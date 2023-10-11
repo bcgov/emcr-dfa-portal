@@ -26,22 +26,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Git Checkout
-        uses: actions/checkout@v3
-      
-      # Get the version number which is prefixed with the Github release branches in format release/{version}
-      - name: Get Release Version
-        run: |
-          branch=${GITHUB_REF##*/}
-          version=$(echo $branch | cut -d "/" -f2-)
-          echo "releaseVersion=$version" >> $GITHUB_ENV
-      
-      # Get Git latest short Sha# from the release branch used. This Sha# will be used in image tagging as well as DC Pod labelling.
-      - name: Get git commit short sha
-        id: sha
-        run: |
-          shortSha=$(echo $(git rev-parse --short HEAD) | cut -c1-7)
-          echo "gitsha=$shortSha" >> $GITHUB_ENV
-      
+        uses: actions/checkout@v3    
+           
       # Prints vital release paramters used
       - name: Print Release Variables
         run: |
