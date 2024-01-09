@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { CacheService } from './cache.service';
 
 @Injectable({ providedIn: 'root' })
 export class AppSessionService {
   private editParentPageVal: string;
   private appNumberVal: string;
+  public currentApplicationsCount: EventEmitter<number> = new EventEmitter<number>();
 
   constructor(private cacheService: CacheService) {}
 

@@ -6,6 +6,7 @@ import { AppSessionService } from 'src/app/core/services/appSession.service';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
 import { DFAApplicationStartDataService } from 'src/app/feature-components/dfa-application-start/dfa-application-start-data.service';
+import { CurrentApplication } from '../../../core/api/models';
 
 @Component({
   selector: 'app-dfadashboard-application',
@@ -16,7 +17,7 @@ export class DfaApplicationComponent implements OnInit {
   @Output() currentApplicationsCount = new EventEmitter<number>();
 
   addNewItem(value: number) {
-    this.currentApplicationsCount.emit(value);
+    this.appSessionService.currentApplicationsCount.emit(value);
   }
 
   items = [
@@ -30,7 +31,7 @@ export class DfaApplicationComponent implements OnInit {
     { label: "DFA Decision made", isCompleted: false, currentStep: false },
   ];
 
-  lstApplications = [];
+  lstApplications: CurrentApplication[] = [];
 
   isLinear = true;
   current = 1;
@@ -87,6 +88,7 @@ export class DfaApplicationComponent implements OnInit {
     var res = JSON.parse(JSON.stringify(lstApp));
     this.appSessionService.appNumber = res.length.toString() != null ? res.length.toString() : "0" ;
     this.lstApplications = res;
+    this.appSessionService.currentApplicationsCount.emit(this.lstApplications ? this.lstApplications.length : 0);
   }
 
   ViewApplication(applicationId: string, primaryApplicantSignedDate: string): void {

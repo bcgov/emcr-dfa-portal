@@ -21,8 +21,8 @@ import { EligibilityService } from '../../core/api/services/eligibility.service'
 })
 export class DashboardComponent implements OnInit {
   currentFlow: string;
-  currentApplicationsCount = "0";
-  pastApplicationsCount = "0";
+  currentApplicationsCount = 0;
+  pastApplicationsCount = 0;
   eventsCount = "0";
   isLoading = false;
   bgColor = 'transparent';
@@ -55,56 +55,67 @@ export class DashboardComponent implements OnInit {
       }
     });
     //alert(this.appSessionService.appNumber);
-    this.currentApplicationsCount = this.appSessionService.appNumber;
+    this.appSessionService.currentApplicationsCount.subscribe(n => this.currentApplicationsCount = n);
 
     this.isLoading = true;
 
-    this.intervalId = setInterval(() => {
-      this.currentApplicationsCount = this.appSessionService.appNumber;
-      if (this.appSessionService.appNumber != null && this.appSessionService.appNumber != 'null') {
-        clearInterval(this.intervalId);
-        this.appSessionService.appNumber = null;
+    this.appService.applicationGetDfaApplications().subscribe({
+      next: (lstData) => {
+        if (lstData != null) {
+          this.countAppData(lstData);
+          this.tabs[0].count = this.currentApplicationsCount.toString();
+        }
+      },
+      error: (error) => {
       }
-    }, 100);
+    });
+
+    //this.intervalId = setInterval(() => {
+    //  this.currentApplicationsCount = this.appSessionService.appNumber;
+    //  if (this.appSessionService.appNumber != null && this.appSessionService.appNumber != 'null') {
+    //    clearInterval(this.intervalId);
+    //    this.appSessionService.appNumber = null;
+    //  }
+    //}, 100);
     
-    setTimeout(
-      function () {
+    this.tabs = [
+      {
+        label: 'Current Applications',
+        route: 'current',
+        activeImage: '/assets/images/past-evac-active.svg',
+        inactiveImage: '/assets/images/past-evac.svg',
+        count: this.currentApplicationsCount.toString()
+      },
+      //{
+      //  label: 'DFA Events',
+      //  route: 'eventlist',
+      //  activeImage: '/assets/images/curr-evac-active.svg',
+      //  inactiveImage: '/assets/images/curr-evac.svg',
+      //  count: this.eventsCount
+      //},
+      //{
+      //  label: 'Past Applications',
+      //  route: 'past',
+      //  activeImage: '/assets/images/past-evac-active.svg',
+      //  inactiveImage: '/assets/images/past-evac.svg',
+      //  count: this.pastApplicationsCount
+      //},
+      {
+        label: 'Profile',
+        route: 'profile',
+        activeImage: '/assets/images/profile-active.svg',
+        inactiveImage: '/assets/images/profile.svg',
+        count: ""
+      }
+    ];
 
-        this.tabs = [
-          {
-            label: 'Current Applications',
-            route: 'current',
-            activeImage: '/assets/images/past-evac-active.svg',
-            inactiveImage: '/assets/images/past-evac.svg',
-            count: this.currentApplicationsCount
-          },
-          //{
-          //  label: 'DFA Events',
-          //  route: 'eventlist',
-          //  activeImage: '/assets/images/curr-evac-active.svg',
-          //  inactiveImage: '/assets/images/curr-evac.svg',
-          //  count: this.eventsCount
-          //},
-          //{
-          //  label: 'Past Applications',
-          //  route: 'past',
-          //  activeImage: '/assets/images/past-evac-active.svg',
-          //  inactiveImage: '/assets/images/past-evac.svg',
-          //  count: this.pastApplicationsCount
-          //},
-          {
-            label: 'Profile',
-            route: 'profile',
-            activeImage: '/assets/images/profile-active.svg',
-            inactiveImage: '/assets/images/profile.svg',
-            count: ""
-          }
-        ];
+    this.isLoading = false;
+  }
 
-        this.isLoading = false;
-      }.bind(this),
-      2000
-    );
+  countAppData(lstApp: Object): void {
+    var res = JSON.parse(JSON.stringify(lstApp));
+    let lstApplications = res;
+    this.currentApplicationsCount = lstApplications.length;
   }
 
   navigateToDFAApplicationStart(): void {
