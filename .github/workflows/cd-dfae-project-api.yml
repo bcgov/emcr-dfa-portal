@@ -6,9 +6,6 @@ on:
     branches:
       - 'feature/workflows'
 
-    paths:
-      - "dfa/src/API/**"
-      - ".github/workflows/cd-dfa-portal-project-api.yml"
   workflow_dispatch:
 env:
   IMAGE_NAME: dfa-portal-api
@@ -41,4 +38,4 @@ jobs:
 
       - name: Tag Image
         run: |
-          docker tag ${{env.IMAGE_NAME}} ${{ secrets.DOCKER_PROJECT_REGISTRY }}/${{env.IMAGE_NAME}}-dev
+            docker tag ${{env.IMAGE_NAME}} ${{ secrets.DOCKER_PROJECT_REGISTRY }}/${{env.IMAGE_NAME}}-dev
