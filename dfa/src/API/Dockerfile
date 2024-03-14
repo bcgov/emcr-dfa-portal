@@ -41,4 +41,4 @@ COPY --from=build /tools .
 # copy app
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "EMBC.DFA.API.dll"]
+ENTRYPOINT ["./entrypoint.sh", "dotnet", "EMBC.DFA.API.dll"]
