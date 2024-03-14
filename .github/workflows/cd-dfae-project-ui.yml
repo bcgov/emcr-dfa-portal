@@ -36,4 +36,4 @@ jobs:
 
       - name: Tag Image
         run: |
-          docker tag ${{env.IMAGE_NAME}} ${{ secrets.DOCKER_PROJECT_REGISTRY }}/${{env.IMAGE_NAME}}-dev
+          docker tag ${{env.IMAGE_NAME}} ${{ secrets.DOCKER_PROJECT_REGISTRY }}/${{env.IMAGE_NAME}}:dev
