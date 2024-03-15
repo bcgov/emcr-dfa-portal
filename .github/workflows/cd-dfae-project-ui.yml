@@ -1,4 +1,4 @@
-name: cd-dfae-portal-project-ui
+name: cd-dfae-project-ui
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
     paths:
       - "dfa/src/UI/**"
-      - ".github/workflows/cd-dfa-portal-project-ui.yml"
+      - ".github/workflows/cd-dfae-project-ui.yml"
   workflow_dispatch:
 env:
   IMAGE_NAME: dfa-portal-ui
