@@ -7,7 +7,7 @@ on:
       - 'feature/workflows'
     paths:
       - "dfa/src/API/**"
-      - ".github/workflows/cd-dfae-project-ui.yml"
+      - ".github/workflows/cd-dfae-project-api.yml"
 
   workflow_dispatch:
 env:
