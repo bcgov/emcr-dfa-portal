@@ -62,8 +62,8 @@ jobs:
           # Update the Helm values file with the new image tag and version
           DATETIME=$(date +'%Y-%m-%d %H:%M:%S')  # Get current date and time
           
-          sed -i  "s/uitag:/uitag: dev # Image Updated on $DATETIME/" ../deploy/dev_values.yaml
-          sed -i  "s/uitag:/uitag: dev # Image Updated on $DATETIME/"  dfa-portal-ui/values.yaml
+          sed -i  "s/uitag: */uitag: dev # Image Updated on $DATETIME/" ../deploy/dev_values.yaml
+          sed -i  "s/uitag: */uitag: dev # Image Updated on $DATETIME/"  dfa-portal-ui/values.yaml
           
           # Commit and push the changes
           git config --global user.email "actions@github.com"
