@@ -49,7 +49,7 @@ jobs:
         uses: actions/checkout@v4
         with:
             repository: bcgov-c/tenant-gitops-c2ee1a
-            ref: develop
+            ref: main
             token: ${{ secrets.GITOPS_KEY }} # `GH_PAT` is a secret that contains your PAT
             path: gitops
 
