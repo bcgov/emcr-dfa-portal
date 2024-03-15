@@ -65,25 +65,25 @@ jobs:
           DATETIME=$(date +'%Y-%m-%d %H:%M:%S')  # Get current date and time
           
           sed -i "s/apitag: .*/apitag: dev # Image Updated on $DATETIME/" ../deploy/dev_values.yaml
-          #sed
+          sed -i "s/apitag: .*/apitag: dev # Image Updated on $DATETIME/"  dfa-portal-api/values.yaml
           
-       #   # Commit and push the changes
-       #   git config --global user.email "actions@github.com"
-       #   git config --global user.name "GitHub Actions"
+          # Commit and push the changes
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
 
-       #   git add .
+          git add .
 
-        #  git add ../deploy/dev_values.yaml
+          git add ../deploy/dev_values.yaml
 
           # Repackage Helm Chart      
 
-         # cd dfa-gitops
+          cd dfa-gitops
 
-         # helm dependency build
+          helm dependency build
 
-         # cd charts
+          cd charts
 
-      #    git add .
+          git add .
 
-       #   git commit -m "Update Dev WEB image tag"
-      #    git push origin develop  # Update the branch name as needed
+          git commit -m "Update Dev API image tag"
+          git push origin main  # Update the branch name as needed
