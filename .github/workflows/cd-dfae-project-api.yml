@@ -33,8 +33,6 @@ jobs:
         working-directory: ${{env.WORKING_DIRECTORY}}
         run: |
             docker build -t ${{env.IMAGE_NAME}} .
-            docker images
-            docker image ls
 
       - name: Tag Image
         run: |
