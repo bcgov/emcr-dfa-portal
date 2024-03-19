@@ -4,6 +4,7 @@ name: cd-dfae-project-landing-page
 on:
   push:
     branches:
+#      - develop
       - 'feature/workflows'
     paths:
       - "landing-page/**"

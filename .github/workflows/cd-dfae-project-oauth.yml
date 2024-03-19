@@ -3,6 +3,7 @@ name: cd-dfae-project-oauth
 on:
   push:
     branches:
+#      - develop
       - 'feature/workflows'
 
     paths:

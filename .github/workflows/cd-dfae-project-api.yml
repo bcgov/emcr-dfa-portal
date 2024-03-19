@@ -4,6 +4,7 @@ name: cd-dfae-project-api
 on:
   push:
     branches:
+#      - develop
       - 'feature/workflows'
     paths:
       - "dfa/src/API/**"

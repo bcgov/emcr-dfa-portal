@@ -1,14 +1,14 @@
-name: cd-dfae-project-ui
+name: cd-dfae-support-ui
 
 on:
   push:
     branches:
-#      - develop
+#       - support-develop
       - 'feature/workflows'
 
     paths:
       - "dfa/src/UI/**"
-      - ".github/workflows/cd-dfae-project-ui.yml"
+      - ".github/workflows/cd-dfae-support-ui.yml"
   workflow_dispatch:
 env:
   IMAGE_NAME: dfa-portal-ui

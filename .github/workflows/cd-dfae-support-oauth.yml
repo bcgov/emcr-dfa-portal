@@ -1,18 +1,19 @@
-name: cd-dfae-project-ui
+name: cd-dfae-support-oauth
 
 on:
   push:
     branches:
-#      - develop
+#       - support-develop
       - 'feature/workflows'
 
     paths:
-      - "dfa/src/UI/**"
-      - ".github/workflows/cd-dfae-project-ui.yml"
+      - "oauth-server/src/API/**"
+      - ".github/workflows/cd-dfae-support-oauth.yml"
   workflow_dispatch:
+
 env:
-  IMAGE_NAME: dfa-portal-ui
-  WORKING_DIRECTORY: ./dfa/src/UI
+  IMAGE_NAME: oauth-server
+  WORKING_DIRECTORY: ./oauth-server/src/API
 
 jobs:
   build:
@@ -63,8 +64,8 @@ jobs:
           # Update the Helm values file with the new image tag and version
           DATETIME=$(date +'%Y-%m-%d %H:%M:%S')  # Get current date and time
           
-          sed -i  "s/uitag: .*/uitag: dev # Image Updated on $DATETIME/" ../deploy/dev_values.yaml
-          sed -i  "s/uitag: .*/uitag: dev # Image Updated on $DATETIME/"  dfa-portal-ui/values.yaml
+          sed -i  "s/authtag: .*/authtag: dev # Image Updated on $DATETIME/" ../deploy/dev_values.yaml
+          sed -i  "s/authtag: .*/authtag: dev # Image Updated on $DATETIME/"  dfa-oauth-server/values.yaml
           
           # Commit and push the changes
           git config --global user.email "actions@github.com"
@@ -84,6 +85,5 @@ jobs:
 
           git add .
 
-          git commit -m "Update DEV UI image tag"
+          git commit -m "Update Dev auth image tag"
           git push origin main  # Update the branch name as needed
-
