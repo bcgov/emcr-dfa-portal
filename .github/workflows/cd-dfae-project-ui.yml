@@ -83,6 +83,6 @@ jobs:
 
           git add .
 
-          git commit -m "Update Dev UI image tag"
+          git commit -m "Update DEV UI image tag"
           git push origin main  # Update the branch name as needed
 
