@@ -342,7 +342,6 @@ export class DFAApplicationMainComponent
       this.setFormData(component);
       let application = this.dfaApplicationMainDataService.createDFAApplicationMainDTO();
       this.dfaApplicationMainService.upsertApplication(application).subscribe(x => {
-
         // determine if step is complete
         switch (component) {
           case 'damaged-property-address':
@@ -418,6 +417,7 @@ export class DFAApplicationMainComponent
    * @param component Name of the component
    */
   setFormData(component: string): void {
+    debugger
     switch (component) {
       case 'damaged-property-address':
         this.dfaApplicationMainDataService.damagedPropertyAddress.addressLine1 = this.form.get('addressLine1').value;
@@ -499,37 +499,44 @@ export class DFAApplicationMainComponent
     switch (index) {
       case 0:
         this.form$ = this.formCreationService
+          .getConsentForm()
+          .subscribe((consent) => {
+            this.form = consent;
+          });
+        break;
+      case 1:
+        this.form$ = this.formCreationService
           .getDamagedPropertyAddressForm()
           .subscribe((damagedPropertyAddress) => {
             this.form = damagedPropertyAddress;
           });
         break;
-      case 1:
+      case 2:
         this.form$ = this.formCreationService
           .getPropertyDamageForm()
           .subscribe((propertyDamage) => {
             this.form = propertyDamage;
           });
         break;
-      case 2:
-        this.form$ = null;
       case 3:
+        this.form$ = null;
+      case 4:
         this.form$ = this.formCreationService
           .getCleanUpLogForm()
           .subscribe((cleanUpLog) => {
             this.form = cleanUpLog;
           });
         break;
-      case 4:
-        this.form$ = null;
       case 5:
+        this.form$ = null;
+      case 6:
         this.form$ = this.formCreationService
           .getSupportingDocumentsForm()
           .subscribe((supportingDocuments) => {
             this.form = supportingDocuments;
           });
         break;
-      case 7:
+      case 8:
         this.form$ = this.formCreationService
           .getSignAndSubmitForm()
           .subscribe((signAndSubmit)=> {

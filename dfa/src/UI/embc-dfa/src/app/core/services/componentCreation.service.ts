@@ -82,6 +82,15 @@ export class ComponentCreationService {
 
   dfaApplicationMainComponents: Array<any> = [
     {
+      component: 'application-details',
+      nextButtonLabel: 'Next - Damaged Property',
+      backButtonLabel: 'Return to Dashboard',
+      isLast: false,
+      loadWrapperButton: false,
+      lastStep: -2,
+      stepName: 'Application Details'
+    },
+    {
       component: 'damaged-property-address',
       nextButtonLabel: 'Next - Cause of Damage',
       backButtonLabel: 'Return to Dashboard',
