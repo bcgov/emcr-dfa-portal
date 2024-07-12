@@ -17,6 +17,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src",
+                "./node_modules"
+              ]
+            },
             "outputPath": "dist/embc-dfa",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -158,9 +164,5 @@
         }
       }
     }
-  },
-  "defaultProject": "embc-dfa",
-  "cli": {
-    "analytics": false
   }
 }

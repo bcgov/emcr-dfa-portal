@@ -3,7 +3,6 @@
 import { StatusBar } from './status-bar';
 export interface CurrentApplication {
   applicationId?: string;
-  applicationSubType?: string;
   applicationType?: string;
   caseNumber?: string;
   damagedAddress?: string;
@@ -11,7 +10,6 @@ export interface CurrentApplication {
   dateOfDamage?: string;
   eventId?: string;
   isErrorInStatus?: boolean;
-  legalName?: string;
   primaryApplicantSignedDate?: string;
   status?: string;
   statusBar?: Array<StatusBar>;
