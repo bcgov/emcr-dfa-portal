@@ -11,7 +11,6 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { FormCreationService } from '../../../../core/services/formCreation.service';
 import { Subscription } from 'rxjs';
 import { DirectivesModule } from '../../../../core/directives/directives.module';
-import { TextMaskModule } from 'angular2-text-mask';
 import * as globalConst from '../../../../core/services/globalConstants';
 import { Router } from '@angular/router';
 
@@ -88,7 +87,6 @@ export default class PersonalDetailsComponent implements OnInit, OnDestroy {
     MatInputModule,
     ReactiveFormsModule,
     DirectivesModule,
-    TextMaskModule,
     MatRadioModule
   ],
   declarations: [PersonalDetailsComponent]

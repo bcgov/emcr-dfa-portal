@@ -384,7 +384,8 @@
                     maxlength="100"
                     required
                     formControlName="cellPhoneNumber"
-                    [textMask]="{ mask: phoneMask, keepCharPositions: true }"
+                    mask="{{phoneMask}}"
+                    keepCharPositions="true"
                     matInput
                     placeholder="Cellular Telephone Number"
                   />
@@ -417,7 +418,8 @@
                   <input
                     maxlength="100"
                     formControlName="residencePhone"
-                    [textMask]="{ mask: phoneMask, keepCharPositions: true }"
+                    mask="{{phoneMask}}"
+                    keepCharPositions="true"
                     matInput
                     placeholder="Residence Telephone Number"
                   />
@@ -449,7 +451,8 @@
                   <input
                     maxlength="100"
                     formControlName="alternatePhone"
-                    [textMask]="{ mask: phoneMask, keepCharPositions: true }"
+                    mask="{{phoneMask}}"
+                    keepCharPositions="true"
                     matInput
                     placeholder="Alternate Telephone Number"
                   />
