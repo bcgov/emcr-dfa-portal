@@ -21,8 +21,8 @@
 @include mat.core();
 
 $custom-typography: mat.m2-define-typography-config(
-  $font-family: 'LiberationMono',
-  $body-1: mat.m2-define-typography-level(14px, 20px, 400, "LiberationMono", 0.0179em),
+  $font-family: $font-family-sans-serif, 
+  $body-1: mat.m2-define-typography-level(15px, 16px, 400),
 );
 
 $custom-theme: mat.m2-define-light-theme((
