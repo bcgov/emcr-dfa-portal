@@ -1,36 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
-
 @use '@angular/material' as mat;
+
 @import './fonts';
-//$bcgov-font-path: "~@bcgov/bootstrap-theme/dist/fonts/";
-//@import "~@bcgov/bootstrap-theme/dist/scss/bootstrap-theme";
 @import './defaults.scss';
 @import './variables';
 
-//@import '~@bcgov/bootstrap-theme/dist/scss/common';
-
 /* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
-
-@import '@angular/material/theming';
+@import 'bootstrap/scss/bootstrap';
 
 // monospace font used for fixed-size text blocks (eg, referral comments)
 // NB: same font as PDF renderer service
 @font-face {
   font-family: 'LiberationMono';
   src: url('/assets/LiberationMono-Regular.woff2') format('woff2'),
-    /* Super Modern Browsers */ url('/assets/LiberationMono-Regular.woff')
+    url('/assets/LiberationMono-Regular.woff') /* Super Modern Browsers */ 
       format('woff'),
-    /* Pretty Modern Browsers */ url('/assets/LiberationMono-Regular.ttf')
+    url('/assets/LiberationMono-Regular.ttf') /* Pretty Modern Browsers */ 
       format('truetype'); /* Safari, Android, iOS */
 }
 
-$custom-typography: mat.define-typography-config(
-  $font-family: $font-family-sans-serif,
-  $body-1: mat.define-typography-level(15px, 1.6, 400)
+@include mat.core();
+
+$custom-typography: mat.m2-define-typography-config(
+  $font-family: $font-family-sans-serif, 
+  $body-1: mat.m2-define-typography-level(15px, 16px, 400),
 );
 
-@include mat.all-component-typographies($custom-typography);
+$custom-theme: mat.m2-define-light-theme((
+  typography: $custom-typography,
+ ));
+
+ @include mat.all-component-themes($custom-theme);
 
 main {
   padding-bottom: 0px !important;
