@@ -24,9 +24,9 @@ import { DFAApplicationStartDataService } from 'src/app/feature-components/dfa-a
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
-import { TextMaskModule } from 'angular2-text-mask';
 import { AddressFormsModule } from '../../address-forms/address-forms.module';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 export class CustomErrorMailMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -344,14 +344,17 @@ export default class ProfileVerificationComponent implements OnInit, OnDestroy {
     FormsModule,
     MatCardModule,
     MatFormFieldModule,
-    TextMaskModule,
     MatRadioModule,
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
     DirectivesModule,
-    AddressFormsModule
+    AddressFormsModule,
+    FormsModule,
+    NgxMaskDirective,
+    NgxMaskPipe
   ],
-  declarations: [ProfileVerificationComponent]
+  declarations: [ProfileVerificationComponent],
+  providers: [provideNgxMask()]
 })
 class ProfileVerificationModule {}

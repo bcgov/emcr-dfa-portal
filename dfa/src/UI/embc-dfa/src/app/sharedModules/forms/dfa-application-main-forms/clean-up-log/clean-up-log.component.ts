@@ -17,7 +17,6 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { TextMaskModule } from 'angular2-text-mask';
 import { CustomPipeModule } from 'src/app/core/pipe/customPipe.module';
 import { FileUpload } from 'src/app/core/model/dfa-application-main.model';
 import { FileCategory, SecondaryApplicantTypeOption } from 'src/app/core/api/models';
@@ -31,6 +30,7 @@ import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog
 import { MatDialog } from '@angular/material/dialog';
 import { DFAFileDeleteDialogComponent } from 'src/app/core/components/dialog-components/dfa-file-delete-dialog/dfa-file-delete.component';
 import { DFACleanuplogDeleteDialogComponent } from 'src/app/core/components/dialog-components/dfa-cleanuplog-delete-dialog/dfa-cleanuplog-delete.component';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-clean-up-log',
@@ -384,15 +384,19 @@ export default class CleanUpLogComponent implements OnInit, OnDestroy {
     MatCardModule,
     MatButtonModule,
     MatFormFieldModule,
-    TextMaskModule,
     CustomPipeModule,
     MatSelectModule,
     MatInputModule,
     MatIconModule,
     ReactiveFormsModule,
     DirectivesModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    NgxMaskDirective,
+    NgxMaskPipe
   ],
-  declarations: [CleanUpLogComponent]
+  declarations: [CleanUpLogComponent],
+  providers: [
+    provideNgxMask()
+  ],
 })
 class CleanUpLogModule {}
