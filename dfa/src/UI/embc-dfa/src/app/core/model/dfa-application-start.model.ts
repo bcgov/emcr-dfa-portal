@@ -282,3 +282,42 @@ export class AppTypeInsuranceForm {
     this.secondaryApplicantSignature?.controls.signedName.setValue(appTypeInsurance?.secondaryApplicantSignature?.signedName);
   }
 }
+
+export class ApplicationDetails {
+  applicantOption: ApplicantOption;
+  insuranceOption: InsuranceOption;
+  smallBusinessOption: SmallBusinessOption;
+  farmOption: FarmOption;
+  consent: Consent;
+
+  constructor(
+    applicantOption?: ApplicantOption,
+    insuranceOption?: InsuranceOption,
+    smallBusinessOption?: SmallBusinessOption,
+    farmOption?: FarmOption,
+    consent?: Consent
+  ) {   }
+}
+
+export class ApplicationDetailsForm {
+  applicantOption = new UntypedFormControl();
+  insuranceOption = new UntypedFormControl();
+  smallBusinessOption = new UntypedFormControl();
+  farmOption = new UntypedFormControl();
+  consent = new UntypedFormControl();
+
+  constructor(
+    applicationDetails: ApplicationDetails
+  ) {
+    if (applicationDetails.applicantOption) {
+      this.applicantOption.setValue(applicationDetails.applicantOption);
+    }
+    this.insuranceOption.setValue(applicationDetails.insuranceOption);
+    this.smallBusinessOption.setValue(applicationDetails.smallBusinessOption);
+    this.farmOption.setValue(applicationDetails.farmOption);
+    if (applicationDetails.consent?.consent) {
+      this.consent.setValue(applicationDetails.consent.consent);
+    }
+  }
+}
+

@@ -11,7 +11,7 @@ import {
   RestrictionForm,
   Restriction,
 } from '../model/profile.model';
-import { AppTypeInsurance, AppTypeInsuranceForm, Consent, ConsentForm, ProfileVerification, ProfileVerificationForm } from '../model/dfa-application-start.model';
+import { AppTypeInsurance, AppTypeInsuranceForm, Consent, ConsentForm, ProfileVerification, ProfileVerificationForm, ApplicationDetails, ApplicationDetailsForm } from '../model/dfa-application-start.model';
 import { DfaPrescreening, DfaPrescreeningForm } from '../model/dfa-prescreening.model';
 import { InsuranceOption } from 'src/app/core/api/models';
 import { PropertyDamageForm, DamagedPropertyAddressForm, DamagedPropertyAddress, PropertyDamage, SignAndSubmit, SupportingDocuments, DamagedRoomsForm,
@@ -90,6 +90,18 @@ export class FormCreationService {
 
   consentForm$: Observable<UntypedFormGroup | undefined> =
    this.consentForm.asObservable();
+
+  applicationDetailsForm: BehaviorSubject<UntypedFormGroup | undefined> =
+   new BehaviorSubject(
+     this.formBuilder.group(
+       new ApplicationDetailsForm(
+        new ApplicationDetails()
+       )
+     )
+   );
+
+  applicationDetailsForm$: Observable<UntypedFormGroup | undefined> =
+   this.applicationDetailsForm.asObservable();
 
   profileVerificationForm: BehaviorSubject<UntypedFormGroup | undefined> =
    new BehaviorSubject(
@@ -607,6 +619,24 @@ export class FormCreationService {
         new SignAndSubmitForm(
           new SignAndSubmit(),
           this.formBuilder
+        )
+      )
+    );
+  }
+
+  getApplicationDetailsForm(): Observable<UntypedFormGroup> {
+    return this.applicationDetailsForm$;
+  }
+
+  setApplicationDetailsForm(applicationDetailsForm: UntypedFormGroup): void {
+    this.applicationDetailsForm.next(applicationDetailsForm);
+  }
+
+  clearApplicationDetailsData(): void {
+    this.applicationDetailsForm.next(
+      this.formBuilder.group(
+        new ApplicationDetailsForm(
+          new ApplicationDetails()
         )
       )
     );

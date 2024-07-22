@@ -1,0 +1,258 @@
+<mat-card class="card-align" style="border:none;" [class.mat-elevation-z0]="true">
+    <mat-card-content>
+  
+      <p class="sub-heading" style="font-size: 20px">Consent</p>
+      <br/>
+  
+      <form [formGroup]="applicationDetailsForm">
+  
+        <ng-container>
+          <div class="row">
+            <div class="col-md-12">
+              <p class="sub-heading">Notice of Collection</p>
+            </div>
+          </div>
+  
+          <div class="row">
+            <p style="font-size: 15px">
+              Personal information on this form is collected by the Ministry of Emergency Management and Climate Readiness under section 26(c) and 27(1)(a) and (b) of the
+              Freedom of Information and Protection of Privacy Act (FOIPPA). The information will be used to evaluate your pre, and post-disaster circumstances to determine
+              eligibility for Disaster Financial Assistance. If you have any questions about the collection of this information, contact 1-888-257-4777 or DFA.Private@gov.bc.ca.
+            </p>
+          </div>
+  
+          <br />
+  
+          <div class="row">
+            <div class="col-md-12">
+              <p class="sub-heading">Sharing of Information</p>
+            </div>
+          </div>
+  
+          <div class="row">
+            <p style="font-size: 15px">
+              The Ministry of Emergency Management and Climate Readiness may disclose the information on this form to other relief organizations, indigenous governing bodies,
+              and governments that are offering any assistance whatsoever as a result of this disaster. The Ministry of Emergency Management and
+              Climate Readiness (or its agent) may disclose information to, or collect information from, other Provincial Government Ministries and Crown Corporations, as permitted by
+              FOIPPA, to verify that the information provided on this form is accurate. Specifically, I/we authorize BC Assessment to provide representatives from
+              the Ministry of Emergency Management and Climate Readiness with confidential information about my/our property. This information will assist the Ministry of Emergency
+              Management and Climate Readiness in assessing damages from the recent authorized DFA event. Personal information is protected from unauthorized use and disclosure
+              in accordance with the Freedom of Information and Protection of Privacy Act and may be disclosed only as provided by that Act.
+            </p>
+          </div>
+  
+          <br />
+  
+          <div class="row">
+            <div class="col-md-12">
+              <p class="sub-heading">Information Viewable at Any Time by DFA Staff</p>
+            </div>
+          </div>
+  
+          <div class="row">
+            <p style="font-size: 15px">
+              Information collected on this application form may be viewable by Disaster Financial Assistance Staff whether the application has been submitted or not.
+            </p>
+          </div>
+          <br />
+
+          <p class="sub-heading" style="font-size: 20px">Applicant Type</p>
+          <br/>
+          
+          <div class="row info-detail">
+            <div class="row">
+              <div class="col-md-12" *ngIf="isHomeowner">
+                <p class="sub-heading">{{ApplicantOptions.Homeowner}}</p>
+                <br/>
+                To qualify for DFA you must have occupied the property as your principal residence at the time of the event. Seasonal or recreational properties aren’t eligible. If you are a landlord, you must apply and qualify as a small business owner.
+                <br/><br/>
+                As a homeowner, you must provide the following with your DFA application:<br/>
+                <ul>
+                  <li><a href="https://www2.gov.bc.ca/assets/gov/public-safety-and-emergency-services/emergency-preparedness-response-recovery/embc/dfa/dfa_homeowners_insurance_template.pdf" target="_blank">insurance template</a> completed by your insurance broker.</li>
+                </ul>
+              </div>
+              <div class="col-md-12" *ngIf="isResidentialTenant">
+                <p class="sub-heading">{{ApplicantOptions.ResidentialTenant}}</p>
+                <br/>
+                To qualify for DFA, you must have occupied the property as your principal residence at the time of the event. Seasonal or recreational properties aren’t eligible.
+                <br/><br/>
+                As a Residential Tenant, you will need to provide the following with your DFA application:
+                <ul>
+                  <li><a href="https://www2.gov.bc.ca/assets/gov/public-safety-and-emergency-services/emergency-preparedness-response-recovery/embc/dfa/dfa_homeowners_insurance_template.pdf" target="_blank">insurance template</a> completed by your insurance broker</li>
+                  <li>a copy of your rental agreement, lease, or <a (click)="onToggleOtherDocuments()"><u>other documentation</u></a> to show that you are/were legally occupying the damaged property at the time of the event</li>
+                  <li>a copy of government issued identification such as Driver's License, Service Card, or BC ID</li>
+                </ul>
+              </div>
+              <div class="col-md-12" *ngIf="isResidentialTenant" style="border: 3px solid #70abd9">
+                <br/>
+                <b>Other documentation to show tenancy:</b>
+                If you don't have a rental or lease agreement, you may include:
+                <ul>
+                  <li>written correspondence from your landlord showing the dates and terms of your tenancy, or</li>
+                  <li>a piece of mail addressed to you at the damaged property address which shows that you lived in the residence at the time of the event, such as a BC Hydro bill, utility bill, bank statement, or vehicle insurance.</li>
+                </ul>
+              </div>
+              <div class="col-md-12" *ngIf="isSmallBusinessOwner">
+                <div class="sub-heading">{{ApplicantOptions.SmallBusinessOwner}}
+                  <div *ngIf="isGeneral">
+                    {{SmallBusinessOptions.General}}
+                  </div>
+                  <div *ngIf="isCorporate">
+                    {{SmallBusinessOptions.Corporate}}
+                  </div>
+                  <div *ngIf="isLandlord">
+                    {{SmallBusinessOptions.Landlord}}
+                  </div>
+                </div>
+                <br/>
+                To qualify for DFA, your business must:
+                <ul>
+                  <li>be managed by the owner on a day-to-day basis,</li>
+                  <li>have grossed at least $10,000 but less than $2 million in revenue in the year immediately preceding the disaster,</li>
+                  <li>employ fewer than 50 employees at one time, and</li>
+                  <li>demonstrate that, without the claimed assistance, the future of the business could be placed in financial jeopardy. Financial jeopardy is defined as when the assistance payment to repair the damage would exceed 10 percent of the net income of the business.</li>
+                </ul>
+                <div *ngIf="isGeneral">
+                  As a General or Sole Proprietorship or DBA name, you must provide the following with your application:
+                  <ul>
+                    <li><a href="https://www2.gov.bc.ca/assets/gov/public-safety-and-emergency-services/emergency-preparedness-response-recovery/embc/dfa/dfa_farm_small_business_charitable_organization-insurance_template.pdf" target="_blank">Small Business Insurance Template</a> completed by your insurance broker,</li>
+                    <li>completed T1 general income tax return with supporting schedules for all owners, and</li>
+                    <li>the most recently filed financial statements (income statement and balance sheet) used for income tax purposes.</li>
+                  </ul><br/>
+                  You <i>may</i> be required to provide the following, if applicable:
+                  <ul>
+                    <li>lease agreements</li>
+                  </ul>
+                </div>
+                <div *ngIf="isCorporate">
+                  As a Corporate Company (Ltd./Inc.), you must provide the following with your application:
+                  <ul>
+                    <li><a href="https://www2.gov.bc.ca/assets/gov/public-safety-and-emergency-services/emergency-preparedness-response-recovery/embc/dfa/dfa_farm_small_business_charitable_organization-insurance_template.pdf" target="_blank">Small Business Insurance Template</a> completed by your insurance broker,</li>
+                    <li>completed T2 corporate income tax return for the company with supporting schedules,</li>
+                    <li>proof of ownership (Central Securities Register listing all shareholders or Partnership Agreement), and </li>
+                    <li>company income statement and balance sheet used for income tax purposes.</li>
+                  </ul><br/>
+                  You <i>may</i> be required to provide the following, if applicable:
+                  <ul>
+                    <li>lease agreements</li>
+                  </ul>
+                </div>
+                <div *ngIf="isLandlord">
+                  As a Landlord, you must to provide the following with your application:
+                  <ul>
+                    <li><a target="_blank" href="https://www2.gov.bc.ca/assets/gov/public-safety-and-emergency-services/emergency-preparedness-response-recovery/embc/dfa/dfa_homeowners_insurance_template.pdf">Insurance Template</a> completed by insurance broker*,</li>
+                    <li>complete T1 general income tax returns for all owners of rented property,</li>
+                    <li>T776 Statement of real estate rentals, and</li>
+                    <li>residential tenancy agreement</li>
+                  </ul><br/>
+                  *Note: Landlords must apply under the small business category but for insurance purposes, use the homeowner insurance template as commercial policies are not applicable to rental homes.
+                  <br/><br/>
+                  You <i>may</i> be required to provide the following, if applicable:
+                  <ul>
+                    <li>Lease Agreements</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-12" *ngIf="isFarmOwner">
+                <div class="sub-heading">{{ApplicantOptions.FarmOwner}}
+                  <div *ngIf="isGeneral">
+                    {{FarmOptions.General}}
+                  </div>
+                  <div *ngIf="isCorporate">
+                    {{FarmOptions.Corporate}}
+                  </div>
+                </div>
+                <br/>
+                To qualify for DFA, your farm must:
+                <ul>
+                  <li>be identified as a developing or established agricultural operation,</li>
+                  <li>be owned and operated by a person whose full-time employment is a farmer,</li>
+                  <li>be the means by which the owner derives the majority of their income, and</li>
+                  <li>demonstrate that, without the claimed assistance, the future of the farm operation could be placed in financial jeopardy. Financial jeopardy is defined as when the assistance payment to repair the damage would be greater than 10 percent of the net income of the farm operation. </li>
+                </ul>
+                <br/>
+                <div *ngIf="isGeneral">
+                  As a General Partnership, Sole Proprietorship, Unregistered or DBA Name, you must provide the following with your application:
+                  <ul>
+                    <li><a href="https://www2.gov.bc.ca/assets/gov/public-safety-and-emergency-services/emergency-preparedness-response-recovery/embc/dfa/dfa_farm_small_business_charitable_organization-insurance_template.pdf" target="_blank">Small Business Insurance Template</a> completed by insurance broker, and</li>
+                    <li>completed T1 general tax return with supporting schedules for all owners.</li>
+                  </ul><br/>
+                  You <i>may</i> be required to provide the following, if applicable:
+                  <ul>
+                    <li>lease agreements, and/or</li>
+                    <li>the most recently filed financial statements (income statement and balance sheet) used for income tax purposes.</li>
+                  </ul>
+                </div>
+                <div *ngIf="isCorporate">
+                  As a Corporate Company (Ltd./Inc.), you must provide the following with your application:
+                  <ul>
+                    <li><a href="https://www2.gov.bc.ca/assets/gov/public-safety-and-emergency-services/emergency-preparedness-response-recovery/embc/dfa/dfa_farm_small_business_charitable_organization-insurance_template.pdf" target="_blank">Small Business Insurance Template</a> completed by the insurance broker,</li>
+                    <li>completed T2 corporate income tax return for the company with supporting schedules,</li>
+                    <li>proof of ownership (Central Securities Register listing all shareholders or Partnership Agreement), and</li>
+                    <li>company income statement and balance sheet used for income tax purposes.</li>
+                  </ul><br/>
+                  You <i>may</i> be required to provide the following, if applicable:
+                  <ul>
+                    <li>lease agreements.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-12" *ngIf="isCharitableOrganization">
+                <p class="sub-heading">{{ApplicantOptions.CharitableOrganization}}</p>
+                <br/>
+                To qualify for DFA, your charitable/non-profit organization must:
+                <ul>
+                  <li>provide a benefit or service to the community,</li>
+                  <li>have been in existence for at least 12 months, and</li>
+                  <li>be registered under the BC <i>Societies Act</i>.</li>
+                </ul><br/>
+                As a charitable organization or non-profit you must provide the following with your application:
+                <ul>
+                  <li><a href="https://www2.gov.bc.ca/assets/gov/public-safety-and-emergency-services/emergency-preparedness-response-recovery/embc/dfa/dfa_farm_small_business_charitable_organization-insurance_template.pdf" target="_blank">Insurance template</a> completed by an insurance broker,</li>
+                  <li>a listing of the Directors, including their contact and address information,</li>
+                  <li>proof of the organization's registration (must include registration date) under the BC <i>Societies Act</i> and annual fillings, and</li>
+                  <li>a statement outlining the organizations benefit or service to the community, and any other documentation supporting how the organization meets the eligibility criteria for DFA.</li>
+                </ul><br/>
+                IF applicable, you will also need to to provide:
+                <ul>
+                <li>lease agreements</li>
+                </ul>
+              </div>
+            </div>  
+          </div>
+          <br />
+
+          <p class="sub-heading" style="font-size: 20px">Will your insurance company cover any or all damages caused by the event?</p>
+          <br/>
+          <div class="row info-detail"> 
+            <div class="row">    
+              <div class="col-md-12" *ngIf="isUnsure">
+                <p class="sub-heading">{{InsuranceOptions.Unsure}}</p>
+                <br/>
+                You may be eligible for DFA and may submit an application. As part of your application process, you must provide insurance payout documentation from your insurance broker
+                showing what was covered by your insurance provider. The DFA Program won't be able to confirm eligibility until this information is provided.
+                <br/><br/>
+              </div>
+              <div class="col-md-12" *ngIf="isNotInsured">
+                <p class="sub-heading">{{InsuranceOptions.No}}</p>
+                <br/>
+                You may be eligible for DFA and may submit an application. During the application process you will be required to declare that you carry no insurance (no fire, theft or liability) on
+                the property listed on this Disaster Financial Assistance application. If you are later to have found to have insurance you will  be required to repay any financial assistance you've
+                received.
+                <br/><br/>
+                The Disaster Financial Assistance (DFA) Program operates under provincial legislation: <i>Emergency Program Act</i> and the <i>Compensation and Disaster Financial Assistance Regulation</i>.
+                Emergency Management BC is obliged to provide DFA in accordance with this legislation. Section 8(1) of the Regulation states: “'eligible costs' does not include costs of expenses (a)
+                recoverable at law of for which insurance was reasonably and readily available.”<br/><br/>
+                <b>A DFA applicant who could reasonably and readily have purchased overland flood, water damage or water seepage insurance is NOT eligible to receive DFA.</b><br/><br/>
+                “Readily available” means that a person could obtain this insurance from a local agent or broker. Also, we should not confuse reasonably available with affordable. What a person can
+                afford is subjective and specific to that person. What is important is that the price of the insurance was reasonable considering the risk.
+                <br/><br/>
+              </div>
+            </div>
+          </div>
+
+        </ng-container>
+      </form>
+  
+     </mat-card-content>
+  </mat-card>

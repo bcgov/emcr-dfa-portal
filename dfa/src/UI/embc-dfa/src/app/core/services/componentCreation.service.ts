@@ -82,58 +82,47 @@ export class ComponentCreationService {
 
   dfaApplicationMainComponents: Array<any> = [
     {
-      component: 'damaged-property-address',
-      nextButtonLabel: 'Next - Cause of Damage',
+      component: 'application-details',
+      nextButtonLabel: 'Next - Damaged Property',
       backButtonLabel: 'Return to Dashboard',
       isLast: false,
       loadWrapperButton: false,
-      lastStep: -2,
-      stepName: 'Damaged Property'
-    },
+      lastStep: -1,
+      stepName: 'Application Details'
+    },   
     {
       component: 'property-damage',
-      nextButtonLabel: 'Next - Occupants',
+      nextButtonLabel: 'Next - Review & Submit',
       backButtonLabel: 'Go Back & Edit',
-      isLast: false,
+      isLast: true,
       loadWrapperButton: false,
       lastStep: 0,
-      stepName: 'Cause of Damage'
+      stepName: 'Damaged Property'
+    }
+
+  ];
+
+  dfaProjectMainComponents: Array<any> = [
+
+    {
+      component: 'recovery-plan',
+      nextButtonLabel: 'Next - Upload Documents',
+      backButtonLabel: 'Go Back',
+      isLast: false,
+      loadWrapperButton: false,
+      lastStep: -1,
+      stepName: 'Recovery Plan',
+      editable: true
     },
     {
-      component: 'occupants',
-      nextButtonLabel: 'Next - Clean Up Log',
-      backButtonLabel: 'Go Back & Edit',
+      component: 'supporting-documents-project',
+      nextButtonLabel: 'Next - Review & Submit',
+      backButtonLabel: 'Go Back',
       isLast: false,
       loadWrapperButton: false,
       lastStep: 0,
-      stepName: 'Occupants'
-    },
-    {
-      component: 'clean-up-log',
-      nextButtonLabel: 'Next - Damaged Items By Room',
-      backButtonLabel: 'Go Back & Edit',
-      isLast: false,
-      loadWrapperButton: false,
-      lastStep: 0,
-      stepName: 'Clean Up Log'
-    },
-    {
-      component: 'damaged-items-by-room',
-      nextButtonLabel: 'Next - Supporting Documents',
-      backButtonLabel: 'Go Back & Edit',
-      isLast: false,
-      loadWrapperButton: false,
-      lastStep: 0,
-      stepName: 'Damaged Items By Room'
-    },
-    {
-      component: 'supporting-documents',
-      nextButtonLabel: 'Next - Review',
-      backButtonLabel: 'Go Back & Edit',
-      isLast: false,
-      loadWrapperButton: false,
-      lastStep: 0,
-      stepName: 'Supporting Documents'
+      stepName: 'Upload Documents',
+      editable: false
     }
 
   ];
@@ -168,6 +157,15 @@ export class ComponentCreationService {
     const componentArr: Array<ComponentMetaDataModel> =
       new Array<ComponentMetaDataModel>();
     for (const comp of this.dfaApplicationMainComponents) {
+      componentArr.push(Object.assign(new ComponentMetaDataModel(), comp));
+    }
+    return componentArr;
+  }
+
+  createDFAProjectMainSteps(): Array<ComponentMetaDataModel> {
+    const componentArr: Array<ComponentMetaDataModel> =
+      new Array<ComponentMetaDataModel>();
+    for (const comp of this.dfaProjectMainComponents) {
       componentArr.push(Object.assign(new ComponentMetaDataModel(), comp));
     }
     return componentArr;
