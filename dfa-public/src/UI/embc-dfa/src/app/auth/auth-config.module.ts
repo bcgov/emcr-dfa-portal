@@ -4,7 +4,7 @@ import { AuthModule, LogLevel, PassedInitialConfig, StsConfigHttpLoader, StsConf
 import { map } from 'rxjs/operators';
 
 export const httpLoaderFactory = (httpClient: HttpClient) => {
-  const config$ = httpClient.get<any>(`assets/config/oidc.json`).pipe(
+  const config$ = httpClient.get<any>(`oidc.json`).pipe(
     map((customConfig: any) => {
       return {
         //configId: customConfig.configId,
