@@ -3,12 +3,27 @@
 	order replace after encode
 }
 
+{
+	debug
+}
+
 :2015 {
 	log {
 		format console
 	}
 
 	root * /site
+
+	@oidc_json {
+		path /assets/config/oidc.json
+	
+	}
+
+	header  @oidc_json {
+		Access-Control-Allow-Origin *
+		Access-Control-Allow-Methods "GET , POST , OPTIONS"
+		Access-Control-Allow-Headers "Origin , Content-Type , Accept , Authorization"
+	}
 
 	header {
 		# Enable HTTP Strict Transport Security (HSTS) to force clients to always connect via HTTPS (do not use if only testing)
@@ -24,6 +39,9 @@
 		# Set referrer policy
 		Referrer-Policy "same-origin"
 	}
+
+	
+
 
 	encode zstd gzip
 

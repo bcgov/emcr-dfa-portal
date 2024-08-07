@@ -5,7 +5,7 @@ name: cd-dfae-project-public-api
 on:
   push:
     branches:
-      - 'EMCRI-282'
+      - 'deploy-bceid'
     paths:
       - "dfa-public/src/API/**"
       - ".github/workflows/cd-dfae-project-public-api.yml"
