@@ -1,5 +1,5 @@
 
-#CD pipeline for dfa ui public
+##CD pipeline for dfa ui public
 name: cd-dfae-project-public-ui
 
 on:
