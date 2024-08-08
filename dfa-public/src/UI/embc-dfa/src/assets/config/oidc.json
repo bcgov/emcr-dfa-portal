@@ -1,7 +1,7 @@
 {
     "authority": "https://dev.loginproxy.gov.bc.ca/auth/realms/standard",
-    "redirectUrl": "https://dfa-public-sector-dev.apps.silver.devops.gov.bc.ca",
-    "postLogoutRedirectUri": "https://dfa-public-sector-dev.apps.silver.devops.gov.bc.ca",
+    "redirectUrl": "http://localhost:5200",
+    "postLogoutRedirectUri": "window.location.origin",
     "auto_userinfo": true,
     "clientId": "dfa-enhancement-5415",
     "kc_idp_hint": "bceid-business",
