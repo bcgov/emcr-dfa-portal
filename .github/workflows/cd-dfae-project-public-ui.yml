@@ -5,7 +5,7 @@ name: cd-dfae-project-public-ui
 on:
   push:
     branches:
-      - 'EMCRI-282'
+      - 'deploy-angular'
     paths:
       - "dfa-public/src/UI/**"
       - ".github/workflows/cd-dfae-project-public-ui.yml"
