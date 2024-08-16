@@ -10,6 +10,11 @@ on:
       - "dfa/src/**"
       - ".github/workflows/train-project-private-build-push.yml"
   workflow_dispatch:
+
+concurrency:
+  group: train-build
+  cancel-in-progress: false
+
 env:
   UI_IMAGE_NAME: dfa-portal-ui
   API_IMAGE_NAME: dfa-portal-api
@@ -84,13 +89,13 @@ jobs:
           # Update the Helm values file with the new image tag and version
           DATETIME=$(date +'%Y-%m-%d %H:%M:%S')  # Get current date and time
           
-          sed -i  "s/apitag: .*/apitag: dev # Image Updated on $DATETIME/" ../deploy/train_values.yaml
+          sed -i  "s/apitag: .*/apitag: training # Image Updated on $DATETIME/" ../deploy/train_values.yaml
           sed -i  "s/apiversion: .*/apiversion: ${{ steps.short_sha.outputs.SHORT_SHA }} # Version Updated on $DATETIME/" ../deploy/train_values.yaml
 
-          sed -i  "s/uitag: .*/uitag: dev # Image Updated on $DATETIME/" ../deploy/train_values.yaml
+          sed -i  "s/uitag: .*/uitag: training # Image Updated on $DATETIME/" ../deploy/train_values.yaml
           sed -i  "s/uiversion: .*/uiversion: ${{ steps.short_sha.outputs.SHORT_SHA }} # Version Updated on $DATETIME/" ../deploy/train_values.yaml
 
-          sed -i  "s/authtag: .*/authtag: dev # Image Updated on $DATETIME/" ../deploy/train_values.yaml
+          sed -i  "s/authtag: .*/authtag: training # Image Updated on $DATETIME/" ../deploy/train_values.yaml
           sed -i  "s/authversion: .*/authversion: ${{ steps.short_sha.outputs.SHORT_SHA }} # Version Updated on $DATETIME/" ../deploy/train_values.yaml
 
           # Commit and push the changes
@@ -109,5 +114,5 @@ jobs:
 
           git add .
 
-          git commit -m "Update Training API and UI image tag"
+          git commit -m "Update Training Private API and UI image tag"
           git push origin training  # Update the branch name as needed
