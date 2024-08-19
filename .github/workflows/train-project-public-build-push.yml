@@ -1,4 +1,5 @@
 #CD pipeline for dfa train branch public
+
 name: train-project-public-build-push.yml
 
 on:
@@ -13,7 +14,7 @@ on:
 concurrency:
   group: train-build
   cancel-in-progress: false
-  
+
 env:
   UI_IMAGE_NAME: dfa-portal-ui-public
   API_IMAGE_NAME: dfa-portal-api-public
