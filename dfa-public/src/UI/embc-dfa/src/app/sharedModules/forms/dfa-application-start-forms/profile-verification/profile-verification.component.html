@@ -380,11 +380,11 @@
               <div class="col-md-3">
                 <mat-form-field appearance="outline">
                   <mat-label>Cellular Telephone Number</mat-label>
+                  <!-- 2024-08-01 EMCRI-216 waynezen; upgrade to Angular 18 - use new ngx-mask -->
                   <input
                     maxlength="100"
                     required
                     formControlName="cellPhoneNumber"
-                    [textMask]="{ mask: phoneMask, keepCharPositions: true }"
                     matInput
                     placeholder="Cellular Telephone Number"
                   />
@@ -414,10 +414,10 @@
               <div class="col-md-3">
                 <mat-form-field appearance="outline">
                   <mat-label>Residence Telephone Number</mat-label>
+                  <!-- 2024-08-01 EMCRI-216 waynezen; upgrade to Angular 18 - use new ngx-mask -->
                   <input
                     maxlength="100"
                     formControlName="residencePhone"
-                    [textMask]="{ mask: phoneMask, keepCharPositions: true }"
                     matInput
                     placeholder="Residence Telephone Number"
                   />
@@ -446,10 +446,10 @@
               <div class="col-md-3">
                 <mat-form-field appearance="outline">
                   <mat-label>Alternate Telephone Number</mat-label>
+                  <!-- 2024-08-01 EMCRI-216 waynezen; upgrade to Angular 18 - use new ngx-mask -->
                   <input
                     maxlength="100"
                     formControlName="alternatePhone"
-                    [textMask]="{ mask: phoneMask, keepCharPositions: true }"
                     matInput
                     placeholder="Alternate Telephone Number"
                   />

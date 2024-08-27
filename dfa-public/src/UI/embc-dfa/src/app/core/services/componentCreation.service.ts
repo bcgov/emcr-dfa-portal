@@ -137,7 +137,7 @@ export class ComponentCreationService {
       backButtonLabel: 'Go Back',
       isLast: false,
       loadWrapperButton: false,
-      lastStep: -1,
+      lastStep: 0,
       stepName: 'Add Invoices',
       editable: true
     },

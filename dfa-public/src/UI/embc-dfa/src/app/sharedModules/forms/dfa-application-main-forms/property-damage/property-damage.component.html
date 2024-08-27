@@ -327,11 +327,7 @@
                       (click)="editOtherContactsRow(element, index)"
                     >
                       <img src="/assets/images/edit.svg" height="35" width="35" />
-                      <img
-                        src="/assets/images/edit_onhover.svg"
-                        height="35"
-                        width="35"
-                      />
+                      <!-- 2024-08-26 EMCRI-617 waynezen; UI fixes for Angular upgrade -->
                     </button>&nbsp;
                     <button
                     class="delete-image"
@@ -431,11 +427,12 @@
                   <div class="col-md-3">
                     <mat-form-field appearance="outline">
                       <mat-label>Contact phone</mat-label>
+                      <!-- 2024-08-01 EMCRI-216 waynezen; upgrade to Angular 18 - use new ngx-mask -->
                       <input formControlName="phoneNumber"
                         matInput
                         required
                         placeholder="Contact phone"
-                        [textMask]="{ mask: phoneMask, keepCharPositions: true }" />
+                      />
                         <mat-error
                         *ngIf="
                           otherContactsForm.get('otherContact').controls.phoneNumber.invalid &&

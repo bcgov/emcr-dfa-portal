@@ -29,7 +29,9 @@ import { MatTableModule } from '@angular/material/table';
 import { CustomPipeModule } from 'src/app/core/pipe/customPipe.module';
 import { DFADeleteConfirmDialogComponent } from '../../../../core/components/dialog-components/dfa-confirm-delete-dialog/dfa-confirm-delete.component';
 import { MatDialog } from '@angular/material/dialog';
-import { TextMaskModule } from 'angular2-text-mask';
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - TextMaskModule not compatible
+//import { TextMaskModule } from 'angular2-text-mask';
+import { NgxMaskDirective, NgxMaskPipe, NgxMaskService, provideNgxMask } from 'ngx-mask';
 import { ApplicationService, OtherContactService, ProjectService } from 'src/app/core/api/services';
 import { DFAApplicationMainMappingService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-mapping.service';
 import { MatSelectModule } from '@angular/material/select';
@@ -375,7 +377,8 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
     DirectivesModule,
     MatTableModule,
     CustomPipeModule,
-    TextMaskModule,
+    // 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - new text mask provider
+    NgxMaskDirective, NgxMaskPipe,
     MatSelectModule,
     MatTooltipModule
   ],

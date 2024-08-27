@@ -305,7 +305,8 @@ export class DFAApplicationMainComponent
 
   returnToDashboard() {
     this.dfaApplicationMainDataService.setApplicationId(null);
-    this.router.navigate(['/verified-registration/dashboard']);
+    // 2024-07-22 EMCRI-301 waynezen; new dashboard
+    this.router.navigate(['/dfa-dashboard']);
   }
 
   submitFile(): void {

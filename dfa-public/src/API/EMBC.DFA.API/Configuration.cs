@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -40,6 +42,19 @@ namespace EMBC.DFA.API
                 opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             });
+            // 2024-06-25 EMCRI-217 waynezen: imported from CSRS.Api
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //.AddJwtBearer(options =>
+            //{
+            //    options.Authority = configuration["Jwt:Authority"];
+            //    options.Audience = configuration["Jwt:Audience"];
+            //});
+
+            authJwtSection authJwt = new authJwtSection();
+            configuration.GetSection("auth:jwt").Bind(authJwt);
+
+            // 2024-08-14 EMCRI-216 waynezen: add extra diagnostics
+            var oidcConfig = configuration.GetSection("auth:oidc");
 
             services.AddAuthentication()
              //JWT tokens handling
@@ -51,9 +66,10 @@ namespace EMBC.DFA.API
                  };
 
                  configuration.GetSection("auth:jwt").Bind(options);
+
                  options.TokenValidationParameters = new TokenValidationParameters
                  {
-                     ValidateAudience = false
+                     ValidateAudience = false,
                  };
 
                  // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
@@ -75,8 +91,12 @@ namespace EMBC.DFA.API
                      OnAuthenticationFailed = async ctx =>
                      {
                          await Task.CompletedTask;
+
+                         var clientId = oidcConfig["clientId"];
+                         var issuer = oidcConfig["issuer"];
+
                          var logger = ctx.HttpContext.RequestServices.GetRequiredService<ITelemetryProvider>().Get<JwtBearerEvents>();
-                         logger.LogError(ctx.Exception, "JWT authantication failed");
+                         logger.LogError(ctx.Exception, $"JWT authantication failed: clientId={clientId}, issuer={issuer}, jwt:authority={options.Authority}");
                      }
                  };
              })
@@ -111,7 +131,7 @@ namespace EMBC.DFA.API
                     policy
                     .RequireAuthenticatedUser()
                     .AddAuthenticationSchemes("jwt")
-                    .RequireClaim("scope", "dfa-portal-api");
+                    .RequireClaim("scope", authJwt.scope);
                 });
 
                 options.DefaultPolicy = options.GetPolicy(JwtBearerDefaults.AuthenticationScheme) ?? null!;
@@ -143,8 +163,22 @@ namespace EMBC.DFA.API
                     BearerFormat = "paste token here",
                     In = OpenApiSecurityApiKeyLocation.Header
                 });
-
                 document.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("bearer token"));
+
+                //document.AddSecurity("oauth2", new OpenApiSecurityScheme
+                //{
+                //    Type = OpenApiSecuritySchemeType.OAuth2,
+                //    Flows = new OpenApiOAuthFlows
+                //    {
+                //        AuthorizationCode = new OpenApiOAuthFlow
+                //        {
+                //            AuthorizationUrl = "https://localhost:5000/connect/authorize",
+                //            TokenUrl = "https://localhost:5000/connect/token",
+                //            Scopes = new Dictionary<string, string> { { "api1", "Demo API - full access" } }
+                //        }
+                //    }
+                //});
+
                 //document.GenerateAbstractProperties = true;
             });
 
@@ -152,6 +186,10 @@ namespace EMBC.DFA.API
             services.AddTransient<IProfileInviteService, ProfileInviteService>();
             services.AddTransient<IConfigurationHandler, Handler>();
             services.AddTransient<IDynamicsGateway, DynamicsGateway>();
+
+            // 2024-07-02 EMCRI-363 waynezen: added
+            services.AddTransient<IUserService, UserService>();
+
             services.Configure<ADFSTokenProviderOptions>(configuration.GetSection("Dynamics:ADFS"));
             services.AddADFSTokenProvider();
             services.AddHttpClient("captcha");
@@ -167,22 +205,27 @@ namespace EMBC.DFA.API
             });
             services.AddCors(opts => opts.AddDefaultPolicy(policy =>
             {
-            //policy.AllowAnyHeader();
-            //policy.AllowAnyMethod();
-            //policy.AllowAnyOrigin();
+                // 2024-08-11 EMCRI-216 waynezen; Very important to AllowAnyHeader - otherwise CORS problems
+                policy.AllowAnyHeader();
+                //policy.AllowAnyMethod();
+                //policy.AllowAnyOrigin();
 
-            //policy.WithOrigins("https://dfa-portal-dev.apps.silver.devops.gov.bc.ca",
-            //                "https://dfa-landing-page-dev.apps.silver.devops.gov.bc.ca");
+                // 2024-08-20 EMCRI-434 waynezen; Instead of AllowAnyMethod - only allow select Http methods
+                //policy.AllowAnyMethod();
+                policy.WithMethods("GET", "POST", "PUT");
 
-            //try to get array of origins from section array
-            var corsOrigins = configuration.GetSection("cors:origins").GetChildren().Select(c => c.Value).ToArray();
-            // try to get array of origins from value
-            if (!corsOrigins.Any()) corsOrigins = configuration.GetValue("cors:origins", string.Empty).Split(',');
-            corsOrigins = corsOrigins.Where(o => !string.IsNullOrWhiteSpace(o)).ToArray();
-            if (corsOrigins.Any())
-            {
-                policy.WithOrigins(corsOrigins);
-            }
+                //policy.WithOrigins("https://dfa-portal-dev.apps.silver.devops.gov.bc.ca",
+                //                "https://dfa-landing-page-dev.apps.silver.devops.gov.bc.ca");
+
+                //try to get array of origins from section array
+                var corsOrigins = configuration.GetSection("cors:origins").GetChildren().Select(c => c.Value).ToArray();
+                // try to get array of origins from value
+                if (!corsOrigins.Any()) corsOrigins = configuration.GetValue("cors:origins", string.Empty).Split(',');
+                corsOrigins = corsOrigins.Where(o => !string.IsNullOrWhiteSpace(o)).ToArray();
+                if (corsOrigins.Any())
+                {
+                    policy.WithOrigins(corsOrigins);
+                }
             }));
         }
 
@@ -204,5 +247,11 @@ namespace EMBC.DFA.API
             app.UseAuthentication();
             app.UseAuthorization();
         }
+    }
+
+    public class authJwtSection
+    {
+        public string authority { get; set; }
+        public string scope { get; set; }
     }
 }

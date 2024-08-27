@@ -3,16 +3,19 @@
 @use '@angular/material' as mat;
 @import './fonts';
 //$bcgov-font-path: "~@bcgov/bootstrap-theme/dist/fonts/";
-//@import "~@bcgov/bootstrap-theme/dist/scss/bootstrap-theme";
+//@import "@bcgov/bootstrap-theme/dist/scss/bootstrap-theme";
 @import './defaults.scss';
 @import './variables';
 
-//@import '~@bcgov/bootstrap-theme/dist/scss/common';
+//@import '@bcgov/bootstrap-theme/dist/scss/common';
 
 /* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
 
-@import '@angular/material/theming';
+// 2024-05-24 EMCRI-21 waynezen: fixed paths changed for bootstrap?
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - no longer need to import theming
+//@import '@angular/material/theming';
 
 // monospace font used for fixed-size text blocks (eg, referral comments)
 // NB: same font as PDF renderer service
@@ -25,12 +28,15 @@
       format('truetype'); /* Safari, Android, iOS */
 }
 
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - no longer need?
+/*
 $custom-typography: mat.define-typography-config(
   $font-family: $font-family-sans-serif,
   $body-1: mat.define-typography-level(15px, 1.6, 400)
 );
 
 @include mat.all-component-typographies($custom-typography);
+*/
 
 main {
   padding-bottom: 0px !important;
@@ -169,13 +175,13 @@ footer nav {
 }
 
 .button-style {
-  height: 55px;
-  font-weight: normal;
+  height: 45px !important;
+  font-weight: normal !important;
 }
 .button-p {
   @extend .button-style;
-  background-color: #234075;
-  color: #ffffff;
+  background: #234075 !important;
+  color: #ffffff !important;
   float: right;
 }
 
@@ -187,7 +193,7 @@ footer nav {
 }
 
 .button-p:hover {
-  background-color: #169bd5;
+  background: #169bd5 !important;
 }
 
 .button-s:hover {

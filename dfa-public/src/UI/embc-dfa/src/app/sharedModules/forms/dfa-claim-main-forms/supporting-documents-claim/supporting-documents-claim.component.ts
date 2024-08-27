@@ -17,7 +17,7 @@ import { FormCreationService } from 'src/app/core/services/formCreation.service'
 import { BehaviorSubject, Observable, Subscription, catchError, mapTo, throwError } from 'rxjs';
 import { DirectivesModule } from '../../../../core/directives/directives.module';
 import { CustomValidationService } from 'src/app/core/services/customValidation.service';
-import { ApplicantOption, FileCategory, FileUpload, RequiredDocumentType, SmallBusinessOption, FarmOption } from 'src/app/core/api/models';
+import { ApplicantOption, FileCategory, FileUpload, RequiredDocumentType, SmallBusinessOption, FarmOption, FileCategoryClaim, RequiredDocumentTypeClaim, FileUploadClaim } from 'src/app/core/api/models';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -71,8 +71,8 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   ];
-  FileCategories = FileCategory;
-  RequiredDocumentTypes = RequiredDocumentType;
+  FileCategories = FileCategoryClaim;
+  RequiredDocumentTypes = RequiredDocumentTypeClaim;
   showOtherDocuments: boolean = false;
   vieworedit: string = "";
 
@@ -105,19 +105,6 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
 
     this.dfaApplicationMainDataService.getDfaApplicationStart().subscribe(application => {
       if (application) {
-        //this.isResidentialTenant = (application.appTypeInsurance.applicantOption == Object.keys(this.AppOptions)[Object.values(this.AppOptions).indexOf(this.AppOptions.ResidentialTenant)]);
-        //this.isHomeowner = (application.appTypeInsurance.applicantOption == Object.keys(this.AppOptions)[Object.values(this.AppOptions).indexOf(this.AppOptions.Homeowner)]);
-        //this.isSmallBusinessOwner = (application.appTypeInsurance.applicantOption == Object.keys(this.AppOptions)[Object.values(this.AppOptions).indexOf(this.AppOptions.SmallBusinessOwner)]);
-        //this.isFarmOwner = (application.appTypeInsurance.applicantOption == Object.keys(this.AppOptions)[Object.values(this.AppOptions).indexOf(this.AppOptions.FarmOwner)]);
-        //this.isCharitableOrganization = (application.appTypeInsurance.applicantOption == Object.keys(this.AppOptions)[Object.values(this.AppOptions).indexOf(this.AppOptions.CharitableOrganization)]);
-        //if (this.isSmallBusinessOwner) {
-        //  this.isGeneral = (application.appTypeInsurance.smallBusinessOption == Object.keys(this.SmallBusinessOptions)[Object.values(this.SmallBusinessOptions).indexOf(this.SmallBusinessOptions.General)]);
-        //  this.isCorporate = (application.appTypeInsurance.smallBusinessOption == Object.keys(this.SmallBusinessOptions)[Object.values(this.SmallBusinessOptions).indexOf(this.SmallBusinessOptions.Corporate)]);
-        //  this.isLandlord = (application.appTypeInsurance.smallBusinessOption == Object.keys(this.SmallBusinessOptions)[Object.values(this.SmallBusinessOptions).indexOf(this.SmallBusinessOptions.Landlord)]);
-        //} else if (this.isFarmOwner) {
-        //  this.isGeneral = (application.appTypeInsurance.farmOption == Object.keys(this.FarmOptions)[Object.values(this.FarmOptions).indexOf(this.FarmOptions.General)]);
-        //  this.isCorporate = (application.appTypeInsurance.farmOption == Object.keys(this.FarmOptions)[Object.values(this.FarmOptions).indexOf(this.FarmOptions.Corporate)]);
-        //}
       }
     });
   }
@@ -136,60 +123,10 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
       .getClaimFileUploadsForm()
       .subscribe((fileUploads) => {
         this.fileUploadForm = fileUploads;
-        this.dfaApplicationMainDataService.getDfaApplicationStart().subscribe(application => { // setting these fields in fileUploadForm for validation checking
-          if (application) {
-          //  if (this.isResidentialTenant) this.fileUploadForm.get('applicantType').setValue("ResidentialTenant");
-          //  else if (this.isHomeowner) this.fileUploadForm.get('applicantType').setValue("Homeowner");
-          //  else if (this.isSmallBusinessOwner) {
-          //   this.fileUploadForm.get('applicantType').setValue("SmallBusinessOwner");
-          //   if (this.isGeneral) this.fileUploadForm.get('smallBusinessOption').setValue("General");
-          //   if (this.isCorporate) this.fileUploadForm.get('smallBusinessOption').setValue("Corporate");
-          //   if (this.isLandlord) this.fileUploadForm.get('smallBusinessOption').setValue("Landlord");
-          //  }
-          //  else if (this.isFarmOwner) {
-          //    this.fileUploadForm.get('applicantType').setValue("FarmOwner");
-          //    if (this.isGeneral) this.fileUploadForm.get('farmOption').setValue("General");
-          //    if (this.isCorporate) this.fileUploadForm.get('farmOption').setValue("Corporate");
-          //  } else if (this.isCharitableOrganization) this.fileUploadForm.get('applicantType').setValue("CharitableOrganization");
-          }
-        });
       });
-
-    if (this.formCreationService.recoveryPlanForm.value.get('projectNumber').invalid &&
-      this.formCreationService.recoveryPlanForm.value.get('projectName').invalid) {
-      this.dfaProjectMainDataService.setDisableFileUpload('true');
-    }
-    else {
-      this.dfaProjectMainDataService.setDisableFileUpload('false');
-    }
-
-    this.fileUploadForm.addValidators([this.validateFormRequiredDocumentTypes]);
-
-    this.formCreationService.recoveryPlanForm.value.get('projectNumber')
-      .valueChanges.subscribe((value) => {
-        if (this.formCreationService.recoveryPlanForm.value.get('projectNumber').invalid &&
-          this.formCreationService.recoveryPlanForm.value.get('projectName').invalid) {
-          this.dfaProjectMainDataService.setDisableFileUpload('true');
-        }
-        else {
-          this.dfaProjectMainDataService.setDisableFileUpload('false');
-        }
-      }
       
-    );
-
-    this.formCreationService.recoveryPlanForm.value.get('projectName')
-      .valueChanges.subscribe((value) => {
-        if (this.formCreationService.recoveryPlanForm.value.get('projectNumber').invalid &&
-          this.formCreationService.recoveryPlanForm.value.get('projectName').invalid) {
-          this.dfaProjectMainDataService.setDisableFileUpload('true');
-        }
-        else {
-          this.dfaProjectMainDataService.setDisableFileUpload('false');
-        }
-      }
-
-      );
+    this.fileUploadForm.addValidators([this.validateFormRequiredDocumentTypes]);
+    
 
     // subscribe to changes for document summary
     const _documentSummaryFormArray = this.formCreationService.fileUploadsClaimForm.value.get('fileUploads');
@@ -214,25 +151,25 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
     let invalid=false
     let supportingFiles = form.get('fileUploads')?.getRawValue();
     //let applicantType = form.get('applicantType').value;
-    const error={};
-    //if (!supportingFiles || supportingFiles?.filter(x => x.requiredDocumentType === "PreEvent" && x.deleteFlag == false).length <= 0) {
-    //  invalid = true;
-    //  error["noPreEventCondition"] = true;
-    //}
-    //if (!supportingFiles || supportingFiles?.filter(x => x.requiredDocumentType === "PostEvent" && x.deleteFlag == false).length <= 0) {
-    //  invalid = true;
-    //  error["noPostEventCondition"] = true;
-    //}
-
-    invalid = true;
-    error["noinvoices"] = true;
-    error["nogeneralledger"] = true;
-    error["noproofofpayment"] = true;
-
+    const error = {};
+    
+    if (!supportingFiles || supportingFiles?.filter(x => x.requiredDocumentType === "Invoices" && x.deleteFlag == false).length <= 0) {
+      invalid = true;
+      error["noinvoices"] = true;
+    }
+    if (!supportingFiles || supportingFiles?.filter(x => x.requiredDocumentType === "GeneralLedger" && x.deleteFlag == false).length <= 0) {
+      invalid = true;
+      error["nogeneralledger"] = true;
+    }
+    if (!supportingFiles || supportingFiles?.filter(x => x.requiredDocumentType === "ProofofPayment" && x.deleteFlag == false).length <= 0) {
+      invalid = true;
+      error["noproofofpayment"] = true;
+    }
+    
     return invalid?error:null;
   }
 
-  saveSupportingFiles(fileUpload: FileUpload): void {
+  saveSupportingFiles(fileUpload: FileUploadClaim): void {
       // dont allow same filename twice
       let fileUploads = this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').value;
       if (fileUploads?.find(x => x.fileName === fileUpload.fileName && x.deleteFlag !== true)) {
@@ -243,33 +180,35 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
     if (this.fileUploadForm.get('supportingFilesFileUpload').status === 'VALID') {
       this.isLoading = true;
       fileUpload.fileData = fileUpload?.fileData?.substring(fileUpload?.fileData?.indexOf(',') + 1) // to allow upload as byte array
-      let project = this.dfaProjectMainDataService.createDFAProjectMainDTO();
+      //let project = this.dfaProjectMainDataService.createDFAProjectMainDTO();
       //this.dfaProjectMainMapping.mapDFAProjectMain(project);
+      fileUpload.claimId = this.dfaClaimMainDataService.getClaimId();
+      fileUpload.requiredDocumentType = null;
+      this.isLoading = true;
 
-      fileUpload.project = project;
-      //this.attachmentsService.attachmentUpsertDeleteAttachment({ body: fileUpload }).subscribe({
-      //  next: (fileUploadId) => {
-      //    fileUpload.id = fileUploadId;
-      //    if (fileUploads) fileUploads.push(fileUpload);
-      //    else fileUploads = [ fileUpload ];
-      //    this.formCreationService.fileUploadsForm.value.get('fileUploads').setValue(fileUploads);
-      //    this.showSupportingFileForm = !this.showSupportingFileForm;
-      //    //if (fileUpload.requiredDocumentType == Object.keys(this.RequiredDocumentTypes)[Object.values(this.RequiredDocumentTypes).indexOf(this.RequiredDocumentTypes.PreEvent)])
-      //    //  this.supportingDocumentsForm.get('hasCopyOfARentalAgreementOrLease').setValue(true);
-      //    this.isLoading = false;
-      //  },
-      //  error: (error) => {
-      //    console.error(error);
-      //    this.isLoading = false;
-      //    document.location.href = 'https://dfa.gov.bc.ca/error.html';
-      //  }
-      //});
+      this.attachmentsService.attachmentUpsertDeleteClaimAttachment({ body: fileUpload }).subscribe({
+        next: (fileUploadId) => {
+          fileUpload.id = fileUploadId;
+          if (fileUploads) fileUploads.push(fileUpload);
+          else fileUploads = [ fileUpload ];
+          this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').setValue(fileUploads);
+          this.showSupportingFileForm = !this.showSupportingFileForm;
+          //if (fileUpload.requiredDocumentType == Object.keys(this.RequiredDocumentTypes)[Object.values(this.RequiredDocumentTypes).indexOf(this.RequiredDocumentTypes.PreEvent)])
+          //  this.supportingDocumentsForm.get('hasCopyOfARentalAgreementOrLease').setValue(true);
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error(error);
+          this.isLoading = false;
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        }
+      });
     } else {
       this.fileUploadForm.get('supportingFilesFileUpload').markAllAsTouched();
     }
   }
 
-  saveRequiredForm(fileUpload: FileUpload): void {
+  saveRequiredForm(fileUpload: FileUploadClaim): void {
     // dont allow same filename twice
     let fileUploads = this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').value;
     if (fileUploads?.find(x => x.fileName === fileUpload.fileName && x.deleteFlag !== true)) {
@@ -278,41 +217,42 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
     }
 
     this.isLoading = true;
-    let project = this.dfaProjectMainDataService.createDFAProjectMainDTO();
-    fileUpload.project = project;
+    //let project = this.dfaProjectMainDataService.createDFAProjectMainDTO();
+    //fileUpload.project = project;
 
     fileUpload.fileData = fileUpload?.fileData?.substring(fileUpload?.fileData?.indexOf(',') + 1) // to allow upload as byte array
+    fileUpload.claimId = this.dfaClaimMainDataService.getClaimId();
     if (fileUploads?.filter(x => x.requiredDocumentType === fileUpload.requiredDocumentType).length > 0) {
-      //this.attachmentsService.attachmentUpsertDeleteAttachment({body: fileUpload }).subscribe({
-      //  next: (result) => {
-      //    let requiredDocumentTypeFoundIndex = fileUploads.findIndex(x => x.requiredDocumentType === fileUpload.requiredDocumentType);
-      //    fileUploads[requiredDocumentTypeFoundIndex] = fileUpload;
-      //    this.formCreationService.fileUploadsForm.value.get('fileUploads').setValue(fileUploads);
-      //    this.isLoading = false;
-      //  },
-      //  error: (error) => {
-      //    console.error(error);
-      //    this.isLoading = false;
-      //    document.location.href = 'https://dfa.gov.bc.ca/error.html';
-      //  }
-      //});
+      this.attachmentsService.attachmentUpsertDeleteClaimAttachment({ body: fileUpload }).subscribe({
+        next: (result) => {
+          let requiredDocumentTypeFoundIndex = fileUploads.findIndex(x => x.requiredDocumentType === fileUpload.requiredDocumentType);
+          fileUploads[requiredDocumentTypeFoundIndex] = fileUpload;
+          this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').setValue(fileUploads);
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error(error);
+          this.isLoading = false;
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        }
+      });
     } else {
-      //this.attachmentsService.attachmentUpsertDeleteAttachment({body: fileUpload }).subscribe({
-      //  next: (fileUploadId) => {
-      //    fileUpload.id = fileUploadId;
-      //    if (fileUploads) fileUploads.push(fileUpload);
-      //    else fileUploads = [fileUpload];
-      //    this.formCreationService.fileUploadsForm.value.get('fileUploads').setValue(fileUploads);
-      //    //if (fileUpload.requiredDocumentType == Object.keys(this.RequiredDocumentTypes)[Object.values(this.RequiredDocumentTypes).indexOf(this.RequiredDocumentTypes.TenancyAgreement)])
-      //    //  this.supportingDocumentsForm.get('hasCopyOfARentalAgreementOrLease').setValue(true);
-      //    this.isLoading = false;
-      //  },
-      //  error: (error) => {
-      //    console.error(error);
-      //    this.isLoading = false;
-      //    document.location.href = 'https://dfa.gov.bc.ca/error.html';
-      //  }
-      //});
+      this.attachmentsService.attachmentUpsertDeleteClaimAttachment({body: fileUpload }).subscribe({
+        next: (fileUploadId) => {
+          fileUpload.id = fileUploadId;
+          if (fileUploads) fileUploads.push(fileUpload);
+          else fileUploads = [fileUpload];
+          this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').setValue(fileUploads);
+          //if (fileUpload.requiredDocumentType == Object.keys(this.RequiredDocumentTypes)[Object.values(this.RequiredDocumentTypes).indexOf(this.RequiredDocumentTypes.TenancyAgreement)])
+          //  this.supportingDocumentsForm.get('hasCopyOfARentalAgreementOrLease').setValue(true);
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error(error);
+          this.isLoading = false;
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        }
+      });
     }
   }
 
@@ -442,7 +382,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
   initRequiredFileForm(formName: string) {
     this.fileUploadForm.get(formName).reset();
     this.fileUploadForm.get(formName).get('modifiedBy').setValue("Applicant");
-    this.fileUploadForm.get(formName).get('fileType').setValue(Object.keys(this.FileCategories)[Object.values(this.FileCategories).indexOf(this.FileCategories.PreEvent)]);
+    this.fileUploadForm.get(formName).get('fileType').setValue(Object.keys(this.FileCategories)[Object.values(this.FileCategories).indexOf(this.FileCategories.Invoices)]);
     //this.fileUploadForm.get(formName).get('requiredDocumentType').setValue(Object.keys(this.RequiredDocumentTypes)[Object.values(this.RequiredDocumentTypes).indexOf(this.RequiredDocumentTypes.InsuranceTemplate)]);
     this.fileUploadForm.get('addNewFileUploadIndicator').setValue(true);
     this.fileUploadForm.get(formName).get('deleteFlag').setValue(false);

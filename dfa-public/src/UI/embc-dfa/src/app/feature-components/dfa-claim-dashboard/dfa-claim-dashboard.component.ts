@@ -30,7 +30,8 @@ import { DFAProjectMainDataService } from 'src/app/feature-components/dfa-projec
 import { AppSessionService } from 'src/app/core/services/appSession.service';
 import { ProjectService } from 'src/app/core/api/services';
 import { ApplicationExtended } from '../../sharedModules/dashboard-components/dfa-application/dfa-application.component';
-import * as moment from 'moment';
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18
+import moment from 'moment';
 import { DFAClaimMainDataService } from '../dfa-claim-main/dfa-claim-main-data.service';
 import { DFAConfirmClaimCreateDialogComponent } from '../../core/components/dialog-components/dfa-confirm-claim-create-dialog/dfa-confirm-claim-create-dialog.component';
 import { DFAClaimMainService } from '../dfa-claim-main/dfa-claim-main.service';
@@ -150,7 +151,7 @@ export class DFAClaimComponent
         data: {
           content: contentDialog
         },
-        height: '350px',
+        height: '320px',
         width: '700px',
         disableClose: true
       })
@@ -164,12 +165,14 @@ export class DFAClaimComponent
           //let application = this.dfaApplicationMainDataService.createDFAApplicationMainDTO();
           this.dfaClaimMainDataService.setProjectId(this.projId);
           this.dfaClaimMainDataService.setApplicationId(this.appId);
+          this.dfaClaimMainDataService.setClaimId(null);
+          this.dfaClaimMainDataService.recoveryClaim = null;
+          this.formCreationService.clearRecoveryClaimData();
           let objClaimDTO = this.dfaClaimMainDataService.createDFAClaimMainDTO();
 
           this.dfaClaimMainService.upsertClaim(objClaimDTO).subscribe(id => {
             if (id) {
               this.dfaClaimMainDataService.setEligibleGST(this.eligibleGST);
-              this.dfaClaimMainDataService.setClaimId(null);
               this.dfaClaimMainDataService.setViewOrEdit('addclaim');
 
               this.dfaClaimMainDataService.setClaimId(id);
@@ -206,6 +209,7 @@ export class DFAClaimComponent
         next: (dfaApplicationMain) => {
           if (dfaApplicationMain) {
             this.eligibleGST = dfaApplicationMain.eligibleGST;
+            this.dfaClaimMainDataService.setEligibleGST(this.eligibleGST);
             this.dateOfDamageFrom = dfaApplicationMain.dateOfDamage;
             this.dateOfDamageTo = dfaApplicationMain.dateOfDamageTo;
             this.caseNumber = dfaApplicationMain.caseNumber ? dfaApplicationMain.caseNumber : "Not Generated";

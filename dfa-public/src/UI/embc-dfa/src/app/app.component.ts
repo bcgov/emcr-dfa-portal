@@ -1,5 +1,6 @@
 import { OnInit, Renderer2 } from '@angular/core';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertService } from './core/services/alert.service';
 import * as globalConst from './core/services/globalConstants';
 import { BootstrapService } from './core/services/bootstrap.service';
@@ -24,12 +25,13 @@ export class AppComponent implements OnInit {
 
   constructor(
     public outageService: OutageService,
+    public router: Router,
     private alertService: AlertService,
     private bootstrapService: BootstrapService,
     private loginService: LoginService,
     private configService: ConfigService,
     private renderer: Renderer2,
-    private scriptService: ScriptService
+    private scriptService: ScriptService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -37,7 +39,7 @@ export class AppComponent implements OnInit {
       //this.environment = await this.configService.loadEnvironmentBanner();
       this.environment = null;
       await this.bootstrapService.init();
-      await this.loginService.tryLogin();
+      // await this.loginService.tryLogin();
     } catch (error) {
       this.isLoading = false;
       if (error.status === 400 || error.status === 404) {

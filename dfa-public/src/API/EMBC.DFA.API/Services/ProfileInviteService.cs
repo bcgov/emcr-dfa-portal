@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using EMBC.ESS.Shared.Contracts;
 using EMBC.ESS.Shared.Contracts.Events;
-using EMBC.Utilities.Messaging;
 using EMBC.Utilities.Telemetry;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace EMBC.DFA.API.Services
@@ -14,27 +15,18 @@ namespace EMBC.DFA.API.Services
 
     public class ProfileInviteService : IProfileInviteService
     {
-        private readonly IMessagingClient messagingClient;
         private readonly ITelemetryReporter logger;
 
-        public ProfileInviteService(IMessagingClient messagingClient, ITelemetryProvider telemetryProvider)
+        public ProfileInviteService(ITelemetryProvider telemetryProvider)
         {
-            this.messagingClient = messagingClient;
             this.logger = telemetryProvider.Get<ProfileInviteService>();
         }
 
+        [Obsolete("Messaging API removed")]
+        // 2024-06-24 EMCRI-282 waynezen: Function obsolete due to removed Messaging API
         public async Task<bool> ProcessInvite(string inviteId, string loggedInUserId)
         {
-            try
-            {
-                await messagingClient.Send(new ProcessRegistrantInviteCommand { InviteId = inviteId, LoggedInUserId = loggedInUserId });
-                return true;
-            }
-            catch (BusinessLogicException e)
-            {
-                logger.LogError(e, "Invite {0} for user {1}: {2} error", inviteId, loggedInUserId, e.Message);
-                return false;
-            }
+            return await Task.FromResult(false);
         }
     }
 }

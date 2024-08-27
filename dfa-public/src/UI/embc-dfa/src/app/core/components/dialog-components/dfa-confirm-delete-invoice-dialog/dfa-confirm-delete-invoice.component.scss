@@ -9,6 +9,10 @@ h1 {
     font-size: 33px;
 }
 
+.h-margin {
+  margin: 20px 20px 0px 20px;
+}
+
 .text-margin {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -28,7 +32,7 @@ h1 {
 }
 
 .button-width {
-    width: 100%;
-    margin-bottom: 10px;
-    height: 50px;
+    width: 95%;
+    margin: 10px;
+    height: 80px;
 }

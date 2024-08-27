@@ -75,6 +75,7 @@
               </div>
               <div class="col-md-1"></div>
             </div>
+            <br />
             <div class="row">
               <div class="col-md-12">
                 <p  style="font-size: 15px">
@@ -83,7 +84,7 @@
                 <mat-radio-group
                   formControlName="isGoodsReceivedonInvoiceDate"
                   class="primary-radio-group horizontal-radio-group"
-                  required
+                  
                   aria-label="Select an option">
                   <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
                   
@@ -97,6 +98,8 @@
                 
               </div>
             </div>
+            <br />
+            
             <div class="row" [hidden]="(formCreationService.invoiceForm$ | async)?.value
   .isGoodsReceivedonInvoiceDate != 'false'">
               <p  style="font-size: 15px">
@@ -118,8 +121,10 @@
     
                 </mat-form-field>
               </div>
+              
             </div>
-
+            <br *ngIf="(formCreationService.invoiceForm$ | async)?.value
+                        .isGoodsReceivedonInvoiceDate == 'false'"/>
             <div class="row" >
               <p  style="font-size: 15px">
                 Purpose of goods or services received<span style="color:red" >*</span>
@@ -128,9 +133,13 @@
                 <mat-form-field appearance="outline">
                   <textarea [disabled]="isReadOnly" matInput
                     formControlName="purposeOfGoodsServiceReceived"
-                    [rows]="4"
+                    
                     required
                     style="resize:none"
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="2"
+                    cdkAutosizeMaxRows="5"
                     maxlength="200"></textarea>
                   <!--<mat-hint>{{ remainingLength }} characters remaining.</mat-hint>-->
                    
@@ -148,21 +157,20 @@
                 <mat-radio-group
                   formControlName="isClaimforPartofTotalInvoice"
                   class="primary-radio-group horizontal-radio-group"
-                  required
+                  
                   (change)="selectDamageDates($event)"
                   aria-label="Select an option">
                   <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
                   <mat-error *ngIf="
-                                 invoiceForm.get('isClaimforPartofTotalInvoice').invalid &&
                                  invoiceForm.get('isClaimforPartofTotalInvoice').hasError('required')
                                ">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is required
                   </mat-error>
-                  </mat-radio-group><br/>
+                  </mat-radio-group>
                    
               </div>
             </div>
-
+            <br/>
             <div class="row" [hidden]="(formCreationService.invoiceForm$ | async)?.value
   .isClaimforPartofTotalInvoice != 'true'" >
               <p  style="font-size: 15px">
@@ -173,8 +181,11 @@
                   <textarea [disabled]="isReadOnly" matInput
                     (focusin)="setHelpText(2, tooltip)"
                     formControlName="reasonClaimingPartofTotalInvoice"
-                    [rows]="4"
                     style="resize:none"
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="2"
+                    cdkAutosizeMaxRows="5"
                     maxlength="200"></textarea>
                   <!--<mat-hint>{{ remainingLength }} characters remaining.</mat-hint>-->
                 </mat-form-field><br/>
@@ -190,7 +201,7 @@
                   <p  style="font-size: 15px; margin-bottom: 10px !important">
                     Net invoiced being claimed (excluding taxes)<span style="color:red" >*</span>
                   </p>
-                  <mat-form-field appearance="outline" class="mat-form-round">
+                  <mat-form-field appearance="outline" class="mat-form-round monetary-input">
     
                     <div class="searchDiv">
                       <input
@@ -217,11 +228,11 @@
                   
                 </div>
                 <div class="col-md-5 inputCurrency">
-                  $&nbsp;<mat-form-field appearance="outline" style="height: 30px !important">
+                  $&nbsp;<mat-form-field class="monetary-input-small" appearance="outline" style="height: 30px !important">
                     <input
                       #PST
                       (focusin)="setHelpText(4, tooltip)"
-                      formControlName="PST"
+                      formControlName="pst"
                       matInput
                       (keypress)="numericOnly($event);"
                       (keyup)="CalculateInvoice($event);"
@@ -234,7 +245,7 @@
                   </p>
                 </div>
                 <div class="col-md-5 inputCurrency">
-                  $&nbsp;<mat-form-field appearance="outline" style="height: 30px !important">
+                  $&nbsp;<mat-form-field class="monetary-input-small" appearance="outline" style="height: 30px !important">
                     <input
                             #grossGST
                       (focusin)="setHelpText(5, tooltip)"
@@ -257,7 +268,7 @@
                       maxlength="100"/>
                 </div>
                 <div class="col-md-5">
-                  <p class="currency-invoice" style="padding-right: 17px; padding-top: 5px;">
+                  <p class="currency-invoice" style="padding-right: 22px; padding-top: 5px;">
                     <b>
                     $&nbsp;{{ (formCreationService.invoiceForm$ | async)?.value
   .actualInvoiceTotal | number }}
@@ -273,9 +284,9 @@
                   </p>
                 </div>
                 <div class="col-md-5">
-                  <p class="currency-invoice" style="padding-right: 17px;">
+                  <p class="currency-invoice" style="padding-right: 22px;">
                     $&nbsp;{{(formCreationService.invoiceForm$ | async)?.value
-  .PST | number }}
+  .pst | number }}
                   </p>
                 </div>
                 <div class="col-md-7 aln-txt">
@@ -284,7 +295,7 @@
                   </p>
                 </div>
                 <div class="col-md-5 inputCurrency">
-                  $&nbsp;<mat-form-field appearance="outline" style="height: 30px !important">
+                  $&nbsp;<mat-form-field class="monetary-input-small" appearance="outline" style="height: 30px !important">
                     <input
                       (focusin)="setHelpText(6, tooltip)"
                             #eligibleGST
@@ -308,7 +319,7 @@
                       maxlength="100"/>
                 </div>
                 <div class="col-md-5">
-                  <p class="currency-invoice" style="padding-right: 17px; padding-top: 5px;">
+                  <p class="currency-invoice" style="padding-right: 22px; padding-top: 5px;">
                     <b>
                     $&nbsp;{{ (formCreationService.invoiceForm$ | async)?.value
   .totalBeingClaimed | number }}

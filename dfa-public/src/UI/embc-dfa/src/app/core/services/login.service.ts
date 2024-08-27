@@ -1,73 +1,66 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { lastValueFrom, Subject } from 'rxjs';
-import { Profile } from '../api/models';
-import { ProfileService } from '../api/services';
+import { BehaviorSubject, first, Observable, ReplaySubject, switchMap, mergeMap, tap, map, of, retry } from 'rxjs';
+import { AuthenticatedResult, AuthModule, AuthOptions, LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
+import { CacheService } from '../../core/services/cache.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
-  public isLoggedIn$: Subject<boolean> = new Subject<boolean>();
+// 2024-07-26 EMCRI-507 waynezen: re-write to centralize oidcSecurityService calls
+export class LoginService  {
+
+  private _isAuth: boolean | null = null;
+  private _accesstoken: string = null;
 
   constructor(
-    private oauthService: OAuthService,
-    private profileService: ProfileService,
-    private router: Router
-  ) {}
+    private oidcSecurityService: OidcSecurityService,
+    private cacheService: CacheService) {  }
 
-  public async login(targetUrl: string = undefined): Promise<boolean> {
-    return await this.oauthService.tryLoginImplicitFlow().then(() => {
+  public checkAuth(): Observable<LoginResponse> {
+    return this.oidcSecurityService.checkAuth()
+      .pipe(
+        tap((response: LoginResponse) => { 
+          // console.debug('[DFA] loginService called oidcSecurityService.checkAuth() isAuthenticated: ' + response?.isAuthenticated);
+          this._isAuth = response?.isAuthenticated;
+          
+          this._accesstoken = response?.accessToken;
 
-      //debugger
-      if (!this.oauthService.hasValidAccessToken()) {
-        if (targetUrl == '/verified-registration') {
-          this.oauthService.initImplicitFlow(targetUrl);
-          this.isLoggedIn$.next(false);
-          return Promise.resolve(false);
-        }
-        else {
-          this.router.navigateByUrl('/');
-          this.isLoggedIn$.next(false);
-          return Promise.resolve(false);
-        }
-      }
-
-      this.isLoggedIn$.next(true);
-      return Promise.resolve(true);
-    });
+          if (response?.isAuthenticated) {
+            this._isAuth = true;
+            this.isAuthenticated.next(true);
+          }
+        }));
   }
 
-  public async logout(): Promise<void> {
-    await this.oauthService.revokeTokenAndLogout();
-    this.isLoggedIn$.next(false);
+  public authorize() : void {
+    // console.debug("[DFA] loginService authorize");
+    this._isAuth = false;
+    this.oidcSecurityService.authorize();
   }
 
-  public isLoggedIn(): boolean {
-    return this.oauthService.hasValidIdToken();
-  }
+  private isAuthenticated: BehaviorSubject<boolean> =
+    new BehaviorSubject(false);
 
-  public getUserSession(): string {
-    return btoa(this.oauthService.getAccessToken());
-  }
+  public isAuthenticated$: Observable<boolean> =
+    this.isAuthenticated.asObservable();
 
-  public async getUserProfile(): Promise<Profile> {
-    const profile = await lastValueFrom(
-      this.profileService.profileGetProfile()
-    );
-    return profile;
-  }
-  public async tryLogin(): Promise<void> {
-    await this.oauthService.tryLogin().then(() => {
-      if (this.oauthService.hasValidAccessToken()) {
-        this.oauthService.setupAutomaticSilentRefresh();
-        this.isLoggedIn$.next(true);
-        const targetUrl = this.oauthService.state;
-        if (targetUrl) {
-          return this.router.navigateByUrl(decodeURIComponent(targetUrl));
-        }
-      }
-    });
-  }
+  public getAccessToken(): Observable<string> {
+      return this.oidcSecurityService.getAccessToken()
+        .pipe(
+          tap((response: string) => {
+            if (response) {
+              // console.debug('[DFA] loginService returning access_token: ' + response);
+              this._accesstoken = response;
+            }
+          }));
+    }
+
+    public logOff(): void {
+      this.oidcSecurityService.logoffAndRevokeTokens();
+      this.isAuthenticated.next(false);
+      this.cacheService.clear();
+      localStorage.clear();
+  
+    }
 }
+  

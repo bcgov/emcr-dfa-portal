@@ -1,79 +1,77 @@
 <div class="container container-frame">
-  <div class="heading-container">
+  <div class="row">
+    <div class="col-md-6 heading-container">
+      <span class="page-heading">{{ this.businessName }}</span>
+    </div>
+    <div class="col-md-6">
+      <button *ngIf="hasActiveEvents == true" class="button-p" mat-button
+        (click)="navigateToDFAApplicationCreate()">
+        Create a New Application
+      </button>
+    </div>
+
+    <div *ngIf="hasActiveEvents == false">
+      <br />
+      <b>
+        There are currently no active events, please visit our website
+        <a target="_blank"
+          href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/preparedbc/evacuation-recovery/disaster-financial-assistance">Financial
+          assistance in a disaster</a>
+        for more information
+      </b>
+    </div>
+  </div>
+  <br />
+
+  <div class="col-12 content-container infoText">
+    <div class="row">
+      <div class="infoIconCol">
+        <div class="material-icons infoIconStyle">info</div>
+      </div>
+      <div class="col-md-11 page-subheadbold">
+        This page is for Indigenous communities or local governments.
+      </div>
+    </div>
+    <div class="row">
+      <div class="infoIconCol"></div>
+      <div class="col-md-11">
+        If you are a homeowner, residential tenant, small business, farm, or charitable organization your process is
+        different: <a target="_blank"
+        href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/preparedbc/evacuation-recovery/disaster-financial-assistance">DFA
+        process for individuals, small businesses, farms, and charitable organizations.</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding-bottom: 100px; padding-top: 30px;">
+    <!--<app-alert></app-alert>-->
+
+    <nav mat-tab-nav-bar dynamicHeight [tabPanel]="tabPanel">
+      <a mat-tab-link *ngFor="let tabItem of tabs" [routerLink]="tabItem.route" routerLinkActive="active-tab"
+        class="tabHead">
+        <img class="inactive-curr" [src]="tabItem.inactiveImage" height="15" width="15" />
+        <img class="active-curr" [src]="tabItem.activeImage" height="15" width="15" />
+        <!--&nbsp;&nbsp; {{ tabItem.label }}-->
+        &nbsp;&nbsp; {{ tabItem.label != "Profile" ? tabItem.label + " (" + tabItem.count + ")" : tabItem.label }}
+      </a>
+    </nav>
+    <mat-tab-nav-panel #tabPanel>
+      <router-outlet></router-outlet>
+    </mat-tab-nav-panel>
+    
+    <app-loader class="spinner" [showLoader]="isLoading" strokeWidth="10" diameter="50">
+    </app-loader>
+  </div>
+
+  <div class="content-container no-applications" *ngIf="this.currentApplicationsCount <= 0" >
     <div class="row">
       <div class="col-md-12">
-        <span class="page-heading">
-          100 Mile Test community
-          </span> <br />
+        <span class="no-applications-text"> {{noApplicationsText}} </span> <br />
       </div>
     </div>
-  </div>
-  <div class="col-12 content-container" >
-    <div class="row">
-      <div class="col-md-6">
-        <span class="page-subheadbold">This page is for Indigenous communities or local governments.</span><br />
-            If you are a homeowner, residential tenant, small business, farm, or charitable organization your process is different: <a target="_blank" href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/preparedbc/evacuation-recovery/disaster-financial-assistance">DFA process for individuals, small businesses, farms, and charitable organizations.</a>
-      </div>
-      <div class="col-md-6"></div>
-      <div class="col-md-6">
-        
-        <button *ngIf="hasActiveEvents == true"
-              class="button-p notice-button left-align"
-              mat-button
-              (click)="navigateToDFAApplicationCreate()"
-            >
-              Create New Application
-        </button>
-
-        <div *ngIf="hasActiveEvents == false">
-          <br />
-          <b>
-            There are currently no active events, please visit our website
-            <a target="_blank" href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/preparedbc/evacuation-recovery/disaster-financial-assistance">Financial assistance in a disaster</a>
-            for more information
-          </b>
-       </div>
-         
-        
-      </div>
-      <div class="col-md-6"></div>
-    </div>
-    <div class="container" style="padding-bottom: 100px; padding-top: 30px;">
-      <!--<app-alert></app-alert>-->
-
-      <nav mat-tab-nav-bar dynamicHeight>
-        <a
-          mat-tab-link
-          *ngFor="let tabItem of tabs"
-          [routerLink]="tabItem.route"
-          routerLinkActive="active-tab"
-           class="tabHead"
-        >
-          <img
-            class="inactive-curr"
-            [src]="tabItem.inactiveImage"
-            height="15"
-            width="15"
-          />
-          <img
-            class="active-curr"
-            [src]="tabItem.activeImage"
-            height="15"
-            width="15"
-          />
-          <!--&nbsp;&nbsp; {{ tabItem.label }}-->
-          &nbsp;&nbsp; {{ tabItem.label != "Profile" ? tabItem.label + " (" + tabItem.count + ")" : tabItem.label }}
-        </a>
-      </nav>
-      <router-outlet></router-outlet>
-      <app-loader
-        class="spinner"
-        [showLoader]="isLoading"
-        strokeWidth="10"
-        diameter="50"
-      >
-      </app-loader>
 </div>
-  </div>
+
 
 </div>
+
+

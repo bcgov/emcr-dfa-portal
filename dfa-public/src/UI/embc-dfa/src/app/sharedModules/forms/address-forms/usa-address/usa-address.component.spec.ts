@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { UsaAddressComponent } from './usa-address.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('UsaAddressComponent', () => {
   let component: UsaAddressComponent;
@@ -10,9 +11,10 @@ describe('UsaAddressComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, MatAutocompleteModule],
-      declarations: [UsaAddressComponent]
-    }).compileComponents();
+    declarations: [UsaAddressComponent],
+    imports: [MatAutocompleteModule],
+    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+}).compileComponents();
   }));
 
   beforeEach(() => {

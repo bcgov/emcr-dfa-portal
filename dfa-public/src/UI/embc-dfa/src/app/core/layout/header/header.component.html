@@ -31,29 +31,13 @@
         </div>
 
         <div class="col-md-4 menu-responsive">
-          <ng-container
-            *ngIf="
-              showLoginMatMenu &&
-              (formCreationService.personalDetailsForm$ | async)?.value
-                ?.lastName &&
-              (formCreationService.personalDetailsForm$ | async)?.value
-                ?.firstName
-            "
-          >
+          <ng-container *ngIf="showLoginMatMenu" >
             <button mat-button class="button-align" [matMenuTriggerFor]="menu">
               <div class="row">
                 <div class="col-md-8">
-                  <span style="color: white"
-                    ><b>{{
-                      (formCreationService.personalDetailsForm$ | async)?.value
-                        ?.lastName | uppercase
-                    }}</b
-                    >,
-                    {{
-                      (formCreationService.personalDetailsForm$ | async)?.value
-                        ?.firstName
-                    }}</span
-                  >
+                  <span style="color: white">
+                    <b>{{ this.firstName }}</b>
+                  </span>
                 </div>
                 <div class="col-md-4">
                   <img

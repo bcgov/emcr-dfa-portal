@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
-using EMBC.Utilities.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +23,6 @@ namespace EMBC.DFA.API.Controllers
 
         public EligibilityController(
             IHostEnvironment env,
-            IMessagingClient messagingClient,
             IMapper mapper,
             IConfigurationHandler handler)
         {

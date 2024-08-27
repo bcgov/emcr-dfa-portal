@@ -39,8 +39,10 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> HandleCleanUpLogItemAsync(dfa_appcleanuplogs_params objCleanUpLogItem);
         Task<IEnumerable<dfa_appcleanuplogs_retrieve>> GetCleanUpLogItemsAsync(Guid applicationId);
         Task<string> HandleFileUploadAsync(SubmissionEntity submission);
+        Task<string> HandleFileUploadClaimAsync(SubmissionEntityClaim objDocumentLocation);
         Task<string> DeleteFileUploadAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms);
         Task<IEnumerable<dfa_projectdocumentlocation>> GetProjectFileUploadsAsync(Guid projectId);
+        Task<IEnumerable<dfa_projectclaimdocumentlocation>> GetProjectClaimFileUploadsAsync(Guid claimId);
         Task<List<CurrentApplication>> HandleApplicationList(string profileId);
         Task<int> HandleEvents();
         Task<IEnumerable<dfa_event>> HandleOpenPublicEventList();
@@ -53,6 +55,9 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> HandleClaimCreateUpdate(dfa_claim_params objClaim);
         Task<List<CurrentClaim>> HandleClaimList(string projectId);
         Task<RecoveryClaim> HandleClaimDetails(string claimId);
+        Task<string> HandleInvoiceCreateUpdate(dfa_invoice_params objInvoice);
+        Task<List<CurrentInvoice>> HandleInvoiceList(string claimId);
+        Task<string> HandleInvoiceDelete(dfa_invoice_delete_params objInvoice);
     }
 
     public class Handler : IConfigurationHandler
@@ -247,6 +252,12 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             return result;
         }
 
+        public async Task<string> HandleFileUploadClaimAsync(SubmissionEntityClaim objDocumentLocation)
+        {
+            var result = await listsGateway.InsertDocumentLocationClaimAsync(objDocumentLocation);
+            return result;
+        }
+
         public async Task<string> DeleteFileUploadAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms)
         {
             var result = await listsGateway.DeleteDocumentLocationAsync(dfa_DFAActionDeleteDocuments_parms);
@@ -256,6 +267,11 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public async Task<IEnumerable<dfa_projectdocumentlocation>> GetProjectFileUploadsAsync(Guid projectId)
         {
             return await listsGateway.GetProjectDocumentLocationsListAsync(projectId);
+        }
+
+        public async Task<IEnumerable<dfa_projectclaimdocumentlocation>> GetProjectClaimFileUploadsAsync(Guid claimId)
+        {
+            return await listsGateway.GetProjectClaimDocumentLocationsListAsync(claimId);
         }
 
         public async Task<int> HandleEvents()
@@ -296,6 +312,25 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         {
             var result = await listsGateway.UpsertClaim(objClaim);
             return result;
+        }
+
+        public async Task<string> HandleInvoiceCreateUpdate(dfa_invoice_params objInvoice)
+        {
+            var result = await listsGateway.UpsertInvoice(objInvoice);
+            return result;
+        }
+
+        public async Task<string> HandleInvoiceDelete(dfa_invoice_delete_params objInvoice)
+        {
+            var result = await listsGateway.DeleteInvoice(objInvoice);
+            return result;
+        }
+
+        public async Task<List<CurrentInvoice>> HandleInvoiceList(string claimId)
+        {
+            var lstApps = await listsGateway.GetInvoiceListAsync(claimId);
+            var mappedInvoices = mapper.Map<List<CurrentInvoice>>(lstApps);
+            return mappedInvoices;
         }
     }
 }

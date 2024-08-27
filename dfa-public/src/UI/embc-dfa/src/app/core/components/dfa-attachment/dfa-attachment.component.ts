@@ -8,7 +8,7 @@ import { KeyValue } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { CustomValidationService } from 'src/app/core/services/customValidation.service';
-import { FileCategory, FileUpload, RequiredDocumentType } from 'src/app/core/api/models';
+import { FileCategory, FileCategoryClaim, FileUpload, FileUploadClaim, RequiredDocumentType, RequiredDocumentTypeClaim } from 'src/app/core/api/models';
 import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
 import { DFAProjectMainDataService } from '../../../feature-components/dfa-project-main/dfa-project-main-data.service';
 import { MatSelectChange } from '@angular/material/select';
@@ -19,6 +19,7 @@ import { MatSelectChange } from '@angular/material/select';
   styleUrls: ['./dfa-attachment.component.scss']
 })
 export class DfaAttachmentComponent implements OnInit, OnDestroy {
+  @Input() isClaim: boolean = false;
   @Input() requiredDocumentType: string;
   @Input() title: string;
   @Input() description: string;
@@ -29,15 +30,15 @@ export class DfaAttachmentComponent implements OnInit, OnDestroy {
   @Input() excludeFileTypes: string[];
   @Input() fileUpload: UntypedFormGroup;
   @Output() showSideNote = new EventEmitter<any>();
-  @Output() saveFileUpload = new EventEmitter<FileUpload>();
+  @Output() saveFileUpload = (this.isClaim ? new EventEmitter<FileUploadClaim>() : new EventEmitter <FileUpload>());
   @Output() cancelFileUpload = new EventEmitter<any>();
   formBuilder: UntypedFormBuilder;
   fileUploadsForm: UntypedFormGroup;
   fileUploadsForm$: Subscription;
   formCreationService: FormCreationService;
   showFileUpload: boolean = false;
-  FileCategories = FileCategory;
-  RequiredDocumentTypes = RequiredDocumentType;
+  FileCategories = this.isClaim ? FileCategoryClaim : FileCategory;
+  RequiredDocumentTypes = this.isClaim ? RequiredDocumentTypeClaim : RequiredDocumentType;
   isdisabled: string = 'true';
 
   constructor(
@@ -60,12 +61,25 @@ export class DfaAttachmentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.fileUploadsForm$ = this.formCreationService
-      .getFileUploadsForm()
-      .subscribe((fileUploads) => {
-        this.fileUploadsForm = fileUploads;
-        this.initFileUploadForm();
-      });
+    
+    this.FileCategories = this.isClaim ? FileCategoryClaim : FileCategory;
+    this.RequiredDocumentTypes = this.isClaim ? RequiredDocumentTypeClaim : RequiredDocumentType;
+    if (this.isClaim) {
+      this.fileUploadsForm$ = this.formCreationService
+        .getClaimFileUploadsForm()
+        .subscribe((fileUploads) => {
+          this.fileUploadsForm = fileUploads;
+          this.initFileUploadForm();
+        });
+    }
+    else {
+      this.fileUploadsForm$ = this.formCreationService
+        .getFileUploadsForm()
+        .subscribe((fileUploads) => {
+          this.fileUploadsForm = fileUploads;
+          this.initFileUploadForm();
+        });
+    }
 
     this.fileUploadsForm
       .get('addNewFileUploadIndicator')
@@ -73,7 +87,9 @@ export class DfaAttachmentComponent implements OnInit, OnDestroy {
   }
 
   initFileUploadForm() {
-    let fileUploads = this.formCreationService.fileUploadsForm.value.get('fileUploads').value;
+    let fileUploads = this.isClaim ?
+      this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').value :
+      this.formCreationService.fileUploadsForm.value.get('fileUploads').value;
     if (this.requiredDocumentType && fileUploads?.filter(x => x.requiredDocumentType === this.requiredDocumentType).length > 0) {
       let foundIndex = fileUploads.findIndex(x => x.requiredDocumentType === this.requiredDocumentType);
       this.fileUpload.setValue(fileUploads[foundIndex]);

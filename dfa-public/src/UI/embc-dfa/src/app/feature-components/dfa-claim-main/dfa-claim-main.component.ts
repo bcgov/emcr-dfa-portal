@@ -17,7 +17,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { Subscription, distinctUntilChanged, mapTo } from 'rxjs';
 import { FormCreationService } from '../../core/services/formCreation.service';
 import { AlertService } from 'src/app/core/services/alert.service';
-import { ApplicantOption, FarmOption, ProjectStageOptionSet, SmallBusinessOption } from 'src/app/core/api/models';
+import { ApplicantOption, ClaimStageOptionSet, FarmOption, ProjectStageOptionSet, SmallBusinessOption } from 'src/app/core/api/models';
 import { ApplicationService, AttachmentService } from 'src/app/core/api/services';
 import { MatDialog } from '@angular/material/dialog';
 import { DFAConfirmSubmitDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-submit-dialog/dfa-confirm-submit-dialog.component';
@@ -97,7 +97,7 @@ export class DFAClaimMainComponent
     
     if (claimId) {
       this.dfaClaimMainDataService.setClaimId(claimId);
-      //this.getFileUploadsForClaim(claimId);
+      this.getFileUploadsForClaim(claimId);
     }
     this.formCreationService.clearRecoveryClaimData();
     this.formCreationService.clearClaimFileUploadsData();
@@ -171,7 +171,7 @@ export class DFAClaimMainComponent
     stepper.selected.interacted = false;
     
     if (event.previouslySelectedIndex == 0) {
-      this.setFormData('recovery-plan');
+      //this.setFormData('recovery-claim');
     }
 
     this.dfaClaimMainDataService.setCurrentStepSelected(event.selectedIndex);
@@ -217,51 +217,10 @@ export class DFAClaimMainComponent
       this.form$.unsubscribe();
       stepper.next();
       this.form.markAllAsTouched();
-    } else if (component === 'recovery-plan') {
-      if (this.form.get('projectNumber').invalid == true && this.form.get('projectName').invalid == true) {
-
-        this.form.addValidators([ValidateProjectMandatoryFields.isRequired(this.form.get('projectNumber'))]);
-        this.form.get('projectNumber').markAsTouched();
-        this.form.get('projectNumber').updateValueAndValidity();
-
-        //this.form.addValidators([ValidateProjectMandatoryFields.isRequired(this.form.get('projectName'))]);
-        //this.form.get('projectName').markAsTouched();
-        //this.form.get('projectName').updateValueAndValidity();
-        document.getElementById("backtodash").scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-      } else {
-        this.form.get('projectNumber').setErrors(null);
-        this.form.get('projectNumber').markAsTouched();
-        this.form.get('projectNumber').updateValueAndValidity();
-        this.setFormData(component);
-        let project = this.dfaClaimMainDataService.createDFAClaimMainDTO();
-        this.dfaClaimMainMapping.mapDFAClaimMain(project);
-        //this.form$.unsubscribe();
-        //stepper.next();
-        //this.form.markAllAsTouched();
-        //this.dfaProjectMainService.upsertProject(project).subscribe(x => {
-
-        //  // determine if step is complete
-        //  //switch (component) {
-        //  //  case 'property-damage':
-        //  //    if (this.form.valid) stepper.selected.completed = true;
-        //  //    else stepper.selected.completed = false;
-        //  //    break;
-        //  //  case 'review':
-        //  //    stepper.selected.completed = true;
-        //  //    break;
-        //  //  default:
-        //  //    break;
-        //  //}
-        //  this.form$.unsubscribe();
-        //  stepper.next();
-        //  this.form.markAllAsTouched();
-        //},
-        //  error => {
-        //    console.error(error);
-        //    document.location.href = 'https://dfa.gov.bc.ca/error.html';
-        //  });
-      }
+    } else if (component === 'recovery-claim') {
+      this.setFormData(component);
+      let claim = this.dfaClaimMainDataService.createDFAClaimMainDTO();
+      this.dfaClaimMainMapping.mapDFAClaimMain(claim);
 
       this.form$.unsubscribe();
       stepper.next();
@@ -276,10 +235,10 @@ export class DFAClaimMainComponent
 
   saveAsDraft(): void {
     this.setFormData(this.steps[this.dfaClaimMainStepper.selectedIndex]?.component.toString());
-    this.dfaClaimMainDataService.recoveryClaim.claimStatus = ProjectStageOptionSet.DRAFT;
-    let project = this.dfaClaimMainDataService.createDFAClaimMainDTO();
+    this.dfaClaimMainDataService.recoveryClaim.claimStatus = ClaimStageOptionSet.DRAFT;
+    let claim = this.dfaClaimMainDataService.createDFAClaimMainDTO();
 
-    this.dfaClaimMainService.upsertClaim(project).subscribe(x => {
+    this.dfaClaimMainService.upsertClaim(claim).subscribe(x => {
         this.BackToDashboard();
     },
       error => {
@@ -289,11 +248,13 @@ export class DFAClaimMainComponent
   }
 
   requiredDocumentsSupplied(): boolean {
-    let isPreEventUploaded = this.formCreationService.fileUploadsForm.getValue().getRawValue()?.fileUploads.filter(x => x.requiredDocumentType === "PreEvent" && x.deleteFlag == false).length >= 1 ? true : false;
-    let isPostEventUploaded = this.formCreationService.fileUploadsForm.getValue().getRawValue()?.fileUploads.filter(x => x.requiredDocumentType === "PostEvent" && x.deleteFlag == false).length >= 1 ? true : false;
+    let isInvoiceUploaded = this.formCreationService.fileUploadsClaimForm.getValue().getRawValue()?.fileUploads.filter(x => x.requiredDocumentType === "Invoices" && x.deleteFlag == false).length >= 1 ? true : false;
+    let isGeneralLedgerUploaded = this.formCreationService.fileUploadsClaimForm.getValue().getRawValue()?.fileUploads.filter(x => x.requiredDocumentType === "GeneralLedger" && x.deleteFlag == false).length >= 1 ? true : false;
+    let isProofofPaymentUploaded = this.formCreationService.fileUploadsClaimForm.getValue().getRawValue()?.fileUploads.filter(x => x.requiredDocumentType === "ProofofPayment" && x.deleteFlag == false).length >= 1 ? true : false;
    
-    if (isPreEventUploaded == true
-      && isPostEventUploaded) return true;
+    if (isInvoiceUploaded == true
+      && isGeneralLedgerUploaded
+      && isProofofPaymentUploaded ) return true;
     else return false;
   }
 
@@ -307,22 +268,6 @@ export class DFAClaimMainComponent
     switch (component) {
       case 'recovery-claim':
         this.dfaClaimMainDataService.recoveryClaim.isThisFinalClaim = this.form.get('isThisFinalClaim').value == 'true' ? true : (this.form.get('isThisFinalClaim').value == 'false' ? false : null);
-        //this.dfaClaimMainDataService.recoveryPlan.projectNumber = this.form.get('projectNumber').value;
-        //this.dfaClaimMainDataService.recoveryPlan.projectStatus = this.form.get('projectStatus').value;
-        //this.dfaClaimMainDataService.recoveryPlan.isdamagedDateSameAsApplication = this.form.get('isdamagedDateSameAsApplication').value == 'true' ? true : (this.form.get('isdamagedDateSameAsApplication').value == 'false' ? false : null);
-        //this.dfaClaimMainDataService.recoveryPlan.sitelocationdamageFromDate = this.form.get('sitelocationdamageFromDate').value;
-        //this.dfaClaimMainDataService.recoveryPlan.sitelocationdamageToDate = this.form.get('sitelocationdamageToDate').value;
-        //this.dfaClaimMainDataService.recoveryPlan.differentDamageDatesReason = this.form.get('differentDamageDatesReason').value;
-        //this.dfaClaimMainDataService.recoveryPlan.siteLocation = this.form.get('siteLocation').value;
-        //this.dfaClaimMainDataService.recoveryPlan.infraDamageDetails = this.form.get('infraDamageDetails').value;
-        //this.dfaClaimMainDataService.recoveryPlan.causeofDamageDetails = this.form.get('causeofDamageDetails').value;
-        //this.dfaClaimMainDataService.recoveryPlan.describeDamageDetails = this.form.get('describeDamageDetails').value;
-        //this.dfaClaimMainDataService.recoveryPlan.describeDamagedInfrastructure = this.form.get('describeDamagedInfrastructure').value;
-        //this.dfaClaimMainDataService.recoveryPlan.repairWorkDetails = this.form.get('repairWorkDetails').value;
-        //this.dfaClaimMainDataService.recoveryPlan.repairDamagedInfrastructure = this.form.get('repairDamagedInfrastructure').value;
-        //this.dfaClaimMainDataService.recoveryPlan.estimatedCompletionDate = this.form.get('estimatedCompletionDate').value;
-        //this.dfaClaimMainDataService.recoveryPlan.estimateCostIncludingTax = this.form.get('estimateCostIncludingTax').value;
-
         break;
       default:
         break;
@@ -339,13 +284,13 @@ export class DFAClaimMainComponent
     switch (index) {
       case 0:
         this.form$ = this.formCreationService
-          .getRecoveryPlanForm()
-          .subscribe((recoveryPlanForm) => {
-            this.form = recoveryPlanForm;
+          .getRecoveryClaimForm()
+          .subscribe((recoveryClaimForm) => {
+            this.form = recoveryClaimForm;
           });
 
         break;
-      case 1:
+      case 2:
         this.form$ = this.formCreationService
           .getSupportingDocumentsForm()
           .subscribe((supportingDocuments) => {
@@ -366,17 +311,14 @@ export class DFAClaimMainComponent
   }
 
   submitFile(): void {
-    var contentDialog = globalConst.confirmSubmitApplicationBody;
-    var height = '350px';
-    if (this.dfaClaimMainDataService.getApplicationId()) {
-      contentDialog = globalConst.confirmUpdateApplicationBody;
-      height = '250px';
-    }
+    var contentDialog = globalConst.confirmSubmitClaimBody;
+    var height = '260px';
 
     this.dialog
       .open(DFAConfirmSubmitDialogComponent, {
         data: {
-          content: contentDialog
+          content: contentDialog,
+          header: 'Submit Claim Confirmation' 
         },
         height: height,
         width: '700px',
@@ -388,7 +330,7 @@ export class DFAClaimMainComponent
           //let application = this.dfaApplicationMainDataService.createDFAApplicationMainDTO();
           //this.dfaApplicationMainMapping.mapDFAApplicationMain(application);
           this.setFormData(this.steps[this.dfaClaimMainStepper.selectedIndex]?.component.toString());
-          this.dfaClaimMainDataService.recoveryClaim.claimStatus = ProjectStageOptionSet.SUBMIT;
+          this.dfaClaimMainDataService.recoveryClaim.claimStatus = ClaimStageOptionSet.SUBMIT;
 
           let project = this.dfaClaimMainDataService.createDFAClaimMainDTO();
 
@@ -416,12 +358,12 @@ export class DFAClaimMainComponent
       });
   }
 
-  public getFileUploadsForProject(projectId: string) {
+  public getFileUploadsForClaim(claimId: string) {
 
-    this.fileUploadsService.attachmentGetProjectAttachments({ projectId: projectId }).subscribe({
+    this.fileUploadsService.attachmentGetClaimAttachments({ claimId: claimId }).subscribe({
       next: (attachments) => {
         // initialize list of file uploads
-        this.formCreationService.fileUploadsForm.value.get('fileUploads').setValue(attachments);
+        this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').setValue(attachments);
 
       },
       error: (error) => {
@@ -435,24 +377,7 @@ export class DFAClaimMainComponent
     var projId = this.dfaClaimMainDataService.getProjectId();
     this.router.navigate(['/dfa-project/' + projId + '/claims']);
   }
-
-  notifyAddressChange(): void {
-    this.dialog
-      .open(AddressChangeComponent, {
-        data: {
-          content: globalConst.notifyBCSCAddressChangeBody
-        },
-        height: '300px',
-        width: '700px',
-        disableClose: true
-      })
-      .afterClosed()
-      .subscribe((result) => {
-        //if (result === 'confirm') {
-
-        //}
-      });
-  }
+  
 }
 
 export class ValidateProjectMandatoryFields {

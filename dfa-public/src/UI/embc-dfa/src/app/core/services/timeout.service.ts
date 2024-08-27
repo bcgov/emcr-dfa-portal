@@ -5,6 +5,7 @@ import { TimeoutConfiguration } from '../api/models';
 import { TimeOutDialogComponent } from '../components/dialog-components/time-out-dialog/time-out-dialog.component';
 import { DialogComponent } from '../components/dialog/dialog.component';
 import { CacheService } from './cache.service';
+import { AuthModule, AuthOptions, LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
 import { LoginService } from './login.service';
 
 @Injectable({
@@ -17,6 +18,7 @@ export class TimeoutService {
   constructor(
     public idle: Idle,
     public dialog: MatDialog,
+    private oidcSecurityService: OidcSecurityService,
     public loginService: LoginService,
     public cacheService: CacheService
   ) {}
@@ -57,7 +59,7 @@ export class TimeoutService {
   }
 
   public async signOut(): Promise<void> {
-    await this.loginService.logout();
+    await this.oidcSecurityService.logoffAndRevokeTokens();
     this.cacheService.clear();
     localStorage.clear();
   }

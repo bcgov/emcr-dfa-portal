@@ -22,7 +22,9 @@ import {
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { Subscription } from 'rxjs';
 import { DirectivesModule } from '../../../../core/directives/directives.module';
-import { TextMaskModule } from 'angular2-text-mask';
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - TextMaskModule not compatible
+//import { TextMaskModule } from 'angular2-text-mask';
+import { NgxMaskDirective, NgxMaskPipe, NgxMaskService, provideNgxMask } from 'ngx-mask';
 import { CustomValidationService } from 'src/app/core/services/customValidation.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
@@ -175,7 +177,8 @@ export default class ContactInfoComponent implements OnInit, OnDestroy {
     ReactiveFormsModule,
     MatCheckboxModule,
     DirectivesModule,
-    TextMaskModule,
+    // 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - new text mask provider
+    NgxMaskDirective, NgxMaskPipe,
     MatRadioModule
   ],
   declarations: [ContactInfoComponent]

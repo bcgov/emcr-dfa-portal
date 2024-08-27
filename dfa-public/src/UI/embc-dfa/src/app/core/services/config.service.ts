@@ -1,7 +1,7 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
+import { AuthModule } from 'angular-auth-oidc-client';
 import { lastValueFrom } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { tap } from 'rxjs/internal/operators/tap';
@@ -55,7 +55,7 @@ export class ConfigService {
     return lastValueFrom(config$);
   }
 
-  public getOAuthConfig(): AuthConfig {
+  public getOAuthConfig(): AuthModule {
     const config = this.configuration;
     if (!config) throw new Error('Configuration was not loaded');
     return {

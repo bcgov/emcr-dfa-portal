@@ -23,19 +23,20 @@
 
     <ng-container *ngIf="vieworedit !== 'viewOnly'"> <!-- Invoices -->
       <div class="row">
-            <!--*ngIf="fileUploadForm.hasError('noinvoices')"-->
         <div class="col-md-8" >
           <app-dfa-attachment
+            *ngIf="fileUploadForm.hasError('noinvoices')"
             title="Invoices"
+            isClaim="true"
             description="Attach Invoices"
-            requiredDocumentType="PreEvent"
+            requiredDocumentType="Invoices"
             [allowedFileTypes]="allowedFileTypes"
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
-            fileType="PreEvent"
+            fileType="Invoices"
             fileTypeText="Invoices"
             excludeFileTypes="[]"
             (saveFileUpload)="saveRequiredForm($event)"
-            [fileUpload]="formCreationService.fileUploadsForm.value.get('prevEventConditionFileUpload')"
+            [fileUpload]="formCreationService.fileUploadsClaimForm.value.get('invoiceUpload')"
           ></app-dfa-attachment>
           <app-loader
             class="spinner"
@@ -44,9 +45,9 @@
             diameter="50"
           >
           </app-loader>
-          <!--<mat-card class="row" *ngIf="!fileUploadForm.hasError('noinvoices')">
+          <mat-card class="row align-card-left" *ngIf="!fileUploadForm.hasError('noinvoices')">
             <p class="sub-heading" style="font-size: 15px">Required invoices has been uploaded.</p>
-          </mat-card>-->
+          </mat-card>
         </div>
       </div>
       <br/>
@@ -55,20 +56,21 @@
     <ng-container *ngIf="vieworedit !== 'viewOnly'"> <!-- General Ledger -->
       <div class="row">
         <div class="col-md-8">
-            <!--*ngIf="fileUploadForm.hasError('nogeneralledger')"-->
 
           <app-dfa-attachment
+            *ngIf="fileUploadForm.hasError('nogeneralledger')"
+            isClaim="true"
             isdisabled="isdisabled"
             title="General Ledger"
             description="Attach General Ledger."
-            requiredDocumentType="PostEvent"
+            requiredDocumentType="GeneralLedger"
             [allowedFileTypes]="allowedFileTypes"
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
-            fileType="PostEvent"
+            fileType="GeneralLedger"
             fileTypeText="General Ledger"
             excludeFileTypes="[]"
             (saveFileUpload)="saveRequiredForm($event)"
-            [fileUpload]="formCreationService.fileUploadsForm.value.get('postEventConditionFileUpload')"
+            [fileUpload]="formCreationService.fileUploadsClaimForm.value.get('generalLedgerUpload')"
           ></app-dfa-attachment>
           <app-loader
             class="spinner"
@@ -77,9 +79,9 @@
             diameter="50"
           >
           </app-loader>
-          <!--<mat-card class="row" *ngIf="!fileUploadForm.hasError('nogeneralledger')">
+          <mat-card class="row align-card-left" *ngIf="!fileUploadForm.hasError('nogeneralledger')">
             <p class="sub-heading" style="font-size: 15px">Required general ledger has been uploaded.</p>
-          </mat-card>-->
+          </mat-card>
         </div>
       </div>
       <br/>
@@ -88,20 +90,20 @@
     <ng-container *ngIf="vieworedit !== 'viewOnly'"> <!-- Proof of Payment -->
       <div class="row">
         <div class="col-md-8">
-          <!--*ngIf="fileUploadForm.hasError('noproofofpayment')"-->
           <app-dfa-attachment
+            isClaim="true"
             isdisabled="isdisabled"
             title="Proof of Payment"
             description="Attach Proof of Payment."
-            
-            requiredDocumentType="PostEvent"
+            *ngIf="fileUploadForm.hasError('noproofofpayment')"
+            requiredDocumentType="ProofofPayment"
             [allowedFileTypes]="allowedFileTypes"
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
-            fileType="PostEvent"
+            fileType="ProofofPayment"
             fileTypeText="Proof of Payment"
             excludeFileTypes="[]"
             (saveFileUpload)="saveRequiredForm($event)"
-            [fileUpload]="formCreationService.fileUploadsForm.value.get('postEventConditionFileUpload')"
+            [fileUpload]="formCreationService.fileUploadsClaimForm.value.get('proofOfPaymentUpload')"
           ></app-dfa-attachment>
           <app-loader
             class="spinner"
@@ -110,9 +112,9 @@
             diameter="50"
           >
           </app-loader>
-          <!--<mat-card class="row" *ngIf="!fileUploadForm.hasError('noproofofpayment')">
+          <mat-card class="row align-card-left" *ngIf="!fileUploadForm.hasError('noproofofpayment')">
             <p class="sub-heading" style="font-size: 15px">Required proof of payment has been uploaded.</p>
-          </mat-card>-->
+          </mat-card>
         </div>
       </div>
       <br/>
@@ -122,16 +124,17 @@
       <div class="row">
         <div class="col-md-8">
           <app-dfa-attachment
+            isClaim=true
             isdisabled="isdisabled"
             requiredDocumentType="null"
             title="Other Supporting Documents (Optional)"
-            description="If applicable, you may include additional documents related to your application."
+            description="If applicable, you may include additional documents related to your claim."
             [allowedFileTypes]="allowedFileTypes"
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             excludeFileTypes="['Identification', 'Unknown']"
             (saveFileUpload)="saveSupportingFiles($event)"
             (cancelFileUpload)="cancelSupportingFiles()"
-            [fileUpload]="formCreationService.fileUploadsForm.value.get('supportingFilesFileUpload')"
+            [fileUpload]="formCreationService.fileUploadsClaimForm.value.get('supportingFilesFileUpload')"
           ></app-dfa-attachment>
           <app-loader
             class="spinner"
@@ -235,14 +238,14 @@
 
     </table>
 
-    <!--<mat-error *ngIf="fileUploadForm.hasError('noPreEventCondition') && isformUploaddisabled != 'true' && vieworedit !== 'viewOnly'">
-      <br/>Invoice is required.
+    <mat-error *ngIf="fileUploadForm.hasError('noinvoices') && isformUploaddisabled != 'true' && vieworedit !== 'viewOnly'">
+      <br/>Invoices are required.
     </mat-error>
-    <mat-error *ngIf="fileUploadForm?.hasError('noPostEventCondition') && isformUploaddisabled != 'true' && vieworedit !== 'viewOnly'">
-      <br/>Post event condition is required.
+    <mat-error *ngIf="fileUploadForm?.hasError('nogeneralledger') && isformUploaddisabled != 'true' && vieworedit !== 'viewOnly'">
+      <br/>General Ledger is required.
     </mat-error>
-    <mat-error *ngIf="fileUploadForm?.hasError('noPostEventCondition') && isformUploaddisabled != 'true' && vieworedit !== 'viewOnly'">
-      <br/>Post event condition is required.
-    </mat-error>-->
+    <mat-error *ngIf="fileUploadForm?.hasError('noproofofpayment') && isformUploaddisabled != 'true' && vieworedit !== 'viewOnly'">
+      <br/>Proof of Payment is required.
+    </mat-error>
   </mat-card-content>
 </mat-card>

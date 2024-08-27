@@ -150,6 +150,8 @@ export class ConfigurationService extends BaseService {
    * To access only the response body, use `configurationGetCommunities()` instead.
    *
    * This method doesn't expect any request body.
+   *
+   * @deprecated
    */
   configurationGetCommunities$Response(params?: {
     stateProvinceId?: string;
@@ -180,6 +182,8 @@ export class ConfigurationService extends BaseService {
    * To access the full response (for headers, for example), `configurationGetCommunities$Response()` instead.
    *
    * This method doesn't expect any request body.
+   *
+   * @deprecated
    */
   configurationGetCommunities(params?: {
     stateProvinceId?: string;
@@ -202,6 +206,8 @@ export class ConfigurationService extends BaseService {
    * To access only the response body, use `configurationGetStateProvinces()` instead.
    *
    * This method doesn't expect any request body.
+   *
+   * @deprecated
    */
   configurationGetStateProvinces$Response(params?: {
     countryId?: string;
@@ -228,6 +234,8 @@ export class ConfigurationService extends BaseService {
    * To access the full response (for headers, for example), `configurationGetStateProvinces$Response()` instead.
    *
    * This method doesn't expect any request body.
+   *
+   * @deprecated
    */
   configurationGetStateProvinces(params?: {
     countryId?: string;
@@ -291,6 +299,8 @@ export class ConfigurationService extends BaseService {
    * To access only the response body, use `configurationGetSecurityQuestions()` instead.
    *
    * This method doesn't expect any request body.
+   *
+   * @deprecated
    */
   configurationGetSecurityQuestions$Response(params?: {
   }): Observable<StrictHttpResponse<Array<string>>> {
@@ -315,6 +325,8 @@ export class ConfigurationService extends BaseService {
    * To access the full response (for headers, for example), `configurationGetSecurityQuestions$Response()` instead.
    *
    * This method doesn't expect any request body.
+   *
+   * @deprecated
    */
   configurationGetSecurityQuestions(params?: {
   }): Observable<Array<string>> {
@@ -334,6 +346,8 @@ export class ConfigurationService extends BaseService {
    * To access only the response body, use `configurationGetOutageInfo()` instead.
    *
    * This method doesn't expect any request body.
+   *
+   * @deprecated
    */
   configurationGetOutageInfo$Response(params?: {
   }): Observable<StrictHttpResponse<OutageInformation>> {
@@ -358,6 +372,8 @@ export class ConfigurationService extends BaseService {
    * To access the full response (for headers, for example), `configurationGetOutageInfo$Response()` instead.
    *
    * This method doesn't expect any request body.
+   *
+   * @deprecated
    */
   configurationGetOutageInfo(params?: {
   }): Observable<OutageInformation> {

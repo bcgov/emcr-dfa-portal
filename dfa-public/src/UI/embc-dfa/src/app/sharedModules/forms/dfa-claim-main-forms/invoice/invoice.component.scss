@@ -19,7 +19,7 @@ mat-form-field {
   color: #003366 !important;
   font-weight: bold;
   margin: 5px;
-  height: 40px;
+  height: 40px !important;
   border-radius: 5px !important;
   min-width: 80px;
 }
@@ -55,8 +55,8 @@ mat-form-field {
   border-radius: 30px !important;*/
 /*border: none !important;*/
 /*}*/
-::ng-deep .mat-form-field {
-  .mat-form-field-outline {
+::ng-deep .mat-mdc-form-field {
+  .mat-form-field-appearance-outline {
     &-end {
       border-radius: 0 5px 5px 0 !important;
     }
@@ -67,6 +67,13 @@ mat-form-field {
   }
 }
 
+::ng-deep .monetary-input .mat-mdc-text-field-wrapper {
+  height: 40px !important;
+}
+
+::ng-deep .monetary-input-small .mat-mdc-text-field-wrapper {
+  height: 30px !important;
+}
 
 .boxborder {
   border: 1px solid #707070;
@@ -91,25 +98,44 @@ mat-form-field {
     padding-left: 20px;
     border-left: 1px solid black;
 }
+
+::ng-deep .costCurrency .mat-mdc-form-field-infix {
+  padding: 9px !important;
+}
+
+::ng-deep .costCurrency .mat-form-field-appearance-outline {
+  border-radius: 6px;
+  background-color: white;
+}
+
 /*
 ::ng-deep .costCurrency .mat-form-field-infix {
   border-right: 50px solid transparent;
 }*/
 
-::ng-deep .pst-box .mat-form-field-infix {
-  border-top: 6px solid transparent;
+::ng-deep .pst-box .mat-mdc-form-field-infix {
+  /*border-top: 6px solid transparent;*/
   padding: 5px !important;
 }
 
-::ng-deep .pst-box .mat-form-field-outline {
+::ng-deep .pst-box .mat-form-field-appearance-outline {
   border-radius: 6px;
   background-color: white;
+}
+
+::ng-deep .mat-mdc-card-content {
+  padding: 30px !important;
+}
+
+::ng-deep .mat-mdc-form-field-error {
+    align-content: center;
 }
 
 .pst-box .inputCurrency {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+  margin: 1px 0px;
 }
 
 .aln-txt {

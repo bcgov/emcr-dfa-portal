@@ -3,6 +3,7 @@ export { AttachmentService } from './services/attachment.service';
 export { ClaimService } from './services/claim.service';
 export { CleanUpLogItemService } from './services/clean-up-log-item.service';
 export { ConfigurationService } from './services/configuration.service';
+export { ContactService } from './services/contact.service';
 export { DamagedRoomService } from './services/damaged-room.service';
 export { EligibilityService } from './services/eligibility.service';
 export { FullTimeOccupantService } from './services/full-time-occupant.service';

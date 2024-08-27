@@ -24,7 +24,9 @@ import { DFAApplicationStartDataService } from 'src/app/feature-components/dfa-a
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
-import { TextMaskModule } from 'angular2-text-mask';
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - TextMaskModule not compatible
+//import { TextMaskModule } from 'angular2-text-mask';
+import { NgxMaskDirective, NgxMaskPipe, NgxMaskService, provideNgxMask } from 'ngx-mask';
 import { AddressFormsModule } from '../../address-forms/address-forms.module';
 import { ErrorStateMatcher } from '@angular/material/core';
 
@@ -85,6 +87,10 @@ export default class ProfileVerificationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.profileService.profileGetProfileWithUpdatedBcsc().subscribe(profile => {
+    console.log('getProfileWithUpdatedBCSC.id: ' + profile?.id)
+    });
+
     this.profileVerificationForm$ = this.formCreationService
       .getProfileVerificationForm()
       .subscribe((profileVerification) => {
@@ -344,7 +350,8 @@ export default class ProfileVerificationComponent implements OnInit, OnDestroy {
     FormsModule,
     MatCardModule,
     MatFormFieldModule,
-    TextMaskModule,
+    // 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - new text mask provider
+    NgxMaskDirective, NgxMaskPipe,
     MatRadioModule,
     MatInputModule,
     MatButtonModule,

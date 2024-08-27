@@ -14,6 +14,8 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<boolean> {
-    return await this.loginService.login(state.url);
+    // 2024-05-27 EMCRI-217 waynezen: replace AuthGuard with built-in from angular-auth-oidc-client
+    //return await this.loginService.login(state.url);
+    return Promise.resolve(true);
   }
 }

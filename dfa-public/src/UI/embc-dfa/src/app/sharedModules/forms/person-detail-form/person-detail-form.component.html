@@ -84,11 +84,11 @@
     <div class="col-md-3">
       <mat-form-field type="date" appearance="outline">
         <mat-label class="requiredField">Date of Birth</mat-label>
+        <!-- 2024-08-01 EMCRI-216 waynezen; upgrade to Angular 18 - use new ngx-mask -->
         <input
           formControlName="dateOfBirth"
           matInput
           placeholder="mm/dd/yyyy"
-          [textMask]="{ mask: dateMask, keepCharPositions: true }"
         />
         <mat-hint>Allowed Date format: mm/dd/yyyy</mat-hint>
         <mat-error

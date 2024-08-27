@@ -1,6 +1,8 @@
 import { AbstractControl, ValidatorFn, Validators } from '@angular/forms';
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18
+import moment from 'moment';
+
 import * as globalConst from '../services/globalConstants';
 
 @Injectable({ providedIn: 'root' })

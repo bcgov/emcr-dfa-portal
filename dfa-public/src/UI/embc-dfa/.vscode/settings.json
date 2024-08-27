@@ -11,5 +11,6 @@
     "ts"
   ],
   "diffEditor.codeLens": true,
-  "editor.minimap.maxColumn": 140
+  "editor.minimap.maxColumn": 140,
+  "angular.enable-strict-mode-prompt": false
 }

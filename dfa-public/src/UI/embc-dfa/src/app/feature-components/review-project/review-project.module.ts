@@ -7,7 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CustomPipeModule } from '../../core/pipe/customPipe.module';
 import { CoreModule } from '../../core/core.module';
-import { RecaptchaFormsModule, RecaptchaModule } from 'ng-recaptcha';
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - using new ng-recaptcha-2
+import { RecaptchaFormsModule, RecaptchaModule } from 'ng-recaptcha-2';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { DashReviewProjectRoutingModule } from './review-project-routing.module';

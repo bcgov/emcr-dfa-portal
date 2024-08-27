@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "startlocal",
+			"problemMatcher": [],
+			"label": "npm: startlocal",
+			"detail": "npm run gen-api-local && ng serve --port 5200 --configuration=local"
+		}
+	]
+}

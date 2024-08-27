@@ -269,7 +269,6 @@ export class DFAProjectMainComponent
     this.setFormData(this.steps[this.dfaProjectMainStepper.selectedIndex]?.component.toString());
     this.dfaProjectMainDataService.recoveryPlan.projectStatus = ProjectStageOptionSet.DRAFT;
     let project = this.dfaProjectMainDataService.createDFAProjectMainDTO();
-
     this.dfaProjectMainService.upsertProject(project).subscribe(x => {
         this.BackToDashboard();
     },

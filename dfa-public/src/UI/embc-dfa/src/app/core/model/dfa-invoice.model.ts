@@ -19,7 +19,7 @@ export class Invoice {
   isClaimforPartofTotalInvoice?: null | boolean;
   reasonClaimingPartofTotalInvoice?: null | string;
   netInvoiceBeingClaimed?: null | string;
-  PST?: null | string;
+  pst?: null | string;
   grossGST?: null | string;
   actualInvoiceTotal?: null | string;
   eligibleGST?: null | string;
@@ -35,7 +35,7 @@ export class Invoice {
     isClaimforPartofTotalInvoice?: null | boolean,
     reasonClaimingPartofTotalInvoice?: null | string,
     netInvoiceBeingClaimed?: null | string,
-    PST?: null | string,
+    pst?: null | string,
     grossGST?: null | string,
     actualInvoiceTotal?: null | string,
     eligibleGST?: null | string,
@@ -54,7 +54,7 @@ export class InvoiceForm {
   isClaimforPartofTotalInvoice = new UntypedFormControl();
   reasonClaimingPartofTotalInvoice = new UntypedFormControl();
   netInvoiceBeingClaimed = new UntypedFormControl();
-  PST = new UntypedFormControl();
+  pst = new UntypedFormControl();
   grossGST = new UntypedFormControl();
   actualInvoiceTotal = new UntypedFormControl();
   eligibleGST = new UntypedFormControl();
@@ -110,10 +110,10 @@ export class InvoiceForm {
     }
     this.netInvoiceBeingClaimed.setValidators(null);
 
-    if (invoice.PST) {
-      this.PST.setValue(invoice.PST);
+    if (invoice.pst) {
+      this.pst.setValue(invoice.pst);
     }
-    this.PST.setValidators(null);
+    this.pst.setValidators(null);
 
     if (invoice.grossGST) {
       this.grossGST.setValue(invoice.grossGST);
@@ -2052,7 +2052,6 @@ export class SupportingDocumentsForm {
  **/
 export interface DfaInvoiceMain {
   id?: string;
-  applicationId?: string;
   claimId?: string;
   invoice?: Invoice;
 }

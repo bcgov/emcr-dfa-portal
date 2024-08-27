@@ -4,7 +4,7 @@ name: cd-dfae-project-public-api
 on:
   push:
     branches:
-      - develop
+      - 'develop'
     paths:
       - "dfa-public/src/API/**"
       - ".github/workflows/cd-dfae-project-public-api.yml"

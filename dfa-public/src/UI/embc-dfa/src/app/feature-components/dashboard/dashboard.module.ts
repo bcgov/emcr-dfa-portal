@@ -18,8 +18,10 @@ import { CoreModule } from '../../core/core.module';
     ReactiveFormsModule,
     DashboardRoutingModule,
     MatTabsModule,
+    MatButtonModule,
     ReviewModule,
     CoreModule
-  ]
+  ],
+  exports: [MatButtonModule]
 })
 export class DashboardModule { }

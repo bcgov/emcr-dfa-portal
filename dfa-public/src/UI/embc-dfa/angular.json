@@ -66,8 +66,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -85,36 +83,33 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "embc-dfa:build"
-          },
           "configurations": {
             "local": {
-              "browserTarget": "embc-dfa:build:local",
-              "proxyConfig": "proxy.local.conf.json"
+              "proxyConfig": "proxy.local.conf.json",
+              "buildTarget": "embc-dfa:build:local"
             },
             "dev": {
-              "browserTarget": "embc-dfa:build:local",
-              "proxyConfig": "proxy.dev.conf.json"
+              "proxyConfig": "proxy.dev.conf.json",
+              "buildTarget": "embc-dfa:build:local"
             },
             "test": {
-              "browserTarget": "embc-dfa:build:local",
-              "proxyConfig": "proxy.test.conf.json"
+              "proxyConfig": "proxy.test.conf.json",
+              "buildTarget": "embc-dfa:build:local"
             },
             "training": {
-              "browserTarget": "embc-dfa:build:local",
-              "proxyConfig": "proxy.training.conf.json"
+              "proxyConfig": "proxy.training.conf.json",
+              "buildTarget": "embc-dfa:build:local"
             },
             "production": {
-              "browserTarget": "embc-dfa:build:production",
-              "proxyConfig": "proxy.conf.json"
+              "proxyConfig": "proxy.conf.json",
+              "buildTarget": "embc-dfa:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "embc-dfa:build"
+            "buildTarget": "embc-dfa:build"
           }
         },
         "test": {
@@ -159,7 +154,6 @@
       }
     }
   },
-  "defaultProject": "embc-dfa",
   "cli": {
     "analytics": false
   }

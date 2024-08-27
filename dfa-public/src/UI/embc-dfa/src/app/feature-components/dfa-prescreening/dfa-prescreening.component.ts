@@ -9,11 +9,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as globalConst from '../../core/services/globalConstants';
 import { MatStepper } from '@angular/material/stepper';
 import { Subscription } from 'rxjs';
+import { map } from "rxjs/operators";
 import { FormCreationService } from '../../core/services/formCreation.service';
 import { DFAPrescreeningDataService } from './dfa-prescreening-data.service';
 import { ApplicantOption } from 'src/app/core/api/models';
 import { MatDialog } from '@angular/material/dialog';
 import { DFAConfirmPrescreeningDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-prescreening-dialog/dfa-confirm-prescreening-dialog.component';
+import { AuthModule, AuthOptions, LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
 import { LoginService } from 'src/app/core/services/login.service';
 import { HttpClient } from '@angular/common/http';
 import { DFAConfirmDashboardNavigationDialogComponent } from '../../core/components/dialog-components/dfa-confirm-dashboard-navigation/dfa-confirm-dashboard-navigation.component';
@@ -46,6 +48,7 @@ export class DFAPrescreeningComponent
     private cd: ChangeDetectorRef,
     public dfaPrescreeningDataService: DFAPrescreeningDataService,
     public dialog: MatDialog,
+    private oidcSecurityService: OidcSecurityService,
     private loginService: LoginService,
     private httpClient: HttpClient
   ) {
@@ -71,7 +74,15 @@ export class DFAPrescreeningComponent
         this.dfaPrescreeningForm = prescreening;
       });
 
-    this.isLoggedIn = this.loginService.isLoggedIn();
+    //    this.isLoggedIn = this.loginService.isLoggedIn();
+
+    // 2024-06-05 EMCRI-217 waynezen: use new BCeID async Auth
+    if (this.oidcSecurityService.isAuthenticated()) {
+      this.isLoggedIn = true;
+    }
+    else {
+      this.isLoggedIn = false
+    }
   }
 
   ngAfterViewChecked(): void {
@@ -160,7 +171,8 @@ export class DFAPrescreeningComponent
       })
       .afterClosed()
       .subscribe((result) => {
-        if (result === 'confirm' && this.loginService.isLoggedIn()) {
+        // 2024-06-05 EMCRI-217 waynezen: use new BCeID async Auth
+        if (result === 'confirm' && this.oidcSecurityService.isAuthenticated()) {
           this.returnToDashboard();
         }
       });
@@ -177,7 +189,8 @@ export class DFAPrescreeningComponent
       })
       .afterClosed()
       .subscribe((result) => {
-        if (result === 'confirm' && this.loginService.isLoggedIn()) {
+        // 2024-06-05 EMCRI-217 waynezen: use new BCeID async Auth
+        if (result === 'confirm' && this.oidcSecurityService.isAuthenticated()) {
           const navigationPath = '/dfa-application-start';
           this.router.navigate([navigationPath]);
         } else this.returnToDashboard();

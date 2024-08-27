@@ -230,6 +230,31 @@ namespace EMBC.DFA.API.Controllers
     /// File Category Options
     /// </summary>
     [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum FileCategoryClaim
+    {
+        [EnumMember(Value = "Invoices")]
+        Invoices,
+
+        [EnumMember(Value = "General Ledger")]
+        GeneralLedger,
+
+        [EnumMember(Value = "Proof of Payment")]
+        ProofofPayment,
+
+        [EnumMember(Value = "Contracts")]
+        Contracts,
+
+        [EnumMember(Value = "Blue Book Rates")]
+        BlueBookRates,
+
+        [EnumMember(Value = "Additional Supporting Documents")]
+        AdditionalDocuments
+    }
+
+    /// <summary>
+    /// File Category Options
+    /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum RequiredDocumentType
     {
         [EnumMember(Value = "Pre Event Condition")]
@@ -237,6 +262,22 @@ namespace EMBC.DFA.API.Controllers
 
         [EnumMember(Value = "Post Event Condition")]
         PostEvent,
+    }
+
+    /// <summary>
+    /// File Category Options
+    /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum RequiredDocumentTypeClaim
+    {
+        [EnumMember(Value = "Invoices")]
+        Invoices,
+
+        [EnumMember(Value = "General Ledger")]
+        GeneralLedger,
+
+        [EnumMember(Value = "Proof of Payment")]
+        ProofofPayment,
     }
 
     /// <summary>
@@ -477,27 +518,45 @@ namespace EMBC.DFA.API.Controllers
     public class DFAClaimMain
     {
         public Guid? Id { get; set; }
-        public string? ApplicationId { get; set; }
         public string? ProjectId { get; set; }
         public RecoveryClaim? Claim { get; set; }
     }
 
+    public class DFAInvoiceMain
+    {
+        public Guid? Id { get; set; }
+        public string? ClaimId { get; set; }
+        public Invoice? Invoice { get; set; }
+    }
+
     public class RecoveryClaim
     {
-        public string claimNumber { get; set; }
-        public ProjectStageOptionSet claimStatus { get; set; }
-        public bool isFirstClaimApproved { get; set; }
-        public bool isThisFinalClaim { get; set; }
-        public string totalInvoicesBeingClaimed { get; set; }
-        public string claimPST { get; set; }
-        public string claimGrossGST { get; set; }
-        public string totalActualClaim { get; set; }
-        public Invoice[] invoices { get; set; }
+        public string? claimNumber { get; set; }
+        public ClaimStageOptionSet? claimStatus { get; set; }
+        public bool? isFirstClaimApproved { get; set; }
+        public bool? isThisFinalClaim { get; set; }
+        public string? totalInvoicesBeingClaimed { get; set; }
+        public string? claimPST { get; set; }
+        public string? claimGrossGST { get; set; }
+        public string? totalActualClaim { get; set; }
+        public Invoice[]? invoices { get; set; }
     }
 
     public class Invoice
     {
-        public string InvoiceId { get; set; }
-        public string InvoiceNumber { get; set; }
+        public string? InvoiceNumber { get; set; }
+        public string? VendorName { get; set; }
+        public string? InvoiceDate { get; set; }
+        public bool? IsGoodsReceivedonInvoiceDate { get; set; }
+        public string? GoodsReceivedDate { get; set; }
+        public string? PurposeOfGoodsServiceReceived { get; set; }
+        public bool? IsClaimforPartofTotalInvoice { get; set; }
+        public string? ReasonClaimingPartofTotalInvoice { get; set; }
+        public string? NetInvoiceBeingClaimed { get; set; }
+        public string? PST { get; set; }
+        public string? GrossGST { get; set; }
+        public string? EligibleGST { get; set; }
+        public string? ActualInvoiceTotal { get; set; }
+        public string? TotalBeingClaimed { get; set; }
     }
 }

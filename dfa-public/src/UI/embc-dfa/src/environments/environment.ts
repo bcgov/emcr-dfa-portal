@@ -2,12 +2,18 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { ApiConfiguration } from '../app/core/api/api-configuration'
+
+const apiconfig: ApiConfiguration = new ApiConfiguration;
+
 export const environment = {
   production: false,
   version: '1.0.0',
   tokenRefreshPeriodInSeconds: 1 * 60,
   httpRetryNumber: 3,
-  httpRetryDelayInSeconds: 5
+  httpRetryDelayInSeconds: 5,
+  // 2024-08-14 EMCRI-216 waynezen; upgrade to Angular 18
+  apiBaseUrl: apiconfig.rootUrl
 };
 
 /*

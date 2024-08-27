@@ -16,7 +16,6 @@ using EMBC.DFA.API.Services;
 using EMBC.ESS.Shared.Contracts;
 using EMBC.ESS.Shared.Contracts.Events;
 using EMBC.ESS.Shared.Contracts.Teams;
-using EMBC.Utilities.Messaging;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -32,28 +31,30 @@ namespace EMBC.DFA.API.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly IHostEnvironment env;
-        private readonly IMessagingClient messagingClient;
         private readonly IMapper mapper;
         private readonly IEvacuationSearchService evacuationSearchService;
         private readonly IProfileInviteService profileInviteService;
         private readonly IConfigurationHandler handler;
+        private readonly IUserService userService;
 
-        private string currentUserId => User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        private string currentUserId => userService.GetBCeIDBusinessId();
 
         public ProfileController(
             IHostEnvironment env,
-            IMessagingClient messagingClient,
             IMapper mapper,
             IEvacuationSearchService evacuationSearchService,
             IProfileInviteService profileInviteService,
-            IConfigurationHandler handler)
+            IConfigurationHandler handler,
+            IUserService userService)
         {
             this.env = env;
-            this.messagingClient = messagingClient;
             this.mapper = mapper;
             this.evacuationSearchService = evacuationSearchService;
             this.profileInviteService = profileInviteService;
             this.handler = handler;
+
+            // 2024-07-02 EMCRI-363 waynezen: added DI for new BCeID UserService
+            this.userService = userService;
         }
 
         /// <summary>
@@ -63,9 +64,12 @@ namespace EMBC.DFA.API.Controllers
         [HttpGet("current")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Obsolete]
         public async Task<ActionResult<Profile>> GetProfile()
         {
-            var userId = currentUserId;
+            // 2024-07-11 EMCRI-440 waynezen: get contact information
+            var userId = userService.GetBCeIDBusinessId();
+
             //var profile = mapper.Map<Profile>(await evacuationSearchService.GetRegistrantByUserId(userId));
             //var profile = null;
             //if (profile == null)
@@ -76,9 +80,14 @@ namespace EMBC.DFA.API.Controllers
             var profile = await handler.HandleGetUser(userId);
             if (profile == null)
             {
-                //try get BCSC profile
-                profile = GetUserFromPrincipal();
+                // get BCeID profile
+                var userData = userService.GetJWTokenData();
+                profile = mapper.Map<Profile>(userData);
             }
+
+            // 2024-08-15 EMCRI-595 waynezen; TODO: once the BCeID Web Service is working, get & compare information
+
+            /*
             else
             {
                 var profileBCSC = GetUserFromPrincipal();
@@ -111,6 +120,7 @@ namespace EMBC.DFA.API.Controllers
                     var contactId = await handler.HandleContact(mappedProfile);
                 }
             }
+            */
 
             if (profile == null) return NotFound(userId);
             return Ok(profile);
@@ -123,21 +133,28 @@ namespace EMBC.DFA.API.Controllers
         [HttpGet("currentWithBCSCUpdates")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Obsolete]
         public async Task<ActionResult<Profile>> GetProfileWithUpdatedBCSC()
         {
-            var userId = currentUserId;
-            var appContactProfile = await handler.HandleGetUser(userId);
+            // 2024-07-11 EMCRI-440 waynezen: get contact information
+            var profile = await handler.HandleGetUser(currentUserId);
 
-            // get BCSC profile
-            //var bcscProfile = GetUserFromPrincipal();
+            if (profile == null)
+            {
+                // get BCeID profile
+                var userData = userService.GetJWTokenData();
+                profile = mapper.Map<Profile>(userData);
+            }
 
-            //// update appContact details from BCSC login
-            //appContactProfile.ContactDetails.Email = bcscProfile.ContactDetails.Email;
-            //appContactProfile.PersonalDetails.FirstName = bcscProfile.PersonalDetails.FirstName;
-            //appContactProfile.PersonalDetails.LastName = bcscProfile.PersonalDetails.LastName;
-            //appContactProfile.PrimaryAddress = bcscProfile.PrimaryAddress;
+            // 2024-08-15 EMCRI-595 waynezen; TODO: once the BCeID Web Service is working, get & compare information
+            /*
+            appContactProfile.ContactDetails.Email = bcscProfile.ContactDetails.Email;
+            appContactProfile.PersonalDetails.FirstName = bcscProfile.PersonalDetails.FirstName;
+            appContactProfile.PersonalDetails.LastName = bcscProfile.PersonalDetails.LastName;
+            appContactProfile.PrimaryAddress = bcscProfile.PrimaryAddress;
+            */
 
-            return Ok(appContactProfile);
+            return Ok(profile);
         }
 
         /// <summary>
@@ -164,7 +181,7 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> AddContact(Profile profile)
         {
-            profile.BCServiceCardId = currentUserId;
+            profile.BCeIDBusinessGuid = currentUserId;
             var mappedProfile = mapper.Map<dfa_appcontact>(profile);
             if (profile == null) return BadRequest("Profile details cannot be empty!");
 
@@ -226,12 +243,11 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [AllowAnonymous]
-        public async Task<IActionResult> Invite(InviteRequest request)
+        [Obsolete("Messaging API removed")]
+        // 2024-06-24 EMCRI-282 waynezen: Function obsolete due to removed Messaging API
+        public IActionResult Invite(InviteRequest request)
         {
-            var file = (await messagingClient.Send(new EvacuationFilesQuery { FileId = request.FileId })).Items.SingleOrDefault();
-            if (file == null) return NotFound(request.FileId);
-            await messagingClient.Send(new InviteRegistrantCommand { RegistrantId = file.PrimaryRegistrantId, Email = request.Email });
-            return Ok();
+            return BadRequest();
         }
 
         [HttpPost("current/join")]
@@ -259,7 +275,10 @@ namespace EMBC.DFA.API.Controllers
 
         public string IsMailingAddressSameAsPrimaryAddress { get; set; }
 
+        [Obsolete]
         public string? BCServiceCardId { get; set; }
+        // 2024-07-17 EMCRI-440 waynezen; added
+        public string BCeIDBusinessGuid { get; set; }
 
         public string? lastUpdatedDateBCSC { get; set; }
         public bool? isMailingAddressVerified { get; set; }

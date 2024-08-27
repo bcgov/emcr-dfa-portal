@@ -49,6 +49,9 @@ export class ComponentWrapperComponent implements OnInit {
    * Imports the component
    */
   loadComponent(): Promise<any> {
+
+    // console.debug("[DFA] component-wrapper: folderPath=" + this.folderPath + ", componentName=" + this.componentName);
+
     return Promise.resolve(
       import(
         `../../forms/${this.folderPath}/${this.componentName}/${this.componentName}.component`

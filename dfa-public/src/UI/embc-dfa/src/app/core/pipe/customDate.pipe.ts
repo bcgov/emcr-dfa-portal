@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import * as moment from 'moment';
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18
+import moment from 'moment';
 
 @Pipe({ name: 'customDate' })
 export class CustomDate implements PipeTransform {

@@ -399,11 +399,12 @@
           <div class="col-md-2">
             <mat-form-field appearance="outline">
               <mat-label>Contact Telephone</mat-label>
+              <!-- 2024-08-01 EMCRI-216 waynezen; upgrade to Angular 18 - use new ngx-mask -->
               <input formControlName="landlordPhone"
                 matInput required
                 [readonly]="isReadOnly == true"
                 placeholder="Contact Telephone"
-                [textMask]="{ mask: phoneMask, keepCharPositions: true }" />
+                mask="0 (000) 000-0000 || (000) 000-0000" />
               <mat-error
                 *ngIf="
                   damagedPropertyAddressForm.get('landlordPhone').invalid &&

@@ -66,6 +66,7 @@ export class ReviewClaimComponent implements OnInit {
 
     // subscribe to changes in invoices
     const _invoiceFormArray = this.formCreationService.recoveryClaimForm.value.get('invoices');
+    this.invoiceSummaryDataSource.data = _invoiceFormArray.getRawValue();
     _invoiceFormArray.valueChanges
       .pipe(
         mapTo(_invoiceFormArray.getRawValue())
@@ -99,7 +100,7 @@ export class ReviewClaimComponent implements OnInit {
     //    ).subscribe(data => this.damagedRoomsDataSource.data = _damagedRoomsFormArray.getRawValue());
 
     // subscribe to changes in file uploads
-    const _fileUploadsFormArray = this.formCreationService.fileUploadsForm.value.get('fileUploads');
+    const _fileUploadsFormArray = this.formCreationService.fileUploadsClaimForm.value.get('fileUploads');
     _fileUploadsFormArray.valueChanges
     .pipe(
       mapTo(_fileUploadsFormArray.value)

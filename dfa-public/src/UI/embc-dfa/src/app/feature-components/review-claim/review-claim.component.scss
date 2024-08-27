@@ -52,10 +52,14 @@
   border-color: rgb(204, 204, 204);
 }
 
-tr.mat-header-row {
+tr.mat-mdc-header-row {
   background: #38598A 0% 0% no-repeat !important;
 }
 
-th.mat-header-cell {
+th.mat-mdc-header-cell {
   color: white;
+}
+
+.align-left {
+  padding-left: 10px;
 }

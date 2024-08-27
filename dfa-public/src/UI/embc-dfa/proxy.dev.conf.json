@@ -1,24 +1,30 @@
 {
   "/api/*": {
-    "target": "https://dfa-portal-dev.apps.silver.devops.gov.bc.ca",
+    "target": "http://localhost:5020/",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/registration-method": {
+    "target": "https://dev.loginproxy.gov.bc.ca",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/login": {
-    "target": "https://dfa-portal-dev.apps.silver.devops.gov.bc.ca",
+    "target": "https://dev.loginproxy.gov.bc.ca",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/token": {
-    "target": "https://dfa-portal-dev.apps.silver.devops.gov.bc.ca",
+    "target": "https://dev.loginproxy.gov.bc.ca",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/signin-oidc": {
-    "target": "https://dfa-portal-dev.apps.silver.devops.gov.bc.ca",
+    "target": "https://dev.loginproxy.gov.bc.ca",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

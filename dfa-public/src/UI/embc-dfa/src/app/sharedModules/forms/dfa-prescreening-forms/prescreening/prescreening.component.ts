@@ -13,10 +13,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, Observable } from 'rxjs';
 import { DirectivesModule } from '../../../../core/directives/directives.module';
 import { CustomValidationService } from 'src/app/core/services/customValidation.service';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Address, ApplicantOption, InsuranceOption, DisasterEvent, Profile } from 'src/app/core/api/models';
 import { DFAEligibilityDialogComponent } from 'src/app/core/components/dialog-components/dfa-eligibility-dialog/dfa-eligibility-dialog.component';
 import * as globalConst from '../../../../core/services/globalConstants';
@@ -32,6 +32,7 @@ import { AddressFormsModule } from '../../address-forms/address-forms.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { DFAPrescreeningDataService } from 'src/app/feature-components/dfa-prescreening/dfa-prescreening-data.service';
+import { AuthModule, AuthOptions, LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
 import { LoginService } from 'src/app/core/services/login.service';
 
 @Component({
@@ -64,6 +65,7 @@ export default class PrescreeningComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private eligibilityService: EligibilityService,
     private prescreeningDataService: DFAPrescreeningDataService,
+    private oidcSecurityService: OidcSecurityService,
     private loginService: LoginService
   ) {
     this.formBuilder = formBuilder;
@@ -92,14 +94,18 @@ export default class PrescreeningComponent implements OnInit, OnDestroy {
       this.prescreeningForm.updateValueAndValidity();
     })
 
-    if (this.loginService.isLoggedIn() == true) {
-      this.isLoggedIn = true;
-      this.getProfileAddress();
-    } else {
-      this.prescreeningForm.controls.isPrimaryAndDamagedAddressSame.setValidators(null);
-      this.prescreeningForm.controls.profileId.setValidators(null);
-      this.prescreeningForm.updateValueAndValidity();
-    }
+    // 2024-05-27 EMCRI-217 waynezen: use new BCeID async Auth
+    this.oidcSecurityService.isAuthenticated().subscribe(isAuth => {
+      if (isAuth == true) {
+        this.isLoggedIn = true;
+        this.getProfileAddress();
+      }
+      else {
+        this.prescreeningForm.controls.isPrimaryAndDamagedAddressSame.setValidators(null);
+        this.prescreeningForm.controls.profileId.setValidators(null);
+        this.prescreeningForm.updateValueAndValidity();
+      }
+    });
 
     this.getOpenDisasterEvents();
 

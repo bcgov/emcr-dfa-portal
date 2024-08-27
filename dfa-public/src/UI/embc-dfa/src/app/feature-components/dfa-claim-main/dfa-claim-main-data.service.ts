@@ -16,6 +16,7 @@ export class DFAClaimMainDataService {
   private _applicationId: string;
   private _projectId: string;
   private _claimId: string;
+  private _invoiceId: string = null;
   private _eligibleGST: boolean;
   private _vieworedit: string;
   private _stepselected: string;
@@ -117,6 +118,14 @@ export class DFAClaimMainDataService {
     return this._claimId;
   }
 
+  public setInvoiceId(invoiceId: string): void {
+    this._invoiceId = invoiceId;
+  }
+
+  public getInvoiceId(): string {
+    return this._invoiceId;
+  }
+
   public setEligibleGST(eligibleGST: boolean): void {
     this._eligibleGST = eligibleGST;
   }
@@ -160,15 +169,13 @@ export class DFAClaimMainDataService {
     return {
       id: this._claimId,
       projectId: this._projectId,
-      applicationId: this._applicationId,
       claim: this._recoveryClaim
     };
   }
 
   public createDFAInvoiceDTO(): DfaInvoiceMain {
     return {
-      id: this._projectId,
-      applicationId: this._applicationId,
+      id: this._invoiceId,
       claimId: this._claimId,
       invoice: this._invoice
     };

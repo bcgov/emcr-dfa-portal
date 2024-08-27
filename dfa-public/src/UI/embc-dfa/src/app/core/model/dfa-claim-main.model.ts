@@ -6,13 +6,13 @@ import {
 } from '@angular/forms';
 import { Community, Country, StateProvince } from './address';
 import { CustomValidationService } from '../services/customValidation.service';
-import { SignatureBlock, SecondaryApplicantTypeOption, FileCategory, RoomType, RequiredDocumentType, ProjectStageOptionSet } from 'src/app/core/api/models';
+import { SignatureBlock, SecondaryApplicantTypeOption, FileCategory, RoomType, RequiredDocumentType, ProjectStageOptionSet, FileCategoryClaim, RequiredDocumentTypeClaim, ClaimStageOptionSet } from 'src/app/core/api/models';
 import { Invoice } from './dfa-invoice.model';
 
 
 export class RecoveryClaim {
   claimNumber?: null | string;
-  claimStatus?: null | ProjectStageOptionSet;
+  claimStatus?: null | ClaimStageOptionSet;
   isFirstClaimApproved?: null | boolean;
   isThisFinalClaim?: null | boolean;
   totalInvoicesBeingClaimed?: null | string;
@@ -24,7 +24,7 @@ export class RecoveryClaim {
 
   constructor(
     claimNumber?: null | string,
-    claimStatus?: null | ProjectStageOptionSet,
+    claimStatus?: null | ClaimStageOptionSet,
     isFirstClaimApproved?: null | boolean,
     isThisFinalClaim?: null | boolean,
     totalInvoicesBeingClaimed?: null | string,
@@ -118,40 +118,37 @@ export class RecoveryClaimForm {
 }
 
 export class FileUploadClaim {
-  applicationId?: string;
+  claimId?: string;
   contentType?: string;
   deleteFlag?: boolean;
   fileData?: string;
   fileDescription?: string;
   fileName?: string;
   fileSize?: number;
-  fileType?: FileCategory;
-  requiredDocumentType?: RequiredDocumentType;
+  fileType?: FileCategoryClaim;
+  fileTypeText?: string;
+  requiredDocumentType?: RequiredDocumentTypeClaim;
   id?: null | string;
   modifiedBy?: string;
   uploadedDate?: string;
   applicantType?: string;
-  smallBusinessOption?: string;
-  farmOption?: string;
 }
 
 export class FileUploadsClaimForm {
-  applicationId = new UntypedFormControl();
+  claimId = new UntypedFormControl();
   applicantType = new UntypedFormControl();
-  smallBusinessOption = new UntypedFormControl();
-  farmOption = new UntypedFormControl();
   deleteFlag = new UntypedFormControl();
   id = new UntypedFormControl();
   fileName = new UntypedFormControl();
   fileDescription = new UntypedFormControl();
   fileType = new UntypedFormControl();
+  fileTypeText = new UntypedFormControl();
   requiredDocumentType = new UntypedFormControl();
   uploadedDate = new UntypedFormControl();
   modifiedBy = new UntypedFormControl();
   fileData = new UntypedFormControl();
   contentType = new UntypedFormControl();
   fileSize = new UntypedFormControl();
-  cleanupFileUpload: UntypedFormGroup;
   invoiceUpload: UntypedFormGroup;
   generalLedgerUpload: UntypedFormGroup;
   proofOfPaymentUpload: UntypedFormGroup;
@@ -176,7 +173,7 @@ export class FileUploadsClaimForm {
             .bind(customValidator)
         ]
       ],
-      applicationId: [
+      claimId: [
         '',
         [
           customValidator
@@ -226,6 +223,9 @@ export class FileUploadsClaimForm {
             )
             .bind(customValidator)
         ]
+      ],
+      fileTypeText: [
+        ''
       ],
       requiredDocumentType: [
         ''
@@ -298,7 +298,7 @@ export class FileUploadsClaimForm {
             .bind(customValidator)
         ]
       ],
-      applicationId: [
+      claimId: [
         '',
         [
           customValidator
@@ -348,6 +348,9 @@ export class FileUploadsClaimForm {
             )
             .bind(customValidator)
         ]
+      ],
+      fileTypeText: [
+        ''
       ],
       requiredDocumentType: [
         ''
@@ -420,7 +423,7 @@ export class FileUploadsClaimForm {
             .bind(customValidator)
         ]
       ],
-      applicationId: [
+      claimId: [
         '',
         [
           customValidator
@@ -470,6 +473,9 @@ export class FileUploadsClaimForm {
             )
             .bind(customValidator)
         ]
+      ],
+      fileTypeText: [
+        ''
       ],
       requiredDocumentType: [
         ''
@@ -542,7 +548,7 @@ export class FileUploadsClaimForm {
             .bind(customValidator)
         ]
       ],
-      applicationId: [
+      claimId: [
         '',
         [
           customValidator
@@ -591,6 +597,9 @@ export class FileUploadsClaimForm {
             )
             .bind(customValidator)
         ]
+      ],
+      fileTypeText: [
+        ''
       ],
       requiredDocumentType: [
         ''
@@ -679,7 +688,6 @@ export class SupportingDocumentsForm {
  **/
 export interface DfaClaimMain {
   id?: string;
-  applicationId?: string;
   projectId?: string;
   claim?: RecoveryClaim;
 }

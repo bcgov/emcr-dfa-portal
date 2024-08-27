@@ -1,0 +1,15 @@
+{
+    "authority": "https://dev.loginproxy.gov.bc.ca/auth/realms/standard",
+    "redirectUrl": "http://localhost:5200",
+    "postLogoutRedirectUri": "window.location.origin",
+    "auto_userinfo": true,
+    "clientId": "dfa-enhancement-5415",
+    "kc_idp_hint": "bceid-business",
+    "prompt": "consent",
+    "scope": "openid profile",
+    "responseType": "code",
+    "silentRenew": false,
+    "useRefreshToken": true,
+    "renewTimeBeforeTokenExpiresInSeconds": 30,
+    "log_level": 0
+}

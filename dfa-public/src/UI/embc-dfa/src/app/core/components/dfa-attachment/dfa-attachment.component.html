@@ -11,11 +11,12 @@
         >
           + Add {{ title }}
         </button>
-        <mat-card *ngIf="showFileUpload">
+        <mat-card *ngIf="showFileUpload" class="align-outer">
           <div class="row">
             <div class="col-md-6">
               <b>{{title}}<span style="color:red;" *ngIf="requiredDocumentType !== null">*</span></b><br/>
               <div [innerHTML]="description" (click)="onToggleSideNote()"></div>
+              <br />
               <app-file-upload
                 [noOfAttachments]="1"
                 (attachedFile)="setFileFormControl($event)"
@@ -25,7 +26,7 @@
               </app-file-upload>
             </div>
             <div class="col-md-6">
-              <br/><br/>
+              
               <div [hidden]="!fileUpload.get('fileName').value">
                 <label class="sub-heading" style="font-size: 15px" >File name<span style="color:red" >*</span></label>
                 <br/>
@@ -35,6 +36,7 @@
               <label class="sub-heading" style="font-size: 15px" [hidden]="!fileUpload.get('fileName').value"
                 >You may update the file description to something more descriptive:</label
               >
+              <br/><br/>
               <mat-form-field appearance="outline" [hidden]="!fileUpload.get('fileName').value">
                 <mat-label>File description</mat-label>
                 <input formControlName="fileDescription" matInput placeholder="File description" required maxlength="100"/>
@@ -58,7 +60,9 @@
                   Maximum length is 100 characters</mat-error
                 >
               </mat-form-field>
+              <br/><br/>
               <label class="sub-heading" style="font-size: 15px" [hidden]="!fileUpload.get('fileName').value" *ngIf="!fileType">Category: please select a category that describes the file you are attaching to your application.</label>
+              <br/><br/>
               <mat-form-field appearance="outline" [hidden]="!fileUpload.get('fileName').value" *ngIf="!fileType">
                 <mat-label>File category</mat-label>
                 <input type="hidden" formControlName="fileTypeText" />

@@ -1,15 +1,15 @@
 /* tslint:disable */
 /* eslint-disable */
+import { ClaimStageOptionSet } from './claim-stage-option-set';
 import { Invoice } from './invoice';
-import { ProjectStageOptionSet } from './project-stage-option-set';
 export interface RecoveryClaim {
-  claimGrossGST?: string;
-  claimNumber?: string;
-  claimPST?: string;
-  claimStatus?: ProjectStageOptionSet;
-  invoices?: Array<Invoice>;
-  isFirstClaimApproved?: boolean;
-  isThisFinalClaim?: boolean;
-  totalActualClaim?: string;
-  totalInvoicesBeingClaimed?: string;
+  claimGrossGST?: null | string;
+  claimNumber?: null | string;
+  claimPST?: null | string;
+  claimStatus?: null | ClaimStageOptionSet;
+  invoices?: null | Array<Invoice>;
+  isFirstClaimApproved?: null | boolean;
+  isThisFinalClaim?: null | boolean;
+  totalActualClaim?: null | string;
+  totalInvoicesBeingClaimed?: null | string;
 }

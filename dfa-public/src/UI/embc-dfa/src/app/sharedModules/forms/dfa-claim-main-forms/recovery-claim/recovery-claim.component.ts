@@ -29,7 +29,9 @@ import { MatTableModule } from '@angular/material/table';
 import { CustomPipeModule } from 'src/app/core/pipe/customPipe.module';
 import { DFADeleteConfirmDialogComponent } from '../../../../core/components/dialog-components/dfa-confirm-delete-dialog/dfa-confirm-delete.component';
 import { MatDialog } from '@angular/material/dialog';
-import { TextMaskModule } from 'angular2-text-mask';
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - TextMaskModule not compatible
+//import { TextMaskModule } from 'angular2-text-mask';
+import { NgxMaskDirective, NgxMaskPipe, NgxMaskService, provideNgxMask } from 'ngx-mask';
 import { ApplicationService, ClaimService, OtherContactService, ProjectService } from 'src/app/core/api/services';
 import { DFAApplicationMainMappingService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-mapping.service';
 import { MatSelectModule } from '@angular/material/select';
@@ -103,19 +105,19 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
   ) {
     this.formBuilder = formBuilder;
     this.formCreationService = formCreationService;
-    this.isReadOnly = (dfaProjectMainDataService.getViewOrEdit() === 'view'
-      || dfaProjectMainDataService.getViewOrEdit() === 'edit'
-      || dfaProjectMainDataService.getViewOrEdit() === 'viewOnly');
-    //this.setViewOrEditControls();
+    this.isReadOnly = (dfaClaimMainDataService.getViewOrEdit() === 'view'
+      || dfaClaimMainDataService.getViewOrEdit() === 'edit'
+      || dfaClaimMainDataService.getViewOrEdit() === 'viewOnly');
+    this.setViewOrEditControls();
 
-    this.dfaProjectMainDataService.changeViewOrEdit.subscribe((vieworedit) => {
+    this.dfaClaimMainDataService.changeViewOrEdit.subscribe((vieworedit) => {
       this.isReadOnly = (vieworedit === 'view'
       || vieworedit === 'edit'
         || vieworedit === 'viewOnly');
-      //this.setViewOrEditControls();
+      this.setViewOrEditControls();
     })
 
-    this.vieworedit = dfaProjectMainDataService.getViewOrEdit();
+    this.vieworedit = dfaClaimMainDataService.getViewOrEdit();
   }
 
   numericOnly(event): boolean {
@@ -132,9 +134,9 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
     if (!this.recoveryClaimForm) return;
     if (this.isReadOnly) {
       this.hideHelp = true;
-      this.recoveryClaimForm.controls.estimatedCompletionDate.disable();
+      this.recoveryClaimForm.controls.isThisFinalClaim.disable();
     } else {
-      this.recoveryClaimForm.controls.estimatedCompletionDate.enable();
+      this.recoveryClaimForm.controls.isThisFinalClaim.enable();
     }
   }
 
@@ -143,7 +145,7 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
       .getRecoveryClaimForm()
       .subscribe((recoveryClaim) => {
         this.recoveryClaimForm = recoveryClaim;
-        //this.setViewOrEditControls();
+        this.setViewOrEditControls();
         this.setDisableInputFields()
       });
 
@@ -167,7 +169,7 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
       }
     })
 
-    if (this.dfaProjectMainDataService.getViewOrEdit() == 'viewOnly') {
+    if (this.dfaClaimMainDataService.getViewOrEdit() == 'viewOnly') {
       this.recoveryClaimForm.disable();
     }
     else {
@@ -333,7 +335,8 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
     DirectivesModule,
     MatTableModule,
     CustomPipeModule,
-    TextMaskModule,
+    // 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - new text mask provider
+    NgxMaskDirective, NgxMaskPipe,
     MatSelectModule,
     MatTooltipModule
   ],

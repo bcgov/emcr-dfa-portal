@@ -18,11 +18,11 @@ information and to verify that the information provided by you is accurate.
           <div class="col-md-4">
             <mat-form-field appearance="outline">
               <mat-label>Cellular Telephone Number</mat-label>
+              <!-- 2024-08-01 EMCRI-216 waynezen; upgrade to Angular 18 - use new ngx-mask -->
               <input
                 formControlName="cellPhoneNumber"
                 matInput
                 placeholder="Cellular Telephone Number"
-                [textMask]="{ mask: phoneMask, keepCharPositions: true }"
                 required
               />
               <mat-error
@@ -51,11 +51,11 @@ information and to verify that the information provided by you is accurate.
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Residence Telephone Number</mat-label>
+              <!-- 2024-08-01 EMCRI-216 waynezen; upgrade to Angular 18 - use new ngx-mask -->
               <input
                 formControlName="residencePhone"
                 matInput
                 placeholder="Residence Telephone Number"
-                [textMask]="{ mask: phoneMask, keepCharPositions: true }"
               />
               <mat-error
                 *ngIf="
@@ -67,11 +67,11 @@ information and to verify that the information provided by you is accurate.
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Alternate Telephone Number</mat-label>
+              <!-- 2024-08-01 EMCRI-216 waynezen; upgrade to Angular 18 - use new ngx-mask -->
               <input
                 formControlName="alternatePhone"
                 matInput
                 placeholder="Alternate Telephone Number"
-                [textMask]="{ mask: phoneMask, keepCharPositions: true }"
               />
               <mat-error
                 *ngIf="

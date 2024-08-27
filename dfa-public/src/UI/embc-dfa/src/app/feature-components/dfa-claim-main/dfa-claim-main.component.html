@@ -10,7 +10,7 @@
         #backtodash
         id="backtodash"
         class="button-p nextNsave col-4"
-        style="height: 40px !important; vertical-align: middle; width: 220px; margin-top: 15px"
+        style="vertical-align: middle; width: 220px; margin-top: 15px"
         (click)="BackToDashboard()"
         mat-stroked-button
         type="button"
@@ -172,6 +172,8 @@
         <div class="col-md-6">
         <button *ngIf="(formCreationService.recoveryClaimForm$ | async)?.valid
                 && invoiceSummaryDataSource?.data?.length > 0
+                && (formCreationService.supportingDocumentsForm$ | async)?.valid
+                && requiredDocumentsSupplied()
                 "
           class="button-p nextNsave"
           mat-stroked-button

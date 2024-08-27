@@ -21,28 +21,47 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Authentication\AuthenticationExtensions.cs" />
+      <Compile Remove="Authentication\IOAuthApiClient.cs" />
+      <Compile Remove="Authentication\ITokenService.cs" />
+      <Compile Remove="Authentication\OAuthApiClient.cs" />
+      <Compile Remove="Authentication\OAuthAuthorizationException.cs" />
+      <Compile Remove="Authentication\OAuthError.cs" />
+      <Compile Remove="Authentication\OAuthHandler.cs" />
+      <Compile Remove="Authentication\Token.cs" />
+      <Compile Remove="Authentication\TokenService.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
         <None Include="..\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.*" />
+        <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.9.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="NSwag.AspNetCore" Version="14.0.7" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="System.ServiceModel.Http" Version="4.6.0" />
+        <PackageReference Include="System.ServiceModel.Security" Version="4.6.0" />
         <PackageReference Include="Xrm.Tools.CRMWebAPI" Version="1.0.25" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\EMBC.BCeID\EMBC.Gov.BCeID.csproj" />
       <ProjectReference Include="..\EMBC.ESS.Shared.Contracts\EMBC.ESS.Shared.Contracts.csproj" />
       <ProjectReference Include="..\EMBC.Utilities.Caching\EMBC.Utilities.Caching.csproj" />
       <ProjectReference Include="..\EMBC.Utilities.Hosting\EMBC.Utilities.Hosting.csproj" />
-      <ProjectReference Include="..\EMBC.Utilities.Messaging\EMBC.Utilities.Messaging.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="ConfigurationModule\ViewModels\" />
+      <Folder Include="Authentication\" />
     </ItemGroup>
 </Project>

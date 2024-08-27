@@ -1,12 +1,12 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockOutageService } from 'src/app/unit-tests/mockOutage.service';
 import { OutageComponent } from './outage.component';
 import { OutageService } from './outage.service';
-import { OAuthModule } from 'angular-oauth2-oidc';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('OutageComponent', () => {
   let component: OutageComponent;
@@ -15,22 +15,20 @@ describe('OutageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        MatDialogModule,
-        HttpClientTestingModule,
-        RouterTestingModule,
-        OAuthModule.forRoot()
-      ],
-      declarations: [OutageComponent],
-      providers: [
+    declarations: [OutageComponent],
+    imports: [MatDialogModule,
+        RouterTestingModule],
+    providers: [
         OutageComponent,
         {
-          provide: OutageService,
-          useClass: MockOutageService
+            provide: OutageService,
+            useClass: MockOutageService
         },
-        { provide: APP_BASE_HREF, useValue: '/' }
-      ]
-    }).compileComponents();
+        { provide: APP_BASE_HREF, useValue: '/' },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
   });
 
   beforeEach(() => {

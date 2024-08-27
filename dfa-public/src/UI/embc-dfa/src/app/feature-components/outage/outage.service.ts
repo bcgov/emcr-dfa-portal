@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { OutageInformation } from 'src/app/core/api/models/outage-information';
-import * as moment from 'moment';
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18
+import moment from 'moment';
 import { OutageDialogComponent } from 'src/app/sharedModules/outage-components/outage-dialog/outage-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 // import { ConfigurationService } from 'src/app/core/api/services';
@@ -17,6 +18,7 @@ import { AlertService } from 'src/app/core/services/alert.service';
 import * as globalConst from 'src/app/core/services/globalConstants';
 import { Router } from '@angular/router';
 import { CacheService } from 'src/app/core/services/cache.service';
+import { AuthModule, AuthOptions, LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
 import { LoginService } from 'src/app/core/services/login.service';
 import { ConfigService } from 'src/app/core/services/config.service';
 
@@ -46,6 +48,7 @@ export class OutageService {
     public configService: ConfigService,
     public alertService: AlertService,
     public router: Router,
+    private oidcSecurityService: OidcSecurityService,
     public loginService: LoginService,
     public cacheService: CacheService,
     private zone: NgZone
@@ -224,7 +227,9 @@ export class OutageService {
   }
 
   public async signOut(): Promise<void> {
-    await this.loginService.logout();
+    // 2024-06-05 EMCRI-217 waynezen: use new BCeID async Auth
+    await this.oidcSecurityService.logoffAndRevokeTokens();
+
     this.cacheService.clear();
     localStorage.clear();
   }

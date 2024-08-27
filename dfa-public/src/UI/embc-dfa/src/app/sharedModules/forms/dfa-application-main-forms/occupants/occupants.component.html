@@ -372,10 +372,11 @@
                   <div class="col-md-2">
                     <mat-form-field appearance="outline">
                       <mat-label>Applicant phone</mat-label>
+                      <!-- 2024-08-01 EMCRI-216 waynezen; upgrade to Angular 18 - use new ngx-mask -->
                       <input formControlName="phoneNumber"
                         matInput required
                         placeholder="Applicant phone"
-                        [textMask]="{ mask: phoneMask, keepCharPositions: true }" />
+                        mask="0 (000) 000-0000 || (000) 000-0000" />
                       <mat-error
                         *ngIf="
                           secondaryApplicantsForm.get('secondaryApplicant').controls.phoneNumber.invalid &&
@@ -628,11 +629,12 @@
                   <div class="col-md-3">
                     <mat-form-field appearance="outline">
                       <mat-label>Contact phone</mat-label>
+                      <!-- 2024-08-01 EMCRI-216 waynezen; upgrade to Angular 18 - use new ngx-mask -->
                       <input formControlName="phoneNumber"
                         matInput
                         required
                         placeholder="Contact phone"
-                        [textMask]="{ mask: phoneMask, keepCharPositions: true }" />
+                        mask="0 (000) 000-0000 || (000) 000-0000" />
                         <mat-error
                         *ngIf="
                           otherContactsForm.get('otherContact').controls.phoneNumber.invalid &&

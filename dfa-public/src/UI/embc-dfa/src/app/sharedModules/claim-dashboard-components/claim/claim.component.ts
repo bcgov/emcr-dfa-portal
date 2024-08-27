@@ -7,9 +7,10 @@ import { AppSessionService } from 'src/app/core/services/appSession.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
 import { DFAApplicationStartDataService } from 'src/app/feature-components/dfa-application-start/dfa-application-start-data.service';
-import { CurrentApplication, CurrentProject } from 'src/app/core/api/models';
+import { CurrentApplication, CurrentClaim, CurrentProject } from 'src/app/core/api/models';
 import { DFAProjectMainDataService } from '../../../feature-components/dfa-project-main/dfa-project-main-data.service';
 import { DFAClaimMainDataService } from '../../../feature-components/dfa-claim-main/dfa-claim-main-data.service';
+import { ClaimService } from '../../../core/api/services';
 
 @Component({
   selector: 'app-dfadashboard-claim',
@@ -44,8 +45,8 @@ export class DfaDashClaimComponent implements OnInit {
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
 
   ];
-  lstProjects: ProjectExtended[] = [];
-  lstFilteredProjects: ProjectExtended[] = [];
+  lstClaims: ClaimExtended[] = [];
+  lstFilteredClaims: ClaimExtended[] = [];
   matchStatusFound = false;
   isLinear = true;
   current = 1;
@@ -63,6 +64,7 @@ export class DfaDashClaimComponent implements OnInit {
     private profileDataService: ProfileDataService,
     private appService: Service,
     private projService: ProjectService,
+    private claimService: ClaimService,
     private appSessionService: AppSessionService,
     private router: Router,
     private dfaApplicationMainDataService: DFAApplicationMainDataService,
@@ -77,9 +79,14 @@ export class DfaDashClaimComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    var applicationId = '0b9eec99-1a34-ef11-b850-00505683fbf4'; //this.dFAProjectMainDataService.getApplicationId();
+    //var applicationId = '0b9eec99-1a34-ef11-b850-00505683fbf4'; //this.dFAProjectMainDataService.getApplicationId();
+    let projectId = this.dFAProjectMainDataService.getProjectId();
 
-    this.projService.projectGetDfaProjects({ applicationId: applicationId }).subscribe({
+    if (projectId) {
+      this.dfaClaimMainDataService.setProjectId(projectId);
+    }
+
+    this.claimService.claimGetDfaClaims({ projectId: projectId }).subscribe({
       next: (lstData) => {
         if (lstData != null) {
           var lstDataModified = [];
@@ -162,33 +169,34 @@ export class DfaDashClaimComponent implements OnInit {
 
   mapData(lstApp: Object): void {
     var res = JSON.parse(JSON.stringify(lstApp));
-    this.lstProjects = res;
+    this.lstClaims = res;
     //dfa decision made
-    this.lstProjects.forEach(x => {
-      if (
-        (x.status.toLowerCase() === "decision made"
-          || x.status.toLowerCase() === "closed: inactive" || x.status.toLowerCase() === "closed: withdrawn")
-        )
-      {
-          x.openProject = false;
-      } else x.openProject = true;
+    this.lstClaims.forEach(x => {
+      //if (
+      //  (x.status.toLowerCase() === "decision made"
+      //    || x.status.toLowerCase() === "closed: inactive" || x.status.toLowerCase() === "closed: withdrawn")
+      //  )
+      //{
+      //    x.openProject = false;
+      //} else x.openProject = true;
+      x.openClaim = true;
     })
     
     if (this.apptype === "open") {
-      this.lstProjects = this.lstProjects
-        .filter(x => x.openProject === true);
-      this.appSessionService.currentProjectsCount?.emit(this.lstProjects.length);
+      this.lstClaims = this.lstClaims
+        .filter(x => x.openClaim === true);
+      this.appSessionService.currentProjectsCount?.emit(this.lstClaims.length);
     } else {
-      this.lstProjects = this.lstProjects
-        .filter(x => x.openProject === false);
-      this.appSessionService.pastProjectsCount?.emit(this.lstProjects.length);
+      this.lstClaims = this.lstClaims
+        .filter(x => x.openClaim === false);
+      this.appSessionService.pastProjectsCount?.emit(this.lstClaims.length);
     }
 
-    this.lstFilteredProjects = this.lstProjects;
+    this.lstFilteredClaims = this.lstClaims;
   }
 
   ApplyFilter(type: number, searchText: string): void {
-    var lstProjectsFilterting = this.lstProjects;
+    var lstClaimsFilterting = this.lstClaims;
 
     if (searchText != null){
       this.searchTextInput = searchText;
@@ -197,79 +205,68 @@ export class DfaDashClaimComponent implements OnInit {
     if (this.stageSelected != '' && this.stageSelected != null) {
 
       if (this.stageSelected == 'All') {
-        lstProjectsFilterting = lstProjectsFilterting;
+        lstClaimsFilterting = lstClaimsFilterting;
       }
       else if (this.stageSelected == 'Approved') {
-        lstProjectsFilterting = lstProjectsFilterting.filter(m => m.status.toLowerCase() == 'decision made' && m.stage.toLowerCase() == 'approved');
+        lstClaimsFilterting = lstClaimsFilterting.filter(m => m.status.toLowerCase() == 'decision made' && m.stage.toLowerCase() == 'approved');
       } else if (this.stageSelected == 'Closed') {
-        lstProjectsFilterting = lstProjectsFilterting.filter(m => m.status.toLowerCase() == 'decision made' && m.stage.toLowerCase() != 'approved');
+        lstClaimsFilterting = lstClaimsFilterting.filter(m => m.status.toLowerCase() == 'decision made' && m.stage.toLowerCase() != 'approved');
       }
       else {
-        lstProjectsFilterting = lstProjectsFilterting.filter(m => m.status.toLowerCase().indexOf(this.stageSelected.toLowerCase()) > -1);
+        lstClaimsFilterting = lstClaimsFilterting.filter(m => m.status.toLowerCase().indexOf(this.stageSelected.toLowerCase()) > -1);
       }
     }
 
     if (this.filterbydaysSelected && this.filterbydaysSelected != -1) {
       var backdate = new Date(new Date().getTime() - (1000 * 60 * 60 * 24 * this.filterbydaysSelected));
-      lstProjectsFilterting = lstProjectsFilterting.filter(m => (backdate <= new Date(m.createdDate)));
+      lstClaimsFilterting = lstClaimsFilterting.filter(m => (backdate <= new Date(m.createdDate)));
     }
 
     if (this.sortfieldSelected != '' && this.sortfieldSelected != null) {
       if (this.sortfieldSelected == 'claimnumber') {
-        lstProjectsFilterting = lstProjectsFilterting.sort((a, b) => (a.projectName > b.projectName) ? 1 : ((b.projectName > a.projectName) ? -1 : 0))
+        lstClaimsFilterting = lstClaimsFilterting.sort((a, b) => (a.claimNumber > b.claimNumber) ? 1 : ((b.claimNumber > a.claimNumber) ? -1 : 0))
       } else if (this.sortfieldSelected == 'submitteddate') {
-        lstProjectsFilterting = lstProjectsFilterting.sort((a, b) => (a.projectNumber > b.projectNumber) ? 1 : ((b.projectNumber > a.projectNumber) ? -1 : 0))
+        lstClaimsFilterting = lstClaimsFilterting.sort((a, b) => (a.createdDate > b.createdDate) ? 1 : ((b.createdDate > a.createdDate) ? -1 : 0))
       } else if (this.sortfieldSelected == 'claimpaiddate') {
-        lstProjectsFilterting = lstProjectsFilterting.sort((a, b) => (new Date(a.estimatedCompletionDate) > new Date(b.estimatedCompletionDate)) ? 1 : (new Date(b.estimatedCompletionDate) > new Date(a.estimatedCompletionDate) ? -1 : 0))
+        lstClaimsFilterting = lstClaimsFilterting.sort((a, b) => (new Date(a.paidClaimDate) > new Date(b.paidClaimDate)) ? 1 : (new Date(b.paidClaimDate) > new Date(a.paidClaimDate) ? -1 : 0))
       }
     }
     
     if (this.searchTextInput != null) {
-      lstProjectsFilterting = lstProjectsFilterting.filter(m => m.projectName.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1
-        || m.projectNumber.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1
-        || m.siteLocation.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1);
+      lstClaimsFilterting = lstClaimsFilterting.filter(m => m.claimNumber.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1);
+        //|| m.claimNumber.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1
+        //|| m.siteLocation.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1);
     }
 
-    this.lstFilteredProjects = lstProjectsFilterting;
+    this.lstFilteredClaims = lstClaimsFilterting;
         
   }
 
-  ViewClaims(applItem: ProjectExtended): void {
-    this.dFAProjectMainDataService.setProjectId(applItem.projectId);
-    this.dfaClaimMainDataService.setProjectId(applItem.projectId);
+  ViewClaim(applItem: ClaimExtended): void {
+    this.dfaClaimMainDataService.setProjectId(this.dFAProjectMainDataService.getProjectId());
+    this.dfaClaimMainDataService.setClaimId(applItem.claimId);
 
-    if (applItem.openProject === true) {
-      this.dFAProjectMainDataService.setViewOrEdit('view');
-    } else if (applItem.openProject === false) {
-      this.dFAProjectMainDataService.setViewOrEdit('viewOnly');
+    if (applItem.openClaim === true) {
+      this.dfaClaimMainDataService.setViewOrEdit('view');
+    } else if (applItem.openClaim === false) {
+      this.dfaClaimMainDataService.setViewOrEdit('viewOnly');
     }
 
-    this.router.navigate(['/dfa-project/' + applItem.projectId + '/claims']);
+    this.router.navigate(['/dfa-claim-main/' + applItem.claimId]);
   }
 
-  ViewProject(applItem: ProjectExtended): void {
-    this.dFAProjectMainDataService.setProjectId(applItem.projectId);
-    //this.dFAProjectMainDataService.setApplicationId(applItem.applicationId);
-    
-    //if (applItem.primaryApplicantSignedDate == null && applItem.currentApplication != false) {
-    //  this.dfaApplicationMainDataService.setViewOrEdit('update');
-    //}
-    //else
-    if (applItem.openProject === true) {
-      if (applItem.status.toLowerCase() == 'draft') {
-        this.dFAProjectMainDataService.setViewOrEdit('updateproject');
-      } else {
-        this.dFAProjectMainDataService.setViewOrEdit('viewOnly');
-      }
-    } else if (applItem.openProject === false) {
-      this.dFAProjectMainDataService.setViewOrEdit('viewOnly');
-    }
+  ResumeClaimSubmission(applItem: ClaimExtended): void {
+    this.dfaClaimMainDataService.setProjectId(this.dFAProjectMainDataService.getProjectId());
+    this.dfaClaimMainDataService.setClaimId(applItem.claimId);
 
-    this.router.navigate(['/dfa-project-main/'+applItem.projectId]);
+    this.dfaClaimMainDataService.setViewOrEdit('addclaim');
+
+    this.router.navigate(['/dfa-claim-main/' + applItem.claimId]);
   }
+  
 
 }
 
-export interface ProjectExtended extends CurrentProject {
-  openProject: boolean;
+export interface ClaimExtended extends CurrentClaim {
+  openClaim: boolean;
 }

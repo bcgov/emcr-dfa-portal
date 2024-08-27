@@ -2,8 +2,9 @@
   <ng-container *ngTemplateOutlet="dfaClaimMain"></ng-container>
   <ng-template #dfaClaimMain>
     <div>
-      <p class="sub-heading" style="font-size: 20px">Review</p>
-       <p>
+      <br />
+      <p class="sub-heading align-left" style="font-size: 20px">Review</p>
+       <p class="align-left">
         Please check that your project information is correct before submitting. Missing required fields marked in red.
       </p>
 
@@ -28,11 +29,7 @@
               (click)="navigateToStep(0)"
             >
               <img src="/assets/images/edit.svg" height="35" width="35" />
-              <img
-                src="/assets/images/edit_onhover.svg"
-                height="35"
-                width="35"
-              />
+              
             </button>
           </div>
         </div>
@@ -114,7 +111,7 @@
         </div>
         
       </mat-card-content>
-
+      <br />
       <mat-card-content class="contentStyle mat-elevation-z8">
         <div class="row justify-content-between">
           <div class="col-md-6 card-heading">Invoices</div>
@@ -126,11 +123,6 @@
               (click)="navigateToStep(1)"
             >
               <img src="/assets/images/edit.svg" height="35" width="35" />
-              <img
-                src="/assets/images/edit_onhover.svg"
-                height="35"
-                width="35"
-              />
             </button>
           </div>
         </div>
@@ -188,9 +180,9 @@
         <div class="row info-detail" *ngIf="invoiceSummaryDataSource?.data?.length == 0">
                     <span style="color:red">Invoice is required.</span>
         </div>
-
+        <br />
       </mat-card-content>
-
+      <br />
       <mat-card-content class="contentStyle mat-elevation-z8">
         <div class="row justify-content-between">
           <div class="col-md-6 card-heading">Supporting Documents</div>
@@ -202,11 +194,6 @@
               (click)="navigateToStep(2)"
             >
               <img src="/assets/images/edit.svg" height="35" width="35" />
-              <img
-                src="/assets/images/edit_onhover.svg"
-                height="35"
-                width="35"
-              />
             </button>
           </div>
           
@@ -264,16 +251,19 @@
             ></tr>
           </table>
         </div>
-        <div class="row info-detail" *ngIf="(formCreationService.fileUploadsForm$ | async)?.hasError('noPreEventCondition')">
-          <span style="color:red">Previous event condition is required.</span>
+        <div class="row info-detail" *ngIf="(formCreationService.fileUploadsClaimForm$ | async)?.hasError('noinvoices')">
+          <span style="color:red">Invoices are required.</span>
         </div>
-        <div class="row info-detail" *ngIf="(formCreationService.fileUploadsForm$ | async)?.hasError('noPostEventCondition')">
-          <span style="color:red">Post event condition is required.</span>
+        <div class="row info-detail" *ngIf="(formCreationService.fileUploadsClaimForm$ | async)?.hasError('nogeneralledger')">
+          <span style="color:red">General Ledger is required.</span>
+        </div>
+        <div class="row info-detail" *ngIf="(formCreationService.fileUploadsClaimForm$ | async)?.hasError('noproofofpayment')">
+          <span style="color:red">Proof of Payment is required.</span>
         </div>
         <div class="row info-detail" *ngIf="supportingDocumentsDataSource?.data?.length > 0">
           <b>Supporting Documents(Optional)</b>
-          <br />
-          <table mat-table [dataSource]="supportingDocumentsDataSource">
+          <br /><br />
+          <table mat-table [dataSource]="supportingDocumentsDataSource" style="width:80%">
            <!-- File Name Column -->
            <ng-container matColumnDef="fileName" style="width:25%">
             <th mat-header-cell *matHeaderCellDef >
@@ -285,7 +275,7 @@
           </ng-container>
 
           <!-- Description Column -->
-          <ng-container matColumnDef="fileDescription" style="width:25%">
+          <ng-container matColumnDef="fileDescription" style="width:45%">
             <th mat-header-cell *matHeaderCellDef>
               <b>File Description</b>
             </th>
@@ -295,7 +285,7 @@
           </ng-container>
 
           <!-- Type Column -->
-          <ng-container matColumnDef="fileTypeText" style="width:25%">
+          <ng-container matColumnDef="fileTypeText" style="width:20%">
             <th mat-header-cell *matHeaderCellDef>
               <b>File Type</b>
             </th>
@@ -305,7 +295,7 @@
           </ng-container>
 
           <!-- UploadedDate Column -->
-          <ng-container matColumnDef="uploadedDate" style="width:25%">
+          <ng-container matColumnDef="uploadedDate" style="width:10%">
             <th mat-header-cell *matHeaderCellDef>
               <b>Date Uploaded</b>
             </th>

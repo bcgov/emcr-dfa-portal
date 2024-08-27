@@ -32,6 +32,7 @@
     <div class="col-md-7 add-invoice-button-parent">
       <button
         class="button-s add-invoice-button"
+              *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'"
         mat-button
         type="button"
         (click)="openInvoiceCreatePopup(null, null);"
@@ -141,34 +142,28 @@
       </td>
     </ng-container>
 
-    <!-- Delete Icon Column -->
-    <ng-container matColumnDef="icons">
+    <!-- Delete/Edit Icon Column -->
+    <ng-container matColumnDef="icons" *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'">
       <th mat-header-cell *matHeaderCellDef style="width:15%">
         <b>Action</b>
       </th>
       <td *matCellDef="let element; let index = index" mat-cell>
         <button
           class="edit-image"
-          *ngIf="vieworedit !== 'viewOnly'"
+          *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'"
           mat-icon-button
           aria-label="Edit"
           (click)="editInvoiceRow(element, index)"
         >
           <img src="/assets/images/edit.svg" height="35" width="35" />
-          <img
-            src="/assets/images/edit_onhover.svg"
-            height="35"
-            width="35"
-          />
         </button>&nbsp;
         <button
           class="delete-image"
           mat-icon-button
           aria-label="Remove"
-          (click)="confirmDeleteInvoiceRow(index)"
+          (click)="confirmDeleteInvoiceRow(element, index)"
         >
           <img src="/assets/images/delete.svg" height="35" width="35" />
-          <img src="/assets/images/delete_onhover.svg" height="35" width="35"/>
         </button>
       </td>
     </ng-container>

@@ -12,6 +12,7 @@ import { map, filter } from 'rxjs/operators';
 import { CurrentInvoice } from '../models/current-invoice';
 import { CurrentProject } from '../models/current-project';
 import { DfaClaimMain } from '../models/dfa-claim-main';
+import { DfaInvoiceMain } from '../models/dfa-invoice-main';
 
 @Injectable({
   providedIn: 'root',
@@ -87,29 +88,29 @@ export class InvoiceService extends BaseService {
   }
 
   /**
-   * Path part for operation invoiceUpsertClaim
+   * Path part for operation invoiceUpsertInvoice
    */
-  static readonly InvoiceUpsertClaimPath = '/api/invoices/update';
+  static readonly InvoiceUpsertInvoicePath = '/api/invoices/update';
 
   /**
-   * create or update claim.
+   * create or update invoice.
    *
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `invoiceUpsertClaim()` instead.
+   * To access only the response body, use `invoiceUpsertInvoice()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  invoiceUpsertClaim$Response(params: {
+  invoiceUpsertInvoice$Response(params: {
 
     /**
-     * The claim information
+     * The invoice information
      */
-    body: DfaClaimMain
+    body: DfaInvoiceMain
   }): Observable<StrictHttpResponse<string>> {
 
-    const rb = new RequestBuilder(this.rootUrl, InvoiceService.InvoiceUpsertClaimPath, 'put');
+    const rb = new RequestBuilder(this.rootUrl, InvoiceService.InvoiceUpsertInvoicePath, 'put');
     if (params) {
       rb.body(params.body, 'application/json');
     }
@@ -126,24 +127,86 @@ export class InvoiceService extends BaseService {
   }
 
   /**
-   * create or update claim.
+   * create or update invoice.
    *
    *
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `invoiceUpsertClaim$Response()` instead.
+   * To access the full response (for headers, for example), `invoiceUpsertInvoice$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  invoiceUpsertClaim(params: {
+  invoiceUpsertInvoice(params: {
 
     /**
-     * The claim information
+     * The invoice information
      */
-    body: DfaClaimMain
+    body: DfaInvoiceMain
   }): Observable<string> {
 
-    return this.invoiceUpsertClaim$Response(params).pipe(
+    return this.invoiceUpsertInvoice$Response(params).pipe(
+      map((r: StrictHttpResponse<string>) => r.body as string)
+    );
+  }
+
+  /**
+   * Path part for operation invoiceDeleteInvoice
+   */
+  static readonly InvoiceDeleteInvoicePath = '/api/invoices/delete';
+
+  /**
+   * delete invoice.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `invoiceDeleteInvoice()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  invoiceDeleteInvoice$Response(params: {
+
+    /**
+     * The invoice information
+     */
+    body: DfaInvoiceMain
+  }): Observable<StrictHttpResponse<string>> {
+
+    const rb = new RequestBuilder(this.rootUrl, InvoiceService.InvoiceDeleteInvoicePath, 'put');
+    if (params) {
+      rb.body(params.body, 'application/json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<string>;
+      })
+    );
+  }
+
+  /**
+   * delete invoice.
+   *
+   *
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `invoiceDeleteInvoice$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  invoiceDeleteInvoice(params: {
+
+    /**
+     * The invoice information
+     */
+    body: DfaInvoiceMain
+  }): Observable<string> {
+
+    return this.invoiceDeleteInvoice$Response(params).pipe(
       map((r: StrictHttpResponse<string>) => r.body as string)
     );
   }

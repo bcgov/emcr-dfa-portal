@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.Services;
-using EMBC.Utilities.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,20 +26,21 @@ namespace EMBC.DFA.API.Controllers
     public class ClaimController : ControllerBase
     {
         private readonly IHostEnvironment env;
-        private readonly IMessagingClient messagingClient;
         private readonly IMapper mapper;
         private readonly IConfigurationHandler handler;
+        // 2024-08-15 EMCRI-595 waynezen; BCeID Authentication
+        private readonly IUserService userService;
 
         public ClaimController(
             IHostEnvironment env,
-            IMessagingClient messagingClient,
             IMapper mapper,
-            IConfigurationHandler handler)
+            IConfigurationHandler handler,
+            IUserService userService)
         {
             this.env = env;
-            this.messagingClient = messagingClient;
             this.mapper = mapper;
             this.handler = handler;
+            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
         private string currentUserId => User.FindFirstValue(JwtRegisteredClaimNames.Sub);
@@ -54,11 +54,13 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<CurrentClaim>>> GetDFAClaims(string projectId)
         {
-            var userId = currentUserId;
-            var profile = await handler.HandleGetUser(userId);
-            if (profile == null) return NotFound(userId);
-            var profileId = profile.Id;
+            //var userId = currentUserId;
+            //var profile = await handler.HandleGetUser(userId);
+            //if (profile == null) return NotFound(userId);
+            //var profileId = profile.Id;
             var lstClaims = await handler.HandleClaimList(projectId);
+            //lstClaims.Add(new CurrentClaim() {
+            //});
 
             return Ok(lstClaims);
         }
@@ -142,12 +144,17 @@ namespace EMBC.DFA.API.Controllers
         public string ProjectId { get; set; }
         public string ClaimId { get; set; }
         public string ClaimNumber { get; set; }
-        public string FirstClaim { get; set; }
-        public string FinalClaim { get; set; }
+        public bool FirstClaim { get; set; }
+        public bool FinalClaim { get; set; }
         public string CreatedDate { get; set; }
-        public string EstimatedCompletionDate { get; set; }
-        public string EMCRApprovedAmount { get; set; }
-        public string Deadline18Month { get; set; }
+        public string SubmittedDate { get; set; }
+        public string ClaimTotal { get; set; }
+        public string ApprovedClaimTotal { get; set; }
+        public string LessFirst1000 { get; set; }
+        public string ApprovedReimbursePercent { get; set; }
+        public string EligiblePayable { get; set; }
+        public string PaidClaimAmount { get; set; }
+        public string PaidClaimDate { get; set; }
         public string Status { get; set; }
         public string Stage { get; set; }
         public List<ClaimStatusBar> StatusBar { get; set; }

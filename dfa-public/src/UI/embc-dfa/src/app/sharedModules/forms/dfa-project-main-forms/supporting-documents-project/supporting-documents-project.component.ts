@@ -133,19 +133,6 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
         this.fileUploadForm = fileUploads;
         this.dfaApplicationMainDataService.getDfaApplicationStart().subscribe(application => { // setting these fields in fileUploadForm for validation checking
           if (application) {
-          //  if (this.isResidentialTenant) this.fileUploadForm.get('applicantType').setValue("ResidentialTenant");
-          //  else if (this.isHomeowner) this.fileUploadForm.get('applicantType').setValue("Homeowner");
-          //  else if (this.isSmallBusinessOwner) {
-          //   this.fileUploadForm.get('applicantType').setValue("SmallBusinessOwner");
-          //   if (this.isGeneral) this.fileUploadForm.get('smallBusinessOption').setValue("General");
-          //   if (this.isCorporate) this.fileUploadForm.get('smallBusinessOption').setValue("Corporate");
-          //   if (this.isLandlord) this.fileUploadForm.get('smallBusinessOption').setValue("Landlord");
-          //  }
-          //  else if (this.isFarmOwner) {
-          //    this.fileUploadForm.get('applicantType').setValue("FarmOwner");
-          //    if (this.isGeneral) this.fileUploadForm.get('farmOption').setValue("General");
-          //    if (this.isCorporate) this.fileUploadForm.get('farmOption').setValue("Corporate");
-          //  } else if (this.isCharitableOrganization) this.fileUploadForm.get('applicantType').setValue("CharitableOrganization");
           }
         });
       });

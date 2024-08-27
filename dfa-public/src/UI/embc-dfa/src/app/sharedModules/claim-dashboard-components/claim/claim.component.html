@@ -76,7 +76,7 @@
     </div>
   </div>
   <div class="row"
-           *ngFor="let applItem of lstFilteredProjects"
+           *ngFor="let applItem of lstFilteredClaims"
            >
     <!--<div class="row block">
     <div class="row">
@@ -96,18 +96,18 @@
       <div style="border-bottom: 1px solid lightgrey; padding-bottom: 15px; display: flex;">
         <div class="col-md-5">
           <span><b>Claim Number - </b></span>
-          <span>C.001</span>
+          <span>{{applItem.claimNumber}}</span>
         </div>
         <div class="col-md-4">
           <span><b>Submitted Date - </b></span>
-          <span>23-JUN-2013</span>
+          <span>{{applItem.submittedDate}}</span>
         </div>
         <div class="col-md-3" style="display: flex; justify-content: flex-end">
           <button
             class="application-button"
             type="button"
             *ngIf="applItem.status != 'Draft'"
-            (click)="ViewProject(applItem)"
+            (click)="ViewClaim(applItem)"
           >
             View Claim
           </button>
@@ -115,7 +115,7 @@
             class="application-button"
             type="button"
             *ngIf="applItem.status == 'Draft'"
-            
+            (click)="ResumeClaimSubmission(applItem)"
           >
             Resume Claim Submission
           </button>
@@ -130,19 +130,19 @@
           <span><b>First Claim - </b></span>
         </div>
         <div class="col-md-2">
-          <span>Yes</span>
+          <span>{{applItem.firstClaim == true ? 'Yes' : (applItem.firstClaim == false ? 'No' : 'Not Set')}}</span>
         </div>
         <div class="col-md-2">
           <span><b>Approved Claim Total - </b></span>
         </div>
         <div class="col-md-2">
-          <span>(pending information)</span>
+          <span>{{applItem.approvedClaimTotal}}</span>
         </div>
         <div class="col-md-2">
           <span><b>Eligible Payable - </b></span>
         </div>
         <div class="col-md-2">
-          <span>(pending information)</span>
+          <span>{{applItem.eligiblePayable}}</span>
         </div>
         
       </div>
@@ -151,19 +151,19 @@
           <span><b>Final Claim -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">No</span>
+          <span id="spnCauseOfDamage">{{applItem.finalClaim == true ? 'Yes' : (applItem.finalClaim == false ? 'No' : 'Not Set')}}</span>
         </div>
         <div class="col-md-2">
           <span><b>Less First $1,000 -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">(pending information)</span>
+          <span id="spnCauseOfDamage">{{applItem.lessFirst1000}}</span>
         </div>
         <div class="col-md-2">
           <span><b>Paid Claim Amount -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">(pending information)</span>
+          <span id="spnCauseOfDamage">{{applItem.paidClaimAmount}}</span>
         </div>
       </div>
 
@@ -172,25 +172,25 @@
           <span><b>Claim Total -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">CA$ 0</span>
+          <span id="spnCauseOfDamage">{{applItem.claimTotal}}</span>
         </div>
         <div class="col-md-2">
           <span><b>Approved Reimebursement % -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">(pending information)</span>
+          <span id="spnCauseOfDamage">{{applItem.approvedReimbursePercent}}</span>
         </div>
         <div class="col-md-2">
           <span><b>Paid Claim Date -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">05-JUL-2013</span>
+          <span id="spnCauseOfDamage">{{applItem.paidClaimDate}}</span>
         </div>
       </div>
 
       <div style="width: 90%; min-width: 725px; display: flex; flex-direction: column;">
         <div class="col-md-3" style="margin-top: 20px;">
-          <span *ngIf="applItem.isErrorInStatus == true" style="color: red;">Error in displaying status<br /></span>
+          <span *ngIf="applItem.isErrorInStatus == true" style="color: red;">Error in displaying status<br /><br /></span>
         </div>
         <table cellpadding="0" cellspacing="0">
           <tr>
@@ -263,7 +263,7 @@
     </mat-card>
   </div>
 </div>
-<div class="content-container no-project" *ngIf="lstFilteredProjects.length == 0 && isLoading == false">
+<div class="content-container no-project" *ngIf="lstFilteredClaims.length == 0 && isLoading == false">
  <div class="heading-container">
     <div class="row">
       <div class="col-md-12">

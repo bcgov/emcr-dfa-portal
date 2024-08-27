@@ -16,8 +16,7 @@
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "messaging__url": "https://localhost:2020",
-        "messaging_allowInvalidServerCertificate": "true",
+        "ASPNETCORE_URLS": "http://*:5020",
         "DOTNET_gcServer": "1"
       },
       "applicationUrl": "http://localhost:5020"

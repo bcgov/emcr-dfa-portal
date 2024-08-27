@@ -29,8 +29,10 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CustomPipeModule } from 'src/app/core/pipe/customPipe.module';
 import { DFADeleteConfirmDialogComponent } from '../../../../core/components/dialog-components/dfa-confirm-delete-dialog/dfa-confirm-delete.component';
 import { MatDialog } from '@angular/material/dialog';
-import { TextMaskModule } from 'angular2-text-mask';
-import { ApplicationService, OtherContactService, ProjectService } from 'src/app/core/api/services';
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - TextMaskModule not compatible
+//import { TextMaskModule } from 'angular2-text-mask';
+import { NgxMaskDirective, NgxMaskPipe, NgxMaskService, provideNgxMask } from 'ngx-mask';
+import { ApplicationService, InvoiceService, OtherContactService, ProjectService } from 'src/app/core/api/services';
 import { DFAApplicationMainMappingService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-mapping.service';
 import { MatSelectModule } from '@angular/material/select';
 import { DFAProjectMainDataService } from '../../../../feature-components/dfa-project-main/dfa-project-main-data.service';
@@ -43,6 +45,9 @@ import { ProjectExtended } from '../../../project-dashboard-components/project/p
 import InvoiceComponent from '../invoice/invoice.component';
 import { DFADeleteConfirmInvoiceDialogComponent } from '../../../../core/components/dialog-components/dfa-confirm-delete-invoice-dialog/dfa-confirm-delete-invoice.component';
 import { Invoice } from '../../../../core/model/dfa-invoice.model';
+import { DFAClaimMainDataService } from '../../../../feature-components/dfa-claim-main/dfa-claim-main-data.service';
+import { DFAClaimMainMappingService } from '../../../../feature-components/dfa-claim-main/dfa-claim-main-mapping.service';
+import { DFAClaimMainService } from '../../../../feature-components/dfa-claim-main/dfa-claim-main.service';
 
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -84,8 +89,8 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
   public sortfieldSelected: string = '';
   public filterbydaysSelected: number;
   documentSummaryColumnsToDisplay = ['invoiceNumber', 'vendorName', 'invoiceDate', 'totalBeingClaimed', 'icons']
-  documentSummaryDataSource = new MatTableDataSource<Invoice>();
-  documentSummaryDataSourceFiltered = new MatTableDataSource<Invoice>();
+  documentSummaryDataSource = new MatTableDataSource<InvoiceExtended>();
+  documentSummaryDataSourceFiltered = new MatTableDataSource<InvoiceExtended>();
   noInvoiceText = 'To begin adding invoices, click the "+ Add Invoice" button.';
   
   readonly phoneMask = [
@@ -109,22 +114,26 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
     public customValidator: CustomValidationService,
     public dfaApplicationMainDataService: DFAApplicationMainDataService,
     public dfaProjectMainDataService: DFAProjectMainDataService,
-    private applicationService: ApplicationService,
+    public dfaClaimMainDataService: DFAClaimMainDataService,
     private projectService: ProjectService,
+    private invoiceService: InvoiceService,
+    private dfaClaimMainService: DFAClaimMainService,
     private dfaApplicationMainMapping: DFAApplicationMainMappingService,
     private dfaProjectMainMapping: DFAProjectMainMappingService,
+    private dfaClaimMainMapping: DFAClaimMainMappingService,
+    
     private otherContactsService: OtherContactService,
     private route: ActivatedRoute,
     public dialog: MatDialog
   ) {
     this.formBuilder = formBuilder;
     this.formCreationService = formCreationService;
-    this.isReadOnly = (dfaProjectMainDataService.getViewOrEdit() === 'view'
-      || dfaProjectMainDataService.getViewOrEdit() === 'edit'
-      || dfaProjectMainDataService.getViewOrEdit() === 'viewOnly');
+    this.isReadOnly = (dfaClaimMainDataService.getViewOrEdit() === 'view'
+      || dfaClaimMainDataService.getViewOrEdit() === 'edit'
+      || dfaClaimMainDataService.getViewOrEdit() === 'viewOnly');
     //this.setViewOrEditControls();
 
-    this.dfaProjectMainDataService.changeViewOrEdit.subscribe((vieworedit) => {
+    this.dfaClaimMainDataService.changeViewOrEdit.subscribe((vieworedit) => {
       this.isReadOnly = (vieworedit === 'view'
         || vieworedit === 'edit'
         || vieworedit === 'viewOnly');
@@ -132,7 +141,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
     })
     this.apptype = this.route.snapshot.data["apptype"];
 
-    this.vieworedit = dfaProjectMainDataService.getViewOrEdit();
+    this.vieworedit = dfaClaimMainDataService.getViewOrEdit();
   }
 
   numericOnly(event): boolean {
@@ -166,24 +175,18 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
       //{ invoiceNumber: 'IN.003', vendorName: 'Home Depot', invoiceDate: '15-JUL-2013', totalBeingClaimed: '37000' }
 
     ];
+    
 
-    //this.recoveryClaimForm.controls.totalInvoicesBeingClaimed.disable();
-    //this.recoveryClaimForm.controls.claimPST.disable();
-    //this.recoveryClaimForm.controls.claimGrossGST.disable();
-    //this.recoveryClaimForm.controls.totalActualClaim.disable();
+    let claimId = this.route.snapshot.paramMap.get('id'); //this.dfaClaimMainDataService.getClaimId();
 
-    this.SummaryClaimCalc();
-
-    this.documentSummaryDataSourceFiltered.data = this.documentSummaryDataSource.data;
-    this.formCreationService.recoveryClaimForm.value.get('invoices').setValue(this.documentSummaryDataSource.data);
-    this.formCreationService.recoveryClaimForm.value.updateValueAndValidity();
-
-    this.invoicesCount = this.documentSummaryDataSource.data.length;
-
-    let projectId = this.dfaProjectMainDataService.getProjectId();
-
-    if (projectId) {
-      this.getRecoveryPlan(projectId);
+    if (claimId) {
+      setTimeout(
+        function () {
+          this.getRecoveryInvoices(claimId);
+        }.bind(this),
+        500
+      );
+      
     }
 
     this.dfaProjectMainDataService.stepSelected.subscribe((stepSelected) => {
@@ -200,8 +203,8 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
       }
     })
 
-    if (this.dfaProjectMainDataService.getViewOrEdit() == 'viewOnly') {
-      this.recoveryClaimForm.disable();
+    if (this.dfaClaimMainDataService.getViewOrEdit() == 'viewOnly') {
+      //this.recoveryClaimForm.disable();
     }
     else {
       setTimeout(
@@ -230,6 +233,10 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
       }
     ];
 
+    if (this.isReadOnly) {
+      this.documentSummaryColumnsToDisplay.pop();
+    }
+
   }
 
   SummaryClaimCalc() {
@@ -238,7 +245,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
     }, 0);
 
     var sumOfClaimPST = this.documentSummaryDataSource.data.reduce((acc, val) => {
-      return acc + Number(val.PST);
+      return acc + Number(val.pst);
     }, 0);
 
     var sumOfClaimGrossGST = this.documentSummaryDataSource.data.reduce((acc, val) => {
@@ -249,6 +256,10 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
       return acc + Number(val.actualInvoiceTotal);
     }, 0);
 
+    this.dfaClaimMainDataService.recoveryClaim.totalInvoicesBeingClaimed = sumOfNetInvoiceBeingClaimed + '';
+    this.dfaClaimMainDataService.recoveryClaim.claimPST = sumOfClaimPST + '';
+    this.dfaClaimMainDataService.recoveryClaim.claimGrossGST = sumOfClaimGrossGST + '';
+    this.dfaClaimMainDataService.recoveryClaim.totalActualClaim = sumOfTotalActualClaim + '';
     this.formCreationService.recoveryClaimForm.value.get('totalInvoicesBeingClaimed').setValue(sumOfNetInvoiceBeingClaimed);
     this.formCreationService.recoveryClaimForm.value.get('claimPST').setValue(sumOfClaimPST);
     this.formCreationService.recoveryClaimForm.value.get('claimGrossGST').setValue(sumOfClaimGrossGST);
@@ -317,19 +328,54 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
 
   }
 
-  getRecoveryPlan(projectId: string) {
-    if (projectId) {
-      this.projectService.projectGetProjectMain({ projectId: projectId }).subscribe({
-        next: (dfaProjectMain) => {
-          //console.log('dfaApplicationMain: ' + JSON.stringify(dfaApplicationMain))
-          //if (dfaApplicationMain.notifyUser == true) {
-          //  //this.notifyAddressChange();
-          //}
-          //debugger
-          if (dfaProjectMain && dfaProjectMain.project && dfaProjectMain.project.isdamagedDateSameAsApplication == false) {
-            this.showDates = true;
+  getRecoveryInvoices(claimId: string) {
+    if (claimId) {
+      this.invoiceService.invoiceGetDfaInvoices({ claimId: claimId }).subscribe({
+        next: (lstInv) => {
+          var lstInvoices = [];
+
+          lstInv.forEach(objInv => {
+            lstInvoices.push({
+              invoiceId: objInv.invoiceId,
+              invoiceNumber: objInv.invoiceNumber,
+              vendorName: objInv.vendorName,
+              invoiceDate: new Date(objInv.invoiceDate),
+              isGoodsReceivedonInvoiceDate: objInv.isGoodsReceivedonInvoiceDate, // == true ? 'true' : (objInv.isGoodsReceivedonInvoiceDate == false ? 'false' : null),
+              goodsReceivedDate: objInv.goodsReceivedDate ? new Date(objInv.goodsReceivedDate) : objInv.goodsReceivedDate,
+              purposeOfGoodsServiceReceived: objInv.purposeOfGoodsServiceReceived,
+              isClaimforPartofTotalInvoice: objInv.isClaimforPartofTotalInvoice, // == true ? 'true' : (objInv.isClaimforPartofTotalInvoice == false ? 'false' : null),
+              reasonClaimingPartofTotalInvoice: objInv.reasonClaimingPartofTotalInvoice,
+              netInvoiceBeingClaimed: objInv.netInvoiceBeingClaimed,
+              pst: objInv.pst,
+              grossGST: objInv.grossGST,
+              actualInvoiceTotal: objInv.actualInvoiceTotal,
+              eligibleGST: objInv.eligibleGST,
+              totalBeingClaimed: objInv.totalBeingClaimed,
+            });
+
+            //var netInvoice = Number(this.invoiceForm.controls.netInvoiceBeingClaimed.value);
+            //var PST = Number(this.invoiceForm.controls.pst.value);
+            //var GrossGST = Number(this.invoiceForm.controls.grossGST.value);
+            //var EligibleGST = Number(this.invoiceForm.controls.eligibleGST.value);
+
+            //this.invoiceForm.controls.totalBeingClaimed.setValue(netInvoice + PST + EligibleGST);
+            //this.invoiceForm.controls.actualInvoiceTotal.setValue(netInvoice + PST + GrossGST);
+          })
+
+          
+          this.documentSummaryDataSource.data = lstInvoices;
+          this.documentSummaryDataSourceFiltered.data = this.documentSummaryDataSource.data;
+          this.invoicesCount = this.documentSummaryDataSource.data.length;
+          
+          this.formCreationService.recoveryClaimForm.value.get('invoices').setValue(this.documentSummaryDataSource.data);
+          this.formCreationService.recoveryClaimForm.value.updateValueAndValidity();
+
+          if (this.dfaClaimMainDataService.recoveryClaim) {
+            this.dfaClaimMainDataService.recoveryClaim.invoices = this.documentSummaryDataSource.data;
+            this.SummaryClaimCalc();
           }
-          this.dfaProjectMainMapping.mapDFAProjectMain(dfaProjectMain);
+          
+          //this.dfaProjectMainMapping.mapDFAProjectMain(dfaProjectMain);
 
         },
         error: (error) => {
@@ -365,7 +411,8 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
     this.openInvoiceCreatePopup(element, index);
   }
 
-  confirmDeleteInvoiceRow(index: number): void {
+  confirmDeleteInvoiceRow(element, index): void {
+    
     this.dialog
       .open(DFADeleteConfirmInvoiceDialogComponent, {
         data: {
@@ -378,34 +425,92 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
       .subscribe((result) => {
         if (result === 'confirm') {
           //this.deleteOtherContactRow(index);
-          this.documentSummaryDataSource.data.splice(index, 1);
-          let cloned = this.documentSummaryDataSource.data.slice()
-          this.documentSummaryDataSource.data = cloned;
-          this.documentSummaryDataSourceFiltered.data = this.documentSummaryDataSource.data;
-          this.invoicesCount = this.documentSummaryDataSource.data.length;
-          this.SummaryClaimCalc();
-          this.formCreationService.recoveryClaimForm.value.get('invoices').setValue(this.documentSummaryDataSource.data);
-          this.formCreationService.recoveryClaimForm.value.updateValueAndValidity();
+          if (element) {
+            this.dfaClaimMainDataService.setInvoiceId(element.invoiceId);
+          }
+          let invoice = this.dfaClaimMainDataService.createDFAInvoiceDTO();
+          
+          this.dfaClaimMainService.deleteInvoice(invoice).subscribe(invoiceId => {
+
+            this.documentSummaryDataSource.data.splice(index, 1);
+            let cloned = this.documentSummaryDataSource.data.slice()
+            this.documentSummaryDataSource.data = cloned;
+            this.documentSummaryDataSourceFiltered.data = this.documentSummaryDataSource.data;
+            this.invoicesCount = this.documentSummaryDataSource.data.length;
+            this.SummaryClaimCalc();
+            this.formCreationService.recoveryClaimForm.value.get('invoices').setValue(this.documentSummaryDataSource.data);
+            this.formCreationService.recoveryClaimForm.value.updateValueAndValidity();
+          },
+            error => {
+              console.error(error);
+              document.location.href = 'https://dfa.gov.bc.ca/error.html';
+            });
         }
       });
   }
 
   openInvoiceCreatePopup(objInvoice, index): void {
+    
+    if (objInvoice && objInvoice.invoiceId) {
+      this.dfaClaimMainDataService.setInvoiceId(objInvoice.invoiceId);
+      delete (objInvoice as any).invoiceId
+    }
+    else {
+      this.dfaClaimMainDataService.setInvoiceId(null);
+    }
+
     this.dialog
       .open(InvoiceComponent, {
         data: {
-          content: objInvoice
+          content: objInvoice,
+          invoiceId: this.dfaClaimMainDataService.getInvoiceId()
         },
-        height: '750px',
+        height: '665px',
         width: '1000px',
         disableClose: true
       })
       .afterClosed()
       .subscribe((result) => {
         //debugger;
-        if (result.event === 'confirm') {
+        if (result.event === 'confirm' || result.event === 'update') {
           if (result.invData) {
             var objInv = result.invData;
+            this.dfaClaimMainDataService.invoice = objInv;
+            this.dfaClaimMainDataService.invoice.invoiceNumber = objInv.invoiceNumber;
+            this.dfaClaimMainDataService.invoice.vendorName = objInv.vendorName;
+            this.dfaClaimMainDataService.invoice.invoiceDate = objInv.invoiceDate;
+            this.dfaClaimMainDataService.invoice.isGoodsReceivedonInvoiceDate = objInv.isGoodsReceivedonInvoiceDate == 'true' ? true : (objInv.isGoodsReceivedonInvoiceDate == 'false' ? false : null) ;
+            this.dfaClaimMainDataService.invoice.goodsReceivedDate = objInv.goodsReceivedDate;
+            this.dfaClaimMainDataService.invoice.purposeOfGoodsServiceReceived = objInv.purposeOfGoodsServiceReceived;
+            this.dfaClaimMainDataService.invoice.isClaimforPartofTotalInvoice = objInv.isClaimforPartofTotalInvoice == 'true' ? true : (objInv.isClaimforPartofTotalInvoice == 'false' ? false : null);
+            this.dfaClaimMainDataService.invoice.reasonClaimingPartofTotalInvoice = objInv.reasonClaimingPartofTotalInvoice;
+            this.dfaClaimMainDataService.invoice.netInvoiceBeingClaimed = objInv.netInvoiceBeingClaimed;
+            this.dfaClaimMainDataService.invoice.pst = objInv.pst;
+            this.dfaClaimMainDataService.invoice.grossGST = objInv.grossGST;
+            this.dfaClaimMainDataService.invoice.actualInvoiceTotal = objInv.actualInvoiceTotal ? "" + objInv.actualInvoiceTotal : "" ;
+            this.dfaClaimMainDataService.invoice.eligibleGST = objInv.eligibleGST ? "" + objInv.eligibleGST : "";
+            this.dfaClaimMainDataService.invoice.totalBeingClaimed = objInv.totalBeingClaimed ? "" + objInv.totalBeingClaimed : "";
+            
+            let invoice = this.dfaClaimMainDataService.createDFAInvoiceDTO();
+            
+            this.dfaClaimMainMapping.mapDFAInvoiceMain(invoice);
+
+            this.dfaClaimMainService.upsertInvoice(invoice).subscribe(invoiceId => {
+              //this.BackToDashboard();
+              if (result.event === 'confirm') {
+                
+                this.dfaClaimMainDataService.setInvoiceId(invoiceId);
+                objInv.invoiceId = invoiceId;
+              }
+              else {
+                objInv.invoiceId = this.dfaClaimMainDataService.getInvoiceId();
+              }
+            },
+              error => {
+                console.error(error);
+                document.location.href = 'https://dfa.gov.bc.ca/error.html';
+              });
+
             //this.documentSummaryDataSource.data.push(
             //  { invoiceNumber: objInv.invoiceNumber, vendorName: objInv.vendorName, invoiceDate: objInv.invoiceDate, totalBeingClaimed: objInv.totalBeingClaimed }
             //);
@@ -425,9 +530,18 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
             this.formCreationService.recoveryClaimForm.value.updateValueAndValidity();
           }
         }
-        //(this.formCreationService.invoiceForm$ | async)?.value
-        
-        //}
+        else {
+          //when edit invoice pop up cancelled without saving
+          
+          var invId = this.dfaClaimMainDataService.getInvoiceId()
+
+          if (invId) {
+            if (index != null) {
+              objInvoice.invoiceId = invId;
+              this.documentSummaryDataSource.data.splice(index, 1, objInvoice);
+            }
+          }
+        }
       });
   }
 
@@ -455,6 +569,10 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
       3000
     );
   }
+}
+
+export interface InvoiceExtended extends Invoice {
+  invoiceId?: string;
 }
 
 const routes: Routes = [{
@@ -491,7 +609,8 @@ const routes: Routes = [{
     DirectivesModule,
     MatTableModule,
     CustomPipeModule,
-    TextMaskModule,
+    // 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - new text mask provider
+    NgxMaskDirective, NgxMaskPipe,
     MatSelectModule,
     MatTooltipModule,
     RouterModule.forChild(routes)

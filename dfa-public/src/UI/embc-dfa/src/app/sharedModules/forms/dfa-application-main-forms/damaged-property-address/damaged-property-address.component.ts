@@ -26,7 +26,9 @@ import { DFAEligibilityDialogComponent } from 'src/app/core/components/dialog-co
 import { MatDialog } from '@angular/material/dialog';
 import { Profile, ApplicantOption, Address } from 'src/app/core/api/models';
 import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
-import { TextMaskModule } from 'angular2-text-mask';
+// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - TextMaskModule not compatible
+//import { TextMaskModule } from 'angular2-text-mask';
+import { NgxMaskDirective, NgxMaskPipe, NgxMaskService, provideNgxMask } from 'ngx-mask';
 import { MatInputModule } from '@angular/material/input';
 import { ApplicationService, ProfileService } from 'src/app/core/api/services';
 import { DFAApplicationMainMappingService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-mapping.service';
@@ -618,7 +620,8 @@ export default class DamagedPropertyAddressComponent implements OnInit, OnDestro
     FormsModule,
     MatCardModule,
     MatFormFieldModule,
-    TextMaskModule,
+    // 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - new text mask provider
+    NgxMaskDirective, NgxMaskPipe,
     MatRadioModule,
     MatInputModule,
     MatButtonModule,

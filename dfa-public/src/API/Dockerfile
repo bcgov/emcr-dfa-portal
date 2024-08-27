@@ -23,6 +23,7 @@ COPY ["EMBC.Utilities.Caching/EMBC.Utilities.Caching.csproj", "EMBC.Utilities.Ca
 COPY ["EMBC.Utilities.Telemetry/EMBC.Utilities.Telemetry.csproj", "EMBC.Utilities.Telemetry/"]
 COPY ["EMBC.Utilities.Messaging/EMBC.Utilities.Messaging.csproj", "EMBC.Utilities.Messaging/"]
 COPY ["EMBC.Tests.Unit.DFA.API/EMBC.Tests.Unit.DFA.API.csproj", "EMBC.Tests.Unit.DFA.API/"]
+COPY ["EMBC.BCeID/EMBC.Gov.BCeID.csproj", "EMBC.BCeID/"]
 COPY ["EMBC.DFA.sln", ".editorconfig", "./"]
 RUN dotnet restore .
 COPY . .

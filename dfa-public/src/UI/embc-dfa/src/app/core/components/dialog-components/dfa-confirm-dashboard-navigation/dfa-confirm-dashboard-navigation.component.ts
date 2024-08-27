@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, Inject } from '@angular/core';
 import { DialogContent } from 'src/app/core/model/dialog-content.model';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { AuthModule, AuthOptions, LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
 import { LoginService } from 'src/app/core/services/login.service';
 
 @Component({
@@ -16,12 +17,19 @@ export class DFAConfirmDashboardNavigationDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<DFAConfirmDashboardNavigationDialogComponent>,
+    private oidcSecurityService: OidcSecurityService,
     loginService: LoginService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    ) {
-      this.content = this.data.content;
-      if (loginService.isLoggedIn()) this.isLoggedIn = true;
+  ) {
+    this.content = this.data.content;
+    // 2024-05-27 EMCRI-217 waynezen: use new BCeID async Auth
+    if (this.oidcSecurityService.isAuthenticated()) {
+      this.isLoggedIn = true;
     }
+    else {
+      this.isLoggedIn = false
+    }
+  }
 
   cancel() {
     this.dialogRef.close('cancel');

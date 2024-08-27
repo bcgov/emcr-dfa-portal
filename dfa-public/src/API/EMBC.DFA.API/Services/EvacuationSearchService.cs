@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EMBC.ESS.Shared.Contracts.Events;
-using EMBC.Utilities.Messaging;
 
 namespace EMBC.DFA.API.Services
 {
@@ -15,30 +15,24 @@ namespace EMBC.DFA.API.Services
 
     public class EvacuationSearchService : IEvacuationSearchService
     {
-        private readonly IMessagingClient messagingClient;
-
-        public EvacuationSearchService(IMessagingClient messagingClient)
+        public EvacuationSearchService()
         {
-            this.messagingClient = messagingClient;
         }
 
+        [Obsolete("Messaging API removed")]
+        // 2024-06-24 EMCRI-282 waynezen: Function obsolete due to removed Messaging API
         public async Task<IEnumerable<EvacuationFile>> GetFiles(string byRegistrantUserId, EvacuationFileStatus[] byStatus)
         {
-            var files = (await messagingClient.Send(new EvacuationFilesQuery
-            {
-                PrimaryRegistrantUserId = byRegistrantUserId,
-                IncludeFilesInStatuses = byStatus
-            })).Items;
-
-            return files;
+            IEnumerable<EvacuationFile> files = null;
+            return await Task.FromResult(files);
         }
 
+        [Obsolete("Messaging API removed")]
+        // 2024-06-24 EMCRI-282 waynezen: Function obsolete due to removed Messaging API
         public async Task<RegistrantProfile> GetRegistrantByUserId(string userId)
         {
-            var registrant = (await messagingClient.Send(new RegistrantsQuery
-            { UserId = userId })).Items.SingleOrDefault();
-
-            return registrant;
+            RegistrantProfile registrant = null;
+            return await Task.FromResult(registrant);
         }
     }
 }

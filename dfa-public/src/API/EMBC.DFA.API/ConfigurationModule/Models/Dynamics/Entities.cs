@@ -381,6 +381,18 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string dfa_requireddocumenttype { get; set; }
     }
 
+    public class dfa_projectclaimdocumentlocation
+    {
+        public Guid? dfa_projectclaimdocumentlocationid { get; set; } // optional string
+        public Guid _dfa_projectclaimid_value { get; set; } // application id
+        public string dfa_name { get; set; } // file name
+        public string dfa_description { get; set; } // file description
+        public string createdon { get; set; } // uploaded date
+        public string dfa_documenttype { get; set; }
+        public string dfa_modifiedby { get; set; }
+        public string dfa_requireddocumenttype { get; set; }
+    }
+
     public class AttachmentEntity
     {
         [JsonProperty("@odata.type")]
@@ -395,6 +407,16 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
     {
         public IEnumerable<AttachmentEntity> documentCollection { get; set; }
         public string dfa_projectid { get; set; }
+        public string dfa_description { get; set; } // pass in description
+        public string dfa_modifiedby { get; set; } // pass in modified by
+        public string fileType { get; set; } // pass in string for fileType (business defined type e.g. damage photo)
+        public string? dfa_requireddocumenttype { get; set; } // for required documents TODO: uncomment
+    }
+
+    public class SubmissionEntityClaim
+    {
+        public IEnumerable<AttachmentEntity> documentCollection { get; set; }
+        public string dfa_projectclaimid { get; set; }
         public string dfa_description { get; set; } // pass in description
         public string dfa_modifiedby { get; set; } // pass in modified by
         public string fileType { get; set; } // pass in string for fileType (business defined type e.g. damage photo)
@@ -442,6 +464,32 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string dfa_recoveryplanid { get; set; } // required string
         public bool? dfa_finalclaim { get; set; }
         public string? dfa_projectclaimid { get; set; }
+        public string? dfa_claimbpfstages { get; set; }
+        public string? dfa_claimbpfsubstages { get; set; }
+    }
+
+    public class dfa_invoice_params
+    {
+        public string dfa_claim { get; set; } // required string
+        public string? dfa_recoveryinvoiceid { get; set; }
+        public string? dfa_purpose { get; set; }
+        public string? dfa_name { get; set; }
+        public string? dfa_invoicenumber { get; set; }
+        public DateTime? dfa_invoicedate { get; set; }
+        public DateTime? dfa_goodsorservicesreceiveddate { get; set; }
+        public bool? dfa_receiveddatesameasinvoicedate { get; set; }
+        public bool? dfa_portionofinvoice { get; set; }
+        public string? dfa_portioninvoicereason { get; set; }
+        public int? dfa_netinvoicedbeingclaimed { get; set; }
+        public int? dfa_pst { get; set; }
+        public int? dfa_grossgst { get; set; }
+        public int? dfa_eligiblegst { get; set; }
+    }
+
+    public class dfa_invoice_delete_params
+    {
+        public string? dfa_recoveryinvoiceid { get; set; }
+        public bool? delete { get; set; }
     }
 
     public class dfa_appdamageditems_params
@@ -596,6 +644,15 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         SUBMIT = 222710001
     }
 
+    public enum ClaimStageOptionSet
+    {
+        [Description("draft")]
+        DRAFT = 222710000,
+
+        [Description("submit")]
+        SUBMIT = 222710001
+    }
+
     public class dfa_appapplication
     {
         public string dfa_appapplicationid { get; set; }
@@ -642,11 +699,35 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_isfirstclaim { get; set; }
         public string? dfa_finalclaim { get; set; }
         public string? dfa_totaloftotaleligible { get; set; }
+        public string? dfa_claimtotal { get; set; }
         public string? dfa_totalapproved { get; set; }
         public string? dfa_lessfirst1000 { get; set; }
         public string? dfa_totalpaid { get; set; }
-        public string? dfa_Claimpaiddate { get; set; }
+        public string? dfa_claimpaiddate { get; set; }
         public string? dfa_projectclaimid { get; set; }
+        public string? dfa_claimbpfstages { get; set; }
+        public string? dfa_claimbpfsubstages { get; set; }
+    }
+
+    public class dfa_recoveryinvoice
+    {
+        public string _dfa_claim_value { get; set; } // required string
+        public string? dfa_recoveryinvoiceid { get; set; }
+        public string? dfa_purpose { get; set; }
+        public string? dfa_name { get; set; }
+        public string? dfa_invoicenumber { get; set; }
+        public DateTime? dfa_invoicedate { get; set; }
+        public DateTime? createdon { get; set; }
+        public DateTime? dfa_goodsorservicesreceiveddate { get; set; }
+        public bool? dfa_receiveddatesameasinvoicedate { get; set; }
+        public bool? dfa_portionofinvoice { get; set; }
+        public string? dfa_portioninvoicereason { get; set; }
+        public int? dfa_netinvoicedbeingclaimed { get; set; }
+        public int? dfa_pst { get; set; }
+        public int? dfa_grossgst { get; set; }
+        public int? dfa_eligiblegst { get; set; }
+        public int? dfa_actualinvoicetotal { get; set; }
+        public int? dfa_totalbeingclaimed { get; set; }
     }
 
     public class dfa_project
@@ -719,6 +800,54 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
 
         [Description("Withdrawn")]
         Withdrawn = 222710007,
+    }
+
+    public enum ClaimStages
+    {
+        [Description("Draft")]
+        Draft = 222710000,
+
+        [Description("Submitted")]
+        Submitted = 222710001,
+
+        [Description("Under Review")]
+        UnderReview = 222710002,
+
+        [Description("Approval Pending")]
+        ApprovalPending = 222710003,
+
+        [Description("Decision Made")]
+        DecisionMade = 222710004
+    }
+
+    public enum ClaimSubStages
+    {
+        [Description("Pending")]
+        Pending = 222710000,
+
+        [Description("Received")]
+        Received = 222710001,
+
+        [Description("In Progress")]
+        InProgress = 222710002,
+
+        [Description("Assign to Evaluator")]
+        AssigntoEvaluator = 222710003,
+
+        [Description("Additional info. Required")]
+        AdditionalinfoRequired = 222710004,
+
+        [Description("Approved")]
+        Approved = 222710005,
+
+        [Description("Ineligible")]
+        Ineligible = 222710006,
+
+        [Description("Withdrawn")]
+        Withdrawn = 222710007,
+
+        [Description("Approved with Exclusion")]
+        ApprovedwithExclusion = 222710008,
     }
 
     public class dfa_incident

@@ -13,6 +13,7 @@ using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Mozilla;
+using Pipelines.Sockets.Unofficial.Arenas;
 using Xrm.Tools.WebAPI;
 using Xrm.Tools.WebAPI.Requests;
 using static System.Net.Mime.MediaTypeNames;
@@ -75,7 +76,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         "dfa_isprimaryandsecondaryaddresssame", "dfa_appcontactid",
                         "dfa_bcservicecardid", "dfa_lastdateupdated"
                     },
-                    Filter = $"dfa_bcservicecardid eq '{userId}'"
+                    Filter = $"dfa_bceiduserguid eq '{userId}'"
                 });
 
                 return userObj != null ? userObj.List.LastOrDefault() : null;
@@ -743,6 +744,24 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             }
         }
 
+        public async Task<string> InsertDocumentLocationClaimAsync(SubmissionEntityClaim submission)
+        {
+            try
+            {
+                var result = await api.ExecuteAction("dfa_SubmitDFADocuments", submission);
+
+                if (result != null)
+                {
+                    return result.Where(m => m.Key == "output") != null ? result.Where(m => m.Key == "output").ToList()[0].Value?.ToString() : string.Empty;
+                }
+                return "Submitted";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to insert/delete document {ex.Message}", ex);
+            }
+        }
+
         public async Task<IEnumerable<dfa_projectdocumentlocation>> GetProjectDocumentLocationsListAsync(Guid projectId)
         {
             try
@@ -754,6 +773,28 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     {
                         "dfa_projectdocumentlocationid", "_dfa_projectid_value", "dfa_name", "dfa_description", "createdon", "dfa_documenttype", "dfa_modifiedby", "dfa_requireddocumenttype"
                     }, Filter = $"_dfa_projectid_value eq {projectIdString}"
+                });
+
+                return list.List;
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Failed to get documents {ex.Message}", ex);
+            }
+        }
+
+        public async Task<IEnumerable<dfa_projectclaimdocumentlocation>> GetProjectClaimDocumentLocationsListAsync(Guid claimId)
+        {
+            try
+            {
+                var claimIdString = claimId.ToString();
+                var list = await api.GetList<dfa_projectclaimdocumentlocation>("dfa_projectclaimdocumentlocations", new CRMGetListOptions
+                {
+                    Select = new[]
+                    {
+                        "dfa_projectclaimdocumentlocationid", "_dfa_projectclaimid_value", "dfa_name", "dfa_description", "createdon", "dfa_documenttype", "dfa_modifiedby", "dfa_requireddocumenttype"
+                    },
+                    Filter = $"_dfa_projectclaimid_value eq {claimIdString}"
                 });
 
                 return list.List;
@@ -867,7 +908,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             }
             catch (System.Exception ex)
             {
-                throw new Exception($"Failed to update/delete application {ex.Message}", ex);
+                throw new Exception($"Failed to update/delete project {ex.Message}", ex);
             }
 
             return string.Empty;
@@ -1006,9 +1047,10 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         "dfa_isfirstclaim",
                         "dfa_finalclaim",
                         "dfa_totaloftotaleligible", "dfa_totalapproved", "dfa_lessfirst1000",
-                        "dfa_totalpaid", "dfa_Claimpaiddate"
+                        "dfa_totalpaid", "dfa_claimpaiddate", "dfa_projectclaimid",
+                        "dfa_claimbpfstages", "dfa_claimbpfsubstages", "dfa_claimtotal"
                     },
-                    Filter = $"dfa_projectclaimid eq {projectId}"
+                    Filter = $"_dfa_recoveryplanid_value eq {projectId}"
                 });
 
                 //where objAppEvent != null && (objAppEvent.dfa_eventtype == Convert.ToInt32(EventType.Public).ToString()
@@ -1024,8 +1066,11 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_totalapproved = objClaim.dfa_totalapproved,
                                    dfa_lessfirst1000 = objClaim.dfa_lessfirst1000,
                                    dfa_totalpaid = objClaim.dfa_totalpaid,
-                                   dfa_Claimpaiddate = objClaim.dfa_Claimpaiddate,
+                                   dfa_claimpaiddate = objClaim.dfa_claimpaiddate,
                                    dfa_projectclaimid = objClaim.dfa_projectclaimid,
+                                   dfa_claimbpfstages = objClaim.dfa_claimbpfstages,
+                                   dfa_claimbpfsubstages = objClaim.dfa_claimbpfsubstages,
+                                   dfa_claimtotal = objClaim.dfa_claimtotal
                                }).AsEnumerable().OrderByDescending(m => m.dfa_claimreceivedbyemcrdate);
 
                 return lstClaims;
@@ -1041,6 +1086,14 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             try
             {
                 var jsonVal = JsonConvert.SerializeObject(claim);
+
+                //var lstClaims = await GetClaimListAsync(claim.dfa_recoveryplanid);
+
+                //if (lstClaims != null && lstClaims.Count() == 0)
+                //{
+                //    //claim.dfa_firstclaim = true
+                //}
+
                 var result = await api.ExecuteAction("dfa_DFAPortalCreateRecoveryClaim", claim);
 
                 if (result != null)
@@ -1050,7 +1103,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             }
             catch (System.Exception ex)
             {
-                throw new Exception($"Failed to update/delete application {ex.Message}", ex);
+                throw new Exception($"Failed to update/delete claim {ex.Message}", ex);
             }
 
             return string.Empty;
@@ -1081,6 +1134,95 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                }).AsEnumerable().OrderByDescending(m => m.createdon);
 
                 return lstApps.FirstOrDefault();
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Failed to obtain access token from {ex.Message}", ex);
+            }
+        }
+
+        public async Task<string> UpsertInvoice(dfa_invoice_params invoice)
+        {
+            try
+            {
+                var jsonVal = JsonConvert.SerializeObject(invoice);
+                var result = await api.ExecuteAction("dfa_DFAPortalCreateRecoveryInvoice", invoice);
+
+                if (result != null)
+                {
+                    return result.Where(m => m.Key == "output") != null ? result.Where(m => m.Key == "output").ToList()[0].Value.ToString() : string.Empty;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Failed to update/delete invoice {ex.Message}", ex);
+            }
+
+            return string.Empty;
+        }
+
+        public async Task<string> DeleteInvoice(dfa_invoice_delete_params invoice)
+        {
+            try
+            {
+                var jsonVal = JsonConvert.SerializeObject(invoice);
+                var result = await api.ExecuteAction("dfa_DFAPortalCreateRecoveryInvoice", invoice);
+
+                if (result != null)
+                {
+                    return result.Where(m => m.Key == "output") != null ? result.Where(m => m.Key == "output").ToList()[0].Value.ToString() : string.Empty;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Failed to update/delete invoice {ex.Message}", ex);
+            }
+
+            return string.Empty;
+        }
+
+        public async Task<IEnumerable<dfa_recoveryinvoice>> GetInvoiceListAsync(string claimId)
+        {
+            try
+            {
+                var list = await api.GetList<dfa_recoveryinvoice>("dfa_recoveryinvoices", new CRMGetListOptions
+                {
+                    Select = new[]
+                    {
+                        "dfa_name", "_dfa_claim_value",
+                        "dfa_recoveryinvoiceid",
+                        "dfa_purpose",
+                        "dfa_invoicenumber", "dfa_invoicedate", "dfa_goodsorservicesreceiveddate",
+                        "dfa_receiveddatesameasinvoicedate", "dfa_portionofinvoice", "dfa_portioninvoicereason",
+                        "dfa_netinvoicedbeingclaimed", "dfa_pst", "dfa_grossgst", "dfa_eligiblegst",
+                        "createdon", "dfa_actualinvoicetotal", "dfa_totalbeingclaimed"
+                    },
+                    Filter = $"_dfa_claim_value eq {claimId}"
+                });
+
+                var lstClaims = (from objInvoice in list.List
+                                 select new dfa_recoveryinvoice
+                                 {
+                                     dfa_name = objInvoice.dfa_name,
+                                     _dfa_claim_value = objInvoice._dfa_claim_value,
+                                     dfa_recoveryinvoiceid = objInvoice.dfa_recoveryinvoiceid,
+                                     dfa_purpose = objInvoice.dfa_purpose,
+                                     dfa_invoicenumber = objInvoice.dfa_invoicenumber,
+                                     dfa_invoicedate = objInvoice.dfa_invoicedate,
+                                     dfa_goodsorservicesreceiveddate = objInvoice.dfa_goodsorservicesreceiveddate,
+                                     dfa_receiveddatesameasinvoicedate = objInvoice.dfa_receiveddatesameasinvoicedate,
+                                     dfa_portionofinvoice = objInvoice.dfa_portionofinvoice,
+                                     dfa_portioninvoicereason = objInvoice.dfa_portioninvoicereason,
+                                     dfa_netinvoicedbeingclaimed = objInvoice.dfa_netinvoicedbeingclaimed,
+                                     dfa_pst = objInvoice.dfa_pst,
+                                     dfa_grossgst = objInvoice.dfa_grossgst,
+                                     dfa_eligiblegst = objInvoice.dfa_eligiblegst,
+                                     createdon = objInvoice.createdon,
+                                     dfa_totalbeingclaimed = objInvoice.dfa_totalbeingclaimed,
+                                     dfa_actualinvoicetotal = objInvoice.dfa_actualinvoicetotal
+                                 }).AsEnumerable().OrderByDescending(m => m.createdon);
+
+                return lstClaims;
             }
             catch (System.Exception ex)
             {

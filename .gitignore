@@ -24,3 +24,7 @@ bin/
 Bin/
 obj/
 Obj/
+
+# dfa-public/src/UI/embc-dfa/src/app/core/api/services/
+
+dfa-public/src/UI/embc-dfa/package-lock.json
