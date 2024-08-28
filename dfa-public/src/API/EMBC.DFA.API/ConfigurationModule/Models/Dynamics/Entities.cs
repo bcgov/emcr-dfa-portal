@@ -466,6 +466,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_projectclaimid { get; set; }
         public string? dfa_claimbpfstages { get; set; }
         public string? dfa_claimbpfsubstages { get; set; }
+        public DateTime? dfa_claimreceivedbyemcrdate { get; set; }
     }
 
     public class dfa_invoice_params
@@ -707,6 +708,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_projectclaimid { get; set; }
         public string? dfa_claimbpfstages { get; set; }
         public string? dfa_claimbpfsubstages { get; set; }
+        public string? createdon { get; set; }
     }
 
     public class dfa_recoveryinvoice

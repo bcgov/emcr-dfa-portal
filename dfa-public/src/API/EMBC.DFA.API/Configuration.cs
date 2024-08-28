@@ -67,6 +67,8 @@ namespace EMBC.DFA.API
 
                  configuration.GetSection("auth:jwt").Bind(options);
 
+                 Debug.WriteLine($"JWT Authentication; Audience: {options.Audience}");
+
                  options.TokenValidationParameters = new TokenValidationParameters
                  {
                      ValidateAudience = false,
@@ -84,9 +86,12 @@ namespace EMBC.DFA.API
                      OnTokenValidated = async ctx =>
                      {
                          await Task.CompletedTask;
-                         var logger = ctx.HttpContext.RequestServices.GetRequiredService<ITelemetryProvider>().Get<JwtBearerEvents>();
-                         var userInfo = ctx.Principal.FindFirstValue("userInfo");
-                         logger.LogDebug("{0}", userInfo);
+                         var logger1 = ctx.HttpContext.RequestServices.GetRequiredService<ITelemetryProvider>().Get<JwtBearerEvents>();
+                         var claims = ctx.Principal.Claims;
+                         foreach (var claim in claims)
+                         {
+                            Debug.WriteLine($"JWT token vValidated. Claim: {claim.Type}: {claim.Value}");
+                         }
                      },
                      OnAuthenticationFailed = async ctx =>
                      {
@@ -96,7 +101,7 @@ namespace EMBC.DFA.API
                          var issuer = oidcConfig["issuer"];
 
                          var logger = ctx.HttpContext.RequestServices.GetRequiredService<ITelemetryProvider>().Get<JwtBearerEvents>();
-                         logger.LogError(ctx.Exception, $"JWT authantication failed: clientId={clientId}, issuer={issuer}, jwt:authority={options.Authority}");
+                         logger.LogError(ctx.Exception, $"JWT authentication failed: clientId={clientId}, issuer={issuer}, jwt:authority={options.Authority}");
                      }
                  };
              })

@@ -384,7 +384,7 @@ namespace EMBC.DFA.API.Mappers
 
             CreateMap<dfa_projectclaim, CurrentClaim>()
                 .ForMember(d => d.ClaimNumber, opts => opts.MapFrom(s => s.dfa_name))
-                //.ForMember(d => d.CreatedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_claimreceivedbyemcrdate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_claimreceivedbyemcrdate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(d => d.CreatedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.createdon).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.createdon).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.SubmittedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_claimreceivedbyemcrdate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_claimreceivedbyemcrdate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.FirstClaim, opts => opts.MapFrom(s => s.dfa_isfirstclaim))
                 .ForMember(d => d.FinalClaim, opts => opts.MapFrom(s => s.dfa_finalclaim))
@@ -523,7 +523,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.dfa_projectclaimid, opts => opts.MapFrom(s => s.Id))
                 .ForMember(d => d.dfa_claimbpfstages, opts => opts.MapFrom(s => s.Claim.claimStatus == null ? Convert.ToInt32(ClaimStages.Draft) : Convert.ToInt32(s.Claim.claimStatus)))
                 .ForMember(d => d.dfa_claimbpfsubstages, opts => opts.MapFrom(s => s.Claim.claimStatus != null && s.Claim.claimStatus.Value == ClaimStageOptionSet.SUBMIT ? Convert.ToInt32(ClaimSubStages.Pending) : (int?)null))
-
+                .ForMember(d => d.dfa_claimreceivedbyemcrdate, opts => opts.MapFrom(s => s.Claim.claimStatus != null && s.Claim.claimStatus.Value == ClaimStageOptionSet.SUBMIT ? DateTime.Now : (DateTime?)null))
                 .ForMember(d => d.dfa_recoveryplanid, opts => opts.MapFrom(s => s.ProjectId));
             //.ForMember(d => d.dfa_finalclaim, opts => opts.MapFrom(s => s.ProjectId));
 
