@@ -90,7 +90,8 @@ namespace EMBC.DFA.API
                          var claims = ctx.Principal.Claims;
                          foreach (var claim in claims)
                          {
-                            Debug.WriteLine($"JWT token vValidated. Claim: {claim.Type}: {claim.Value}");
+                             logger1.LogDebug($"JWT token validated. Claim: {claim.Type}: {claim.Value}");
+                             Debug.WriteLine($"JWT token validated. Claim: {claim.Type}: {claim.Value}");
                          }
                      },
                      OnAuthenticationFailed = async ctx =>
