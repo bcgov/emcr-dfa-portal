@@ -28,6 +28,7 @@ export class DFAApplicationMainDataService {
   private _vieworedit: string;
   private _editstep: string;
   private _requiredDocuments = [];
+  private _business: string;
   public changeViewOrEdit: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(
@@ -165,6 +166,14 @@ export class DFAApplicationMainDataService {
 
   public getApplicationId(): string {
     return this._applicationId;
+  }
+
+  public setBusiness(busName: string): void {
+    this._business = busName;
+  }
+
+  public getBusiness(): string {
+    return this._business;
   }
 
   public setViewOrEdit(vieworedit: string): void {

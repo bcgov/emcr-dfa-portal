@@ -67,6 +67,19 @@
                 maxlength="100"/>
             </mat-form-field>
           </div>
+          <div class="col-md-3" *ngIf="isReadOnly == true">
+            <p  style="font-size: 15px">
+              Claim Received by EMCR Date
+            </p>
+            <mat-form-field appearance="outline" class="mat-form-round">
+              <input
+                id="claimReceivedByEMCRDate"
+                     (focusin)="setHelpText(1, tooltip)"
+                formControlName="claimReceivedByEMCRDate"
+                matInput
+                maxlength="100"/>
+            </mat-form-field>
+          </div>
         </div>
         <div class="row">
           <div class="col-md-3">
@@ -112,7 +125,6 @@
                   id="currencyBoxTotalInvoicesBeingClaimed"
                   formControlName="totalInvoicesBeingClaimed"
                   matInput
-                  placeholder="Estimate or actual cost"
                        (keypress)="numericOnly($event)"
                   maxlength="100"/>
                 <span class="currencyText">CA$</span>
@@ -133,7 +145,6 @@
                   id="currencyBoxClaimPST"
                   formControlName="claimPST"
                   matInput
-                  placeholder="Estimate or actual cost"
                         (keypress)="numericOnly($event)"
                   maxlength="100"/>
                 <span class="currencyText">CA$</span>
@@ -154,7 +165,6 @@
                   id="currencyBoxClaimGrossGST"
                   formControlName="claimGrossGST"
                   matInput
-                  placeholder="Estimate or actual cost"
                        (keypress)="numericOnly($event)"
                   maxlength="100"/>
                 <span class="currencyText">CA$</span>
@@ -175,7 +185,6 @@
                   id="currencyBoxTotalActualClaim"
                   formControlName="totalActualClaim"
                   matInput
-                  placeholder="Estimate or actual cost"
                        (keypress)="numericOnly($event)"
                   maxlength="100"/>
                 <span class="currencyText">CA$</span>
@@ -186,7 +195,176 @@
           
         </div>
       </ng-container>
+      <br />
+
+      <ng-container *ngIf="isReadOnly == true">
+        <div class="row decisionHeader">
+          <b>Decision</b>
+        </div>
+       <div class="row">
+        
+        <div class="col-md-3 costCurrency">
+          <p  style="font-size: 15px; margin-bottom: 10px !important">
+            Claim Eligible GST
+          </p>
+          <mat-form-field appearance="outline" class="mat-form-round">
       
+            <div class="searchDiv">
+              <input
+                (focusin)="setHelpText(15, tooltip)"
+                #currencyBoxclaimEligibleGST
+                id="currencyBoxclaimEligibleGST"
+                formControlName="claimEligibleGST"
+                matInput
+                     (keypress)="numericOnly($event)"
+                maxlength="100"/>
+              <span class="currencyText">CA$</span>
+            </div>
+      
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 costCurrency">
+          <p  style="font-size: 15px; margin-bottom: 10px !important">
+            Claim Total
+          </p>
+          <mat-form-field appearance="outline" class="mat-form-round">
+    
+            <div class="searchDiv">
+              <input
+                (focusin)="setHelpText(15, tooltip)"
+                #currencyBoxclaimTotal
+                id="currencyBoxclaimTotal"
+                formControlName="claimTotal"
+                matInput
+                      (keypress)="numericOnly($event)"
+                maxlength="100"/>
+              <span class="currencyText">CA$</span>
+            </div>
+    
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 costCurrency">
+          <p  style="font-size: 15px; margin-bottom: 10px !important">
+            Approved Claim Total
+          </p>
+          <mat-form-field appearance="outline" class="mat-form-round">
+    
+            <div class="searchDiv">
+              <input
+                (focusin)="setHelpText(15, tooltip)"
+                #currencyBoxapprovedClaimTotal
+                id="currencyBoxapprovedClaimTotal"
+                formControlName="approvedClaimTotal"
+                matInput
+                     (keypress)="numericOnly($event)"
+                maxlength="100"/>
+              <span class="currencyText">CA$</span>
+            </div>
+    
+          </mat-form-field>
+        </div>  
+        <div class="col-md-3 costCurrency">
+          <p  style="font-size: 15px; margin-bottom: 10px !important">
+            Less First $1,000
+          </p>
+          <mat-form-field appearance="outline" class="mat-form-round">
+    
+            <div class="searchDiv">
+              <input
+                (focusin)="setHelpText(15, tooltip)"
+                #currencyBoxfirstClaimDeductible1000
+                id="currencyBoxfirstClaimDeductible1000"
+                formControlName="firstClaimDeductible1000"
+                matInput
+                     (keypress)="numericOnly($event)"
+                maxlength="100"/>
+              <span class="currencyText">CA$</span>
+            </div>
+    
+          </mat-form-field>
+        </div>
+  
+      </div>
+
+         <div class="row">
+  
+          <div class="col-md-3 costCurrency">
+            <p  style="font-size: 15px; margin-bottom: 10px !important">
+              Approved Reimbursement %
+            </p>
+            <mat-form-field appearance="outline" class="mat-form-round">
+
+              <div class="searchDiv">
+                <input
+                  (focusin)="setHelpText(15, tooltip)"
+                  #currencyBoxapprovedReimbursement
+                  id="currencyBoxapprovedReimbursement"
+                  formControlName="approvedReimbursement"
+                  matInput
+                       (keypress)="numericOnly($event)"
+                  maxlength="100"/>
+                <span class="currencyText">CA$</span>
+              </div>
+
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 costCurrency">
+            <p  style="font-size: 15px; margin-bottom: 10px !important">
+              Eligible Payable
+            </p>
+            <mat-form-field appearance="outline" class="mat-form-round">
+    
+              <div class="searchDiv">
+                <input
+                  (focusin)="setHelpText(15, tooltip)"
+                  #currencyBoxeligiblePayable
+                  id="currencyBoxeligiblePayable"
+                  formControlName="eligiblePayable"
+                  matInput
+                        (keypress)="numericOnly($event)"
+                  maxlength="100"/>
+                <span class="currencyText">CA$</span>
+              </div>
+    
+            </mat-form-field>
+          </div>
+          <div class="col-md-3 costCurrency">
+            <p  style="font-size: 15px; margin-bottom: 10px !important">
+              Paid Claim Amount
+            </p>
+            <mat-form-field appearance="outline" class="mat-form-round">
+    
+              <div class="searchDiv">
+                <input
+                  (focusin)="setHelpText(15, tooltip)"
+                  #currencyBoxpaidClaimAmount
+                  id="currencyBoxpaidClaimAmount"
+                  formControlName="paidClaimAmount"
+                  matInput
+                       (keypress)="numericOnly($event)"
+                  maxlength="100"/>
+                <span class="currencyText">CA$</span>
+              </div>
+    
+            </mat-form-field>
+          </div>  
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <p  style="font-size: 15px">
+              Paid Claim Date
+            </p>
+            <mat-form-field appearance="outline" class="mat-form-round">
+              <input
+                id="paidClaimDate"
+                     (focusin)="setHelpText(1, tooltip)"
+                formControlName="paidClaimDate"
+                matInput
+                maxlength="100"/>
+            </mat-form-field>
+          </div>
+        </div>
+      </ng-container>
     </form>
     
   </mat-card-content>

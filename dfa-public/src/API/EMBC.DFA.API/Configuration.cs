@@ -87,10 +87,11 @@ namespace EMBC.DFA.API
                      {
                          await Task.CompletedTask;
                          var logger1 = ctx.HttpContext.RequestServices.GetRequiredService<ITelemetryProvider>().Get<JwtBearerEvents>();
+                         var logger2 = ctx.HttpContext.RequestServices.GetRequiredService<ILogger<Configuration>>();
                          var claims = ctx.Principal.Claims;
                          foreach (var claim in claims)
                          {
-                             logger1.LogDebug($"JWT token validated. Claim: {claim.Type}: {claim.Value}");
+                             logger2.LogInformation($"JWT token validated. Claim: {claim.Type}: {claim.Value}");
                              Debug.WriteLine($"JWT token validated. Claim: {claim.Type}: {claim.Value}");
                          }
                      },
@@ -101,8 +102,9 @@ namespace EMBC.DFA.API
                          var clientId = oidcConfig["clientId"];
                          var issuer = oidcConfig["issuer"];
 
-                         var logger = ctx.HttpContext.RequestServices.GetRequiredService<ITelemetryProvider>().Get<JwtBearerEvents>();
-                         logger.LogError(ctx.Exception, $"JWT authentication failed: clientId={clientId}, issuer={issuer}, jwt:authority={options.Authority}");
+                         var logger1 = ctx.HttpContext.RequestServices.GetRequiredService<ITelemetryProvider>().Get<JwtBearerEvents>();
+                         var logger2 = ctx.HttpContext.RequestServices.GetRequiredService<ILogger<Configuration>>();
+                         logger2.LogError(ctx.Exception, $"JWT authentication failed: clientId={clientId}, issuer={issuer}, jwt:authority={options.Authority}");
                      }
                  };
              })

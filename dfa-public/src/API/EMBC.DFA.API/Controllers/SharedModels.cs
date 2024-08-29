@@ -539,6 +539,15 @@ namespace EMBC.DFA.API.Controllers
         public string? claimPST { get; set; }
         public string? claimGrossGST { get; set; }
         public string? totalActualClaim { get; set; }
+        public string? claimEligibleGST { get; set; }
+        public string? claimTotal { get; set; }
+        public string? approvedClaimTotal { get; set; }
+        public string? firstClaimDeductible1000 { get; set; }
+        public string? approvedReimbursement { get; set; }
+        public string? eligiblePayable { get; set; }
+        public string? paidClaimAmount { get; set; }
+        public string? paidClaimDate { get; set; }
+        public string? claimReceivedByEMCRDate { get; set; }
         public Invoice[]? invoices { get; set; }
     }
 

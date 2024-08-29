@@ -206,6 +206,15 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_isfirstclaim { get; set; }
         public string? dfa_finalclaim { get; set; }
         public string? createdon { get; set; }
+        public string? dfa_totaleligiblegst { get; set; }
+        public string? dfa_totaloftotaleligible { get; set; }
+        public string? dfa_totalapproved { get; set; }
+        public string? dfa_lessfirst1000 { get; set; }
+        public string? dfa_costsharing { get; set; }
+        public string? dfa_eligiblepayable { get; set; }
+        public string? dfa_totalpaid { get; set; }
+        public string? dfa_claimpaiddate { get; set; }
+        public string? dfa_claimreceiveddate { get; set; }
     }
 
     public class dfa_appapplicationmain_retrieve
@@ -709,6 +718,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_claimbpfstages { get; set; }
         public string? dfa_claimbpfsubstages { get; set; }
         public string? createdon { get; set; }
+        public string? dfa_costsharing { get; set; }
+        public string? dfa_eligiblepayable { get; set; }
     }
 
     public class dfa_recoveryinvoice

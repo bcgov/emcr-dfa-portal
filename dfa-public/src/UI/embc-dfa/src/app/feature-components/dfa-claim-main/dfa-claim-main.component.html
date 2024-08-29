@@ -5,7 +5,7 @@
       <span class="page-heading">{{ dfaClaimMainHeading }}</span>
     </div>
     <br />
-    <div class="col-4" *ngIf="vieworedit === 'addclaim' || vieworedit === 'updateclaim'" >
+    <div class="col-4" >
       <button
         #backtodash
         id="backtodash"
@@ -78,33 +78,6 @@
           </button>-->
         </div>
         <div class="col-md-6">
-          <!--<button
-            *ngIf="
-                step.component === 'recovery-plan' &&
-                  vieworedit === 'addproject'
-            "
-            class="button-p"
-            mat-stroked-button
-            type="button"
-            (click)="goForward(dfaApplicationMainStepper, step.isLast, step.component)"
-          >
-            Next - Review Submission
-          </button>-->
-          <!--<div class="col-md-12" *ngIf="!isSubmitted
-                && (formCreationService.propertyDamageForm$ | async)?.valid
-                && ((formCreationService.otherContactsForm$ | async)?.value?.otherContacts?.length > 0)
-                && vieworedit === 'view'
-                ">-->
-            <!--<div class="col-md-6">-->
-            <!--<button
-              class="button-p save-button"
-              mat-stroked-button
-              type="button"
-              (click)="submitFile()"
-            >
-              Submit
-            </button>
-          </div>-->
           <button *ngIf="vieworedit === 'addclaim' || vieworedit === 'updateclaim'"
             class="button-p nextNsave"
             mat-stroked-button

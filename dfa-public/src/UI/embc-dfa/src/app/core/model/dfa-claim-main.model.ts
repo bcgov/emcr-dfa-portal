@@ -12,6 +12,7 @@ import { Invoice } from './dfa-invoice.model';
 
 export class RecoveryClaim {
   claimNumber?: null | string;
+  claimReceivedByEMCRDate?: null | string;
   claimStatus?: null | ClaimStageOptionSet;
   isFirstClaimApproved?: null | boolean;
   isThisFinalClaim?: null | boolean;
@@ -20,10 +21,19 @@ export class RecoveryClaim {
   claimGrossGST?: null | string;
   totalActualClaim?: null | string;
   invoices?: null | Invoice[];
+  claimEligibleGST?: null | string;
+  claimTotal?: null | string;
+  approvedClaimTotal?: null | string;
+  firstClaimDeductible1000?: null | string;
+  approvedReimbursement?: null | string;
+  eligiblePayable?: null | string;
+  paidClaimAmount?: null | string;
+  paidClaimDate?: null | string;
   
 
   constructor(
     claimNumber?: null | string,
+    claimReceivedByEMCRDate?: null | string,
     claimStatus?: null | ClaimStageOptionSet,
     isFirstClaimApproved?: null | boolean,
     isThisFinalClaim?: null | boolean,
@@ -31,12 +41,21 @@ export class RecoveryClaim {
     claimPST?: null | string,
     claimGrossGST?: null | string,
     totalActualClaim?: null | string,
-    invoices?: null | Invoice[]
+    invoices?: null | Invoice[],
+    claimEligibleGST?: null | string,
+    claimTotal?: null | string,
+    approvedClaimTotal?: null | string,
+    firstClaimDeductible1000?: null | string,
+    approvedReimbursement?: null | string,
+    eligiblePayable?: null | string,
+    paidClaimAmount?: null | string,
+    paidClaimDate?: null | string
   ) { }
 }
 
 export class RecoveryClaimForm {
   claimNumber = new UntypedFormControl();
+  claimReceivedByEMCRDate = new UntypedFormControl();
   claimStatus = new UntypedFormControl();
   isFirstClaimApproved = new UntypedFormControl();
   isThisFinalClaim = new UntypedFormControl();
@@ -45,6 +64,14 @@ export class RecoveryClaimForm {
   claimGrossGST = new UntypedFormControl();
   totalActualClaim = new UntypedFormControl();
   invoices = new UntypedFormControl();
+  claimEligibleGST = new UntypedFormControl();
+  claimTotal = new UntypedFormControl();
+  approvedClaimTotal = new UntypedFormControl();
+  firstClaimDeductible1000 = new UntypedFormControl();
+  approvedReimbursement = new UntypedFormControl();
+  eligiblePayable = new UntypedFormControl();
+  paidClaimAmount = new UntypedFormControl();
+  paidClaimDate = new UntypedFormControl();
 
   constructor(
     recoveryClaim: RecoveryClaim,
@@ -58,6 +85,11 @@ export class RecoveryClaimForm {
       this.claimNumber.setValue(0);
     }
     this.claimNumber.setValidators(null);
+
+    if (recoveryClaim.claimReceivedByEMCRDate) {
+      this.claimReceivedByEMCRDate.setValue(recoveryClaim.claimReceivedByEMCRDate);
+    }
+    this.claimReceivedByEMCRDate.setValidators(null);
 
     if (recoveryClaim.claimStatus) {
       this.claimStatus.setValue(recoveryClaim.claimStatus);
@@ -114,6 +146,66 @@ export class RecoveryClaimForm {
     }
     this.invoices.setValidators(null);
 
+    if (recoveryClaim.claimEligibleGST) {
+      this.claimEligibleGST.setValue(recoveryClaim.claimEligibleGST);
+    }
+    else {
+      this.claimEligibleGST.setValue(0);
+    }
+    this.claimEligibleGST.setValidators(null);
+
+    if (recoveryClaim.claimTotal) {
+      this.claimTotal.setValue(recoveryClaim.claimTotal);
+    }
+    else {
+      this.claimTotal.setValue(0);
+    }
+    this.claimTotal.setValidators(null);
+
+    if (recoveryClaim.approvedClaimTotal) {
+      this.approvedClaimTotal.setValue(recoveryClaim.approvedClaimTotal);
+    }
+    else {
+      this.approvedClaimTotal.setValue(0);
+    }
+    this.approvedClaimTotal.setValidators(null);
+
+    if (recoveryClaim.firstClaimDeductible1000) {
+      this.firstClaimDeductible1000.setValue(recoveryClaim.firstClaimDeductible1000);
+    }
+    else {
+      this.firstClaimDeductible1000.setValue(0);
+    }
+    this.firstClaimDeductible1000.setValidators(null);
+
+    if (recoveryClaim.approvedReimbursement) {
+      this.approvedReimbursement.setValue(recoveryClaim.approvedReimbursement);
+    }
+    else {
+      this.approvedReimbursement.setValue(0);
+    }
+    this.approvedReimbursement.setValidators(null);
+
+    if (recoveryClaim.eligiblePayable) {
+      this.eligiblePayable.setValue(recoveryClaim.eligiblePayable);
+    }
+    else {
+      this.eligiblePayable.setValue(0);
+    }
+    this.eligiblePayable.setValidators(null);
+
+    if (recoveryClaim.paidClaimAmount) {
+      this.paidClaimAmount.setValue(recoveryClaim.paidClaimAmount);
+    }
+    else {
+      this.paidClaimAmount.setValue(0);
+    }
+    this.paidClaimAmount.setValidators(null);
+
+    if (recoveryClaim.paidClaimDate) {
+      this.paidClaimDate.setValue(recoveryClaim.paidClaimDate);
+    }
+    this.paidClaimDate.setValidators(null);
   }
 }
 

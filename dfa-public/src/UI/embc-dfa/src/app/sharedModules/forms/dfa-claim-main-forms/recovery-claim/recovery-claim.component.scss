@@ -273,3 +273,8 @@ table {
 ::ng-deep .mat-tooltip-hide {
   animation: mat-tooltip-hide 1000ms cubic-bezier(0, 0, 0.2, 1) forwards !important;
 }
+
+.decisionHeader {
+  padding-bottom: 15px;
+  font-size: 18px;
+}

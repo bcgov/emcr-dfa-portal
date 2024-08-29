@@ -63,6 +63,8 @@ export class DFAClaimComponent
   deadline18Months = '';
   deadline18MonthsText = '';
 
+  businessName = "";
+
 
   constructor(
     private router: Router,
@@ -83,7 +85,7 @@ export class DFAClaimComponent
   }
 
   ngOnInit(): void {
-    
+    this.businessName = this.dfaApplicationMainDataService.getBusiness();
     this.projId = this.route.snapshot.paramMap.get('id');
     this.applicationNumber = 'Application';
     this.appId = this.dfaApplicationMainDataService.getApplicationId();

@@ -61,6 +61,7 @@ export class DashboardComponent implements OnInit {
     this.contactService.contactGetLoginInfo().subscribe(loginInfo => {
       if (loginInfo) {
         this.businessName = loginInfo?.bceid_business_name;
+        this.dfaApplicationMainDataService.setBusiness(loginInfo?.bceid_business_name);
       }
     });
 

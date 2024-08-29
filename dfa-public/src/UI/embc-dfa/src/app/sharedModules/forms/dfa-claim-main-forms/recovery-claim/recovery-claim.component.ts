@@ -192,11 +192,21 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
 
   setDisableInputFields() {
     this.recoveryClaimForm.controls.claimNumber.disable();
+    this.recoveryClaimForm.controls.claimReceivedByEMCRDate.disable();
     this.recoveryClaimForm.controls.isFirstClaimApproved.disable();
     this.recoveryClaimForm.controls.totalInvoicesBeingClaimed.disable();
     this.recoveryClaimForm.controls.claimPST.disable();
     this.recoveryClaimForm.controls.claimGrossGST.disable();
     this.recoveryClaimForm.controls.totalActualClaim.disable();
+
+    this.recoveryClaimForm.controls.claimEligibleGST.disable();
+    this.recoveryClaimForm.controls.claimTotal.disable();
+    this.recoveryClaimForm.controls.approvedClaimTotal.disable();
+    this.recoveryClaimForm.controls.firstClaimDeductible1000.disable();
+    this.recoveryClaimForm.controls.approvedReimbursement.disable();
+    this.recoveryClaimForm.controls.eligiblePayable.disable();
+    this.recoveryClaimForm.controls.paidClaimAmount.disable();
+    this.recoveryClaimForm.controls.paidClaimDate.disable();
   }
 
 
