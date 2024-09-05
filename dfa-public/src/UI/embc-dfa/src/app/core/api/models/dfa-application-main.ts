@@ -1,13 +1,13 @@
 /* tslint:disable */
 /* eslint-disable */
-import { ApplicationDetails } from './application-details';
 import { OtherContact } from './other-contact';
 import { ProfileVerification } from './profile-verification';
+import { PropertyDamage } from './property-damage';
 export interface DfaApplicationMain {
-  applicationDetails?: null | ApplicationDetails;
   deleteFlag?: boolean;
   id?: null | string;
   notifyUser?: boolean;
   otherContact?: null | Array<OtherContact>;
   profileVerification?: null | ProfileVerification;
+  propertyDamage?: null | PropertyDamage;
 }

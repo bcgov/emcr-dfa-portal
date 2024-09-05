@@ -200,7 +200,7 @@ namespace EMBC.DFA.API.Controllers
                 var dfa_appapplication = await handler.GetApplicationMainAsync(applicationId);
                 DFAApplicationMain dfaApplicationMain = new DFAApplicationMain();
                 dfaApplicationMain.Id = applicationId;
-                dfaApplicationMain.applicationDetails = mapper.Map<ApplicationDetails>(dfa_appapplication);
+                dfaApplicationMain.propertyDamage = mapper.Map<PropertyDamage>(dfa_appapplication);
 
                 return Ok(dfaApplicationMain);
             }
@@ -352,7 +352,7 @@ namespace EMBC.DFA.API.Controllers
     public class DFAApplicationMain
     {
         public Guid? Id { get; set; }
-        public ApplicationDetails? applicationDetails { get; set; }
+        public PropertyDamage? propertyDamage { get; set; }
         public ProfileVerification? ProfileVerification { get; set; }
         public OtherContact[]? OtherContact { get; set; }
         public bool deleteFlag { get; set; }

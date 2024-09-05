@@ -39,7 +39,7 @@ import { MatSelectModule } from '@angular/material/select';
   templateUrl: './create-application1.component.html',
   styleUrl: './create-application1.component.scss'
 })
-export default class CreateApplication1Component implements OnInit, OnDestroy {
+export class CreateApplication1Component implements OnInit, OnDestroy {
   // createApplication1Form = new FormGroup({
   //   legalName: new FormControl('')
   // });
@@ -91,9 +91,7 @@ export default class CreateApplication1Component implements OnInit, OnDestroy {
     this.createApplication1Form$ = this.formCreationService
       .getCreateApplication1Form()
       .subscribe((createApplication1) => {
-        
         this.createApplication1Form = createApplication1;
-        
         this.setViewOrEditControls();
         // this.dfaApplicationMainDataService.propertyDamage = {
         //   damageFromDate: null,
@@ -119,28 +117,4 @@ export default class CreateApplication1Component implements OnInit, OnDestroy {
     this.createApplication1Form$.unsubscribe();
   }
 }
-
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatCheckboxModule,
-    MatRadioModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    DirectivesModule,
-    MatTableModule,
-    CustomPipeModule,
-    // 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - new text mask provider
-    NgxMaskDirective, NgxMaskPipe,
-    MatSelectModule
-  ],
-  declarations: [CreateApplication1Component]
-})
-class CreateApplication1Module { }
 

@@ -1,0 +1,518 @@
+<mat-card class="card-align" style="border:none;" [class.mat-elevation-z0]="true">
+  <mat-card-content>
+
+    <form [formGroup]="propertyDamageForm">
+      <p class="sub-heading" style="font-size: 20px">Cause of Damage</p>
+      <br/>
+
+      <ng-container>
+        <div class="row">
+          <div class="col-md-12 bottomspace">
+            <p class="sub-heading" style="font-size: 15px">
+              Select the cause(s) of damage.<span style="color:red" >*</span>
+            </p>
+            <mat-checkbox
+              formControlName="floodDamage"
+              >
+              Flood Damage
+            </mat-checkbox><br/>
+            <mat-checkbox
+              formControlName="landslideDamage"
+              >
+              Landslide Damage
+            </mat-checkbox><br/>
+            <mat-checkbox
+              formControlName="stormDamage"
+              >
+              Storm Damage
+            </mat-checkbox><br/>
+            <mat-checkbox
+              formControlName="wildfireDamage"
+              >
+              Wildfire Damage
+            </mat-checkbox><br/>
+            <mat-checkbox
+              formControlName="otherDamage"
+              class="col-md-4"
+            >
+              Other Damage
+            </mat-checkbox>
+            <mat-form-field appearance="outline" [hidden]="propertyDamageForm.get('otherDamage').value !== true" class="col-md-4 topSpace">
+              <mat-label>Cause of Damage</mat-label>
+              <input matInput
+                [required]="propertyDamageForm.get('otherDamage').value === true || propertyDamageForm.get('otherDamage').value === 'true'"
+                type="text"
+                [readonly]="isReadOnly === true"
+                formControlName="otherDamageText"
+                placeholder="Cause of damage*"
+                maxlength="100"
+              />
+              <mat-hint>Maximum length is 100 characters</mat-hint>
+              <mat-error
+                *ngIf="
+                propertyDamageForm.get('otherDamageText').invalid &&
+                propertyDamageForm.get('otherDamageText').hasError('required')
+              "
+              >
+                Text is required</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  propertyDamageForm.get('otherDamageText').invalid &&
+                propertyDamageForm.get('otherDamageText').hasError('maxLength')
+                "
+              >
+                Maximum length is 100 characters</mat-error
+              >
+            </mat-form-field>
+            <mat-error *ngIf="propertyDamageForm.hasError('noCauseOfDamage') && vieworedit !== 'viewOnly'">
+              <br/>At least one cause of damage is required.
+            </mat-error>
+          </div>
+        </div><br/><br/>
+
+        <div class="row">
+          <p class="sub-heading" style="font-size: 15px">
+            Date(s) of damage?<span style="color:red" >*</span>
+          </p>
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" >
+              <mat-label>From date</mat-label>
+              <input matInput
+                [matDatepicker]="fromPicker"
+                [readonly]="isReadOnly === true"
+                formControlName="damageFromDate"
+                [max]="propertyDamageForm.get('damageToDate').value ? propertyDamageForm.get('damageToDate').value : todayDate"
+                required >
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="fromPicker" [disabled]="isReadOnly === true"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #fromPicker [disabled]="isReadOnly === true"
+              ></mat-datepicker>
+              <mat-error
+                *ngIf="
+                propertyDamageForm.get('damageFromDate').invalid &&
+                propertyDamageForm.get('damageFromDate').hasError('required')
+              "
+              >
+                From date is required</mat-error
+              >
+              <mat-error
+              *ngIf="
+              propertyDamageForm.get('damageFromDate').invalid &&
+              propertyDamageForm.get('damageFromDate').hasError('matDatepickerMax')
+            "
+            >
+              From date cannot be in the future or after to date</mat-error
+            >
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <mat-form-field appearance="outline">
+              <mat-label>To date</mat-label>
+              <input matInput
+                [matDatepicker]="toPicker"
+                formControlName="damageToDate"
+                [readonly]="isReadOnly === true"
+                [min]="propertyDamageForm.get('damageFromDate').value ? propertyDamageForm.get('damageFromDate').value : '2000-01-01'"
+                [max]="todayDate"
+                required>
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="toPicker" [disabled]="isReadOnly === true"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #toPicker [disabled]="isReadOnly === true"
+              ></mat-datepicker>
+              <mat-error
+                *ngIf="
+                propertyDamageForm.get('damageToDate').invalid &&
+                propertyDamageForm.get('damageToDate').hasError('required')
+              "
+              >
+                To date is required</mat-error
+              >
+              <mat-error
+                *ngIf="
+                propertyDamageForm.get('damageToDate').invalid &&
+                propertyDamageForm.get('damageToDate').hasError('matDatepickerMin')
+              "
+              >
+                To date cannot be before from date</mat-error
+              >
+              <mat-error
+                *ngIf="
+                propertyDamageForm.get('damageToDate').invalid &&
+                propertyDamageForm.get('damageToDate').hasError('matDatepickerMax')
+              "
+              >
+                To date cannot be a future date</mat-error
+              >
+            </mat-form-field>
+          </div>
+        </div><br/>
+
+        <div class="row">
+          <p class="sub-heading" style="font-size: 15px">
+            Applicant type<span style="color:red" >*</span>
+          </p>
+          <div class="col-md-4">
+            <mat-form-field appearance="outline">
+              <mat-label>Please select the type of applicant that best describes your organization.</mat-label>
+              <mat-select [disabled]="isReadOnly === true" formControlName="applicantSubtype" matInput placeholder="Select applicant subtype" required>
+                <div *ngFor="let option of ApplicantSubCategories ">
+                  <mat-option (click)="onSelectApplicantSubType(option)"
+                    [value]="option.subType">
+                    {{ option.subType }}
+                  </mat-option>
+                </div>
+              </mat-select>
+              <mat-error
+                *ngIf="
+                  propertyDamageForm.get('applicantSubtype').invalid &&
+                  propertyDamageForm.get('applicantSubtype').hasError('required') &&
+                  propertyDamageForm.get('applicantSubtype').touched
+                "
+              >
+                Applicant type is required</mat-error
+              >
+            </mat-form-field>
+          </div>
+        </div>
+        
+        <div class="row" *ngIf="showSubTypeOtherDetails == true">
+          <!--<p class="sub-heading" style="font-size: 15px">
+            Please describe your organization
+          </p>-->
+          <div class="col-md-8">
+            <mat-form-field appearance="outline">
+              <textarea [disabled]="isReadOnly" matInput
+                formControlName="subtypeOtherDetails"
+                placeholder="Please describe your organization"
+                [rows]="5"
+                style="resize:none"
+                maxlength="200"
+                (keyup)="calcRemainingChars()"></textarea>
+              <mat-hint>{{ remainingLength }} characters remaining.</mat-hint>
+            </mat-form-field><br/>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="showSubSubTypeCategories == true">
+          <p class="sub-heading" style="font-size: 15px">
+            Type of Other Local Government Body<span style="color:red" >*</span>
+          </p>
+          <div class="col-md-8">
+            <mat-form-field appearance="outline">
+              <mat-select [disabled]="isReadOnly === true" formControlName="applicantSubSubtype" matInput placeholder="Please select the type of Other Local Government Body">
+                <div *ngFor="let option of ApplicantSubSubCategories | keyvalue: originalOrder">
+                  <mat-option style="height: unset !important;"
+                    [value]="option.value">
+                    {{ option.value }}
+                  </mat-option>
+                </div>
+              </mat-select>
+              <mat-error
+                *ngIf="
+                  propertyDamageForm.get('applicantSubSubtype').invalid &&
+                  propertyDamageForm.get('applicantSubSubtype').hasError('required') &&
+                  propertyDamageForm.get('applicantSubSubtype').touched
+                "
+              >
+                Type of Other Local Government Body is required</mat-error
+              >
+            </mat-form-field>
+          </div>
+        </div><br/>
+
+        <div class="row">
+          <div class="col-md-4">
+            <p class="sub-heading" style="font-size: 15px">
+              Estimated %
+            </p>
+            <mat-form-field appearance="outline">
+              <input
+                formControlName="estimatedPercent"
+                matInput
+                readonly
+                placeholder="Estimated %"
+                maxlength="100"/>
+            </mat-form-field>
+          </div>
+        </div><br/>
+
+        <div class="row" *ngIf="vieworedit !== 'add'">
+          <div class="col-md-8">
+            <p class="sub-heading" style="font-size: 15px">
+              DFA comments
+            </p>
+            <mat-form-field appearance="outline">
+              <textarea matInput
+                formControlName="subtypeDFAComment"
+                placeholder="DFA comments"
+                [rows]="5"
+                style="resize:none"
+                readonly
+                ></textarea>
+            </mat-form-field>
+        </div></div><br/>
+
+        <div class="row">
+          <p class="sub-heading" style="font-size: 15px">
+            If there was opportunity to receive guidance and support in assessing your damaged infrastructure, would you like to receive this support?<span style="color:red" >*</span>
+          </p>
+          <mat-radio-group
+            formControlName="guidanceSupport"
+            class="primary-radio-group horizontal-radio-group"
+            required
+            aria-label="Select an option">
+            <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+          </mat-radio-group><br/><br/><br/>
+        </div>
+      </ng-container>
+    </form>
+    <form [formGroup]="otherContactsForm">
+      <div formGroupName="otherContact">
+        <ng-container>
+          <div class="row">
+            <div class="col-md-12">
+              <p class="sub-heading">
+                <b>Other Contact</b><span style="color:red" >*</span>
+              </p>
+              <p>
+                You must provide the name of one other contact person in case the DFA can't reach you. The Ministry of Emergency Management (EMCR) can't and won't speak with the contact
+                about your application. If you don't have an alternate contact, add your own name and contact details.
+              </p>
+
+              <table mat-table [dataSource]="otherContactsDataSource" *ngIf="otherContactsDataSource.getValue().length > 0">
+                <!-- Name Column -->
+                <ng-container matColumnDef="name" style="width:26%">
+                  <th mat-header-cell *matHeaderCellDef >
+                    <b>Name</b>
+                  </th>
+                  <td *matCellDef="let element" mat-cell>
+                    {{ element.firstName }}&nbsp; {{element.lastName }}
+                  </td>
+                </ng-container>
+
+                <!-- Phone Column -->
+                <ng-container matColumnDef="phoneNumber" style="width:27%">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <b>Phone</b>
+                  </th>
+                  <td *matCellDef="let element" mat-cell>
+                    {{ element.phoneNumber | phoneFormat }}
+                  </td>
+                </ng-container>
+
+                <!-- Email Column -->
+                <ng-container matColumnDef="email" style="width:27%">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <b>Email</b>
+                  </th>
+                  <td *matCellDef="let element" mat-cell>
+                    {{ element.email}}
+                  </td>
+                </ng-container>
+
+                <!-- Delete Icon Column -->
+                <ng-container matColumnDef="deleteIcon" style="width:20%">
+                  <th mat-header-cell *matHeaderCellDef>
+                    &nbsp;
+                  </th>
+                  <td *matCellDef="let element; let index = index" mat-cell>
+                    <button
+                      class="edit-image"
+                      *ngIf="vieworedit !== 'viewOnly'"
+                      mat-icon-button
+                      aria-label="Edit"
+                      (click)="editOtherContactsRow(element, index)"
+                    >
+                      <img src="/assets/images/edit.svg" height="35" width="35" />
+                      <!-- 2024-08-26 EMCRI-617 waynezen; UI fixes for Angular upgrade -->
+                    </button>&nbsp;
+                    <button
+                    class="delete-image"
+                    *ngIf="vieworedit !== 'viewOnly'"
+                    mat-icon-button
+                    aria-label="Remove"
+                    (click)="confirmDeleteOtherContactRow(index)"
+                  >
+                    <img src="/assets/images/delete.svg" height="35" width="35" />
+                    <img
+                      src="/assets/images/delete_onhover.svg"
+                      height="35"
+                      width="35"
+                    />
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="otherContactsColumnsToDisplay"></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let element; columns: otherContactsColumnsToDisplay"
+                  class="example-element-row"
+                ></tr>
+
+              </table>
+
+              <div  *ngIf="otherContactsDataSource.getValue().length > 0">
+                <br /><br/>
+              </div>
+
+              <!--<div *ngIf="otherContactsForm.get('otherContacts').invalid && otherContactsForm.get('otherContacts').hasError('required')">
+                <span style="color:red">At least one other contact is required.</span>
+              </div>-->
+
+              <button
+                *ngIf="!showOtherContactForm && vieworedit !== 'viewOnly'"
+                class="family-button"
+                mat-button
+                type="button"
+                (click)="addOtherContact()"
+              >
+                + Add Other Contact
+              </button>
+
+              <mat-card *ngIf="showOtherContactForm">
+                <p class="sub-heading" style="font-size: 15px">
+                  {{otherContactText}}
+                </p>
+                <div class="row">
+                  <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Contact first name</mat-label>
+                      <input formControlName="firstName" matInput placeholder="Contact first name" required maxlength="49"/>
+                      <mat-error
+                        *ngIf="
+                          otherContactsForm.get('otherContact').controls.firstName.invalid &&
+                          otherContactsForm.get('otherContact').controls.firstName.hasError('required') &&
+                          otherContactsForm.get('otherContact').controls.firstName.touched
+                        "
+                      >
+                        First Name is required</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          otherContactsForm.get('otherContact').controls.firstName.invalid &&
+                          otherContactsForm.get('otherContact').controls.firstName.hasError('maxLength')
+                        "
+                      >
+                        Maximum length is 49 characters</mat-error
+                      >
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Contact last name</mat-label>
+                      <input formControlName="lastName" matInput placeholder="Contact last name" required maxlength="49"/>
+                      <mat-error
+                        *ngIf="
+                          otherContactsForm.get('otherContact').controls.lastName.invalid &&
+                          otherContactsForm.get('otherContact').controls.lastName.hasError('required') &&
+                          otherContactsForm.get('otherContact').controls.lastName.touched
+                        "
+                      >
+                        Last Name is required</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          otherContactsForm.get('otherContact').controls.lastName.invalid &&
+                          otherContactsForm.get('otherContact').controls.lastName.hasError('maxLength')
+                        "
+                      >
+                        Maximum length is 49 characters</mat-error
+                      >
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Contact phone</mat-label>
+                      <!-- 2024-08-01 EMCRI-216 waynezen; upgrade to Angular 18 - use new ngx-mask -->
+                      <input formControlName="phoneNumber"
+                        matInput
+                        required
+                        placeholder="Contact phone"
+                      />
+                        <mat-error
+                        *ngIf="
+                          otherContactsForm.get('otherContact').controls.phoneNumber.invalid &&
+                          otherContactsForm.get('otherContact').controls.phoneNumber.hasError('required') &&
+                          otherContactsForm.get('otherContact').controls.phoneNumber.touched
+                        "
+                      >
+                       Telephone number is required</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          otherContactsForm.get('otherContact').controls.phoneNumber.invalid &&
+                          otherContactsForm.get('otherContact').controls.phoneNumber.hasError('incorrectLength')
+                        "
+                      >
+                        Telephone number must have 10 digits</mat-error
+                      >
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Contact email</mat-label>
+                      <input formControlName="email" required matInput placeholder="Contact email" type="email" maxlength="100" />
+                      <mat-error
+                        *ngIf="
+                          otherContactsForm.get('otherContact').controls.email.invalid &&
+                          otherContactsForm.get('otherContact').controls.email.hasError('required') &&
+                          otherContactsForm.get('otherContact').controls.email.touched
+                        "
+                      >
+                        Email is required</mat-error
+                      >
+                      <mat-error
+                      *ngIf="
+                        otherContactsForm.get('otherContact').controls.email.invalid
+                      "
+                    >
+                      Invalid email address</mat-error
+                    >
+                      <mat-error
+                        *ngIf="
+                          otherContactsForm.get('otherContact').controls.email.invalid &&
+                          otherContactsForm.get('otherContact').controls.email.hasError('maxLength')
+                        "
+                      >
+                        Maximum length is 100 characters</mat-error
+                      >
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <button
+                      class="button-s details-button"
+                      mat-button
+                      type="button"
+                      (click)="cancelOtherContact()"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                  <div class="col-md-3">
+                    <button
+                      class="family-button details-button save-button"
+                      mat-button
+                      type="button"
+                      (click)="saveOtherContact()"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+
+              </mat-card>
+
+            </div>
+          </div>
+        </ng-container>
+      </div>
+</form>
+  </mat-card-content>
+</mat-card>

@@ -83,22 +83,13 @@ export class ComponentCreationService {
   dfaApplicationMainComponents: Array<any> = [
     // 2024-08-20 EMCRI-613 waynezen; Create Application1
     {
-      component: 'application-details',
-      nextButtonLabel: 'Next - Contact Information',
-      backButtonLabel: 'Go Back & Edit',
-      isLast: false,
-      loadWrapperButton: false,
-      lastStep: -1,
-      stepName: 'Application Details'
-    },
-    {
-      component: 'create-application1',
+      component: 'property-damage',
       nextButtonLabel: 'Next - Review & Submit',
       backButtonLabel: 'Go Back & Edit',
-      isLast: false,
+      isLast: true,
       loadWrapperButton: false,
       lastStep: 0,
-      stepName: 'Contact Information'
+      stepName: 'Application Details'
     }
   ];
 

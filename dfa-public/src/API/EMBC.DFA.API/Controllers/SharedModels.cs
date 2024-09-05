@@ -444,7 +444,7 @@ namespace EMBC.DFA.API.Controllers
     /// <summary>
     /// Property Damage
     /// </summary>
-    public class ApplicationDetails
+    public class PropertyDamage
     {
         public bool? floodDamage { get; set; }
         public bool? landslideDamage { get; set; }
@@ -460,8 +460,6 @@ namespace EMBC.DFA.API.Controllers
         public string? estimatedPercent { get; set; }
         public string? subtypeOtherDetails { get; set; }
         public string? subtypeDFAComment { get; set; }
-        public string? legalName { get; set; }
-        public string? eventName { get; set; }
     }
 
     /// <summary>

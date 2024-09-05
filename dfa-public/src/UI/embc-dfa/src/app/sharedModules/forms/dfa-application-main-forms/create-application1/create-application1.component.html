@@ -1,22 +1,18 @@
-<mat-card class="card-align" style="border:none; min-height: 500px;" [class.mat-elevation-z0]="true">
-  <mat-card-content>
-    <form [formGroup]="createApplication1Form">
-        <!--<p>Please review and complete the form below</p>
-        <br />
+<form [formGroup]="createApplication1Form">
+    <p>Please review and complete the form below</p>
+    <br />
 
-        <ng-container>
-            <div class="row">
-                <input matInput
-                type="text"
-                [readonly]="isReadOnly === true"
-                formControlName="legalName"
-                placeholder="Legal Name"
-                maxlength="100"
-              />
-            </div>
-        </ng-container>-->
-    </form>
+    <ng-container>
+        <div class="row">
+            <input matInput
+            type="text"
+            [readonly]="isReadOnly === true"
+            formControlName="legalName"
+            placeholder="Legal Name"
+            maxlength="100"
+          />
+        </div>
+    </ng-container>
+</form>
 
-  </mat-card-content>
-</mat-card>
 

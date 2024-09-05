@@ -2,7 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { CacheService } from 'src/app/core/services/cache.service';
 import { DfaApplicationStart,  } from 'src/app/core/api/models';
 import { DFAApplicationStartDataService } from '../dfa-application-start/dfa-application-start-data.service';
-import { CleanUpLog, DfaApplicationMain, DamagedPropertyAddress, ApplicationDetails, SupportingDocuments, SignAndSubmit, FullTimeOccupant, OtherContact, SecondaryApplicant, DamagedRoom, CleanUpLogItem } from 'src/app/core/model/dfa-application-main.model';
+import { CleanUpLog, DfaApplicationMain, DamagedPropertyAddress, PropertyDamage, SupportingDocuments, SignAndSubmit, FullTimeOccupant, OtherContact, SecondaryApplicant, DamagedRoom, CleanUpLogItem } from 'src/app/core/model/dfa-application-main.model';
 import { ApplicationService, AttachmentService } from 'src/app/core/api/services';
 import { DFAApplicationStartService } from '../dfa-application-start/dfa-application-start.service';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -10,7 +10,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class DFAApplicationMainDataService {
   private _damagedPropertyAddress: DamagedPropertyAddress;
-  private _applicationDetails: ApplicationDetails;
+  private _propertyDamage: PropertyDamage;
   private _cleanUpLog: CleanUpLog;
   private _supportingDocuments: SupportingDocuments;
   private _signAndSubmit: SignAndSubmit;
@@ -132,12 +132,12 @@ export class DFAApplicationMainDataService {
     this._signAndSubmit = value;
   }
 
-  public get applicationDetails(): ApplicationDetails {
-    return this._applicationDetails;
+  public get propertyDamage(): PropertyDamage {
+    return this._propertyDamage;
   }
 
-  public set applicationDetails(value: ApplicationDetails) {
-    this._applicationDetails = value;
+  public set propertyDamage(value: PropertyDamage) {
+    this._propertyDamage = value;
   }
 
   public get cleanUpLog(): CleanUpLog {
@@ -194,7 +194,7 @@ export class DFAApplicationMainDataService {
    public createDFAApplicationMainDTO(): DfaApplicationMain {
     return {
       id: this._applicationId,
-      applicationDetails: this._applicationDetails,
+      propertyDamage: this._propertyDamage,
       otherContact: this._otherContacts,
       deleteFlag: false
     };

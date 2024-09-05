@@ -1,16 +1,16 @@
-<h2 class="h-margin"><b>Disaster Financial Assistance (DFA) Eligibility</b></h2>
+<h2><b>Disaster Financial Assistance (DFA) Eligibility</b></h2>
 
 <mat-dialog-content>
   <div class="col-md-12" [innerHTML]="content?.text"></div>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <div class="col-md-5 h-margin">
+  <div class="col-md-5">
     <button class="button-s button-width" mat-button (click)="cancel()">
       {{ content?.cancelButton }}
     </button>
   </div>
-  <div class="col-md-5 h-margin">
+  <div class="col-md-5">
     <button class="button-p button-width" mat-button (click)="confirm()">
       {{ content?.confirmButton }}
     </button>

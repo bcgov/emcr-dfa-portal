@@ -64,30 +64,23 @@
       ></app-component-wrapper>
       <br />
       <div class="row justify-content-between resp-style">
+          <div class="col-md-6"></div>
         <div class="col-md-6" *ngIf="vieworedit === 'add' || vieworedit === 'update'">
           <button
             class="button-s"
-            [hidden]="step.component === 'application-details'"
+            [hidden]="step.component === 'property-damage'"
             mat-button
             type="button"
             (click)="goBack(dfaApplicationMainStepper, step.lastStep)"
           >
             {{ step.backButtonLabel }}
           </button>
-          &nbsp;
-          <button
-            class="button-s"
-            mat-button
-            type="button"
-            (click)="goBack(dfaApplicationMainStepper, step.lastStep)"
-          >
-            Save Application
-          </button>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
           <button
             *ngIf="
               currentFlow === 'verified-registration' &&
+                step.component === 'property-damage' &&
                   vieworedit === 'add'
             "
             class="button-p"
@@ -95,16 +88,44 @@
             type="button"
             (click)="goForward(dfaApplicationMainStepper, step.isLast, step.component)"
           >
-            {{step.nextButtonLabel}}
+            Next - Review Submission
           </button>
+          <div class="col-md-12" *ngIf="!isSubmitted
+                && (formCreationService.propertyDamageForm$ | async)?.valid
+                && ((formCreationService.otherContactsForm$ | async)?.value?.otherContacts?.length > 0)
+                && vieworedit === 'view'
+                ">
+            <!--<div class="col-md-6">-->
+            <button
+              class="button-p save-button"
+              mat-stroked-button
+              type="button"
+              (click)="submitFile()"
+            >
+              Submit
+            </button>
+          </div>
+          <!--<button
+            *ngIf="!(currentFlow === 'verified-registration' && (step.component === 'review' || step.component === 'supporting-documents'))"
+            class="button-p"
+            mat-stroked-button
+            type="button"
+            (click)="goForward(dfaApplicationMainStepper, step.isLast, step.component)"
+          >
+            {{ step.nextButtonLabel }}
+          </button>-->
+          
+          
         </div>
         <br/>
-        <div class="col-md-12" style="padding: 35px 16px 28px 12px;">
+        <div class="col-md-12" style="padding: 16px 16px 16px 28px;">
           <p class="infoHeader">Information Viewable at Any Time by DFA Staff</p>
           <p>
             Information collected on this application form may be viewable by Disaster Financial Assistance Staff whether the application has been submitted or not.
           </p>
         </div>
+        <!--<label>** You do not have to complete the entire application at once, you can udpate it from the dashboard as needed.  However, before you
+        submit the final signed version, all fields marked with a <b><span style="color:red;">*</span></b> must be completed.</label>-->
       </div>
     </mat-step>
     <mat-step *ngIf="vieworedit === 'add'">
@@ -131,10 +152,9 @@
             <span>Go Back</span><span *ngIf="vieworedit === 'add' || vieworedit === 'update'"> & Edit</span>
           </button>
         </div>
-        <!--&& ((formCreationService.otherContactsForm$ | async)?.value?.otherContacts?.length > 0)-->
         <div class="col-md-6" *ngIf="!isSubmitted
-           && (formCreationService.applicationDetailsForm$ | async)?.valid
-           
+           && (formCreationService.propertyDamageForm$ | async)?.valid
+           && ((formCreationService.otherContactsForm$ | async)?.value?.otherContacts?.length > 0)
            ">
         <!--<div class="col-md-6">-->
         <button
@@ -147,7 +167,7 @@
         </button>
       </div>
         <br/><br/>
-        <div class="col-md-12" style="padding: 35px 16px 28px 12px;">
+        <div class="col-md-12" style="padding: 28px 16px 16px 28px;">
           <p class="infoHeader">Information Viewable at Any Time by DFA Staff</p>
           <p>
             Information collected on this application form may be viewable by Disaster Financial Assistance Staff whether the application has been submitted or not.
@@ -155,6 +175,50 @@
         </div>
       </div>
     </mat-step>
+    <!--<mat-step *ngIf="currentFlow === 'verified-registration'">
+      <ng-template matStepLabel>Sign & Submit</ng-template>
+      <app-component-wrapper
+        componentName="sign-and-submit"
+        [folderPath]="dfaApplicationMainFolderPath"
+      ></app-component-wrapper>
+      <br />
+      <div class="row justify-content-between resp-style">
+        <div class="col-md-6">
+          <button *ngIf="isSubmitted === false"
+            class="button-s"
+            mat-button
+            type="button"
+            (click)="dfaApplicationMainStepper.previous()"
+          >
+            Go Back<span *ngIf="vieworedit === 'add' || vieworedit === 'update'"> & Edit</span>
+          </button>
+          <button *ngIf="isSubmitted === true"
+            class="button-s"
+            mat-button
+            type="button"
+            (click)="returnToDashboard()"
+          >
+            Return to Dashboard
+          </button>
+        </div>
+        <div class="col-md-6" *ngIf="!isSubmitted
+             && (formCreationService.propertyDamageForm$ | async)?.valid
+             ">
+          <button
+            class="button-p save-button"
+            mat-stroked-button
+            type="button"
+            (click)="submitFile()"
+          >
+            Submit
+          </button>
+        </div>
+        <div class="col-md-6" *ngIf="!isSubmitted
+            && !(formCreationService.propertyDamageForm$ | async)?.valid">
+          <span style="color:red">Enter all required information before submitting.</span>
+        </div>
+      </div>
+    </mat-step>-->
     <ng-template matStepperIcon="edit" let-index="index">
       {{ index + 1 }}
     </ng-template>

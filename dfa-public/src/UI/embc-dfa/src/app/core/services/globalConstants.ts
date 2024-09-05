@@ -121,14 +121,6 @@ export const addressAndDateNotWithinOpenEvent: DialogContent = {
   confirmButton: 'Yes, Continue'
 }
 
-export const addressAndDateNotWithinPublicOpenEvent: DialogContent = {
-  text: '<p>The date of damage doesn\'t match any DFA eligible events.<br/><br/>' +
-    'To view the current list of DFA eligible events and their areas and start/end dates, go to the <a href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/preparedbc/evacuation-recovery/disaster-financial-assistance#step3" target="_blank">DFA Program Webpage</a>.</p><p>You may call us to discuss further at 1-888-257-4777.</p>' +
-    '<p><b>Would you like to correct the date that your community was first impacted?</b></p>',
-  cancelButton: 'No, Don\'t Continue',
-  confirmButton: 'Yes, Continue'
-}
-
 export const lossesDontExceed1000: DialogContent = {
   text: '<p>DFA is unable to compensate for damages that are under $1,000. Per the <i>Compensation and Disaster Financial Assistance Regulation</i> the following applies:<br/>' +
   '2.2 Limits on assistance for private sector claims:<br/>' +

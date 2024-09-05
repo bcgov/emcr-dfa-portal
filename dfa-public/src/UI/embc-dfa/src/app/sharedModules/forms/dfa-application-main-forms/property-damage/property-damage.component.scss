@@ -2,33 +2,10 @@ mat-form-field {
     width: 100%;
 }
 
-.card-content-align {
-    padding: 0 22px;
-}
-
-.infoText {
-  background: #F6F9FC 0% 0% no-repeat padding-box;
-  border: 1px solid #003366;
-  border-radius: 10px;
-  padding: 12px;
-  /*margin-top: 10px;*/
-  font-size: 10px;
-}
-
-.infoIconCol {
-  width: 20px;
-  padding-top: 2px;
-}
-
-.infoIconStyle {
-  font-size: 17px;
-  color: #003366;
-}
-
 .primary-radio-group {
-  display: flex;
-  flex-direction: column;
-  margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
 }
 
 .primary-radio-button {
@@ -51,10 +28,6 @@ mat-form-field {
 
 ::ng-deep .mat-select-panel .mat-option {
   height: unset !important;
-}
-
-::ng-deep .mat-mdc-form-field-error-wrapper {
-  padding-left: 0px !important;
 }
 
 ::ng-deep span.mat-option-text {

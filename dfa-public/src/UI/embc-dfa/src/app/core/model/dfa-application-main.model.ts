@@ -257,7 +257,7 @@ export class DamagedPropertyAddressForm {
   }
 }
 
-export class ApplicationDetails {
+export class PropertyDamage {
   damageFromDate?: null | string;
   damageToDate?: null | string;
   floodDamage?: null | boolean;
@@ -273,9 +273,6 @@ export class ApplicationDetails {
   estimatedPercent?: null | string;
   subtypeOtherDetails?: null | string;
   subtypeDFAComment?: null | string;
-  legalName?: null | string;
-  eventName?: null | string;
-  
 
   constructor(
     floodDamage?: null | boolean,
@@ -292,13 +289,11 @@ export class ApplicationDetails {
     applicantSubtype?: null | string,
     estimatedPercent?: null | string,
     subtypeOtherDetails?: null | string,
-    subtypeDFAComment?: null | string,
-    legalName?: null | string,
-    eventName?: null | string,
+    subtypeDFAComment?: null | string
   ) { }
 }
 
-export class ApplicationDetailsForm {
+export class PropertyDamageForm {
   floodDamage = new UntypedFormControl();
   landslideDamage = new UntypedFormControl();
   stormDamage = new UntypedFormControl();
@@ -313,95 +308,83 @@ export class ApplicationDetailsForm {
   estimatedPercent = new UntypedFormControl();
   subtypeOtherDetails = new UntypedFormControl();
   subtypeDFAComment = new UntypedFormControl();
-  legalName = new UntypedFormControl();
-  eventName = new UntypedFormControl();
 
   constructor(
-    applicationDetails: ApplicationDetails,
+    propertyDamage: PropertyDamage,
     customValidator: CustomValidationService
   ) {
-    if (applicationDetails.floodDamage) {
-      this.floodDamage.setValue(applicationDetails.floodDamage);
+    if (propertyDamage.floodDamage) {
+      this.floodDamage.setValue(propertyDamage.floodDamage);
     }
     this.floodDamage.setValidators(null);
 
-    if (applicationDetails.landslideDamage) {
-      this.landslideDamage.setValue(applicationDetails.landslideDamage);
+    if (propertyDamage.landslideDamage) {
+      this.landslideDamage.setValue(propertyDamage.landslideDamage);
     }
     this.landslideDamage.setValidators(null);
 
-    if (applicationDetails.stormDamage) {
-      this.stormDamage.setValue(applicationDetails.stormDamage);
+    if (propertyDamage.stormDamage) {
+      this.stormDamage.setValue(propertyDamage.stormDamage);
     }
     this.stormDamage.setValidators(null);
 
-    if (applicationDetails.wildfireDamage) {
-      this.stormDamage.setValue(applicationDetails.wildfireDamage);
+    if (propertyDamage.wildfireDamage) {
+      this.stormDamage.setValue(propertyDamage.wildfireDamage);
     }
     this.wildfireDamage.setValidators(null);
 
-    if (applicationDetails.guidanceSupport) {
-      this.stormDamage.setValue(applicationDetails.guidanceSupport);
+    if (propertyDamage.guidanceSupport) {
+      this.stormDamage.setValue(propertyDamage.guidanceSupport);
     }
     this.guidanceSupport.setValidators(null);
 
-    if (applicationDetails.otherDamage) {
-      this.otherDamage.setValue(applicationDetails.otherDamage);
+    if (propertyDamage.otherDamage) {
+      this.otherDamage.setValue(propertyDamage.otherDamage);
     }
     this.otherDamage.setValidators(null);
 
-    if (applicationDetails.otherDamageText) {
-      this.otherDamageText.setValue(applicationDetails.otherDamageText);
+    if (propertyDamage.otherDamageText) {
+      this.otherDamageText.setValue(propertyDamage.otherDamageText);
     }
     this.otherDamageText.setValidators([customValidator
       .maxLengthValidator(100)
       .bind(customValidator)]);
 
-    if (applicationDetails.damageFromDate) {
-      this.damageFromDate.setValue(applicationDetails.damageFromDate);
+    if (propertyDamage.damageFromDate) {
+      this.damageFromDate.setValue(propertyDamage.damageFromDate);
     }
     this.damageFromDate.setValidators(null);
 
-    if (applicationDetails.damageToDate) {
-      this.damageToDate.setValue(applicationDetails.damageToDate);
+    if (propertyDamage.damageToDate) {
+      this.damageToDate.setValue(propertyDamage.damageToDate);
     }
     this.damageToDate.setValidators(null);
 
-    if (applicationDetails.applicantSubtype) {
-      this.applicantSubtype.setValue(applicationDetails.applicantSubtype);
+    if (propertyDamage.applicantSubtype) {
+      this.applicantSubtype.setValue(propertyDamage.applicantSubtype);
     }
     this.applicantSubtype.setValidators(null);
 
-    if (applicationDetails.applicantSubSubtype) {
-      this.applicantSubSubtype.setValue(applicationDetails.applicantSubSubtype);
+    if (propertyDamage.applicantSubSubtype) {
+      this.applicantSubSubtype.setValue(propertyDamage.applicantSubSubtype);
     }
     this.applicantSubSubtype.setValidators(null);
 
-    if (applicationDetails.estimatedPercent) {
-      this.estimatedPercent.setValue(applicationDetails.estimatedPercent);
+    if (propertyDamage.estimatedPercent) {
+      this.estimatedPercent.setValue(propertyDamage.estimatedPercent);
     }
 
     this.estimatedPercent.setValidators(null);
 
-    if (applicationDetails.subtypeOtherDetails) {
-      this.subtypeOtherDetails.setValue(applicationDetails.subtypeOtherDetails);
+    if (propertyDamage.subtypeOtherDetails) {
+      this.subtypeOtherDetails.setValue(propertyDamage.subtypeOtherDetails);
     }
     this.subtypeOtherDetails.setValidators(null);
 
-    if (applicationDetails.subtypeDFAComment) {
-      this.subtypeDFAComment.setValue(applicationDetails.subtypeDFAComment);
+    if (propertyDamage.subtypeDFAComment) {
+      this.subtypeDFAComment.setValue(propertyDamage.subtypeDFAComment);
     }
     this.subtypeDFAComment.setValidators(null);
-
-    if (applicationDetails.legalName) {
-      this.legalName.setValue(applicationDetails.legalName);
-    }
-    this.legalName.setValidators(null);
-
-    if (applicationDetails.eventName) {
-      this.eventName.setValue(applicationDetails.eventName);
-    }
-    this.eventName.setValidators(null);
   }
 }
 
@@ -1036,7 +1019,7 @@ export class SignAndSubmitForm {
  **/
 export interface DfaApplicationMain {
   id?: string;
-  applicationDetails?: ApplicationDetails;
+  propertyDamage?: PropertyDamage;
   otherContact?: OtherContact[];
   deleteFlag?: boolean;
 }

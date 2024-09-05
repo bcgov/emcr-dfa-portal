@@ -185,7 +185,6 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.dfa_dateofdamage, opts => opts.MapFrom(s => s.propertyDamage.damageFromDate))
                 .ForMember(d => d.dfa_dateofdamageto, opts => opts.MapFrom(s => s.propertyDamage.damageToDate));
 
-
             CreateMap<dfa_appapplicationmain_retrieve, CleanUpLog>()
                 .ForMember(d => d.haveInvoicesOrReceiptsForCleanupOrRepairs, opts => opts.MapFrom(s => s.dfa_haveinvoicesreceiptsforcleanuporrepairs2 == (int)YesNoOptionSet.Yes ? true : (s.dfa_haveinvoicesreceiptsforcleanuporrepairs2 == (int)YesNoOptionSet.No ? false : (bool?)null)));
 
@@ -221,7 +220,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.isPrimaryAndDamagedAddressSame, opts => opts.MapFrom(s => s.dfa_isprimaryanddamagedaddresssame2 == (int)YesNoOptionSet.Yes ? true : (s.dfa_isprimaryanddamagedaddresssame2 == (int)YesNoOptionSet.No ? false : (bool?)null)))
                 .ForMember(d => d.isDamagedAddressVerified, opts => opts.MapFrom(s => s.dfa_damagedpropertyaddresscanadapostverified == (int)YesNoOptionSet.Yes ? true : (s.dfa_damagedpropertyaddresscanadapostverified == (int)YesNoOptionSet.No ? false : (bool?)null)));
 
-            CreateMap<dfa_appapplicationmain_retrieve, ApplicationDetails>()
+            CreateMap<dfa_appapplicationmain_retrieve, PropertyDamage>()
                 .ForMember(d => d.stormDamage, opts => opts.MapFrom(s => s.dfa_causeofdamagestorm2 == (int)YesNoOptionSet.Yes ? true : (s.dfa_causeofdamagestorm2 == (int)YesNoOptionSet.No ? false : (bool?)null)))
                 .ForMember(d => d.wildfireDamage, opts => opts.MapFrom(s => s.dfa_causeofdamagewildfire2 == (int)YesNoOptionSet.Yes ? true : (s.dfa_causeofdamagewildfire2 == (int)YesNoOptionSet.No ? false : (bool?)null)))
                 .ForMember(d => d.landslideDamage, opts => opts.MapFrom(s => s.dfa_causeofdamagelandslide2 == (int)YesNoOptionSet.Yes ? true : (s.dfa_causeofdamagelandslide2 == (int)YesNoOptionSet.No ? false : (bool?)null)))
