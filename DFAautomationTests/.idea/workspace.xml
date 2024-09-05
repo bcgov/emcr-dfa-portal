@@ -5,14 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2e2c1a18-e64c-44c1-869d-cdbed49dcc8f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dfa/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dfa/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/CreateNewApplicationHomeownerNoInsurance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/CreateNewApplicationHomeownerNoInsurance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/FarmUnsureInsurance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/FarmUnsureInsurance.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/dfa/CommonUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dfa/CommonUtils.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/dfa/Config.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dfa/Config.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/dfa/CustomWebDriverManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/dfa/CustomWebDriverManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/CreateNewApplicationHomeownerNoInsurance.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/CreateNewApplicationHomeownerNoInsurance.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/FarmUnsureInsurance.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/FarmUnsureInsurance.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -29,6 +29,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="develop" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -56,57 +61,39 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="useMavenConfig" value="true" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2T4hpT5yyc4m6AAbZnct8Z7GuzN" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../jag-traffic-courts-online" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.Login.executor": "Run",
+    "JUnit.Login.test.executor": "Run",
+    "JUnit.SmallBusinessUnsureInsurance.executor": "Run",
+    "Maven.DFAautomationTests [clean].executor": "Run",
+    "Maven.DFAautomationTests [compile].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "git-widget-placeholder": "AutomatedTestingRel2",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Workspace/jag-community-corrections-case-management",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\workspace4\DFA_Fork\DFAautomationTests" />
       <recent name="C:\workspace4\emcr-dfa-portal\DFAautomationTests" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.FarmUnsureInsurance.test">
-    <configuration name="CreateNewApplicationHomeownerNoInsurance" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="DFAautomationTests" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="CreateNewApplicationHomeownerNoInsurance" />
-      <option name="METHOD_NAME" value="" />
-      <option name="TEST_OBJECT" value="class" />
-      <envs>
-        <env name="USERNAME_BCEID" value="DFA00004" />
-        <env name="PASSWORD_BCEID" value="98900004" />
-      </envs>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CreateNewApplicationHomeownerNoInsurance.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="DFAautomationTests" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="CreateNewApplicationHomeownerNoInsurance" />
-      <option name="METHOD_NAME" value="test" />
-      <option name="TEST_OBJECT" value="method" />
-      <envs>
-        <env name="USERNAME_BCEID" value="DFA00004" />
-        <env name="PASSWORD_BCEID" value="98900004" />
-      </envs>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.Login">
     <configuration name="FarmUnsureInsurance" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="DFAautomationTests" />
       <option name="PACKAGE_NAME" value="" />
@@ -149,28 +136,55 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Login.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="DFAautomationTests" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="Login" />
+      <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
+      <envs>
+        <env name="USERNAME_BCEID" value="DFA00004" />
+        <env name="PASSWORD_BCEID" value="98900004" />
+      </envs>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SmallBusinessUnsureInsurance" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="DFAautomationTests" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="SmallBusinessUnsureInsurance" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <envs>
+        <env name="USERNAME_BCEID" value="DFA00004" />
+        <env name="PASSWORD_BCEID" value="98900004" />
+      </envs>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
+      <item itemvalue="JUnit.SmallBusinessUnsureInsurance" />
+      <item itemvalue="JUnit.Login.test" />
       <item itemvalue="JUnit.Login" />
-      <item itemvalue="JUnit.CreateNewApplicationHomeownerNoInsurance" />
-      <item itemvalue="JUnit.CreateNewApplicationHomeownerNoInsurance.test" />
       <item itemvalue="JUnit.FarmUnsureInsurance" />
       <item itemvalue="JUnit.FarmUnsureInsurance.test" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.Login" />
+        <item itemvalue="JUnit.SmallBusinessUnsureInsurance" />
+        <item itemvalue="JUnit.Login.test" />
         <item itemvalue="JUnit.FarmUnsureInsurance.test" />
         <item itemvalue="JUnit.FarmUnsureInsurance" />
-        <item itemvalue="JUnit.CreateNewApplicationHomeownerNoInsurance.test" />
-        <item itemvalue="JUnit.CreateNewApplicationHomeownerNoInsurance" />
-        <item itemvalue="JUnit.Login" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.1-openjdk-21.0.1-249ae16d76d6-a618e4d4" />
-        <option value="jdk-21.0.1-openjdk-21.0.1-8336523bb0d9-657b72ed" />
+        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
       </set>
     </attachedChunks>
   </component>
