@@ -6,7 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="DFAautomationTests" />
+      </profile>
+      <profile name="Annotation profile for DFAautomationTests" enabled="true">
+        <sourceOutputDir name="../generated-sources/annotations" />
+        <sourceTestOutputDir name="../generated-test-sources/test-annotations" />
+        <module name="DFAautomationTests.main" />
+        <module name="DFAautomationTests.test" />
       </profile>
     </annotationProcessing>
   </component>

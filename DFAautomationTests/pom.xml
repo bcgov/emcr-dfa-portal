@@ -139,8 +139,8 @@
                 <version>3.7.0</version>
                 <configuration>
                     <compilerVersion>1.8</compilerVersion>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>16</source>
+                    <target>16</target>
                     <testSource>1.8</testSource>
                     <testTarget>1.8</testTarget>
                 </configuration>
