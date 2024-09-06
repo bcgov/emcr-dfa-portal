@@ -1,4 +1,6 @@
 import dfa.CustomWebDriverManager;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,16 +21,16 @@ public class CreateNewApplicationPublic {
     private WebDriver driver;
 
 
-//    @After
-//    public void tearDown() {
-//        driver.close();
-//        driver.quit();
-//    }
-//
-//    @AfterClass
-//    public static void afterClass() {
-//        CustomWebDriverManager.instance = null;
-//    }
+    @After
+    public void tearDown() {
+        driver.close();
+        driver.quit();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        CustomWebDriverManager.instance = null;
+    }
 
 
     @Test
@@ -79,7 +81,7 @@ public class CreateNewApplicationPublic {
         }
 
         Random r = new Random();
-        String alphabet = "123xyz";
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder randomChars = new StringBuilder();
 
         for (int i = 0; i < 100; i++) {
@@ -87,7 +89,7 @@ public class CreateNewApplicationPublic {
         }
 
         // Cause of damage
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("mat-input-3")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='otherDamageText']")));
         element.clear();
         element.sendKeys(randomChars.toString());
 
