@@ -142,8 +142,7 @@ public class CreateNewApplicationPublic {
         ElementClickHelper.clickElement(driver, element);
 
         //Click on Next
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Next - Review Submission ')]")));
-        ElementClickHelper.clickElement(driver, element);
+        nextReviewSubmission(driver, driverWait);
 
         //Check Review page
         String[] valuesToCheck = {" " + randomChars + " ", yesterdayAsString, todayAsString, "Municipality", "TestFirstName  ", " TestLastName ", " 999-999-9999 "};
@@ -155,8 +154,7 @@ public class CreateNewApplicationPublic {
             }
         }
         //Submit
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit ')]")));
-        ElementClickHelper.clickElement(driver, element);
+        clickSubmitButton(driver, driverWait);
         //Submit Application Confirmation
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to submit my application. ')]")));
         element.click();
@@ -181,5 +179,15 @@ public class CreateNewApplicationPublic {
             WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='" + entry.getKey() + "']")));
             element.sendKeys(entry.getValue());
         }
+
+    }
+
+    public void clickSubmitButton(WebDriver driver, WebDriverWait driverWait) {
+        WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit ')]")));
+        ElementClickHelper.clickElement(driver, element);
+    }
+    public void nextReviewSubmission(WebDriver driver, WebDriverWait driverWait) {
+        WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Next - Review Submission ')]")));
+        ElementClickHelper.clickElement(driver, element);
     }
 }
