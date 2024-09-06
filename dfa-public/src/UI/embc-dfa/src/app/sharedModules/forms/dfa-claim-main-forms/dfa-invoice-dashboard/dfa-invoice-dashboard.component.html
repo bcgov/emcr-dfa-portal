@@ -104,7 +104,7 @@
   <table mat-table [dataSource]="documentSummaryDataSourceFiltered" *ngIf="documentSummaryDataSourceFiltered.data.length > 0" style="width:100%">
     <!-- Invoice Number Column -->
     <ng-container matColumnDef="invoiceNumber">
-      <th mat-header-cell *matHeaderCellDef style="width:20%">
+      <th mat-header-cell *matHeaderCellDef style="width:15%">
         <b>Invoice Number</b>
       </th>
       <td *matCellDef="let element" mat-cell>
@@ -124,7 +124,7 @@
 
     <!-- Invoice Date Column -->
     <ng-container matColumnDef="invoiceDate">
-      <th mat-header-cell *matHeaderCellDef style="width:20%">
+      <th mat-header-cell *matHeaderCellDef style="width:10%">
         <b>Invoice Date</b>
       </th>
       <td *matCellDef="let element" mat-cell>
@@ -133,19 +133,65 @@
     </ng-container>
 
       <!-- Total Claim Column -->
-      <ng-container matColumnDef="totalBeingClaimed">
-      <th mat-header-cell *matHeaderCellDef style="width:20%">
+      <ng-container matColumnDef="totalBeingClaimed" *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'">
+      <th mat-header-cell *matHeaderCellDef style="width:15%">
         <b>Total being Claimed</b>
       </th>
       <td *matCellDef="let element" mat-cell>
-        ${{ element.totalBeingClaimed | number }}
+        $&nbsp;{{ element.totalBeingClaimed | number }}
+      </td>
+    </ng-container>
+
+      <!-- Invoice Amount -->
+      <ng-container matColumnDef="invoiceAmount" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
+      <th mat-header-cell *matHeaderCellDef style="width:12%">
+        <b>Invoice Amount</b>
+      </th>
+      <td *matCellDef="let element" mat-cell>
+        $&nbsp;{{ element.totalBeingClaimed | number }}
+      </td>
+    </ng-container>
+
+      <!-- EMCR Approved Amount -->
+      <ng-container matColumnDef="emcrApprovedAmount" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
+      <th mat-header-cell *matHeaderCellDef style="width:16%">
+        <b>EMCR Approved Amount</b>
+      </th>
+      <td *matCellDef="let element" mat-cell>
+        $&nbsp;{{ element.emcrApprovedAmount | number }}
+      </td>
+    </ng-container>
+
+      <!-- EMCR Comments -->
+      <ng-container matColumnDef="emcrComments" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
+      <th mat-header-cell *matHeaderCellDef style="width:12%">
+        <b>EMCR Comments</b>
+      </th>
+      <td *matCellDef="let element" mat-cell>
+        <span (click)="viewEMCRComment(element, index)" class="material-symbols-outlined setViewIcon"
+        >
+        chat_bubble
+      </span>
+      </td>
+    </ng-container>
+    
+      <!-- View Invoices -->
+      <ng-container matColumnDef="viewInvoice" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
+      <th mat-header-cell *matHeaderCellDef style="width:10%">
+        <b>View Invoices</b>
+      </th>
+      <td *matCellDef="let element" mat-cell>
+        <span (click)="viewInvoiceRow(element, index)" class="material-symbols-outlined setViewIcon"
+              >
+          visibility
+        </span>
       </td>
     </ng-container>
 
     <!-- Delete/Edit Icon Column -->
     <ng-container matColumnDef="icons" *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'">
       <th mat-header-cell *matHeaderCellDef style="width:15%">
-        <b>Action</b>
+        
       </th>
       <td *matCellDef="let element; let index = index" mat-cell>
         <button

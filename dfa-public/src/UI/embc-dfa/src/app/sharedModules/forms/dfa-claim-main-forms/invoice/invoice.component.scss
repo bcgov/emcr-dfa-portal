@@ -2,6 +2,19 @@ mat-form-field {
     width: 100%;
 }
 
+.header-align-inv {
+  margin-bottom: 20px !important;
+}
+
+.hr-align {
+    border: 1px solid gray;
+}
+
+.align-cancel-col {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .recoveryPlan p {
   margin: 0 0 5px !important;
 }
@@ -94,7 +107,7 @@ mat-form-field {
 
 .currencyText {
     position: relative;
-    left: -50px;
+    /*left: -50px;*/
     padding-left: 20px;
     border-left: 1px solid black;
 }

@@ -1,7 +1,7 @@
 <mat-card class="card-align recoveryPlan" style="border:none;" [class.mat-elevation-z0]="true">
   <mat-card-content>
     <form [formGroup]="invoiceForm">
-      <h1>{{addeditInvoiceText}} Invoice</h1>
+      <h1 class="header-align-inv">{{addeditInvoiceText}} Invoice</h1>
       <button type="button"
           #tooltip="matTooltip" [hidden]="hideHelp"
       (mouseenter)="$event.stopImmediatePropagation()"
@@ -24,6 +24,79 @@
       <ng-container>
         <div class="row">
           <div class="col-md-7">
+            <div class="row" *ngIf="isReadOnly === true">
+              <div class="col-md-6">
+                <p  style="font-size: 15px">
+                  EMCR Decision
+                </p>
+                <mat-form-field appearance="outline">
+                  <input
+                         #emcrDecision
+                    formControlName="emcrDecision"
+                    matInput />
+                </mat-form-field>
+              </div>
+            
+              <div class="col-md-6">
+                <p  style="font-size: 15px;">
+                  EMCR Approved Amount
+                </p>
+                <mat-form-field appearance="outline" class="mat-form-round">
+    
+                  <div class="searchDiv">
+                    <input
+                      #currencyBoxemcrApprovedAmount
+                      id="currencyBoxemcrApprovedAmount"
+                      formControlName="emcrApprovedAmount"
+                      matInput />
+                    <span class="currencyText">CA$</span>
+                  </div>
+    
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row" *ngIf="isReadOnly === true">
+              <div class="col-md-6">
+                <p  style="font-size: 15px">
+                  EMCR Decision Date
+                </p>
+                <mat-form-field appearance="outline" >
+                  <input matInput
+                    [matDatepicker]="emcrDecisionDatePicker"
+                    [readonly]="isReadOnly === true"
+                    formControlName="emcrDecisionDate"
+                     >
+                  <mat-hint *ngIf="isReadOnly !== true">MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matSuffix [for]="emcrDecisionDatePicker" [disabled]="isReadOnly === true"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #emcrDecisionDatePicker [disabled]="isReadOnly === true"
+                  ></mat-datepicker>
+    
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row" *ngIf="isReadOnly === true">
+              <p  style="font-size: 15px">
+                EMCR Decision Comments
+              </p>
+              <div class="col-md-12">
+                <mat-form-field appearance="outline">
+                  <textarea [disabled]="isReadOnly" matInput
+                    formControlName="emcrDecisionComments"
+                    style="resize:none"
+                    cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize"
+                    cdkAutosizeMinRows="2"
+                    cdkAutosizeMaxRows="5"></textarea>
+     
+                </mat-form-field>
+  
+                <br/>
+              </div>
+            </div>
+            <hr class="hr-align" *ngIf="isReadOnly === true" />
             <div class="row">
               <div class="col-md-12">
                 <p  style="font-size: 15px">
@@ -65,7 +138,7 @@
                     [readonly]="isReadOnly === true"
                     formControlName="invoiceDate"
                     required >
-                  <mat-hint>MM/DD/YYYY</mat-hint>
+                  <mat-hint *ngIf="isReadOnly !== true">MM/DD/YYYY</mat-hint>
                   <mat-datepicker-toggle matSuffix [for]="invoiceDatePicker" [disabled]="isReadOnly === true"
                   ></mat-datepicker-toggle>
                   <mat-datepicker #invoiceDatePicker [disabled]="isReadOnly === true"
@@ -113,7 +186,7 @@
                     [readonly]="isReadOnly === true"
                     formControlName="goodsReceivedDate"
                     >
-                  <mat-hint>MM/DD/YYYY</mat-hint>
+                  <mat-hint *ngIf="isReadOnly !== true">MM/DD/YYYY</mat-hint>
                   <mat-datepicker-toggle matSuffix [for]="goodsReceivedDatePicker" [disabled]="isReadOnly === true"
                   ></mat-datepicker-toggle>
                   <mat-datepicker #goodsReceivedDatePicker [disabled]="isReadOnly === true"
@@ -140,7 +213,7 @@
                     #autosize="cdkTextareaAutosize"
                     cdkAutosizeMinRows="2"
                     cdkAutosizeMaxRows="5"
-                    maxlength="200"></textarea>
+                    maxlength="2000"></textarea>
                   <!--<mat-hint>{{ remainingLength }} characters remaining.</mat-hint>-->
                    
                 </mat-form-field>
@@ -186,7 +259,7 @@
                     #autosize="cdkTextareaAutosize"
                     cdkAutosizeMinRows="2"
                     cdkAutosizeMaxRows="5"
-                    maxlength="200"></textarea>
+                    maxlength="2000"></textarea>
                   <!--<mat-hint>{{ remainingLength }} characters remaining.</mat-hint>-->
                 </mat-form-field><br/>
               </div>
@@ -335,9 +408,9 @@
       <div class="row">
         <div class="col-md-9">
           </div>
-        <div class="col-md-3">
+        <div class="col-md-3 align-cancel-col">
           <button class="button-s cancel" type="button" (click)="cancel()">Cancel</button>
-          <button type="submit" class="button-p add-invoice" (click)="AddInvoice()">{{addeditInvoiceText}}</button>
+          <button *ngIf="isReadOnly != true" type="submit" class="button-p add-invoice" (click)="AddInvoice()">{{addeditInvoiceText}}</button>
         </div>
       </div>
     </form>

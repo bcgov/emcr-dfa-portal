@@ -165,11 +165,15 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_dateofdamageto { get; set; } // optional date only
         public string? dfa_appapplicationid { get; set; } // optional string
         public string dfa_appcontactid { get; set; }
+        public string dfa_portalloggedinuser { get; set; }
         public int? dfa_applicantsubtype { get; set; }
         public int? dfa_applicantlocalgovsubtype { get; set; }
-        public string dfa_estimated { get; set; }
-        public string dfa_applicantothercomments { get; set; }
-        public string dfa_dfaapplicantsubtypecomments { get; set; }
+        public string? dfa_estimated { get; set; }
+        public string? dfa_applicantothercomments { get; set; }
+        public string? dfa_dfaapplicantsubtypecomments { get; set; }
+        public bool? dfa_createdonportal { get; set; }
+        public int? dfa_applicationcasebpfstages { get; set; }
+        public int? dfa_applicationcasebpfsubstages { get; set; }
     }
 
     public class temp_dfa_appapplicationmain_params // TODO: move these under dfa_appapplicationmain_params
@@ -645,6 +649,15 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         YesBut = 222710001
     }
 
+    public enum ApplicationStageOptionSet
+    {
+        [Description("draft")]
+        DRAFT = 222710000,
+
+        [Description("submit")]
+        SUBMIT = 222710001
+    }
+
     public enum ProjectStageOptionSet
     {
         [Description("draft")]
@@ -741,6 +754,10 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public int? dfa_eligiblegst { get; set; }
         public int? dfa_actualinvoicetotal { get; set; }
         public int? dfa_totalbeingclaimed { get; set; }
+        public string? dfa_emcrdecision { get; set; }
+        public string? dfa_emcrapprovedamount { get; set; }
+        public DateTime? dfa_emcrdecisiondate { get; set; }
+        public string? dfa_emcrdecisioncomments { get; set; }
     }
 
     public class dfa_project

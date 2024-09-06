@@ -166,7 +166,7 @@ namespace EMBC.DFA.API.Mappers
             CreateMap<DFAApplicationMain, dfa_appapplicationmain_params>()
                 .ForMember(d => d.dfa_appapplicationid, opts => opts.MapFrom(s => s.Id))
                 .ForMember(d => d.dfa_applicanttype, opts => opts.MapFrom(s => Convert.ToInt32(ApplicantTypeOptionSet.GovernmentBody)))
-                .ForMember(d => d.dfa_appcontactid, opts => opts.MapFrom(s => s.ProfileVerification.profileId))
+                .ForMember(d => d.dfa_portalloggedinuser, opts => opts.MapFrom(s => s.ProfileVerification.profileId))
                 .ForMember(d => d.dfa_causeofdamagestorm2, opts => opts.MapFrom(s => s.propertyDamage.stormDamage == true ? (int?)YesNoOptionSet.Yes : (int?)YesNoOptionSet.No))
                 .ForMember(d => d.dfa_causeofdamagewildfire2, opts => opts.MapFrom(s => s.propertyDamage.wildfireDamage == true ? (int?)YesNoOptionSet.Yes : (int?)YesNoOptionSet.No))
                 .ForMember(d => d.dfa_receiveguidanceassessingyourinfra, opts => opts.MapFrom(s => s.propertyDamage.guidanceSupport == true ? (int?)YesNoOptionSet.Yes : (int?)YesNoOptionSet.No))
@@ -178,6 +178,9 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.dfa_applicantlocalgovsubtype, opts => opts.MapFrom(s => ConvertStringToApplicantSubTypeSubOptionSet(s.propertyDamage.applicantSubSubtype)))
                 .ForMember(d => d.dfa_applicantothercomments, opts => opts.MapFrom(s => s.propertyDamage.subtypeOtherDetails))
                 .ForMember(d => d.dfa_dfaapplicantsubtypecomments, opts => opts.MapFrom(s => s.propertyDamage.subtypeDFAComment))
+                .ForMember(d => d.dfa_createdonportal, opts => opts.MapFrom(s => true))
+                .ForMember(d => d.dfa_applicationcasebpfstages, opts => opts.MapFrom(s => Convert.ToInt32(ApplicationStageOptionSet.SUBMIT)))
+                //.ForMember(d => d.dfa_applicationcasebpfsubstages, opts => opts.MapFrom(s => Convert.ToInt32(ApplicationStageOptionSet.SUBMIT)))
                 .ForMember(d => d.dfa_estimated, opts => opts.MapFrom(s => s.propertyDamage.estimatedPercent))
                 .ForMember(d => d.dfa_dateofdamage, opts => opts.MapFrom(s => s.propertyDamage.damageFromDate))
                 .ForMember(d => d.dfa_dateofdamageto, opts => opts.MapFrom(s => s.propertyDamage.damageToDate));
@@ -569,7 +572,11 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.VendorName, opts => opts.MapFrom(s => s.dfa_name))
                 .ForMember(d => d.EligibleGST, opts => opts.MapFrom(s => s.dfa_eligiblegst))
                 .ForMember(d => d.ActualInvoiceTotal, opts => opts.MapFrom(s => s.dfa_actualinvoicetotal))
-                .ForMember(d => d.TotalBeingClaimed, opts => opts.MapFrom(s => s.dfa_totalbeingclaimed));
+                .ForMember(d => d.TotalBeingClaimed, opts => opts.MapFrom(s => s.dfa_totalbeingclaimed))
+                .ForMember(d => d.EMCRApprovedAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_emcrapprovedamount) ? "0" : s.dfa_emcrapprovedamount))
+                .ForMember(d => d.EMCRDecision, opts => opts.MapFrom(s => s.dfa_emcrdecision))
+                .ForMember(d => d.EMCRDecisionComments, opts => opts.MapFrom(s => s.dfa_emcrdecisioncomments))
+                .ForMember(d => d.EMCRDecisionDate, opts => opts.MapFrom(s => s.dfa_emcrdecisiondate));
 
             CreateMap<DFAInvoiceMain, dfa_invoice_delete_params>()
                 .ForMember(d => d.dfa_recoveryinvoiceid, opts => opts.MapFrom(s => s.Id))

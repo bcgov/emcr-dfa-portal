@@ -109,19 +109,6 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
   ) {
     this.formBuilder = formBuilderObj;
     this.formCreationService = formCreationServiceObj;
-    //this.isReadOnly = (dfaProjectMainDataService.getViewOrEdit() === 'view'
-    //  || dfaProjectMainDataService.getViewOrEdit() === 'edit'
-    //  || dfaProjectMainDataService.getViewOrEdit() === 'viewOnly');
-    //this.setViewOrEditControls();
-
-    //this.dfaProjectMainDataService.changeViewOrEdit.subscribe((vieworedit) => {
-    //  this.isReadOnly = (vieworedit === 'view'
-    //  || vieworedit === 'edit'
-    //    || vieworedit === 'viewOnly');
-    //  this.setViewOrEditControls();
-    //})
-
-    //this.vieworedit = dfaProjectMainDataService.getViewOrEdit();
   }
 
   numericOnly(event): boolean {
@@ -241,6 +228,32 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
       this.addeditInvoiceText = "Update";
     }
 
+    if (passData.header) {
+      this.addeditInvoiceText = passData.header;
+      this.invoiceForm.controls.vendorName.disable();
+      this.invoiceForm.controls.invoiceNumber.disable();
+      this.invoiceForm.controls.invoiceDate.disable();
+      this.invoiceForm.controls.isGoodsReceivedonInvoiceDate.disable();
+      this.invoiceForm.controls.goodsReceivedDate.disable();
+      this.invoiceForm.controls.purposeOfGoodsServiceReceived.disable();
+      this.invoiceForm.controls.isClaimforPartofTotalInvoice.disable();
+      this.invoiceForm.controls.reasonClaimingPartofTotalInvoice.disable();
+      this.invoiceForm.controls.netInvoiceBeingClaimed.disable();
+      this.invoiceForm.controls.pst.disable();
+      this.invoiceForm.controls.grossGST.disable();
+      this.invoiceForm.controls.actualInvoiceTotal.disable();
+      this.invoiceForm.controls.eligibleGST.disable();
+      this.invoiceForm.controls.totalBeingClaimed.disable();
+
+      this.invoiceForm.controls.emcrDecision.disable();
+      this.invoiceForm.controls.emcrApprovedAmount.disable();
+      this.invoiceForm.controls.emcrDecisionDate.disable();
+      this.invoiceForm.controls.emcrDecisionComments.disable();
+
+      this.hideHelp = true;
+      this.isReadOnly = true;
+    }
+
     //let projectId = this.dfaProjectMainDataService.getProjectId();
 
     this.eligibleGST = this.dfaClaimMainDataService.getEligibleGST();
@@ -250,26 +263,8 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
     } else {
       this.invoiceForm.controls.eligibleGST.disable();
     }
-
-    //if (projectId) {
-    //  this.getRecoveryPlan(projectId);
-    //}
-
-    this.dfaProjectMainDataService.stepSelected.subscribe((stepSelected) => {
-      if (stepSelected == "0" && this.dfaProjectMainDataService.getViewOrEdit() != 'viewOnly') {
-        setTimeout(
-          function () {
-            this.hideHelp = false;
-          }.bind(this),
-          1000
-        );
-      }
-      else {
-        this.hideHelp = true;
-      }
-    })
-
-    if (this.dfaProjectMainDataService.getViewOrEdit() == 'viewOnly') {
+    
+    if (this.dfaClaimMainDataService.getViewOrEdit() == 'viewOnly') {
       this.invoiceForm.disable();
     }
     else {

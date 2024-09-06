@@ -88,7 +88,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
   public stageSelected: string = '';
   public sortfieldSelected: string = '';
   public filterbydaysSelected: number;
-  documentSummaryColumnsToDisplay = ['invoiceNumber', 'vendorName', 'invoiceDate', 'totalBeingClaimed', 'icons']
+  documentSummaryColumnsToDisplay = ['invoiceNumber', 'vendorName', 'invoiceDate']
   documentSummaryDataSource = new MatTableDataSource<InvoiceExtended>();
   documentSummaryDataSourceFiltered = new MatTableDataSource<InvoiceExtended>();
   noInvoiceText = 'To begin adding invoices, click the "+ Add Invoice" button.';
@@ -155,6 +155,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    
     this.recoveryClaimForm$ = this.formCreationService
       .getRecoveryClaimForm()
       .subscribe((recoveryClaim) => {
@@ -234,7 +235,14 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
     ];
 
     if (this.isReadOnly) {
-      this.documentSummaryColumnsToDisplay.pop();
+      this.documentSummaryColumnsToDisplay.push('invoiceAmount');
+      this.documentSummaryColumnsToDisplay.push('emcrApprovedAmount');
+      this.documentSummaryColumnsToDisplay.push('emcrComments');
+      this.documentSummaryColumnsToDisplay.push('viewInvoice');
+    }
+    else {
+      this.documentSummaryColumnsToDisplay.push('totalBeingClaimed');
+      this.documentSummaryColumnsToDisplay.push('icons');
     }
 
   }
@@ -351,6 +359,10 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
               actualInvoiceTotal: objInv.actualInvoiceTotal,
               eligibleGST: objInv.eligibleGST,
               totalBeingClaimed: objInv.totalBeingClaimed,
+              emcrDecision: objInv.emcrDecision,
+              emcrApprovedAmount: objInv.emcrApprovedAmount,
+              emcrDecisionDate: objInv.emcrDecisionDate ? new Date(objInv.emcrDecisionDate) : objInv.emcrDecisionDate,
+              emcrDecisionComments: objInv.emcrDecisionComments,
             });
 
             //var netInvoice = Number(this.invoiceForm.controls.netInvoiceBeingClaimed.value);
@@ -361,7 +373,6 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
             //this.invoiceForm.controls.totalBeingClaimed.setValue(netInvoice + PST + EligibleGST);
             //this.invoiceForm.controls.actualInvoiceTotal.setValue(netInvoice + PST + GrossGST);
           })
-
           
           this.documentSummaryDataSource.data = lstInvoices;
           this.documentSummaryDataSourceFiltered.data = this.documentSummaryDataSource.data;
@@ -407,6 +418,14 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
     this.recoveryClaimForm$.unsubscribe();
   }
 
+  viewInvoiceRow(element, index): void {
+    this.openInvoiceViewPopup(element, index);
+  }
+
+  viewEMCRComment(element, index): void {
+    //this.openInvoiceViewPopup(element, index);
+  }
+
   editInvoiceRow(element, index): void {
     this.openInvoiceCreatePopup(element, index);
   }
@@ -446,6 +465,32 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
               document.location.href = 'https://dfa.gov.bc.ca/error.html';
             });
         }
+      });
+  }
+
+  openInvoiceViewPopup(objInvoice, index): void {
+
+    if (objInvoice && objInvoice.invoiceId) {
+      this.dfaClaimMainDataService.setInvoiceId(objInvoice.invoiceId);
+      delete (objInvoice as any).invoiceId
+    }
+    else {
+      this.dfaClaimMainDataService.setInvoiceId(null);
+    }
+
+    this.dialog
+      .open(InvoiceComponent, {
+        data: {
+          content: objInvoice,
+          invoiceId: this.dfaClaimMainDataService.getInvoiceId(),
+          header: 'View'
+        },
+        height: '665px',
+        width: '1000px',
+        disableClose: true
+      })
+      .afterClosed()
+      .subscribe((result) => {
       });
   }
 

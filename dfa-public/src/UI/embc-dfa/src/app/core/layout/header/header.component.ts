@@ -45,9 +45,6 @@ export class HeaderComponent implements OnInit {
               this.firstName = loginInfo?.individualFirstname;    
             })
         }
-        else {
-          this.firstName = "<unknown>";
-        }
       });
   }
 
@@ -55,6 +52,7 @@ export class HeaderComponent implements OnInit {
 
   public async signOut(): Promise<void> {
     // 2024-06-05 EMCRI-217 waynezen: use new BCeID async Auth
+    this.showLoginMatMenu = false;
     this.loginService.logOff();
     this.router.navigate(['/registration-method']);
   }

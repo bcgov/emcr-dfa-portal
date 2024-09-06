@@ -6,6 +6,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { ApplicationService } from './services/application.service';
 import { AttachmentService } from './services/attachment.service';
+import { BCeIdLookupService } from './services/b-ce-id-lookup.service';
 import { ClaimService } from './services/claim.service';
 import { CleanUpLogItemService } from './services/clean-up-log-item.service';
 import { ConfigurationService } from './services/configuration.service';
@@ -29,6 +30,7 @@ import { SecondaryApplicantService } from './services/secondary-applicant.servic
   providers: [
     ApplicationService,
     AttachmentService,
+    BCeIdLookupService,
     ClaimService,
     CleanUpLogItemService,
     ConfigurationService,

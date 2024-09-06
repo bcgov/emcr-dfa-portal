@@ -3,6 +3,10 @@
 export interface Invoice {
   actualInvoiceTotal?: null | string;
   eligibleGST?: null | string;
+  emcrApprovedAmount?: null | string;
+  emcrDecision?: null | string;
+  emcrDecisionComments?: null | string;
+  emcrDecisionDate?: null | string;
   goodsReceivedDate?: null | string;
   grossGST?: null | string;
   invoiceDate?: null | string;

@@ -1,0 +1,27 @@
+{
+  "ExtendedData": {
+    "inputs": [
+      "https://gws1.development.bceid.ca/webservices/client/V10/BCeIDService.asmx?WSDL"
+    ],
+    "collectionTypes": [
+      "System.Array",
+      "System.Collections.Generic.Dictionary`2"
+    ],
+    "namespaceMappings": [
+      "*, ServiceReference1"
+    ],
+    "references": [
+      "System.Reflection.DispatchProxy, {System.Reflection.DispatchProxy, 4.5.0}",
+      "System.Security.AccessControl, {System.Security.AccessControl, 4.5.0}",
+      "System.Security.Cryptography.Xml, {System.Security.Cryptography.Xml, 4.5.0}",
+      "System.Security.Permissions, {System.Security.Permissions, 4.5.0}",
+      "System.Security.Principal.Windows, {System.Security.Principal.Windows, 4.5.0}",
+      "System.ServiceModel, {System.ServiceModel.Primitives, 4.6.0}",
+      "System.ServiceModel.Http, {System.ServiceModel.Http, 4.6.0}",
+      "System.ServiceModel.Primitives, {System.ServiceModel.Primitives, 4.6.0}",
+      "System.ServiceModel.Security, {System.ServiceModel.Security, 4.6.0}"
+    ],
+    "targetFramework": "net6.0",
+    "typeReuseMode": "All"
+  }
+}

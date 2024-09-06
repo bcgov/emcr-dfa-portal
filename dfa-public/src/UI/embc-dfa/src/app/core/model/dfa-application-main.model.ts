@@ -373,6 +373,7 @@ export class PropertyDamageForm {
     if (propertyDamage.estimatedPercent) {
       this.estimatedPercent.setValue(propertyDamage.estimatedPercent);
     }
+
     this.estimatedPercent.setValidators(null);
 
     if (propertyDamage.subtypeOtherDetails) {
@@ -386,6 +387,30 @@ export class PropertyDamageForm {
     this.subtypeDFAComment.setValidators(null);
   }
 }
+
+// 2024-08-20 EMCRI-613 waynezen; Create Application1
+export class CreateApplication1 {
+  legalName?: null | string;
+
+  constructor(
+    legalName?: null | string) {
+  
+  }
+}
+
+export class CreateApplication1Form {
+  legalName = new UntypedFormControl();
+  
+  constructor(
+    createApplication1: CreateApplication1,
+    customValidator: CustomValidationService) {
+      if (createApplication1.legalName) {
+        this.legalName.setValue(createApplication1.legalName);
+      }
+  }
+}
+
+
 
 export class FullTimeOccupant {
   applicationId?: string;

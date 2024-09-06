@@ -9,6 +9,8 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.Services;
+using EMBC.Gov.BCeID;
+using EMBC.Gov.BCeID.Models;
 using EMBC.Utilities.Configuration;
 using EMBC.Utilities.Telemetry;
 using IdentityModel.AspNetCore.OAuth2Introspection;
@@ -19,6 +21,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
@@ -215,7 +218,11 @@ namespace EMBC.DFA.API
             {
                 // 2024-08-11 EMCRI-216 waynezen; Very important to AllowAnyHeader - otherwise CORS problems
                 policy.AllowAnyHeader();
+
+                // 2024-08-20 EMCRI-434 waynezen; Instead of AllowAnyMethod - only allow select Http methods
                 //policy.AllowAnyMethod();
+                policy.WithMethods("GET", "POST");
+
                 //policy.AllowAnyOrigin();
 
                 // 2024-08-20 EMCRI-434 waynezen; Instead of AllowAnyMethod - only allow select Http methods
@@ -235,6 +242,16 @@ namespace EMBC.DFA.API
                     policy.WithOrigins(corsOrigins);
                 }
             }));
+
+            // 2024-08-19 EMCRI-434 waynezen; configure BCeID Web Services
+            var bceidSection = configuration.GetSection("BCeIDWebServices");
+            BCeIDWebSvcOptions bceidWebSvcOptions = new BCeIDWebSvcOptions();
+            bceidSection.Bind(bceidWebSvcOptions);
+
+            services.Configure<BCeIDWebSvcOptions>(bceidSection);
+            services.AddScoped<IBCeIDBusinessQuery, BCeIDBusinessQuery>();
+
+            //sp => new BCeIDBusinessQuery(options: sp.GetRequiredService<IOptions<BCeIDWebSvcOptions>>())
         }
 
         public void ConfigurePipeline(PipelineServices services)

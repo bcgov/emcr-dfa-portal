@@ -1,0 +1,18 @@
+<form [formGroup]="createApplication1Form">
+    <p>Please review and complete the form below</p>
+    <br />
+
+    <ng-container>
+        <div class="row">
+            <input matInput
+            type="text"
+            [readonly]="isReadOnly === true"
+            formControlName="legalName"
+            placeholder="Legal Name"
+            maxlength="100"
+          />
+        </div>
+    </ng-container>
+</form>
+
+

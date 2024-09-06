@@ -81,7 +81,7 @@ export class ComponentCreationService {
   ];
 
   dfaApplicationMainComponents: Array<any> = [
-    
+    // 2024-08-20 EMCRI-613 waynezen; Create Application1
     {
       component: 'property-damage',
       nextButtonLabel: 'Next - Review & Submit',
@@ -91,7 +91,6 @@ export class ComponentCreationService {
       lastStep: 0,
       stepName: 'Application Details'
     }
-
   ];
 
   dfaProjectMainComponents: Array<any> = [

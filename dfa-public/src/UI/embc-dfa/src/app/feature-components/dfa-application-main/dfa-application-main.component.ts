@@ -7,7 +7,7 @@ import {
   ChangeDetectorRef,
   ViewEncapsulation
 } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ComponentCreationService } from '../../core/services/componentCreation.service';
 import * as globalConst from '../../core/services/globalConstants';
@@ -114,7 +114,7 @@ export class DFAApplicationMainComponent
     this.vieworedit = this.dfaApplicationMainDataService.getViewOrEdit();
     this.editstep = this.dfaApplicationMainDataService.getEditStep();
     //this.showStepper = true;
-    this.dfaApplicationMainHeading = 'Application Details'
+    this.dfaApplicationMainHeading = 'Create your Application'
   }
 
 
@@ -263,6 +263,9 @@ export class DFAApplicationMainComponent
         //this.dfaApplicationMainDataService.otherContacts = 
         //this.otherContactsForm.get('otherContact').getRawValue()
         break;
+        case 'create-application1':
+          // TODO: EMCRI-613 - modify dfaApplicationMainDataService
+          break;
       case 'occupants':
         break;
       default:
@@ -278,11 +281,11 @@ export class DFAApplicationMainComponent
   loadStepForm(index: number): void {
     switch (index) {
       case 0:
-        this.form$ = this.formCreationService
-          .getPropertyDamageForm()
-          .subscribe((propertyDamage) => {
-            this.form = propertyDamage;
-          });
+         this.form$ = this.formCreationService
+           .getPropertyDamageForm()
+           .subscribe((propertyDamage) => {
+             this.form = propertyDamage;
+           });
 
         break;
     }

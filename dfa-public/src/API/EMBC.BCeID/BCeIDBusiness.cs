@@ -29,5 +29,6 @@
         public string addressPostal { get; set; }
         public string addressCountry { get; set; }
         public string userId { get; set; }
+
     }
 }

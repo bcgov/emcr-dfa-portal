@@ -24,6 +24,10 @@ export class Invoice {
   actualInvoiceTotal?: null | string;
   eligibleGST?: null | string;
   totalBeingClaimed?: null | string;
+  emcrDecision?: null | string;
+  emcrApprovedAmount?: null | string;
+  emcrDecisionDate?: null | string;
+  emcrDecisionComments?: null | string;
 
   constructor(
     invoiceNumber?: null | string,
@@ -40,7 +44,10 @@ export class Invoice {
     actualInvoiceTotal?: null | string,
     eligibleGST?: null | string,
     totalBeingClaimed?: null | string,
-
+    emcrDecision?: null | string,
+    emcrApprovedAmount?: null | string,
+    emcrDecisionDate?: null | string,
+    emcrDecisionComments?: null | string,
   ) { }
 }
 
@@ -59,6 +66,10 @@ export class InvoiceForm {
   actualInvoiceTotal = new UntypedFormControl();
   eligibleGST = new UntypedFormControl();
   totalBeingClaimed = new UntypedFormControl();
+  emcrDecision = new UntypedFormControl();
+  emcrApprovedAmount = new UntypedFormControl();
+  emcrDecisionDate = new UntypedFormControl();
+  emcrDecisionComments = new UntypedFormControl();
 
   constructor(
     invoice: Invoice,
@@ -137,6 +148,26 @@ export class InvoiceForm {
       this.totalBeingClaimed.setValue(invoice.totalBeingClaimed);
     }
     this.totalBeingClaimed.setValidators(null);
+
+    if (invoice.emcrDecision) {
+      this.emcrDecision.setValue(invoice.emcrDecision);
+    }
+    this.emcrDecision.setValidators(null);
+
+    if (invoice.emcrApprovedAmount) {
+      this.emcrApprovedAmount.setValue(invoice.emcrApprovedAmount);
+    }
+    this.emcrApprovedAmount.setValidators(null);
+
+    if (invoice.emcrDecisionDate) {
+      this.emcrDecisionDate.setValue(invoice.emcrDecisionDate);
+    }
+    this.emcrDecisionDate.setValidators(null);
+
+    if (invoice.emcrDecisionComments) {
+      this.emcrDecisionComments.setValue(invoice.emcrDecisionComments);
+    }
+    this.emcrDecisionComments.setValidators(null);
     
   }
 }

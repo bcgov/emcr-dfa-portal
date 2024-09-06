@@ -16,7 +16,9 @@ import { DfaPrescreening, DfaPrescreeningForm } from '../model/dfa-prescreening.
 import { InsuranceOption } from 'src/app/core/api/models';
 import { PropertyDamageForm, DamagedPropertyAddressForm, DamagedPropertyAddress, PropertyDamage, SignAndSubmit, SupportingDocuments, DamagedRoomsForm,
   FullTimeOccupantsForm, SecondaryApplicantsForm, OtherContactsForm,
-  CleanUpLogForm, SignAndSubmitForm, SupportingDocumentsForm, CleanUpLog, CleanUpLogItemsForm, SecondaryApplicant, FullTimeOccupant, OtherContact, CleanUpLogItem, DamagedRoom  } from '../model/dfa-application-main.model';
+  CleanUpLogForm, SignAndSubmitForm, SupportingDocumentsForm, CleanUpLog, CleanUpLogItemsForm, SecondaryApplicant, FullTimeOccupant, OtherContact, CleanUpLogItem, DamagedRoom,  
+  CreateApplication1Form,
+  CreateApplication1} from '../model/dfa-application-main.model';
 import { CustomValidationService } from './customValidation.service';
 import { FileUpload, FileUploadsForm, RecoveryPlan, RecoveryPlanForm } from '../model/dfa-project-main.model';
 import { FileUploadClaim, FileUploadsClaimForm, RecoveryClaim, RecoveryClaimForm } from '../model/dfa-claim-main.model';
@@ -147,6 +149,21 @@ export class FormCreationService {
 
   propertyDamageForm$: Observable<UntypedFormGroup | undefined> =
     this.propertyDamageForm.asObservable();
+
+  // 2024-08-20 EMCRI-613 waynezen; Create Application1
+  createApplication1Form: BehaviorSubject<UntypedFormGroup | undefined> =
+    new BehaviorSubject(
+      this.formBuilder.group(
+        new CreateApplication1Form(
+          new CreateApplication1(),
+          this.customValidator
+        )
+      )
+    );
+
+  createApplication1Form$: Observable<UntypedFormGroup | undefined> =
+    this.createApplication1Form.asObservable();
+
 
   fullTimeOccupantsForm: BehaviorSubject<UntypedFormGroup | undefined> =
     new BehaviorSubject(
@@ -492,6 +509,12 @@ export class FormCreationService {
       )
     );
   }
+
+  // 2024-08-20 EMCRI-613 waynezen; Create (new) Application
+  getCreateApplication1Form(): Observable<UntypedFormGroup> {
+    return this.createApplication1Form$;
+  }
+
 
   getFullTimeOccupantsForm(): Observable<UntypedFormGroup> {
     return this.fullTimeOccupantsForm$;

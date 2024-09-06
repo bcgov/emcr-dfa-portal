@@ -567,5 +567,9 @@ namespace EMBC.DFA.API.Controllers
         public string? EligibleGST { get; set; }
         public string? ActualInvoiceTotal { get; set; }
         public string? TotalBeingClaimed { get; set; }
+        public string? EMCRDecision { get; set; }
+        public string? EMCRApprovedAmount { get; set; }
+        public string? EMCRDecisionDate { get; set; }
+        public string? EMCRDecisionComments { get; set; }
     }
 }

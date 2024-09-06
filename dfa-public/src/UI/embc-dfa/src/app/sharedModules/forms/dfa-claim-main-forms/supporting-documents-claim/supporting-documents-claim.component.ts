@@ -54,7 +54,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
   formCreationService: FormCreationService;
   showSupportingFileForm: boolean = false;
   supportingFilesDataSource = new MatTableDataSource();
-  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate']
+  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate'] //, 'icons'
   claimDocumentSummaryDataSource = new MatTableDataSource();
   isLoading: boolean = false;
   isdisabled: string = 'false';
@@ -135,10 +135,14 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
         mapTo(_documentSummaryFormArray.getRawValue())
     ).subscribe(data => this.claimDocumentSummaryDataSource.data = _documentSummaryFormArray.getRawValue()?.filter(x => x.deleteFlag == false));
 
-    if (this.dfaApplicationMainDataService.getViewOrEdit() == 'viewOnly') {
+    if (this.dfaClaimMainDataService.getViewOrEdit() == 'viewOnly') {
       this.supportingDocumentsForm.disable();
       this.fileUploadForm.disable();
     }
+
+    //if (this.dfaClaimMainDataService.getViewOrEdit() == 'viewOnly' || this.dfaClaimMainDataService.getViewOrEdit() == 'view' ) {
+    //  this.documentSummaryColumnsToDisplay.pop()
+    //}
 
   }
 
@@ -376,6 +380,22 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
       //    document.location.href = 'https://dfa.gov.bc.ca/error.html';
       //  }
       //});
+
+      this.attachmentsService.attachmentUpsertDeleteClaimAttachment({ body: element }).subscribe({
+        next: (fileUploadId) => {
+          fileUploads.splice(index, 1);
+          this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').setValue(fileUploads);
+          //this.showSupportingFileForm = !this.showSupportingFileForm;
+          //if (fileUpload.requiredDocumentType == Object.keys(this.RequiredDocumentTypes)[Object.values(this.RequiredDocumentTypes).indexOf(this.RequiredDocumentTypes.PreEvent)])
+          //  this.supportingDocumentsForm.get('hasCopyOfARentalAgreementOrLease').setValue(true);
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error(error);
+          this.isLoading = false;
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        }
+      });
     }
   }
 
