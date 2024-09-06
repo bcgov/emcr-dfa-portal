@@ -1,5 +1,6 @@
 import dfa.CustomWebDriverManager;
 import dfa.ElementClickHelper;
+import dfa.PageContentChecker;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -8,12 +9,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
+
 import static dfa.CustomWebDriverManager.getDriver;
+import static org.junit.Assert.fail;
 
 public class CreateNewApplicationPublic {
 
@@ -36,7 +38,7 @@ public class CreateNewApplicationPublic {
     public void test() throws Exception {
         driver = getDriver();
         WebDriverWait driverWait = CustomWebDriverManager.getDriverWait();
-        WebElement element = CustomWebDriverManager.getElement();
+        WebElement element;
         CustomWebDriverManager.getElements();
 
 
@@ -52,16 +54,16 @@ public class CreateNewApplicationPublic {
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
 
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        Date tomorrow = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        Date yesterday = calendar.getTime();
 
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/YYYY");
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
         String todayAsString = dateFormat.format(today);
-        String tomorrowAsString = dateFormat.format(tomorrow);
+        String yesterdayAsString = dateFormat.format(yesterday);
 
         System.out.println(todayAsString);
-        System.out.println(tomorrowAsString);
+        System.out.println(yesterdayAsString);
 
         //Select cause of damage
         Thread.sleep(1000);
@@ -92,5 +94,92 @@ public class CreateNewApplicationPublic {
         element.clear();
         element.sendKeys(randomChars.toString());
 
+        //Date of damage
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='damageFromDate']")));
+        element.clear();
+        element.sendKeys(yesterdayAsString);
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='damageToDate']")));
+        element.clear();
+        element.sendKeys(todayAsString);
+
+        //Application Type
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='applicantSubtype']")));
+        ElementClickHelper.clickElement(driver, element);
+
+        element = driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//*[contains(text(), 'Municipality')]")));
+        element.click();
+
+        //Check 90% displayed
+        WebElement elementVal = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='estimatedPercent']")));
+        String value = elementVal.getAttribute("value");
+        if ("90".equals(value)) {
+            System.out.println("The text box contains 90");
+        } else {
+            System.out.println("The text box does not contain 90");
+        }
+
+        //If there was opportunity to receive guidance and support in assessing your damaged infrastructure, would you like to receive this support?*
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[type='radio'][value='true']")));
+        ElementClickHelper.clickElement(driver, element);
+
+        //Other Contact
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' + Add Other Contact ')]")));
+        ElementClickHelper.clickElement(driver, element);
+
+        //New Other Contact
+        Map<String, String> formFields = new HashMap<>();
+        formFields.put("firstName", "TestFirstName");
+        formFields.put("lastName", "TestLastName");
+        formFields.put("phoneNumber", "999-999-9999");
+        formFields.put("email", "test@test.com");
+
+        fillFormFields(driverWait, formFields);
+
+        //Save Other Contact
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Save ')]")));
+        ElementClickHelper.clickElement(driver, element);
+
+        //Click on Next
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Next - Review Submission ')]")));
+        ElementClickHelper.clickElement(driver, element);
+
+        //Check Review page
+        String[] valuesToCheck = {" " + randomChars + " ", yesterdayAsString, todayAsString, "Municipality", "TestFirstName  ", " TestLastName ", " 999-999-9999 "};
+        for (String insertValues : valuesToCheck) {
+            if (PageContentChecker.isValuePresentInBody(driver, insertValues)) {
+                System.out.println("The body contains: " + insertValues);
+            } else {
+                System.out.println("The body does not contain: " + insertValues);
+            }
+        }
+        //Submit
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit ')]")));
+        ElementClickHelper.clickElement(driver, element);
+        //Submit Application Confirmation
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to submit my application. ')]")));
+        element.click();
+
+        //Check success message
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Your application has been submitted. ')]")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Back To Dashboard ')]")));
+        element.click();
+
+        //Check Dashboard
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("spnCauseOfDamage")));
+        if (element.getText().contains(randomChars)) {
+            System.out.println("The body contains: " + randomChars);
+        } else {
+            System.out.println("The body does not contain: " + randomChars);
+            fail("The body does not contain the expected randomChars value.");
+        }
+    }
+
+    private void fillFormFields(WebDriverWait driverWait, Map<String, String> formFields) {
+        for (Map.Entry<String, String> entry : formFields.entrySet()) {
+            WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='" + entry.getKey() + "']")));
+            element.sendKeys(entry.getValue());
+        }
     }
 }
