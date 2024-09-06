@@ -1,4 +1,5 @@
 import dfa.CustomWebDriverManager;
+import dfa.ElementClickHelper;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -7,13 +8,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
-
 import static dfa.CustomWebDriverManager.getDriver;
 
 public class CreateNewApplicationPublic {
