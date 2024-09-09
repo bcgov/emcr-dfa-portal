@@ -74,15 +74,7 @@ public class CustomWebDriverManager {
             WebDriverManager.iedriver().setup();
             WebDriver driver = new InternetExplorerDriver(options);
             driver.manage().window().maximize();
-
-            // Create the DesiredCapability object of InternetExplorer
-            //DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
-
-            // Settings to Accept the SSL Certificate in the Capability object
-            //capabilities.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
-
-            // driver.get("URL for which certificate error is coming");
-            driver.get("https://tst-apply.educationplannerbc.ca/account/create" + "/account/login");
+            return driver;
 
         } else if (Config.SELECTED_DRIVER.equals(Constants.EDGE_DRIVER)) {
 
@@ -91,7 +83,7 @@ public class CustomWebDriverManager {
             // options.addArguments("headless");
             WebDriverManager.iedriver().setup();
             WebDriver driver = new EdgeDriver(options);
-            driver.manage().window();
+            driver.manage().window().maximize();
             return driver;
 
         }
