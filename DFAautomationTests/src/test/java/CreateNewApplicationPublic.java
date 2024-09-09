@@ -186,6 +186,7 @@ public class CreateNewApplicationPublic {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit ')]")));
         ElementClickHelper.clickElement(driver, element);
     }
+
     public void nextReviewSubmission(WebDriver driver, WebDriverWait driverWait) {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Next - Review Submission ')]")));
         ElementClickHelper.clickElement(driver, element);

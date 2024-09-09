@@ -10,3 +10,4 @@
 # Angular local environment files
 **/environment.local.ts
 DFAautomationTests/bin/chromedriver.exe
+config.properties

@@ -2,7 +2,8 @@ package dfa;
 
 public class Config {
     public static final String SELECTED_DRIVER = Constants.CHROME_DRIVER;    //the driver that will be used for the tests
-    public static final String ENVIRONMENT = Constants.DEV_Public;
+    public static final String ENVIRONMENT = Constants.TST_Public;
+    public static final String ENVIRONMENT_Dynamics = Constants.TST_DynamicsPub;
 
 
     public static String TEST_SCENARIO = Constants.NOT_SET;

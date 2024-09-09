@@ -58,7 +58,7 @@ public class LoginPublicPortal {
         element.click();
         //Display notice of Collention
         new WebDriverWait(driver, Duration.ofSeconds(60)).until(
-                ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'BC Provincial Gov DFA DEV Testing')]")));
+                ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Disaster Financial Assistance')]")));
 
     }
 }
