@@ -48,10 +48,8 @@ public class SubmitApplicationsRAFT {
         loginDynamicsPublic.test();
 
         // Navigate to "App Applications"
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'App Applications')]")));
-        js.executeScript("arguments[0].scrollIntoView(true);", element);
-        js.executeScript("arguments[0].click();", element);
-        Thread.sleep(1000);
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'App Applications')]"));
+
         // Interact with "Active AppApplications for Public Sector"
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-haspopup='true'][title='Select a view']")));
         System.out.println("Element found: " + element.isDisplayed()); // Log element visibility
