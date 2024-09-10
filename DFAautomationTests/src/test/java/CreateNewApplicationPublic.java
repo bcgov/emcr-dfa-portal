@@ -17,22 +17,18 @@ import java.util.*;
 import static dfa.CustomWebDriverManager.getDriver;
 import static org.junit.Assert.fail;
 
+// CreateNewApplicationPublic.java
 public class CreateNewApplicationPublic {
-
     private WebDriver driver;
+    private String randomChars;
 
-
-    @After
-    public void tearDown() {
-        driver.close();
-        driver.quit();
+    public String getRandomChars() {
+        return randomChars;
     }
 
-    @AfterClass
-    public static void afterClass() {
-        CustomWebDriverManager.instance = null;
+    public void setRandomChars(String randomChars) {
+        this.randomChars = randomChars;
     }
-
 
     @Test
     public void test() throws Exception {
@@ -41,16 +37,14 @@ public class CreateNewApplicationPublic {
         WebElement element;
         CustomWebDriverManager.getElements();
 
-
         LoginPublicPortal loginPublicPortal = new LoginPublicPortal();
         loginPublicPortal.test();
 
-        //Create New application
-        element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Create a New Application ')]")));
+        // Create New application
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Create a New Application ')]")));
         element.click();
 
-        //Select dates
+        // Select dates
         Calendar calendar = Calendar.getInstance();
         Date today = calendar.getTime();
 
@@ -65,7 +59,7 @@ public class CreateNewApplicationPublic {
         System.out.println(todayAsString);
         System.out.println(yesterdayAsString);
 
-        //Select cause of damage
+        // Select cause of damage
         Thread.sleep(1000);
         String[] checkboxIds = {
                 "mat-mdc-checkbox-1-input",
@@ -75,7 +69,6 @@ public class CreateNewApplicationPublic {
                 "mat-mdc-checkbox-5-input"
         };
 
-
         for (String id : checkboxIds) {
             element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id(id)));
             ElementClickHelper.clickElement(driver, element);
@@ -83,18 +76,20 @@ public class CreateNewApplicationPublic {
 
         Random r = new Random();
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder randomChars = new StringBuilder();
+        StringBuilder randomCharsBuilder = new StringBuilder();
 
         for (int i = 0; i < 100; i++) {
-            randomChars.append(alphabet.charAt(r.nextInt(alphabet.length())));
+            randomCharsBuilder.append(alphabet.charAt(r.nextInt(alphabet.length())));
         }
+
+        setRandomChars(randomCharsBuilder.toString());
 
         // Cause of damage
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='otherDamageText']")));
         element.clear();
-        element.sendKeys(randomChars.toString());
+        element.sendKeys(getRandomChars());
 
-        //Date of damage
+        // Date of damage
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='damageFromDate']")));
         element.clear();
         element.sendKeys(yesterdayAsString);
@@ -103,15 +98,14 @@ public class CreateNewApplicationPublic {
         element.clear();
         element.sendKeys(todayAsString);
 
-        //Application Type
+        // Application Type
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='applicantSubtype']")));
         ElementClickHelper.clickElement(driver, element);
 
-        element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), 'Municipality')]")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Municipality')]")));
         element.click();
 
-        //Check 90% displayed
+        // Check 90% displayed
         WebElement elementVal = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='estimatedPercent']")));
         String value = elementVal.getAttribute("value");
         if ("90".equals(value)) {
@@ -120,15 +114,15 @@ public class CreateNewApplicationPublic {
             System.out.println("The text box does not contain 90");
         }
 
-        //If there was opportunity to receive guidance and support in assessing your damaged infrastructure, would you like to receive this support?*
+        // If there was opportunity to receive guidance and support in assessing your damaged infrastructure, would you like to receive this support?*
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[type='radio'][value='true']")));
         ElementClickHelper.clickElement(driver, element);
 
-        //Other Contact
+        // Other Contact
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' + Add Other Contact ')]")));
         ElementClickHelper.clickElement(driver, element);
 
-        //New Other Contact
+        // New Other Contact
         Map<String, String> formFields = new HashMap<>();
         formFields.put("firstName", "TestFirstName");
         formFields.put("lastName", "TestLastName");
@@ -137,15 +131,15 @@ public class CreateNewApplicationPublic {
 
         fillFormFields(driverWait, formFields);
 
-        //Save Other Contact
+        // Save Other Contact
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Save ')]")));
         ElementClickHelper.clickElement(driver, element);
 
-        //Click on Next
+        // Click on Next
         nextReviewSubmission(driver, driverWait);
 
-        //Check Review page
-        String[] valuesToCheck = {" " + randomChars + " ", yesterdayAsString, todayAsString, "Municipality", "TestFirstName  ", " TestLastName ", " 999-999-9999 "};
+        // Check Review page
+        String[] valuesToCheck = {" " + getRandomChars() + " ", yesterdayAsString, todayAsString, "Municipality", "TestFirstName  ", " TestLastName ", " 999-999-9999 "};
         for (String insertValues : valuesToCheck) {
             if (PageContentChecker.isValuePresentInBody(driver, insertValues)) {
                 System.out.println("The body contains: " + insertValues);
@@ -153,23 +147,23 @@ public class CreateNewApplicationPublic {
                 System.out.println("The body does not contain: " + insertValues);
             }
         }
-        //Submit
+        // Submit
         clickSubmitButton(driver, driverWait);
-        //Submit Application Confirmation
+        // Submit Application Confirmation
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to submit my application. ')]")));
         element.click();
 
-        //Check success message
+        // Check success message
         driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Your application has been submitted. ')]")));
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Back To Dashboard ')]")));
         element.click();
 
-        //Check Dashboard
+        // Check Dashboard
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("spnCauseOfDamage")));
-        if (element.getText().contains(randomChars)) {
-            System.out.println("The body contains: " + randomChars);
+        if (element.getText().contains(getRandomChars())) {
+            System.out.println("The body contains: " + getRandomChars());
         } else {
-            System.out.println("The body does not contain: " + randomChars);
+            System.out.println("The body does not contain: " + getRandomChars());
             fail("The body does not contain the expected randomChars value.");
         }
     }
@@ -179,7 +173,6 @@ public class CreateNewApplicationPublic {
             WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='" + entry.getKey() + "']")));
             element.sendKeys(entry.getValue());
         }
-
     }
 
     public void clickSubmitButton(WebDriver driver, WebDriverWait driverWait) {
