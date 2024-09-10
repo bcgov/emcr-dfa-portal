@@ -1,4 +1,5 @@
 import dfa.CustomWebDriverManager;
+import dfa.ElementInteractionHelper;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -69,9 +70,7 @@ public class SubmitApplicationsRAFT {
         }
 
         // Interact with "Draft App Applications for Public Sector"
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Draft App Applications for Public Sector')]")));
-        js.executeScript("arguments[0].scrollIntoView(true);", element);
-        js.executeScript("arguments[0].click();", element);
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Draft App Applications for Public Sector')]"));
 
     }
 }
