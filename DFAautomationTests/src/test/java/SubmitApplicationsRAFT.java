@@ -1,4 +1,5 @@
 import dfa.CustomWebDriverManager;
+import dfa.ElementClickHelper;
 import dfa.ElementInteractionHelper;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -144,8 +145,7 @@ public class SubmitApplicationsRAFT {
         element.sendKeys(caseTitleWithTimestamp);
         System.out.println("Case Title with timestamp: " + caseTitleWithTimestamp);
         Thread.sleep(1000);
-//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Save'][title^='Save (CTRL+S)']")));
-//        element.click();
+
         long timestampLegalName = System.currentTimeMillis();
         String legalName = "Legal Name";
         String legalNameWithTimestamp = legalName + " " + timestampLegalName;
@@ -154,6 +154,39 @@ public class SubmitApplicationsRAFT {
         element.sendKeys(legalNameWithTimestamp);
         System.out.println("Legal Name with timestamp: " + legalNameWithTimestamp);
 
+        //Confirmed event
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Confirmed Event, Lookup'][type='text']")));
+        element.click();
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), '2000-01')]")));
+        element.click();
+        Thread.sleep(1000);
+        //Confirm Effected region
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Confirmed Effected Region/Community, Lookup'][type='text']")));
+        element.click();
+        element.sendKeys("District Municipality of 100 Mile House");
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'District Municipality of 100 Mile House')]")));
+        element.click();
+        Thread.sleep(1000);
+        clickSaveButton(driver, driverWait);
+        Thread.sleep(1000);
+        //Confirm Primary Contact
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[6]/div/div/div[2]/div/div[3]/div[2]/div/div[2]/div[1]/div/div[1]/div/input")));
+        element.sendKeys("Alexandra Strong");
+        //element.sendKeys("Alexandra Strong");
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Alexandra Strong')]")));
+        element.click();
+        Thread.sleep(1000);
+        clickSaveButton(driver, driverWait);
+        Thread.sleep(1000);
+        //Approve
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Review Status'][title^='Open']")));
+        element.click();
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Approved')]")));
+        element.click();
+        System.out.println("Switched to Approve status");
+        //Save
+        clickSaveButton(driver, driverWait);
+
     }
 
     public static void clickElementMultipleTimes(WebDriver driver, WebDriverWait driverWait, By locator, int times, int delayMillis) throws InterruptedException {
@@ -161,6 +194,10 @@ public class SubmitApplicationsRAFT {
             ElementInteractionHelper.scrollAndClickElement(driver, driverWait, locator);
             sleep(delayMillis);
         }
+    }
+    public void clickSaveButton(WebDriver driver, WebDriverWait driverWait) {
+        WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Save'][title^='Save (CTRL+S)']")));
+        element.click();
     }
 }
 
