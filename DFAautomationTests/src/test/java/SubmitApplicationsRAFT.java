@@ -18,18 +18,27 @@ import static java.lang.Thread.*;
 public class SubmitApplicationsRAFT {
 
     private WebDriver driver;
+    private String caseNumber;
+
+    public String getCaseNumber() {
+        return caseNumber;
+    }
+
+    public void setCaseNumber(String caseNumber) {
+        this.caseNumber = caseNumber;
+    }
 
 
-//    @After
-//    public void tearDown() {
-//        driver.close();
-//        driver.quit();
-//    }
-//
-//    @AfterClass
-//    public static void afterClass() {
-//        CustomWebDriverManager.instance = null;
-//    }
+    @After
+    public void tearDown() {
+        driver.close();
+        driver.quit();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        CustomWebDriverManager.instance = null;
+    }
 
 
     @Test
@@ -222,6 +231,13 @@ public class SubmitApplicationsRAFT {
         element.click();
         clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 2, 1000);
 
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='ID'][type^='text']")));
+        String caseNumber = element.getText();
+        if (caseNumber.isEmpty()) {
+            caseNumber = element.getAttribute("value");
+        }
+        setCaseNumber(caseNumber);
+        System.out.println("Case Number: " + getCaseNumber());
 
     }
 

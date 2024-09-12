@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class CommonUtils {
 
-    private static final Map<String, String> environmentUrls = new HashMap<>();
+    public static final Map<String, String> environmentUrls = new HashMap<>();
 
     static {
         environmentUrls.put(Constants.DEV, "https://dfa-portal-dev.apps.silver.devops.gov.bc.ca/");
