@@ -178,6 +178,18 @@ public class SubmitApplicationsRAFT {
         Thread.sleep(1000);
         clickSaveButton(driver, driverWait);
         Thread.sleep(1000);
+
+        //Damaged Property city
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='TO DELETE: Damaged Property: City, Lookup'][type='text']")));
+        element.click();
+        element.sendKeys("Oak");
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Oak Bay')]")));
+        element.click();
+
+        Thread.sleep(1000);
+        clickSaveButton(driver, driverWait);
+        Thread.sleep(1000);
+
         //Approve
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Review Status'][title^='Open']")));
         element.click();
@@ -185,7 +197,31 @@ public class SubmitApplicationsRAFT {
         element.click();
         System.out.println("Switched to Approve status");
         //Save
+        Thread.sleep(1000);
         clickSaveButton(driver, driverWait);
+        Thread.sleep(1000);
+
+        //Review Application
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("MscrmControls.Containers.ProcessBreadCrumb-stageStatusLabel")));
+        element.click();
+        Thread.sleep(4000);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'General')]")));
+        element.click();
+        Thread.sleep(4000);
+        //Review Application
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("MscrmControls.Containers.ProcessBreadCrumb-stageStatusLabel")));
+        element.click();
+
+        clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
+
+        //Click Case title
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), '" + caseTitleWithTimestamp + "')]")));
+        element.click();
+        System.out.println("Case title clicked: " + caseTitleWithTimestamp);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("okButton")));
+        element.click();
+        clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 2, 1000);
+
 
     }
 
@@ -195,6 +231,7 @@ public class SubmitApplicationsRAFT {
             sleep(delayMillis);
         }
     }
+
     public void clickSaveButton(WebDriver driver, WebDriverWait driverWait) {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Save'][title^='Save (CTRL+S)']")));
         element.click();
