@@ -48,7 +48,6 @@ public class SubmitClaimsPublic {
         if (url != null) {
             driver.get(url);
             driver.navigate().to(url);
-            driver.navigate().refresh();
         } else {
             throw new IllegalArgumentException("Unknown environment: " + Config.ENVIRONMENT_Dynamics);
         }
