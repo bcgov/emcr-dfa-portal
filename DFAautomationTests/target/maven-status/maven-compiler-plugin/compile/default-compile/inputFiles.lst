@@ -1,9 +1,12 @@
 C:\Workspace\emcr-dfa-portal\DFAautomationTests\src\main\java\dfa\Atest.java
 C:\Workspace\emcr-dfa-portal\DFAautomationTests\src\main\java\dfa\WaitTool.java
+C:\Workspace\emcr-dfa-portal\DFAautomationTests\src\main\java\dfa\ElementClickHelper.java
 C:\Workspace\emcr-dfa-portal\DFAautomationTests\src\main\java\dfa\Concurent.java
 C:\Workspace\emcr-dfa-portal\DFAautomationTests\src\main\java\dfa\CommonUtils.java
 C:\Workspace\emcr-dfa-portal\DFAautomationTests\src\main\java\dfa\ConcurrentSuite.java
 C:\Workspace\emcr-dfa-portal\DFAautomationTests\src\main\java\dfa\CustomWebDriverManager.java
 C:\Workspace\emcr-dfa-portal\DFAautomationTests\src\main\java\dfa\Config.java
 C:\Workspace\emcr-dfa-portal\DFAautomationTests\src\main\java\dfa\Constants.java
+C:\Workspace\emcr-dfa-portal\DFAautomationTests\src\main\java\dfa\ElementInteractionHelper.java
 C:\Workspace\emcr-dfa-portal\DFAautomationTests\src\main\java\dfa\ConcurrentJunitRunner.java
+C:\Workspace\emcr-dfa-portal\DFAautomationTests\src\main\java\dfa\PageContentChecker.java

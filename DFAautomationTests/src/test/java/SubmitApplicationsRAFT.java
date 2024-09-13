@@ -239,6 +239,11 @@ public class SubmitApplicationsRAFT {
         setCaseNumber(caseNumber);
         System.out.println("Case Number: " + getCaseNumber());
 
+        //Case in progress Save and Close
+        Thread.sleep(1000);
+        clickSaveButton(driver, driverWait);
+        Thread.sleep(1000);
+
     }
 
     public static void clickElementMultipleTimes(WebDriver driver, WebDriverWait driverWait, By locator, int times, int delayMillis) throws InterruptedException {
