@@ -19,17 +19,28 @@ import static org.junit.Assert.fail;
 public class CreateNewProjectPublic {
 
     private WebDriver driver;
+private static String randomProjectNumber;
 
 
-    @After
-    public void tearDown() {
-        driver.close();
-        driver.quit();
+
+
+
+    public static String getRandomProjectNumber() {
+        return randomProjectNumber;
+    }
+
+    public static void setRandomProjectNumber(String randomProjectNumber) {
+        CreateNewProjectPublic.randomProjectNumber = randomProjectNumber;
     }
 
     @AfterClass
     public static void afterClass() {
         CustomWebDriverManager.instance = null;
+    }
+    @After
+    public void tearDown() {
+        driver.close();
+        driver.quit();
     }
 
 
@@ -68,6 +79,7 @@ public class CreateNewProjectPublic {
         String randomProjectNumber = RandomStringGenerator.generateRandomAlphanumeric(10);
         System.out.println("Project Number is: " + randomProjectNumber);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("projectNumber")));
+        setRandomProjectNumber(randomProjectNumber);
 
         // Scroll into view if necessary
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
@@ -114,7 +126,6 @@ public class CreateNewProjectPublic {
         fillFormField(driverWait, "[formcontrolname='repairDamagedInfrastructure'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumeric(2000));
         fillFormField(driverWait, "[formcontrolname='estimateCostIncludingTax'][maxlength='100']", RandomIntGenerator.generateRandomInt(7));
         fillFormField(driverWait, "[formcontrolname='estimatedCompletionDate'][aria-haspopup='dialog']", dateUtils.getInOneYearAsString());
-
 
         //Click Next
         Thread.sleep(1000);

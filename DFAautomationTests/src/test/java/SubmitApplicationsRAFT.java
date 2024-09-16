@@ -17,17 +17,27 @@ import static java.lang.Thread.*;
 
 public class SubmitApplicationsRAFT {
 
-    private WebDriver driver;
-    private String caseNumber;
 
-    public String getCaseNumber() {
+    private WebDriver driver;
+    private static String caseTitleWithTimestamp;
+    private static String caseNumber;
+
+
+    public static String getCaseTitleWithTimestamp() {
+        return caseTitleWithTimestamp;
+    }
+
+    public static void setCaseTitleWithTimestamp(String caseTitleWithTimestamp) {
+        SubmitApplicationsRAFT.caseTitleWithTimestamp = caseTitleWithTimestamp;
+    }
+
+    public static String getCaseNumber() {
         return caseNumber;
     }
 
     public void setCaseNumber(String caseNumber) {
         this.caseNumber = caseNumber;
     }
-
 
     @After
     public void tearDown() {
@@ -93,6 +103,14 @@ public class SubmitApplicationsRAFT {
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='LG - '][tabindex='-1']")));
         element.click();
 
+        //Primary contact
+        //Assign to
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Assigned To, Lookup'][type='text']")));
+        element.click();
+        element.sendKeys("test");
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'EMBC DFA Test')]")));
+        element.click();
+
         String ariaLabel = "Primary Contact, Lookup";
         String role = "combobox";
 
@@ -147,12 +165,13 @@ public class SubmitApplicationsRAFT {
         // Define the case title
         String caseTitle = "Case Title";
         // Concatenate the timestamp with the case title
-        String caseTitleWithTimestamp = caseTitle + " " + timestamp;
+        String CaseTitleWithTimestamp = caseTitle + " " + timestamp;
+        setCaseTitleWithTimestamp(CaseTitleWithTimestamp);
         // Locate the case title input field and set its value
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Case Title'][type='text']")));
         element.click();
-        element.sendKeys(caseTitleWithTimestamp);
-        System.out.println("Case Title with timestamp: " + caseTitleWithTimestamp);
+        element.sendKeys(CaseTitleWithTimestamp);
+        System.out.println("Case Title with timestamp: " + CaseTitleWithTimestamp);
         Thread.sleep(1000);
 
         long timestampLegalName = System.currentTimeMillis();
@@ -179,7 +198,7 @@ public class SubmitApplicationsRAFT {
         clickSaveButton(driver, driverWait);
         Thread.sleep(1000);
         //Confirm Primary Contact
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[6]/div/div/div[2]/div/div[3]/div[2]/div/div[2]/div[1]/div/div[1]/div/input")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[6]/div/div/div[2]/div/div/div[2]/div/div[2]/div[1]/div/div[1]/div/input")));
         element.sendKeys("Alexandra Strong");
         //element.sendKeys("Alexandra Strong");
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Alexandra Strong')]")));
@@ -200,7 +219,7 @@ public class SubmitApplicationsRAFT {
         Thread.sleep(1000);
 
         //Approve
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Review Status'][title^='Open']")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='presentation'][title^='In-Review']")));
         element.click();
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Approved')]")));
         element.click();
@@ -224,9 +243,9 @@ public class SubmitApplicationsRAFT {
         clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
 
         //Click Case title
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), '" + caseTitleWithTimestamp + "')]")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), '" + CaseTitleWithTimestamp + "')]")));
         element.click();
-        System.out.println("Case title clicked: " + caseTitleWithTimestamp);
+        System.out.println("Case title clicked: " + CaseTitleWithTimestamp);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("okButton")));
         element.click();
         clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 2, 1000);
@@ -253,10 +272,11 @@ public class SubmitApplicationsRAFT {
         }
     }
 
-    public void clickSaveButton(WebDriver driver, WebDriverWait driverWait) {
+    public static void clickSaveButton(WebDriver driver, WebDriverWait driverWait) {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Save'][title^='Save (CTRL+S)']")));
         element.click();
     }
 }
+
 
 
