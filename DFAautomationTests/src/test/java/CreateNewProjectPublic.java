@@ -18,7 +18,7 @@ import static org.junit.Assert.fail;
 
 public class CreateNewProjectPublic {
 
-    private WebDriver driver;
+    private static WebDriver driver;
 private static String randomProjectNumber;
 
 
@@ -214,7 +214,7 @@ private static String randomProjectNumber;
         element.sendKeys(value);
     }
 
-    private void clickElementWithRetry(WebDriverWait driverWait, By locator) {
+    static void clickElementWithRetry(WebDriverWait driverWait, By locator) {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
         element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
@@ -228,13 +228,13 @@ private static String randomProjectNumber;
         }
     }
 
-    private void uploadFile(WebDriverWait driverWait, String elementId, String filePath) throws InterruptedException {
+    public static void uploadFile(WebDriverWait driverWait, String elementId, String filePath) throws InterruptedException {
         WebElement fileInput = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id(elementId)));
         fileInput.sendKeys(filePath);
         Thread.sleep(1000);
     }
 
-    private void clickElementWithRetryforDocSave(WebDriverWait driverWait, By locator) throws InterruptedException {
+    public static void clickElementWithRetryforDocSave(WebDriverWait driverWait, By locator) throws InterruptedException {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
         element = driverWait.until(ExpectedConditions.elementToBeClickable(element));

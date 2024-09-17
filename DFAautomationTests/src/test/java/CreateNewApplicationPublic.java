@@ -175,7 +175,7 @@ public class CreateNewApplicationPublic {
         }
     }
 
-    public void clickSubmitButton(WebDriver driver, WebDriverWait driverWait) {
+    public static void clickSubmitButton(WebDriver driver, WebDriverWait driverWait) {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit ')]")));
         ElementClickHelper.clickElement(driver, element);
     }
