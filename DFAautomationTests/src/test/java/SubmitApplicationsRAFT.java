@@ -147,7 +147,7 @@ public class SubmitApplicationsRAFT {
             System.out.println("XPath used: " + xpathExpression);
         }
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Save')]"));
-        sleep(1000);
+        sleep(3000);
         //Click Draft
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='Draft'][role='presentation']")));
         element.click();

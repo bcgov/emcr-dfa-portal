@@ -97,7 +97,7 @@ public class SubmitClaimsPublic {
         SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='checkbox'][title='Pending']")));
         element.click();
-        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 7, 1000);
+        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 3, 1000);
         Thread.sleep(1000);
         SubmitApplicationsRAFT.clickSaveButton(driver, driverWait);
         Thread.sleep(1000);
@@ -113,10 +113,10 @@ public class SubmitClaimsPublic {
         Thread.sleep(1000);
 
         //Decision made
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='presentation'][title='Decision Made']")));
-        element.click();
-        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
-        Thread.sleep(1000);
+//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='presentation'][title='Decision Made']")));
+//        element.click();
+//        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
+//        Thread.sleep(1000);
         SubmitApplicationsRAFT.clickSaveButton(driver, driverWait);
         Thread.sleep(1000);
 
@@ -143,10 +143,79 @@ public class SubmitClaimsPublic {
         element = driverWait.until(ExpectedConditions
                 .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to proceed. ')]")));
         element.click();
-        driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to proceed. ')]")));
+
 
         System.out.println("Claim number: " + getClaimNumberText());
+
+        //Check text
+        driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Please review and complete the form below. You may start a claim, save it, and continue to add to it later. Required fields are marked with a red asterisk ')]")));
+
+        //Click Next - add invoice
+        element = driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Next - Add Invoices ')]")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+        int attempts = 0;
+        while (attempts < 3) {
+            try {
+                element.click();
+                break;
+            } catch (org.openqa.selenium.ElementNotInteractableException e) {
+                Thread.sleep(500); // Adjust the sleep time as necessary
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+                element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+            }
+            attempts++;
+        }
+
+        //Click add invoices
+        element = driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' + Add Invoice ')]")));
+        element.click();
+
+        //Add invoice details
+        DateUtils dateUtils = new DateUtils();
+        dateUtils.setTodayAsString(DateUtils.getFormattedDates().get("today"));
+        fillFormField(driverWait, "[formcontrolname='vendorName'][maxlength='100']", RandomStringGenerator.generateRandomAlphanumeric(100));
+        fillFormField(driverWait, "[formcontrolname='invoiceNumber'][maxlength='100']", RandomStringGenerator.generateRandomAlphanumeric(100));
+        fillFormField(driverWait, "[formcontrolname='invoiceDate'][aria-haspopup='dialog']", dateUtils.getTodayAsString());
+        fillFormField(driverWait, "[formcontrolname='purposeOfGoodsServiceReceived'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumeric(2000));
+        fillFormField(driverWait, "[formcontrolname='netInvoiceBeingClaimed'][maxlength='100']", RandomIntGenerator.generateRandomInt(6));
+        fillFormField(driverWait, "[formcontrolname='pst'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
+        fillFormField(driverWait, "[formcontrolname='grossGST'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
+
+        //Check rdo buttons
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("mat-radio-8-input")));
+        element.click();
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("mat-radio-12-input")));
+        element.click();
+
+        //Click Add
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".button-p.add-invoice.ng-star-inserted")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+
+        int attempts1 = 0;
+        while (attempts1 < 3) {
+            try {
+                element.click();
+                break;
+            } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+                Thread.sleep(500); // Adjust the sleep time as necessary
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+                element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+            } catch (org.openqa.selenium.ElementNotInteractableException e) {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+                break;
+            }
+            attempts1++;
+        }
+
+
+
+
+
 
     }
 
@@ -178,6 +247,24 @@ public class SubmitClaimsPublic {
         WebDriverWait driverWait = CustomWebDriverManager.getDriverWait();
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("claimNumber")));
         return element.getText();
+    }
+    private void fillFormField(WebDriverWait driverWait, String cssSelector, String value) throws InterruptedException {
+        WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(cssSelector)));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+        int attempts = 0;
+        while (attempts < 3) {
+            try {
+                element.clear();
+                element.sendKeys(value);
+                break;
+            } catch (org.openqa.selenium.ElementNotInteractableException e) {
+                Thread.sleep(500); // Adjust the sleep time as necessary
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+                element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+            }
+            attempts++;
+        }
     }
 }
 
