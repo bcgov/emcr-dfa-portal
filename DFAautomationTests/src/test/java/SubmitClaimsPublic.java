@@ -18,19 +18,28 @@ import static java.lang.Thread.sleep;
 
 public class SubmitClaimsPublic {
 
-    private WebDriver driver;
+    private static WebDriver driver;
+    private static String vendorName;
+
+    public static String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
 
 
-//    @After
-//    public void tearDown() {
-//        driver.close();
-//        driver.quit();
-//    }
-//
-//    @AfterClass
-//    public static void afterClass() {
-//        CustomWebDriverManager.instance = null;
-//    }
+    @After
+    public void tearDown() {
+        driver.close();
+        driver.quit();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        CustomWebDriverManager.instance = null;
+    }
 
 
     @Test
@@ -109,11 +118,6 @@ public class SubmitClaimsPublic {
         SubmitApplicationsRAFT.clickSaveButton(driver, driverWait);
         Thread.sleep(1000);
 
-        //Decision made
-//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='presentation'][title='Decision Made']")));
-//        element.click();
-//        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
-//        Thread.sleep(1000);
         SubmitApplicationsRAFT.clickSaveButton(driver, driverWait);
         Thread.sleep(1000);
 
@@ -155,13 +159,19 @@ public class SubmitClaimsPublic {
         //Add invoice details
         DateUtils dateUtils = new DateUtils();
         dateUtils.setTodayAsString(DateUtils.getFormattedDates().get("today"));
-        fillFormField(driverWait, "[formcontrolname='vendorName'][maxlength='100']", RandomStringGenerator.generateRandomAlphanumeric(100));
+        setVendorName(RandomStringGenerator.generateRandomAlphanumeric(100));
+
+// Use the getter method to retrieve and use the vendorName value
+        fillFormField(driverWait, "[formcontrolname='vendorName'][maxlength='100']", getVendorName());
+        System.out.println("Vendor name is: " + getVendorName());
         fillFormField(driverWait, "[formcontrolname='invoiceNumber'][maxlength='100']", RandomIntGenerator.generateRandomInt(100));
         fillFormField(driverWait, "[formcontrolname='invoiceDate'][aria-haspopup='dialog']", dateUtils.getTodayAsString());
-        fillFormField(driverWait, "[formcontrolname='purposeOfGoodsServiceReceived'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumeric(200));
+        fillFormField(driverWait, "[formcontrolname='purposeOfGoodsServiceReceived'][maxlength='200']", RandomStringGenerator.generateRandomAlphanumeric(200));
         fillFormField(driverWait, "[formcontrolname='netInvoiceBeingClaimed'][maxlength='100']", RandomIntGenerator.generateRandomInt(6));
         fillFormField(driverWait, "[formcontrolname='pst'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
         fillFormField(driverWait, "[formcontrolname='grossGST'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
+
+
 
         //Check rdo buttons
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("mat-radio-8-input")));
@@ -176,7 +186,7 @@ public class SubmitClaimsPublic {
         element = driverWait.until(ExpectedConditions
                 .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Next - Upload Documents ')]")));
         element.click();
-
+        Thread.sleep(1000);
         clickElementWithRetry(driverWait, By.xpath("//*[contains(text(), ' + Add Invoices ')]"));
         // Upload docs
         Thread.sleep(1000);
@@ -215,6 +225,7 @@ public class SubmitClaimsPublic {
         Thread.sleep(1000);
         actions.moveToElement(driver.findElement(By.tagName("body")), 0, 0).clickAndHold().perform();
         Thread.sleep(1000);
+
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/app-root/div/main/div/app-dfa-claim-main/div/mat-horizontal-stepper/div/div[2]/div[4]/div/div[2]/button/span[4]")));
 
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
@@ -236,7 +247,7 @@ public class SubmitClaimsPublic {
         if (attempts == 3) {
             System.out.println("Failed to click the Submit button after " + attempts + " attempts");
         }
-        Thread.sleep(1000);
+       // Thread.sleep(1000);
         element = driverWait.until(ExpectedConditions
                 .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to submit the claim. ')]")));
         element.click();
@@ -284,7 +295,7 @@ public class SubmitClaimsPublic {
             attempts++;
         }
     }
-    private void clickElementWithRetry(WebDriverWait driverWait, By locator) throws InterruptedException {
+    public static void clickElementWithRetry(WebDriverWait driverWait, By locator) throws InterruptedException {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
         element = driverWait.until(ExpectedConditions.visibilityOf(element));

@@ -1,3 +1,5 @@
+import dfa.Config;
+import dfa.Constants;
 import dfa.CustomWebDriverManager;
 import dfa.ElementClickHelper;
 import dfa.ElementInteractionHelper;
@@ -75,21 +77,8 @@ public class SubmitApplicationsRAFT {
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'App Applications')]"));
         sleep(1000);
         // Interact with "Active AppApplications for Public Sector"
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-haspopup='true'][title='Select a view']")));
-        System.out.println("Element found: " + element.isDisplayed()); // Log element visibility
-        element = driverWait.until(ExpectedConditions.visibilityOf(element));
-        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
-
-        if (element.isDisplayed() && element.isEnabled()) {
-            js.executeScript("arguments[0].scrollIntoView(true);", element);
-            try {
-                js.executeScript("arguments[0].click();", element);
-            } catch (Exception e) {
-                actions.moveToElement(element).click().perform();
-            }
-        } else {
-            System.out.println("Element is not interactable: " + element);
-        }
+        // Usage example in your test method
+        clickElementWithJS(driverWait, js, actions, By.cssSelector("[aria-haspopup='true'][title='Select a view']"));
 
         // Interact with "Draft App Applications for Public Sector"
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Draft App Applications for Public Sector')]"));
@@ -100,38 +89,62 @@ public class SubmitApplicationsRAFT {
 
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Sort Newest to Oldest')]"));
         sleep(1000);
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='LG - '][tabindex='-1']")));
+
+        // Determine the environment and set the appropriate CSS selector
+        String environmentName = Config.ENVIRONMENT_Dynamics; // Use the correct environment variable
+        String cssSelector;
+
+        if (Constants.DEV_DynamicsPub.equalsIgnoreCase(environmentName)) {
+            cssSelector = "[title='LG - BC Provincial Gov DFA DEV Testing'][tabindex='-1']";
+        } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentName)) {
+            cssSelector = "[title='LG - DFA_C'][tabindex='-1']";
+        } else {
+            throw new IllegalArgumentException("Unknown environment: " + environmentName);
+        }
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(cssSelector)));
         element.click();
 
-        //Primary contact
         //Assign to
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Assigned To, Lookup'][type='text']")));
         element.click();
         element.sendKeys("test");
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'EMBC DFA Test')]")));
+
+        // Determine the environment and set the appropriate XPath
+        String environmentAssingTo = Config.ENVIRONMENT_Dynamics; // Assume Config.ENVIRONMENT contains the environment name
+        String xpathExpressionAssingTo = null;
+
+        if (Constants.DEV_DynamicsPub.equalsIgnoreCase(environmentAssingTo)) {
+            xpathExpressionAssingTo = "//*[contains(text(), 'EMCR DFA Reporting BI Test')]";
+        } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentAssingTo)) {
+            xpathExpressionAssingTo = "//*[contains(text(), 'EMBC DFA Test')]";
+        } else {
+            throw new IllegalArgumentException("Unknown environment: " + environmentName);
+        }
+
+// Locate and click the element based on the environment
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathExpressionAssingTo)));
         element.click();
 
-        String ariaLabel = "Primary Contact, Lookup";
-        String role = "combobox";
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Primary Contact, Lookup'][role='combobox']")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        element.sendKeys(" PHSAPOC");
+        sleep(1000);
+        //Primary Contact
+        String environmentPrimaryContact = Config.ENVIRONMENT_Dynamics; // Use the correct environment variable
+        String xpathExpressionPrimaryContact;
 
-        try {
-            element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='" + ariaLabel + "'][role='" + role + "']")));
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-            element.sendKeys("abc");
-            element = driverWait.until(ExpectedConditions
-                    .elementToBeClickable(By.xpath("//*[contains(text(), 'cde, abc')]")));
-            element.click();
-            System.out.println("Element with aria-label 'Primary Contact, Lookup' and role 'combobox' clicked.");
-        } catch (TimeoutException e) {
-            System.out.println("TimeoutException: Element not found with aria-label: " + ariaLabel + " and role: " + role);
-            System.out.println("Current URL: " + driver.getCurrentUrl());
-            System.out.println("Page Source: " + driver.getPageSource());
-        } catch (NoSuchElementException e) {
-            System.out.println("NoSuchElementException: Element not found with aria-label: " + ariaLabel + " and role: " + role);
-            System.out.println("Current URL: " + driver.getCurrentUrl());
-            System.out.println("Page Source: " + driver.getPageSource());
+        if (Constants.DEV_DynamicsPub.equalsIgnoreCase(environmentPrimaryContact)) {
+            xpathExpressionPrimaryContact = "//*[contains(text(), 'EIGHT, PHSAPOC')]";
+        } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentPrimaryContact)) {
+            xpathExpressionPrimaryContact = "//*[contains(text(), 'EIGHT, PHSAPOC')]";
+        } else {
+            throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContact);
         }
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathExpressionPrimaryContact)));
+        element.click();
 
         // Check Other contact value exist
         String xpathExpression = String.format("//input[@type='text' and @value='%s']", randomChars);
@@ -174,35 +187,34 @@ public class SubmitApplicationsRAFT {
         System.out.println("Case Title with timestamp: " + CaseTitleWithTimestamp);
         Thread.sleep(1000);
 
-        long timestampLegalName = System.currentTimeMillis();
-        String legalName = "Legal Name";
-        String legalNameWithTimestamp = legalName + " " + timestampLegalName;
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[3]/div/div/div[2]/div/div/div[2]/div/div[2]/div[1]/div/input")));
-        element.click();
-        element.sendKeys(legalNameWithTimestamp);
-        System.out.println("Legal Name with timestamp: " + legalNameWithTimestamp);
-
-        //Confirmed event
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Confirmed Event, Lookup'][type='text']")));
-        element.click();
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), '2000-01')]")));
-        element.click();
         Thread.sleep(1000);
         //Confirm Effected region
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Confirmed Effected Region/Community, Lookup'][type='text']")));
         element.click();
-        element.sendKeys("District Municipality of 100 Mile House");
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'District Municipality of 100 Mile House')]")));
+        element.sendKeys("City of Burnaby");
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'City of Burnaby')]")));
         element.click();
         Thread.sleep(1000);
         clickSaveButton(driver, driverWait);
         Thread.sleep(1000);
         //Confirm Primary Contact
+        //To discuss
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[6]/div/div/div[2]/div/div/div[2]/div/div[2]/div[1]/div/div[1]/div/input")));
-        element.sendKeys("Alexandra Strong");
-        //element.sendKeys("Alexandra Strong");
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Alexandra Strong')]")));
+        element.sendKeys("PHSAPOC");
+        String environmentPrimaryContactConfirm = Config.ENVIRONMENT_Dynamics; // Use the correct environment variable
+        String xpathExpressionPrimaryContactConfirm;
+
+        if (Constants.DEV_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
+            xpathExpressionPrimaryContactConfirm = "//*[contains(text(), 'PHSAPOC FOUR')]";
+        } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
+            xpathExpressionPrimaryContactConfirm = "//*[contains(text(), 'GREGORY PHSAPOC')]";
+        } else {
+            throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactConfirm);
+        }
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathExpressionPrimaryContactConfirm)));
         element.click();
+
         Thread.sleep(1000);
         clickSaveButton(driver, driverWait);
         Thread.sleep(1000);
@@ -275,6 +287,23 @@ public class SubmitApplicationsRAFT {
     public static void clickSaveButton(WebDriver driver, WebDriverWait driverWait) {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Save'][title^='Save (CTRL+S)']")));
         element.click();
+    }
+    public static void clickElementWithJS(WebDriverWait driverWait, JavascriptExecutor js, Actions actions, By locator) {
+        WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        System.out.println("Element found: " + element.isDisplayed()); // Log element visibility
+        element = driverWait.until(ExpectedConditions.visibilityOf(element));
+        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+
+        if (element.isDisplayed() && element.isEnabled()) {
+            js.executeScript("arguments[0].scrollIntoView(true);", element);
+            try {
+                js.executeScript("arguments[0].click();", element);
+            } catch (Exception e) {
+                actions.moveToElement(element).click().perform();
+            }
+        } else {
+            System.out.println("Element is not interactable: " + element);
+        }
     }
 }
 
