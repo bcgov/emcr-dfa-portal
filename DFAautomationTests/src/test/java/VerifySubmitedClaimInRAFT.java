@@ -10,22 +10,23 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static dfa.CustomWebDriverManager.getDriver;
 import static java.lang.Thread.sleep;
+import static org.junit.Assert.fail;
 
 public class VerifySubmitedClaimInRAFT {
 
     private WebDriver driver;
 
 
-//    @After
-//    public void tearDown() {
-//        driver.close();
-//        driver.quit();
-//    }
-//
-//    @AfterClass
-//    public static void afterClass() {
-//        CustomWebDriverManager.instance = null;
-//    }
+    @After
+    public void tearDown() {
+        driver.close();
+        driver.quit();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        CustomWebDriverManager.instance = null;
+    }
 
 
     @Test
@@ -139,6 +140,26 @@ public class VerifySubmitedClaimInRAFT {
 
         //Login portal
         SubmitClaimsPublic.loginToPortal();
+
+        //Check Case number
+
+        //Click Submit project
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit Projects ')]")));
+        element.click();
+        //Click Submit Claims
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit Claims ')]")));
+        element.click();
+        Thread.sleep(1000);
+        // Retrieve the text content of the body element
+        String bodyText = driver.findElement(By.tagName("body")).getText();
+
+        // Check if the ClaimNumber exists in the body text
+        if (bodyText.contains(ClaimNumber)) {
+            System.out.println("Claim Number " + ClaimNumber + " exists in the body of the page.");
+        } else {
+            System.out.println("Claim Number " + ClaimNumber + " does not exist in the body of the page.");
+            fail("Claim Number " + ClaimNumber + " does not exist in the body of the page.");
+        }
 
 
 

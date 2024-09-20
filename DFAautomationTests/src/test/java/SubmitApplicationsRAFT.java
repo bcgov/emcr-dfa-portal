@@ -131,6 +131,7 @@ public class SubmitApplicationsRAFT {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         element.sendKeys(" PHSAPOC");
         sleep(1000);
+
         //Primary Contact
         String environmentPrimaryContact = Config.ENVIRONMENT_Dynamics; // Use the correct environment variable
         String xpathExpressionPrimaryContact;
@@ -186,8 +187,6 @@ public class SubmitApplicationsRAFT {
         element.sendKeys(CaseTitleWithTimestamp);
         System.out.println("Case Title with timestamp: " + CaseTitleWithTimestamp);
         Thread.sleep(1000);
-
-        Thread.sleep(1000);
         //Confirm Effected region
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Confirmed Effected Region/Community, Lookup'][type='text']")));
         element.click();
@@ -199,17 +198,32 @@ public class SubmitApplicationsRAFT {
         Thread.sleep(1000);
         //Confirm Primary Contact
         //To discuss
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[6]/div/div/div[2]/div/div/div[2]/div/div[2]/div[1]/div/div[1]/div/input")));
-        element.sendKeys("PHSAPOC");
         String environmentPrimaryContactConfirm = Config.ENVIRONMENT_Dynamics; // Use the correct environment variable
-        String xpathExpressionPrimaryContactConfirm;
+        String primaryContactValue;
 
         if (Constants.DEV_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
-            xpathExpressionPrimaryContactConfirm = "//*[contains(text(), 'PHSAPOC FOUR')]";
+            primaryContactValue = " test";
+        } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
+            primaryContactValue = " PHSAPOC";
+        } else {
+            throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactConfirm);
+        }
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[6]/div/div/div[2]/div/div[3]/div[2]/div/div[2]/div[1]/div/div[1]/div/input")));
+        element = driverWait.until(ExpectedConditions.visibilityOf(element));
+        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        element.sendKeys(primaryContactValue);
+        String environmentPrimaryContactConfirmSelectPopup = Config.ENVIRONMENT_Dynamics; // Use the correct environment variable
+        String xpathExpressionPrimaryContactConfirm;
+
+        if (Constants.DEV_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirmSelectPopup)) {
+            xpathExpressionPrimaryContactConfirm = "//*[contains(text(), 'Allen Jim')]";
         } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
             xpathExpressionPrimaryContactConfirm = "//*[contains(text(), 'GREGORY PHSAPOC')]";
         } else {
-            throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactConfirm);
+            throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactConfirmSelectPopup);
         }
 
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathExpressionPrimaryContactConfirm)));
