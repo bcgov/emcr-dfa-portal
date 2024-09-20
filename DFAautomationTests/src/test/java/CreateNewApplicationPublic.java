@@ -82,17 +82,6 @@ public class CreateNewApplicationPublic {
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("mat-option-8")));
         element.click();
 
-        //Choose date calendar
-//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id=\"cdk-step-content-0-0\"]/app-component-wrapper/app-application-details/mat-card/mat-card-content/form/div[2]/div[1]/mat-form-field/div[1]/div/div[3]/mat-datepicker-toggle/button/span[3]")));
-//        ElementClickHelper.clickElement(driver, element);
-//        Thread.sleep(1000);
-//        clickElementWithRetry(driverWait, driver, By.xpath("//*[contains(text(), ' 10 ')]"));
-//        Thread.sleep(1000);
-//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id=\"cdk-step-content-0-0\"]/app-component-wrapper/app-application-details/mat-card/mat-card-content/form/div[2]/div[2]/mat-form-field/div[1]/div/div[3]/mat-datepicker-toggle/button/span[3]")));
-//        ElementClickHelper.clickElement(driver, element);
-//        Thread.sleep(1000);
-//        clickElementWithRetry(driverWait, driver, By.xpath("//*[contains(text(), ' 11 ')]"));
-
         // Select cause of damage
         Thread.sleep(1000);
         String[] checkboxIds = {
@@ -130,49 +119,9 @@ public class CreateNewApplicationPublic {
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Municipality')]")));
         element.click();
 
-        // Check 90% displayed
-     /*    WebElement elementVal = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='estimatedPercent']")));
-        String value = elementVal.getAttribute("value");
-        if ("90".equals(value)) {
-            System.out.println("The text box contains 90");
-        } else {
-            System.out.println("The text box does not contain 90");
-        }
-
-        // If there was opportunity to receive guidance and support in assessing your damaged infrastructure, would you like to receive this support?*
-       element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[type='radio'][value='true']")));
-        ElementClickHelper.clickElement(driver, element);
-
-        // Other Contact
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' + Add Other Contact ')]")));
-        ElementClickHelper.clickElement(driver, element);
-
-        // New Other Contact
-        Map<String, String> formFields = new HashMap<>();
-        formFields.put("firstName", "TestFirstName");
-        formFields.put("lastName", "TestLastName");
-        formFields.put("phoneNumber", "999-999-9999");
-        formFields.put("email", "test@test.com");
-
-        fillFormFields(driverWait, formFields);
-
-        // Save Other Contact
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Save ')]")));
-        ElementClickHelper.clickElement(driver, element); */
-
         // Click on Next
         Thread.sleep(1000);
         nextReviewSubmission(driver, driverWait);
-
-        // Check Review page
-//        String[] valuesToCheck = {" " + getRandomChars() + " ", yesterdayAsString, todayAsString, "Municipality", "TestFirstName  ", " TestLastName ", " 999-999-9999 "};
-//        for (String insertValues : valuesToCheck) {
-//            if (PageContentChecker.isValuePresentInBody(driver, insertValues)) {
-//                System.out.println("The body contains: " + insertValues);
-//            } else {
-//                System.out.println("The body does not contain: " + insertValues);
-//            }
-//        }
 
 
         // Submit
@@ -202,16 +151,6 @@ public class CreateNewApplicationPublic {
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Back To Dashboard ')]")));
         element.click();
 
-        // Check Dashboard
-//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("spnCauseOfDamage")));
-//        if (element.getText().contains(getRandomChars())) {
-//            System.out.println("The body contains: " + getRandomChars());
-//        } else {
-//            System.out.println("The body does not contain: " + getRandomChars());
-//            fail("The body does not contain the expected randomChars value.");
-//        }
-//    }
-
         driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Cause(s) of Damage - ')]")));
         WebElement bodyElement = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
         String bodyText = bodyElement.getText();
@@ -234,8 +173,26 @@ public class CreateNewApplicationPublic {
         ElementClickHelper.clickElement(driver, element);
     }
 
-    public void nextReviewSubmission(WebDriver driver, WebDriverWait driverWait) {
-        WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Next - Contact Information ')]")));
-        ElementClickHelper.clickElement(driver, element);
+    public static void nextReviewSubmission(WebDriver driver, WebDriverWait driverWait) {
+
+        try {
+            WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Next - Contact Information')]")));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+
+            // Ensure the element is visible and enabled before clicking
+            element = driverWait.until(ExpectedConditions.visibilityOf(element));
+            element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+
+            // Adding a small delay to ensure the element is interactable
+            Thread.sleep(500);
+        } catch (ElementNotInteractableException e) {
+            System.out.println("Element not interactable: " + e.getMessage());
+            throw e;
+        } catch (InterruptedException e) {
+            System.out.println("Thread was interrupted: " + e.getMessage());
+            Thread.currentThread().interrupt();
+        }
     }
 }

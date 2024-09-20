@@ -57,10 +57,6 @@ public class VerifySubmitedClaimInRAFT {
         //Search for Claim no and switch to Submitted claims
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Recovery Claims')]"));
         sleep(1000);
-        // Correct way to run
-//        SubmitApplicationsRAFT.clickElementWithJS(driverWait, js, actions, By.cssSelector("[aria-haspopup='true'][title='Select a view']"));
-//
-//        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Submitted Recovery Claims')]"));
 
         //Search for Claim no
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='Select to enter data'][placeholder='Search this view']")));

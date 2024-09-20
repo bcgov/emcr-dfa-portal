@@ -48,11 +48,18 @@ public class CreateNewApplicationPublicNeg {
         CreateNewApplicationPublic createNewApplicationPublic = new CreateNewApplicationPublic();
         createNewApplicationPublic.nextReviewSubmission(driver, driverWait);
 
+        // Click on Next
+        Thread.sleep(1000);
+        element = driverWait.until(ExpectedConditions
+                .elementToBeClickable(By.xpath("//*[contains(text(), ' Next - Review & Submit ')]")));
+        element.click();
+
+
         // Read errors in red
         String[] errorMessages = {
                 "Enter required start date.  Enter required end date.",
                 "Enter required information",
-                "At least one other contact is required."
+               // "At least one other contact is required."
         };
 
         for (String errorMessage : errorMessages) {
@@ -67,12 +74,18 @@ public class CreateNewApplicationPublicNeg {
         // Check if error messages are displayed on App detail page
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[@id='cdk-step-content-0-1']/div/div[1]/button/span[4]")));
         ElementClickHelper.clickElement(driver, element);
+        //Click Back again
+        Thread.sleep(1000);
+        element = driverWait.until(ExpectedConditions
+                .elementToBeClickable(By.xpath("/html/body/app-root/div/main/div/app-dfa-application-main/div/mat-horizontal-stepper/div/div[2]/div[2]/div/div[1]/button[1]/span[4]")));
+        ElementClickHelper.clickElement(driver, element);
 
         String[] errorMessagesAppDetail = {
                 "At least one cause of damage is required. ",
                 " From date is required",
                 " To date is required",
-                " Applicant type is required"
+                "No matching disaster events for this date.",
+                " Type of governing body is required"
         };
 
         for (String errorMessageAppDetail : errorMessagesAppDetail) {
