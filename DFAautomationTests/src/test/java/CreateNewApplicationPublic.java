@@ -25,7 +25,9 @@ public class CreateNewApplicationPublic {
     }
 
     @AfterClass
-    public static void afterClass() {
+    public static void afterClass()
+
+    {
         CustomWebDriverManager.instance = null;
     }
 

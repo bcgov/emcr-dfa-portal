@@ -45,14 +45,32 @@ public class CreateNewApplicationPublicNeg {
         element.click();
 
         // Click on the submit button
-        CreateNewApplicationPublic createNewApplicationPublic = new CreateNewApplicationPublic();
-        createNewApplicationPublic.nextReviewSubmission(driver, driverWait);
+        try {
+            element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Next - Contact Information ')]")));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+
+            // Ensure the element is visible and enabled before clicking
+            element = driverWait.until(ExpectedConditions.visibilityOf(element));
+            element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+
+            // Adding a small delay to ensure the element is interactable
+            Thread.sleep(500);
+
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        } catch (ElementClickInterceptedException e) {
+            System.out.println("Element click intercepted: " + e.getMessage());
+            throw e;
+        } catch (InterruptedException e) {
+            System.out.println("Thread was interrupted: " + e.getMessage());
+            Thread.currentThread().interrupt();
+        }
 
         // Click on Next
         Thread.sleep(1000);
         element = driverWait.until(ExpectedConditions
                 .elementToBeClickable(By.xpath("//*[contains(text(), ' Next - Review & Submit ')]")));
         element.click();
+
 
 
         // Read errors in red

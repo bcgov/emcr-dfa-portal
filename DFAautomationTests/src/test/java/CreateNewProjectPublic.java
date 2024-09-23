@@ -22,9 +22,6 @@ public class CreateNewProjectPublic {
 private static String randomProjectNumber;
 
 
-
-
-
     public static String getRandomProjectNumber() {
         return randomProjectNumber;
     }

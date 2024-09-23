@@ -90,7 +90,8 @@ public class SubmitClaimsPublic {
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='" + caseTitleWithTimestamp + "'][tabindex='-1']")));
         element.click();
         //Click OK
-        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.id("okButtonText"));
+        Thread.sleep(1000);
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.id("okButton"));
         //Click Recovery plan
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Recovery Plans'][title='Recovery Plans']")));
         element.click();
@@ -154,6 +155,7 @@ public class SubmitClaimsPublic {
         clickElementWithRetry(driverWait, By.xpath("//*[contains(text(), ' Next - Add Invoices ')]"));
 
         //Click add invoices
+        Thread.sleep(1000);
         clickElementWithRetry(driverWait, By.xpath("//*[contains(text(), ' + Add Invoice ')]"));
 
         //Add invoice details
@@ -191,9 +193,10 @@ public class SubmitClaimsPublic {
         // Upload docs
         Thread.sleep(1000);
         CreateNewProjectPublic.uploadFile(driverWait, "fileDrop", System.getProperty("user.dir") + '/' + "dummy.pdf");
-
+        Thread.sleep(1000);
         CreateNewProjectPublic.clickElementWithRetry(driverWait, By.cssSelector(".family-button.details-button.save-button.mdc-button.mat-mdc-button.mat-unthemed.mat-mdc-button-base"));
-
+        Thread.sleep(1000);
+        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' + Add General Ledger ')]")));
         Thread.sleep(1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' + Add General Ledger ')]")));
         element.click();
