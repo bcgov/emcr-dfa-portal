@@ -53,16 +53,16 @@ public class DenyClaimAmountPublic {
 
         // Click Save
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Save')]"));
-
+        Thread.sleep(1000);
         // Locate the body element
         WebElement bodyElement = driver.findElement(By.tagName("body"));
         actions.moveToElement(bodyElement).click().perform();
+        Thread.sleep(1000);
 
         driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Approved amount. Last saved value: $0.00'][title='$0.00']")));
 
         // Click back
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='Go back'][aria-label='Press Enter to go back.']")));
-        element.click();
+        clickGoBackButton(driver, driverWait);
 
         //Check Decision and EMCR approved amount
         driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Denied')]")));
@@ -76,7 +76,7 @@ public class DenyClaimAmountPublic {
 
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Finish')]")));
         element.click();
-        Thread.sleep(1000);
+
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Save')]"));
 
         // Login portal
@@ -85,5 +85,9 @@ public class DenyClaimAmountPublic {
         // Click Submit project
         VerifySubmitedClaimInRAFT.submitProjectAndCheckClaim(driver, driverWait, ClaimNumber);
 
+    }
+    public void clickGoBackButton(WebDriver driver, WebDriverWait driverWait) {
+        WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='Go back'][aria-label='Press Enter to go back.']")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
     }
 }
