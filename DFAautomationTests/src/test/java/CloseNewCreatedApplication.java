@@ -18,16 +18,16 @@ public class CloseNewCreatedApplication
 
 
 
-//    @After
-//    public void tearDown() {
-//        driver.close();
-//        driver.quit();
-//    }
-//
-//    @AfterClass
-//    public static void afterClass() {
-//        CustomWebDriverManager.instance = null;
-//    }
+    @After
+    public void tearDown() {
+        driver.close();
+        driver.quit();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        CustomWebDriverManager.instance = null;
+    }
 
 
     @Test
@@ -53,7 +53,7 @@ public class CloseNewCreatedApplication
         SubmitApplicationsRAFT.navigateAndInteractWithAppApplications(driver, driverWait, js, actions, randomChars);
 
         SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 3, 1000);
-        
+
         //Take CAS number
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div/section/section[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div[3]/div[2]/div/div[2]/div[1]/div/input")));
         String CASNo = element.getText();

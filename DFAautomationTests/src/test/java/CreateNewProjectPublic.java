@@ -186,7 +186,7 @@ private static String randomProjectNumber;
             attempts++;
         }
 
-
+        Thread.sleep(1000);
         element = driverWait.until(ExpectedConditions
                 .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to submit the project. ')]")));
         element.click();

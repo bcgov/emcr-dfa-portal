@@ -57,113 +57,25 @@ public class SubmitClaimsPublic {
         //Login RAFT
         getUrls();
 
-        //Go to Submitted projects
-        element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), 'Projects')]")));
-        element.click();
-        Thread.sleep(1000);
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-haspopup='true'][title='Select a view']")));
-        System.out.println("Element found: " + element.isDisplayed()); // Log element visibility
-        element = driverWait.until(ExpectedConditions.visibilityOf(element));
-        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+        //Navigate to Submitted projects
+        navigateToSubmittedProjects(driver, driverWait, js, actions);
 
-        if (element.isDisplayed() && element.isEnabled()) {
-            js.executeScript("arguments[0].scrollIntoView(true);", element);
-            try {
-                js.executeScript("arguments[0].click();", element);
-            } catch (Exception e) {
-                actions.moveToElement(element).click().perform();
-            }
-        } else {
-            System.out.println("Element is not interactable: " + element);
-        }
-        element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), 'Submitted Projects')]")));
-        element.click();
-        // Submitted dates descending
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[tabindex='-1'][title='Date Received (Case)']")));
-        element.click();
-
-        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Sort Newest to Oldest')]"));
-        //Click on case title
-        String caseTitleWithTimestamp = SubmitApplicationsRAFT.getCaseTitleWithTimestamp();
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='" + caseTitleWithTimestamp + "'][tabindex='-1']")));
-        element.click();
-        //Click OK
-        Thread.sleep(1000);
-        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.id("okButton"));
-        //Click Recovery plan
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Recovery Plans'][title='Recovery Plans']")));
-        element.click();
-        //Double-click on Project number
-        System.out.println("Project number: " + CreateNewProjectPublic.getRandomProjectNumber());
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='" + CreateNewProjectPublic.getRandomProjectNumber() + "'][role='gridcell']")));
-        actions.doubleClick(element).perform();
-        Thread.sleep(1000);
-        clickElementWithRetry(driverWait, By.cssSelector("[role='presentation'][title='Draft']"));
-        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='checkbox'][title='Pending']")));
-        element.click();
-        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 3, 1000);
-        Thread.sleep(1000);
-        SubmitApplicationsRAFT.clickSaveButton(driver, driverWait);
-        Thread.sleep(1000);
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='tab'][title='Project Costing & Claims']")));
-        element.click();
-        //add final cost and save
-        System.out.println(RandomIntGenerator.generateRandomInt(7));
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[type='text'][title='$0.00']")));
-        element.click();
-        element.sendKeys(RandomIntGenerator.generateRandomInt(7));
-        Thread.sleep(1000);
-        SubmitApplicationsRAFT.clickSaveButton(driver, driverWait);
-        Thread.sleep(1000);
-
-        SubmitApplicationsRAFT.clickSaveButton(driver, driverWait);
-        Thread.sleep(1000);
-
-       //Login Portal
+        //Login Portal
         loginToPortal();
 
-        //Click Submit project
-        element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit Projects ')]")));
-        element.click();
-        Thread.sleep(1000);
-        // Check case number
-        String caseNumberDisplayPortal = SubmitApplicationsRAFT.getCaseNumber();
-        boolean isCaseNumberPresent = driver.getPageSource().contains(caseNumberDisplayPortal);
-        System.out.println("Case Number found in page body: " + isCaseNumberPresent);
+        //Submit project
+        submitProjectAndAddInvoice(driver, driverWait, js, actions);
 
-        //Create project
-        element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit Claims ')]")));
-        element.click();
-        element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Create a New Claim')]")));
-        element.click();
-        element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to proceed. ')]")));
-        element.click();
-
-
-        //Check text
-        driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Please review and complete the form below. You may start a claim, save it, and continue to add to it later. Required fields are marked with a red asterisk ')]")));
-
-        //Click Next - add invoice
-        clickElementWithRetry(driverWait, By.xpath("//*[contains(text(), ' Next - Add Invoices ')]"));
-
-        //Click add invoices
+        // Click add invoices
         Thread.sleep(1000);
         clickElementWithRetry(driverWait, By.xpath("//*[contains(text(), ' + Add Invoice ')]"));
 
-        //Add invoice details
+        // Add invoice details
         DateUtils dateUtils = new DateUtils();
         dateUtils.setTodayAsString(DateUtils.getFormattedDates().get("today"));
         setVendorName(RandomStringGenerator.generateRandomAlphanumeric(100));
 
-// Use the getter method to retrieve and use the vendorName value
+        // Use the getter method to retrieve and use the vendorName value
         fillFormField(driverWait, "[formcontrolname='vendorName'][maxlength='100']", getVendorName());
         System.out.println("Vendor name is: " + getVendorName());
         fillFormField(driverWait, "[formcontrolname='invoiceNumber'][maxlength='100']", RandomIntGenerator.generateRandomInt(100));
@@ -173,15 +85,13 @@ public class SubmitClaimsPublic {
         fillFormField(driverWait, "[formcontrolname='pst'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
         fillFormField(driverWait, "[formcontrolname='grossGST'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
 
-
-
-        //Check rdo buttons
+        // Check rdo buttons
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("mat-radio-8-input")));
         element.click();
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("mat-radio-12-input")));
         element.click();
 
-        //Click Add
+        // Click Add
         clickElementWithRetry(driverWait, By.cssSelector(".button-p.add-invoice.ng-star-inserted"));
 
         //Click Nxt to upload docs
@@ -250,7 +160,7 @@ public class SubmitClaimsPublic {
         if (attempts == 3) {
             System.out.println("Failed to click the Submit button after " + attempts + " attempts");
         }
-       // Thread.sleep(1000);
+        // Thread.sleep(1000);
         element = driverWait.until(ExpectedConditions
                 .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to submit the claim. ')]")));
         element.click();
@@ -268,6 +178,7 @@ public class SubmitClaimsPublic {
             throw new IllegalArgumentException("Unknown environment: " + Config.ENVIRONMENT_Dynamics);
         }
     }
+
     public static void loginToPortal() throws Exception {
         WebDriver driver = CustomWebDriverManager.getDriver();
         String url = environmentUrls.get(Config.ENVIRONMENT);
@@ -280,7 +191,8 @@ public class SubmitClaimsPublic {
             throw new IllegalArgumentException("Unknown environment: " + Config.ENVIRONMENT);
         }
     }
-    private void fillFormField(WebDriverWait driverWait, String cssSelector, String value) throws InterruptedException {
+
+    static void fillFormField(WebDriverWait driverWait, String cssSelector, String value) throws InterruptedException {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(cssSelector)));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
         element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
@@ -298,6 +210,7 @@ public class SubmitClaimsPublic {
             attempts++;
         }
     }
+
     public static void clickElementWithRetry(WebDriverWait driverWait, By locator) throws InterruptedException {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
@@ -315,6 +228,109 @@ public class SubmitClaimsPublic {
             }
             attempts++;
         }
+    }
+
+    public static void navigateToSubmittedProjects(WebDriver driver, WebDriverWait driverWait, JavascriptExecutor js, Actions actions) throws InterruptedException {
+        // Ensure the driver is set
+        if (SubmitClaimsPublic.driver == null) {
+            SubmitClaimsPublic.driver = driver;
+        }
+
+        WebElement element;
+
+        // Go to Submitted projects
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Projects')]")));
+        element.click();
+        Thread.sleep(1000);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-haspopup='true'][title='Select a view']")));
+        System.out.println("Element found: " + element.isDisplayed()); // Log element visibility
+        element = driverWait.until(ExpectedConditions.visibilityOf(element));
+        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+
+        if (element.isDisplayed() && element.isEnabled()) {
+            js.executeScript("arguments[0].scrollIntoView(true);", element);
+            try {
+                js.executeScript("arguments[0].click();", element);
+            } catch (Exception e) {
+                actions.moveToElement(element).click().perform();
+            }
+        } else {
+            System.out.println("Element is not interactable: " + element);
+        }
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Submitted Projects')]")));
+        element.click();
+        // Submitted dates descending
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[tabindex='-1'][title='Date Received (Case)']")));
+        element.click();
+
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Sort Newest to Oldest')]"));
+        // Click on case title
+        String caseTitleWithTimestamp = SubmitApplicationsRAFT.getCaseTitleWithTimestamp();
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='" + caseTitleWithTimestamp + "'][tabindex='-1']")));
+        element.click();
+        // Click OK
+        Thread.sleep(1000);
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.id("okButton"));
+        // Click Recovery plan
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Recovery Plans'][title='Recovery Plans']")));
+        element.click();
+        // Double-click on Project number
+        System.out.println("Project number: " + CreateNewProjectPublic.getRandomProjectNumber());
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='" + CreateNewProjectPublic.getRandomProjectNumber() + "'][role='gridcell']")));
+        actions.doubleClick(element).perform();
+        Thread.sleep(1000);
+        clickElementWithRetry(driverWait, By.cssSelector("[role='presentation'][title='Draft']"));
+        // Click Set Active
+        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Set Active')]"), 1, 1000);
+        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='checkbox'][title='Pending']")));
+        element.click();
+        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 3, 1000);
+        Thread.sleep(1000);
+        SubmitApplicationsRAFT.clickSaveButton(driver, driverWait);
+        Thread.sleep(1000);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='tab'][title='Project Costing & Claims']")));
+        element.click();
+        // Add final cost and save
+        System.out.println(RandomIntGenerator.generateRandomInt(7));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[type='text'][title='$0.00']")));
+        element.click();
+        element.sendKeys(RandomIntGenerator.generateRandomInt(7));
+        Thread.sleep(1000);
+        SubmitApplicationsRAFT.clickSaveButton(driver, driverWait);
+        Thread.sleep(1000);
+
+        SubmitApplicationsRAFT.clickSaveButton(driver, driverWait);
+        Thread.sleep(1000);
+    }
+    public static void submitProjectAndAddInvoice(WebDriver driver, WebDriverWait driverWait, JavascriptExecutor js, Actions actions) throws InterruptedException {
+        WebElement element;
+
+        // Click Submit project
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit Projects ')]")));
+        element.click();
+        Thread.sleep(1000);
+
+        // Check case number
+        String caseNumberDisplayPortal = SubmitApplicationsRAFT.getCaseNumber();
+        boolean isCaseNumberPresent = driver.getPageSource().contains(caseNumberDisplayPortal);
+        System.out.println("Case Number found in page body: " + isCaseNumberPresent);
+
+        // Create project
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit Claims ')]")));
+        element.click();
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Create a New Claim')]")));
+        element.click();
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to proceed. ')]")));
+        element.click();
+
+        // Check text
+        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Please review and complete the form below. You may start a claim, save it, and continue to add to it later. Required fields are marked with a red asterisk ')]")));
+
+        // Click Next - add invoice
+        clickElementWithRetry(driverWait, By.xpath("//*[contains(text(), ' Next - Add Invoices ')]"));
+
+
     }
 }
 

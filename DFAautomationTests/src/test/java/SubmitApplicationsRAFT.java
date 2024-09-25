@@ -102,7 +102,9 @@ public class SubmitApplicationsRAFT {
     public static void clickSaveButton(WebDriver driver, WebDriverWait driverWait) {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Save'][title^='Save (CTRL+S)']")));
         element.click();
+
     }
+
     public static void clickElementWithJS(WebDriverWait driverWait, JavascriptExecutor js, Actions actions, By locator) {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
         System.out.println("Element found: " + element.isDisplayed()); // Log element visibility
@@ -120,6 +122,7 @@ public class SubmitApplicationsRAFT {
             System.out.println("Element is not interactable: " + element);
         }
     }
+
     public static void navigateAndInteractWithAppApplications(WebDriver driver, WebDriverWait driverWait, JavascriptExecutor js, Actions actions, String randomChars) throws InterruptedException {
         WebElement element;
 
@@ -148,6 +151,8 @@ public class SubmitApplicationsRAFT {
             cssSelector = "[title='LG - BC Provincial Gov DFA DEV Testing'][tabindex='-1']";
         } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentName)) {
             cssSelector = "[title='LG - DFA_C'][tabindex='-1']";
+        } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentName)) {
+            cssSelector = "[title='LG - DFA_C'][tabindex='-1']";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentName);
         }
@@ -167,6 +172,8 @@ public class SubmitApplicationsRAFT {
         if (Constants.DEV_DynamicsPub.equalsIgnoreCase(environmentAssingTo)) {
             xpathExpressionAssingTo = "//*[contains(text(), 'EMCR DFA Reporting BI Test')]";
         } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentAssingTo)) {
+            xpathExpressionAssingTo = "//*[contains(text(), 'EMBC DFA Test')]";
+        } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentAssingTo)) {
             xpathExpressionAssingTo = "//*[contains(text(), 'EMBC DFA Test')]";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentName);
@@ -189,6 +196,8 @@ public class SubmitApplicationsRAFT {
         if (Constants.DEV_DynamicsPub.equalsIgnoreCase(environmentPrimaryContact)) {
             xpathExpressionPrimaryContact = "//*[contains(text(), 'EIGHT, PHSAPOC')]";
         } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentPrimaryContact)) {
+            xpathExpressionPrimaryContact = "//*[contains(text(), 'EIGHT, PHSAPOC')]";
+        } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentPrimaryContact)) {
             xpathExpressionPrimaryContact = "//*[contains(text(), 'EIGHT, PHSAPOC')]";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContact);
@@ -257,11 +266,14 @@ public class SubmitApplicationsRAFT {
             primaryContactValue = " test";
         } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
             primaryContactValue = " PHSAPOC";
+        } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
+            primaryContactValue = " PHSAPOC";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactConfirm);
         }
 
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[6]/div/div/div[2]/div/div[3]/div[2]/div/div[2]/div[1]/div/div[1]/div/input")));
+        //element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[8]/div/div/div[2]/div/div[3]/div[2]/div/div[2]/div[1]/div/div[1]/div/input")));
         element = driverWait.until(ExpectedConditions.visibilityOf(element));
         element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
@@ -273,6 +285,8 @@ public class SubmitApplicationsRAFT {
         if (Constants.DEV_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirmSelectPopup)) {
             xpathExpressionPrimaryContactConfirm = "//*[contains(text(), 'Allen Jim')]";
         } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
+            xpathExpressionPrimaryContactConfirm = "//*[contains(text(), 'GREGORY PHSAPOC')]";
+        } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
             xpathExpressionPrimaryContactConfirm = "//*[contains(text(), 'GREGORY PHSAPOC')]";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactConfirmSelectPopup);
@@ -307,23 +321,34 @@ public class SubmitApplicationsRAFT {
         clickSaveButton(driver, driverWait);
         Thread.sleep(1000);
 
-        // Review Application
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("MscrmControls.Containers.ProcessBreadCrumb-stageStatusLabel")));
-        element.click();
-        Thread.sleep(4000);
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'General')]")));
-        element.click();
-        Thread.sleep(4000);
+        for (int i = 0; i < 2; i++) {
+            // Click the stage status label
+            element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("MscrmControls.Containers.ProcessBreadCrumb-stageStatusLabel")));
+            element.click();
+            Thread.sleep(1000);
 
-        // Review Application
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("MscrmControls.Containers.ProcessBreadCrumb-stageStatusLabel")));
-        element.click();
+            // Click the General tab
+            element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'General')]")));
+            element.click();
+            Thread.sleep(1000);
 
-        clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
+            // Review Application
+            Thread.sleep(1000);
+            element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("MscrmControls.Containers.ProcessBreadCrumb-stageStatusLabel")));
+            element.click();
 
-        // Click Case title
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), '" + CaseTitleWithTimestamp + "')]")));
-        element.click();
+            // Click Next Stage
+            clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
+
+            // Click Case title
+            try {
+                element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), '" + CaseTitleWithTimestamp + "')]")));
+                element.click();
+                break; // Exit the loop if the element is found
+            } catch (TimeoutException e) {
+                // Continue the loop if the element is not found
+            }
+        }
         System.out.println("Case title clicked: " + CaseTitleWithTimestamp);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("okButton")));
         element.click();

@@ -57,8 +57,12 @@ public class VerifySubmitedClaimInRAFT {
         actions.moveToElement(bodyElement).click().perform();
 
         // Click back
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='Go back'][aria-label='Press Enter to go back.']")));
-        element.click();
+        try {
+            element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='Go back'][aria-label='Press Enter to go back.']")));
+            element.click();
+        } catch (ElementClickInterceptedException e) {
+            js.executeScript("arguments[0].click();", element);
+        }
 
         // Click Approval pending
         clickApprovalPending(driver, driverWait);
@@ -122,7 +126,7 @@ public class VerifySubmitedClaimInRAFT {
         // Click Draft
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='presentation'][title='Draft']")));
         element.click();
-
+        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Set Active')]"), 1, 1000);
         SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 3, 1000);
 
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Save')]"));

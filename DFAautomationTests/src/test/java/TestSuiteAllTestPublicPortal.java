@@ -6,7 +6,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 
         LoginPublicPortal.class, CreateNewApplicationPublic.class, CreateNewApplicationPublicNeg.class, CreateNewProjectPublic.class, SubmitApplicationsRAFT.class,
-        SubmitClaimsPublic.class, VerifySubmitedClaimInRAFT.class, LoginDynamicsPublic.class, DenyClaimAmountPublic.class
+        SubmitClaimsPublic.class, VerifySubmitedClaimInRAFT.class, LoginDynamicsPublic.class, DenyClaimAmountPublic.class, AddMultipleInvoices.class
 })
 
 
