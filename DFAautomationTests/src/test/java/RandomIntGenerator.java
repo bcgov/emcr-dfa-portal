@@ -6,6 +6,7 @@ public class RandomIntGenerator {
     private static final Random RANDOM = new SecureRandom();
     private String randomInt;
 
+
     public static String generateRandomInt(int length) {
         if (length <= 0) {
             throw new IllegalArgumentException("Length must be greater than 0");

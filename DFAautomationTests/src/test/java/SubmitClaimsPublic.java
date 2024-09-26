@@ -20,6 +20,7 @@ public class SubmitClaimsPublic {
 
     private static WebDriver driver;
     private static String vendorName;
+    private static String invoiceAmmount;
 
     public static String getVendorName() {
         return vendorName;
@@ -28,6 +29,8 @@ public class SubmitClaimsPublic {
     public void setVendorName(String vendorName) {
         this.vendorName = vendorName;
     }
+
+
 
 
     @After
@@ -74,7 +77,6 @@ public class SubmitClaimsPublic {
         DateUtils dateUtils = new DateUtils();
         dateUtils.setTodayAsString(DateUtils.getFormattedDates().get("today"));
         setVendorName(RandomStringGenerator.generateRandomAlphanumeric(100));
-
         // Use the getter method to retrieve and use the vendorName value
         fillFormField(driverWait, "[formcontrolname='vendorName'][maxlength='100']", getVendorName());
         System.out.println("Vendor name is: " + getVendorName());

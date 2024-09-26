@@ -321,7 +321,7 @@ public class SubmitApplicationsRAFT {
         clickSaveButton(driver, driverWait);
         Thread.sleep(1000);
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
             // Click the stage status label
             element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("MscrmControls.Containers.ProcessBreadCrumb-stageStatusLabel")));
             element.click();
