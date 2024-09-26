@@ -54,5 +54,7 @@ public class PartialPaymentApproveClaim {
         String AmountClaimed = element.getText();
         System.out.println("Total being claimed: " + AmountClaimed);
 
+        //To get the fillFormField(driverWait, "[formcontrolname='netInvoiceBeingClaimed'][maxlength='100']", RandomIntGenerator.generateRandomInt(6)); which is the amount added by me in Invoice from SubmitClaimsPublic
+
     }
 }
