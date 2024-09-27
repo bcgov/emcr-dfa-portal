@@ -272,8 +272,19 @@ public class SubmitApplicationsRAFT {
             throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactConfirm);
         }
 
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[6]/div/div/div[2]/div/div[3]/div[2]/div/div[2]/div[1]/div/div[1]/div/input")));
-        //element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[8]/div/div/div[2]/div/div[3]/div[2]/div/div[2]/div[1]/div/div[1]/div/input")));
+        String environmentPrimaryContactXpath = Config.ENVIRONMENT_Dynamics; // Use the correct environment variable
+        //String primaryContactXpath;
+
+        if (Constants.DEV_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactXpath)) {
+            element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[8]/div/div/div[2]/div/div[3]/div[2]/div/div[2]/div[1]/div/div[1]/div/input")));;
+
+        } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactXpath)) {
+            element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[2]/div/div[3]/div[2]/div/div/div/div/div/div[1]/div[1]/div[2]/div/div/div[2]/section/section[1]/div/div/div/div[6]/div/div/div[2]/div/div[3]/div[2]/div/div[2]/div[1]/div/div[1]/div/input")));
+
+        } else {
+            throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactXpath);
+        }
+
         element = driverWait.until(ExpectedConditions.visibilityOf(element));
         element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
