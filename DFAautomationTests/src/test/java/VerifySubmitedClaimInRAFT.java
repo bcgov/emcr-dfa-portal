@@ -120,8 +120,17 @@ public class VerifySubmitedClaimInRAFT {
         element.sendKeys(ClaimNumber);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("quickFind_button_icon_1")));
         element.click();
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), '" + ClaimNumber + "')]")));
-        element.click();
+        int attempts = 0;
+        while (attempts < 3) {
+            try {
+                element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), '" + ClaimNumber + "')]")));
+                element.click();
+                break; // Exit the loop if successful
+            } catch (StaleElementReferenceException e) {
+                attempts++;
+                Thread.sleep(1000); // Wait for 1 second before retrying
+            }
+        }
 
         // Click Draft
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='presentation'][title='Draft']")));
