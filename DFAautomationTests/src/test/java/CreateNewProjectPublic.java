@@ -1,6 +1,9 @@
 import dfa.CommonUtils;
 import dfa.Config;
 import dfa.CustomWebDriverManager;
+import dfa.ElementInteractionHelper;
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -11,29 +14,20 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-
 import static dfa.CustomWebDriverManager.getDriver;
-import static org.junit.Assert.fail;
 
 public class CreateNewProjectPublic {
 
     private static WebDriver driver;
-private static String randomProjectNumber;
-
-
-    public static String getRandomProjectNumber() {
-        return randomProjectNumber;
-    }
-
-    public static void setRandomProjectNumber(String randomProjectNumber) {
-        CreateNewProjectPublic.randomProjectNumber = randomProjectNumber;
-    }
+    @Getter
+    @Setter
+    private static String randomProjectNumber;
 
     @AfterClass
     public static void afterClass() {
         CustomWebDriverManager.instance = null;
     }
+
     @After
     public void tearDown() {
         driver.close();
@@ -54,12 +48,14 @@ private static String randomProjectNumber;
         getUrls();
 
         // Submit project
-        element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit Projects ')]")));
-        element.click();
+        String xpathSubmitProjectByCaseNumber = "//span[contains(text(),'" + SubmitApplicationsRAFT.getCaseNumber() + "')]/../../div//button[contains(text(), 'Submit Projects')]";
+        driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath(xpathSubmitProjectByCaseNumber)));
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath(xpathSubmitProjectByCaseNumber));
+
         Thread.sleep(1000);
         // Check case number
-        String caseNumberDisplayPortal = submitApplicationsRAFT.getCaseNumber();
+        String caseNumberDisplayPortal = SubmitApplicationsRAFT.getCaseNumber();
         boolean isCaseNumberPresent = driver.getPageSource().contains(caseNumberDisplayPortal);
         System.out.println("Case Number found in page body: " + isCaseNumberPresent);
 
@@ -73,7 +69,7 @@ private static String randomProjectNumber;
 
         // Create random number
         Thread.sleep(1000);
-        String randomProjectNumber = RandomStringGenerator.generateRandomAlphanumeric(10);
+        String randomProjectNumber = "AT_" + RandomStringGenerator.generateRandomAlphanumeric(7);
         System.out.println("Project Number is: " + randomProjectNumber);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("projectNumber")));
         setRandomProjectNumber(randomProjectNumber);
@@ -86,7 +82,7 @@ private static String randomProjectNumber;
         element.sendKeys(randomProjectNumber);
 
         // Create random project name
-        String randomProjectName = RandomStringGenerator.generateRandomAlphanumeric(20);
+        String randomProjectName = "AT_Project_" + RandomStringGenerator.generateRandomAlphanumeric(9);
         System.out.println("Project Name is: " + randomProjectName);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("mat-input-1")));
 
@@ -113,14 +109,14 @@ private static String randomProjectNumber;
         Thread.sleep(1000);
 
         // Fill form fields
-        fillFormField(driverWait, "[formcontrolname='differentDamageDatesReason'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumeric(200));
-        fillFormField(driverWait, "[formcontrolname='siteLocation'][maxlength='100']", RandomStringGenerator.generateRandomAlphanumeric(100));
-        fillFormField(driverWait, "[formcontrolname='infraDamageDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumeric(2000));
-        fillFormField(driverWait, "[formcontrolname='causeofDamageDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumeric(2000));
-        fillFormField(driverWait, "[formcontrolname='describeDamageDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumeric(2000));
-        fillFormField(driverWait, "[formcontrolname='describeDamagedInfrastructure'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumeric(2000));
-        fillFormField(driverWait, "[formcontrolname='repairWorkDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumeric(2000));
-        fillFormField(driverWait, "[formcontrolname='repairDamagedInfrastructure'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumeric(2000));
+        fillFormField(driverWait, "[formcontrolname='differentDamageDatesReason'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(200));
+        fillFormField(driverWait, "[formcontrolname='siteLocation'][maxlength='100']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(100));
+        fillFormField(driverWait, "[formcontrolname='infraDamageDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
+        fillFormField(driverWait, "[formcontrolname='causeofDamageDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
+        fillFormField(driverWait, "[formcontrolname='describeDamageDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
+        fillFormField(driverWait, "[formcontrolname='describeDamagedInfrastructure'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
+        fillFormField(driverWait, "[formcontrolname='repairWorkDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
+        fillFormField(driverWait, "[formcontrolname='repairDamagedInfrastructure'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
         fillFormField(driverWait, "[formcontrolname='estimateCostIncludingTax'][maxlength='100']", RandomIntGenerator.generateRandomInt(7));
         fillFormField(driverWait, "[formcontrolname='estimatedCompletionDate'][aria-haspopup='dialog']", dateUtils.getInOneYearAsString());
 
@@ -140,12 +136,15 @@ private static String randomProjectNumber;
         // Upload docs
         Thread.sleep(1000);
         uploadFile(driverWait, "fileDrop", System.getProperty("user.dir") + '/' + "dummy.pdf");
+        Thread.sleep(1000);
 
-        clickElementWithRetry(driverWait, By.cssSelector(".family-button.details-button.save-button.mdc-button.mat-mdc-button.mat-unthemed.mat-mdc-button-base"));
+        clickElementWithRetry(driverWait, By.xpath("//mat-card//span[contains(text(),'Save')]"));
 
         Thread.sleep(1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' + Add Post Event Condition ')]")));
-        element.click();
+
+        JavascriptExecutor jse = (JavascriptExecutor) driver;
+        jse.executeScript("arguments[0].click();", element);
 
         Thread.sleep(1000);
         uploadFile(driverWait, "fileDrop", System.getProperty("user.dir") + '/' + "testDFA.xlsx");
@@ -154,12 +153,13 @@ private static String randomProjectNumber;
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
         Thread.sleep(1000);
 
-        clickElementWithRetryforDocSave(driverWait, By.cssSelector(".family-button.details-button.save-button.mdc-button.mat-mdc-button.mat-unthemed.mat-mdc-button-base"));
+        clickElementWithRetry(driverWait, By.xpath("//mat-card//span[contains(text(),'Save')]"));
 
         //Click Next
         element = driverWait.until(ExpectedConditions
                 .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Next - Review & Submit ')]")));
-        element.click();
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+
         System.out.println("Next - Review & Submit clicked");
 
         //Check Review page
@@ -186,14 +186,19 @@ private static String randomProjectNumber;
             attempts++;
         }
 
+        Thread.sleep(5000);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//span[contains(text(),'Submit')])[last()]")));
+        jse.executeScript("arguments[0].click();", element);
+
         Thread.sleep(1000);
         element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to submit the project. ')]")));
-        element.click();
+                .presenceOfElementLocated(By.xpath("//span[contains(text(), 'Yes, I want to submit the project.')]")));
+        jse.executeScript("arguments[0].click();", element);
         System.out.println("Yes, I want to submit the project.");
 
+        driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//*[contains(text(), 'Open Projects')]")));
     }
-
 
     public void getUrls() {
         String urlPortal = CommonUtils.environmentUrls.get(Config.ENVIRONMENT);
@@ -219,9 +224,9 @@ private static String randomProjectNumber;
             element.click();
         } catch (org.openqa.selenium.ElementClickInterceptedException e) {
             // Retry clicking the element
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
-            element.click();
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("arguments[0].scrollIntoView(true);", element);
+            js.executeScript("arguments[0].click();", element);
         }
     }
 

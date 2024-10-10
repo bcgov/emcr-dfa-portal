@@ -50,7 +50,7 @@ public class CloseNewCreatedApplication
         LoginDynamicsPublic loginDynamicsPublic = new LoginDynamicsPublic();
         loginDynamicsPublic.test();
 
-        SubmitApplicationsRAFT.navigateAndInteractWithAppApplications(driver, driverWait, js, actions, randomChars);
+        SubmitApplicationsRAFT.navigateAndInteractWithAppApplications(driver, driverWait, randomChars);
 
         SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 3, 1000);
 

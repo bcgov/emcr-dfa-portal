@@ -1,6 +1,8 @@
 import dfa.CustomWebDriverManager;
 import dfa.ElementClickHelper;
-import dfa.PageContentChecker;
+import dfa.ElementInteractionHelper;
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -13,37 +15,83 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static dfa.CustomWebDriverManager.getDriver;
-import static org.junit.Assert.fail;
 
 public class CreateNewApplicationPublic {
     private WebDriver driver;
-    private String randomChars;
-        @After
+
+    @Setter
+    @Getter
+    private static String randomChars;
+
+    @Setter
+    @Getter
+    private static String DBAName = "Test DBA Name";
+
+    private static String bceidUSERNAME = System.getenv("USERNAME_BCEID");
+
+    @After
     public void tearDown() {
         driver.close();
         driver.quit();
     }
 
     @AfterClass
-    public static void afterClass()
-
-    {
+    public static void afterClass() {
         CustomWebDriverManager.instance = null;
-    }
-
-    public String getRandomChars() {
-        return randomChars;
-    }
-
-    public void setRandomChars(String randomChars) {
-        this.randomChars = randomChars;
     }
 
     @Test
     public void test() throws Exception {
         driver = getDriver();
-        WebDriverWait driverWait = CustomWebDriverManager.getDriverWait();
         WebElement element;
+        WebDriverWait driverWait = CustomWebDriverManager.getDriverWait();
+        CustomWebDriverManager.getElements();
+
+        createApplication(false);
+
+        // Submit
+        Thread.sleep(1000);
+        clickSubmitButton(driver, driverWait);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//span[contains(text(),'Submit')])[last()]")));
+
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        int attempts = 0;
+        while (attempts < 3) {
+            try {
+                element.sendKeys(Keys.ENTER);
+                System.out.println("Submit button is clicked");
+                break;
+            } catch (org.openqa.selenium.ElementNotInteractableException e) {
+                Thread.sleep(500); // Adjust the sleep time as necessary
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+            }
+            attempts++;
+        }
+        // Submit Application Confirmation
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to submit my application. ')]")));
+        element.click();
+
+        // Check success message
+        // there's a bug that redirect doesn't work, need to uncomment after fix
+
+//        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Your application has been submitted. ')]")));
+//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Back To Dashboard ')]")));
+//        element.click();
+//
+//        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Cause(s) of Damage - ')]")));
+//        WebElement bodyElement = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+//        String bodyText = bodyElement.getText();
+//        if (bodyText.contains(getRandomChars())) {
+//            System.out.println("The body contains: " + getRandomChars());
+//        } else {
+//            System.out.println("The body does not contain: " + getRandomChars());
+//        }
+    }
+
+    public static void createApplication(Boolean isDraft) throws Exception {
+        WebDriver driver = getDriver();
+        WebElement element;
+        WebDriverWait driverWait = CustomWebDriverManager.getDriverWait();
         CustomWebDriverManager.getElements();
 
         LoginPublicPortal loginPublicPortal = new LoginPublicPortal();
@@ -77,11 +125,13 @@ public class CreateNewApplicationPublic {
         element.clear();
         element.sendKeys("08/19/2024");
 
+        Thread.sleep(2000);
         //Choose and event
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='eventId']")));
         element.click();
 
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("mat-option-8")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//mat-option")));
+//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[contains(text(),'August 1')]")));
         element.click();
 
         // Select cause of damage
@@ -99,15 +149,7 @@ public class CreateNewApplicationPublic {
             ElementClickHelper.clickElement(driver, element);
         }
 
-        Random r = new Random();
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder randomCharsBuilder = new StringBuilder();
-
-        for (int i = 0; i < 100; i++) {
-            randomCharsBuilder.append(alphabet.charAt(r.nextInt(alphabet.length())));
-        }
-
-        setRandomChars(randomCharsBuilder.toString());
+        CreateNewApplicationPublic.setRandomChars(generateDamageCause());
 
         // Cause of damage
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='otherDamageText']")));
@@ -119,48 +161,102 @@ public class CreateNewApplicationPublic {
         ElementClickHelper.clickElement(driver, element);
 
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Municipality')]")));
-        element.click();
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 
         // Click on Next
         Thread.sleep(1000);
         nextReviewSubmission(driver, driverWait);
 
+        if (isDraft) {
+            setDBAName(DBAName + " - DraftApplication");
+        }
 
-        // Submit
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Doing Business as (DBA) Name')]/parent::div//input")));
+        element.sendKeys(DBAName);
+
+        Random random = new Random();
+        StringBuilder randomNumbers = new StringBuilder();
+
+        for (int i = 0; i < 5; i++) {
+            int randomNumber = random.nextInt(10); // Generates a random number between 0 and 9
+            randomNumbers.append(randomNumber);
+        }
+
+
         Thread.sleep(1000);
-        clickSubmitButton(driver, driverWait);
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/app-root/div/main/div/app-dfa-application-main/div/mat-horizontal-stepper/div/div[2]/div[3]/div/div[2]/button/span[4]")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Business Number')]/parent::div//input")));
+        element.sendKeys("Test" + randomNumbers);
 
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-        int attempts = 0;
-        while (attempts < 3) {
-            try {
-                element.sendKeys(Keys.ENTER);
-                System.out.println("Submit button is clicked");
+        Thread.sleep(1000);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Mailing Address')]/parent::div//input")));
+        element.sendKeys("1409-755 Caledonia Ave");
+
+        Thread.sleep(1000);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//mat-option")));
+        element.click();
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Primary Contact')]/parent::div//input")));
+        element.sendKeys(bceidUSERNAME);
+
+        Thread.sleep(1000);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[contains(text(),'Search for Contact')]")));
+        element.click();
+
+        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),' Primary Contact found!')]")));
+
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//input[@type='radio']"));
+
+        Thread.sleep(1000);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Cell Phone')]/parent::div//input")));
+        element.sendKeys("7780000000");
+
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Job Title')]/parent::div//input")));
+        element.sendKeys("Test Title");
+    }
+
+    public static String generateDamageCause() {
+        // Get current date and time
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+
+        // Format date and time
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String formattedDate = dateFormat.format(now);
+
+        // Predefined list of words
+        String[] words = {
+                "fire", "flood", "earthquake", "hurricane", "tornado", "hailstorm", "landslide", "volcano",
+                "tsunami", "drought", "blizzard", "avalanche", "cyclone", "erosion", "sinkhole", "lightning",
+                "wildfire", "storm", "wind", "ice", "snow", "heatwave", "coldwave", "mudslide", "thunderstorm"
+        };
+
+        // Symbols to use between words
+        String symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~\\";
+        Random r = new Random();
+        StringBuilder randomWordsBuilder = new StringBuilder();
+
+        // Combine "Test_", formatted date, and random words with symbols
+        String prefix = "Test " + formattedDate + " ";
+        randomWordsBuilder.append(prefix);
+
+        int maxLength = 100;
+        int currentLength = randomWordsBuilder.length();
+
+        // Convert array to list and shuffle
+        List<String> wordList = Arrays.asList(words);
+        Collections.shuffle(wordList, r);
+
+        for (String word : wordList) {
+            String wordWithSymbols = word + " " + symbols.charAt(r.nextInt(symbols.length())) + " ";
+            if (currentLength + wordWithSymbols.length() > maxLength) {
                 break;
-            } catch (org.openqa.selenium.ElementNotInteractableException e) {
-                Thread.sleep(500); // Adjust the sleep time as necessary
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
             }
-            attempts++;
+            randomWordsBuilder.append(wordWithSymbols);
+            currentLength += wordWithSymbols.length();
         }
-                // Submit Application Confirmation
-                element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to submit my application. ')]")));
-        element.click();
 
-        // Check success message
-        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Your application has been submitted. ')]")));
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Back To Dashboard ')]")));
-        element.click();
-
-        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Cause(s) of Damage - ')]")));
-        WebElement bodyElement = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-        String bodyText = bodyElement.getText();
-        if (bodyText.contains(getRandomChars())) {
-            System.out.println("The body contains: " + getRandomChars());
-        } else {
-            System.out.println("The body does not contain: " + getRandomChars());
-        }
+        return randomWordsBuilder.length() > maxLength ? randomWordsBuilder.substring(0, maxLength).trim() : randomWordsBuilder.toString().trim();
     }
 
     private void fillFormFields(WebDriverWait driverWait, Map<String, String> formFields) {

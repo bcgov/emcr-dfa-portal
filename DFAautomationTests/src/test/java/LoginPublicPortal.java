@@ -15,8 +15,8 @@ import java.time.Duration;
 public class LoginPublicPortal {
 
     private WebDriver driver;
-    private static String  bceidUSERNAME = System.getenv("USERNAME_BCEID");
-    private static String bceidPASSWORD = System.getenv("PASSWORD_BCEID");
+    private static final String  bceidUSERNAME = System.getenv("USERNAME_BCEID");
+    private static final String bceidPASSWORD = System.getenv("PASSWORD_BCEID");
 
 
     @After
@@ -35,13 +35,13 @@ public class LoginPublicPortal {
     public void test() throws Exception {
         driver = CustomWebDriverManager.getDriver();
         WebDriverWait driverWait = CustomWebDriverManager.getDriverWait();
-        WebElement element = CustomWebDriverManager.getElement();
+        WebElement element;
         CustomWebDriverManager.getElements();
 
         CommonUtils.login();
         JavascriptExecutor js = (JavascriptExecutor) driver;
         element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Log in with Business BCeID ')]")));
+                .presenceOfElementLocated(By.xpath("//*[contains(text(), 'Log in with Business BCeID')]")));
         js.executeScript("arguments[0].click();", element);
 
         //To be added as sys variables

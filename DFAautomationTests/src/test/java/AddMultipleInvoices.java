@@ -1,4 +1,6 @@
 import dfa.CustomWebDriverManager;
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -15,18 +17,9 @@ import static dfa.CustomWebDriverManager.getDriver;
 public class AddMultipleInvoices {
 
     private static WebDriver driver;
-
+    @Getter
+    @Setter
     private static String vendorName;
-
-    public static String getVendorName() {
-        return vendorName;
-    }
-
-    public void setVendorName(String vendorName) {
-        this.vendorName = vendorName;
-    }
-
-
 
     @After
     public void tearDown() {
@@ -41,7 +34,7 @@ public class AddMultipleInvoices {
 
 
     @Test
-    public  void test() throws Exception {
+    public void test() throws Exception {
         driver = getDriver();
         WebDriverWait driverWait = CustomWebDriverManager.getDriverWait();
         WebElement element;
@@ -69,23 +62,23 @@ public class AddMultipleInvoices {
             // Add invoice details
             DateUtils dateUtils = new DateUtils();
             dateUtils.setTodayAsString(DateUtils.getFormattedDates().get("today"));
-            setVendorName(RandomStringGenerator.generateRandomAlphanumeric(100));
+            setVendorName(RandomStringGenerator.generateRandomAlphanumericWithSpaces(100));
 
             // Ensure vendorName is not null
             String vendorName = SubmitClaimsPublic.getVendorName();
             if (vendorName == null) {
-                vendorName = RandomStringGenerator.generateRandomAlphanumeric(100);
+                vendorName = RandomStringGenerator.generateRandomAlphanumericWithSpaces(100);
                 setVendorName(vendorName);
             }
             // Click add invoices
-            Thread.sleep(1000);
+            Thread.sleep(3000);
             SubmitClaimsPublic.clickElementWithRetry(driverWait, By.xpath("//*[contains(text(), ' + Add Invoice ')]"));
             // Use the getter method to retrieve and use the vendorName value
             SubmitClaimsPublic.fillFormField(driverWait, "[formcontrolname='vendorName'][maxlength='100']", vendorName);
             System.out.println("Vendor name is: " + vendorName);
             SubmitClaimsPublic.fillFormField(driverWait, "[formcontrolname='invoiceNumber'][maxlength='100']", RandomIntGenerator.generateRandomInt(100));
             SubmitClaimsPublic.fillFormField(driverWait, "[formcontrolname='invoiceDate'][aria-haspopup='dialog']", dateUtils.getTodayAsString());
-            SubmitClaimsPublic.fillFormField(driverWait, "[formcontrolname='purposeOfGoodsServiceReceived'][maxlength='200']", RandomStringGenerator.generateRandomAlphanumeric(200));
+            SubmitClaimsPublic.fillFormField(driverWait, "[formcontrolname='purposeOfGoodsServiceReceived'][maxlength='200']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(200));
             SubmitClaimsPublic.fillFormField(driverWait, "[formcontrolname='netInvoiceBeingClaimed'][maxlength='100']", RandomIntGenerator.generateRandomInt(6));
             SubmitClaimsPublic.fillFormField(driverWait, "[formcontrolname='pst'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
             SubmitClaimsPublic.fillFormField(driverWait, "[formcontrolname='grossGST'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
