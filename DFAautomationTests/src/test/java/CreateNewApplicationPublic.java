@@ -143,7 +143,6 @@ public class CreateNewApplicationPublic {
             randomNumbers.append(randomNumber);
         }
 
-
         sleep(1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Business Number')]/parent::div//input")));
         element.sendKeys("Test" + randomNumbers);
@@ -174,6 +173,32 @@ public class CreateNewApplicationPublic {
 
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Job Title')]/parent::div//input")));
         element.sendKeys("Test Title");
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Contact Notes')]/parent::div//textarea")));
+        element.sendKeys("Test contact note");
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(),'Add Other Contact')]")));
+        element.click();
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@formcontrolname='firstName']")));
+        element.sendKeys("FirstName Test");
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@formcontrolname='lastName']")));
+        element.sendKeys("FirstName Test");
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@formcontrolname='phoneNumber']")));
+        element.sendKeys("7780000000");
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@formcontrolname='cellPhone']")));
+        element.sendKeys("7780000000");
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@formcontrolname='email']")));
+        element.sendKeys("test@test.test");
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@formcontrolname='jobTitle']")));
+        element.sendKeys("Test Job Title");
+
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//span[text()=' Save ']"));
     }
 
     public static void submitApplication() throws InterruptedException {
@@ -198,9 +223,23 @@ public class CreateNewApplicationPublic {
             }
             attempts++;
         }
+
+
+        // need to create a bug if not resolved, as we added all the info, but text is presented
+
+//        // Validate that "Enter required information" text is not present
+//        boolean isTextNotPresent = driverWait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[contains(text(), 'Enter required information')]")));
+//        if (isTextNotPresent) {
+//            System.out.println("\"Enter required information\" text is not present on the page.");
+//        } else {
+//            System.out.println("\"Enter required information\" text is still present on the page.");
+//        }
+//
+
         // Submit Application Confirmation
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to submit my application. ')]")));
         element.click();
+
 
         // Check success message
         // there's a bug that redirect doesn't work, need to uncomment after fix
