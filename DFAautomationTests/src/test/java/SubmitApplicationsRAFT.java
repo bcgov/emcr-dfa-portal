@@ -318,7 +318,9 @@ public class SubmitApplicationsRAFT {
         Thread.sleep(1000);
         clickSaveButton(driverWait);
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 7; i++) {
+            sleep(5000);
+
             // Click the stage status label
             element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("MscrmControls.Containers.ProcessBreadCrumb-stageStatusLabel")));
             element.click();
@@ -339,13 +341,11 @@ public class SubmitApplicationsRAFT {
 
             // Click Case title
             try {
-                sleep(1000);
                 element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), '" + CaseTitleWithTimestamp + "')]")));
                 element.click();
                 break; // Exit the loop if the element is found
             } catch (TimeoutException e) {
                 // Continue the loop if the element is not found
-                sleep(5000);
             }
         }
         System.out.println("Case title clicked: " + CaseTitleWithTimestamp);

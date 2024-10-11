@@ -43,6 +43,8 @@ public class CreateNewApplicationPublic {
 
     @Test
     public void test() throws Exception {
+        driver = getDriver();
+
         createApplication(false);
         submitApplication();
     }

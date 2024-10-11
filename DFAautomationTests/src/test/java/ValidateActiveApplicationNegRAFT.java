@@ -12,7 +12,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static dfa.CustomWebDriverManager.getDriver;
-import static dfa.ElementInteractionHelper.scrollAndClickElement;
 import static java.lang.Thread.sleep;
 
 public class ValidateActiveApplicationNegRAFT {
