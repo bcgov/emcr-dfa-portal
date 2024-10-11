@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static dfa.CustomWebDriverManager.getDriver;
+import static java.lang.Thread.sleep;
 
 public class CreateNewApplicationPublic {
     private WebDriver driver;
@@ -42,50 +43,8 @@ public class CreateNewApplicationPublic {
 
     @Test
     public void test() throws Exception {
-        driver = getDriver();
-        WebElement element;
-        WebDriverWait driverWait = CustomWebDriverManager.getDriverWait();
-        CustomWebDriverManager.getElements();
-
         createApplication(false);
-
-        // Submit
-        Thread.sleep(1000);
-        clickSubmitButton(driver, driverWait);
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//span[contains(text(),'Submit')])[last()]")));
-
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-        int attempts = 0;
-        while (attempts < 3) {
-            try {
-                element.sendKeys(Keys.ENTER);
-                System.out.println("Submit button is clicked");
-                break;
-            } catch (org.openqa.selenium.ElementNotInteractableException e) {
-                Thread.sleep(500); // Adjust the sleep time as necessary
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            }
-            attempts++;
-        }
-        // Submit Application Confirmation
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to submit my application. ')]")));
-        element.click();
-
-        // Check success message
-        // there's a bug that redirect doesn't work, need to uncomment after fix
-
-//        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Your application has been submitted. ')]")));
-//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Back To Dashboard ')]")));
-//        element.click();
-//
-//        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Cause(s) of Damage - ')]")));
-//        WebElement bodyElement = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-//        String bodyText = bodyElement.getText();
-//        if (bodyText.contains(getRandomChars())) {
-//            System.out.println("The body contains: " + getRandomChars());
-//        } else {
-//            System.out.println("The body does not contain: " + getRandomChars());
-//        }
+        submitApplication();
     }
 
     public static void createApplication(Boolean isDraft) throws Exception {
@@ -125,7 +84,7 @@ public class CreateNewApplicationPublic {
         element.clear();
         element.sendKeys("08/19/2024");
 
-        Thread.sleep(2000);
+        sleep(2000);
         //Choose and event
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='eventId']")));
         element.click();
@@ -135,7 +94,7 @@ public class CreateNewApplicationPublic {
         element.click();
 
         // Select cause of damage
-        Thread.sleep(1000);
+        sleep(1000);
         String[] checkboxIds = {
                 "mat-mdc-checkbox-1-input",
                 "mat-mdc-checkbox-2-input",
@@ -164,7 +123,7 @@ public class CreateNewApplicationPublic {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 
         // Click on Next
-        Thread.sleep(1000);
+        sleep(1000);
         nextReviewSubmission(driver, driverWait);
 
         if (isDraft) {
@@ -183,22 +142,22 @@ public class CreateNewApplicationPublic {
         }
 
 
-        Thread.sleep(1000);
+        sleep(1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Business Number')]/parent::div//input")));
         element.sendKeys("Test" + randomNumbers);
 
-        Thread.sleep(1000);
+        sleep(1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Mailing Address')]/parent::div//input")));
         element.sendKeys("1409-755 Caledonia Ave");
 
-        Thread.sleep(1000);
+        sleep(1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//mat-option")));
         element.click();
 
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Primary Contact')]/parent::div//input")));
         element.sendKeys(bceidUSERNAME);
 
-        Thread.sleep(1000);
+        sleep(1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[contains(text(),'Search for Contact')]")));
         element.click();
 
@@ -206,13 +165,56 @@ public class CreateNewApplicationPublic {
 
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//input[@type='radio']"));
 
-        Thread.sleep(1000);
+        sleep(1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Cell Phone')]/parent::div//input")));
         element.sendKeys("7780000000");
 
 
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[contains(text(),'Job Title')]/parent::div//input")));
         element.sendKeys("Test Title");
+    }
+
+    public static void submitApplication() throws InterruptedException {
+        WebDriver driver = getDriver();
+        WebElement element;
+        WebDriverWait driverWait = CustomWebDriverManager.getDriverWait();
+        CustomWebDriverManager.getElements();
+
+        clickSubmitButton(driver, driverWait);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//span[contains(text(),'Submit')])[last()]")));
+
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        int attempts = 0;
+        while (attempts < 3) {
+            try {
+                element.sendKeys(Keys.ENTER);
+                System.out.println("Submit button is clicked");
+                break;
+            } catch (org.openqa.selenium.ElementNotInteractableException e) {
+                sleep(1000); // Adjust the sleep time as necessary
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+            }
+            attempts++;
+        }
+        // Submit Application Confirmation
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to submit my application. ')]")));
+        element.click();
+
+        // Check success message
+        // there's a bug that redirect doesn't work, need to uncomment after fix
+
+//        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Your application has been submitted. ')]")));
+//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Back To Dashboard ')]")));
+//        element.click();
+//
+//        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Cause(s) of Damage - ')]")));
+//        WebElement bodyElement = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+//        String bodyText = bodyElement.getText();
+//        if (bodyText.contains(getRandomChars())) {
+//            System.out.println("The body contains: " + getRandomChars());
+//        } else {
+//            System.out.println("The body does not contain: " + getRandomChars());
+//        }
     }
 
     public static String generateDamageCause() {
@@ -284,7 +286,7 @@ public class CreateNewApplicationPublic {
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 
             // Adding a small delay to ensure the element is interactable
-            Thread.sleep(500);
+            sleep(500);
         } catch (ElementNotInteractableException e) {
             System.out.println("Element not interactable: " + e.getMessage());
             throw e;

@@ -91,6 +91,9 @@ public class VerifySubmitedClaimInRAFT {
         SubmitClaimsPublic.loginToPortal();
 
         // Check Case number
+        String caseNumberDisplayPortal = SubmitApplicationsRAFT.getCaseNumber();
+        boolean isCaseNumberPresent = driver.getPageSource().contains(caseNumberDisplayPortal);
+        System.out.println("Case Number found in page body: " + isCaseNumberPresent);
 
         // Click Submit project
         submitProjectAndCheckClaim(driver, driverWait, ClaimNumber);

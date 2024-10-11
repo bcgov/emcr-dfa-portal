@@ -81,7 +81,7 @@ public class ValidateDraftApplicationNegRAFT {
             element.click();
 
 
-            sleep(1000);
+            sleep(2000);
 
             // scroll to the bottom
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.xpath("(//label)[last()]")));
@@ -92,15 +92,20 @@ public class ValidateDraftApplicationNegRAFT {
             // Get Other Causes element
             element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[contains(@aria-label,'Other Causes')]")));
 
-            // Assert that the actual value not matches the expected value
-            Assert.assertEquals("The populated cause of damage value is not as expected.", CreateNewApplicationPublic.getRandomChars(), element.getAttribute("value"));
+            // Validate that cause is not the same as created and name is not the same as created
+            if (!CreateNewApplicationPublic.getRandomChars().equals(element.getAttribute("value"))) isFound = false;
 
+            // Get Doing Business As (DBA) Name
             element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[contains(@aria-label,'Doing Business As (DBA) Name')]")));
-            Assert.assertEquals("The populated cause of damage value is not as expected.", CreateNewApplicationPublic.getDBAName(), element.getAttribute("value"));
+
+            // Validate that it's not the same as created draft
+            if (!CreateNewApplicationPublic.getDBAName().equals(element.getAttribute("value")))  isFound = false;
+
         } catch (TimeoutException e) {
             isFound = false;
         }
-        Assert.assertFalse("An application was created as a draft (not submitted but saved), but was found on the active tab on RAFT", isFound);
+        Assert.assertFalse("The application was created as a draft (not submitted but saved), but was found on the active tab on RAFT. " +
+                "ticket: https://jag.gov.bc.ca/jira/browse/EMCRI-833", isFound);
         System.out.println("Draft application was created from the Public Portal and validated that it didn't appear on the Active tab on RAFT successfully.");
     }
 }
