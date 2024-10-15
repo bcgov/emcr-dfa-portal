@@ -113,6 +113,8 @@ public class SubmitApplicationsRAFT {
 
     public static void navigateAndInteractWithAppApplications(WebDriver driver, WebDriverWait driverWait, String randomChars) throws InterruptedException {
         WebElement element;
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        Actions actions = new Actions(driver);
 
         // Navigate to "App Applications"
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'App Applications')]"));
@@ -319,8 +321,6 @@ public class SubmitApplicationsRAFT {
         clickSaveButton(driverWait);
 
         for (int i = 0; i < 7; i++) {
-            sleep(5000);
-
             // Click the stage status label
             element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("MscrmControls.Containers.ProcessBreadCrumb-stageStatusLabel")));
             element.click();
@@ -338,13 +338,14 @@ public class SubmitApplicationsRAFT {
 
             // Click Next Stage
             clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
+            sleep(1000);
 
             // Click Case title
             try {
-                element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), '" + CaseTitleWithTimestamp + "')]")));
-                element.click();
-                break; // Exit the loop if the element is found
-            } catch (TimeoutException e) {
+                String xpath = "(//*[contains(text(), '" + CaseTitleWithTimestamp + "')])[last()]";
+                element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
+                element.click();                break; // Exit the loop if the element is found
+            } catch (TimeoutException | ElementNotInteractableException e) {
                 // Continue the loop if the element is not found
             }
         }
