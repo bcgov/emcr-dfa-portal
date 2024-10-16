@@ -2,17 +2,17 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-      </profile>
-      <profile name="Annotation profile for DFAautomationTests" enabled="true">
-        <sourceOutputDir name="../generated-sources/annotations" />
-        <sourceTestOutputDir name="../generated-test-sources/test-annotations" />
-        <module name="DFAautomationTests.main" />
-        <module name="DFAautomationTests.test" />
+        <module name="DFAautomationTests" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="DFAautomationTests.main" target="16" />
+      <module name="DFAautomationTests.test" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

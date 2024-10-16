@@ -121,10 +121,10 @@ public class SubmitClaimsPublic {
         CreateNewProjectPublic.uploadFile(driverWait, "fileDrop", System.getProperty("user.dir") + '/' + "testPPXDFA.pptx");
         Thread.sleep(1000);
         CreateNewProjectPublic.clickElementWithRetryforDocSave(driverWait, By.cssSelector(".family-button.details-button.save-button.mdc-button.mat-mdc-button.mat-unthemed.mat-mdc-button-base"));
-
+        Thread.sleep(1000);
         //Click Next - Review and Submit and Submit
         clickElementWithRetry(driverWait, By.xpath("//*[contains(text(), ' Next - Review & Submit ')]"));
-
+        Thread.sleep(1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/app-root/div/main/div/app-dfa-claim-main/div/mat-horizontal-stepper/div/div[2]/div[4]/app-review-claim/mat-card/div/mat-card-content[1]/div[1]/div[2]/span")));
         if (element != null) {
             System.out.println("Element found: " + element.isDisplayed()); // Log element visibility
@@ -308,7 +308,7 @@ public class SubmitClaimsPublic {
         // fix it
 
         clickElementWithRetry(driverWait, By.cssSelector("[role='presentation'][title='Adjudicator ']"));
-        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 5, 2000);
+        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 5, 4000);
 
         sleep(2000);
         clickElementWithRetry(driverWait, By.cssSelector("[role='presentation'][title='Decision Made']"));

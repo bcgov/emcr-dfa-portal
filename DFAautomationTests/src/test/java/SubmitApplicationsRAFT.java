@@ -27,16 +27,16 @@ public class SubmitApplicationsRAFT {
     @Setter
     private static String caseNumber;
 
-    @After
-    public void tearDown() {
-        driver.close();
-        driver.quit();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        CustomWebDriverManager.instance = null;
-    }
+//    @After
+//    public void tearDown() {
+//        driver.close();
+//        driver.quit();
+//    }
+//
+//    @AfterClass
+//    public static void afterClass() {
+//        CustomWebDriverManager.instance = null;
+//    }
 
 
     @Test
@@ -143,6 +143,8 @@ public class SubmitApplicationsRAFT {
             cssSelector = "[title='LG - DFA Train Automated'][tabindex='-1']";
         } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentName)) {
             cssSelector = "[title='LG - DFA Train Automated'][tabindex='-1']";
+        } else if (Constants.DEV_SupportDynamicsPub.equalsIgnoreCase(environmentName)) {
+            cssSelector = "[title='LG - DFA Dev Automated'][tabindex='-1']";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentName);
         }
@@ -162,7 +164,7 @@ public class SubmitApplicationsRAFT {
         WebElement inputElement = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[contains(@aria-label,'Other Causes')]")));
 
         // Assert that the actual value matches the expected value
-        Assert.assertEquals("The populated cause of damage value is not as expected.", randomChars, inputElement.getAttribute("value"));
+       Assert.assertEquals("The populated cause of damage value is not as expected.", randomChars, inputElement.getAttribute("value"));
 
         // scroll to the top
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.xpath("//label[@role='presentation']")));
@@ -182,6 +184,8 @@ public class SubmitApplicationsRAFT {
             xpathExpressionAssingTo = "//*[contains(text(), 'EMBC DFA Test')]";
         } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentAssingTo)) {
             xpathExpressionAssingTo = "//*[contains(text(), 'EMBC DFA Test')]";
+        } else if (Constants.DEV_SupportDynamicsPub.equalsIgnoreCase(environmentAssingTo)) {
+            xpathExpressionAssingTo = "//*[contains(text(), 'EMCR DFA Reporting BI Test')]";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentName);
         }
@@ -273,6 +277,8 @@ public class SubmitApplicationsRAFT {
             primaryContactValue = "DFA Train Automated";
         } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
             primaryContactValue = "DFA Train Automated";
+        } else if (Constants.DEV_SupportDynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
+            primaryContactValue = "DFA Dev Automated";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactConfirm);
         }
@@ -294,6 +300,8 @@ public class SubmitApplicationsRAFT {
             xpathExpressionPrimaryContactConfirm = "//span[contains(text(), 'DFA Train Automated')]";
         } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
             xpathExpressionPrimaryContactConfirm = "//span[contains(text(), 'DFA Train Automated')]";
+        } else if (Constants.DEV_SupportDynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
+            xpathExpressionPrimaryContactConfirm = "//span[contains(text(), 'DFA Dev Automated')]";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactConfirmSelectPopup);
         }
@@ -337,14 +345,15 @@ public class SubmitApplicationsRAFT {
             element.click();
 
             // Click Next Stage
-            clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
+            clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 2, 1000);
             sleep(1000);
 
             // Click Case title
             try {
                 String xpath = "(//*[contains(text(), '" + CaseTitleWithTimestamp + "')])[last()]";
                 element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
-                element.click();                break; // Exit the loop if the element is found
+                element.click();
+                break; // Exit the loop if the element is found
             } catch (TimeoutException | ElementNotInteractableException e) {
                 // Continue the loop if the element is not found
             }

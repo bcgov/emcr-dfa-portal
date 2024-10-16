@@ -4,8 +4,8 @@ public class Config {
     public static final String SELECTED_DRIVER = Constants.CHROME_DRIVER;    //the driver that will be used for the tests
 
     // Uncomment for Test env run:
-    public static final String ENVIRONMENT = Constants.TST_Public;      //the environment that will be used for the tests Portal
-    public static final String ENVIRONMENT_Dynamics = Constants.TST_DynamicsPub; //the environment that will be used for the tests RAFT
+    public static final String ENVIRONMENT = Constants.DEV_SupportPub;      //the environment that will be used for the tests Portal
+    public static final String ENVIRONMENT_Dynamics = Constants.DEV_SupportDynamicsPub; //the environment that will be used for the tests RAFT
 
     // Uncomment for Dev env run:
 //    public static final String ENVIRONMENT = Constants.DEV_Public;      //the environment that will be used for the tests Portal

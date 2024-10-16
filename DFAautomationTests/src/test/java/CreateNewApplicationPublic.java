@@ -80,11 +80,11 @@ public class CreateNewApplicationPublic {
         // Date of damage
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='damageFromDate']")));
         element.clear();
-        element.sendKeys("08/16/2024");
+        element.sendKeys("09/16/2024");
 
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='damageToDate']")));
         element.clear();
-        element.sendKeys("08/19/2024");
+        element.sendKeys("09/19/2024");
 
         sleep(2000);
         //Choose and event

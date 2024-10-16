@@ -20,6 +20,8 @@ public class Constants {
     public static final String 		TST_DynamicsPub 	= "TST_DynamicsPub";
     public static final String 		TRN_Public 	= "TRN_Public";
     public static final String 		TRN_DynamicsPub 	= "TRN_DynamicsPub";
+    public static final String 		DEV_SupportDynamicsPub    = "DEV_SupportDynamicsPub";
+    public static final String 		DEV_SupportPub     = "DEV_SupportPub";
 
 
     //others
