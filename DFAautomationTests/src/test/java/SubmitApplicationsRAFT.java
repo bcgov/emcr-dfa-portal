@@ -27,16 +27,16 @@ public class SubmitApplicationsRAFT {
     @Setter
     private static String caseNumber;
 
-//    @After
-//    public void tearDown() {
-//        driver.close();
-//        driver.quit();
-//    }
-//
-//    @AfterClass
-//    public static void afterClass() {
-//        CustomWebDriverManager.instance = null;
-//    }
+    @After
+    public void tearDown() {
+        driver.close();
+        driver.quit();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        CustomWebDriverManager.instance = null;
+    }
 
 
     @Test
@@ -119,12 +119,6 @@ public class SubmitApplicationsRAFT {
         // Navigate to "App Applications"
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'App Applications')]"));
         sleep(1000);
-//
-//        // Interact with "Active AppApplications for Public Sector"
-//        clickElementWithJS(driverWait, js, actions, By.cssSelector("[aria-haspopup='true'][title='Select a view']"));
-//
-//        // Interact with "Draft App Applications for Public Sector"
-//        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Draft App Applications for Public Sector')]"));
 
         // Submitted dates descending
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[tabindex='-1'][title='Created On']")));
@@ -164,7 +158,7 @@ public class SubmitApplicationsRAFT {
         WebElement inputElement = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[contains(@aria-label,'Other Causes')]")));
 
         // Assert that the actual value matches the expected value
-       Assert.assertEquals("The populated cause of damage value is not as expected.", randomChars, inputElement.getAttribute("value"));
+        Assert.assertEquals("The populated cause of damage value is not as expected.", randomChars, inputElement.getAttribute("value"));
 
         // scroll to the top
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.xpath("//label[@role='presentation']")));
@@ -201,42 +195,39 @@ public class SubmitApplicationsRAFT {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.xpath("(//label)[last()]")));
         sleep(1000);
 
-
         // now primary conatact is filled out by default, but I'll leave this implementation for future
         // Primary Contact
-//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Primary Contact, Lookup'][role='combobox']")));
-//        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-//        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-//        element.sendKeys("DFA Train Automated");
-//        sleep(1000);
+        // element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Primary Contact, Lookup'][role='combobox']")));
+        // ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        // ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        // element.sendKeys("DFA Train Automated");
+        // sleep(1000);
 
         // Primary Contact
-//        String environmentPrimaryContact = Config.ENVIRONMENT_Dynamics; // Use the correct environment variable
-//        String xpathExpressionPrimaryContact;
-//
-//        if (Constants.DEV_DynamicsPub.equalsIgnoreCase(environmentPrimaryContact)) {
-//            xpathExpressionPrimaryContact = "//*[contains(text(), 'EIGHT, PHSAPOC')]";
-//        } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentPrimaryContact)) {
-//            xpathExpressionPrimaryContact = "//*[contains(text(), 'DFA Train Automated')]";
-//        } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentPrimaryContact)) {
-//            xpathExpressionPrimaryContact = "//*[contains(text(), 'EIGHT, PHSAPOC')]";
-//        } else {
-//            throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContact);
-//        }
-//
-//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathExpressionPrimaryContact)));
-//        element.click();
+        // String environmentPrimaryContact = Config.ENVIRONMENT_Dynamics; // Use the correct environment variable
+        // String xpathExpressionPrimaryContact;
 
+        // if (Constants.DEV_DynamicsPub.equalsIgnoreCase(environmentPrimaryContact)) {
+        //     xpathExpressionPrimaryContact = "//*[contains(text(), 'EIGHT, PHSAPOC')]";
+        // } else if (Constants.TST_DynamicsPub.equalsIgnoreCase(environmentPrimaryContact)) {
+        //     xpathExpressionPrimaryContact = "//*[contains(text(), 'DFA Train Automated')]";
+        // } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentPrimaryContact)) {
+        //     xpathExpressionPrimaryContact = "//*[contains(text(), 'EIGHT, PHSAPOC')]";
+        // } else {
+        //     throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContact);
+        // }
+
+        // element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpathExpressionPrimaryContact)));
+        // element.click();
+
+        //Mailling add city
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Mailing Address City, Lookup'][type='text']")));
+        element.click();
+        element.sendKeys("Victoria");
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Victoria')]"));
+        sleep(1000);
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Save')]"));
         sleep(3000);
-
-//        // Click Draft
-//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='Draft'][role='presentation']")));
-//        element.click();
-//        sleep(1000);
-//
-//        // Click Next Stage
-//        clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
 
         // Click Review details tab and enter details
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Review Details'][role='tab']")));
@@ -331,7 +322,8 @@ public class SubmitApplicationsRAFT {
         for (int i = 0; i < 7; i++) {
             // Click the stage status label
             element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("MscrmControls.Containers.ProcessBreadCrumb-stageStatusLabel")));
-            element.click();
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
             Thread.sleep(1000);
 
             // Click the General tab
@@ -342,7 +334,8 @@ public class SubmitApplicationsRAFT {
             // Review Application
             Thread.sleep(1000);
             element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("MscrmControls.Containers.ProcessBreadCrumb-stageStatusLabel")));
-            element.click();
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 
             // Click Next Stage
             clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 2, 1000);
@@ -363,6 +356,7 @@ public class SubmitApplicationsRAFT {
         element.click();
     }
 }
+
 
 
 
