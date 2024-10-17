@@ -24,16 +24,16 @@ public class SubmitClaimsPublic {
     @Setter
     private static String vendorName;
 
-    @After
-    public void tearDown() {
-        driver.close();
-        driver.quit();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        CustomWebDriverManager.instance = null;
-    }
+//    @After
+//    public void tearDown() {
+//        driver.close();
+//        driver.quit();
+//    }
+//
+//    @AfterClass
+//    public static void afterClass() {
+//        CustomWebDriverManager.instance = null;
+//    }
 
 
     @Test
@@ -265,6 +265,7 @@ public class SubmitClaimsPublic {
 
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Sort Newest to Oldest')]"));
         // Click on case title
+        Thread.sleep(1000);
         String caseTitleWithTimestamp = SubmitApplicationsRAFT.getCaseTitleWithTimestamp();
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='" + caseTitleWithTimestamp + "'][tabindex='-1']")));
         element.click();

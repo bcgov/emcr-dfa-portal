@@ -27,16 +27,16 @@ public class SubmitApplicationsRAFT {
     @Setter
     private static String caseNumber;
 
-    @After
-    public void tearDown() {
-        driver.close();
-        driver.quit();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        CustomWebDriverManager.instance = null;
-    }
+//    @After
+//    public void tearDown() {
+//        driver.close();
+//        driver.quit();
+//    }
+//
+//    @AfterClass
+//    public static void afterClass() {
+//        CustomWebDriverManager.instance = null;
+//    }
 
 
     @Test
@@ -56,13 +56,18 @@ public class SubmitApplicationsRAFT {
         String randomChars = CreateNewApplicationPublic.getRandomChars();
         System.out.println("Other comments: " + randomChars);
 
+        //Wait for dashboard
+        element = driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Back To Dashboard ')]")));
+        element.click();
+
         LoginDynamicsPublic loginDynamicsPublic = new LoginDynamicsPublic();
         loginDynamicsPublic.test();
 
-        sleep(5000);
+        sleep(1000);
         navigateAndInteractWithAppApplications(driver, driverWait, randomChars);
 
-        sleep(3000);
+        sleep(1000);
         clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 2, 1000);
 
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='ID'][type^='text']")));
