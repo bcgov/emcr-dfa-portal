@@ -27,16 +27,16 @@ public class SubmitApplicationsRAFT {
     @Setter
     private static String caseNumber;
 
-//    @After
-//    public void tearDown() {
-//        driver.close();
-//        driver.quit();
-//    }
-//
-//    @AfterClass
-//    public static void afterClass() {
-//        CustomWebDriverManager.instance = null;
-//    }
+    @After
+    public void tearDown() {
+        driver.close();
+        driver.quit();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        CustomWebDriverManager.instance = null;
+    }
 
 
     @Test
@@ -57,18 +57,21 @@ public class SubmitApplicationsRAFT {
         System.out.println("Other comments: " + randomChars);
 
         //Wait for dashboard
-        element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Back To Dashboard ')]")));
-        element.click();
+//        element = driverWait.until(ExpectedConditions
+//                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Back To Dashboard ')]")));
+//        element.click();
 
         LoginDynamicsPublic loginDynamicsPublic = new LoginDynamicsPublic();
         loginDynamicsPublic.test();
 
-        sleep(1000);
+        sleep(2000);
         navigateAndInteractWithAppApplications(driver, driverWait, randomChars);
 
         sleep(1000);
         clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 2, 1000);
+
+        //Click Summary tab
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Summary')]"));
 
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='ID'][type^='text']")));
         String caseNumber = element.getText();
@@ -256,8 +259,8 @@ public class SubmitApplicationsRAFT {
         // Confirm Effected region
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Confirmed Effected Region/Community, Lookup'][type='text']")));
         element.click();
-        element.sendKeys("City of Burnaby");
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'City of Burnaby')]")));
+        element.sendKeys("City of Surrey");
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'City of Surrey')]")));
         element.click();
         Thread.sleep(1000);
         clickSaveButton(driverWait);
@@ -298,6 +301,8 @@ public class SubmitApplicationsRAFT {
             xpathExpressionPrimaryContactConfirm = "//span[contains(text(), 'DFA Train Automated')]";
         } else if (Constants.DEV_SupportDynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
             xpathExpressionPrimaryContactConfirm = "//span[contains(text(), 'DFA Dev Automated')]";
+        } else if (Constants.DEV_SandboxDynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
+            xpathExpressionPrimaryContactConfirm = "//span[contains(text(), 'Nitin Joy')]";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactConfirmSelectPopup);
         }
@@ -333,7 +338,7 @@ public class SubmitApplicationsRAFT {
 
             // Click the General tab
             element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'General')]")));
-            element.click();
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
             Thread.sleep(1000);
 
             // Review Application
@@ -357,6 +362,7 @@ public class SubmitApplicationsRAFT {
             }
         }
         System.out.println("Case title clicked: " + CaseTitleWithTimestamp);
+        sleep(1500);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("okButton")));
         element.click();
     }

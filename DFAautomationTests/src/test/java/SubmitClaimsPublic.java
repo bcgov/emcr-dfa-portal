@@ -24,16 +24,16 @@ public class SubmitClaimsPublic {
     @Setter
     private static String vendorName;
 
-//    @After
-//    public void tearDown() {
-//        driver.close();
-//        driver.quit();
-//    }
-//
-//    @AfterClass
-//    public static void afterClass() {
-//        CustomWebDriverManager.instance = null;
-//    }
+    @After
+    public void tearDown() {
+        driver.close();
+        driver.quit();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        CustomWebDriverManager.instance = null;
+    }
 
 
     @Test
@@ -94,10 +94,10 @@ public class SubmitClaimsPublic {
 
         // Click Add
         clickElementWithRetry(driverWait, By.xpath("//button[text()='Add']"));
-        sleep(1000);
+        sleep(4000);
         //Click Nxt to upload docs
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[contains(text(), 'Next - Upload Documents')]")));
-        element.click();
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         Thread.sleep(1000);
         clickElementWithRetry(driverWait, By.xpath("//*[contains(text(), ' + Add Invoices ')]"));
         // Upload docs
@@ -137,10 +137,9 @@ public class SubmitClaimsPublic {
         js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
         Thread.sleep(1000);
         actions.moveToElement(driver.findElement(By.tagName("body")), 0, 0).clickAndHold().perform();
-        Thread.sleep(1000);
+        Thread.sleep(3000);
 
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//span[contains(text(),'Submit')])[last()]")));
-
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/app-root/div/main/div/app-dfa-claim-main/div/mat-horizontal-stepper/div/div[2]/div[4]/div/div[2]/button/span[2]")));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         element = driverWait.until(ExpectedConditions.visibilityOf(element));
         element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
@@ -276,8 +275,11 @@ public class SubmitClaimsPublic {
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Recovery Plans'][title='Recovery Plans']")));
         element.click();
         // Double-click on Project number
+        Thread.sleep(2000);
         System.out.println("Project number: " + CreateNewProjectPublic.getRandomProjectNumber());
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='" + CreateNewProjectPublic.getRandomProjectNumber() + "'][role='gridcell']")));
+        actions.doubleClick(element).perform();
+        Thread.sleep(1000);
         actions.doubleClick(element).perform();
         Thread.sleep(5000);
         clickElementWithRetry(driverWait, By.cssSelector("[role='presentation'][title='Draft']"));

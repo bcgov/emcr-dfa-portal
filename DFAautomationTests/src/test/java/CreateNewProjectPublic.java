@@ -93,6 +93,10 @@ public class CreateNewProjectPublic {
         element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
         element.sendKeys(randomProjectName);
 
+        //Are the dates of damage the same dates provided on the application?
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[type='radio'][value='false']")));
+        element.click();
+
         //What is the date(s) of damage for this site?
         DateUtils dateUtils = new DateUtils();
         dateUtils.setYesterdayAsString(DateUtils.getFormattedDates().get("yesterday"));

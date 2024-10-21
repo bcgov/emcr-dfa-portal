@@ -51,7 +51,7 @@ public class VerifySubmitedClaimInRAFT {
 
         // Click Save
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Save')]"));
-
+        Thread.sleep(1000);
         // Locate the body element
         WebElement bodyElement = driver.findElement(By.tagName("body"));
         actions.moveToElement(bodyElement).click().perform();
@@ -65,10 +65,11 @@ public class VerifySubmitedClaimInRAFT {
         }
 
         // Click Approval pending
+        Thread.sleep(1000);
         clickApprovalPending(driver, driverWait);
-
+        Thread.sleep(1000);
         // Click Next
-        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 5, 1000);
+       SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 7, 1000);
 
         // Decision Approve on Decision Made Popup
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[data-id='header_process_dfa_decision.fieldControl-option-set-select'][aria-label='Decision']")));
@@ -80,7 +81,8 @@ public class VerifySubmitedClaimInRAFT {
         Thread.sleep(1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='Decision Made'][role='presentation']")));
         element.click();
-
+        Thread.sleep(1000);
+        clickApprovalDecisionMade(driver, driverWait);
         SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Finish')]")));
         element.click();
@@ -163,8 +165,17 @@ public class VerifySubmitedClaimInRAFT {
         int attempts = 0;
         while (attempts < 3) {
             try {
-                element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='presentation'][title='Approval Pending']")));
+                element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='presentation'][title='Submitted']")));
                 element.click();
+                Thread.sleep(1000);
+                element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Submitted'][data-id='header_process_dfa_submittedbpf.fieldControl-option-set-select']")));
+                element.click();
+                Thread.sleep(1500);
+                // Select Project Decision - Approved
+                element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//select[@data-id='header_process_dfa_submittedbpf.fieldControl-option-set-select']")));
+                element.click();
+                sleep(1000);
+                element.sendKeys(Keys.DOWN, Keys.RETURN);
                 break; // Exit the loop if successful
             } catch (StaleElementReferenceException e) {
                 attempts++;
@@ -175,10 +186,14 @@ public class VerifySubmitedClaimInRAFT {
     public static void submitProjectAndCheckClaim(WebDriver driver, WebDriverWait driverWait, String ClaimNumber) throws InterruptedException {
         WebElement element;
 
+        //Click on Login page
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Log in with Business BCeID ')]")));
+        element.click();
+
         // Click Submit project
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit Projects ')]")));
         element.click();
-
+        Thread.sleep(1000);
         // Click Submit Claims
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit Claims ')]")));
         element.click();
@@ -193,6 +208,26 @@ public class VerifySubmitedClaimInRAFT {
         } else {
             System.out.println("Claim Number " + ClaimNumber + " does not exist in the body of the page.");
             fail("Claim Number " + ClaimNumber + " does not exist in the body of the page.");
+        }
+    }
+    public static void clickApprovalDecisionMade(WebDriver driver, WebDriverWait driverWait) throws InterruptedException {
+        WebElement element;
+        int attempts = 0;
+        while (attempts < 3) {
+            try {
+                element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Decision'][data-id='header_process_dfa_decision.fieldControl-option-set-select']")));
+                element.click();
+                Thread.sleep(1500);
+                // Select Project Decision - Approved
+                element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//select[@data-id='header_process_dfa_decision.fieldControl-option-set-select']")));
+                element.click();
+                sleep(1000);
+                element.sendKeys(Keys.DOWN, Keys.RETURN);
+                break; // Exit the loop if successful
+            } catch (StaleElementReferenceException e) {
+                attempts++;
+                sleep(1000); // Wait for 1 second before retrying
+            }
         }
     }
 
