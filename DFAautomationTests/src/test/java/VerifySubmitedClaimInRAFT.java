@@ -72,10 +72,8 @@ public class VerifySubmitedClaimInRAFT {
        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 7, 1000);
 
         // Decision Approve on Decision Made Popup
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[data-id='header_process_dfa_decision.fieldControl-option-set-select'][aria-label='Decision']")));
-        element.click();
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Approved')]")));
-        element.click();
+        approveDecision(driver, driverWait);
+
         // Click Save
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Save')]"));
         Thread.sleep(1000);
@@ -121,7 +119,7 @@ public class VerifySubmitedClaimInRAFT {
         sleep(1000);
 
         // Search for Claim no
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='Select to enter data'][placeholder='Search this view']")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[type='text'][placeholder='Search this view']")));
         element.sendKeys(ClaimNumber);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("quickFind_button_icon_1")));
         element.click();
@@ -229,6 +227,16 @@ public class VerifySubmitedClaimInRAFT {
                 sleep(1000); // Wait for 1 second before retrying
             }
         }
+    }
+
+    public static void approveDecision(WebDriver driver, WebDriverWait driverWait) {
+        WebElement element;
+
+        // Decision Approve on Decision Made Popup
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[data-id='header_process_dfa_decision.fieldControl-option-set-select'][aria-label='Decision']")));
+        element.click();
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Approved')]")));
+        element.click();
     }
 
 }

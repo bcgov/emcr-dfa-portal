@@ -259,8 +259,8 @@ public class SubmitApplicationsRAFT {
         // Confirm Effected region
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Confirmed Effected Region/Community, Lookup'][type='text']")));
         element.click();
-        element.sendKeys("City of Surrey");
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'City of Surrey')]")));
+        element.sendKeys("City of Burnaby");
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'City of Burnaby')]")));
         element.click();
         Thread.sleep(1000);
         clickSaveButton(driverWait);

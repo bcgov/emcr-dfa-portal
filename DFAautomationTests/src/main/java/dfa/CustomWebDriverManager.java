@@ -34,7 +34,7 @@ public class CustomWebDriverManager {
      */
     private CustomWebDriverManager() {
         driver = initDriver();
-        Duration duration4 = Duration.ofSeconds(15);
+        Duration duration4 = Duration.ofSeconds(30);
         driverWait = (new WebDriverWait(driver,duration4));
         element = null;
         elements = null;

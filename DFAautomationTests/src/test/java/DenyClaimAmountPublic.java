@@ -16,16 +16,16 @@ public class DenyClaimAmountPublic {
 
     private WebDriver driver;
 
-    @After
-    public void tearDown() {
-        driver.close();
-        driver.quit();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        CustomWebDriverManager.instance = null;
-    }
+//    @After
+//    public void tearDown() {
+//        driver.close();
+//        driver.quit();
+//    }
+//
+//    @AfterClass
+//    public static void afterClass() {
+//        CustomWebDriverManager.instance = null;
+//    }
 
     @Test
     public void test() throws Exception {
@@ -45,9 +45,13 @@ public class DenyClaimAmountPublic {
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Denied')]")));
         element.click();
 
+        //Click Save
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Save')]"));
+        Thread.sleep(1000);
+
         //Deny comments
         String commentsDeny= RandomStringGenerator.generateRandomAlphanumeric(2000);
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Decision comments'][maxlength='2000']")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='Select to enter data'][maxlength='2000']")));
         element.click();
         element.sendKeys(commentsDeny);
 
@@ -72,7 +76,12 @@ public class DenyClaimAmountPublic {
         VerifySubmitedClaimInRAFT.clickApprovalPending(driver, driverWait);
 
         // Click Next
-        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 6, 1000);
+        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 7, 1000);
+
+        // Decision Approve on Decision Made Popup
+        VerifySubmitedClaimInRAFT.approveDecision(driver, driverWait);
+
+        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
 
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Finish')]")));
         element.click();

@@ -311,7 +311,7 @@ public class SubmitClaimsPublic {
         // fix it
 
         clickElementWithRetry(driverWait, By.cssSelector("[role='presentation'][title='Adjudicator ']"));
-        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 5, 4000);
+        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 5, 2000);
 
         sleep(2000);
         clickElementWithRetry(driverWait, By.cssSelector("[role='presentation'][title='Decision Made']"));
