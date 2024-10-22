@@ -58,7 +58,7 @@ public class ValidateActiveApplicationNegRAFT {
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Draft App Applications for Public Sector')]"));
 
         // Submitted dates descending
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[tabindex='-1'][title='Submitted Date']")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[tabindex='-1'][title='Date Received']")));
         element.click();
 
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Sort Newest to Oldest')]"));
@@ -74,6 +74,8 @@ public class ValidateActiveApplicationNegRAFT {
             cssSelector = "[title='LG - DFA Train Automated'][tabindex='-1']";
         } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentName)) {
             cssSelector = "[title='LG - DFA Train Automated'][tabindex='-1']";
+        } else if (Constants.DEV_SupportDynamicsPub.equalsIgnoreCase(environmentName)) {
+            cssSelector = "[title='LG - DFA Dev Automated'][tabindex='-1']";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentName);
         }

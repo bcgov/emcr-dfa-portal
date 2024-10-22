@@ -16,16 +16,16 @@ public class DenyClaimAmountPublic {
 
     private WebDriver driver;
 
-//    @After
-//    public void tearDown() {
-//        driver.close();
-//        driver.quit();
-//    }
-//
-//    @AfterClass
-//    public static void afterClass() {
-//        CustomWebDriverManager.instance = null;
-//    }
+    @After
+    public void tearDown() {
+        driver.close();
+        driver.quit();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        CustomWebDriverManager.instance = null;
+    }
 
     @Test
     public void test() throws Exception {
@@ -47,6 +47,9 @@ public class DenyClaimAmountPublic {
 
         //Click Save
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Save')]"));
+        Thread.sleep(1000);
+
+        scrollToBottom(driver);
         Thread.sleep(1000);
 
         //Deny comments
@@ -98,5 +101,9 @@ public class DenyClaimAmountPublic {
     public void clickGoBackButton(WebDriver driver, WebDriverWait driverWait) {
         WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='Go back'][aria-label='Press Enter to go back.']")));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+    }
+
+    public void scrollToBottom(WebDriver driver) {
+        ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
     }
 }
