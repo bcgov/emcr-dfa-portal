@@ -113,7 +113,7 @@ public class CreateNewProjectPublic {
         Thread.sleep(1000);
 
         // Fill form fields
-        fillFormField(driverWait, "[formcontrolname='differentDamageDatesReason'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(200));
+        fillFormField(driverWait, "[formcontrolname='differentDamageDatesReason'][maxlength='500']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(500));
         fillFormField(driverWait, "[formcontrolname='siteLocation'][maxlength='100']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(100));
         fillFormField(driverWait, "[formcontrolname='infraDamageDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
         fillFormField(driverWait, "[formcontrolname='causeofDamageDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
