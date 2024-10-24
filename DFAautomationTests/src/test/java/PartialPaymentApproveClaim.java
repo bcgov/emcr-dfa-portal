@@ -14,16 +14,16 @@ public class PartialPaymentApproveClaim {
 
     private WebDriver driver;
 
-    @After
-    public void tearDown() {
-        driver.close();
-        driver.quit();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        CustomWebDriverManager.instance = null;
-    }
+//    @After
+//    public void tearDown() {
+//        driver.close();
+//        driver.quit();
+//    }
+//
+//    @AfterClass
+//    public static void afterClass() {
+//        CustomWebDriverManager.instance = null;
+//    }
 
     @Test
     public void test() throws Exception {
@@ -135,7 +135,7 @@ public class PartialPaymentApproveClaim {
 
         sleep(2000);
         SubmitClaimsPublic.clickElementWithRetry(driverWait, By.cssSelector("[role='presentation'][title='Decision Made']"));
-        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Set Active')]"), 1, 1000);
+        //SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Set Active')]"), 1, 1000);
 
 
         // Decision Approve on Decision Made Popup

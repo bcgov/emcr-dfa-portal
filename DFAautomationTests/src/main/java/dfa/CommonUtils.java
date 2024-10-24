@@ -25,6 +25,8 @@ public class CommonUtils {
         environmentUrls.put(Constants.DEV_SupportDynamicsPub, "https://embc-dfa.dev.jag.gov.bc.ca/main.aspx?appid=3d27a86f-57c6-ec11-b832-00505683fbf4&pagetype=dashboard&id=87bd5bc9-6d29-ed11-b834-00505683fbf4&type=system&_canOverride=true");
         environmentUrls.put(Constants.DEV_SupportPub, "https://dfa-public-sector-dev.apps.silver.devops.gov.bc.ca/");
         environmentUrls.put(Constants.DEV_SandboxPub, "https://dfa-public-sector-dev.apps.silver.devops.gov.bc.ca/");
+        environmentUrls.put(Constants.TST_SupportPub, "https://dfa-public-sector-test.apps.silver.devops.gov.bc.ca/");
+        environmentUrls.put(Constants.TST_SupportDynamicsPub, "https://embc-dfa.dev.jag.gov.bc.ca/main.aspx?appid=3d27a86f-57c6-ec11-b832-00505683fbf4&pagetype=dashboard&id=87bd5bc9-6d29-ed11-b834-00505683fbf4&type=system&_canOverride=true");
         //environmentUrls.put(Constants.DEV_SandboxDynamicsPub , "https://embc-dfa-sbx.dev.jag.gov.bc.ca/main.aspx?appid=3d27a86f-57c6-ec11-b832-00505683fbf4&pagetype=dashboard&id=87bd5bc9-6d29-ed11-b834-00505683fbf4&type=system&_canOverride=true");
 
 

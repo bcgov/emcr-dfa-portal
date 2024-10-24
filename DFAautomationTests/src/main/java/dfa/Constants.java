@@ -24,6 +24,8 @@ public class Constants {
     public static final String 		DEV_SupportPub     = "DEV_SupportPub";
     public static final String 		DEV_SandboxPub     = "DEV_SandboxPub";
     public static final String 		DEV_SandboxDynamicsPub    = "DEV_SupportDynamicsPub";
+    public static final String 		TST_SupportPub     = "TST_SupportPub";
+    public static final String 		TST_SupportDynamicsPub    = "TST_SupportDynamicsPub";
 
 
 
