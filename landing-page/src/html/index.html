@@ -718,6 +718,17 @@ a:hover {
         font-weight: bold;
 		text-align: center;
     }
+	.environment-banner {
+		max-width: 100%;
+		padding: 10px 0px;
+		justify-content: space-between;
+		text-align: center;
+		color: white;
+		background-color: #097d8c;
+		p {
+			margin-top: 10px;
+		}
+	}
 }
 
 </style>
@@ -817,7 +828,15 @@ a:hover {
 </head>
 
 <body onload="onLoad()">
-
+	<div class="environment-banner">
+		<p>
+		  	You are in the <b>DEV</b> version of the <b>Disaster Financial Assistance Tool</b>.
+		</p>
+		<p>
+		  	All information entered here will be treated as <b>dev</b> data.
+		</p>
+	</div>
+	
 	<header class="site-header">
 		<div class="container">
 			<div class="site-header-content">
