@@ -72,6 +72,8 @@ public class ValidateDraftApplicationNegRAFT {
             cssSelector = "[title='LG - DFA Train Automated'][tabindex='-1']";
         } else if (Constants.DEV_SupportDynamicsPub.equalsIgnoreCase(environmentName)) {
             cssSelector = "[title='LG - DFA Dev Automated'][tabindex='-1']";
+        } else if (Constants.TST_SupportDynamicsPub.equalsIgnoreCase(environmentName)) {
+            cssSelector = "[title='LG - DFA Train Automated'][tabindex='-1']";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentName);
         }

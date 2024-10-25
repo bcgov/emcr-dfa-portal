@@ -185,9 +185,9 @@ public class VerifySubmitedClaimInRAFT {
         WebElement element;
 
         //Click on Login page
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Log in with Business BCeID ')]")));
-        element.click();
-
+//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Log in with Business BCeID ')]")));
+//        element.click();
+        Thread.sleep(1000);
         // Click Submit project
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Submit Projects ')]")));
         element.click();

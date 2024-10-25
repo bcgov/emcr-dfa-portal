@@ -130,11 +130,10 @@ public class PartialPaymentApproveClaim {
         VerifySubmitedClaimInRAFT.clickApprovalPending(driver, driverWait);
 
         // Click Next
-        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 6, 2000);
+        SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 7, 2000);
         Thread.sleep(1000);
 
-        sleep(2000);
-        SubmitClaimsPublic.clickElementWithRetry(driverWait, By.cssSelector("[role='presentation'][title='Decision Made']"));
+        //SubmitClaimsPublic.clickElementWithRetry(driverWait, By.cssSelector("[role='presentation'][title='Decision Made']"));
         //SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Set Active')]"), 1, 1000);
 
 
@@ -153,10 +152,10 @@ public class PartialPaymentApproveClaim {
         // Click Save
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Save')]"));
 
-        Thread.sleep(3000);
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[title='Decision Made'][role='presentation']")));
-        element.click();
+      //  Thread.sleep(1000);
+       // SubmitClaimsPublic.clickElementWithRetry(driverWait, By.cssSelector("[title='Decision Made'][role='presentation']"));
 
+        Thread.sleep(1000);
         SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Finish')]")));
         element.click();
@@ -166,7 +165,9 @@ public class PartialPaymentApproveClaim {
         // Login portal
         SubmitClaimsPublic.loginToPortal();
 
-        // Check Case number
+        //Click on Login page
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Log in with Business BCeID ')]")));
+        element.click();
 
         // Click Submit project
         VerifySubmitedClaimInRAFT.submitProjectAndCheckClaim(driver, driverWait, ClaimNumber);

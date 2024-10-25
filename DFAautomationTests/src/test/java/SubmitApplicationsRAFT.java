@@ -147,6 +147,8 @@ public class SubmitApplicationsRAFT {
             cssSelector = "[title='LG - DFA Train Automated'][tabindex='-1']";
         } else if (Constants.DEV_SupportDynamicsPub.equalsIgnoreCase(environmentName)) {
             cssSelector = "[title='LG - DFA Dev Automated'][tabindex='-1']";
+        } else if (Constants.TST_SupportDynamicsPub.equalsIgnoreCase(environmentName)) {
+            cssSelector = "[title='LG - DFA Train Automated'][tabindex='-1']";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentName);
         }
@@ -187,6 +189,8 @@ public class SubmitApplicationsRAFT {
         } else if (Constants.TRN_DynamicsPub.equalsIgnoreCase(environmentAssingTo)) {
             xpathExpressionAssingTo = "//*[contains(text(), 'EMBC DFA Test')]";
         } else if (Constants.DEV_SupportDynamicsPub.equalsIgnoreCase(environmentAssingTo)) {
+            xpathExpressionAssingTo = "//*[contains(text(), 'EMCR DFA Reporting BI Test')]";
+        } else if (Constants.TST_SupportDynamicsPub.equalsIgnoreCase(environmentAssingTo)) {
             xpathExpressionAssingTo = "//*[contains(text(), 'EMCR DFA Reporting BI Test')]";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentName);
@@ -278,6 +282,8 @@ public class SubmitApplicationsRAFT {
             primaryContactValue = "DFA Train Automated";
         } else if (Constants.DEV_SupportDynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
             primaryContactValue = "DFA Dev Automated";
+        } else if (Constants.TST_SupportDynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
+            primaryContactValue = "DFA Train Automated";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactConfirm);
         }
@@ -303,6 +309,8 @@ public class SubmitApplicationsRAFT {
             xpathExpressionPrimaryContactConfirm = "//span[contains(text(), 'DFA Dev Automated')]";
         } else if (Constants.DEV_SandboxDynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
             xpathExpressionPrimaryContactConfirm = "//span[contains(text(), 'Nitin Joy')]";
+        } else if (Constants.TST_SupportDynamicsPub.equalsIgnoreCase(environmentPrimaryContactConfirm)) {
+            xpathExpressionPrimaryContactConfirm = "//span[contains(text(), 'DFA Train Automated')]";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentPrimaryContactConfirmSelectPopup);
         }
