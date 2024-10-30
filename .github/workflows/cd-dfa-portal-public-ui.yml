@@ -1,6 +1,5 @@
 # GitHub Actions pipeline for DFA UI Public Portal component
 name: cd-dfa-portal-public-ui
-
 on:
   push:
     branches:
