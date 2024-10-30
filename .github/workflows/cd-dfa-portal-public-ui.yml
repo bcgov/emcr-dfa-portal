@@ -6,6 +6,7 @@ on:
     branches:
       - support-develop
       - develop
+      - branch-ui-test-1
     paths:
       - "dfa-public/src/UI/**"
       - ".github/workflows/cd-dfa-portal-public-ui.yml"
