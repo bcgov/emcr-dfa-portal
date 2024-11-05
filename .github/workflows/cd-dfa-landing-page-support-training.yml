@@ -1,5 +1,5 @@
 #CD pipeline for dfa landing page into the support stream
-name: cd-dfa-landing-page-support-test
+name: cd-dfa-landing-page-support-training
 
 on:
   workflow_dispatch:
