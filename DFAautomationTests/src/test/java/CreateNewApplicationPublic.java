@@ -88,7 +88,7 @@ public class CreateNewApplicationPublic {
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='damageToDate']")));
         element.clear();
         //TST
-        element.sendKeys("10/23/2024");
+       element.sendKeys("10/23/2024");
         //DEV
         //element.sendKeys("09/23/2024");
 
