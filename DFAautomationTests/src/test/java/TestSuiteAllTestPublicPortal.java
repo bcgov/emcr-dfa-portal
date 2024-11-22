@@ -7,7 +7,7 @@ import org.junit.runners.Suite;
 
         LoginPublicPortal.class, CreateNewApplicationPublic.class, CreateNewApplicationPublicNeg.class, CreateNewProjectPublic.class, SubmitApplicationsRAFT.class,
         SubmitClaimsPublic.class, VerifySubmitedClaimInRAFT.class, LoginDynamicsPublic.class, DenyClaimAmountPublic.class, AddMultipleInvoices.class, PartialPaymentApproveClaim.class,
-        ValidateDraftApplicationRAFT.class, ValidateDraftApplicationNegRAFT.class
+        ValidateDraftApplicationRAFT.class, ValidateDraftApplicationNegRAFT.class, CheckDocAttachProject.class
 })
 
 

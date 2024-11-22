@@ -178,7 +178,8 @@ public class SubmitApplicationsRAFT {
         // Assign to
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Assigned To, Lookup'][type='text']")));
         element.click();
-        element.sendKeys("test");
+        //element.sendKeys("test");
+       element.sendKeys("EMCR DFA API Service Account");
 
         // Determine the environment and set the appropriate XPath
         String environmentAssingTo = Config.ENVIRONMENT_Dynamics; // Assume Config.ENVIRONMENT contains the environment name
@@ -195,7 +196,7 @@ public class SubmitApplicationsRAFT {
         } else if (Constants.TST_SupportDynamicsPub.equalsIgnoreCase(environmentAssingTo)) {
             xpathExpressionAssingTo = "//*[contains(text(), 'EMCR DFA Reporting BI Test')]";
         } else if (Constants.TRN_SupportDynamicsPub.equalsIgnoreCase(environmentAssingTo)) {
-            xpathExpressionAssingTo = "//*[contains(text(), 'EMCR DFA Reporting BI Test')]";
+            xpathExpressionAssingTo = "//*[contains(text(), 'EMCR DFA API Service Account')]";
         } else {
             throw new IllegalArgumentException("Unknown environment: " + environmentName);
         }
