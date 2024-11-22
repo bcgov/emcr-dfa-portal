@@ -179,7 +179,7 @@ public class SubmitApplicationsRAFT {
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[aria-label='Assigned To, Lookup'][type='text']")));
         element.click();
         //element.sendKeys("test");
-       element.sendKeys("EMCR DFA API Service Account");
+        element.sendKeys("EMCR DFA API Service Account");
 
         // Determine the environment and set the appropriate XPath
         String environmentAssingTo = Config.ENVIRONMENT_Dynamics; // Assume Config.ENVIRONMENT contains the environment name
