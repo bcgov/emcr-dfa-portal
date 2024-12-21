@@ -104,6 +104,8 @@ public class CustomWebDriverManager {
         options.setExperimentalOption("prefs", prefs);
         options.addArguments("start-maximized");
         options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--incognito");
+        options.addArguments("--disable-cache");
         //options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1080","--ignore-certificate-errors","--no-sandbox", "--disable-dev-shm-usage");
 
         return options;
