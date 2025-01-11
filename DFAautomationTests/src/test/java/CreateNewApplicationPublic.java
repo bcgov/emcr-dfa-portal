@@ -126,9 +126,47 @@ public class CreateNewApplicationPublic {
         // Application Type
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='applicantSubtype']")));
         ElementClickHelper.clickElement(driver, element);
+//        //Municipality
+//       element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Municipality')]")));
+//
+//        //Regional District
+//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Regional District')]")));
+//
+//        //  First Nations Community
+//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'First Nations Community')]")));
+//
+//        //  Other Local Government Body
+//
+//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Other Local Government Body')]")));
+//
+//
+//        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+//       sleep(1000);
+//
+//        //select the type of other local gov
+//        WebElement selectElement = driverWait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='Please select the type of Other Local Government Body']")));
+//        selectElement.click();
+//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'an improvement district as defined in the Local Government Act')]")));
+//        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Municipality')]")));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+        //Other
+//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Other')]")));
+//        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+//
+//        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//textarea[@placeholder='Please describe your organization']")));
+//        element.sendKeys("Your description text here");
+
+
+
+
+// Wait for dropdown options and select the 4th index (index 3 since zero-based)
+        WebElement otherOption = driverWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+                By.xpath("//mat-option"))).get(4);
+        otherOption.click();
+
+        //Please Describe your Organisation
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//textarea[@placeholder='Please describe your organization']")));
+       element.sendKeys("Your description text here");
 
         // Click on Next
         sleep(1000);

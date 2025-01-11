@@ -234,8 +234,11 @@ public class SmallBusinessNoInsurance {
 
     public void addressAndQuestion(WebElement element, WebDriverWait driverWait, WebDriver driver) throws Exception{
 
+//        new WebDriverWait(driver, Duration.ofSeconds(60)).until(
+//                ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' 123 FIRST STREET')]")));
+        // TODO: Later change it to check the question as address is dynamic
         new WebDriverWait(driver, Duration.ofSeconds(60)).until(
-                ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' 123 FIRST STREET')]")));
+                ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), '4000 SEYMOUR PLACE')]")));
 
         //Select No
         Thread.sleep(2000);

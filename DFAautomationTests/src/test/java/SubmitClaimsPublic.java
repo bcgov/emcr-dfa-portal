@@ -77,9 +77,12 @@ public class SubmitClaimsPublic {
         fillFormField(driverWait, "[formcontrolname='invoiceNumber'][maxlength='100']", RandomIntGenerator.generateRandomInt(100));
         fillFormField(driverWait, "[formcontrolname='invoiceDate'][aria-haspopup='dialog']", dateUtils.getTodayAsString());
         fillFormField(driverWait, "[formcontrolname='purposeOfGoodsServiceReceived'][maxlength='200']", RandomStringGenerator.generateRandomAlphanumeric(200));
-        fillFormField(driverWait, "[formcontrolname='netInvoiceBeingClaimed'][maxlength='100']", RandomIntGenerator.generateRandomInt(6));
-        fillFormField(driverWait, "[formcontrolname='pst'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
-        fillFormField(driverWait, "[formcontrolname='grossGST'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
+        //fillFormField(driverWait, "[formcontrolname='netInvoiceBeingClaimed'][maxlength='100']", RandomIntGenerator.generateRandomInt(6));
+        fillFormField(driverWait, "input#currencyBoxnetInvoiceBeingClaimed[maxlength='100']", RandomIntGenerator.generateRandomInt(6));
+       // fillFormField(driverWait, "[formcontrolname='pst'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
+       // fillFormField(driverWait, "input[mask='separator.2'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
+       // fillFormField(driverWait, "[formcontrolname='grossGST'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
+       // fillFormField(driverWait, "input[mask='separator.2'][maxlength='100']", RandomIntGenerator.generateRandomInt(1));
 
         // Check rdo buttons
 

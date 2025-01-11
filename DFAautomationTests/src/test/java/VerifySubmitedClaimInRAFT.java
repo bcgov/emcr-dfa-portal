@@ -17,11 +17,11 @@ public class VerifySubmitedClaimInRAFT {
 
     private WebDriver driver;
 
-    @After
-    public void tearDown() {
-        driver.close();
-        driver.quit();
-    }
+//    @After
+//    public void tearDown() {
+//        driver.close();
+//        driver.quit();
+//    }
 
     @AfterClass
     public static void afterClass() {
@@ -86,9 +86,15 @@ public class VerifySubmitedClaimInRAFT {
         element.click();
         Thread.sleep(1000);
         ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Save')]"));
-
+        WebElement generalTab = driverWait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("li[aria-label='General']")));
+        generalTab.click();
+        Thread.sleep(3000);
         // Login portal
         SubmitClaimsPublic.loginToPortal();
+        element = driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//*[contains(text(), 'Log in with Business BCeID')]")));
+        js.executeScript("arguments[0].click();", element);
 
         // Check Case number
         String caseNumberDisplayPortal = SubmitApplicationsRAFT.getCaseNumber();
@@ -100,6 +106,11 @@ public class VerifySubmitedClaimInRAFT {
     }
 
     public static String processClaimDetails(WebDriver driver, WebDriverWait driverWait) throws Exception {
+        // Call the overloaded method with the default vendor name
+        return processClaimDetails(driver, driverWait, null);
+    }
+
+    public static String processClaimDetails(WebDriver driver, WebDriverWait driverWait, String vendorName) throws Exception {
         WebElement element;
 
         // Locate the element using the provided XPath
@@ -147,8 +158,11 @@ public class VerifySubmitedClaimInRAFT {
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[role='tab'][title='Invoices']")));
         element.click();
 
+        // Determine the vendor name to use
+        String resolvedVendorName = (vendorName != null && !vendorName.trim().isEmpty()) ? vendorName : SubmitClaimsPublic.getVendorName();
+
         // Click on the vendor name
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[tabindex='-1'][title='" + SubmitClaimsPublic.getVendorName() + "']")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[tabindex='-1'][title='" + resolvedVendorName + "']")));
         element.click();
 
         // Approve decision Total
@@ -203,11 +217,14 @@ public class VerifySubmitedClaimInRAFT {
         // Check if the ClaimNumber exists in the body text
         if (bodyText.contains(ClaimNumber)) {
             System.out.println("Claim Number " + ClaimNumber + " exists in the body of the page.");
+            Thread.sleep(2000);
         } else {
             System.out.println("Claim Number " + ClaimNumber + " does not exist in the body of the page.");
             fail("Claim Number " + ClaimNumber + " does not exist in the body of the page.");
+            Thread.sleep(2000);
         }
     }
+    //end of the verify submitted claim
     public static void clickApprovalDecisionMade(WebDriver driver, WebDriverWait driverWait) throws InterruptedException {
         WebElement element;
         int attempts = 0;
