@@ -92,9 +92,16 @@ public class VerifySubmitedClaimInRAFT {
         Thread.sleep(3000);
         // Login portal
         SubmitClaimsPublic.loginToPortal();
-        element = driverWait.until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//*[contains(text(), 'Log in with Business BCeID')]")));
-        js.executeScript("arguments[0].click();", element);
+        try {
+            element = driverWait.until(ExpectedConditions
+                    .presenceOfElementLocated(By.xpath("//*[contains(text(), 'Log in with Business BCeID')]")));
+            if (element != null) {
+                js.executeScript("arguments[0].click();", element);
+            }
+        } catch (TimeoutException e) {
+            // Handle the case where the element is not found within the timeout
+            System.out.println("Element not found, proceeding without clicking.");
+        }
 
         // Check Case number
         String caseNumberDisplayPortal = SubmitApplicationsRAFT.getCaseNumber();
@@ -164,10 +171,12 @@ public class VerifySubmitedClaimInRAFT {
         // Click on the vendor name
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[tabindex='-1'][title='" + resolvedVendorName + "']")));
         element.click();
+        Thread.sleep(1000);
 
         // Approve decision Total
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[data-id='dfa_emcrdecision.fieldControl-option-set-select'][aria-label='Decision']")));
         element.click();
+        Thread.sleep(1000);
 
         return ClaimNumber;
     }

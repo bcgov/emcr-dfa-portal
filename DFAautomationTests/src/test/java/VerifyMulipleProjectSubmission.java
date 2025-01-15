@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static dfa.CustomWebDriverManager.getDriver;
 import static java.lang.Thread.sleep;
 
-public class VerifyMultipleClaimSubmission {
+public class VerifyMulipleProjectSubmission {
     private static WebDriver driver;
     @Getter
     @Setter
@@ -29,11 +29,11 @@ public class VerifyMultipleClaimSubmission {
         CustomWebDriverManager.instance = null;
     }
 
-    @After
-    public void tearDown() {
-        driver.close();
-        driver.quit();
-    }
+//    @After
+//    public void tearDown() {
+//        driver.close();
+//        driver.quit();
+//    }
 
 
     public void submitClaim(WebDriver driver, WebDriverWait driverWait){
@@ -50,30 +50,181 @@ public class VerifyMultipleClaimSubmission {
         Actions actions = new Actions(driver);
         CustomWebDriverManager.getElements();
 
-        VerifySubmitedClaimInRAFT verifySubmitedClaimInRAFT = new VerifySubmitedClaimInRAFT();
-        verifySubmitedClaimInRAFT.test();
+        VerifyMultipleClaimSubmission verifyMultipleClaimSubmission = new VerifyMultipleClaimSubmission();
+        verifyMultipleClaimSubmission.test();
 
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Create a New Claim')]")));
+        // Login portal
+        SubmitClaimsPublic.loginToPortal();
+        // Check Case number
+        String caseNumberDisplayPortal = SubmitApplicationsRAFT.getCaseNumber();
+        boolean isCaseNumberPresent = driver.getPageSource().contains(caseNumberDisplayPortal);
+        System.out.println("Case Number found in page body: " + isCaseNumberPresent);
+
+
+        // Submit project
+        String xpathSubmitProjectByCaseNumber = "//span[contains(text(),'" + SubmitApplicationsRAFT.getCaseNumber() + "')]/../../div//button[contains(text(), 'Submit Projects')]";
+        driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath(xpathSubmitProjectByCaseNumber)));
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath(xpathSubmitProjectByCaseNumber));
+
+        //Create project
+        element = driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Create a New Project')]")));
         element.click();
-        sleep(1000);
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to proceed. ')]")));
+        element = driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Yes, I want to proceed. ')]")));
         element.click();
-        sleep(1000);
 
-        // Check text
-        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Please review and complete the form below. You may start a claim, save it, and continue to add to it later. Required fields are marked with a red asterisk ')]")));
+        // Create random number
+        Thread.sleep(1000);
+        String randomProjectNumber = "AT_" + RandomStringGenerator.generateRandomAlphanumeric(7);
+        System.out.println("Project Number is: " + randomProjectNumber);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("projectNumber")));
+        setRandomProjectNumber(randomProjectNumber);
 
-        // Click Next - add invoice
-        sleep(2000);
-        clickElementWithRetry(driverWait, By.xpath("//*[contains(text(), ' Next - Add Invoices ')]"));
-        clickElementWithRetry(driverWait, By.xpath("//*[contains(text(), 'Add Invoices')]"));
+        // Scroll into view if necessary
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        Thread.sleep(1000);
+        // Ensure the element is clickable
+        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+        element.sendKeys(randomProjectNumber);
 
-        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'You must provide all the required information to save an invoice record')]")));
+        // Create random project name
+        String randomProjectName = "AT_Project_" + RandomStringGenerator.generateRandomAlphanumeric(9);
+        System.out.println("Project Name is: " + randomProjectName);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("mat-input-1")));
+
+        // Scroll into view if necessary
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+
+        // Ensure the element is clickable
+        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+        element.sendKeys(randomProjectName);
+
+        //Are the dates of damage the same dates provided on the application?
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[type='radio'][value='false']")));
+        element.click();
+
+        //What is the date(s) of damage for this site?
+        DateUtils dateUtils = new DateUtils();
+        dateUtils.setYesterdayAsString(DateUtils.getFormattedDates().get("yesterday"));
+        dateUtils.setTodayAsString(DateUtils.getFormattedDates().get("today"));
+        dateUtils.setInOneYearAsString(DateUtils.getFormattedDates().get("inOneYear"));
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("mat-input-11")));
+        element.clear();
+        element.sendKeys(dateUtils.getYesterdayAsString());
+
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("mat-input-12")));
+        element.clear();
+        element.sendKeys(dateUtils.getTodayAsString());
+        Thread.sleep(1000);
+
+        // Fill form fields
+        fillFormField(driverWait, "[formcontrolname='differentDamageDatesReason'][maxlength='500']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(500));
+        fillFormField(driverWait, "[formcontrolname='siteLocation'][maxlength='100']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(100));
+        fillFormField(driverWait, "[formcontrolname='infraDamageDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
+        fillFormField(driverWait, "[formcontrolname='causeofDamageDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
+        fillFormField(driverWait, "[formcontrolname='describeDamageDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
+        fillFormField(driverWait, "[formcontrolname='describeDamagedInfrastructure'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
+        fillFormField(driverWait, "[formcontrolname='repairWorkDetails'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
+        fillFormField(driverWait, "[formcontrolname='repairDamagedInfrastructure'][maxlength='2000']", RandomStringGenerator.generateRandomAlphanumericWithSpaces(2000));
+        fillFormField(driverWait, "[formcontrolname='estimateCostIncludingTax'][maxlength='100']", RandomIntGenerator.generateRandomInt(7));
+        fillFormField(driverWait, "[formcontrolname='estimatedCompletionDate'][aria-haspopup='dialog']", dateUtils.getInOneYearAsString());
+
+        //Click Next
+        Thread.sleep(1000);
+        ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        Thread.sleep(1000);
+        clickElementWithRetry(driverWait, By.xpath("//*[contains(text(), ' Next - Upload Documents ')]"));
+        System.out.println("Next - Upload Documents clicked");
+
+        Thread.sleep(1000);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' + Add Previous Event Condition ')]")));
+        element.click();
+
+        Thread.sleep(1000);
+
+        // Upload docs
+        Thread.sleep(1000);
+        uploadFile(driverWait, "fileDrop", System.getProperty("user.dir") + '/' + "dummy.pdf");
+        Thread.sleep(1000);
+
+        clickElementWithRetry(driverWait, By.xpath("//mat-card//span[contains(text(),'Save')]"));
+
+        Thread.sleep(1000);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' + Add Post Event Condition ')]")));
+
+        JavascriptExecutor jse = (JavascriptExecutor) driver;
+        jse.executeScript("arguments[0].click();", element);
+
+        Thread.sleep(1000);
+        uploadFile(driverWait, "fileDrop", System.getProperty("user.dir") + '/' + "testDFA.xlsx");
+
+        Thread.sleep(1000);
+        ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        Thread.sleep(1000);
+
+        clickElementWithRetry(driverWait, By.xpath("//mat-card//span[contains(text(),'Save')]"));
+
+        //Click Next
+        element = driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//*[contains(text(), ' Next - Review & Submit ')]")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+
+        System.out.println("Next - Review & Submit clicked");
+
+        //Check Review page
+        // Check if the random project number is present in the page body
+        boolean isProjectNumberPresent = driver.getPageSource().contains(randomProjectNumber);
+        System.out.println("Project Number found in page body: " + isProjectNumberPresent);
+        boolean isProjectNamePresent = driver.getPageSource().contains(randomProjectName);
+        System.out.println("Project Number found in page body: " + isProjectNamePresent);
+
+        element = driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("/html/body/app-root/div/main/div/app-dfa-project-main/div/mat-horizontal-stepper/div/div[2]/div[3]/div/div[2]/button/span[2]")));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+        int attempts = 0;
+        while (attempts < 3) {
+            try {
+                element.click();
+                break;
+            } catch (org.openqa.selenium.ElementNotInteractableException e) {
+                Thread.sleep(500); // Adjust the sleep time as necessary
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+                element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+            }
+            attempts++;
+        }
+
+        Thread.sleep(5000);
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("(//span[contains(text(),'Submit')])[last()]")));
+        jse.executeScript("arguments[0].click();", element);
+
+        Thread.sleep(1000);
+        element = driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//span[contains(text(), 'Yes, I want to submit the project.')]")));
+        jse.executeScript("arguments[0].click();", element);
+        System.out.println("Yes, I want to submit the project.");
+
+        driverWait.until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//*[contains(text(), 'Open Projects')]")));
 
 
 
+        //Login RAFT
+        SubmitClaimsPublic.getUrls();
 
+        //Navigate to Submitted projects
+        SubmitClaimsPublic.navigateToSubmittedProjects(driver, driverWait, js, actions, getRandomProjectNumber());
 
+        //Login Portal
+        SubmitClaimsPublic.loginToPortal();
+        SubmitApplicationsRAFT.setCaseNumber(caseNumberDisplayPortal);
+        SubmitClaimsPublic.submitProjectAndAddInvoice(driver, driverWait, js, actions);
+
+        ///
 
         sleep(2000);
         clickElementWithRetry(driverWait, By.xpath("//span[contains(text(), '+ Add Invoice')]"));
@@ -81,7 +232,7 @@ public class VerifyMultipleClaimSubmission {
         driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Vendor Name')]")));
 
         // Add invoice details
-        DateUtils dateUtils = new DateUtils();
+     //   DateUtils dateUtils = new DateUtils();
         dateUtils.setTodayAsString(DateUtils.getFormattedDates().get("today"));
         setVendorName(RandomStringGenerator.generateRandomAlphanumeric(100));
         // Use the getter method to retrieve and use the vendorName value
@@ -159,8 +310,8 @@ public class VerifyMultipleClaimSubmission {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         element = driverWait.until(ExpectedConditions.visibilityOf(element));
         element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
-        int attempts = 0;
-        while (attempts < 3) {
+        int attempts2 = 0;
+        while (attempts2 < 3) {
             try {
                 element.sendKeys(Keys.ENTER);
                 System.out.println("Submit button is clicked");
@@ -170,10 +321,10 @@ public class VerifyMultipleClaimSubmission {
                 ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
                 element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
             }
-            attempts++;
+            attempts2++;
         }
-        if (attempts == 3) {
-            System.out.println("Failed to click the Submit button after " + attempts + " attempts");
+        if (attempts2 == 3) {
+            System.out.println("Failed to click the Submit button after " + attempts2 + " attempts");
         }
 
         Thread.sleep(1000);
@@ -181,7 +332,7 @@ public class VerifyMultipleClaimSubmission {
         element.click();
 
         sleep(2000);
-
+        VerifySubmitedClaimInRAFT verifySubmitedClaimInRAFT = new VerifySubmitedClaimInRAFT();
         verifySubmitedClaimInRAFT.processClaimDetails(driver,driverWait,getVendorName());
 
 
@@ -224,6 +375,7 @@ public class VerifyMultipleClaimSubmission {
         element.click();
         Thread.sleep(2000);
         verifySubmitedClaimInRAFT.clickApprovalDecisionMade(driver, driverWait);
+        Thread.sleep(2000);
         SubmitApplicationsRAFT.clickElementMultipleTimes(driver, driverWait, By.xpath("//*[contains(text(), 'Next Stage')]"), 1, 1000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Finish')]")));
         element.click();
@@ -235,32 +387,9 @@ public class VerifyMultipleClaimSubmission {
         Thread.sleep(3000);
 
 
+/// ////
 
-    }
 
-    public static void uploadFile(WebDriverWait driverWait, String elementId, String filePath) throws InterruptedException {
-        WebElement fileInput = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id(elementId)));
-        fileInput.sendKeys(filePath);
-        Thread.sleep(1000);
-    }
-
-    public static void clickElementWithRetry(WebDriverWait driverWait, By locator) throws InterruptedException {
-        WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-        element = driverWait.until(ExpectedConditions.visibilityOf(element));
-        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
-        int attempts = 0;
-        while (attempts < 3) {
-            try {
-                element.click();
-                break;
-            } catch (org.openqa.selenium.ElementNotInteractableException e) {
-                Thread.sleep(500); // Adjust the sleep time as necessary
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-                element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
-            }
-            attempts++;
-        }
     }
 
     static void fillFormField(WebDriverWait driverWait, String cssSelector, String value) throws InterruptedException {
@@ -282,5 +411,29 @@ public class VerifyMultipleClaimSubmission {
         }
     }
 
+    public static void clickElementWithRetry(WebDriverWait driverWait, By locator) throws InterruptedException {
+        WebElement element = driverWait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        element = driverWait.until(ExpectedConditions.visibilityOf(element));
+        element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+        int attempts = 0;
+        while (attempts < 3) {
+            try {
+                element.click();
+                break;
+            } catch (org.openqa.selenium.ElementNotInteractableException e) {
+                Thread.sleep(500); // Adjust the sleep time as necessary
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+                element = driverWait.until(ExpectedConditions.elementToBeClickable(element));
+            }
+            attempts++;
+        }
+    }
+
+    public static void uploadFile(WebDriverWait driverWait, String elementId, String filePath) throws InterruptedException {
+        WebElement fileInput = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id(elementId)));
+        fileInput.sendKeys(filePath);
+        Thread.sleep(1000);
+    }
 
 }

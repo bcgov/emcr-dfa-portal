@@ -53,9 +53,9 @@ public class LoginPublicPortal {
         element.sendKeys(bceidPASSWORD);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.name("btnSubmit")));
         element.click();
-        element = driverWait
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='submit' and @value='Continue']")));
-        element.click();
+//        element = driverWait
+//                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@type='submit' and @value='Continue']")));
+//       element.click();
         //Display notice of Collention
         new WebDriverWait(driver, Duration.ofSeconds(60)).until(
                 ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Disaster Financial Assistance')]")));

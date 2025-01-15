@@ -49,7 +49,7 @@ public class AddMultipleInvoices {
         SubmitClaimsPublic.getUrls();
 
         //Navigate to Submitted projects
-        SubmitClaimsPublic.navigateToSubmittedProjects(driver, driverWait, js, actions);
+        SubmitClaimsPublic.navigateToSubmittedProjects(driver, driverWait, js, actions, null);
 
         //Login Portal
         SubmitClaimsPublic.loginToPortal();

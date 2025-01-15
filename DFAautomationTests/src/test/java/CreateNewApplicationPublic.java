@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static dfa.CustomWebDriverManager.getDriver;
+import static java.lang.Thread.currentThread;
 import static java.lang.Thread.sleep;
 
 public class CreateNewApplicationPublic {
@@ -289,8 +290,10 @@ public class CreateNewApplicationPublic {
         // there's a bug that redirect doesn't work, need to uncomment after fix
 
         driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Your application has been submitted. ')]")));
+        sleep(2000);
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), ' Back To Dashboard ')]")));
         element.click();
+        sleep(2000);
 //
 //        driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Cause(s) of Damage - ')]")));
 //        WebElement bodyElement = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
