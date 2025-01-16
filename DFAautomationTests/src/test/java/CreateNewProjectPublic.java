@@ -23,16 +23,16 @@ public class CreateNewProjectPublic {
     @Setter
     private static String randomProjectNumber;
 
-    @AfterClass
-    public static void afterClass() {
-        CustomWebDriverManager.instance = null;
-    }
-
-    @After
-    public void tearDown() {
-        driver.close();
-        driver.quit();
-    }
+//    @AfterClass
+//    public static void afterClass() {
+//        CustomWebDriverManager.instance = null;
+//    }
+//
+//    @After
+//    public void tearDown() {
+//        driver.close();
+//        driver.quit();
+//    }
 
 
     @Test

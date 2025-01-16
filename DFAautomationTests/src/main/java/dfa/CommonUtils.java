@@ -29,8 +29,7 @@ public class CommonUtils {
         environmentUrls.put(Constants.TST_SupportDynamicsPub, "https://embc-dfa.test.jag.gov.bc.ca/main.aspx?appid=02c4ab7f-accc-ec11-b82a-005056832896&pagetype=dashboard&id=87bd5bc9-6d29-ed11-b834-00505683fbf4&type=system&_canOverride=true");
         //environmentUrls.put(Constants.DEV_SandboxDynamicsPub , "https://embc-dfa-sbx.dev.jag.gov.bc.ca/main.aspx?appid=3d27a86f-57c6-ec11-b832-00505683fbf4&pagetype=dashboard&id=87bd5bc9-6d29-ed11-b834-00505683fbf4&type=system&_canOverride=true");
         environmentUrls.put(Constants.TRN_SupportPub, "https://dfa-public-training.apps.silver.devops.gov.bc.ca");
-        environmentUrls.put(Constants.TRN_SupportDynamicsPub, "https://embc-dfa-trn.jag.gov.bc.ca/main.aspx?appid=7e541bc9-0675-ee11-b845-0050568324d9&pagetype=dashboard&id=87bd5bc9-6d29-ed11-b834-00505683fbf4&type=system&_canOverride=true");
-
+        environmentUrls.put(Constants.TRN_SupportDynamicsPub, "https://embc-dfa-trn.jag.gov.bc.ca/main.aspx?appid=d120f648-aecc-ec11-b829-005056832174&pagetype=dashboard&id=87bd5bc9-6d29-ed11-b834-00505683fbf4&type=system&_canOverride=true");
 
 
     }

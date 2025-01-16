@@ -17,16 +17,16 @@ public class VerifySubmitedClaimInRAFT {
 
     private WebDriver driver;
 
-    @After
-    public void tearDown() {
-        driver.close();
-        driver.quit();
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        CustomWebDriverManager.instance = null;
-    }
+//    @After
+//    public void tearDown() {
+//        driver.close();
+//        driver.quit();
+//    }
+//
+//    @AfterClass
+//    public static void afterClass() {
+//        CustomWebDriverManager.instance = null;
+//    }
 
     @Test
     public void test() throws Exception {
