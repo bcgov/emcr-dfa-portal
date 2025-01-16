@@ -13,16 +13,16 @@ import static java.lang.Thread.sleep;
 
 public class DocsClaimVerfy {   private WebDriver driver;
 
-//    @After
-//    public void tearDown() {
-//        driver.close();
-//        driver.quit();
-//    }
-//
-//    @AfterClass
-//    public static void afterClass() {
-//        CustomWebDriverManager.instance = null;
-//    }
+    @After
+    public void tearDown() {
+        driver.close();
+        driver.quit();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        CustomWebDriverManager.instance = null;
+    }
 
     @Test
     public void test() throws Exception {
@@ -70,10 +70,10 @@ public class DocsClaimVerfy {   private WebDriver driver;
         }
         // Click Related
         Thread.sleep(1000);
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("related_tab_4")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("related_tab_2")));
         element.click();
         Thread.sleep(1000);
-        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Project Document Locations')]"));
+        ElementInteractionHelper.scrollAndClickElement(driver, driverWait, By.xpath("//*[contains(text(), 'Project Claim Document Locations')]"));
 
         //Check if the document is attached
         driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'dummy.pdf')]")));
