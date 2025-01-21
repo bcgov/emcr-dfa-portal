@@ -25,7 +25,6 @@ public class CreateNewApplicationPublicNeg {
         CustomWebDriverManager.instance = null;
     }
 
-
     @Test
     public void test() throws Exception {
         driver = getDriver();

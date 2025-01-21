@@ -265,6 +265,8 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
       this.documentSummaryColumnsToDisplay.push('icons');
     }
 
+    this.claimDecision = this.dfaClaimMainDataService.getClaimDecision();
+
   }
 
   SummaryClaimCalc() {

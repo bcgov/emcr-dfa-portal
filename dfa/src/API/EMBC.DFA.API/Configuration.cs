@@ -134,21 +134,7 @@ namespace EMBC.DFA.API
                 options.DocumentPath = "/api/openapi/{documentName}/openapi.json";
             });
 
-            // Add feature flags
-            var featureFlags = new FeatureFlags
-            {
-                DFA_EVENTTYPE = new DfaEventTypeFeature
-                {
-                    ENABLED = configuration.GetValue<bool>("FEATURES__DFA_EVENTTYPE__ENABLED")
-                },
-                DFA_APPEALCLOSEDDATE = new DfaAppealClosedDateFeature
-                {
-                    ENABLED = configuration.GetValue<bool>("FEATURES__DFA_APPEALCLOSEDDATE__ENABLED")
-                }
-            };
-
-            // Register it for DI
-            services.AddSingleton(featureFlags);
+           // Register it for DI
 
             services.AddOpenApiDocument(document =>
             {
@@ -222,21 +208,4 @@ namespace EMBC.DFA.API
             app.UseAuthorization();
         }
     }
-}
-
-public class FeatureFlags
-{
-    public DfaEventTypeFeature DFA_EVENTTYPE { get; set; } = new DfaEventTypeFeature();
-    public DfaAppealClosedDateFeature DFA_APPEALCLOSEDDATE { get; set; } = new DfaAppealClosedDateFeature();
-    // Add additional feature flags here as needed
-}
-
-public class DfaEventTypeFeature
-{
-    public bool ENABLED { get; set; } = false;
-}
-
-public class DfaAppealClosedDateFeature
-{
-    public bool ENABLED { get; set; } = false;
 }

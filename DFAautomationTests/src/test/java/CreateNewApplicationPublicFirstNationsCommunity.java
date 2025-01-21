@@ -17,7 +17,7 @@ import java.util.*;
 import static dfa.CustomWebDriverManager.getDriver;
 import static java.lang.Thread.sleep;
 
-public class CreateNewApplicationPublic {
+public class CreateNewApplicationPublicFirstNationsCommunity {
     private WebDriver driver;
 
     @Setter
@@ -128,7 +128,7 @@ public class CreateNewApplicationPublic {
             ElementClickHelper.clickElement(driver, element);
         }
 
-        CreateNewApplicationPublic.setRandomChars(generateDamageCause());
+        CreateNewApplicationPublicFirstNationsCommunity.setRandomChars(generateDamageCause());
 
         // Cause of damage
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='otherDamageText']")));
@@ -139,7 +139,7 @@ public class CreateNewApplicationPublic {
         element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[formcontrolname='applicantSubtype']")));
         ElementClickHelper.clickElement(driver, element);
 
-        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'Municipality')]")));
+        element = driverWait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(text(), 'First Nations Community')]")));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 
         // Click on Next
@@ -235,7 +235,7 @@ public class CreateNewApplicationPublic {
                 element.sendKeys(Keys.ENTER);
                 System.out.println("Submit button is clicked");
                 break;
-            } catch (org.openqa.selenium.ElementNotInteractableException e) {
+            } catch (ElementNotInteractableException e) {
                 sleep(1000); // Adjust the sleep time as necessary
                 ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
             }
