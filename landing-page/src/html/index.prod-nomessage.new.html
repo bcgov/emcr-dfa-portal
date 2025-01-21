@@ -1,4 +1,4 @@
-﻿
+
 
 <!DOCTYPE html>
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -625,6 +625,10 @@ a:hover {
 	width: 120px;
 }
 
+.contact-cta .container {
+	max-width: 900px;
+}
+
 /** Footer **/
 
 .site-footer {
@@ -733,8 +737,8 @@ a:hover {
 
 </style>
 <script type="text/javascript">
-	var privatePortal = 'https://portal.test.dfa.gov.bc.ca'
-	var publicPortal = 'https://publicsector-test.dfa.gov.bc.ca'
+	var privatePortal = 'https://portal.dfa.gov.bc.ca'
+	var publicPortal = 'https://publicsector.dfa.gov.bc.ca'
 
 	var apiPrivateUrl = privatePortal + '/api/eligibility/checkEventsAvailable';
 	var eventButtonPrivateUrl = privatePortal + '/verified-registration';
@@ -828,14 +832,6 @@ a:hover {
 </head>
 
 <body onload="onLoad()">
-	<div class="environment-banner">
-		<p>
-		  	You are in the <b>TEST</b> version of the <b>Disaster Financial Assistance Tool</b>.
-		</p>
-		<p>
-		  	All information entered here will be treated as <b>test</b> data.
-		</p>
-	</div>
 
 	<header class="site-header">
 		<div class="container">

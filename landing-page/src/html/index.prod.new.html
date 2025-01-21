@@ -625,6 +625,10 @@ a:hover {
 	width: 120px;
 }
 
+.contact-cta .container {
+	max-width: 900px;
+}
+
 /** Footer **/
 
 .site-footer {
@@ -733,8 +737,8 @@ a:hover {
 
 </style>
 <script type="text/javascript">
-	var privatePortal = 'https://portal.test.dfa.gov.bc.ca'
-	var publicPortal = 'https://publicsector-test.dfa.gov.bc.ca'
+	var privatePortal = 'https://portal.dfa.gov.bc.ca'
+	var publicPortal = 'https://publicsector.dfa.gov.bc.ca'
 
 	var apiPrivateUrl = privatePortal + '/api/eligibility/checkEventsAvailable';
 	var eventButtonPrivateUrl = privatePortal + '/verified-registration';
@@ -828,14 +832,6 @@ a:hover {
 </head>
 
 <body onload="onLoad()">
-	<div class="environment-banner">
-		<p>
-		  	You are in the <b>TEST</b> version of the <b>Disaster Financial Assistance Tool</b>.
-		</p>
-		<p>
-		  	All information entered here will be treated as <b>test</b> data.
-		</p>
-	</div>
 
 	<header class="site-header">
 		<div class="container">
@@ -858,6 +854,26 @@ a:hover {
 			</div>
 		</section>
 		
+		<section class="hero">
+			<div style="background: rgb(190, 0, 0); color: rgb(255, 255, 255); text-align: center; padding-left: 25px; padding-right: 25px; margin-bottom: 10px; font-weight: bold;">
+				</br>
+				PLANNED OUTAGE ALERT!
+				</br>
+				</br>
+				There is a scheduled system outage of the Disaster Financial Assistance portal from </br><i>Wednesday January 22 at 3:00 p.m. to Friday January 24 at 3:00 p.m.</i></br> which will disrupt our services and access to the portal.
+                </br>
+                </br>
+                Please ensure you are logged out of the portal by <u>3:00 p.m. on Wednesday January 22</u></br> to ensure that your application information is saved.
+                </br>
+                </br>
+				We apologize for any inconvenience caused and thank you for your patience.
+                </br>
+                If you have any questions, please contact <a class="--link-orange" href="mailto:DFA.private@gov.bc.ca">DFA.private@gov.bc.ca</a>.
+				</br>
+				</br>
+			</div>
+		</section>
+
 		<div class="toggle-div">
 			<div class="overlay" id="overlay">
 				<div class="overlay-content" id="overlay-content-loc" onclick="switchSection(1)">
