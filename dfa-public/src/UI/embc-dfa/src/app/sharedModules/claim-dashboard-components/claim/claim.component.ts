@@ -259,6 +259,8 @@ export class DfaDashClaimComponent implements OnInit {
   ViewClaim(applItem: ClaimExtended): void {
     this.dfaClaimMainDataService.setProjectId(this.dFAProjectMainDataService.getProjectId());
     this.dfaClaimMainDataService.setClaimId(applItem.claimId);
+    /* EMCRI-478: Set the Claim Decision so it's available to the Claim Details page. */
+    this.dfaClaimMainDataService.setClaimDecision(applItem.claimDecision);
 
     if (applItem.openClaim === true) {
       this.dfaClaimMainDataService.setViewOrEdit('view');

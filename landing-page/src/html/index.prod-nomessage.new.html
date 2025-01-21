@@ -722,17 +722,6 @@ a:hover {
         font-weight: bold;
 		text-align: center;
     }
-	.environment-banner {
-		max-width: 100%;
-		padding: 10px 0px;
-		justify-content: space-between;
-		text-align: center;
-		color: white;
-		background-color: #fc6621;
-		p {
-			margin-top: 10px;
-		}
-	}
 }
 
 </style>
@@ -743,7 +732,7 @@ a:hover {
 	var apiPrivateUrl = privatePortal + '/api/eligibility/checkEventsAvailable';
 	var eventButtonPrivateUrl = privatePortal + '/verified-registration';
 	var noeventButtonPrivateUrl = privatePortal + '/verified-registration';
-
+  
 	var apiPublicUrl = publicPortal + '/api/eligibility/checkPublicEventsAvailable';
 	var eventButtonPublicUrl = publicPortal + '/verified-registration'
 	var noeventButtonPublicUrl = publicPortal + '/verified-registration'
@@ -825,6 +814,9 @@ a:hover {
 			document.getElementById('overlay-content-loc').style.display = 'none';
 			document.getElementById('overlay-content-ind').style.display = 'block';
 			divOverlay.style.left = "0%";
+
+		if (data > 0) {
+			document.getElementById('secAreEvacuated').style.display = 'block';
 		}
 	}
 
@@ -852,7 +844,43 @@ a:hover {
 					</div>
 				</div>
 			</div>
+		</section>	
+
+		<section id="secAreEvacuated" class="are-evacuated"  style="display:none;">
+			<div class="container --are-evacuated-cols">
+				<div class="are-evacuated-description">
+					<!--<h1>Are you Eligible?</h1>
+					<p>If you've recently experienced a disaster and your event is not on the eligible events list, contact your Indigenous or local government first.</p>-->
+					<p>
+					<table style="width: 100%;">
+						<tr>
+							<td class="borderCls">
+							
+								<div id="divHomeOwnerButton" class="are-evacuated-registration center">
+								<!--<a class="btn btn--dark-blue btn--strong" href="">Check Eligible Events</a>-->
+									<a class="btn btn--regular1 btn--dark-blue" target="_blank" href="https://portal.dfa.gov.bc.ca/verified-registration">
+										Apply For DFA
+									</a>
+								<p>Apply for Disaster Financial Assistance (DFA). You may submit an<br />application by selecting this button and signing in with BC Service Card. </p>
+
+								</div>
+
+							</td>
+						</tr>
+					</table>
+
+					<p class="fontweight90">Applications must be submitted within 90 days of the disaster being declared eligible.</p>
+				</div>
+				<!--<div id="divCheckEligibilityButton" class="are-evacuated-registration center">-->
+					<!--<a class="btn btn--dark-blue btn--strong" href="">Check Eligible Events</a>-->
+					<!--<a class="btn btn--regular btn--dark-blue" target="_blank" href="https://urldefense.com/v3/__https://www2.gov.bc.ca/gov/content/safety/emergency-management/preparedbc/evacuation-recovery/disaster-financial-assistance__;!!AKgNyAfk550h-spHnEo!a2hu9GOWT3s7Q_ZmaQEO2RpzsOueQMAcoa7ddRKy6hwVXXOlo7rXLY_pkJ2RzyqvTaYpldYuiiWwLX3q4LggVJpiT_LwHPwb$">
+						Check Eligiblity
+					</a>
+				</div>-->
+			</div>
 		</section>
+
+  <div class="grey-wrapper">
 		
 		<div class="toggle-div">
 			<div class="overlay" id="overlay">

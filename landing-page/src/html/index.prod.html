@@ -1,4 +1,4 @@
-﻿
+
 
 <!DOCTYPE html>
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -26,7 +26,6 @@ body {
 	background: -webkit-gradient(linear, left top, left bottom, from(#bdd3e8),to(#ffffff));
 	background: -o-linear-gradient(top, #bdd3e8 0%,#fF2F2F2 100%);
 	background: linear-gradient(to bottom, #bdd3e8 0%,#F2F2F2 100%);
-	min-width: 1200px;
 }
 
 table td {
@@ -59,7 +58,7 @@ p {
 }
 
 p.headerText {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 24px;
     margin-bottom: 20px;
     text-align: left;
@@ -89,7 +88,6 @@ h3 {
 
 h2.headerStyle {
 	color: white;
-	text-align: center;
 }
 
 
@@ -138,19 +136,11 @@ a:hover {
 }
 
 .--link-light-blue {
-    color: #1A5A96;
+	color: #31B0E6;
 }
 
 .--link-light-blue:hover {
 	text-decoration: underline;
-}
-
-.--link-light-blue-header {
-    color: #31B0E6;
-}
-
-.--link-light-blue-header:hover {
-    text-decoration: underline;
 }
 
 .--link-black {
@@ -257,54 +247,10 @@ a:hover {
 
 
 .grey-wrapper {
-    background: #FCBA19;
-    width: 100%;
-    padding-top: 40px;
-    display: flex;
-    height: 290px;
-    color: #003366;
-}
-
-/*.overlay {
-    position: relative;
-	height: 100%;
+	background: #f2f2f2;
 	width: 100%;
-}*/
-
-.toggle-div {
-    
+	padding-top: 40px;
 }
-
-.overlay-content {
-    /*background-color: green;*/
-    height: 70px;
-    width: 300px;
-    min-width: 300px;
-    border: 4px solid white;
-    cursor: pointer;
-    padding: 10px;
-    text-align: center;
-    color: white;
-}
-
-        .overlay {
-            content: " ";
-            z-index: 10;
-            display: block;
-            position: absolute;
-            height: 660px;
-            width: 50%;
-            left: 50%;
-            right: 0;
-            background: rgba(0, 0, 0, 0.5);
-            min-width: 600px;
-            display: flex;
-            justify-content: center;
-            background: #003366D9 0% 0% no-repeat padding-box;
-            align-items: center;
-            background: #003366D9 0% 0% no-repeat padding-box;
-            transition: .5s ease;
-        }
 
 
 
@@ -378,31 +324,21 @@ a:hover {
 
 
 /** Are Evacuated Section **/
-        .are-evacuated {
-            background-color: #f2f2f2;
-            padding: 40px 0;
-            height: 370px;
-            min-width: 1200px;
-            color: #003366;
-            text-align: center;
-        }
-
-.are-evacuated-description {
-    width: 100%;
-    padding-right: 30px;
-    min-width: 600px;
-    max-width: 50%;
+.are-evacuated {
+	width: 100%;
+	background-color: #FCBA19;
+	padding: 40px 0;
 }
 
 .--are-evacuated-cols {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 }
 
 @media (min-width: 720px) {
-        .--are-evacuated-cols {
-            flex-direction: row;
-        }
+	.--are-evacuated-cols {
+		flex-direction: row;
+	}
 }
 
 
@@ -410,19 +346,15 @@ a:hover {
 	.are-evacuated-description {
 		width: 100%;
 		padding-right: 30px;
-		min-width: 600px;
-		max-width: 50%;
 	}
 }
 
 @media (min-width: 1024px) {
-        .are-evacuated-description {
-            width: 100%;
-            padding-right: 30px;
-            padding-left: 30px;
-            min-width: 600px;
-            max-width: 50%;
-        }
+	.are-evacuated-description {
+		width: 100%;
+		padding-right: 30px;
+		padding-left: 30px;
+	}
 }
 
 
@@ -514,11 +446,8 @@ a:hover {
 /** What is DFA **/
 .what-dfa {
 	padding: 50px 0 70px 0;
-	/*margin: 0 auto;*/
-	max-width: 50%;
-    padding: 40px 0;
-	min-width: 600px;
-
+	margin: 0 auto;
+	max-width: 900px;
 }
 
 .--what-dfa-layout {
@@ -561,9 +490,9 @@ a:hover {
 }
 
 @media (min-width: 720px) {
-        .--register-dfa-layout {
-            flex-direction: column;
-        }
+	.--register-dfa-layout {
+		flex-direction: row;
+	}
 }
 
 .register-dfa .container {
@@ -614,7 +543,6 @@ a:hover {
 	}
 }
 
-
 @media (min-width: 720px) {
 	.contact-cta-description {
 		padding-left: 60px;
@@ -625,24 +553,26 @@ a:hover {
 	width: 120px;
 }
 
+.contact-cta .container {
+	max-width: 900px;
+}
+
+
 /** Footer **/
 
 .site-footer {
-    background-color: #dce2f0fe;
-    width: 100%;
-    min-height: 60px;
-    padding-top: 20px;
-    border-top: 2px solid #FCBA19;
-    display: inline-block;
-    align-content: space-around;
-	font-size: 14px;
+	background-color: #dce2f0fe;
+	width: 100%;
+	min-height: 60px;
+	padding: 20px 0;
+	border-top: 2px solid #FCBA19;
 }
 
-/*@media (min-width: 720px) {
+@media (min-width: 720px) {
 	.site-footer {
 		min-height: 160px;
 	}
-}*/
+}
 
 .--site-footer-layout {
 	display: flex;
@@ -711,7 +641,7 @@ a:hover {
 
     .hero-text {
         padding: 30px 0 10px 0;
-        /*width: 50%;*/
+        width: 50%;
     }
 
     .fontweight90 {
@@ -724,98 +654,27 @@ a:hover {
 <script type="text/javascript">
 	var apiUrl = 'https://portal.dfa.gov.bc.ca/api/eligibility/checkEventsAvailable';
 
-	var apiPrivateUrl = privatePortal + '/api/eligibility/checkEventsAvailable';
-	var eventButtonPrivateUrl = privatePortal + '/verified-registration';
-	var noeventButtonPrivateUrl = privatePortal + '/verified-registration';
+	fetch(apiUrl, {
+		method: "GET", mode: 'cors'
+	}).then(response => {
+		return response.json();
+	}).then(data => {
 
-	var apiPublicUrl = publicPortal + '/api/eligibility/checkPublicEventsAvailable';
-	var eventButtonPublicUrl = publicPortal + '/verified-registration'
-	var noeventButtonPublicUrl = publicPortal + '/verified-registration'
-
-    function callAPIs() {
-		fetch(apiPublicUrl, {
-			method: "GET", mode: 'cors'
-		}).then(response => {
-			return response.json();
-		}).then(data => {
-
-			if (data > 0) {
-				publicEventsAvailable();
-			}
-
-		}).catch(err => {
-			// Do something for an error here
-		});
-
-		fetch(apiPrivateUrl, {
-			method: "GET", mode: 'cors'
-		}).then(response => {
-			return response.json();
-		}).then(data => {
-
-			if (data > 0) {
-				privateEventsAvailable();
-			}
-
-		}).catch(err => {
-			// Do something for an error here
-		});
-    }
-	
-
-	function onLoad() {
-		document.getElementById('eventButtonPrivate').href = eventButtonPrivateUrl;
-		document.getElementById('noeventButtonPrivate').href = privatePortal;
-
-		document.getElementById('eventButtonPublic').href = eventButtonPublicUrl;
-		document.getElementById('noeventButtonPublic').href = publicPortal;
-
-		callAPIs();
-	}
-
-	function privateEventsAvailable() {
-		document.getElementById('eventTextPrivate').style.display = 'inline-block';
-		document.getElementById('eventButtonPrivate').style.display = 'inline-block';
-
-		document.getElementById('noeventTextPrivate').style.display = 'none';
-		document.getElementById('noeventButtonPrivate').style.display = 'none';
-
-		document.getElementById('eventBottomTextPrivate').style.display = 'inline-block';
-	}
-
-	function publicEventsAvailable() {
-		document.getElementById('eventTextPublic').style.display = 'inline-block';
-		document.getElementById('eventButtonPublic').style.display = 'inline-block';
-
-		document.getElementById('noeventTextPublic').style.display = 'none';
-		document.getElementById('noeventButtonPublic').style.display = 'none';
-
-		document.getElementById('eventBottomTextPublic').style.display = 'inline-block';
-	}
-
-	function switchSection(section) {
-		var divOverlay = document.getElementById('overlay');
-		if (section == 0) {
-			document.getElementById('overlay-content-ind').style.display = 'none';
-			document.getElementById('overlay-content-loc').style.display = 'block';
-
-			if (document.body.offsetWidth <= 1200) {
-				divOverlay.style.left = "600px";
-			}
-            else {
-				divOverlay.style.left = "50%";
-            }
-		} else if (section == 1) {
-			document.getElementById('overlay-content-loc').style.display = 'none';
-			document.getElementById('overlay-content-ind').style.display = 'block';
-			divOverlay.style.left = "0%";
+		if (data > 0) {
+			document.getElementById('secAreEvacuated').style.display = 'block';
 		}
-	}
-
+		else {
+			document.getElementById('secAreEvacuated').style.display = 'none';
+		}
+		//// Work with JSON data here
+		//console.log(JSON.stringify(data));
+	}).catch(err => {
+		// Do something for an error here
+	});
 </script>
 </head>
 
-<body onload="onLoad()">
+<body>
 
 	<header class="site-header">
 		<div class="container">
@@ -831,8 +690,8 @@ a:hover {
 				<div class="hero-content">
 					<div class="hero-text">
 						<h2 class="headerStyle">Disaster Financial Assistance (DFA)</h2>
-						<p class="lead"><p class="headerText">After a disaster, the provincial government may declare the event eligible for Disaster Financial Assistance (DFA). On this page you will be able to access the correct portal for your application type.</p>
-						<p class="lead headerText"><a class="--link-light-blue-header --link-strong" href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/preparedbc/evacuation-recovery/disaster-financial-assistance" target="_blank">Learn more ></a></p>
+						<p class="lead"><p class="headerText">After a disaster, the provincial government may declare the event eligible for <strong>Disaster Financial Assistance (DFA).</strong> Once declared, the DFA program may provide applicants with financial assistance to restore uninsurable losses that are essential to your home, livelihood or community service.</p>
+						<p class="lead headerText"><a class="--link-light-blue --link-strong" href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/preparedbc/evacuation-recovery/disaster-financial-assistance" target="_blank">Learn more ></a></p>
 					</div>
 				</div>
 			</div>
@@ -844,9 +703,15 @@ a:hover {
 				PLANNED OUTAGE ALERT!
 				</br>
 				</br>
-				There is a scheduled system outage of the Disaster Financial Assistance portal from Wednesday October 9 at 7:00 a.m. to Wednesday October 9 at 8:00 a.m. which will disrupt our services and access to the portal.
-				</br>
+				There is a scheduled system outage of the Disaster Financial Assistance portal from </br><i>Wednesday January 22 at 3:00 p.m. to Friday January 24 at 3:00 p.m.</i></br> which will disrupt our services and access to the portal.
+                </br>
+                </br>
+                Please ensure you are logged out of the portal by <u>3:00 p.m. on Wednesday January 22</u></br> to ensure that your application information is saved.
+                </br>
+                </br>
 				We apologize for any inconvenience caused and thank you for your patience.
+                </br>
+                If you have any questions, please contact <a class="--link-orange" href="mailto:DFA.private@gov.bc.ca">DFA.private@gov.bc.ca</a>.
 				</br>
 				</br>
 			</div>
@@ -889,101 +754,20 @@ a:hover {
 
 <div class="grey-wrapper">
 		
-		<div class="toggle-div">
-			<div class="overlay" id="overlay">
-				<div class="overlay-content" id="overlay-content-loc" onclick="switchSection(1)">
-					<p>Switch to<br />Local Governments and First Nations</p>
+		<section class="what-dfa">
+			<div class="container --what-dfa-layout">
+				<div class="what-dfa-img">
+					<img class="--what-dfa-img" src="img/whatisdfa.svg" alt="DFA User Illustration">
 				</div>
-				<div class="overlay-content" id="overlay-content-ind" onclick="switchSection(0)" style="display: none;">
-					<p>Switch to<br />Individuals and Organizations</p>
+				<div class="what-dfa-description">
+					<h3>What is DFA?</h3>
+					<p>Disaster events can be stressful, please refer to our disaster recovery resources to help guide your next steps to recovery</p>
+					<a class="--link-light-blue" href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/preparedbc/evacuation-recovery/disaster-financial-assistance" target="_blank">Find out more ></a>
 				</div>
 			</div>
-
-			<div class="grey-wrapper">
-				<section class="what-dfa">
-					<div class="container --what-dfa-layout">
-						<!--<div class="what-dfa-img">
-							<img class="--what-dfa-img" src="img/whatisdfa.svg" alt="DFA User Illustration">
-						</div>-->
-						<div class="what-dfa-description">
-							<p>For <b>homeowners, residential tenants, small businesses, landlords, farms, and charitable organizations</b> the DFA program may provide applicants with financial assistance to restore uninsurable losses that are essential to your home, livelihood, or community service.</p>
-							<a class="--link-light-blue" href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/preparedbc/evacuation-recovery/disaster-financial-assistance" target="_blank">Private Sector information… ></a>
-						</div>
-					</div>
-				</section>
-				<section class="what-dfa">
-					<div class="container --what-dfa-layout">
-						<!--<div class="what-dfa-img">
-							<img class="--what-dfa-img" src="img/whatisdfa.svg" alt="DFA User Illustration">
-						</div>-->
-						<div class="what-dfa-description">
-							<p>For <b>Indigenous communities and local governments</b>, the DFA program may provide communities with financial assistance for damaged infrastructure.</p>
-							<a class="--link-light-blue" href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/local-emergency-programs/financial/communities-dfa" target="_blank">Public Communities information… ></a>
-						</div>
-					</div>
-				</section>
-			</div>
-
-			<section id="secAreEvacuated" class="are-evacuated" >
-				<div class="container --are-evacuated-cols">
-					<div class="are-evacuated-description">
-						<p>
-						<table style="width: 100%;">
-							<tr>
-								<td>
-									<p style="display:none" id="eventTextPrivate">For homeowners, residential tenants, small businesses, landlords, farms and charitable organizations only, log in with your BC Services card to create an application.</p>
-									<p id="noeventTextPrivate">For homeowners, residential tenants, small businesses, landlords, farms and charitable organizations to create a profile or check your application status, log in with your BC Services card.</p>
-					
-									<div id="divHomeOwnerButton" class="are-evacuated-registration center">
-									<!--<a class="btn btn--dark-blue btn--strong" href="">Check Eligible Events</a>-->
-										<a style="display:none" id="eventButtonPrivate" class="btn btn--regular1 btn--dark-blue" target="_blank" href="javascript:void(0);">
-											Apply For DFA
-										</a>
-										<a id="noeventButtonPrivate" class="btn btn--regular1 btn--dark-blue" target="_blank" href="javascript:void(0);">
-											Log in to Portal
-										</a>
-									</div>
-
-								</td>
-							</tr>
-						</table>
-
-						<p style="display:none" id="eventBottomTextPrivate" class="fontweight90">Applications must be submitted within 90 days of the disaster being declared.</p>
-					</div>
-					<div class="are-evacuated-description">
-						<!--<h1>Are you Eligible?</h1>
-						<p>If you've recently experienced a disaster and your event is not on the eligible events list, contact your Indigenous or local government first.</p>-->
-						<p>
-						<table style="width: 100%;">
-							<tr>
-								<td>
-									<p style="display:none" id="eventTextPublic">For Indigenous communities and local governments only, log in with your Business BCeID to create an application.</p>
-									<p id="noeventTextPublic">For Indigenous communities and local governments to check the status of your application, log in with your Business BCeID.</p>
-					
-									<div id="divHomeOwnerButton" class="are-evacuated-registration center">
-									<!--<a class="btn btn--dark-blue btn--strong" href="">Check Eligible Events</a>-->
-										<a style="display:none" id="eventButtonPublic" class="btn btn--regular1 btn--dark-blue" target="_blank" href="javascript:void(0);">
-											Apply For DFA
-										</a>
-										<a id="noeventButtonPublic" class="btn btn--regular1 btn--dark-blue" target="_blank" href="javascript:void(0);">
-											Log in to Portal
-										</a>
-									</div>
-
-								</td>
-							</tr>
-						</table>
-
-						<p style="display:none" id="eventBottomTextPublic" class="fontweight90">Applications must be submitted within 90 days of the disaster being declared.</p>
-					</div>
-				</div>
-
-			</section>
-			
-		</div>
-
-
-			<!--<section class="register-dfa">
+		</section>
+	</div>
+			<section class="register-dfa">
 				<div class="container --register-dfa-layout">
 					<div class="register-dfa-description">
 						<h3>Register with DFA</h3>
@@ -995,7 +779,7 @@ a:hover {
 						<img class="register-dfa-img" src="https://ess.gov.bc.ca/app/uploads/sites/931/2024/06/noun-umbrella-5817185-333333.png" alt="Umbrella Illustration">
 					</div>
 				</div>
-			</section>-->
+			</section>
 
 			<section class="contact-cta">
 				<div class="container --contact-cta-layout">
@@ -1004,10 +788,10 @@ a:hover {
 					</div>
 					<div class="contact-cta-description">
 						<h3>Contact Us</h3>
-						<p>For questions or more information, contact the Disaster Financial Assistance team
+						<p>For questions or more information, contact the Disaster Financial Assistance team<br>
 						toll-free at <a class="--link-orange" href="tel:18882574777">1-888-257-4777</a> or by email at <a class="--link-orange" href="mailto:DFA.Private@gov.bc.ca">DFA.Private@gov.bc.ca</a> for individuals, small
 						<br>businesses, charitable organizations, and farms or <a class="--link-orange" href="mailto:DFA.Public@gov.bc.ca">DFA.Public@gov.bc.ca</a> for local
-						governments and Indigenous Governing Bodies.
+						<br>governments and Indigenous Governing Bodies.
 						<p>Send DFA Technical Support inquiries <a class="--link-orange" href="mailto:DFA.private@gov.bc.ca">here</a>.</p>
 					</div>
 				</div>

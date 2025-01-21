@@ -16,7 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static dfa.CustomWebDriverManager.getDriver;
 
-public class CreateNewProjectPublic {
+public  class CreateNewProjectPublic {
 
     private static WebDriver driver;
     @Getter
