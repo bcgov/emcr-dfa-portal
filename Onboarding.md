@@ -122,7 +122,7 @@ dfa-public/
 Both APIs require user secrets configuration for local development.
 
 1. Configure user secrets:
-   - Reference the structure from the Confluence page (URL needed)
+   - Reference the structure from the Confluence page
    - Configuration details should be added using .NET User Secrets
 
 ### Running DFA Private Sector API
