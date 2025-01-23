@@ -121,6 +121,30 @@
             </span>
           </div>
         </div>
+
+        <div class="row info-detail">
+          <div class="col-md-3"><span>Claim Eligible GST:</span></div>
+          <div class="col-md-3">
+            <span>
+              $&nbsp;{{
+                recoveryPlanFormAbstract
+                  .eligibleGST| number : '1.2-2'
+              }}
+            </span>
+          </div>
+        </div>
+
+        <div class="row info-detail">
+          <div class="col-md-3"><span>Claim Total:</span></div>
+          <div class="col-md-3">
+            <span>
+              $&nbsp;{{
+                recoveryPlanFormAbstract
+                  .claimTotal	 | number : '1.2-2'
+              }}
+            </span>
+          </div>
+        </div>
         
         
       </mat-card-content>
