@@ -53,7 +53,7 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
   formCreationService: FormCreationService;
   showSupportingFileForm: boolean = false;
   supportingFilesDataSource = new MatTableDataSource();
-  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate'] //, 'icons'
+  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate', 'icons'] //, 'icons'
   documentSummaryDataSource = new MatTableDataSource();
   isLoading: boolean = false;
   isdisabled: string = 'false';
@@ -121,6 +121,7 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
   }
 
   ngOnInit(): void {
+    console.log(this.vieworedit);
     this.supportingDocumentsForm$ = this.formCreationService
       .getSupportingDocumentsForm()
       .subscribe((supportingDocuments) => {
@@ -157,7 +158,7 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
           this.dfaProjectMainDataService.setDisableFileUpload('false');
         }
       }
-      
+
     );
 
     this.formCreationService.recoveryPlanForm.value.get('projectName')

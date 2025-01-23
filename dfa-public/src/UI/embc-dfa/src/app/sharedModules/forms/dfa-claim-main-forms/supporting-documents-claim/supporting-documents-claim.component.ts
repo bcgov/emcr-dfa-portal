@@ -54,7 +54,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
   formCreationService: FormCreationService;
   showSupportingFileForm: boolean = false;
   supportingFilesDataSource = new MatTableDataSource();
-  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate'] //, 'icons'
+  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate', 'icons'] //, 'icons'
   claimDocumentSummaryDataSource = new MatTableDataSource();
   isLoading: boolean = false;
   isdisabled: string = 'false';
@@ -124,9 +124,9 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
       .subscribe((fileUploads) => {
         this.fileUploadForm = fileUploads;
       });
-      
+
     this.fileUploadForm.addValidators([this.validateFormRequiredDocumentTypes]);
-    
+
 
     // subscribe to changes for document summary
     const _documentSummaryFormArray = this.formCreationService.fileUploadsClaimForm.value.get('fileUploads');
@@ -156,7 +156,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
     let supportingFiles = form.get('fileUploads')?.getRawValue();
     //let applicantType = form.get('applicantType').value;
     const error = {};
-    
+
     if (!supportingFiles || supportingFiles?.filter(x => x.requiredDocumentType === "Invoices" && x.deleteFlag == false).length <= 0) {
       invalid = true;
       error["noinvoices"] = true;
@@ -169,7 +169,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
       invalid = true;
       error["noproofofpayment"] = true;
     }
-    
+
     return invalid?error:null;
   }
 
