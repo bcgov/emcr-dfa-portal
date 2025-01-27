@@ -742,12 +742,12 @@ a:hover {
 	var publicPortal = 'https://publicsector-dev.dfa.gov.bc.ca'
 
 	var apiPrivateUrl = privatePortal + '/api/eligibility/checkEventsAvailable';
-	var eventButtonPrivateUrl = privatePortal + '/verified-registration';
-	var noeventButtonPrivateUrl = privatePortal + '/verified-registration';
+	var eventButtonPrivateUrl = privatePortal + '/registration-method';
+	var noeventButtonPrivateUrl = privatePortal + '/registration-method';
 
 	var apiPublicUrl = publicPortal + '/api/eligibility/checkPublicEventsAvailable';
-	var eventButtonPublicUrl = publicPortal + '/verified-registration'
-	var noeventButtonPublicUrl = publicPortal + '/verified-registration'
+	var eventButtonPublicUrl = publicPortal + '/registration-method'
+	var noeventButtonPublicUrl = publicPortal + '/registration-method'
 
     function callAPIs() {
 		fetch(apiPublicUrl, {
