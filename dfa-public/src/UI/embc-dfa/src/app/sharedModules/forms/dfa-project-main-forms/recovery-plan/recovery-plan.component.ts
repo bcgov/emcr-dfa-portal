@@ -39,6 +39,7 @@ import { DFAProjectMainDataService } from '../../../../feature-components/dfa-pr
 import { DFAProjectMainMappingService } from '../../../../feature-components/dfa-project-main/dfa-project-main-mapping.service';
 import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
+import {MatDividerModule} from "@angular/material/divider";
 
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -72,6 +73,7 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
   vieworedit: string = "";
   isReadOnly: boolean = false;
   showDates: boolean = false;
+  projectDecision: string = "";
   hideHelp: boolean = true;
   timerID;
   readonly phoneMask = [
@@ -125,12 +127,12 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
     if(text.indexOf('.')<0)
     {
       text=text+'.0'
-    }else 
+    }else
     if(text.indexOf('.')==text.length-1)
       {
         text=text+'0'
       }
-    
+
     let result = patt.test(text);
     return result;
   }
@@ -203,7 +205,7 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
         1000
       );
     }
-    
+
     //this.otherContactsForm.get('onlyOtherContact').setValue(this.onlyOtherContact);
     this.message = "Click on any field in the form to view detailed information " +
       "about what information is required and tips on how to fill " +
@@ -274,18 +276,21 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
           if (dfaProjectMain && dfaProjectMain.project && dfaProjectMain.project.isdamagedDateSameAsApplication == false) {
             this.showDates = true;
           }
-          
+
           dfaProjectMain.project.estimateCostIncludingTax = dfaProjectMain.project.estimateCostIncludingTax ? toFixedWithZeros(dfaProjectMain.project.estimateCostIncludingTax,2) : null;
-          
+
           this.dfaProjectMainMapping.mapDFAProjectMain(dfaProjectMain);
-          
+
           this.calcRemainingCharsCauseDamage();
           this.calcRemainingCharsDescribeDamage();
           this.calcRemainingCharsDescribeDamagedInfrastructure();
           this.calcRemainingCharsDescribeRepair();
           this.calcRemainingCharsDescribeRepairMaterial();
           this.calcRemainingCharsInfrastructure();
-          
+          console.log("--------------------- Setting the ProjectDecision ---------------------");
+          this.projectDecision = dfaProjectMain.project.projectDecision
+          console.log(this.projectDecision);
+
         },
         error: (error) => {
           //console.error(error);
@@ -318,7 +323,7 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
 
   setHelpText(inputSelection, tooltip: MatTooltip): void {
     switch (inputSelection) {
-      
+
       case 1:
         this.message = "Project number\r\n\r\nThe project number is the unique project identifier that your organization assigned to the project's site location where damage has occurred.\r\nThe project identifier may be a number, letter, or any combination of letters and numbers.\r\nThis project number is specific to the site and is often referred to when discussing the location.";
         break;
@@ -402,7 +407,8 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
     // 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - new text mask provider
     NgxMaskDirective, NgxMaskPipe,
     MatSelectModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDividerModule
   ],
   declarations: [RecoveryPlanComponent],
   providers: [provideNgxMask()]

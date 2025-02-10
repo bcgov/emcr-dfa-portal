@@ -780,6 +780,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.approvedTotal, opts => opts.MapFrom(s => s.dfa_approvedtotal.HasValue ? decimal.Round(decimal.Parse(s.dfa_approvedtotal.Value.ToString("F")), 2) : (decimal?)null))
                 .ForMember(d => d.paidProjectAmount,opts => opts.MapFrom(s => s.dfa_paidprojectamount.HasValue ? decimal.Round(decimal.Parse(s.dfa_paidprojectamount.Value.ToString("F")), 2) : (decimal?)null))
                 .ForMember(d => d.emcrapprovalcomments, opts => opts.MapFrom(s => s.dfa_emcrapprovalcomments))
+                .ForMember(d => d.ProjectDecision,opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projectdecision) ? GetEnumDescription((ProjectDecisions)Convert.ToInt32(s.dfa_projectdecision)) : null))
                 ;
             //.ForMember(d => d.estimatedCompletionDate, opts => opts.MapFrom(s => s.dfa_estimatedcompletiondateofproject));
             //.ForMember(d => d.wildfireDamage, opts => opts.MapFrom(s => s.dfa_causeofdamagewildfire2 == (int)YesNoOptionSet.Yes ? true : (s.dfa_causeofdamagewildfire2 == (int)YesNoOptionSet.No ? false : (bool?)null)))

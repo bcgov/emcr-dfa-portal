@@ -16,7 +16,7 @@
         aria-tooltip="Button that displays and hides a tooltip triggered by other buttons">
         Action
       </button>-->
-      <div class="col-12 content-container infoText">
+      <div class="col-12 content-container infoText" *ngIf="projectDecision !== 'Approved'">
         <div class="row">
           <div class="infoIconCol">
             <div class="material-icons infoIconStyle">info</div>
@@ -31,17 +31,19 @@
         <div class="col-md-6"></div>
       </div>
       <br />
-      <ng-container>
+      <ng-container *ngIf="projectDecision === 'Approved'">
+        <mat-divider style="margin: 30px 0px;"/>
+        <div>
         <div>
           <p style="font-size: 18px; font-weight: bold;">
             Decision
           </p>
         </div>
         <br />
-        <div class="row">
+        <div class="row my-2">
           <div class="col-md-3">
             <p class="label">
-              Project Approved Date<span style="color:red">*</span>
+              Project Approved Date
             </p>
             <mat-form-field appearance="outline">
               <mat-label>Project Approved Date</mat-label>
@@ -60,9 +62,9 @@
             </mat-form-field>
           </div>
 
-          <!-- <div class="col-md-3">
+          <div class="col-md-3">
             <p class="label">
-              18 month deadline<span style="color:red">*</span>
+              18 month deadline
             </p>
             <mat-form-field appearance="outline">
               <mat-label>18 month deadline</mat-label>
@@ -73,16 +75,16 @@
                 [disabled]="isReadOnly === true"></mat-datepicker-toggle>
               <mat-datepicker #deadlinePicker startView="multi-year"
                 [disabled]="isReadOnly === true"></mat-datepicker>
-              
+
             </mat-form-field>
-          </div> -->
+          </div>
 
         </div>
 
-        <div class="row">
+        <div class="row my-2">
           <div class="col-md-3">
             <p class="label">
-              Approved Project Cost<span style="color:red">*</span>
+              Approved Project Cost
             </p>
             <mat-form-field appearance="outline" class="mat-form-round">
               <div class="searchDiv">
@@ -97,12 +99,12 @@
 
           <div class="col-md-3">
             <p class="label">
-              Approved Amended Project Cost<span style="color:red">*</span>
+              Approved Amended Project Cost
             </p>
             <mat-form-field appearance="outline" class="mat-form-round">
               <div class="searchDiv">
                 <input (focusin)="setHelpText(15, tooltip)" #currencyBox id="currencyBox"
-                  formControlName="approvedAmendedProjectCost" matInput required placeholder="Amendmend Project Cost"
+                  formControlName="approvedAmendedProjectCost" matInput required placeholder="Amended Project Cost"
                   mask="separator.2" thousandSeparator="," decimalMarker="." maxlength="100" />
                 <span class="currencyText">CA$</span>
               </div>
@@ -111,7 +113,7 @@
           </div>
           <div class="col-md-3">
             <p class="label">
-              Project Claim Total<span style="color:red">*</span>
+              Project Claim Total
             </p>
             <mat-form-field appearance="outline" class="mat-form-round">
               <div class="searchDiv">
@@ -125,7 +127,7 @@
           </div>
           <div class="col-md-3">
             <p class="label">
-              Project Approved Claim Total <span style="color:red">*</span>
+              Project Approved Claim Total
             </p>
             <mat-form-field appearance="outline" class="mat-form-round">
               <div class="searchDiv">
@@ -144,7 +146,7 @@
         <div class="row">
           <div class="col-md-3">
             <p class="label">
-              Paid Project Amount <span style="color:red">*</span>
+              Paid Project Amount
             </p>
             <mat-form-field appearance="outline" class="mat-form-round">
               <div class="searchDiv">
@@ -159,7 +161,7 @@
         </div>
         <div class="row">
           <p class="label">
-            EMCR Decision Comments<span style="color:red">*</span>
+            EMCR Decision Comments
           </p>
           <div class="col-md-12">
             <mat-form-field appearance="outline">
@@ -170,6 +172,10 @@
             </mat-form-field><br />
           </div>
         </div>
+        </div>
+      </ng-container>
+      <ng-container>
+        <mat-divider style="margin: 30px 0px;"/>
         <div>
           <p style="font-size: 18px; font-weight: bold;">
             Project Details

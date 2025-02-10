@@ -18,6 +18,7 @@ export interface RecoveryPlan {
   paidProjectAmount?: null | number;
   project18MonthDeadline?: string;
   projectApprovedDate?: null | string;
+  projectDecision?: null | string;
   projectName?: null | string;
   projectNumber?: null | string;
   projectStatus?: null | ProjectStageOptionSet;

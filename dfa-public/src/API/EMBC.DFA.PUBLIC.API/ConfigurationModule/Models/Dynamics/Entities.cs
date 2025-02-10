@@ -294,6 +294,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public decimal? dfa_approvedtotal { get; set; }
         public decimal? dfa_paidprojectamount { get; set; }
         public string? dfa_emcrapprovalcomments { get; set; }
+        public string? dfa_projectdecision { get; set; }
     }
 
     public class dfa_claim_retrieve
