@@ -287,9 +287,6 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
           this.calcRemainingCharsDescribeRepair();
           this.calcRemainingCharsDescribeRepairMaterial();
           this.calcRemainingCharsInfrastructure();
-          console.log("--------------------- Setting the ProjectDecision ---------------------");
-          this.projectDecision = dfaProjectMain.project.projectDecision
-          console.log(this.projectDecision);
 
         },
         error: (error) => {
