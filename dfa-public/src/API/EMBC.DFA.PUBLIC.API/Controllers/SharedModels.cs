@@ -557,7 +557,7 @@ namespace EMBC.DFA.API.Controllers
         public ProjectStageOptionSet? projectStatus { get; set; }
 
         public string? projectApprovedDate { get; set; }
-        public string project18MonthDeadline { get; set; }
+        public string? project18MonthDeadline { get; set; }
         public decimal? approvedCost { get; set; }
         public decimal? approvedAmendedProjectCost { get; set; }
         public decimal? claimTotal { get; set; }
