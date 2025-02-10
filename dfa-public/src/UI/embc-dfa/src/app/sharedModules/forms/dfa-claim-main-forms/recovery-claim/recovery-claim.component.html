@@ -84,19 +84,6 @@
         <div class="row">
           <div class="col-md-3">
             <p  style="font-size: 15px">
-              First claim approved?
-            </p>
-            <mat-radio-group
-              (focusin)="setHelpText(3, tooltip)"
-              formControlName="isFirstClaimApproved"
-              class="primary-radio-group horizontal-radio-group"
-              (change)="selectDamageDates($event)"
-              aria-label="Select an option">
-              <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
-            </mat-radio-group><br/><br/>
-          </div>
-          <div class="col-md-3">
-            <p  style="font-size: 15px">
               Is this the final claim for this project?<span style="color:red" >*</span>
             </p>
             <mat-radio-group
@@ -193,7 +180,7 @@
             </mat-form-field>
           </div>
 
-          
+
           <div class="col-md-3 costCurrency">
             <p  style="font-size: 15px; margin-bottom: 10px !important">
                Total Being Claimed
