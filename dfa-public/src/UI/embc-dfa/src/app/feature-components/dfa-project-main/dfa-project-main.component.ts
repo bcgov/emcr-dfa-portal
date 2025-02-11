@@ -296,6 +296,14 @@ export class DFAProjectMainComponent
     
     switch (component) {
       case 'recovery-plan':
+        this.dfaProjectMainDataService.recoveryPlan.projectApprovedDate = this.form.get('projectApprovedDate').value;
+        this.dfaProjectMainDataService.recoveryPlan.project18MonthDeadline = this.form.get('project18MonthDeadline').value;
+        this.dfaProjectMainDataService.recoveryPlan.approvedCost = !this.form.get('approvedCost').value ? null : this.form.get('approvedCost').value;
+        this.dfaProjectMainDataService.recoveryPlan.approvedAmendedProjectCost = !this.form.get('approvedAmendedProjectCost').value ? null : this.form.get('approvedAmendedProjectCost').value;
+        this.dfaProjectMainDataService.recoveryPlan.claimTotal = !this.form.get('claimTotal').value ? null : this.form.get('claimTotal').value;
+        this.dfaProjectMainDataService.recoveryPlan.approvedTotal = !this.form.get('approvedTotal').value ? null : this.form.get('approvedTotal').value;
+        this.dfaProjectMainDataService.recoveryPlan.paidProjectAmount = !this.form.get('paidProjectAmount').value ? null : this.form.get('paidProjectAmount').value;
+        this.dfaProjectMainDataService.recoveryPlan.emcrapprovalcomments = this.form.get('emcrapprovalcomments').value;
         this.dfaProjectMainDataService.recoveryPlan.projectName = this.form.get('projectName').value;
         this.dfaProjectMainDataService.recoveryPlan.projectNumber = this.form.get('projectNumber').value;
         this.dfaProjectMainDataService.recoveryPlan.projectStatus = this.form.get('projectStatus').value;

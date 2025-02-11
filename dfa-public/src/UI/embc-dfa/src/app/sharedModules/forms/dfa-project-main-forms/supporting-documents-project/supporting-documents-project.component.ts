@@ -121,7 +121,6 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
   }
 
   ngOnInit(): void {
-    console.log(this.vieworedit);
     this.supportingDocumentsForm$ = this.formCreationService
       .getSupportingDocumentsForm()
       .subscribe((supportingDocuments) => {
