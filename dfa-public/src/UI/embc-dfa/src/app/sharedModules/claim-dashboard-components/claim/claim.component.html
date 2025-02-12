@@ -136,13 +136,13 @@
           <span><b>Approved Claim Total - </b></span>
         </div>
         <div class="col-md-2">
-          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.approvedClaimTotal : "N/A"}}</span>
+          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.approvedClaimTotal : ""}}</span>
         </div>
         <div class="col-md-2">
           <span><b>Eligible Payable - </b></span>
         </div>
         <div class="col-md-2">
-          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.eligiblePayable : "N/A"}}</span>
+          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.eligiblePayable : ""}}</span>
         </div>
       </div>
       <div style="padding-bottom: 16px; display: flex;" [hidden]="applItem.isHidden">
@@ -156,13 +156,13 @@
           <span><b>Less First $1,000 -</b></span>
         </div>
         <div class="col-md-2">
-          {{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.lessFirst1000 : "N/A"}}
+          {{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.lessFirst1000 : ""}}
         </div>
         <div class="col-md-2">
           <span><b>Paid Claim Amount -</b></span>
         </div>
         <div class="col-md-2">
-          {{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.paidClaimAmount : "N/A"}}
+          {{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.paidClaimAmount : ""}}
         </div>
       </div>
 
@@ -179,13 +179,13 @@
           <span><b>Approved Reimbursement % -</b></span>
         </div>
         <div class="col-md-2">
-          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.approvedReimbursePercent : "N/A"}}</span>
+          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.approvedReimbursePercent : ""}}</span>
         </div>
         <div class="col-md-2">
           <span><b>Paid Claim Date -</b></span>
         </div>
         <div class="col-md-2">
-          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.paidClaimDate : "N/A"}}</span>
+          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.paidClaimDate : ""}}</span>
         </div>
 
       </div>

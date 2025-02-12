@@ -116,7 +116,7 @@
               type="button"
               *ngIf="applItem.hasAmendment"
                     >
-          
+
               View Amendment
             </button>
            @if(applItem.status != 'Closed') {
@@ -130,7 +130,7 @@
               Submit Claims
             </button>
             }
-           
+
             <button
               class="application-button"
               type="button"
@@ -153,38 +153,36 @@
           </span>
         </div>
       </div>
-      
-      @if(applItem.projectDecision == DecisionEnum.Approved || applItem.projectDecision == DecisionEnum.ApprovedWithExclusions) {
       <div style="padding-top: 16px; display: flex;" [hidden]="applItem.isHidden">
           <div class="col-md-2">
             <span><b>Site Location - </b></span>
           </div>
           <div class="col-md-3 wrap-text">
-            <span>{{applItem.siteLocation }}</span>
+            <span>{{applItem?.projectDecision == DecisionEnum.Approved || applItem?.projectDecision == DecisionEnum.ApprovedWithExclusions ? applItem.siteLocation : "" }}</span>
           </div>
           <div class="col-md-2">
             <span><b>Estimated Completion Date - </b></span>
           </div>
           <div class="col-md-2">
-            <span>{{ applItem.estimatedCompletionDate }}</span>
+            <span>{{applItem?.projectDecision == DecisionEnum.Approved || applItem?.projectDecision == DecisionEnum.ApprovedWithExclusions ? applItem.estimatedCompletionDate : "" }}</span>
           </div>
       </div>
       <div style="border-bottom: 1px solid lightgrey; padding-bottom: 16px; display: flex;" [hidden]="applItem.isHidden">
-        
+
         <div class="col-md-2">
           <span><b>EMCR Approved Amount -</b></span>
         </div>
         <div class="col-md-3">
-          <span id="spnCauseOfDamage">CA$&nbsp;{{ applItem.emcrApprovedAmount | number : '1.2-2' }}</span>
+          <span>{{applItem?.projectDecision == DecisionEnum.Approved || applItem?.projectDecision == DecisionEnum.ApprovedWithExclusions ? (applItem.emcrApprovedAmount | number : '1.2-2') : "" }}</span>
         </div>
         <div class="col-md-2">
           <span><b>18 Month Deadline -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">{{ applItem.deadline18Month }}</span>
+          <span>{{applItem?.projectDecision == DecisionEnum.Approved || applItem?.projectDecision == DecisionEnum.ApprovedWithExclusions ? applItem.deadline18Month : "" }}</span>
         </div>
       </div>
-    }
+
       <div style="width: 90%; min-width: 725px; display: flex; flex-direction: column;">
         <div class="col-md-3" style="margin-top: 20px;">
           <span *ngIf="applItem.isErrorInStatus == true" style="color: red;">Error in displaying status<br /></span>
@@ -259,7 +257,7 @@
             <span *ngIf="item.currentStep == true && applItem.isErrorInStatus == false && item.isCompleted == false" class="youAreHere">You are here</span>
           </div>-->
       </div>
-      
+
     </mat-card>
   </div>
 </div>
