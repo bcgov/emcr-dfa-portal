@@ -98,7 +98,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
   documentSummaryDataSourceFiltered = new MatTableDataSource<InvoiceExtended>();
   noInvoiceText = 'To begin adding invoices, click the "+ Add Invoice" button.';
   isLoading = false;
-  
+
   readonly phoneMask = [
     /\d/,
     /\d/,
@@ -114,9 +114,9 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
     /\d/
   ];
 
-  claimDecision: string = '';  
+  claimDecision: string = '';
   DecisionEnum = Decision;
-    
+
   constructor(
     @Inject('formBuilder') formBuilder: UntypedFormBuilder,
     @Inject('formCreationService') formCreationService: FormCreationService,
@@ -130,7 +130,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
     private dfaApplicationMainMapping: DFAApplicationMainMappingService,
     private dfaProjectMainMapping: DFAProjectMainMappingService,
     private dfaClaimMainMapping: DFAClaimMainMappingService,
-    
+
     private otherContactsService: OtherContactService,
     private route: ActivatedRoute,
     public dialog: MatDialog
@@ -160,12 +160,12 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
      if(text.indexOf('.')<0)
      {
        text=text+'.0'
-     }else 
+     }else
      if(text.indexOf('.')==text.length-1)
        {
          text=text+'0'
        }
-     
+
      let result = patt.test(text);
      return result;
    }
@@ -175,7 +175,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    
+
     this.recoveryClaimForm$ = this.formCreationService
       .getRecoveryClaimForm()
       .subscribe((recoveryClaim) => {
@@ -196,7 +196,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
       //{ invoiceNumber: 'IN.003', vendorName: 'Home Depot', invoiceDate: '15-JUL-2013', totalBeingClaimed: '37000' }
 
     ];
-    
+
 
     let claimId = this.route.snapshot.paramMap.get('id'); //this.dfaClaimMainDataService.getClaimId();
 
@@ -207,7 +207,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
         }.bind(this),
         500
       );
-      
+
     }
 
     this.dfaProjectMainDataService.stepSelected.subscribe((stepSelected) => {
@@ -294,7 +294,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
       return acc + Number(val.totalBeingClaimed);
     }, 0);
 
-   
+
 
     this.dfaClaimMainDataService.recoveryClaim.totalInvoicesBeingClaimed = sumOfNetInvoiceBeingClaimed?.toFixed(2) + '';
     this.dfaClaimMainDataService.recoveryClaim.claimPST = sumOfClaimPST?.toFixed(2) + '';
@@ -308,7 +308,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
     this.formCreationService.recoveryClaimForm.value.get('totalActualClaim').setValue(sumOfTotalActualClaim?.toFixed(2));
     this.formCreationService.recoveryClaimForm.value.get('claimEligibleGST').setValue(sumOfClaimEligibleGST?.toFixed(2));
     this.formCreationService.recoveryClaimForm.value.get('claimTotal').setValue(sumOfTotalClaim?.toFixed(2));
-    
+
     this.formCreationService.recoveryClaimForm.value.updateValueAndValidity();
   }
 
@@ -328,10 +328,10 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
       this.showDates = true;
     }
   }
-  
+
 
   ApplyFilter(type: number, searchText: string): void {
-    
+
     this.lstInvoices = this.documentSummaryDataSource.data;
     var lstInvoicesFilterting = this.lstInvoices;
 
@@ -342,7 +342,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
     if (this.stageSelected && this.stageSelected != '-1') {
       lstInvoicesFilterting = lstInvoicesFilterting.filter(m => m.emcrDecision == this.stageSelected);
     }
-    
+
     if (this.filterbydaysSelected && this.filterbydaysSelected != -1) {
       var backdate = new Date(new Date().getTime() - (1000 * 60 * 60 * 24 * this.filterbydaysSelected));
       lstInvoicesFilterting = lstInvoicesFilterting.filter(m => (backdate <= new Date(m.invoiceDate)));
@@ -414,11 +414,11 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
             //this.invoiceForm.controls.totalBeingClaimed.setValue(netInvoice + PST + EligibleGST);
             //this.invoiceForm.controls.actualInvoiceTotal.setValue(netInvoice + PST + GrossGST);
           })
-          
+
           this.documentSummaryDataSource.data = lstInvoices;
           this.documentSummaryDataSourceFiltered.data = this.documentSummaryDataSource.data;
           this.invoicesCount = this.documentSummaryDataSource.data.length;
-          
+
           this.formCreationService.recoveryClaimForm.value.get('invoices').setValue(this.documentSummaryDataSource.data);
           this.formCreationService.recoveryClaimForm.value.updateValueAndValidity();
 
@@ -426,7 +426,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
             this.dfaClaimMainDataService.recoveryClaim.invoices = this.documentSummaryDataSource.data;
             this.SummaryClaimCalc();
           }
-          
+
           //this.dfaProjectMainMapping.mapDFAProjectMain(dfaProjectMain);
 
         },
@@ -469,7 +469,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
       emcrComment = element.emcrDecisionComments;
     }
     const content = { text: emcrComment, cancelButton: 'Close', title: 'EMCR Comment' };
-    
+
     this.dialog
       .open(DFAGeneralInfoDialogComponent, {
         data: {
@@ -489,7 +489,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
   }
 
   confirmDeleteInvoiceRow(element, index): void {
-    
+
     this.dialog
       .open(DFADeleteConfirmInvoiceDialogComponent, {
         data: {
@@ -506,7 +506,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
             this.dfaClaimMainDataService.setInvoiceId(element.invoiceId);
           }
           let invoice = this.dfaClaimMainDataService.createDFAInvoiceDTO();
-          
+
           this.dfaClaimMainService.deleteInvoice(invoice).subscribe(invoiceId => {
 
             this.documentSummaryDataSource.data.splice(index, 1);
@@ -554,7 +554,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
   }
 
   openInvoiceCreatePopup(objInvoice, index): void {
-    
+
     if (objInvoice && objInvoice.invoiceId) {
       this.dfaClaimMainDataService.setInvoiceId(objInvoice.invoiceId);
       delete (objInvoice as any).invoiceId
@@ -597,8 +597,8 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
             this.dfaClaimMainDataService.invoice.actualInvoiceTotal = objInv.actualInvoiceTotal ? "" + objInv.actualInvoiceTotal : "" ;
             this.dfaClaimMainDataService.invoice.eligibleGST = objInv.eligibleGST ? "" + objInv.eligibleGST : "";
             this.dfaClaimMainDataService.invoice.totalBeingClaimed = objInv.totalBeingClaimed ? "" + objInv.totalBeingClaimed : "";
-       
-            
+
+
             let invoice = this.dfaClaimMainDataService.createDFAInvoiceDTO();
             if(invoice.id=='null')
             {
@@ -609,7 +609,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
             this.dfaClaimMainService.upsertInvoice(invoice).subscribe(invoiceId => {
               //this.BackToDashboard();
               if (result.event === 'confirm') {
-                
+
                 this.dfaClaimMainDataService.setInvoiceId(invoiceId);
                 objInv.invoiceId = invoiceId;
               }
@@ -643,7 +643,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
             //this.documentSummaryDataSource.data.push(
             //  { invoiceNumber: objInv.invoiceNumber, vendorName: objInv.vendorName, invoiceDate: objInv.invoiceDate, totalBeingClaimed: objInv.totalBeingClaimed }
             //);
-            
+
           }
         }
         else {
@@ -659,7 +659,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
           }
         }
 
-        
+
       });
   }
 
@@ -668,7 +668,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
       case 1:
         this.message = "Project number\r\n\r\nThe project number is the unique project identifier that your organization assigned to the project's site location where damage has occurred.\r\nThe project identifier may be a number, letter, or any combination of letters and numbers.\r\nThis project number is specific to the site and is often referred to when discussing the location.";
         break;
-      
+
       default:
         this.message = "Click on any field in the form to view detailed information " +
           "about what information is required and tips on how to fill " +

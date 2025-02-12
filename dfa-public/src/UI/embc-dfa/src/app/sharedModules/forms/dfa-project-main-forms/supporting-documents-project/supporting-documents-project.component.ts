@@ -53,9 +53,10 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
   formCreationService: FormCreationService;
   showSupportingFileForm: boolean = false;
   supportingFilesDataSource = new MatTableDataSource();
-  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate', 'icons'] //, 'icons'
+  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate'] //, 'icons'
   documentSummaryDataSource = new MatTableDataSource();
   isLoading: boolean = false;
+  isReadOnly: boolean = false;
   isdisabled: string = 'false';
   isformUploaddisabled: string = 'false';
   allowedFileTypes = [
@@ -118,6 +119,16 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
         //}
       }
     });
+
+    this.isReadOnly = (dfaProjectMainDataService.getViewOrEdit() === 'view'
+      || dfaProjectMainDataService.getViewOrEdit() === 'edit'
+      || dfaProjectMainDataService.getViewOrEdit() === 'viewOnly');
+
+    this.dfaProjectMainDataService.changeViewOrEdit.subscribe((vieworedit) => {
+      this.isReadOnly = (vieworedit === 'view'
+        || vieworedit === 'edit'
+        || vieworedit === 'viewOnly');
+    })
   }
 
   ngOnInit(): void {
@@ -183,6 +194,10 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
     if (this.dfaApplicationMainDataService.getViewOrEdit() == 'viewOnly') {
       this.supportingDocumentsForm.disable();
       this.fileUploadForm.disable();
+    }
+
+    if (!this.isReadOnly) {
+      this.documentSummaryColumnsToDisplay.push('icons');
     }
 
   }
