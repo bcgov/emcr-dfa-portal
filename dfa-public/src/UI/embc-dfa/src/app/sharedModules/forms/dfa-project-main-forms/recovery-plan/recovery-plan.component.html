@@ -2,15 +2,10 @@
   <mat-card-content>
     <form [formGroup]="recoveryPlanForm">
 
-      <button type="button"
-          #tooltip="matTooltip" [hidden]="hideHelp"
-      (mouseenter)="$event.stopImmediatePropagation()"
-      (click)="tooltip.show()"
-      class="help-button"
-      matTooltipClass="tooltip-custom"
-      [matTooltip]="message || ''">
-      <span class="ques">?</span>&nbsp; HELP
-    </button>
+      <button type="button" #tooltip="matTooltip" [hidden]="hideHelp" (mouseenter)="$event.stopImmediatePropagation()"
+        (click)="tooltip.show()" class="help-button" matTooltipClass="tooltip-custom" [matTooltip]="message || ''">
+        <span class="ques">?</span>&nbsp; HELP
+      </button>
       <!--<mat-form-field class="example-user-input">
         <mat-label>Tooltip message</mat-label>
         <input style="display:none" value="test test test value" matInput [formControl]="message">
@@ -21,334 +16,403 @@
         aria-tooltip="Button that displays and hides a tooltip triggered by other buttons">
         Action
       </button>-->
-      <div class="col-12 content-container infoText" >
+      <div class="col-12 content-container infoText" *ngIf="projectDecision !== 'Approved'">
         <div class="row">
           <div class="infoIconCol">
             <div class="material-icons infoIconStyle">info</div>
           </div>
           <div class="col-md-11">
-            Please review and complete the form below. Required fields are marked with a red asterisk<span style="color:red" >*</span>
+            Please review and complete the form below. Required fields are marked with a red asterisk<span
+              style="color:red">*</span>
           </div>
           <div class="col-md-6"></div>
 
-          </div>
-          <div class="col-md-6"></div>
+        </div>
+        <div class="col-md-6"></div>
       </div>
-      <br/>
-      <ng-container>
-        <div class="row">
+      <br />
+      <ng-container *ngIf="projectDecision === 'Approved'">
+        <mat-divider style="margin: 30px 0px;"/>
+        <div>
+        <div>
+          <p style="font-size: 18px; font-weight: bold;">
+            Decision
+          </p>
+        </div>
+        <br />
+        <div class="row my-2">
           <div class="col-md-3">
-            <p  style="font-size: 15px">
-              Project Number<span style="color:red" >*</span>
+            <p class="label">
+              Project Approved Date
+            </p>
+            <mat-form-field appearance="outline">
+              <mat-label>Project Approved Date</mat-label>
+              <input matInput (focusin)="setHelpText(14, tooltip)" [matDatepicker]="approvedPicker"
+                [readonly]="isReadOnly === true" formControlName="projectApprovedDate" required>
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="approvedPicker"
+                [disabled]="isReadOnly === true"></mat-datepicker-toggle>
+              <mat-datepicker #approvedPicker startView="multi-year"
+                [disabled]="isReadOnly === true"></mat-datepicker>
+              <mat-error *ngIf="
+                recoveryPlanForm.get('projectApprovedDate').invalid &&
+                recoveryPlanForm.get('projectApprovedDate').hasError('required')
+              ">
+                Project Approved Date is required</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-3">
+            <p class="label">
+              18 month deadline
+            </p>
+            <mat-form-field appearance="outline">
+              <mat-label>18 month deadline</mat-label>
+              <input matInput (focusin)="setHelpText(14, tooltip)" [matDatepicker]="deadlinePicker"
+                [readonly]="isReadOnly === true" formControlName="project18MonthDeadline">
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="deadlinePicker"
+                [disabled]="isReadOnly === true"></mat-datepicker-toggle>
+              <mat-datepicker #deadlinePicker startView="multi-year"
+                [disabled]="isReadOnly === true"></mat-datepicker>
+
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row my-2">
+          <div class="col-md-3">
+            <p class="label">
+              Approved Project Cost
             </p>
             <mat-form-field appearance="outline" class="mat-form-round">
-              <input
-                id="projectNumber"
-                     (focusin)="setHelpText(1, tooltip)"
-                formControlName="projectNumber"
-                matInput
-                required
-                placeholder="Project Number"
-                maxlength="100"/>
-              <mat-error
-                  *ngIf="
+              <div class="searchDiv">
+                <input (focusin)="setHelpText(15, tooltip)" #currencyBox id="currencyBox"
+                  formControlName="approvedCost" matInput required placeholder="Approved Project Cost"
+                  mask="separator.2" thousandSeparator="," decimalMarker="." maxlength="100" />
+                <span class="currencyText">CA$</span>
+              </div>
+
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-3">
+            <p class="label">
+              Approved Amended Project Cost
+            </p>
+            <mat-form-field appearance="outline" class="mat-form-round">
+              <div class="searchDiv">
+                <input (focusin)="setHelpText(15, tooltip)" #currencyBox id="currencyBox"
+                  formControlName="approvedAmendedProjectCost" matInput required placeholder="Amended Project Cost"
+                  mask="separator.2" thousandSeparator="," decimalMarker="." maxlength="100" />
+                <span class="currencyText">CA$</span>
+              </div>
+
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <p class="label">
+              Project Claim Total
+            </p>
+            <mat-form-field appearance="outline" class="mat-form-round">
+              <div class="searchDiv">
+                <input (focusin)="setHelpText(15, tooltip)" #currencyBox id="currencyBox"
+                  formControlName="claimTotal" matInput required placeholder="Project Claim Total"
+                  mask="separator.2" thousandSeparator="," decimalMarker="." maxlength="100" />
+                <span class="currencyText">CA$</span>
+              </div>
+
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <p class="label">
+              Project Approved Claim Total
+            </p>
+            <mat-form-field appearance="outline" class="mat-form-round">
+              <div class="searchDiv">
+                <input (focusin)="setHelpText(15, tooltip)" #currencyBox id="currencyBox"
+                  formControlName="approvedTotal" matInput required
+                  placeholder="Project Approved Claim Total" mask="separator.2" thousandSeparator="," decimalMarker="."
+                  maxlength="100" />
+                <span class="currencyText">CA$</span>
+              </div>
+
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <p class="label">
+              Paid Project Amount
+            </p>
+            <mat-form-field appearance="outline" class="mat-form-round">
+              <div class="searchDiv">
+                <input (focusin)="setHelpText(15, tooltip)" #currencyBox id="currencyBox"
+                  formControlName="paidProjectAmount" matInput required placeholder="Paid Project Amount"
+                  mask="separator.2" thousandSeparator="," decimalMarker="." maxlength="100" />
+                <span class="currencyText">CA$</span>
+              </div>
+
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <p class="label">
+            EMCR Decision Comments
+          </p>
+          <div class="col-md-12">
+            <mat-form-field appearance="outline">
+              <textarea [disabled]="isReadOnly" matInput (focusin)="setHelpText(8, tooltip)"
+                formControlName="emcrapprovalcomments" placeholder="EMCR Decision Comments" [rows]="5" required
+                style="resize:none" (keyup)="calcRemainingEMCRComments()" maxlength="2000"></textarea>
+              <mat-hint>{{ remainingLengthInfrastructure }} characters remaining.</mat-hint>
+            </mat-form-field><br />
+          </div>
+        </div>
+        </div>
+      </ng-container>
+      <ng-container>
+        <mat-divider style="margin: 30px 0px;"/>
+        <div>
+          <p style="font-size: 18px; font-weight: bold;">
+            Project Details
+          </p>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col-md-3">
+            <p style="font-size: 15px">
+              Project Number<span style="color:red">*</span>
+            </p>
+            <mat-form-field appearance="outline" class="mat-form-round">
+              <input id="projectNumber" (focusin)="setHelpText(1, tooltip)" formControlName="projectNumber" matInput
+                required placeholder="Project Number" maxlength="100" />
+              <mat-error *ngIf="
                   recoveryPlanForm.get('projectNumber').hasError('isRequired')
-                "
-                >
-                  Project Name or Project Number is required to upload documents</mat-error
-                >
+                ">
+                Project Name or Project Number is required to upload documents</mat-error>
             </mat-form-field>
           </div>
           <div class="col-md-1"></div>
           <div class="col-md-8">
-            <p  style="font-size: 15px">
-              Project Name<span style="color:red" >*</span>
+            <p style="font-size: 15px">
+              Project Name<span style="color:red">*</span>
             </p>
             <mat-form-field appearance="outline">
-              <input
-                     (focusin)="setHelpText(2, tooltip)"
-                     #projectName
-                formControlName="projectName"
-                matInput
-                required
-                placeholder="Project Name"
-                maxlength="100"/>
-              <mat-error
-                *ngIf="
+              <input (focusin)="setHelpText(2, tooltip)" #projectName formControlName="projectName" matInput required
+                placeholder="Project Name" maxlength="100" />
+              <mat-error *ngIf="
                 recoveryPlanForm.get('projectName').hasError('isRequired')
-              "
-              >
-                Project Name or Project Number is required to upload documents</mat-error
-              >
+              ">
+                Project Name or Project Number is required to upload documents</mat-error>
             </mat-form-field>
           </div>
         </div>
         <div class="row">
-          <p  style="font-size: 15px">
-            Are the dates of damage the same dates provided on the application?<span style="color:red" >*</span>
+          <p style="font-size: 15px">
+            Are the dates of damage the same dates provided on the application?<span style="color:red">*</span>
           </p>
-          <mat-radio-group
-            (focusin)="setHelpText(3, tooltip)"
-            formControlName="isdamagedDateSameAsApplication"
-            class="primary-radio-group horizontal-radio-group"
-            required
-            (change)="selectDamageDates($event)"
+          <mat-radio-group (focusin)="setHelpText(3, tooltip)" formControlName="isdamagedDateSameAsApplication"
+            class="primary-radio-group horizontal-radio-group" required (change)="selectDamageDates($event)"
             aria-label="Select an option">
-            <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
-          </mat-radio-group><br/><br/><br/>
+            <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button
+              value=false>No</mat-radio-button>
+          </mat-radio-group><br /><br /><br />
         </div>
 
         <div class="row" *ngIf="showDates == true">
-          <p  style="font-size: 15px; margin-bottom: 10px !important">
-            What is the date(s) of damage for this site?<span style="color:red" >*</span>
+          <p style="font-size: 15px; margin-bottom: 10px !important">
+            What is the date(s) of damage for this site?<span style="color:red">*</span>
           </p>
           <div class="col-md-3">
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>From date</mat-label>
-              <input matInput
-                (focusin)="setHelpText(4, tooltip)"
-                [matDatepicker]="fromPicker"
-                [readonly]="isReadOnly === true"
-                formControlName="sitelocationdamageFromDate"
+              <input matInput (focusin)="setHelpText(4, tooltip)" [matDatepicker]="fromPicker"
+                [readonly]="isReadOnly === true" formControlName="sitelocationdamageFromDate"
                 [max]="recoveryPlanForm.get('sitelocationdamageToDate').value ? recoveryPlanForm.get('sitelocationdamageToDate').value : todayDate"
-                required >
+                required>
               <mat-hint>MM/DD/YYYY</mat-hint>
-              <mat-datepicker-toggle matSuffix [for]="fromPicker" [disabled]="isReadOnly === true"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #fromPicker [disabled]="isReadOnly === true"
-              ></mat-datepicker>
-              <mat-error
-                *ngIf="
+              <mat-datepicker-toggle matSuffix [for]="fromPicker"
+                [disabled]="isReadOnly === true"></mat-datepicker-toggle>
+              <mat-datepicker #fromPicker [disabled]="isReadOnly === true"></mat-datepicker>
+              <mat-error *ngIf="
                 recoveryPlanForm.get('sitelocationdamageFromDate').invalid &&
                 recoveryPlanForm.get('sitelocationdamageFromDate').hasError('required')
-              "
-              >
-                From date is required</mat-error
-              >
-              <mat-error
-              *ngIf="
+              ">
+                From date is required</mat-error>
+              <mat-error *ngIf="
               recoveryPlanForm.get('sitelocationdamageFromDate').invalid &&
               recoveryPlanForm.get('sitelocationdamageFromDate').hasError('matDatepickerMax')
-            "
-            >
-              From date cannot be in the future or after to date</mat-error
-            >
+            ">
+                From date cannot be in the future or after to date</mat-error>
             </mat-form-field>
           </div>
           <div class="col-md-3">
             <mat-form-field appearance="outline">
               <mat-label>To date</mat-label>
-              <input matInput
-                (focusin)="setHelpText(5, tooltip)"
-                [matDatepicker]="toPicker"
-                formControlName="sitelocationdamageToDate"
-                [readonly]="isReadOnly === true"
+              <input matInput (focusin)="setHelpText(5, tooltip)" [matDatepicker]="toPicker"
+                formControlName="sitelocationdamageToDate" [readonly]="isReadOnly === true"
                 [min]="recoveryPlanForm.get('sitelocationdamageFromDate').value ? recoveryPlanForm.get('sitelocationdamageFromDate').value : '2000-01-01'"
-                [max]="todayDate"
-                required>
+                [max]="todayDate" required>
               <mat-hint>MM/DD/YYYY</mat-hint>
-              <mat-datepicker-toggle matSuffix [for]="toPicker" [disabled]="isReadOnly === true"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #toPicker [disabled]="isReadOnly === true"
-              ></mat-datepicker>
-              <mat-error
-                *ngIf="
+              <mat-datepicker-toggle matSuffix [for]="toPicker"
+                [disabled]="isReadOnly === true"></mat-datepicker-toggle>
+              <mat-datepicker #toPicker [disabled]="isReadOnly === true"></mat-datepicker>
+              <mat-error *ngIf="
                 recoveryPlanForm.get('sitelocationdamageToDate').invalid &&
                 recoveryPlanForm.get('sitelocationdamageToDate').hasError('required')
-              "
-              >
-                To date is required</mat-error
-              >
-              <mat-error
-                *ngIf="
+              ">
+                To date is required</mat-error>
+              <mat-error *ngIf="
                 recoveryPlanForm.get('sitelocationdamageToDate').invalid &&
                 recoveryPlanForm.get('sitelocationdamageToDate').hasError('matDatepickerMin')
-              "
-              >
-                To date cannot be before from date</mat-error
-              >
-              <mat-error
-                *ngIf="
+              ">
+                To date cannot be before from date</mat-error>
+              <mat-error *ngIf="
                 recoveryPlanForm.get('sitelocationdamageToDate').invalid &&
                 recoveryPlanForm.get('sitelocationdamageToDate').hasError('matDatepickerMax')
-              "
-              >
-                To date cannot be a future date</mat-error
-              >
+              ">
+                To date cannot be a future date</mat-error>
             </mat-form-field>
           </div>
         </div>
         <br />
         <div class="row" *ngIf="showDates == true">
-          <p  style="font-size: 15px">
-            Why is the date(s) of damage for this site different from the dates provided on the application?<span style="color:red" >*</span>
+          <p style="font-size: 15px">
+            Why is the date(s) of damage for this site different from the dates provided on the application?<span
+              style="color:red">*</span>
           </p>
           <div class="col-md-12">
             <mat-form-field appearance="outline">
-              <textarea [disabled]="isReadOnly" matInput
-                (focusin)="setHelpText(6, tooltip)"
+              <textarea [disabled]="isReadOnly" matInput (focusin)="setHelpText(6, tooltip)"
                 formControlName="differentDamageDatesReason"
                 placeholder="Why is this site location's date(s) of damage different from dates provided on the application?"
-                [rows]="5"
-                required
-                style="resize:none"
-                maxlength="500"></textarea>
+                [rows]="5" required style="resize:none" maxlength="500"></textarea>
               <!--<mat-hint>{{ remainingLength }} characters remaining.</mat-hint>-->
-            </mat-form-field><br/>
+            </mat-form-field><br />
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-4">
-            <p  style="font-size: 15px">
-              Site Location<span style="color:red" >*</span>
+            <p style="font-size: 15px">
+              Site Location<span style="color:red">*</span>
             </p>
             <mat-form-field appearance="outline">
-              <input
-                (focusin)="setHelpText(7, tooltip)"
-                formControlName="siteLocation"
-                required
-                matInput
-                placeholder="Site Location"
-                maxlength="100"/>
+              <input (focusin)="setHelpText(7, tooltip)" formControlName="siteLocation" required matInput
+                placeholder="Site Location" maxlength="100" />
             </mat-form-field>
           </div>
         </div>
         <br />
         <div>
-          <p  style="font-size: 18px; font-weight: bold;">
+          <p style="font-size: 18px; font-weight: bold;">
             Damage Description
           </p>
         </div>
         <br />
-        <div class="row" >
-          <p  style="font-size: 15px">
-            What infrastructure was damaged?<span style="color:red" >*</span>
+        <div class="row">
+          <p style="font-size: 15px">
+            What infrastructure was damaged?<span style="color:red">*</span>
           </p>
           <div class="col-md-12">
             <mat-form-field appearance="outline">
-              <textarea [disabled]="isReadOnly" matInput
-                (focusin)="setHelpText(8, tooltip)"
-                formControlName="infraDamageDetails"
-                placeholder="What infrastructure was damaged?"
-                [rows]="5"
-                required
-                style="resize:none"
-                (keyup)="calcRemainingCharsInfrastructure()"
-                maxlength="2000"></textarea>
+              <textarea [disabled]="isReadOnly" matInput (focusin)="setHelpText(8, tooltip)"
+                formControlName="infraDamageDetails" placeholder="What infrastructure was damaged?" [rows]="5" required
+                style="resize:none" (keyup)="calcRemainingCharsInfrastructure()" maxlength="2000"></textarea>
               <mat-hint>{{ remainingLengthInfrastructure }} characters remaining.</mat-hint>
-            </mat-form-field><br/>
+            </mat-form-field><br />
           </div>
         </div>
         <br />
-        <div class="row" >
-          <p  style="font-size: 15px">
-            What caused the damage?<span style="color:red" >*</span>
+        <div class="row">
+          <p style="font-size: 15px">
+            What caused the damage?<span style="color:red">*</span>
           </p>
           <div class="col-md-12">
             <mat-form-field appearance="outline">
-              <textarea [disabled]="isReadOnly" matInput
-                (focusin)="setHelpText(9, tooltip)"
-                formControlName="causeofDamageDetails"
-                placeholder="What caused the damage?"
-                [rows]="5"
-                required
-                style="resize:none"
-                (keyup)="calcRemainingCharsCauseDamage()"
-                maxlength="2000"></textarea>
+              <textarea [disabled]="isReadOnly" matInput (focusin)="setHelpText(9, tooltip)"
+                formControlName="causeofDamageDetails" placeholder="What caused the damage?" [rows]="5" required
+                style="resize:none" (keyup)="calcRemainingCharsCauseDamage()" maxlength="2000"></textarea>
               <mat-hint>{{ remainingLengthCauseDamage }} characters remaining.</mat-hint>
-            </mat-form-field><br/>
+            </mat-form-field><br />
           </div>
         </div>
         <br />
-        <div class="row" >
-          <p  style="font-size: 15px">
-            Describe the damage<span style="color:red" >*</span>
+        <div class="row">
+          <p style="font-size: 15px">
+            Describe the damage<span style="color:red">*</span>
           </p>
           <div class="col-md-12">
             <mat-form-field appearance="outline">
-              <textarea [disabled]="isReadOnly" matInput
-                (focusin)="setHelpText(10, tooltip)"
-                formControlName="describeDamageDetails"
-                placeholder="Describe the damage"
-                [rows]="5"
-                required
-                (keyup)="calcRemainingCharsDescribeDamage()"
-                style="resize:none"
-                maxlength="2000"></textarea>
+              <textarea [disabled]="isReadOnly" matInput (focusin)="setHelpText(10, tooltip)"
+                formControlName="describeDamageDetails" placeholder="Describe the damage" [rows]="5" required
+                (keyup)="calcRemainingCharsDescribeDamage()" style="resize:none" maxlength="2000"></textarea>
               <mat-hint>{{ remainingLengthDescribeDamage }} characters remaining.</mat-hint>
-            </mat-form-field><br/>
+            </mat-form-field><br />
           </div>
         </div>
         <br />
-        <div class="row" >
-          <p  style="font-size: 15px">
-            Describe what was damaged (materials, including quantities and measurements) of damaged infrastructure<span style="color:red" >*</span>
+        <div class="row">
+          <p style="font-size: 15px">
+            Describe what was damaged (materials, including quantities and measurements) of damaged infrastructure<span
+              style="color:red">*</span>
           </p>
           <div class="col-md-12">
             <mat-form-field appearance="outline">
-              <textarea [disabled]="isReadOnly" matInput
-                (focusin)="setHelpText(11, tooltip)"
+              <textarea [disabled]="isReadOnly" matInput (focusin)="setHelpText(11, tooltip)"
                 formControlName="describeDamagedInfrastructure"
                 placeholder="Describe what was damaged (materials, including quantities and measurements) of damaged infrastructure"
-                [rows]="5"
-                required
-                (keyup)="calcRemainingCharsDescribeDamagedInfrastructure()"
-                style="resize:none"
+                [rows]="5" required (keyup)="calcRemainingCharsDescribeDamagedInfrastructure()" style="resize:none"
                 maxlength="2000"></textarea>
               <mat-hint>{{ remainingLengthDescribeDamagedInfrastructure }} characters remaining.</mat-hint>
-            </mat-form-field><br/>
+            </mat-form-field><br />
           </div>
         </div>
         <br />
         <div>
-          <p  style="font-size: 18px; font-weight: bold;">
+          <p style="font-size: 18px; font-weight: bold;">
             Repair Work Description
           </p>
         </div>
         <br />
-        <div class="row" >
-          <p  style="font-size: 15px">
-            Describe the repair work required to restore to pre-event condition<span style="color:red" >*</span>
+        <div class="row">
+          <p style="font-size: 15px">
+            Describe the repair work required to restore to pre-event condition<span style="color:red">*</span>
           </p>
           <div class="col-md-12">
             <mat-form-field appearance="outline">
-              <textarea [disabled]="isReadOnly" matInput
-                (focusin)="setHelpText(12, tooltip)"
+              <textarea [disabled]="isReadOnly" matInput (focusin)="setHelpText(12, tooltip)"
                 formControlName="repairWorkDetails"
-                placeholder="Describe the repair work required to restore to pre-event condition"
-                [rows]="5"
-                required
-                (keyup)="calcRemainingCharsDescribeRepair()"
-                style="resize:none"
-                maxlength="2000"></textarea>
+                placeholder="Describe the repair work required to restore to pre-event condition" [rows]="5" required
+                (keyup)="calcRemainingCharsDescribeRepair()" style="resize:none" maxlength="2000"></textarea>
               <mat-hint>{{ remainingLengthDescribeRepair }} characters remaining.</mat-hint>
-            </mat-form-field><br/>
+            </mat-form-field><br />
           </div>
         </div>
         <br />
-        <div class="row" >
-          <p  style="font-size: 15px">
-            Describe the materials, including quantities and measurements, to repair to pre-event condition<span style="color:red" >*</span>
+        <div class="row">
+          <p style="font-size: 15px">
+            Describe the materials, including quantities and measurements, to repair to pre-event condition<span
+              style="color:red">*</span>
           </p>
           <div class="col-md-12">
             <mat-form-field appearance="outline">
-              <textarea [disabled]="isReadOnly" matInput
-                (focusin)="setHelpText(13, tooltip)"
+              <textarea [disabled]="isReadOnly" matInput (focusin)="setHelpText(13, tooltip)"
                 formControlName="repairDamagedInfrastructure"
                 placeholder="Describe the materials, including quantities and measurements, to repair to pre-event condition"
-                [rows]="5"
-                style="resize:none"
-                required
-                (keyup)="calcRemainingCharsDescribeRepairMaterial()"
+                [rows]="5" style="resize:none" required (keyup)="calcRemainingCharsDescribeRepairMaterial()"
                 maxlength="2000"></textarea>
               <mat-hint>{{ remainingLengthDescribeRepairMaterial }} characters remaining.</mat-hint>
-            </mat-form-field><br/>
+            </mat-form-field><br />
           </div>
         </div>
         <br />
         <div>
-          <p  style="font-size: 18px; font-weight: bold;">
+          <p style="font-size: 18px; font-weight: bold;">
             Estimations
           </p>
         </div>
@@ -356,48 +420,34 @@
         <div class="row">
 
           <div class="col-md-4">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
+            <p style="font-size: 15px; margin-bottom: 10px !important">
               Estimated completion date (month/year)
             </p>
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>Estimated completion date</mat-label>
-              <input matInput
-                (focusin)="setHelpText(14, tooltip)"
-                [matDatepicker]="completionPicker"
-                [readonly]="isReadOnly === true"
-                formControlName="estimatedCompletionDate"
-                required >
+              <input matInput (focusin)="setHelpText(14, tooltip)" [matDatepicker]="completionPicker"
+                [readonly]="isReadOnly === true" formControlName="estimatedCompletionDate" required>
               <mat-hint>MM/DD/YYYY</mat-hint>
-              <mat-datepicker-toggle matSuffix [for]="completionPicker" [disabled]="isReadOnly === true"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #completionPicker startView="multi-year" [disabled]="isReadOnly === true"
-              ></mat-datepicker>
-              <mat-error
-                *ngIf="
+              <mat-datepicker-toggle matSuffix [for]="completionPicker"
+                [disabled]="isReadOnly === true"></mat-datepicker-toggle>
+              <mat-datepicker #completionPicker startView="multi-year"
+                [disabled]="isReadOnly === true"></mat-datepicker>
+              <mat-error *ngIf="
                 recoveryPlanForm.get('estimatedCompletionDate').invalid &&
                 recoveryPlanForm.get('estimatedCompletionDate').hasError('required')
-              "
-              >
-                Estimated completion date is required</mat-error
-              >
+              ">
+                Estimated completion date is required</mat-error>
             </mat-form-field>
           </div>
           <div class="col-md-4 costCurrency">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
-              Estimate or actual cost of total project (include taxes)<span style="color:red" >*</span>
+            <p style="font-size: 15px; margin-bottom: 10px !important">
+              Estimate or actual cost of total project (include taxes)<span style="color:red">*</span>
             </p>
             <mat-form-field appearance="outline" class="mat-form-round">
               <div class="searchDiv">
-                <input
-                  (focusin)="setHelpText(15, tooltip)"
-                  #currencyBox
-                  id="currencyBox"
-                  formControlName="estimateCostIncludingTax"
-                  matInput
-                       required
-                  placeholder="Estimate or actual cost"
-                  mask="separator.2" thousandSeparator="," decimalMarker="."
-                  maxlength="100"/>
+                <input (focusin)="setHelpText(15, tooltip)" #currencyBox id="currencyBox"
+                  formControlName="estimateCostIncludingTax" matInput required placeholder="Estimate or actual cost"
+                  mask="separator.2" thousandSeparator="," decimalMarker="." maxlength="100" />
                 <span class="currencyText">CA$</span>
               </div>
 

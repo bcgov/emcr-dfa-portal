@@ -89,7 +89,7 @@ export class DfaDashProjectComponent implements OnInit {
           var lstDataUnModified = [];
           var initialList = lstData;
           lstDataUnModified.push(initialList);
-          lstData.forEach(objApp => {       
+          lstData.forEach(objApp => {
             var isFound = false;
             var jsonVal = JSON.stringify(this.items);
             objApp.isErrorInStatus = false;
@@ -97,7 +97,7 @@ export class DfaDashProjectComponent implements OnInit {
             objApp.statusBar.forEach(objStatItem => {
               if (objApp.status != null && objStatItem.status.toLowerCase() == objApp.status.toLowerCase()) {
                 objStatItem.currentStep = true;
-                isFound = true
+                isFound = true;
                 this.matchStatusFound = true;
 
                 if (objApp.stage) {
@@ -141,7 +141,7 @@ export class DfaDashProjectComponent implements OnInit {
 
             lstDataModified.push(objApp);
           })
-          
+
           this.mapData(lstDataModified);
         }
             //this.mapData(lstData);
@@ -176,7 +176,7 @@ export class DfaDashProjectComponent implements OnInit {
     var res = JSON.parse(JSON.stringify(lstApp));
     this.lstProjects = res;
     //dfa decision made
-    
+
     this.lstProjects.forEach(x => {
       if (
         (x.status.toLowerCase() === "decision made"
@@ -188,7 +188,7 @@ export class DfaDashProjectComponent implements OnInit {
           x.openProject = false;
       } else x.openProject = true;
     })
-    
+
     if (this.apptype === "open") {
       this.lstProjects = this.lstProjects
         .filter(x => x.openProject === true);
@@ -232,7 +232,7 @@ export class DfaDashProjectComponent implements OnInit {
 
     if (this.sortfieldSelected != '' && this.sortfieldSelected != null) {
       if (this.sortfieldSelected == 'projectname') {
-       
+
         lstProjectsFilterting = lstProjectsFilterting.sort((a, b) => (a.projectName.toLowerCase() > b.projectName.toLowerCase()) ? 1 : ((b.projectName.toLowerCase() > a.projectName.toLowerCase()) ? -1 : 0))
       } else if (this.sortfieldSelected == 'projectnumber') {
         lstProjectsFilterting = lstProjectsFilterting.sort((a, b) => (a.projectNumber.toLowerCase() > b.projectNumber.toLowerCase()) ? 1 : ((b.projectNumber.toLowerCase() > a.projectNumber.toLowerCase()) ? -1 : 0))
@@ -244,7 +244,7 @@ export class DfaDashProjectComponent implements OnInit {
         lstProjectsFilterting = lstProjectsFilterting.sort((a, b) => (new Date(a.deadline18Month) > new Date(b.deadline18Month)) ? 1 : (new Date(b.deadline18Month) > new Date(a.deadline18Month) ? -1 : 0))
       }
     }
-    
+
     if (this.searchTextInput != null) {
       lstProjectsFilterting = lstProjectsFilterting.filter(m => (m.projectName && m.projectName.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1)
         || (m.projectNumber && m.projectNumber.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1)
@@ -252,7 +252,7 @@ export class DfaDashProjectComponent implements OnInit {
     }
 
     this.lstFilteredProjects = lstProjectsFilterting;
-        
+
   }
 
   ViewClaims(applItem: ProjectExtended): void {

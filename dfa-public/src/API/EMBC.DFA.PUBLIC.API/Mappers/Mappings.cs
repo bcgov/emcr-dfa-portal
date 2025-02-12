@@ -685,6 +685,21 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.dfa_descriptionofmaterialneededtorepair, opts => opts.MapFrom(s => s.Project.repairDamagedInfrastructure))
                 .ForMember(d => d.dfa_estimatedcompletiondateofproject, opts => opts.MapFrom(s => Convert.ToDateTime(s.Project.estimatedCompletionDate)))
                 .ForMember(d => d.dfa_estimatedcost, opts => opts.MapFrom(s => s.Project != null ? s.Project.estimateCostIncludingTax : (decimal?)null));
+                //.ForMember(d => d.dfa_projectapproveddate, opts => opts.MapFrom(s => Convert.ToDateTime(s.Project.projectApprovedDate)))
+                ////.ForMember(d => d.dfa_18monthdeadline, opts => opts.MapFrom(s => Convert.ToDateTime(s.Project.project18MonthDeadline).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.Project.project18MonthDeadline).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
+                //.ForMember(d => d.dfa_approvedcost, opts => opts.MapFrom(s => s.Project != null ? s.Project.approvedCost : (decimal?)null))
+                //.ForMember(d => d.dfa_approvedamendedprojectcost, opts => opts.MapFrom(s => s.Project != null ? s.Project.approvedAmendedProjectCost : (decimal?)null))
+                //.ForMember(d => d.dfa_claimtotal, opts => opts.MapFrom(s => s.Project != null ? s.Project.claimTotal : (decimal?)null))
+                //.ForMember(d => d.dfa_approvedtotal, opts => opts.MapFrom(s => s.Project != null ? s.Project.approvedTotal : (decimal?)null))
+                //.ForMember(d => d.dfa_paidprojectamount, opts => opts.MapFrom(s => s.Project != null ? s.Project.paidProjectAmount : (decimal?)null))
+                //.ForMember (d => d.dfa_emcrapprovalcomments, opts => opts.MapFrom(s => s.Project.emcrapprovalcomments));
+
+
+
+
+
+
+
 
             CreateMap<DFAClaimMain, dfa_claim_params>()
                 .ForMember(d => d.dfa_finalclaim, opts => opts.MapFrom(s => s.Claim != null ? s.Claim.isThisFinalClaim : (bool?)null))
@@ -755,7 +770,18 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.sitelocationdamageFromDate, opts => opts.MapFrom(s => s.dfa_dateofdamagefrom == null ? null : Convert.ToDateTime(s.dfa_dateofdamagefrom).ToString("o")))
                 .ForMember(d => d.sitelocationdamageToDate, opts => opts.MapFrom(s => s.dfa_dateofdamageto == null ? null : Convert.ToDateTime(s.dfa_dateofdamageto).ToString("o")))
                 .ForMember(d => d.isdamagedDateSameAsApplication, opts => opts.MapFrom(s => s.dfa_dateofdamagesameasapplication))
-                .ForMember(d => d.estimatedCompletionDate, opts => opts.MapFrom(s => s.dfa_estimatedcompletiondateofproject == null ? null : Convert.ToDateTime(s.dfa_estimatedcompletiondateofproject).ToString("o")));
+                .ForMember(d => d.estimatedCompletionDate, opts => opts.MapFrom(s => s.dfa_estimatedcompletiondateofproject == null ? null : Convert.ToDateTime(s.dfa_estimatedcompletiondateofproject).ToString("o")))
+                .ForMember(d => d.projectApprovedDate, opts => opts.MapFrom(s => s.dfa_projectapproveddate == null ? null : Convert.ToDateTime(s.dfa_projectapproveddate).ToString("o")))
+                .ForMember(d => d.project18MonthDeadline, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_18monthdeadline).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_18monthdeadline).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
+                //.ForMember(d => d.project18MonthDeadline, opts => opts.MapFrom(s => s.dfa_18monthdeadline == null ? null : Convert.ToDateTime(s.dfa_18monthdeadline).ToString("o")))
+                .ForMember(d => d.approvedCost, opts => opts.MapFrom(s => s.dfa_approvedcost.HasValue ? decimal.Round(decimal.Parse(s.dfa_approvedcost.Value.ToString("F")), 2) : (decimal?)null))
+                .ForMember(d => d.approvedAmendedProjectCost, opts => opts.MapFrom(s => s.dfa_approvedamendedprojectcost.HasValue ? decimal.Round(decimal.Parse(s.dfa_approvedamendedprojectcost.Value.ToString("F")), 2) : (decimal?)null))
+                .ForMember(d => d.claimTotal, opts => opts.MapFrom(s => s.dfa_claimtotal.HasValue ? decimal.Round(decimal.Parse(s.dfa_claimtotal.Value.ToString("F")), 2) : (decimal?)null))
+                .ForMember(d => d.approvedTotal, opts => opts.MapFrom(s => s.dfa_approvedtotal.HasValue ? decimal.Round(decimal.Parse(s.dfa_approvedtotal.Value.ToString("F")), 2) : (decimal?)null))
+                .ForMember(d => d.paidProjectAmount,opts => opts.MapFrom(s => s.dfa_paidprojectamount.HasValue ? decimal.Round(decimal.Parse(s.dfa_paidprojectamount.Value.ToString("F")), 2) : (decimal?)null))
+                .ForMember(d => d.emcrapprovalcomments, opts => opts.MapFrom(s => s.dfa_emcrapprovalcomments))
+                .ForMember(d => d.ProjectDecision,opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projectdecision) ? GetEnumDescription((ProjectDecisions)Convert.ToInt32(s.dfa_projectdecision)) : null))
+                ;
             //.ForMember(d => d.estimatedCompletionDate, opts => opts.MapFrom(s => s.dfa_estimatedcompletiondateofproject));
             //.ForMember(d => d.wildfireDamage, opts => opts.MapFrom(s => s.dfa_causeofdamagewildfire2 == (int)YesNoOptionSet.Yes ? true : (s.dfa_causeofdamagewildfire2 == (int)YesNoOptionSet.No ? false : (bool?)null)))
             //.ForMember(d => d.landslideDamage, opts => opts.MapFrom(s => s.dfa_causeofdamagelandslide2 == (int)YesNoOptionSet.Yes ? true : (s.dfa_causeofdamagelandslide2 == (int)YesNoOptionSet.No ? false : (bool?)null)))

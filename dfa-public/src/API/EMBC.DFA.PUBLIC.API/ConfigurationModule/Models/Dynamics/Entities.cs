@@ -284,6 +284,17 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public DateTime? dfa_estimatedcompletiondateofproject { get; set; }
         public decimal? dfa_estimatedcost { get; set; }
         public bool? dfa_dateofdamagesameasapplication { get; set; }
+
+        public DateTime? dfa_projectapproveddate { get; set; }
+
+        public DateTime? dfa_18monthdeadline { get; set; }
+        public decimal? dfa_approvedcost { get; set; }
+        public decimal? dfa_approvedamendedprojectcost { get; set; }
+        public decimal? dfa_claimtotal { get; set; }
+        public decimal? dfa_approvedtotal { get; set; }
+        public decimal? dfa_paidprojectamount { get; set; }
+        public string? dfa_emcrapprovalcomments { get; set; }
+        public string? dfa_projectdecision { get; set; }
     }
 
     public class dfa_claim_retrieve
@@ -598,6 +609,16 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public bool? dfa_dateofdamagesameasapplication { get; set; }
         public bool? dfa_createdonportal { get; set; }
         public bool? dfa_portalsubmitted { get; set; }
+
+        //public DateTime? dfa_projectapproveddate { get; set; }
+
+        ////public DateTime? dfa_18monthdeadline { get; set; }
+        //public decimal? dfa_approvedcost { get; set; }
+        //public decimal? dfa_approvedamendedprojectcost { get; set; }
+        //public decimal? dfa_claimtotal { get; set; }
+        //public decimal? dfa_approvedtotal { get; set; }
+        //public decimal? dfa_paidprojectamount { get; set; }
+        //public string? dfa_emcrapprovalcomments { get; set; }
     }
 
     public class dfa_claim_params

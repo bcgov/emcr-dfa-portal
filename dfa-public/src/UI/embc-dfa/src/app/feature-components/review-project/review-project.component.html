@@ -3,7 +3,7 @@
   <ng-template #dfaProjectMain>
     <div>
       <p class="sub-heading" style="font-size: 20px">Review</p>
-       <p>
+      <p>
         Please check that your project information is correct before submitting. Missing required fields marked in red.
       </p>
 
@@ -114,7 +114,7 @@
 
         <div class="row justify-content-between">
           <div class="col-md-6 card-heading">Damage Description</div>
-  
+
         </div>
         <hr />
 
@@ -172,7 +172,7 @@
 
         <div class="row justify-content-between">
           <div class="col-md-6 card-heading">Repair Work Description</div>
-  
+
         </div>
         <hr />
 
@@ -204,7 +204,7 @@
 
         <div class="row justify-content-between">
           <div class="col-md-6 card-heading">Estimations</div>
-  
+
         </div>
         <hr />
 
@@ -254,8 +254,8 @@
         <div class="row info-detail" *ngIf="requiredDocumentsDataSource?.data?.length > 0">
           <b>Required Documents</b>
           <table mat-table [dataSource]="requiredDocumentsDataSource">
-             <!-- File Name Column -->
-             <ng-container matColumnDef="fileName" style="width:25%">
+            <!-- File Name Column -->
+            <ng-container matColumnDef="fileName" style="width:25%">
               <th mat-header-cell *matHeaderCellDef >
                 <b>File Name</b>
               </th>
@@ -311,53 +311,53 @@
         <div class="row info-detail" *ngIf="supportingDocumentsDataSource?.data?.length > 0">
           <b>Supporting Documents(Optional)</b>
           <table mat-table [dataSource]="supportingDocumentsDataSource">
-           <!-- File Name Column -->
-           <ng-container matColumnDef="fileName" style="width:25%">
-            <th mat-header-cell *matHeaderCellDef >
-              <b>File Name</b>
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.fileName }}
-            </td>
-          </ng-container>
+            <!-- File Name Column -->
+            <ng-container matColumnDef="fileName" style="width:25%">
+              <th mat-header-cell *matHeaderCellDef >
+                <b>File Name</b>
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                {{ element.fileName }}
+              </td>
+            </ng-container>
 
-          <!-- Description Column -->
-          <ng-container matColumnDef="fileDescription" style="width:25%">
-            <th mat-header-cell *matHeaderCellDef>
-              <b>File Description</b>
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.fileDescription}}
-            </td>
-          </ng-container>
+            <!-- Description Column -->
+            <ng-container matColumnDef="fileDescription" style="width:25%">
+              <th mat-header-cell *matHeaderCellDef>
+                <b>File Description</b>
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                {{ element.fileDescription}}
+              </td>
+            </ng-container>
 
-          <!-- Type Column -->
-          <ng-container matColumnDef="fileTypeText" style="width:25%">
-            <th mat-header-cell *matHeaderCellDef>
-              <b>File Type</b>
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.fileTypeText}}
-            </td>
-          </ng-container>
+            <!-- Type Column -->
+            <ng-container matColumnDef="fileTypeText" style="width:25%">
+              <th mat-header-cell *matHeaderCellDef>
+                <b>File Type</b>
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                {{ element.fileTypeText}}
+              </td>
+            </ng-container>
 
-          <!-- UploadedDate Column -->
-          <ng-container matColumnDef="uploadedDate" style="width:25%">
-            <th mat-header-cell *matHeaderCellDef>
-              <b>Date Uploaded</b>
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.uploadedDate | date:"dd-MMM-yyyy" }}
-            </td>
-          </ng-container>
+            <!-- UploadedDate Column -->
+            <ng-container matColumnDef="uploadedDate" style="width:25%">
+              <th mat-header-cell *matHeaderCellDef>
+                <b>Date Uploaded</b>
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                {{ element.uploadedDate | date:"dd-MMM-yyyy" }}
+              </td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="supportingDocumentsColumnsToDisplay"></tr>
-          <tr
-            mat-row
-            *matRowDef="let element; columns: supportingDocumentsColumnsToDisplay"
-            class="example-element-row"
-          ></tr>
-        </table>
+            <tr mat-header-row *matHeaderRowDef="supportingDocumentsColumnsToDisplay"></tr>
+            <tr
+              mat-row
+              *matRowDef="let element; columns: supportingDocumentsColumnsToDisplay"
+              class="example-element-row"
+            ></tr>
+          </table>
         </div>
       </mat-card-content>
 

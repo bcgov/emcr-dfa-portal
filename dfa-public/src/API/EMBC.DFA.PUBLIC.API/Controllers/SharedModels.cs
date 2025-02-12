@@ -502,7 +502,7 @@ namespace EMBC.DFA.API.Controllers
         public string? pcNotes { get; set; }
         public string? pcBCeIDOrgGuid { get; set; }
         public string? pcBCeIDuserGuid { get; set; }
-}
+    }
 
     /// <summary>
     /// Clean Up Log
@@ -555,6 +555,17 @@ namespace EMBC.DFA.API.Controllers
         public string? estimatedCompletionDate { get; set; }
         public decimal? estimateCostIncludingTax { get; set; }
         public ProjectStageOptionSet? projectStatus { get; set; }
+
+        public string? projectApprovedDate { get; set; }
+        public string? project18MonthDeadline { get; set; }
+        public decimal? approvedCost { get; set; }
+        public decimal? approvedAmendedProjectCost { get; set; }
+        public decimal? claimTotal { get; set; }
+        public decimal? approvedTotal { get; set; }
+        public decimal? paidProjectAmount { get; set; }
+        public string? emcrapprovalcomments { get; set; }
+        public string? ProjectDecision { get; set; }
+
     }
 
     public class DFAClaimMain
