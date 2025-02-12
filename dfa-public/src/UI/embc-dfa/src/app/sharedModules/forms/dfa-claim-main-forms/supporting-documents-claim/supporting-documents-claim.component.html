@@ -210,7 +210,7 @@
       </ng-container>
 
       <!-- Delete Icon Column -->
-      <!--<ng-container matColumnDef="icons" style="width:25%" *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'">
+      <ng-container matColumnDef="icons" style="width:25%" *ngIf="vieworedit == 'addclaim' || vieworedit == 'updateclaim'">
         <th mat-header-cell *matHeaderCellDef>
           &nbsp;
         </th>
@@ -224,7 +224,7 @@
             <img src="/assets/images/delete.svg" height="35" width="35" />
           </button>
         </td>
-      </ng-container>-->
+      </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="documentSummaryColumnsToDisplay"></tr>
       <tr

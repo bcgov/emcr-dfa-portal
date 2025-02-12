@@ -119,7 +119,8 @@
           
               View Amendment
             </button>
-            <button
+           @if(applItem.status != 'Closed') {
+              <button
               class="application-button"
               (click)="ViewClaims(applItem)"
               type="button"
@@ -128,6 +129,8 @@
 
               Submit Claims
             </button>
+            }
+           
             <button
               class="application-button"
               type="button"

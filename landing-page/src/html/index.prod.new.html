@@ -1,5 +1,3 @@
-﻿
-
 <!DOCTYPE html>
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -161,6 +159,9 @@ a:hover {
 	color: #FCBA19;
 }
 
+.--link-white {
+	color: #FFFFFF;
+}
 
 .btn {
 	display: inline-block;
@@ -629,7 +630,6 @@ a:hover {
 	max-width: 900px;
 }
 
-
 /** Footer **/
 
 .site-footer {
@@ -723,23 +723,13 @@ a:hover {
         font-weight: bold;
 		text-align: center;
     }
-	.environment-banner {
-		max-width: 100%;
-		padding: 10px 0px;
-		justify-content: space-between;
-		text-align: center;
-		color: white;
-		background-color: #097d8c;
-		p {
-			margin-top: 10px;
-		}
-	}
 }
 
 </style>
 <script type="text/javascript">
-	var privatePortal = 'https://portal.dev.dfa.gov.bc.ca'
-	var publicPortal = 'https://publicsector-dev.dfa.gov.bc.ca'
+
+	var privatePortal = 'https://portal.dfa.gov.bc.ca'
+	var publicPortal = 'https://publicsector.dfa.gov.bc.ca'
 
 	var apiPrivateUrl = privatePortal + '/api/eligibility/checkEventsAvailable';
 	var eventButtonPrivateUrl = privatePortal + '/registration-method';
@@ -833,15 +823,7 @@ a:hover {
 </head>
 
 <body onload="onLoad()">
-	<div class="environment-banner">
-		<p>
-		  	You are in the <b>DEV</b> version of the <b>Disaster Financial Assistance Tool</b>.
-		</p>
-		<p>
-		  	All information entered here will be treated as <b>dev</b> data.
-		</p>
-	</div>
-	
+
 	<header class="site-header">
 		<div class="container">
 			<div class="site-header-content">
@@ -862,7 +844,7 @@ a:hover {
 				</div>
 			</div>
 		</section>
-
+		
 		<section class="hero">
 			<div style="background: rgb(190, 0, 0); color: rgb(255, 255, 255); text-align: center; padding-left: 25px; padding-right: 25px; margin-bottom: 10px; font-weight: bold;">
 				</br>
@@ -882,7 +864,9 @@ a:hover {
 				</br>
 			</div>
 		</section>
-		
+
+<div class="grey-wrapper">
+
 		<div class="toggle-div">
 			<div class="overlay" id="overlay">
 				<div class="overlay-content" id="overlay-content-loc" onclick="switchSection(1)">
@@ -918,7 +902,7 @@ a:hover {
 				</section>
 			</div>
 
-			<section id="secAreEvacuated" class="are-evacuated" >
+			<section id="secAreEvacuated" class="are-evacuated">
 				<div class="container --are-evacuated-cols">
 					<div class="are-evacuated-description">
 						<p>
@@ -971,9 +955,7 @@ a:hover {
 						<p style="display:none" id="eventBottomTextPublic" class="fontweight90">Applications must be submitted within 90 days of the disaster being declared.</p>
 					</div>
 				</div>
-
 			</section>
-			
 		</div>
 
 

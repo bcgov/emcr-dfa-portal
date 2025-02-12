@@ -16,7 +16,7 @@
             <li>Pre event photos, description, maintenance records </li>
             <li>Post event photos, description, damage assessment/inspections </li>
           </ul>
-          
+
           <p class="sub-heading" style="font-size: 15px" *ngIf="vieworedit !== 'viewOnly'">Upload Required Documents</p>
         </div>
       </div>
@@ -123,7 +123,7 @@
 
     <table mat-table [dataSource]="documentSummaryDataSource" *ngIf="documentSummaryDataSource.data.length > 0" style="width:100%">
       <!-- File Name Column -->
-      <ng-container matColumnDef="fileName" style="width:25%">
+      <ng-container matColumnDef="fileName" style="width:20%">
         <th mat-header-cell *matHeaderCellDef >
           <b>File Name</b>
         </th>
@@ -133,7 +133,7 @@
       </ng-container>
 
       <!-- Description Column -->
-      <ng-container matColumnDef="fileDescription" style="width:25%">
+      <ng-container matColumnDef="fileDescription" style="width:20%">
         <th mat-header-cell *matHeaderCellDef>
           <b>File Description</b>
         </th>
@@ -153,7 +153,7 @@
       </ng-container>-->
 
       <!-- Category Column -->
-      <ng-container matColumnDef="fileTypeText" style="width:25%">
+      <ng-container matColumnDef="fileTypeText" style="width:20%">
         <th mat-header-cell *matHeaderCellDef>
           <b>Category</b>
         </th>
@@ -163,7 +163,7 @@
       </ng-container>
 
         <!-- UploadedDate Column -->
-        <ng-container matColumnDef="uploadedDate" style="width:25%">
+        <ng-container matColumnDef="uploadedDate" style="width:20%">
         <th mat-header-cell *matHeaderCellDef>
           <b>Date Uploaded</b>
         </th>
@@ -173,9 +173,9 @@
       </ng-container>
 
       <!-- Delete Icon Column -->
-      <!--<ng-container matColumnDef="icons" style="width:25%">
+      <ng-container matColumnDef="icons" style="width:20%">
         <th mat-header-cell *matHeaderCellDef>
-          &nbsp;
+          <b>Delete</b>
         </th>
         <td *matCellDef="let element; let index = index" mat-cell>
           <button
@@ -185,11 +185,10 @@
             (click)="confirmDeleteDocumentSummaryRow(element)"
             *ngIf="vieworedit === 'addproject' || vieworedit === 'updateproject'"
           >
-            <img src="/assets/images/delete.svg" height="35" width="35" />
             <img src="/assets/images/delete_onhover.svg" height="35" width="35"/>
           </button>
         </td>
-      </ng-container>-->
+      </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="documentSummaryColumnsToDisplay"></tr>
       <tr

@@ -193,6 +193,28 @@
             </mat-form-field>
           </div>
 
+          
+          <div class="col-md-3 costCurrency">
+            <p  style="font-size: 15px; margin-bottom: 10px !important">
+               Total Being Claimed
+            </p>
+            <mat-form-field appearance="outline" class="mat-form-round">
+
+              <div class="searchDiv">
+                <input
+                  (focusin)="setHelpText(15, tooltip)"
+                  #currencyBoxTotalBeingClaimed
+                  id="currencyBoxTotalBeingClaimed"
+                  formControlName="claimTotal"
+                  matInput
+                  mask="separator.2" thousandSeparator="," decimalMarker="."
+                  maxlength="100"/>
+                <span class="currencyText">CA$</span>
+              </div>
+
+            </mat-form-field>
+          </div>
+
           <div class="col-md-3 costCurrency">
             <p  style="font-size: 15px; margin-bottom: 10px !important">
               Claim Eligible GST
