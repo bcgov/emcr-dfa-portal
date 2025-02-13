@@ -134,7 +134,6 @@ export class DFAProjectAmendmentComponent
 
     this.dfaProjectMainDataService.setApplicationId(this.appId);
     this.disableFormfields();
-    console.log(this.projectAmendmentForm.controls.amended18MonthDeadline.value);
   }
 
   disableFormfields(): void {
