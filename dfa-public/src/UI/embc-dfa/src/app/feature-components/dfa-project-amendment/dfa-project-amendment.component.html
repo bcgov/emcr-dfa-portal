@@ -145,7 +145,6 @@
                 </mat-form-field>
               </div>
             </div>
-            @if (option.amendmentDecision == DecisionEnum.Approved || option.amendmentDecision == DecisionEnum.ApprovedWithExclusions) {
               <div class="row">
                 <div class="col-md-3">
                   <p style="font-size: 15px">
@@ -180,7 +179,6 @@
                   </mat-form-field>
                 </div>
               </div>
-            }
             <hr/>
             <div><b>Project Extension</b></div>
             <br/>
@@ -205,13 +203,12 @@
                          formControlName="amendedProjectDeadlineDate"
                   >
                   <mat-hint>MM/DD/YYYY</mat-hint>
-                  <mat-datepicker-toggle matSuffix [for]="amendedProjectDeadlineDatePicker" disabled
+                  <mat-datepicker-toggle matSuffix [for]="amendedProjectDeadlineDatePicker"
                   ></mat-datepicker-toggle>
-                  <mat-datepicker #amendedProjectDeadlineDatePicker disabled
+                  <mat-datepicker #amendedProjectDeadlineDatePicker
                   ></mat-datepicker>
                 </mat-form-field>
               </div>
-              @if (option.amendmentDecision == DecisionEnum.Approved || option.amendmentDecision == DecisionEnum.ApprovedWithExclusions) {
                 <div class="col-md-3">
                   <p style="font-size: 15px; margin-bottom: 10px !important">
                     Deadline Extension Approved
@@ -230,16 +227,14 @@
                   <mat-form-field appearance="outline">
                     <input matInput
                            formControlName="amended18MonthDeadline"
-
                     >
                     <mat-hint>MM/DD/YYYY</mat-hint>
-                    <mat-datepicker-toggle matSuffix [for]="amended18MonthDeadlineDatePicker" disabled
+                    <mat-datepicker-toggle matSuffix [for]="amended18MonthDeadlineDatePicker"
                     ></mat-datepicker-toggle>
-                    <mat-datepicker #amended18MonthDeadlineDatePicker disabled
+                    <mat-datepicker #amended18MonthDeadlineDatePicker
                     ></mat-datepicker>
                   </mat-form-field>
                 </div>
-              }
             </div>
 
             <hr/>
@@ -276,7 +271,6 @@
 
                 </mat-form-field>
               </div>
-              @if (option.amendmentDecision == DecisionEnum.Approved || option.amendmentDecision == DecisionEnum.ApprovedWithExclusions) {
                 <div class="col-md-3">
                   <p style="font-size: 15px; margin-bottom: 10px !important">
                     Additional Project Cost Decision
@@ -307,7 +301,6 @@
 
                   </mat-form-field>
                 </div>
-              }
             </div>
 
           </div>

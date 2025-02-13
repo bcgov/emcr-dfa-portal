@@ -134,6 +134,7 @@ export class DFAProjectAmendmentComponent
 
     this.dfaProjectMainDataService.setApplicationId(this.appId);
     this.disableFormfields();
+    console.log(this.projectAmendmentForm.controls.amended18MonthDeadline.value);
   }
 
   disableFormfields(): void {
@@ -316,6 +317,16 @@ export class DFAProjectAmendmentComponent
       var jsonVal = JSON.stringify(this.items);
       this.isErrorInStatus = false;
       this.statusBar = JSON.parse(jsonVal);
+
+      if(objAmendment.amendmentDecision !== "Approved" && objAmendment.amendmentDecision !== "Approved with Exclusions") {
+        objAmendment.amendmentReceivedDate = null
+        objAmendment.emcrDecisionComments = null
+        objAmendment.deadlineExtensionApproved = null
+        objAmendment.amended18MonthDeadline = null
+        objAmendment.additionalProjectCostDecision = null
+        objAmendment.approvedAdditionalProjectCost = null
+      }
+
       this.statusBar.forEach(objStatItem => {
         if (objAmendment.status != null && objStatItem.status.toLowerCase() == objAmendment.status.toLowerCase()) {
           objStatItem.currentStep = true;
