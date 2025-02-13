@@ -280,6 +280,7 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
           dfaProjectMain.project.estimateCostIncludingTax = dfaProjectMain.project.estimateCostIncludingTax ? toFixedWithZeros(dfaProjectMain.project.estimateCostIncludingTax,2) : null;
 
           this.dfaProjectMainMapping.mapDFAProjectMain(dfaProjectMain);
+          this.projectDecision = dfaProjectMain.project.projectDecision
 
           this.calcRemainingCharsCauseDamage();
           this.calcRemainingCharsDescribeDamage();
