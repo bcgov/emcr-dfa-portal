@@ -148,7 +148,7 @@ export class DfaDashClaimComponent implements OnInit {
 
             lstDataModified.push(objApp);
           })
-          
+
           this.mapData(lstDataModified);
         }
             //this.mapData(lstData);
@@ -195,7 +195,7 @@ export class DfaDashClaimComponent implements OnInit {
       } else x.openClaim = true;
       //x.openClaim = true;
     })
-    
+
     if (this.apptype === "open") {
       this.lstClaims = this.lstClaims
         .filter(x => x.openClaim === true);
@@ -245,7 +245,7 @@ export class DfaDashClaimComponent implements OnInit {
         lstClaimsFilterting = lstClaimsFilterting.sort((a, b) => (new Date(a.paidClaimDate) > new Date(b.paidClaimDate)) ? 1 : (new Date(b.paidClaimDate) > new Date(a.paidClaimDate) ? -1 : 0))
       }
     }
-    
+
     if (this.searchTextInput != null) {
       lstClaimsFilterting = lstClaimsFilterting.filter(m => m.claimNumber.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1);
         //|| m.claimNumber.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1
@@ -253,7 +253,7 @@ export class DfaDashClaimComponent implements OnInit {
     }
 
     this.lstFilteredClaims = lstClaimsFilterting;
-        
+
   }
 
   ViewClaim(applItem: ClaimExtended): void {
@@ -279,7 +279,7 @@ export class DfaDashClaimComponent implements OnInit {
 
     this.router.navigate(['/dfa-claim-main/' + applItem.claimId]);
   }
-  
+
 
 }
 

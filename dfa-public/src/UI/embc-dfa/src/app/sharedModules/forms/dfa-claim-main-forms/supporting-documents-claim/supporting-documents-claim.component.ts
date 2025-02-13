@@ -54,10 +54,11 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
   formCreationService: FormCreationService;
   showSupportingFileForm: boolean = false;
   supportingFilesDataSource = new MatTableDataSource();
-  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate', 'icons'] //, 'icons'
+  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate'] //, 'icons'
   claimDocumentSummaryDataSource = new MatTableDataSource();
   isLoading: boolean = false;
   isdisabled: string = 'false';
+  isReadOnly: boolean = false;
   isformUploaddisabled: string = 'false';
   allowedFileTypes = [
     'application/pdf',
@@ -107,6 +108,16 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
       if (application) {
       }
     });
+
+    this.isReadOnly = (dfaClaimMainDataService.getViewOrEdit() === 'view'
+      || dfaClaimMainDataService.getViewOrEdit() === 'edit'
+      || dfaClaimMainDataService.getViewOrEdit() === 'viewOnly');
+
+    this.dfaClaimMainDataService.changeViewOrEdit.subscribe((vieworedit) => {
+      this.isReadOnly = (vieworedit === 'view'
+        || vieworedit === 'edit'
+        || vieworedit === 'viewOnly');
+    })
   }
 
   ngOnInit(): void {
@@ -143,6 +154,10 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
     //if (this.dfaClaimMainDataService.getViewOrEdit() == 'viewOnly' || this.dfaClaimMainDataService.getViewOrEdit() == 'view' ) {
     //  this.documentSummaryColumnsToDisplay.pop()
     //}
+
+    if (!this.isReadOnly) {
+      this.documentSummaryColumnsToDisplay.push('icons');
+    }
 
   }
 

@@ -1,17 +1,11 @@
 <mat-card class="card-align recoveryPlan" style="border:none;" [class.mat-elevation-z0]="true">
   <mat-card-content>
     <form [formGroup]="invoiceForm">
-      <h1 #invHeadr
-id="invHeadr" class="header-align-inv">{{addeditInvoiceText}} Invoice</h1>
-      <button type="button"
-          #tooltip="matTooltip" [hidden]="hideHelp"
-      (mouseenter)="$event.stopImmediatePropagation()"
-      (click)="tooltip.show()"
-      class="help-button"
-      matTooltipClass="tooltip-custom"
-      [matTooltip]="message || ''">
-      <span class="ques">?</span>&nbsp; HELP
-    </button>
+      <h1 #invHeadr id="invHeadr" class="header-align-inv">{{addeditInvoiceText}} Invoice</h1>
+      <button type="button" #tooltip="matTooltip" [hidden]="hideHelp" (mouseenter)="$event.stopImmediatePropagation()"
+        (click)="tooltip.show()" class="help-button" matTooltipClass="tooltip-custom" [matTooltip]="message || ''">
+        <span class="ques">?</span>&nbsp; HELP
+      </button>
 
       <!--<mat-form-field class="example-user-input">
         <mat-label>Tooltip message</mat-label>
@@ -28,70 +22,57 @@ id="invHeadr" class="header-align-inv">{{addeditInvoiceText}} Invoice</h1>
           <div class="col-md-6">
             <div class="row" *ngIf="isReadOnly === true">
               <div class="col-md-6">
-                <p  style="font-size: 15px">
+                <p style="font-size: 15px">
                   EMCR Decision
                 </p>
                 <mat-form-field appearance="outline">
-                    <input
-                          #emcrDecision
-                      formControlName="emcrDecision"
-                      matInput />
+                  <input #emcrDecision formControlName="emcrDecision" matInput />
                 </mat-form-field>
               </div>
 
-              <div *ngIf="claimDecision == DecisionEnum.Approved || claimDecision == DecisionEnum.ApprovedWithExclusions">
-                <div class="col-md-6">
-                  <p  style="font-size: 15px;">
-                    EMCR Approved Amount
-                  </p>
-                  <mat-form-field appearance="outline" class="mat-form-round">
-                      <div class="searchDiv">
-                        <input
-                          #currencyBoxemcrApprovedAmount
-                          id="currencyBoxemcrApprovedAmount"
-                          formControlName="emcrApprovedAmount"
-                          matInput />
-                        <span class="currencyText">CA$</span>
-                      </div>
-                  </mat-form-field>
-                </div>
+              <div class="col-md-6">
+                <p style="font-size: 15px;">
+                  EMCR Approved Amount
+                </p>
+                <mat-form-field appearance="outline" class="mat-form-round">
+                  <div class="searchDiv">
+                    <div
+                      *ngIf="claimDecision == DecisionEnum.Approved || claimDecision == DecisionEnum.ApprovedWithExclusions">
+                      <input #currencyBoxemcrApprovedAmount id="currencyBoxemcrApprovedAmount"
+                        formControlName="emcrApprovedAmount" matInput />
+                      <span class="currencyText">CA$</span>
+                    </div>
+                  </div>
+                </mat-form-field>
               </div>
 
               <div class="row" *ngIf="isReadOnly === true">
                 <div class="col-md-6">
-                  <p  style="font-size: 15px">
+                  <p style="font-size: 15px">
                     EMCR Decision Date
                   </p>
-                  <mat-form-field appearance="outline" >
-                      <input matInput
-                        [matDatepicker]="emcrDecisionDatePicker"
-                        [readonly]="isReadOnly === true"
-                        formControlName="emcrDecisionDate"
-                        >
-                      <mat-hint *ngIf="isReadOnly !== true">MM/DD/YYYY</mat-hint>
-                      <mat-datepicker-toggle matSuffix [for]="emcrDecisionDatePicker" [disabled]="isReadOnly === true"
-                      ></mat-datepicker-toggle>
-                      <mat-datepicker #emcrDecisionDatePicker [disabled]="isReadOnly === true"
-                      ></mat-datepicker>
+                  <mat-form-field appearance="outline">
+                    <input matInput [matDatepicker]="emcrDecisionDatePicker" [readonly]="isReadOnly === true"
+                      formControlName="emcrDecisionDate">
+                    <mat-hint *ngIf="isReadOnly !== true">MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="emcrDecisionDatePicker"
+                      [disabled]="isReadOnly === true"></mat-datepicker-toggle>
+                    <mat-datepicker #emcrDecisionDatePicker [disabled]="isReadOnly === true"></mat-datepicker>
                   </mat-form-field>
                 </div>
               </div>
 
               <div class="row" *ngIf="isReadOnly === true">
-                <p  style="font-size: 15px">
+                <p style="font-size: 15px">
                   EMCR Decision Comments
                 </p>
                 <div class="col-md-12">
                   <mat-form-field appearance="outline">
-                      <textarea [disabled]="isReadOnly" matInput
-                        formControlName="emcrDecisionComments"
-                        style="resize:none"
-                        cdkTextareaAutosize
-                        #autosize="cdkTextareaAutosize"
-                        cdkAutosizeMinRows="2"
-                        cdkAutosizeMaxRows="5"></textarea>
+                    <textarea [disabled]="isReadOnly" matInput formControlName="emcrDecisionComments"
+                      style="resize:none" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+                      cdkAutosizeMaxRows="5"></textarea>
                   </mat-form-field>
-                  <br/>
+                  <br />
                 </div>
               </div>
             </div>
@@ -99,50 +80,35 @@ id="invHeadr" class="header-align-inv">{{addeditInvoiceText}} Invoice</h1>
             <hr class="hr-align" *ngIf="isReadOnly === true" />
             <div class="row">
               <div class="col-md-12">
-                <p  style="font-size: 15px">
-                  Vendor Name<span style="color:red" >*</span>
+                <p style="font-size: 15px">
+                  Vendor Name<span style="color:red">*</span>
                 </p>
                 <mat-form-field appearance="outline">
-                  <input
-                         #vendorName
-                    formControlName="vendorName"
-                    matInput
-                    required
-                    maxlength="100"/>
+                  <input #vendorName formControlName="vendorName" matInput required maxlength="100" />
                 </mat-form-field>
               </div>
             </div>
             <div class="row">
               <div class="col-md-6">
-                <p  style="font-size: 15px">
-                  Invoice Number<span style="color:red" >*</span>
+                <p style="font-size: 15px">
+                  Invoice Number<span style="color:red">*</span>
                 </p>
                 <mat-form-field appearance="outline" class="mat-form-round">
-                  <input
-                    id="invoiceNumber"
-                    formControlName="invoiceNumber"
-                    matInput
-                    required
-                    maxlength="100"/>
+                  <input id="invoiceNumber" formControlName="invoiceNumber" matInput required maxlength="100" />
                 </mat-form-field>
               </div>
               <div class="col-md-6">
-                <p  style="font-size: 15px">
-                  Invoice Date<span style="color:red" >*</span>
+                <p style="font-size: 15px">
+                  Invoice Date<span style="color:red">*</span>
                 </p>
-                <mat-form-field appearance="outline" >
+                <mat-form-field appearance="outline">
                   <mat-label>Invoice Date</mat-label>
-                  <input matInput
-                    (focusin)="setHelpText(1, tooltip)"
-                    [matDatepicker]="invoiceDatePicker"
-                    [readonly]="isReadOnly === true"
-                    formControlName="invoiceDate"
-                    required >
+                  <input matInput (focusin)="setHelpText(1, tooltip)" [matDatepicker]="invoiceDatePicker"
+                    [readonly]="isReadOnly === true" formControlName="invoiceDate" required>
                   <mat-hint *ngIf="isReadOnly !== true">MM/DD/YYYY</mat-hint>
-                  <mat-datepicker-toggle matSuffix [for]="invoiceDatePicker" [disabled]="isReadOnly === true"
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker #invoiceDatePicker [disabled]="isReadOnly === true"
-                  ></mat-datepicker>
+                  <mat-datepicker-toggle matSuffix [for]="invoiceDatePicker"
+                    [disabled]="isReadOnly === true"></mat-datepicker-toggle>
+                  <mat-datepicker #invoiceDatePicker [disabled]="isReadOnly === true"></mat-datepicker>
 
                 </mat-form-field>
               </div>
@@ -151,23 +117,22 @@ id="invHeadr" class="header-align-inv">{{addeditInvoiceText}} Invoice</h1>
             <br />
             <div class="row">
               <div class="col-md-12">
-                <p  style="font-size: 15px">
-                  Is the date that the goods or services were received the same as the invoice date?<span style="color:red" >*</span>
+                <p style="font-size: 15px">
+                  Is the date that the goods or services were received the same as the invoice date?<span
+                    style="color:red">*</span>
                 </p>
-                <mat-radio-group
-                  formControlName="isGoodsReceivedonInvoiceDate"
-                  class="primary-radio-group horizontal-radio-group"
+                <mat-radio-group formControlName="isGoodsReceivedonInvoiceDate"
+                  class="primary-radio-group horizontal-radio-group" aria-label="Select an option">
+                  <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button
+                    value=false>No</mat-radio-button>
 
-                  aria-label="Select an option">
-                  <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
-
-                   <mat-error *ngIf="
+                  <mat-error *ngIf="
                                   invoiceForm.get('isGoodsReceivedonInvoiceDate').invalid &&
                                   invoiceForm.get('isGoodsReceivedonInvoiceDate').hasError('required')
                                 ">
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is required
-                   </mat-error>
-                  </mat-radio-group>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is required
+                  </mat-error>
+                </mat-radio-group>
 
               </div>
             </div>
@@ -175,118 +140,95 @@ id="invHeadr" class="header-align-inv">{{addeditInvoiceText}} Invoice</h1>
 
             <div class="row" [hidden]="(formCreationService.invoiceForm$ | async)?.value
   .isGoodsReceivedonInvoiceDate != 'false'">
-              <p  style="font-size: 15px">
-                Select the date that the goods or services were received<span style="color:red" >*</span>
+              <p style="font-size: 15px">
+                Select the date that the goods or services were received<span style="color:red">*</span>
               </p>
               <div class="col-md-6">
 
-                <mat-form-field appearance="outline" >
-                  <input matInput
-                    [matDatepicker]="goodsReceivedDatePicker"
-                    [readonly]="isReadOnly === true"
-                    formControlName="goodsReceivedDate"
-                    >
+                <mat-form-field appearance="outline">
+                  <input matInput [matDatepicker]="goodsReceivedDatePicker" [readonly]="isReadOnly === true"
+                    formControlName="goodsReceivedDate">
                   <mat-hint *ngIf="isReadOnly !== true">MM/DD/YYYY</mat-hint>
-                  <mat-datepicker-toggle matSuffix [for]="goodsReceivedDatePicker" [disabled]="isReadOnly === true"
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker #goodsReceivedDatePicker [disabled]="isReadOnly === true"
-                  ></mat-datepicker>
+                  <mat-datepicker-toggle matSuffix [for]="goodsReceivedDatePicker"
+                    [disabled]="isReadOnly === true"></mat-datepicker-toggle>
+                  <mat-datepicker #goodsReceivedDatePicker [disabled]="isReadOnly === true"></mat-datepicker>
 
                 </mat-form-field>
               </div>
 
             </div>
             <br *ngIf="(formCreationService.invoiceForm$ | async)?.value
-                        .isGoodsReceivedonInvoiceDate == 'false'"/>
-            <div class="row" >
-              <p  style="font-size: 15px">
-                Purpose of goods or services received<span style="color:red" >*</span>
+                        .isGoodsReceivedonInvoiceDate == 'false'" />
+            <div class="row">
+              <p style="font-size: 15px">
+                Purpose of goods or services received<span style="color:red">*</span>
               </p>
               <div class="col-md-12">
                 <mat-form-field appearance="outline">
-                  <textarea [disabled]="isReadOnly" matInput
-                    formControlName="purposeOfGoodsServiceReceived"
-
-                    required
-                    style="resize:none"
-                    cdkTextareaAutosize
-                    #autosize="cdkTextareaAutosize"
-                    cdkAutosizeMinRows="2"
-                    cdkAutosizeMaxRows="5"
-                    maxlength="200"></textarea>
+                  <textarea [disabled]="isReadOnly" matInput formControlName="purposeOfGoodsServiceReceived" required
+                    style="resize:none" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+                    cdkAutosizeMaxRows="5" maxlength="200"></textarea>
                   <!--<mat-hint>{{ remainingLength }} characters remaining.</mat-hint>-->
 
                 </mat-form-field>
 
-                <br/>
+                <br />
               </div>
             </div>
 
             <div class="row">
               <div class="col-md-12">
-                <p  style="font-size: 15px">
-                  Are you claiming only a portion or part of the total invoice amount?<span style="color:red" >*</span>
+                <p style="font-size: 15px">
+                  Are you claiming only a portion or part of the total invoice amount?<span style="color:red">*</span>
                 </p>
-                <mat-radio-group
-                  formControlName="isClaimforPartofTotalInvoice"
-                  class="primary-radio-group horizontal-radio-group"
-
-                  (change)="selectDamageDates($event)"
+                <mat-radio-group formControlName="isClaimforPartofTotalInvoice"
+                  class="primary-radio-group horizontal-radio-group" (change)="selectDamageDates($event)"
                   aria-label="Select an option">
-                  <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                  <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button
+                    value=false>No</mat-radio-button>
                   <mat-error *ngIf="
                                  invoiceForm.get('isClaimforPartofTotalInvoice').hasError('required')
                                ">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is required
                   </mat-error>
-                  </mat-radio-group>
+                </mat-radio-group>
 
               </div>
             </div>
-            <br/>
+            <br />
             <div class="row" [hidden]="(formCreationService.invoiceForm$ | async)?.value
-  .isClaimforPartofTotalInvoice != 'true'" >
-              <p  style="font-size: 15px">
-                Please state why you are claiming only a portion of the total invoice<span style="color:red" >*</span>
+  .isClaimforPartofTotalInvoice != 'true'">
+              <p style="font-size: 15px">
+                Please state why you are claiming only a portion of the total invoice<span style="color:red">*</span>
               </p>
               <div class="col-md-12">
                 <mat-form-field appearance="outline">
-                  <textarea [disabled]="isReadOnly" matInput
-                    (focusin)="setHelpText(2, tooltip)"
-                    formControlName="reasonClaimingPartofTotalInvoice"
-                    style="resize:none"
-                    cdkTextareaAutosize
-                    #autosize="cdkTextareaAutosize"
-                    cdkAutosizeMinRows="2"
-                    cdkAutosizeMaxRows="5"
+                  <textarea [disabled]="isReadOnly" matInput (focusin)="setHelpText(2, tooltip)"
+                    formControlName="reasonClaimingPartofTotalInvoice" style="resize:none" cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5"
                     maxlength="200"></textarea>
                   <!--<mat-hint>{{ remainingLength }} characters remaining.</mat-hint>-->
-                </mat-form-field><br/>
+                </mat-form-field><br />
               </div>
             </div>
 
           </div>
 
-          <div class="col-md-6" >
+          <div class="col-md-6">
             <div class="invoice-box">
               <div class="row">
                 <div class="col-md-12 costCurrency">
-                  <p  style="font-size: 15px; margin-bottom: 10px !important">
-                    Net invoiced being claimed (excluding taxes)<span style="color:red" >*</span>
+                  <p style="font-size: 15px; margin-bottom: 10px !important">
+                    Net invoiced being claimed (excluding taxes)<span style="color:red">*</span>
                   </p>
                   <mat-form-field appearance="outline" class="mat-form-round monetary-input">
 
                     <div class="searchDiv">
-                      <input
-                        (focusin)="setHelpText(3, tooltip)"
-                        #currencyBoxnetInvoiceBeingClaimed
+                      <input (focusin)="setHelpText(3, tooltip)" #currencyBoxnetInvoiceBeingClaimed
                         id="currencyBoxnetInvoiceBeingClaimed"
-                        [formControl]="invoiceForm.controls['netInvoiceBeingClaimed']"
-                        matInput
-                             required
-                             mask="separator.2" thousandSeparator="," decimalMarker="."
-                             (keyup)="CalculateInvoice($event);"
-                        maxlength="100"/>
+                        [formControl]="invoiceForm.controls['netInvoiceBeingClaimed']" matInput required
+                        mask="separator.2" thousandSeparator="," decimalMarker="." (keyup)="CalculateInvoice($event);"
+                        maxlength="100" />
                       <span class="currencyText">CA$</span>
                     </div>
                   </mat-form-field>
@@ -295,109 +237,87 @@ id="invHeadr" class="header-align-inv">{{addeditInvoiceText}} Invoice</h1>
 
               <div class="row pst-box">
                 <div class="col-md-4 aln-txt">
-                  <p  style="font-size: 15px">
+                  <p style="font-size: 15px">
                     PST
                   </p>
 
                 </div>
                 <div class="col-md-8 inputCurrency">
-                  $&nbsp;<mat-form-field class="monetary-input-small" appearance="outline" style="height: 30px !important">
-                    <input
-                      #PST
-                      (focusin)="setHelpText(4, tooltip)"
-                      [formControl]="invoiceForm.controls['pst']"
-                      matInput
-                      mask="separator.2" thousandSeparator="," decimalMarker="."
-                      (keyup)="CalculateInvoice($event);"
-                      maxlength="100"/>
+                  $&nbsp;<mat-form-field class="monetary-input-small" appearance="outline"
+                    style="height: 30px !important">
+                    <input #PST (focusin)="setHelpText(4, tooltip)" [formControl]="invoiceForm.controls['pst']" matInput
+                      mask="separator.2" thousandSeparator="," decimalMarker="." (keyup)="CalculateInvoice($event);"
+                      maxlength="100" />
                   </mat-form-field>
                 </div>
                 <div class="col-md-4 aln-txt">
-                  <p  style="font-size: 15px">
+                  <p style="font-size: 15px">
                     Gross GST
                   </p>
                 </div>
                 <div class="col-md-8 inputCurrency">
-                  $&nbsp;<mat-form-field class="monetary-input-small" appearance="outline" style="height: 30px !important">
-                    <input
-                            #grossGST
-                      (focusin)="setHelpText(5, tooltip)"
-                      [formControl]="invoiceForm.controls['grossGST']"
-                      matInput
-                      mask="separator.2" thousandSeparator="," decimalMarker="."
-                      (keyup)="CalculateInvoice($event);"
-                      maxlength="100"/>
+                  $&nbsp;<mat-form-field class="monetary-input-small" appearance="outline"
+                    style="height: 30px !important">
+                    <input #grossGST (focusin)="setHelpText(5, tooltip)"
+                      [formControl]="invoiceForm.controls['grossGST']" matInput mask="separator.2" thousandSeparator=","
+                      decimalMarker="." (keyup)="CalculateInvoice($event);" maxlength="100" />
                   </mat-form-field>
                 </div>
                 <div class="col-md-7 aln-txt">
-                  <p  style="font-size: 15px">
+                  <p style="font-size: 15px">
                     <b>Actual Invoice Total</b>
                   </p>
-                    <input
-                           #PST
-                      [formControl]="invoiceForm.controls['actualInvoiceTotal']"
-                      type="hidden"
-                      required
-                      maxlength="100"/>
+                  <input #PST [formControl]="invoiceForm.controls['actualInvoiceTotal']" type="hidden" required
+                    maxlength="100" />
                 </div>
                 <div class="col-md-5">
                   <p class="currency-invoice" style="padding-right: 22px; padding-top: 5px;">
                     <b>
-                    $&nbsp;{{ (formCreationService.invoiceForm$ | async)?.value
-  .actualInvoiceTotal | number : '1.2-2' }}
-                      </b>
+                      $&nbsp;{{ (formCreationService.invoiceForm$ | async)?.value
+                      .actualInvoiceTotal | number : '1.2-2' }}
+                    </b>
                   </p>
                 </div>
               </div>
 
               <div class="row pst-box">
                 <div class="col-md-7 aln-txt">
-                  <p  style="font-size: 15px">
+                  <p style="font-size: 15px">
                     PST
                   </p>
                 </div>
                 <div class="col-md-5">
                   <p class="currency-invoice" style="padding-right: 22px;">
                     $&nbsp;{{(formCreationService.invoiceForm$ | async)?.value
-  .pst | number : '1.2-2' }}
+                    .pst | number : '1.2-2' }}
                   </p>
                 </div>
                 <div class="col-md-4 aln-txt">
-                  <p  style="font-size: 15px">
+                  <p style="font-size: 15px">
                     Eligible GST
                   </p>
                 </div>
                 <div class="col-md-8 inputCurrency">
-                  $&nbsp;<mat-form-field class="monetary-input-small" appearance="outline" style="height: 30px !important">
-                    <input
-                      (focusin)="setHelpText(6, tooltip)"
-                            #eligibleGST
-
-                      [formControl]="invoiceForm.controls['eligibleGST']"
-                      matInput
-                      mask="separator.2" thousandSeparator="," decimalMarker="."
-                      (keyup)="CalculateInvoice($event);"
-                      maxlength="100"/>
+                  $&nbsp;<mat-form-field class="monetary-input-small" appearance="outline"
+                    style="height: 30px !important">
+                    <input (focusin)="setHelpText(6, tooltip)" #eligibleGST
+                      [formControl]="invoiceForm.controls['eligibleGST']" matInput mask="separator.2"
+                      thousandSeparator="," decimalMarker="." (keyup)="CalculateInvoice($event);" maxlength="100" />
                   </mat-form-field>
                 </div>
                 <div class="col-md-7 aln-txt">
-                  <p  style="font-size: 15px">
+                  <p style="font-size: 15px">
                     <b>Total being Claimed</b>
                   </p>
-                    <input
-                      (focusin)="setHelpText(7, tooltip)"
-                           #PST
-                      [formControl]="invoiceForm.controls['totalBeingClaimed']"
-                      type="hidden"
-                      required
-                      maxlength="100"/>
+                  <input (focusin)="setHelpText(7, tooltip)" #PST
+                    [formControl]="invoiceForm.controls['totalBeingClaimed']" type="hidden" required maxlength="100" />
                 </div>
                 <div class="col-md-5">
                   <p class="currency-invoice" style="padding-right: 22px; padding-top: 5px;">
                     <b>
-                    $&nbsp;{{ (formCreationService.invoiceForm$ | async)?.value
-  .totalBeingClaimed | number : '1.2-2' }}
-                      </b>
+                      $&nbsp;{{ (formCreationService.invoiceForm$ | async)?.value
+                      .totalBeingClaimed | number : '1.2-2' }}
+                    </b>
                   </p>
                 </div>
               </div>
@@ -408,10 +328,11 @@ id="invHeadr" class="header-align-inv">{{addeditInvoiceText}} Invoice</h1>
       </ng-container>
       <div class="row">
         <div class="col-md-9">
-          </div>
+        </div>
         <div class="col-md-3 align-cancel-col">
           <button class="button-s cancel" type="button" (click)="cancel()">Cancel</button>
-          <button *ngIf="isReadOnly != true" type="submit" class="button-p add-invoice" (click)="AddInvoice()">{{addeditInvoiceText}}</button>
+          <button *ngIf="isReadOnly != true" type="submit" class="button-p add-invoice"
+            (click)="AddInvoice()">{{addeditInvoiceText}}</button>
         </div>
       </div>
     </form>

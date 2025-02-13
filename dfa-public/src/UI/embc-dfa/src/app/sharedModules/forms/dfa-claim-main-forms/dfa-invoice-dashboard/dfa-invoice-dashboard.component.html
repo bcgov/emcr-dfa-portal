@@ -1,11 +1,11 @@
-<div class="content-container" >
-  <div class="col-12 content-container infoText" >
+<div class="content-container">
+  <div class="col-12 content-container infoText">
     <div class="row">
       <div class="infoIconCol">
         <div class="material-icons infoIconStyle">info</div>
       </div>
       <div class="col-md-11" style="line-height: normal;">
-        You must provide all the required information to save an invoice record<span style="color:red" >*</span>
+        You must provide all the required information to save an invoice record<span style="color:red">*</span>
         <br /><br />
         Don't group invoices from the same supplier; each invoice must be entered separately.
         <br /><br />
@@ -15,14 +15,17 @@
         <br /><br />
         Only include DFA eligible costs. Clearly indicate on invoice which costs are included.
         <br /><br />
-        DFA eligible expenses are costs required to repair or restore infrastructure to its pre-event functionality. Enhancements or betterments are eligible only if required to meet prevailing codes and bylaws in the affected area. Costs incurred or required in relation to works undertaken as a preventative measure to guard against future disasters are not eligible.
+        DFA eligible expenses are costs required to repair or restore infrastructure to its pre-event functionality.
+        Enhancements or betterments are eligible only if required to meet prevailing codes and bylaws in the affected
+        area. Costs incurred or required in relation to works undertaken as a preventative measure to guard against
+        future disasters are not eligible.
       </div>
       <div class="col-md-6"></div>
 
-      </div>
-      <div class="col-md-6"></div>
+    </div>
+    <div class="col-md-6"></div>
   </div>
-  <br/><br/>
+  <br /><br />
   <div class="tab-heading-parent">
     <div class="col-md-5">
       <p class="tab-heading">
@@ -30,95 +33,88 @@
       </p>
     </div>
     <div class="col-md-7 add-invoice-button-parent">
-      <button
-        class="button-s add-invoice-button"
-              *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'"
-        mat-button
-        type="button"
-        (click)="openInvoiceCreatePopup(null, null);"
-      >
+      <button class="button-s add-invoice-button" *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'" mat-button
+        type="button" (click)="openInvoiceCreatePopup(null, null);">
         + Add Invoice
       </button>
     </div>
-    
+
   </div>
   <div class="row filterStage">
-  <div class="col-md-2" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'" >
-    <mat-select placeholder="Filter by status" class="boxborder" [(value)]="stageSelected" (selectionChange)="ApplyFilter(2,null)">
-      <mat-option value="-1">
-        All Invoices
-      </mat-option>
-      <mat-option value="Approved Total">
-        Approved Total
-      </mat-option>
-      <mat-option value="Approved Partial">
-        Approved Partial
-      </mat-option>
-      <mat-option value="Denied">
-        Denied
-      </mat-option>
-    </mat-select>
+    <div class="col-md-2" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
+      <mat-select placeholder="Filter by status" class="boxborder" [(value)]="stageSelected"
+        (selectionChange)="ApplyFilter(2,null)">
+        <mat-option value="-1">
+          All Invoices
+        </mat-option>
+        <mat-option value="Approved Total">
+          Approved Total
+        </mat-option>
+        <mat-option value="Approved Partial">
+          Approved Partial
+        </mat-option>
+        <mat-option value="Denied">
+          Denied
+        </mat-option>
+      </mat-select>
+    </div>
+
+    <div class="col-md-2">
+      <mat-select placeholder="Filter by days" class="boxborder" [(value)]="filterbydaysSelected"
+        (selectionChange)="ApplyFilter(2,null)">
+        <mat-option value="-1">
+          All Invoices
+        </mat-option>
+        <mat-option value="10">
+          Last 10 days
+        </mat-option>
+        <mat-option value="15">
+          Last 15 days
+        </mat-option>
+        <mat-option value="30">
+          Last 30 days
+        </mat-option>
+        <mat-option value="90">
+          Last Quarter
+        </mat-option>
+        <mat-option value="365">
+          Last Year
+        </mat-option>
+      </mat-select>
+    </div>
+
+    <div class="col-md-3" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
+    </div>
+    <div class="col-md-5" *ngIf="!(vieworedit == 'viewOnly' || vieworedit == 'view')">
+    </div>
+
+    <div class="col-md-2 ">
+      <mat-select placeholder="Sort by" class="boxborder" [(value)]="sortfieldSelected"
+        (selectionChange)="ApplyFilter(3,null)">
+        <mat-option value="vendorname">
+          Vendor Name
+        </mat-option>
+        <mat-option value="invoicenumber">
+          Invoice Number
+        </mat-option>
+        <mat-option value="invoicedate">
+          Invoice Date
+        </mat-option>
+        <mat-option value="totaleligible">
+          Total Eligible
+        </mat-option>
+      </mat-select>
+    </div>
+
+    <div class="col-md-3 searchDiv">
+      <input #searchBox id="searchBox" (keyup)="ApplyFilter(4,searchBox.value)" class="boxborder" matInput
+        placeholder="Search" maxlength="100" />
+      <i class="material-icons">search</i>
+    </div>
   </div>
 
-  <div class="col-md-2">
-    <mat-select placeholder="Filter by days" class="boxborder" [(value)]="filterbydaysSelected" (selectionChange)="ApplyFilter(2,null)">
-      <mat-option value="-1">
-        All Invoices
-      </mat-option>
-      <mat-option value="10">
-        Last 10 days
-      </mat-option>
-      <mat-option value="15">
-        Last 15 days
-      </mat-option>
-      <mat-option value="30">
-        Last 30 days
-      </mat-option>
-      <mat-option value="90">
-        Last Quarter
-      </mat-option>
-      <mat-option value="365">
-        Last Year
-      </mat-option>
-    </mat-select>
-  </div>
-
-  <div class="col-md-3" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
-  </div>
-  <div class="col-md-5" *ngIf="!(vieworedit == 'viewOnly' || vieworedit == 'view')">
-  </div>
-
-  <div class="col-md-2 ">
-    <mat-select placeholder="Sort by" class="boxborder" [(value)]="sortfieldSelected" (selectionChange)="ApplyFilter(3,null)">
-      <mat-option value="vendorname">
-        Vendor Name
-      </mat-option>
-      <mat-option value="invoicenumber">
-        Invoice Number
-      </mat-option>
-      <mat-option value="invoicedate">
-        Invoice Date
-      </mat-option>
-      <mat-option value="totaleligible">
-        Total Eligible
-      </mat-option>
-    </mat-select>
-  </div>
-
-  <div class="col-md-3 searchDiv">
-    <input
-      #searchBox
-      id="searchBox"
-      (keyup)="ApplyFilter(4,searchBox.value)"
-      class="boxborder"
-      matInput
-      placeholder="Search"
-      maxlength="100"/>
-    <i class="material-icons">search</i>
-  </div>
-</div>
-
-  <table mat-table [dataSource]="documentSummaryDataSourceFiltered" *ngIf="documentSummaryDataSourceFiltered.data.length > 0" style="width:100%">
+  <table mat-table [dataSource]="documentSummaryDataSourceFiltered"
+    *ngIf="documentSummaryDataSourceFiltered.data.length > 0" style="width:100%">
     <!-- Invoice Number Column -->
     <ng-container matColumnDef="invoiceNumber">
       <th mat-header-cell *matHeaderCellDef style="width:15%">
@@ -149,8 +145,8 @@
       </td>
     </ng-container>
 
-      <!-- Total Claim Column -->
-      <ng-container matColumnDef="totalBeingClaimed" *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'">
+    <!-- Total Claim Column -->
+    <ng-container matColumnDef="totalBeingClaimed" *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'">
       <th mat-header-cell *matHeaderCellDef style="width:18%">
         <b>Total being Claimed</b>
       </th>
@@ -159,8 +155,8 @@
       </td>
     </ng-container>
 
-      <!-- Invoice Amount -->
-      <ng-container matColumnDef="invoiceAmount" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
+    <!-- Invoice Amount -->
+    <ng-container matColumnDef="invoiceAmount" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
       <th mat-header-cell *matHeaderCellDef style="width:18%">
         <b>Invoice Amount</b>
       </th>
@@ -170,24 +166,16 @@
     </ng-container>
 
     <!-- EMCR Approved Amount -->
-    @if(claimDecision == DecisionEnum.Approved || claimDecision == DecisionEnum.ApprovedWithExclusions){
-      <ng-container matColumnDef="emcrApprovedAmount" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
-        <th mat-header-cell *matHeaderCellDef style="width:17%">
-          <b>EMCR Approved Amount</b>
-        </th>
-        <td *matCellDef="let element" mat-cell>
-            $&nbsp;{{element.emcrApprovedAmount | number : '1.2-2'}}
-        </td>
-      </ng-container>
-    }@else{
-      <ng-container matColumnDef="emcrApprovedAmount" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
-        <th mat-header-cell *matHeaderCellDef style="width:0%">
-        </th>
-        <td *matCellDef="let element" mat-cell>
-          &nbsp;
-        </td>
-      </ng-container>
-    }
+    <ng-container matColumnDef="emcrApprovedAmount" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
+      <th mat-header-cell *matHeaderCellDef style="width:17%">
+        <b>EMCR Approved Amount</b>
+      </th>
+      <td *matCellDef="let element" mat-cell>
+        <div *ngIf="claimDecision == DecisionEnum.Approved || claimDecision == DecisionEnum.ApprovedWithExclusions">
+          $&nbsp;{{ element.emcrApprovedAmount | number : '1.2-2'}}
+        </div>
+      </td>
+    </ng-container>
 
     <!-- EMCR Comments -->
     <ng-container matColumnDef="emcrComments" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
@@ -201,14 +189,13 @@
       </td>
     </ng-container>
 
-      <!-- View Invoices -->
-      <ng-container matColumnDef="viewInvoice" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
+    <!-- View Invoices -->
+    <ng-container matColumnDef="viewInvoice" *ngIf="vieworedit == 'viewOnly' || vieworedit == 'view'">
       <th mat-header-cell *matHeaderCellDef style="width:10%">
         <b>View Invoices</b>
       </th>
       <td *matCellDef="let element" mat-cell>
-        <span (click)="viewInvoiceRow(element, index)" class="material-symbols-outlined setViewIcon"
-              >
+        <span (click)="viewInvoiceRow(element, index)" class="material-symbols-outlined setViewIcon">
           visibility
         </span>
       </td>
@@ -217,50 +204,32 @@
     <!-- Delete/Edit Icon Column -->
     <ng-container matColumnDef="icons" *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'">
       <th mat-header-cell *matHeaderCellDef style="width:15%">
-        
+
       </th>
       <td *matCellDef="let element; let index = index" mat-cell>
-        <button
-          class="edit-image"
-          *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'"
-          mat-icon-button
-          aria-label="Edit"
-          (click)="editInvoiceRow(element, index)"
-        >
+        <button class="edit-image" *ngIf="vieworedit !== 'viewOnly' && vieworedit !== 'view'" mat-icon-button
+          aria-label="Edit" (click)="editInvoiceRow(element, index)">
           <img src="/assets/images/edit.svg" height="35" width="35" />
         </button>&nbsp;
-        <button
-          class="delete-image"
-          mat-icon-button
-          aria-label="Remove"
-          (click)="confirmDeleteInvoiceRow(element, index)"
-        >
+        <button class="delete-image" mat-icon-button aria-label="Remove"
+          (click)="confirmDeleteInvoiceRow(element, index)">
           <img src="/assets/images/delete.svg" height="35" width="35" />
         </button>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="documentSummaryColumnsToDisplay"></tr>
-    <tr
-      mat-row
-      *matRowDef="let element; columns: documentSummaryColumnsToDisplay"
-      class="example-element-row"
-      [style.height]="'auto'"
-    ></tr>
+    <tr mat-row *matRowDef="let element; columns: documentSummaryColumnsToDisplay" class="example-element-row"
+      [style.height]="'auto'"></tr>
 
   </table>
-  <app-loader
-    class="spinner"
-    [showLoader]="isLoading"
-    strokeWidth="10"
-    diameter="50"
-  >
+  <app-loader class="spinner" [showLoader]="isLoading" strokeWidth="10" diameter="50">
   </app-loader>
 </div>
-<div class="content-container no-invoices" *ngIf="documentSummaryDataSourceFiltered.data.length <= 0" >
-    <div class="row">
-      <div class="col-md-12">
-        <span class="no-invoices-text"> {{noInvoiceText}} </span> <br />
-      </div>
+<div class="content-container no-invoices" *ngIf="documentSummaryDataSourceFiltered.data.length <= 0">
+  <div class="row">
+    <div class="col-md-12">
+      <span class="no-invoices-text"> {{noInvoiceText}} </span> <br />
     </div>
+  </div>
 </div>

@@ -125,75 +125,69 @@
         </div>
       </div>
       <div style="padding-top: 16px; display: flex; padding-bottom: 16px;" [hidden]="applItem.isHidden">
-  
+
         <div class="col-md-2">
           <span><b>First Claim - </b></span>
         </div>
         <div class="col-md-2">
           <span>{{applItem.firstClaim == true ? 'Yes' : (applItem.firstClaim == false ? 'No' : 'Not Set')}}</span>
         </div>
-        @if(applItem.claimDecision == DecisionEnum.Approved || applItem.claimDecision == DecisionEnum.ApprovedWithExclusions){
-          <div class="col-md-2">
-            <span><b>Approved Claim Total - </b></span>
-          </div>
-          <div class="col-md-2">
-            <span>{{applItem.approvedClaimTotal}}</span>
-          </div>
-          <div class="col-md-2">
-            <span><b>Eligible Payable - </b></span>
-          </div>
-          <div class="col-md-2">
-            <span>{{applItem.eligiblePayable}}</span>
-          </div>
-        }
-        
-        
+        <div class="col-md-2">
+          <span><b>Approved Claim Total - </b></span>
+        </div>
+        <div class="col-md-2">
+          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.approvedClaimTotal : ""}}</span>
+        </div>
+        <div class="col-md-2">
+          <span><b>Eligible Payable - </b></span>
+        </div>
+        <div class="col-md-2">
+          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.eligiblePayable : ""}}</span>
+        </div>
       </div>
       <div style="padding-bottom: 16px; display: flex;" [hidden]="applItem.isHidden">
         <div class="col-md-2">
           <span><b>Final Claim -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">{{applItem.finalClaim == true ? 'Yes' : (applItem.finalClaim == false ? 'No' : 'Not Set')}}</span>
+          <span>{{applItem.finalClaim == true ? 'Yes' : (applItem.finalClaim == false ? 'No' : 'Not Set')}}</span>
         </div>
-        @if(applItem.claimDecision == DecisionEnum.Approved || applItem.claimDecision == DecisionEnum.ApprovedWithExclusions){
         <div class="col-md-2">
           <span><b>Less First $1,000 -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">{{applItem.lessFirst1000 }}</span>
+          {{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.lessFirst1000 : ""}}
         </div>
         <div class="col-md-2">
           <span><b>Paid Claim Amount -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">{{applItem.paidClaimAmount}}</span>
+          {{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.paidClaimAmount : ""}}
         </div>
-      }
       </div>
-    
+
 
       <div style="border-bottom: 1px solid lightgrey; padding-bottom: 16px; display: flex;" [hidden]="applItem.isHidden">
         <div class="col-md-2">
           <span><b>Claim Total -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">{{applItem.claimTotal }}</span>
+          <span id="claimTotal">{{applItem.claimTotal }}</span>
         </div>
-        @if(applItem.claimDecision == DecisionEnum.Approved || applItem.claimDecision == DecisionEnum.ApprovedWithExclusions){
+
         <div class="col-md-2">
           <span><b>Approved Reimbursement % -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">{{applItem.approvedReimbursePercent}}</span>
+          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.approvedReimbursePercent : ""}}</span>
         </div>
         <div class="col-md-2">
           <span><b>Paid Claim Date -</b></span>
         </div>
         <div class="col-md-2">
-          <span id="spnCauseOfDamage">{{applItem.paidClaimDate}}</span>
+          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.paidClaimDate : ""}}</span>
         </div>
-      }
+
       </div>
 
       <div style="width: 90%; min-width: 725px; display: flex; flex-direction: column;">
@@ -270,7 +264,7 @@
             <span *ngIf="item.currentStep == true && applItem.isErrorInStatus == false && item.isCompleted == false" class="youAreHere">You are here</span>
           </div>-->
       </div>
-      
+
     </mat-card>
   </div>
 </div>
