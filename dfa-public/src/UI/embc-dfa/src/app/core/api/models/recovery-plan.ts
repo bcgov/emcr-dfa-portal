@@ -16,7 +16,7 @@ export interface RecoveryPlan {
   infraDamageDetails?: null | string;
   isdamagedDateSameAsApplication?: null | boolean;
   paidProjectAmount?: null | number;
-  project18MonthDeadline?: string;
+  project18MonthDeadline?: null | string;
   projectApprovedDate?: null | string;
   projectDecision?: null | string;
   projectName?: null | string;

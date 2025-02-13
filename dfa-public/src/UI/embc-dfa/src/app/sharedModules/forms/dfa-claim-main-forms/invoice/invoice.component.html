@@ -34,16 +34,23 @@
                 <p style="font-size: 15px;">
                   EMCR Approved Amount
                 </p>
-                <mat-form-field appearance="outline" class="mat-form-round">
-                  <div class="searchDiv">
-                    <div
-                      *ngIf="claimDecision == DecisionEnum.Approved || claimDecision == DecisionEnum.ApprovedWithExclusions">
-                      <input #currencyBoxemcrApprovedAmount id="currencyBoxemcrApprovedAmount"
-                        formControlName="emcrApprovedAmount" matInput />
-                      <span class="currencyText">CA$</span>
+
+                @if(claimDecision == DecisionEnum.Approved || claimDecision == DecisionEnum.ApprovedWithExclusions){
+                  <mat-form-field appearance="outline" class="mat-form-round">
+                    <div class="searchDiv">
+                        <input #currencyBoxemcrApprovedAmount id="currencyBoxemcrApprovedAmount"
+                          formControlName="emcrApprovedAmount" matInput />
+                        <span class="currencyText">CA$</span>                   
                     </div>
-                  </div>
-                </mat-form-field>
+                  </mat-form-field>
+                }@else {
+                  <mat-form-field appearance="outline" class="mat-form-round">
+                    <div class="searchDiv">
+                      <input matInput readonly disabled="true"/>
+                      <span class="currencyText">CA$</span>                   
+                    </div>
+                  </mat-form-field>
+                }
               </div>
 
               <div class="row" *ngIf="isReadOnly === true">
