@@ -8,6 +8,7 @@ import {
   FormGroup,
   FormControl
 } from '@angular/forms';
+import moment from 'moment';
 import { CommonModule, KeyValue } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,7 +25,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
-import { ApplicantOption, ApplicantSubtypeSubCategories } from 'src/app/core/api/models';
+import {ApplicantOption, ApplicantSubtypeSubCategories, CurrentApplication} from 'src/app/core/api/models';
 import { MatTableModule } from '@angular/material/table';
 import { CustomPipeModule } from 'src/app/core/pipe/customPipe.module';
 import { DFADeleteConfirmDialogComponent } from '../../../../core/components/dialog-components/dfa-confirm-delete-dialog/dfa-confirm-delete.component';
@@ -40,6 +41,7 @@ import { DFAProjectMainMappingService } from '../../../../feature-components/dfa
 import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
 import {MatDividerModule} from "@angular/material/divider";
+import {Decision} from "../../../../models/decision.enum";
 
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -74,6 +76,10 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
   isReadOnly: boolean = false;
   showDates: boolean = false;
   projectDecision: string = "";
+  dateOfDamageTo: string = "";
+  dateOfDamage: string = "";
+  caseNumber: string = "";
+  damageTypes: string = '';
   hideHelp: boolean = true;
   timerID;
   readonly phoneMask = [
@@ -175,9 +181,14 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
       });
 
     let projectId = this.dfaProjectMainDataService.getProjectId();
+    let applicaitonId = this.dfaProjectMainDataService.getApplicationId();
 
     if (projectId) {
       this.getRecoveryPlan(projectId);
+    }
+
+    if (applicaitonId) {
+      this.getApplication(applicaitonId);
     }
 
     this.dfaProjectMainDataService.stepSelected.subscribe((stepSelected) => {
@@ -261,7 +272,27 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
       this.showDates = true;
     }
   }
+  getApplication(applicationId: string){
+    if(applicationId){
+      this.applicationService.applicationGetApplicationDetailsForProject({ applicationId: applicationId }).subscribe({
+        next: (dfaApplicationMain) => {
 
+          console.log(moment(dfaApplicationMain.dateOfDamageTo).format('DD-MMM-YYYY'));
+          this.dateOfDamageTo = moment(dfaApplicationMain.dateOfDamageTo).format('DD-MMM-YYYY');
+          this.dateOfDamage = moment(dfaApplicationMain.dateOfDamage).format('DD-MMM-YYYY');
+          this.caseNumber = dfaApplicationMain.caseNumber;
+          dfaApplicationMain.floodDamage === true ? this.damageTypes += 'Flood Damage, ' : '';
+          dfaApplicationMain.stormDamage === true ? this.damageTypes += 'Storm Damage, ' : '';
+          dfaApplicationMain.landslideDamage === true ? this.damageTypes += 'Landslide Damage, ' : '';
+          dfaApplicationMain.wildfireDamage === true ? this.damageTypes += 'Wildfire Damage, ' : '';
+          if(dfaApplicationMain.otherDamage === true) {
+            this.damageTypes += dfaApplicationMain.otherDamageText;
+          }
+          this.damageTypes = this.damageTypes.replace(/,\s*$/, "");
+          }
+      });
+    }
+  }
   getRecoveryPlan(projectId: string) {
     if (projectId) {
       this.projectService.projectGetProjectMain({ projectId: projectId }).subscribe({
@@ -385,6 +416,8 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
       3000
     );
   }
+
+  protected readonly DecisionEnum = Decision;
 }
 
 @NgModule({

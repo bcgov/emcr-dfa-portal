@@ -16,30 +16,66 @@
         aria-tooltip="Button that displays and hides a tooltip triggered by other buttons">
         Action
       </button>-->
-      <div class="col-12 content-container infoText" *ngIf="projectDecision !== 'Approved'">
+      <ng-container *ngIf="projectDecision === 'Draft'">
+      <div class="col-12 content-container infoText">
         <div class="row">
           <div class="infoIconCol">
             <div class="material-icons infoIconStyle">info</div>
           </div>
+
           <div class="col-md-11">
             Please review and complete the form below. Required fields are marked with a red asterisk<span
               style="color:red">*</span>
           </div>
           <div class="col-md-6"></div>
-
         </div>
         <div class="col-md-6"></div>
       </div>
-      <br />
-      <ng-container *ngIf="projectDecision === 'Approved' || projectDecision === 'Approved with Exclusions'">
-        <mat-divider style="margin: 30px 0px;"/>
-        <div>
-        <div>
-          <p style="font-size: 18px; font-weight: bold;">
-            Decision
-          </p>
+      </ng-container>
+      <ng-container>
+        <mat-divider style="margin-bottom: 15px;"/>
+      <div style="display: flex; margin-bottom: 10px">
+        <div class="col-md-2">
+          <span><b>Case Number - </b></span>
         </div>
-        <br />
+        <div class="col-md-4 wrap-text">
+          <span>{{caseNumber}}</span>
+        </div>
+        <div class="col-md-2">
+          <span><b>Date of Damage (From) - </b></span>
+        </div>
+        <div class="col-md-2">
+          <span>{{dateOfDamage}}</span>
+        </div>
+      </div>
+      <div style="display: flex;">
+
+        <div class="col-md-2">
+          <span><b>Cause of the Damage -</b></span>
+        </div>
+        <div class="col-md-4">
+          <span>{{ damageTypes }}</span>
+        </div>
+        <div class="col-md-2">
+          <span><b>Date of Damage (To) -</b></span>
+        </div>
+        <div class="col-md-2">
+          <span>{{dateOfDamageTo}}</span>
+        </div>
+      </div>
+      </ng-container>
+      <br />
+      <div>
+        <ng-container *ngIf="projectDecision === 'Approved' || projectDecision === 'Approved with Exclusions' || projectDecision === 'Withdrawn' || projectDecision === 'Ineligible'">
+          <mat-divider style="margin-bottom: 25px;"/>
+          <div>
+            <p style="font-size: 18px; font-weight: bold;">
+              Decision
+            </p>
+        </div>
+          <br />
+        </ng-container>
+        <ng-container *ngIf="projectDecision === 'Approved' || projectDecision === 'Approved with Exclusions'">
         <div class="row my-2">
           <div class="col-md-3">
             <p class="label">
@@ -159,6 +195,8 @@
             </mat-form-field>
           </div>
         </div>
+      </ng-container>
+      <ng-container *ngIf="projectDecision === 'Approved' || projectDecision === 'Approved with Exclusions' || projectDecision === 'Withdrawn' || projectDecision === 'Ineligible'">
         <div class="row">
           <p class="label">
             EMCR Decision Comments
@@ -172,8 +210,10 @@
             </mat-form-field><br />
           </div>
         </div>
-        </div>
       </ng-container>
+
+        </div>
+
       <ng-container>
         <mat-divider style="margin: 30px 0px;"/>
         <div>
