@@ -276,8 +276,6 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
     if(applicationId){
       this.applicationService.applicationGetApplicationDetailsForProject({ applicationId: applicationId }).subscribe({
         next: (dfaApplicationMain) => {
-
-          console.log(moment(dfaApplicationMain.dateOfDamageTo).format('DD-MMM-YYYY'));
           this.dateOfDamageTo = moment(dfaApplicationMain.dateOfDamageTo).format('DD-MMM-YYYY');
           this.dateOfDamage = moment(dfaApplicationMain.dateOfDamage).format('DD-MMM-YYYY');
           this.caseNumber = dfaApplicationMain.caseNumber;
