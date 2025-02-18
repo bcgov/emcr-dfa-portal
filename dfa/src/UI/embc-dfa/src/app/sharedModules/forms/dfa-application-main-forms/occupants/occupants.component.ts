@@ -424,7 +424,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
         this.otherContactsData.splice(index, 1);
         this.otherContactsDataSource.next(this.otherContactsData);
         this.otherContactsForm.get('otherContacts').setValue(this.otherContactsData);
-        this.showOtherContactForm = !this.showOtherContactForm
+        this.disableOnlyOtherContact = this.showOtherContactForm
         if (this.otherContactsData.length === 0) {
           this.otherContactsForm
             .get('addNewOtherContactIndicator')
