@@ -260,14 +260,14 @@
             City:
           </div>
           <div class="col-md-3" *ngIf="((formCreationService.addressForm$ | async)?.value?.mailingAddress
-                  ?.addressLine1 == null ||
+                  ?.addressLine1 === null ||
                                (formCreationService.addressForm$ | async)?.value?.mailingAddress
                   ?.addressLine1 === '') &&
                ((formCreationService.addressForm$ | async)?.value?.mailingAddress
-                  ?.addressLine2 == null ||
+                  ?.addressLine2 === null ||
                                (formCreationService.addressForm$ | async)?.value?.mailingAddress
                   ?.addressLine2 === '') && ((formCreationService.addressForm$ | async)?.value?.mailingAddress
-                  ?.postalCode == null ||
+                  ?.postalCode === null ||
                                (formCreationService.addressForm$ | async)?.value?.mailingAddress
                   ?.postalCode === '')
                                "><b>No mailing address available.</b></div>
@@ -1035,14 +1035,14 @@
           </table>
         </div>
         <div class="row info-detail" *ngIf="(isHomeowner || isResidentialTenant) &&
-             ((formCreationService.fullTimeOccupantsForm$ | async)?.value?.onlyOccupantInHome == false &&
-             (formCreationService.fullTimeOccupantsForm$ | async)?.value?.fullTimeOccupants?.length == 0)
+             ((formCreationService.fullTimeOccupantsForm$ | async)?.value?.onlyOccupantInHome === false &&
+             (formCreationService.fullTimeOccupantsForm$ | async)?.value?.fullTimeOccupants?.length === 0)
              ">
           <span style="color:red">At least one full time occupant is required.</span>
         </div>
 
         <div class="row info-detail" *ngIf="(isHomeowner || isResidentialTenant) &&
-        ((formCreationService.fullTimeOccupantsForm$ | async)?.value?.onlyOccupantInHome == true)">
+        ((formCreationService.fullTimeOccupantsForm$ | async)?.value?.onlyOccupantInHome === true)">
          <b>Full Time Occupants</b>
          <span>No full time occupants, I am the only person in the home</span>
        </div>
@@ -1098,7 +1098,7 @@
             ></tr>
           </table>
         </div>
-        <div class="row info-detail" *ngIf="(formCreationService.secondaryApplicantsForm$ | async)?.value?.secondaryApplicants?.length == 0">
+        <div class="row info-detail" *ngIf="(formCreationService.secondaryApplicantsForm$ | async)?.value?.secondaryApplicants?.length === 0">
           <b>Secondary Applicants</b>
           <span>No secondary applicants.</span>
         </div>
@@ -1143,12 +1143,12 @@
             ></tr>
           </table>
         </div>
-        <div class="row info-detail" *ngIf="(formCreationService.otherContactsForm$ | async)?.value?.onlyOtherContact == false &&
-             (formCreationService.otherContactsForm$ | async)?.value?.otherContacts?.length == 0">
+        <div class="row info-detail" *ngIf="(formCreationService.otherContactsForm$ | async)?.value?.onlyOtherContact === false &&
+             (formCreationService.otherContactsForm$ | async)?.value?.otherContacts?.length === 0">
           <span style="color:red">At least one other contact is required.</span>
         </div>
 
-        <div class="row info-detail" *ngIf="(formCreationService.otherContactsForm$ | async)?.value?.onlyOtherContact == true">
+        <div class="row info-detail" *ngIf="(formCreationService.otherContactsForm$ | async)?.value?.onlyOtherContact === true">
         <b>Other Contacts</b>
         <span>I don't have an Other Contact</span>
         </div>
@@ -1225,7 +1225,7 @@
             ></tr>
           </table>
         </div>
-        <div class="row info-detail" *ngIf="(formCreationService.cleanUpLogItemsForm$ | async)?.value?.cleanuplogs?.length == 0">
+        <div class="row info-detail" *ngIf="(formCreationService.cleanUpLogItemsForm$ | async)?.value?.cleanuplogs?.length === 0">
           <span>No clean up logs.</span>
         </div>
         <div class="row info-detail" *ngIf="cleanUpWorkFileDataSource?.data?.length > 0">
@@ -1268,7 +1268,7 @@
             ></tr>
           </table>
         </div>
-        <div class="row info-detail" *ngIf="cleanUpWorkFileDataSource?.data?.length == 0">
+        <div class="row info-detail" *ngIf="cleanUpWorkFileDataSource?.data?.length === 0">
           <span>No receipts or invoices supplied.</span>
         </div>
       </mat-card-content>
@@ -1325,7 +1325,7 @@
             ></tr>
           </table>
         </div>
-        <div class="row info-detail" *ngIf="(formCreationService.damagedRoomsForm$ | async)?.value?.damagedRooms?.length == 0">
+        <div class="row info-detail" *ngIf="(formCreationService.damagedRoomsForm$ | async)?.value?.damagedRooms?.length === 0">
           <span>No damaged rooms listed.</span>
         </div>
         <div class="row info-detail" *ngIf="damagePhotosDataSource?.data?.length > 0">
@@ -1369,7 +1369,7 @@
             ></tr>
           </table>
         </div>
-        <div class="row info-detail" *ngIf="damagePhotosDataSource?.data?.length == 0">
+        <div class="row info-detail" *ngIf="damagePhotosDataSource?.data?.length === 0">
           <span>No damage photos supplied.</span>
         </div>
       </mat-card-content>
@@ -1396,7 +1396,7 @@
         </div>
         <hr />
 
-        <div class="row info-detail" *ngIf="requiredDocumentsDataSource?.data?.length == 0">
+        <div class="row info-detail" *ngIf="requiredDocumentsDataSource?.data?.length === 0">
           <span>No required documents.</span>
         </div>
 
@@ -1451,7 +1451,7 @@
             ></tr>
           </table>
         </div>
-       
+
 
         <div class="row info-detail" *ngIf="(formCreationService.fileUploadsForm$ | async)?.hasError('noInsuranceTemplate')">
           <span style="color:red">Insurance template is required.</span>
@@ -1563,7 +1563,7 @@
             ></tr>
           </table>
         </div>
-        <div class="row info-detail" *ngIf="supportingDocumentsDataSource?.data?.length == 0">
+        <div class="row info-detail" *ngIf="supportingDocumentsDataSource?.data?.length === 0">
           <span>No supporting documents.</span>
         </div>
       </mat-card-content>

@@ -5,8 +5,8 @@
       <mat-label>
         <span *ngIf="whoseSignature">{{ whoseSignature }}&nbsp;</span>
         Signature
-        <span style="color:red" *ngIf="isRequired == true" >*</span>
-        <span *ngIf="isRequired != true">&nbsp;(optional)</span>&nbsp;
+        <span style="color:red" *ngIf="isRequired === true" >*</span>
+        <span *ngIf="isRequired !== true">&nbsp;(optional)</span>&nbsp;
         <mat-icon style="vertical-align:text-bottom;" (click)="clearCanvas()">refresh</mat-icon>
       </mat-label>
       <canvas
@@ -27,7 +27,7 @@
   <div class="row p1-3 pr-0">
     <div class="col-md-10 pr-0">
       <mat-form-field appearance="outline">
-        <mat-label>Print Name<span style="color:red" *ngIf="isRequired == true" >*</span></mat-label>
+        <mat-label>Print Name<span style="color:red" *ngIf="isRequired === true" >*</span></mat-label>
         <input matInput
           type="text"
           [readonly]="isReadOnly === true"
@@ -50,7 +50,7 @@
   <div class="row p1-3 pr-0">
     <div class="col-md-10 pr-0">
       <mat-form-field appearance="outline" >
-        <mat-label>Date<span style="color:red" *ngIf="isRequired == true" >*</span></mat-label>
+        <mat-label>Date<span style="color:red" *ngIf="isRequired === true" >*</span></mat-label>
         <input matInput
           [matDatepicker]="datePicker"
           [readonly]="isReadOnly === true"

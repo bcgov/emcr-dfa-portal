@@ -9,7 +9,7 @@
     <mat-card appearance="outlined" class="mat-elevation-z4 content" style="margin: 10px; padding: 20px;">
       <div class="row">
         <div class="col-4">
-          <span><b>Event Name:</b>&nbsp;&nbsp;{{eventItem.eventName == null ? "To Be Assigned" : eventItem.eventName }}</span>
+          <span><b>Event Name:</b>&nbsp;&nbsp;{{eventItem.eventName === null ? "To Be Assigned" : eventItem.eventName }}</span>
         </div>
         <div class="col-4">
           <span><b>Date of Event:</b>&nbsp;&nbsp;{{eventItem.startDate ? (eventItem.startDate | date: "dd-MMM-YYYY") : "TBD"}} to {{eventItem.endDate ? (eventItem.endDate | date: "dd-MMM-yyyy") : "TBD"}}</span>
@@ -48,14 +48,14 @@
           [style.height]="'auto'"
         ></tr>
       </table><br/><br/>
-      <div *ngIf="getEffectedRegionCommuntiesForEvent(eventItem.eventId).length == 0">
+      <div *ngIf="getEffectedRegionCommuntiesForEvent(eventItem.eventId).length === 0">
         <h2 style="text-align:center"><b>No Effected Communities</b></h2>
       </div>
       <button mat-button type="button" class="button-p" (click)="checkEligibility()">Check Eligibility</button>
     </mat-card>
   </div>
 </div>
-<div class="content-container" style="padding-bottom: 100px; padding-top: 50px;" *ngIf="openDisasterEvents.length == 0">
+<div class="content-container" style="padding-bottom: 100px; padding-top: 50px;" *ngIf="openDisasterEvents.length === 0">
  <div class="heading-container">
     <div class="row">
       <div class="col-md-12">

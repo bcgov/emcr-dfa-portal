@@ -37,7 +37,7 @@
           Maximum length is 100 characters</mat-error
         >
         <mat-autocomplete autoActiveFirstOption #autoAddress1="matAutocomplete">
-        
+
         <mat-option (onSelectionChange)="selectOption(option, addressMatchResponse)"
             *ngFor="let option of filteredAddress | async"
             [value]="option.name"
@@ -90,12 +90,9 @@
              [formControlName]="'community'"
              [matAutocomplete]="auto"
              (keyup)="SelectCity($event, 'input')"
-             [readonly]="primaryAddressWarning == true || readOnly == true"
+             [readonly]="primaryAddressWarning === true || readOnly === true"
              >
       <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-        <!--@for (option of filteredCountries | async; track option) {
-          <mat-option [value]="option">{{option}}</mat-option>
-        }-->
         <mat-option (onSelectionChange)="SelectCity(option, null)"
             *ngFor="let option of filteredOptions | async"
             [value]="option.name"
@@ -111,7 +108,7 @@
           [formControlName]="'community'"
           matInput
           placeholder="City"
-          
+
           (focusout)="checkCanadaPostAddress(addressFormControl?.addressLine1,
                addressFormControl?.addressLine2,
                addressFormControl?.community,

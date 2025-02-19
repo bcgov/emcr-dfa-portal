@@ -22,8 +22,8 @@ If you're an Indigenous community or local government your process is different:
         </div>
       <div class="col-md-6"></div>
       <div class="col-md-6">
-        
-        <button *ngIf="hasActiveEvents == true"
+
+        <button *ngIf="hasActiveEvents === true"
               class="button-p notice-button left-align"
               mat-button
               (click)="navigateToDFAPrescreening()"
@@ -31,7 +31,7 @@ If you're an Indigenous community or local government your process is different:
               Create New Application
         </button>
 
-        <div *ngIf="hasActiveEvents == false">
+        <div *ngIf="hasActiveEvents === false">
           <br />
           <b>
             There are currently no active events, please visit our website
@@ -39,8 +39,8 @@ If you're an Indigenous community or local government your process is different:
             for more information
           </b>
        </div>
-         
-        
+
+
       </div>
       <div class="col-md-6"></div>
     </div>
@@ -74,7 +74,7 @@ If you're an Indigenous community or local government your process is different:
       <mat-tab-nav-panel #tabPanel>
         <router-outlet></router-outlet>
       </mat-tab-nav-panel>
-      
+
       <app-loader
         class="spinner"
         [showLoader]="isLoading"

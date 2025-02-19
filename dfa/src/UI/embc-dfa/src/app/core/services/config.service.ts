@@ -67,7 +67,6 @@ export class ConfigService {
       scope: config.oidc?.scope || undefined,
       showDebugInformation: true, //!environment.production,
       customQueryParams: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         acr_values: 'idp:bcsc'
       }
     };

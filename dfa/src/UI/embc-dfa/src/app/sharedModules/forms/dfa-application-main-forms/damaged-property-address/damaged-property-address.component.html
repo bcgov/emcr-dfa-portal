@@ -1,11 +1,8 @@
 <mat-card appearance="outlined" class="card-align" style="border:none;" [class.mat-elevation-z0]="true">
   <mat-card-content>
-
     <form [formGroup]="damagedPropertyAddressForm">
-
       <p class="sub-heading" style="font-size: 20px">Damaged Property</p>
       <br/>
-
       <ng-container>
         <div class="row">
           <div class="col-md-12 bottomspace">
@@ -14,7 +11,7 @@
             </p>
             <p class="sub-heading" style="font-size: 15px; color: black; padding-bottom: 10px; padding-top: 10px;">
               If you update your address with BC Services Card, please verify the correct damaged property address is still in your DFA application.
-            </p>  
+            </p>
             <mat-radio-group
               formControlName="isPrimaryAndDamagedAddressSame"
               class="primary-radio-group"
@@ -38,7 +35,6 @@
             </mat-radio-group>
           </div>
         </div>
-
         <div class="row" style="padding-top: 24px;">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
@@ -53,7 +49,6 @@
             </mat-radio-group>
           </div>
         </div>
-        
         <div class="row" style="padding-top: 24px;" *ngIf="isHomeowner === true || isResidentialTenant === true">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
@@ -74,8 +69,7 @@
             </div>
           </div>
         </div>
-
-        <div class="row" style="padding-top: 24px;" *ngIf="isSmallBusinessOwner == true">
+        <div class="row" style="padding-top: 24px;" *ngIf="isSmallBusinessOwner === true">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
               Is your business managed by all owners on a day to day basis?<span style="color:red" >*</span>
@@ -89,8 +83,7 @@
             </mat-radio-group>
           </div>
         </div>
-
-        <div class="row" style="padding-top: 24px;" *ngIf="isSmallBusinessOwner == true">
+        <div class="row" style="padding-top: 24px;" *ngIf="isSmallBusinessOwner === true">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
               Are the gross revenues of the business more than $10,000 but less than $2
@@ -105,8 +98,7 @@
             </mat-radio-group>
           </div>
         </div>
-
-        <div class="row" style="padding-top: 24px;" *ngIf="isSmallBusinessOwner == true">
+        <div class="row" style="padding-top: 24px;" *ngIf="isSmallBusinessOwner === true">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
               Does the business employ less than 50 employees at any one time?<span style="color:red" >*</span>
@@ -120,8 +112,7 @@
             </mat-radio-group>
           </div>
         </div>
-
-        <div class="row" style="padding-top: 24px;" *ngIf="isFarmOwner == true">
+        <div class="row" style="padding-top: 24px;" *ngIf="isFarmOwner === true">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
               Is the farm operation identified in the current assessment of the British Columbia Assessment Authority as a developing or established agricultural operation?<span style="color:red" >*</span>
@@ -135,8 +126,7 @@
             </mat-radio-group>
           </div>
         </div>
-
-        <div class="row" style="padding-top: 24px;" *ngIf="isFarmOwner == true">
+        <div class="row" style="padding-top: 24px;" *ngIf="isFarmOwner === true">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
               Is the farm operation owned and operated by a person(s) who full-time employment is as a farmer?<span style="color:red" >*</span>
@@ -150,8 +140,7 @@
             </mat-radio-group>
           </div>
         </div>
-
-        <div class="row" style="padding-top: 24px;" *ngIf="isFarmOwner == true">
+        <div class="row" style="padding-top: 24px;" *ngIf="isFarmOwner === true">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
               Is the farm operation the means by which the owner(s) derives the majority of that person’s income?<span style="color:red" >*</span>
@@ -165,8 +154,7 @@
             </mat-radio-group>
           </div>
         </div>
-
-        <div class="row" style="padding-top: 24px;" *ngIf="isCharitableOrganization == true">
+        <div class="row" style="padding-top: 24px;" *ngIf="isCharitableOrganization === true">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
               Does the charitable/non-profit organization provide a benefit or service to the community?<span style="color:red" >*</span>
@@ -180,8 +168,7 @@
             </mat-radio-group>
           </div>
         </div>
-
-        <div class="row" style="padding-top: 24px;" *ngIf="isCharitableOrganization == true">
+        <div class="row" style="padding-top: 24px;" *ngIf="isCharitableOrganization === true">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
               Has the charitable/non-profit organization been in existence for at least 12 months?<span style="color:red" >*</span>
@@ -195,8 +182,7 @@
             </mat-radio-group>
           </div>
         </div>
-
-        <div class="row" style="padding-top: 24px;" *ngIf="isCharitableOrganization == true">
+        <div class="row" style="padding-top: 24px;" *ngIf="isCharitableOrganization === true">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
               Is the charitable/non-profit organization registered under the BC <i>Societies Act</i>?<span style="color:red" >*</span>
@@ -210,7 +196,6 @@
             </mat-radio-group>
           </div>
         </div>
-
         <div class="row" style="padding-top: 24px;" *ngIf="isSmallBusinessOwner === true || isFarmOwner === true || isCharitableOrganization === true">
           <div class="col-md-6 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
@@ -224,7 +209,7 @@
                 formControlName="businessLegalName"
                 matInput
                 required
-                [readonly]="isReadOnly == true"
+                [readonly]="isReadOnly === true"
                 placeholder="{{accountPlaceHolderLabel + ' Legal Name'}}"
                 maxlength="100"/>
               <mat-hint>Maximum length is 100 characters</mat-hint>
@@ -245,10 +230,8 @@
                 {{accountPlaceHolderLabel + ' Legal Name is required'}}</mat-error
               >
             </mat-form-field>
-            
           </div>
         </div>
-
         <div class="row" style="padding-top: 24px;">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
@@ -263,7 +246,6 @@
             </mat-radio-group>
           </div>
         </div>
-
         <!-- TODO: drop down list from ERA -->
         <div class="row" style="padding-top: 24px;" *ngIf="damagedPropertyAddressForm.get('onAFirstNationsReserve').value === 'true'">
           <div class="col-md-6 bottomspace">
@@ -272,7 +254,7 @@
               <input
                 formControlName="firstNationsReserve"
                 matInput
-                [readonly]="isReadOnly == true"
+                [readonly]="isReadOnly === true"
                 placeholder="Name of First Nations Reserve"
                 [required]="damagedPropertyAddressForm.get('onAFirstNationsReserve').value === 'true'"
                 maxlength="100"/>
@@ -295,14 +277,10 @@
                 Maximum length is 100 characters</mat-error
               >
             </mat-form-field>
-            
           </div>
         </div>
-
         <div *ngIf="damagedPropertyAddressForm.get('onAFirstNationsReserve').value !== 'true'">
-          
         </div>
-
         <div class="row" style="padding-top: 24px;" *ngIf="isHomeowner === true || isResidentialTenant === true">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
@@ -317,7 +295,6 @@
             </mat-radio-group>
           </div>
         </div>
-
         <div class="row" style="padding-top: 24px;" *ngIf="isHomeowner">
           <div class="col-md-12 bottomspace">
             <p class="sub-heading" style="font-size: 15px">
@@ -332,7 +309,6 @@
             </mat-radio-group>
           </div>
         </div>
-
         <div class="row" style="padding-top: 24px;" *ngIf="isResidentialTenant">
           <p class="sub-heading" style="font-size: 15px">
            Provide at least one registered building owner and/or landlord name and phone number.<span style="color:red" >*</span>
@@ -345,7 +321,7 @@
                 matInput
                 placeholder="First name"
                 required
-                [readonly]="isReadOnly == true"
+                [readonly]="isReadOnly === true"
                 maxlength="49"/>
               <mat-error
                 *ngIf="
@@ -374,7 +350,7 @@
                 matInput
                 placeholder="Last name"
                 required
-                [readonly]="isReadOnly == true"
+                [readonly]="isReadOnly === true"
                 maxlength="49"/>
               <mat-error
                 *ngIf="
@@ -400,7 +376,7 @@
               <mat-label>Contact Telephone</mat-label>
               <input formControlName="landlordPhone"
                 matInput required
-                [readonly]="isReadOnly == true"
+                [readonly]="isReadOnly === true"
                 placeholder="Contact Telephone"
                 [imask]="phoneMask" />
               <mat-error
@@ -427,7 +403,7 @@
               <mat-label>Contact Email</mat-label>
               <input formControlName="landlordEmail"
                 matInput
-                [readonly]="isReadOnly == true"
+                [readonly]="isReadOnly === true"
                 placeholder="Contact Email"
                 type="email"
                 maxlength="100"
@@ -451,7 +427,6 @@
             </mat-form-field>
           </div>
         </div>
-
         <div class="row" style="padding-top: 24px;" *ngIf="isResidentialTenant">
           <p class="sub-heading" style="font-size: 15px">
            You may also provide a second registered building owner and/or landlord name and phone number, if applicable.
@@ -463,9 +438,8 @@
                 formControlName="landlordGivenNames2"
                 matInput
                 placeholder="First name"
-                [readonly]="isReadOnly == true"
+                [readonly]="isReadOnly === true"
                 maxlength="49"/>
-              
               <mat-error
               *ngIf="
                 damagedPropertyAddressForm.get('landlordGivenNames2').invalid &&
@@ -483,9 +457,8 @@
                 formControlName="landlordSurname2"
                 matInput
                 placeholder="Last name"
-                [readonly]="isReadOnly == true"
+                [readonly]="isReadOnly === true"
                 maxlength="49"/>
-              
               <mat-error
                 *ngIf="
                   damagedPropertyAddressForm.get('landlordSurname2').invalid &&
@@ -500,8 +473,8 @@
             <mat-form-field appearance="outline">
               <mat-label>Contact Telephone</mat-label>
               <input formControlName="landlordPhone2"
-                matInput 
-                [readonly]="isReadOnly == true"
+                matInput
+                [readonly]="isReadOnly === true"
                 placeholder="Contact Telephone"
                 [imask]="phoneMask" />
               <mat-error
@@ -512,7 +485,6 @@
               >
                 Telephone number must have 10 digits</mat-error
               >
-              
             </mat-form-field>
           </div>
           <div class="col-md-2">
@@ -520,7 +492,7 @@
               <mat-label>Contact Email</mat-label>
               <input formControlName="landlordEmail2"
                 matInput
-                [readonly]="isReadOnly == true"
+                [readonly]="isReadOnly === true"
                 placeholder="Contact Email"
                 type="email"
                 maxlength="100"
@@ -544,9 +516,7 @@
             </mat-form-field>
           </div>
         </div>
-
       </ng-container>
     </form>
-
    </mat-card-content>
 </mat-card>

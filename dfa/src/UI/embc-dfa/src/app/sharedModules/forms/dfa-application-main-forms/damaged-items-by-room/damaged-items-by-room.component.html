@@ -1,11 +1,8 @@
 <mat-card appearance="outlined" class="card-align" style="border:none;" [class.mat-elevation-z0]="true">
   <mat-card-content>
-
     <form [formGroup]="damagedRoomsForm">
-
       <p class="sub-heading" style="font-size: 20px">Damaged Items by Room</p>
       <br />
-
       <div formGroupName="damagedRoom">
         <ng-container>
           <div class="row">
@@ -28,7 +25,6 @@
                     {{ element.roomType === RoomTypes.Other ? element.otherRoomType : element.roomType }}
                   </td>
                 </ng-container>
-
                 <!-- Description Column -->
                 <ng-container matColumnDef="description">
                   <th mat-header-cell *matHeaderCellDef>
@@ -38,7 +34,6 @@
                     {{ element.description}}
                   </td>
                 </ng-container>
-
                 <!-- Delete & Edit Icons Column -->
                 <ng-container matColumnDef="icons" style="width:20%">
                   <th mat-header-cell *matHeaderCellDef>
@@ -71,7 +66,6 @@
                     </button>
                   </td>
                 </ng-container>
-
                 <tr mat-header-row *matHeaderRowDef="damagedRoomsColumnsToDisplay"></tr>
                 <tr
                   mat-row
@@ -79,17 +73,13 @@
                   class="example-element-row"
                   [style.height]="'auto'"
                 ></tr>
-
               </table>
-
               <div  *ngIf="damagedRoomsDataSource.getValue().length > 0">
                 <br /><br/>
               </div>
-
-              <div  *ngIf="damagedRoomsDataSource.getValue().length == 0 && vieworedit === 'viewOnly'">
+              <div  *ngIf="damagedRoomsDataSource.getValue().length === 0 && vieworedit === 'viewOnly'">
                 <br />No damaged rooms were added.<br/>
               </div>
-
               <button
                 *ngIf="!showDamagedRoomForm && vieworedit !== 'viewOnly'"
                 class="family-button"
@@ -99,7 +89,6 @@
               >
                 + Add Room & Items
               </button>
-
               <mat-card appearance="outlined" *ngIf="showDamagedRoomForm" style="padding: 12px;">
                 <p class="sub-heading" style="font-size: 15px">
                   New room and items
@@ -177,7 +166,6 @@
                     </mat-form-field>
                   </div>
                 </div>
-
                 <div class="row">
                   <div class="col-md-6">
                     <button
@@ -200,16 +188,13 @@
                     </button>
                   </div>
                 </div>
-
               </mat-card>
             </div>
-
           </div>
         </ng-container>
       </div>
       <br/><br/>
     </form>
-
     <ng-container>
       <div class="row">
         <div class="col-md-8">
@@ -303,15 +288,12 @@
           <div  *ngIf="damagePhotosDataSource.data.length > 0">
             <br /><br/>
           </div>
-          <div  *ngIf="damagePhotosDataSource.data.length == 0 && vieworedit === 'viewOnly'">
+          <div  *ngIf="damagePhotosDataSource.data.length === 0 && vieworedit === 'viewOnly'">
             <br />No damage photos were added.<br/>
           </div>
         </div>
       </div>
-
     </ng-container>
-
     <br/><br/>
-
   </mat-card-content>
 </mat-card>

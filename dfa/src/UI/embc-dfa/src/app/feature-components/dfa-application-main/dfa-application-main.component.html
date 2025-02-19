@@ -7,7 +7,7 @@
         <span class="sub-heading" style="float:right;">Event: {{event}}</span>
         <span class="sub-heading" style="float:right;">Submit application before midnight on: {{ninetyDayDeadline | date: "MM/dd/yyyy"}}</span><br/>
         <span class="sub-heading" style="color:#941372; float:right;" *ngIf="daysToApply>1">{{ daysToApply }} day(s) remaining to apply</span>
-        <span class="sub-heading" style="color:#941372; float:right;" *ngIf="daysToApply==1">DUE MIDNIGHT TODAY</span>
+        <span class="sub-heading" style="color:#941372; float:right;" *ngIf="daysToApply===1">DUE MIDNIGHT TODAY</span>
         <span class="sub-heading" style="color:#941372; float:right;" *ngIf="daysToApply<1">{{ -1 - daysToApply }} DAY(S) OVERDUE</span><br/>
     </div>
   </div>

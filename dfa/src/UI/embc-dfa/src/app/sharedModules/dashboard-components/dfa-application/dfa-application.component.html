@@ -20,7 +20,7 @@
 
       <div style="border-bottom: 1px solid lightgrey; padding-bottom: 20px; display: flex;">
         <div class="col-md-3">
-          <span style="font-size: 20px;"><b>{{applItem.eventId == null ? "To Be Assigned" : applItem.eventId }}</b></span>
+          <span style="font-size: 20px;"><b>{{applItem.eventId === null ? "To Be Assigned" : applItem.eventId }}</b></span>
         </div>
         <div class="col-md-7">
         </div>
@@ -32,26 +32,23 @@
       <div [ngClass]="applItem.hasAppealStages ? 'appeal-stages' : ''" style="border-bottom: 1px solid lightgrey;padding-bottom:20px; height: 210px;width: 100%;min-width: 725px;">
         <div class="col-md-3" style="margin-top: 20px;">
           <span><b>Application Status</b></span><br />
-          <span *ngIf="applItem.isErrorInStatus == true" style="color: red;">Error in displaying status<br /></span>
+          <span *ngIf="applItem.isErrorInStatus === true" style="color: red;">Error in displaying status<br /></span>
         </div>
         <div *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}" class="stepsDesc col-md-1">
           <span class="stepText">{{item.label}}</span>
         </div>
         <br style="clear: both;" />
-        <div *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}" [ngClass]="i == 0 ? 'nocircle col-md-1' : 'circle col-md-1'">
-          <!--<span [ngClass]="item.isCompleted == true ? 'material-icons' : 'material-symbols-outlined'" style="color: rgb(0, 128, 55);">
-            {{item.isCompleted == true ? 'check_circle' : 'circle'}}
-          </span>-->
-          <span *ngIf="item.isCompleted == true && applItem.isErrorInStatus == false" class="material-icons" style="color: rgb(21 178 89);">
+        <div *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}" [ngClass]="i === 0 ? 'nocircle col-md-1' : 'circle col-md-1'">
+          <span *ngIf="item.isCompleted === true && applItem.isErrorInStatus === false" class="material-icons" style="color: rgb(21 178 89);">
             check_circle
           </span>
-          <span *ngIf="item.isCompleted == false && item.currentStep == true && applItem.isErrorInStatus == false" class="material-symbols-outlined" style="color: darkblue">
+          <span *ngIf="item.isCompleted === false && item.currentStep === true && applItem.isErrorInStatus === false" class="material-symbols-outlined" style="color: darkblue">
             circle
           </span>
-          <span *ngIf="item.isCompleted == false && item.currentStep == false && applItem.isErrorInStatus == false" class="material-symbols-outlined" style="color: lightgrey">
+          <span *ngIf="item.isCompleted === false && item.currentStep === false && applItem.isErrorInStatus === false" class="material-symbols-outlined" style="color: lightgrey">
             circle
           </span>
-          <span *ngIf="applItem.isErrorInStatus == true" class="material-symbols-outlined" style="color: lightgrey">
+          <span *ngIf="applItem.isErrorInStatus === true" class="material-symbols-outlined" style="color: lightgrey">
             circle
           </span>
           <!--<mat-icon>circle</mat-icon>
@@ -60,8 +57,8 @@
           </span>-->
         </div>
         <br style="clear: both;" />
-        <div *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}" [ngClass]="item.currentStep == true ? 'stepsDesc col-md-2' : 'stepsDesc col-md-1'">
-            <span *ngIf="item.currentStep == true && applItem.isErrorInStatus == false && item.isCompleted == false" class="youAreHere">You are here</span>
+        <div *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}" [ngClass]="item.currentStep === true ? 'stepsDesc col-md-2' : 'stepsDesc col-md-1'">
+            <span *ngIf="item.currentStep === true && applItem.isErrorInStatus === false && item.isCompleted === false" class="youAreHere">You are here</span>
           </div>
       </div>
       <div class="row" style="padding-top: 20px;">
@@ -79,7 +76,7 @@
         </div>
         <div class="col-md-2">
           <span><b>Case Number</b></span><br />
-          <span>{{applItem.caseNumber == null ? "To Be Assigned" : applItem.caseNumber }}</span>
+          <span>{{applItem.caseNumber === null ? "To Be Assigned" : applItem.caseNumber }}</span>
         </div>
         <div class="col-md-2">
           <span><b>Date of Damage</b></span><br />
@@ -169,7 +166,7 @@
     </mat-card>
   </div>
 </div>
-<div class="content-container" style="padding-bottom: 100px; padding-top: 50px;" *ngIf="lstApplications.length == 0 && isLoading == false">
+<div class="content-container" style="padding-bottom: 100px; padding-top: 50px;" *ngIf="lstApplications.length === 0 && isLoading === false">
  <div class="heading-container">
     <div class="row">
       <div class="col-md-12">

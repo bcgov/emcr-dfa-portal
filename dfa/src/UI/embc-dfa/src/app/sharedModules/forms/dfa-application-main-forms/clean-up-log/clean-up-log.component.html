@@ -36,10 +36,6 @@
               <p class="sub-heading">
                 <b>Provide the date, names, hours worked and description of work</b>
               </p>
-              <!--<p class="sub-heading" style="font-size: 15px" *ngIf="cleanUpWorkDataSource.getValue().length == 0">
-                Add a new clean up log
-              </p>-->
-
               <table mat-table [dataSource]="cleanUpWorkDataSource" *ngIf="cleanUpWorkDataSource.getValue().length > 0">
                  <!-- Date Column -->
                 <ng-container matColumnDef="date" style="width:40%">
@@ -117,7 +113,7 @@
                 <br /><br/>
               </div>
 
-              <div  *ngIf="cleanUpWorkDataSource.getValue().length == 0 && vieworedit === 'viewOnly'">
+              <div  *ngIf="cleanUpWorkDataSource.getValue().length === 0 && vieworedit === 'viewOnly'">
                 <br />No cleanup logs were added.<br/>
               </div>
 
@@ -374,7 +370,7 @@
         <div  *ngIf="cleanUpWorkFileDataSource.data.length > 0">
           <br/>
         </div>
-        <div  *ngIf="cleanUpWorkFileDataSource.data.length == 0">
+        <div  *ngIf="cleanUpWorkFileDataSource.data.length === 0">
           <br />No cleanup photos were added.<br/>
         </div>
       </div>
