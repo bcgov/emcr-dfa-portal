@@ -37,4 +37,4 @@ dfa-public/src/UI/embc-dfa/package-lock.json
 /DFAautomationTests/src/test/java/CreateNewApplicationHomeowner.java
 
 # Ignore Pycache
-*/__pycache__
+*__pycache__*
