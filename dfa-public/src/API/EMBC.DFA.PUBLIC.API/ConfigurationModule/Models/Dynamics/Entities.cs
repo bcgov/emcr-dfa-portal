@@ -221,6 +221,14 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public int? dfa_toreceivesupportaccessingdamage { get; set; }
         // 2024-10-29 EMCRI-922 waynezen
         public string? verified_contact_id { get; set; }
+        /* EMCRI-1066: Authorized Representative */
+        public string? dfa_arbusinessphone { get; set; }
+        public bool? dfa_ardeclaration1 { get; set; }
+        public bool? dfa_ardeclaration2 { get; set; }
+        public string? dfa_aremail { get; set; }
+        public string? dfa_arfirstname { get; set; }
+        public string? dfa_arlastname { get; set; }
+        public string? dfa_arpositiontitle { get; set; }
     }
 
     // 2024-09-17 EMCRI-663 waynezen
@@ -261,7 +269,15 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
 
     public class temp_dfa_appapplicationmain_params // TODO: move these under dfa_appapplicationmain_params
     {
-        public string? dfa_accountlegalname { get; set; } // optional string
+        // public string? dfa_accountlegalname { get; set; } // optional string
+        /* EMCRI-1066: Authorized Representative */
+        public string? dfa_arbusinessphone { get; set; }
+        public bool? dfa_ardeclaration1 { get; set; }
+        public bool? dfa_ardeclaration2 { get; set; }
+        public string? dfa_aremail { get; set; }
+        public string? dfa_arfirstname { get; set; }
+        public string? dfa_arlastname { get; set; }
+        public string? dfa_arpositiontitle { get; set; }
     }
 
     public class dfa_projectmain_retrieve
@@ -404,6 +420,14 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public int? dfa_mailingaddresscanadapostverified { get; set; }
         public bool? dfa_primarycontactverified { get; set; }
         public int? dfa_toreceivesupportaccessingdamage { get; set; }
+        /* EMCRI-1066: Authorized Representative */
+        public string? dfa_arbusinessphone { get; set; }
+        public bool? dfa_ardeclaration1 { get; set; }
+        public bool? dfa_ardeclaration2 { get; set; }
+        public string? dfa_aremail { get; set; }
+        public string? dfa_arfirstname { get; set; }
+        public string? dfa_arlastname { get; set; }
+        public string? dfa_arpositiontitle { get; set; }
     }
 
     public class dfa_appbuildingownerlandlord
@@ -453,6 +477,21 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
     }
 
     public class dfa_appothercontact_params
+    {
+        public Guid dfa_appapplicationid { get; set; } // required string
+        public Guid? dfa_appothercontactid { get; set; } // optional string
+        public string dfa_appemailaddress { get; set; } // required string
+        public string dfa_firstname { get; set; } // required string
+        public string dfa_lastname { get; set; } // required string
+        public string dfa_phonenumber { get; set; } // required string
+        // 2024-10-09 EMCRI-815 waynezen; new fields
+        public string? dfa_jobtitle { get; set; }
+        public string? dfa_cellphone { get; set; }
+        public string? dfa_notes { get; set; }
+        public bool delete { get; set; } // required enum
+    }
+
+    public class dfa_appauthorizedrepresentative_params
     {
         public Guid dfa_appapplicationid { get; set; } // required string
         public Guid? dfa_appothercontactid { get; set; } // optional string
@@ -854,6 +893,13 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_applicationcasebpfstages { get; set; }
         public string? dfa_applicationcasebpfsubstages { get; set; }
         public string? dfa_bpfcloseddate { get; set; }
+        public string? dfa_arbusinessphone { get; set; }
+        public bool? dfa_ardeclaration1 { get; set; }
+        public bool? dfa_ardeclaration2 { get; set; }
+        public string? dfa_aremail { get; set; }
+        public string? dfa_arfirstname { get; set; }
+        public string? dfa_arlastname { get; set; }
+        public string? dfa_arpositiontitle { get; set; }
     }
 
     public class dfa_event

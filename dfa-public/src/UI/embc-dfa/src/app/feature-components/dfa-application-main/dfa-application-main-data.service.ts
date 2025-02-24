@@ -2,7 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { CacheService } from 'src/app/core/services/cache.service';
 import { DfaApplicationStart, ApplicationContacts } from 'src/app/core/api/models';
 import { DFAApplicationStartDataService } from '../dfa-application-start/dfa-application-start-data.service';
-import { CleanUpLog, DfaApplicationMain, DamagedPropertyAddress, ApplicationDetails, Contacts, SupportingDocuments, SignAndSubmit, FullTimeOccupant, OtherContact, SecondaryApplicant, DamagedRoom, CleanUpLogItem } from 'src/app/core/model/dfa-application-main.model';
+import { CleanUpLog, DfaApplicationMain, DamagedPropertyAddress, ApplicationDetails, Contacts, SupportingDocuments, SignAndSubmit, FullTimeOccupant, OtherContact, SecondaryApplicant, DamagedRoom, CleanUpLogItem, AuthorizedRepresentative } from 'src/app/core/model/dfa-application-main.model';
 import { ApplicationService, AttachmentService } from 'src/app/core/api/services';
 import { DFAApplicationStartService } from '../dfa-application-start/dfa-application-start.service';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -33,6 +33,7 @@ export class DFAApplicationMainDataService {
   private _business: string;
   private _doingBusinessAs: string;
   private _businessNumber: string;
+  private _authorizedRepresentative: AuthorizedRepresentative;
   public changeViewOrEdit: EventEmitter<string> = new EventEmitter<string>();
   public changeAppId: EventEmitter<string> = new EventEmitter<string>();
   public isApplicationLoadComplete: EventEmitter<string> = new EventEmitter<string>();
@@ -44,7 +45,7 @@ export class DFAApplicationMainDataService {
   public dfaApplicationMainCachedEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   public primaryContactValidatedEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   public otherContactsDataChangedEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
-
+  public authorizedRepresentativeDataChangedEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
     private cacheService: CacheService,
@@ -163,6 +164,14 @@ export class DFAApplicationMainDataService {
 
   public set contacts(value: Contacts) {
     this._contacts = value;
+  }
+
+  /* EMCRI-1066: Authorized Representative */
+  public get authorizedRepresentative(): AuthorizedRepresentative {
+    return this._authorizedRepresentative;
+  }
+  public set authorizedRepresentative(value: AuthorizedRepresentative) {
+    this._authorizedRepresentative = value;
   }
 
   public get cleanUpLog(): CleanUpLog {
@@ -285,12 +294,12 @@ export class DFAApplicationMainDataService {
 
     // 2024-09-16 EMCRI-663 waynezen; assign non-homogeneous fields to Contacts form
     let primaryContact: ApplicationContacts = this._contacts;
-
     return {
       id: this._applicationId,
       applicationDetails: this._applicationDetails,
       applicationContacts: primaryContact,
       otherContact: this._otherContacts,
+      authorizedRepresentative: this._authorizedRepresentative,
       deleteFlag: false
     };
   }

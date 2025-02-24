@@ -1,4 +1,4 @@
-<mat-card style="border: none !important; box-shadow: none !important;">
+<mat-card class="card-align" style="border: none !important; box-shadow: none !important;">
   <div *ngIf="type === 'profile'">
     <ng-container *ngTemplateOutlet="profile"></ng-container>
   </div>
@@ -12,10 +12,10 @@
       <!-- <p>
           Please check that your application information is correct before submitting. Missing required fields marked in red.
         </p> -->
-  
+
       <!-- <mat-card-content class="contentStyle mat-elevation-z8"> -->
-  
-  
+
+
       <!-- <div class="row info-detail">
             <div class="col-md-3">
               <span [ngClass]="{'missing-info': !(formCreationService.applicationDetailsForm$ | async)?.value?.legalName || (formCreationService.applicationDetailsForm$ | async)?.controls.legalName.invalid}"><b>Indigenous Governing Body & Local Authority Legal Name</b>:</span>
@@ -114,10 +114,10 @@
             </div>
           </div>
           <br /><br /> -->
-  
+
       <div class="page">
-  
-  
+
+
         <br />
         <div style="width:100%;border:1px solid gray;">
           <div class="row justify-content-between">
@@ -136,7 +136,7 @@
                       .legalName : "Enter required information"
                       }}
                     </span>
-  
+
                   </td>
                 </tr>
                 <tr>
@@ -159,7 +159,8 @@
                       [ngClass]="{'missing-info':  !(formCreationService.applicationDetailsForm$ | async)?.value?.damageToDate} ">
                       {{
                       (formCreationService.applicationDetailsForm$ | async)?.value
-                      .damageToDate ? ('Ends ' + ((formCreationService.applicationDetailsForm$ | async).value.damageToDate
+                      .damageToDate ? ('Ends ' + ((formCreationService.applicationDetailsForm$ |
+                      async).value.damageToDate
                       |
                       date: "MM/dd/yyyy")) + '. ' : 'Enter required end date.'
                       }}</span>
@@ -181,9 +182,8 @@
                 <tr>
                   <td class="record-title"> Cause of Damage </td>
                   <td>
-                    
-                    <span
-                      [ngClass]="{'missing-info': !(causeOfDamage)}">
+
+                    <span [ngClass]="{'missing-info': !(causeOfDamage)}">
                       {{
                       causeOfDamage ? causeOfDamage : "At least one cause of damage is required"
                       }}
@@ -235,7 +235,7 @@
                     </td>
                   </tr>
                 </div>
-  
+
               </table>
             </div>
             <div class="col-md-1" *ngIf="allowEdit">
@@ -245,14 +245,14 @@
               </button>
             </div>
           </div>
-  
-  
+
+
         </div>
         <br />
         <div style="width:100%;border:1px solid gray;">
           <div class="row justify-content-between">
             <div class="col-md-11 card-heading">
-  
+
               <table cellspacing="0" cellpadding="0" style="border: none;">
                 <tr>
                   <td class="record-title">Doing Business As (DBA) Name </td>
@@ -278,7 +278,7 @@
                     </span>
                   </td>
                 </tr>
-  
+
                 <tr>
                   <td width="50%">
                     <p><u><strong>Mailing Address</strong></u> </p>
@@ -295,13 +295,13 @@
                       .addressLine1 : "Enter required information"
                       }}
                     </span>
-  
+
                   </td>
                 </tr>
                 <tr>
                   <td class="record-title"> Address Line 2 </td>
                   <td>
-  
+
                     <span>
                       {{
                       (formCreationService.contactsForm$ | async)?.value
@@ -314,7 +314,7 @@
                 <tr>
                   <td class="record-title"> City </td>
                   <td>
-  
+
                     <span
                       [ngClass]="{'missing-info': !(formCreationService.contactsForm$ | async)?.value?.community || (formCreationService.contactsForm$ | async)?.controls.community.invalid}">
                       {{
@@ -351,7 +351,7 @@
                     </span>
                   </td>
                 </tr>
-  
+
                 <tr>
                   <td width="50%">
                     <p><u><strong>Primary Contact Details</strong></u> </p>
@@ -467,9 +467,9 @@
                     </span>
                   </td>
                 </tr>
-  
+
               </table>
-  
+
             </div>
             <div class="col-md-1" *ngIf="allowEdit">
               <button class="edit-image" mat-icon-button aria-label="Edit" (click)="navigateToStep(1)">
@@ -477,9 +477,9 @@
               </button>
             </div>
           </div>
-  
+
           <p class="card-heading"><u><strong>Additional Contact Details</strong></u> </p>
-  
+
           <div class="contacts-container">
             <table class="contacts" style="width:95%" *ngIf="otherContactsDataSource.getValue().length > 0">
               <thead>
@@ -505,13 +505,13 @@
               </tbody>
             </table>
           </div>
- 
+
         </div>
 
         <div style="width:100%;border:1px solid gray;">
           <div class="row justify-content-between">
             <div class="col-md-11 card-heading">
-        
+
               <table cellspacing="0" cellpadding="0" style="border: none;"
                 *ngIf="otherContactsDataSource.getValue()?.length == 0">
                 <tr>
@@ -526,12 +526,199 @@
             </div>
           </div>
         </div>
-        
-        </div>
-      <!-- </mat-card-content> -->
-  
+      </div>
     </div>
 
-</ng-template>
+    <!-- EMCRI-1066 -->
+    <div style="width:100%;border:1px solid gray;">
+      <mat-card-content class="card-content-align">
+        <form [formGroup]="authorizedRepresentativeForm" (change)="validateAuthorizedRepresentative()">
+          <div>
+            <ng-container>
+              <br>
 
+              <div class="row">
+                <p class="sub-heading" style="font-size: 15px">
+                  Authorized Representative<span style="color:red">*</span>
+                </p>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <mat-form-field appearance="outline">
+                        <mat-label>First Name</mat-label>
+                        <input formControlName="firstName" matInput placeholder="First Name" required maxlength="49" />
+                        <mat-error *ngIf="
+                      authorizedRepresentativeForm.get('firstName').invalid &&
+                      authorizedRepresentativeForm.get('firstName').hasError('required') &&
+                      authorizedRepresentativeForm.get('firstName').touched
+                    ">
+                          First Name is required</mat-error>
+                        <mat-error *ngIf="
+                      authorizedRepresentativeForm.get('firstName').invalid &&
+                      authorizedRepresentativeForm.get('firstName').hasError('maxLength')
+                    ">
+                          Maximum length is 49 characters</mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Last Name</mat-label>
+                        <input formControlName="lastName" matInput placeholder="Last Name" required maxlength="49" />
+                        <mat-error *ngIf="
+                      authorizedRepresentativeForm.get('lastName').invalid &&
+                      authorizedRepresentativeForm.get('lastName').hasError('required') &&
+                      authorizedRepresentativeForm.get('lastName').touched
+                    ">
+                          Last Name is required</mat-error>
+                        <mat-error *ngIf="
+                      authorizedRepresentativeForm.get('lastName').invalid &&
+                      authorizedRepresentativeForm.get('lastName').hasError('maxLength')
+                    ">
+                          Maximum length is 49 characters</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Business Phone</mat-label>
+                        <input formControlName="businessPhone"
+                          matInput
+                          required
+                          placeholder="Business Phone"
+                          mask="(000) 000-0000"
+                        />
+                          <mat-error
+                          *ngIf="
+                            authorizedRepresentativeForm.get('businessPhone').invalid &&
+                            authorizedRepresentativeForm.get('businessPhone').hasError('required') &&
+                            authorizedRepresentativeForm.get('businessPhone').touched
+                          "
+                        >
+                         Business Phone is required</mat-error
+                        >
+                        <mat-error
+                          *ngIf="
+                            authorizedRepresentativeForm.get('businessPhone').invalid &&
+                            authorizedRepresentativeForm.get('businessPhone').hasError('incorrectLength')
+                          "
+                        >
+                          Business Phone must have 10 digits</mat-error
+                        >
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input formControlName="email" required matInput placeholder="Email" type="email" maxlength="100" />
+                        <mat-error
+                          *ngIf="
+                            authorizedRepresentativeForm.get('email').invalid &&
+                            authorizedRepresentativeForm.get('email').hasError('required') &&
+                            authorizedRepresentativeForm.get('email').touched
+                          "
+                        >
+                          Email is required</mat-error
+                        >
+                        <mat-error
+                        *ngIf="
+                          authorizedRepresentativeForm.get('email').invalid
+                        "
+                      >
+                        Invalid email address</mat-error
+                      >
+                        <mat-error
+                          *ngIf="
+                            authorizedRepresentativeForm.get('email').invalid &&
+                            authorizedRepresentativeForm.get('email').hasError('maxLength')
+                          "
+                        >
+                          Maximum length is 100 characters</mat-error
+                        >
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-3">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Position Title</mat-label>
+                        <input formControlName="positionTitle" matInput placeholder="Position Title" maxlength="100"/>
+                        <mat-error
+                          *ngIf="
+                            authorizedRepresentativeForm.get('positionTitle').invalid &&
+                            authorizedRepresentativeForm.get('positionTitle').hasError('required') &&
+                            authorizedRepresentativeForm.get('positionTitle').touched
+                          "
+                        >
+                          Job Title is required</mat-error
+                        >
+                        <mat-error
+                          *ngIf="
+                            authorizedRepresentativeForm.get('positionTitle').invalid &&
+                            authorizedRepresentativeForm.get('positionTitle').hasError('maxLength')
+                          "
+                        >
+                          Maximum length is 100 characters</mat-error
+                        >
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <p>
+                        I am duly authorized to submit this application on behalf of the represented Indigenous Governing Body or Local Authority.
+                        <span style="color:red">*</span>
+                      </p>
+                      <mat-radio-group formControlName="firstDeclaration" class="primary-radio-group horizontal-radio-group" required
+                        aria-label="Select an option">
+                        <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <mat-error *ngIf="
+                        authorizedRepresentativeForm.get('firstDeclaration').invalid &&
+                        authorizedRepresentativeForm.get('firstDeclaration').hasError('required') &&
+                        authorizedRepresentativeForm.get('firstDeclaration').touched">
+                        Authorization declaration is required
+                      </mat-error>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <p>
+                        I confirm, on behalf of the represented Indigenous Governing Body or Local Authority, that the information contained in this application is accurate.
+                        <span style="color:red">*</span>
+                      </p>
+                      <mat-radio-group formControlName="secondDeclaration" class="primary-radio-group horizontal-radio-group" required
+                        aria-label="Select an option">
+                        <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <mat-error *ngIf="
+                        authorizedRepresentativeForm.get('secondDeclaration').invalid &&
+                        authorizedRepresentativeForm.get('secondDeclaration').hasError('required') &&
+                        authorizedRepresentativeForm.get('secondDeclaration').touched">
+                        Accurate information declaration is required
+                      </mat-error>
+                    </div>
+                  </div>
+                  <br />
+
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </form>
+      </mat-card-content>
+    </div>
+  </ng-template>
 </mat-card>

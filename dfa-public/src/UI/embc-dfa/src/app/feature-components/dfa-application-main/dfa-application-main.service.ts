@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { FullTimeOccupant, DfaApplicationMain, OtherContact, SecondaryApplicant } from 'src/app/core/model/dfa-application-main.model';
+import { FullTimeOccupant, DfaApplicationMain, OtherContact, SecondaryApplicant, AuthorizedRepresentative } from 'src/app/core/model/dfa-application-main.model';
 import { DFAApplicationMainMappingService } from './dfa-application-main-mapping.service';
 import { DFAApplicationMainDataService } from './dfa-application-main-data.service';
 import { Observable } from 'rxjs';
@@ -10,6 +10,7 @@ export class DFAApplicationMainService {
   private _fullTimeOccupants: Array<FullTimeOccupant> = [];
   private _otherContacts: Array<OtherContact> = [];
   private _secondaryApplicants: Array<SecondaryApplicant> = [];
+  private _authorizedRepresentative: AuthorizedRepresentative;
 
   constructor(
     private dfaApplicationMainMapping: DFAApplicationMainMappingService,
@@ -96,6 +97,29 @@ export class DFAApplicationMainService {
     this.dfaApplicationMainDataService.secondaryApplicants = this.secondaryApplicants;
   }
 
+  /* EMCRI-1066: Authorized Representative */
+  public get authorizedRepresentative(): AuthorizedRepresentative {
+    return this._authorizedRepresentative;
+  }
+
+  public set authorizedRepresentative(value: AuthorizedRepresentative) {
+    this._authorizedRepresentative = value;
+  } 
+
+  public setAuthorizedRepresentative(authorizedRep: AuthorizedRepresentative): void {
+    const authorizedRepresentative: AuthorizedRepresentative = {
+      firstName: authorizedRep.firstName,
+      lastName: authorizedRep.lastName,
+      email: authorizedRep.email,
+      businessPhone: authorizedRep.businessPhone,
+      positionTitle: authorizedRep.positionTitle,
+      firstDeclaration: authorizedRep.firstDeclaration,
+      secondDeclaration: authorizedRep.secondDeclaration
+    };
+    this.authorizedRepresentative = authorizedRepresentative;
+    this.dfaApplicationMainDataService.authorizedRepresentative = this.authorizedRepresentative;
+  }
+  
   public upsertApplication(updatedApplication: DfaApplicationMain): Observable<string> {
     return this.applicationService.applicationUpdateApplication({ body: updatedApplication });
   }

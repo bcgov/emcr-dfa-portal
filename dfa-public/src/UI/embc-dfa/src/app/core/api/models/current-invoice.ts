@@ -11,4 +11,5 @@ export type CurrentInvoice = Invoice & {
 'isErrorInStatus'?: boolean;
 'isHidden'?: boolean;
 'statusColor'?: string;
+'claimDecision'?: string;
 };

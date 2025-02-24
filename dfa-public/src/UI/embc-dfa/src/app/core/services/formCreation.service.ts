@@ -17,7 +17,7 @@ import { InsuranceOption } from 'src/app/core/api/models';
 import { ApplicationDetailsForm, DamagedPropertyAddressForm, DamagedPropertyAddress, SignAndSubmit, SupportingDocuments, DamagedRoomsForm,
   FullTimeOccupantsForm, SecondaryApplicantsForm, OtherContactsForm,
   CleanUpLogForm, SignAndSubmitForm, SupportingDocumentsForm, CleanUpLog, CleanUpLogItemsForm, SecondaryApplicant, FullTimeOccupant, OtherContact, CleanUpLogItem, DamagedRoom,  
-  ApplicationDetails, ContactsForm, Contacts} from '../model/dfa-application-main.model';
+  ApplicationDetails, ContactsForm, Contacts, AuthorizedRepresentative, AuthorizedRepresentativeForm} from '../model/dfa-application-main.model';
 import { CustomValidationService } from './customValidation.service';
 import { FileUpload, FileUploadsForm, ProjectAmendment, ProjectAmendmentForm, RecoveryPlan, RecoveryPlanForm } from '../model/dfa-project-main.model';
 import { FileUploadClaim, FileUploadsClaimForm, RecoveryClaim, RecoveryClaimForm } from '../model/dfa-claim-main.model';
@@ -32,6 +32,8 @@ export class FormCreationService {
   public appTypeInsuranceFormValidityChange: EventEmitter<string>;
   public signaturesChanged: EventEmitter<UntypedFormGroup>;
   public AppTypeInsuranceData: AppTypeInsurance;
+  /* EMCRI-1066 */
+  public authorizedRepresentativeChanged: EventEmitter<UntypedFormGroup>;
 
   restrictionForm: BehaviorSubject<UntypedFormGroup | undefined> =
     new BehaviorSubject(
@@ -349,7 +351,7 @@ export class FormCreationService {
 
   invoiceForm$: Observable<UntypedFormGroup | undefined> =
     this.invoiceForm.asObservable();
-
+        
   constructor(
     private formBuilder: UntypedFormBuilder,
     private customValidator: CustomValidationService
@@ -360,7 +362,22 @@ export class FormCreationService {
     this.smallBusinessOptionChanged = new EventEmitter<any>();
     this.appTypeInsuranceFormValidityChange = new EventEmitter<string>();
     this.signaturesChanged = new EventEmitter<UntypedFormGroup>;
+    this.authorizedRepresentativeChanged = new EventEmitter<UntypedFormGroup>;
   }
+
+  /* EMCRI-1066: Authorized Representative */
+  authorizedRepresentativeForm: BehaviorSubject<UntypedFormGroup | undefined> =
+    new BehaviorSubject(
+      this.formBuilder.group(
+       new AuthorizedRepresentativeForm(
+         new AuthorizedRepresentative(),
+         this.customValidator
+       )
+     )
+   );
+
+  authorizedRepresentativeForm$: Observable<UntypedFormGroup | undefined> =
+    this.authorizedRepresentativeForm.asObservable();
 
   getPersonalDetailsForm(): Observable<UntypedFormGroup> {
     return this.personalDetailsForm$;
@@ -810,4 +827,25 @@ export class FormCreationService {
       )
     );
   }
+
+  /* EMCRI-1066: Authorized Representative */
+  getAuthorizedRepresentativeForm():Observable<UntypedFormGroup> {
+    return this.authorizedRepresentativeForm$;
+  }
+
+  setAuthorizedRepresentativeForm(authorizedRepresentativeForm: UntypedFormGroup): void {
+    this.authorizedRepresentativeForm.next(authorizedRepresentativeForm);
+  }
+
+  clearAuthorizedRepresentativeData(): void {
+    this.authorizedRepresentativeForm.next(
+      this.formBuilder.group(
+        new AuthorizedRepresentativeForm(
+          new AuthorizedRepresentative,
+          this.customValidator
+        )
+      )
+    )
+  }
+
 }

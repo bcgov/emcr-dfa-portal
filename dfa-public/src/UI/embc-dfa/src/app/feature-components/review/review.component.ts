@@ -1,5 +1,5 @@
 import { ValidateInsuranceOption } from './../../sharedModules/forms/dfa-prescreening-forms/prescreening/prescreening.component';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, NgModule, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, Subscription, mapTo,BehaviorSubject, interval } from 'rxjs';
 import { NavigationExtras, Router } from '@angular/router';
 import { FormCreationService } from '../../core/services/formCreation.service';
@@ -10,18 +10,21 @@ import {
 import { ApplicantOption, DfaApplicationMain, FarmOption, FileCategory, FileUpload, InsuranceOption, RoomType, SmallBusinessOption } from 'src/app/core/api/models';
 import { MatTableDataSource } from '@angular/material/table';
 import { DFAApplicationMainDataService } from '../dfa-application-main/dfa-application-main-data.service';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ContactDetails } from 'src/app/core/model/profile.model';
-import { OtherContactService } from 'src/app/core/api/services';
+import { ApplicationService, OtherContactService } from 'src/app/core/api/services';
 import { CacheService } from 'src/app/core/services/cache.service';
-import { ContactsForm, ApplicationDetails, OtherContact } from 'src/app/core/model/dfa-application-main.model';
+import { ContactsForm, ApplicationDetails, OtherContact, AuthorizedRepresentativeForm, AuthorizedRepresentative } from 'src/app/core/model/dfa-application-main.model';
+//import { AuthorizedRepresentativeService } from 'src/app/core/api/services/authorized-representative.service';
+import { DFAApplicationMainMappingService } from '../dfa-application-main/dfa-application-main-mapping.service';
+import { CustomValidationService } from 'src/app/core/services/customValidation.service';
 
 @Component({
   selector: 'app-review',
   templateUrl: './review.component.html',
   styleUrls: ['./review.component.scss']
 })
-export class ReviewComponent implements OnInit {
+export class ReviewComponent implements OnInit, OnDestroy {
   @Output() captchaPassed = new EventEmitter<CaptchaResponse>();
   // @Input() parentApi !: any;
   @Input() type: string;
@@ -65,6 +68,7 @@ export class ReviewComponent implements OnInit {
   isGeneral: boolean = false;
   isCorporate: boolean = false;
   isLandlord: boolean = false;
+  isReadOnly: boolean = false;
   insuranceOptionName: string = "";
   appTypeInsuranceForm: UntypedFormGroup;
   appTypeInsuranceForm$: Subscription;
@@ -83,13 +87,28 @@ export class ReviewComponent implements OnInit {
   contacts:ContactDetails[]= [];
   otherContactsForm: UntypedFormGroup;
   otherContactsForm$: Subscription;
-  
-  constructor(
-    private router: Router,
-    public formCreationService: FormCreationService,private otherContactsService: OtherContactService,
-    private dfaApplicationMainDataService: DFAApplicationMainDataService,private cacheService: CacheService
-  ) {
 
+  /* EMCRI-1066 */
+  authorizedRepresentativeForm: UntypedFormGroup;
+  authorizedRepresentativeForm$: Subscription;
+
+  //authorizedRepDataSource = new BehaviorSubject<AuthorizedRepresentative>(new AuthorizedRepresentative);
+  authorizedRepresentative: AuthorizedRepresentative;
+  authorizedRepColumnsToDisplay = ['firstName', 'lastName', 'businessPhone', 'email', 'positionTitle', 'firstDeclaration', 'secondDeclaration'];
+
+
+  constructor(
+    public customValidator: CustomValidationService,
+    private router: Router,
+    public formCreationService: FormCreationService, 
+    public formBuilder: FormBuilder,
+    private otherContactsService: OtherContactService,
+    private dfaApplicationMainDataService: DFAApplicationMainDataService,
+    private applicationService: ApplicationService,
+    private dfaApplicationMainMapping: DFAApplicationMainMappingService,
+    //private authorizedRepresentativeService: AuthorizedRepresentativeService, 
+    private cacheService: CacheService
+  ) {
     this.appTypeInsuranceForm$ = this.formCreationService
       .getAppTypeInsuranceForm()
       .subscribe((appTypeInsurance) => {
@@ -123,17 +142,48 @@ export class ReviewComponent implements OnInit {
                 this.insuranceOptionName = application.appTypeInsurance.insuranceOption;
                 break;
             }
-           }
+          }
         });
       });
+
+    this.isReadOnly = false;
+    this.setViewOrEditControls();
   }
 
   mySubscription: Subscription
 
-
   ngOnInit(): void {
+
+    /* EMCRI-1066: Authorized Representative */
+    this.authorizedRepresentativeForm$ = this.formCreationService
+      .getAuthorizedRepresentativeForm()
+      .subscribe((authorizedRepresentativeDetails) => {
+        this.authorizedRepresentativeForm = authorizedRepresentativeDetails;
+        this.setViewOrEditControls();
+        this.dfaApplicationMainDataService.authorizedRepresentative = {
+          firstName: null,
+          lastName: null,
+          businessPhone: null,
+          email: null,
+          positionTitle: null,
+          firstDeclaration: null,
+          secondDeclaration: null
+        };
+      })
+
+    this.dfaApplicationMainDataService.authorizedRepresentativeDataChangedEvent.subscribe((changed) => {
+      if (changed) {
+        this.authorizedRepresentative = this.dfaApplicationMainDataService.authorizedRepresentative;
+      }
+    });
+      
+    this.getAuthorizedRepresentativeForApplication(
+      this.dfaApplicationMainDataService.getApplicationId()
+    );
+
     this.cacheService.set('otherContacts',undefined);
-    
+    this.setViewOrEditControls();
+
     this.navigationExtras = { state: { parentPageName: this.parentPageName } };
     if (this.currentFlow === 'verified-registration') {
       this.captchaPassed.emit({
@@ -160,6 +210,7 @@ export class ReviewComponent implements OnInit {
         this.primaryContactValidated = verifiedornot;
       }
     });
+
 
 
     var appForm = this.formCreationService.applicationDetailsForm.value;
@@ -247,13 +298,6 @@ export class ReviewComponent implements OnInit {
         mapTo(_secondaryApplicantsFormArray.getRawValue())
         ).subscribe(data => this.secondaryApplicantsDataSource.data = _secondaryApplicantsFormArray.getRawValue());
 
-    // subscribe to changes in other contacts
-    // const _otherContactsFormArray = this.formCreationService.otherContactsForm.value.get('otherContacts');
-    // _otherContactsFormArray.valueChanges
-    //   .pipe(
-    //     mapTo(_otherContactsFormArray.getRawValue())
-    //     ).subscribe(data => this.otherContactsDataSource.data = _otherContactsFormArray.getRawValue());
-
     // subscribe to changes in clean up logs
     const _cleanUpWorkFormArray = this.formCreationService.cleanUpLogItemsForm.value.get('cleanuplogs');
     _cleanUpWorkFormArray.valueChanges
@@ -289,6 +333,37 @@ export class ReviewComponent implements OnInit {
       //  _fileUploadsFormArray?.value?.filter(x =>
       //    x.fileType === this.FileCategories.Cleanup && x.deleteFlag === false)
     })
+
+/*     const _authorizedRepresentativeForm = this.formCreationService.authorizedRepresentativeForm.value.get('authorizedRepresentative');
+    _authorizedRepresentativeForm.valueChanges
+    .pipe(mapTo(_authorizedRepresentativeForm.value)
+  ).subscribe(data => {
+    this.authorizedRepDataSource.data = 
+  }) */
+
+
+    this.cacheService.set(
+      'authorizedRepresentative',
+      this.dfaApplicationMainDataService.authorizedRepresentative ?? new AuthorizedRepresentative()
+    );
+  }
+
+  getAuthorizedRepresentativeForApplication(applicationId: string) {
+    if (applicationId) {
+      this.applicationService
+      .applicationGetApplicationMain({applicationId: applicationId})
+      .subscribe({
+        next: (dfaApplicationMain) => {
+          this.authorizedRepresentative = dfaApplicationMain?.authorizedRepresentative ?? new AuthorizedRepresentative();
+          this.dfaApplicationMainMapping.mapDFAApplicationMainAuthorizedRepresentative(
+            dfaApplicationMain
+          );
+        },
+        error: (error) => {
+          console.error(error);
+        }
+      });
+    }
   }
 
   navigateToStep(stepIndex: number) {
@@ -332,4 +407,56 @@ export class ReviewComponent implements OnInit {
     return false;
   }
 
+  setViewOrEditControls() {
+    if (!this.authorizedRepresentativeForm) return;
+    if (this.isReadOnly) {
+      this.authorizedRepresentativeForm.controls.firstName.disable();
+      this.authorizedRepresentativeForm.controls.lastName.disable();
+      this.authorizedRepresentativeForm.controls.businessPhone.disable();
+      this.authorizedRepresentativeForm.controls.email.disable();
+      this.authorizedRepresentativeForm.controls.positionTitle.disable();
+      this.authorizedRepresentativeForm.controls.firstDeclaration.disable();
+      this.authorizedRepresentativeForm.controls.secondDeclaration.disable();
+    } else {
+      this.authorizedRepresentativeForm.controls.firstName.enable();
+      this.authorizedRepresentativeForm.controls.lastName.enable();
+      this.authorizedRepresentativeForm.controls.businessPhone.enable();
+      this.authorizedRepresentativeForm.controls.email.enable();
+      this.authorizedRepresentativeForm.controls.positionTitle.enable();
+      this.authorizedRepresentativeForm.controls.firstDeclaration.enable();
+      this.authorizedRepresentativeForm.controls.secondDeclaration.enable();
+    }
+  }
+
+  validateAuthorizedRepresentative(){
+    this.formCreationService.authorizedRepresentativeChanged.emit(this.authorizedRepresentativeForm);
+  }
+
+  updateAuthorizedRepresentativeOnVisibility(): void {
+    this.authorizedRepresentativeForm
+      .get('authorizedRepresentative.firstName')
+      .updateValueAndValidity();
+    this.authorizedRepresentativeForm
+      .get('authorizedRepresentative.lastName')
+      .updateValueAndValidity();
+    this.authorizedRepresentativeForm
+      .get('authorizedRepresentative.businessPhone')
+      .updateValueAndValidity();
+    this.authorizedRepresentativeForm
+      .get('authorizedRepresentative.email')
+      .updateValueAndValidity();
+    this.authorizedRepresentativeForm
+      .get('authorizedRepresentative.positionTitle')
+      .updateValueAndValidity();
+    this.authorizedRepresentativeForm
+      .get('authorizedRepresentative.firstDeclaration')
+      .updateValueAndValidity();
+    this.authorizedRepresentativeForm
+      .get('authorizedRepresentative.secondDeclaration')
+      .updateValueAndValidity();  
+  }
+
+  ngOnDestroy(): void {
+    this.authorizedRepresentativeForm$.unsubscribe();
+  }
 }

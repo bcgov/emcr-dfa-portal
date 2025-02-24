@@ -402,6 +402,9 @@ namespace EMBC.DFA.API.Controllers
                 ApplicationContacts appContact = new ApplicationContacts();
                 appContact = mapper.Map<ApplicationContacts>(dfa_appapplication);
 
+                /* EMCRI-1066: Authorized Representative */
+                dfaApplicationMain.authorizedRepresentative = mapper.Map<AuthorizedRepresentative>(dfa_appapplication);
+
                 // 2024-09-24 EMCRI-663; get primary contact info
                 if (dfa_appapplication?._dfa_applicant_value != null)
                 {
@@ -604,6 +607,7 @@ namespace EMBC.DFA.API.Controllers
         public ApplicationContacts applicationContacts { get; set; }
         public ProfileVerification? ProfileVerification { get; set; }
         public OtherContact[]? OtherContact { get; set; }
+        public AuthorizedRepresentative? authorizedRepresentative { get; set; }
         public bool deleteFlag { get; set; }
         public bool notifyUser { get; set; }
     }
@@ -633,6 +637,13 @@ namespace EMBC.DFA.API.Controllers
         public string? otherDamageText { get; set; }
         public string StatusColor { get; set; }
         public bool IsProjectSubmission { get; set; }
+        public string? ARFirstName { get; set; }
+        public string? ARLastName { get; set; }
+        public string? ARBusinessPhone { get; set; }
+        public string? AREmail { get; set; }
+        public string? ARPositionTitle { get; set; }
+        public bool? ARFirstDeclaration { get; set; }
+        public bool? ARSecondDeclaration { get; set; }
     }
 
     public class ApplicantSubtypes

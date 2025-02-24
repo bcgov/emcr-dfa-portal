@@ -469,6 +469,20 @@ namespace EMBC.DFA.API.Controllers
         public ApplicationStageOptionSet? appStatus { get; set; }
     }
 
+    /// <summary>
+    /// Authorized Representative
+    /// </summary>
+    public class AuthorizedRepresentative
+    {
+        public string? firstName { get; set; }
+        public string? lastName { get; set; }
+        public string? businessPhone { get; set; }
+        public string? email { get; set; }
+        public string? positionTitle { get; set; }
+        public bool? firstDeclaration { get; set; }
+        public bool? secondDeclaration { get; set; }
+    }
+
     // 2024-09-16 EMCRI-663 waynezen
     public class ApplicationContacts
     {

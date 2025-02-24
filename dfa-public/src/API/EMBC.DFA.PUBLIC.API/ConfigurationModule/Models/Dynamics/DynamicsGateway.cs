@@ -248,7 +248,10 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     "dfa_incorporationnumber", "dfa_jurisdictionofincorporation", "dfa_statementofregistrationnumber", "dfa_bceidbusinessguid",
                     "dfa_businessmailingaddressline1", "dfa_businessmailingaddressline2", "dfa_businessmailingaddresscitytext",
                     "dfa_businessmailingaddressprovince", "dfa_businessmailingaddresspostalcode",
-                    "dfa_mailingaddresscanadapostverified", "dfa_toreceivesupportaccessingdamage"
+                    "dfa_mailingaddresscanadapostverified", "dfa_toreceivesupportaccessingdamage",
+                    /* EMCRI-1066: Authorized Representative */
+                    "dfa_arbusinessphone", "dfa_ardeclaration1", "dfa_ardeclaration2",
+                    "dfa_aremail", "dfa_arfirstname", "dfa_arlastname", "dfa_arpositiontitle"
                 },
                 Filter = $"dfa_appapplicationid eq {applicationId}"
             });
@@ -452,7 +455,10 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         "dfa_applicationstatusportal", "dfa_causeofdamageflood2", "dfa_causeofdamagestorm2",
                         "dfa_causeofdamagewildfire2", "dfa_causeofdamagelandslide2", "dfa_causeofdamageloss",
                         "dfa_causeofdamageother2", "dfa_receiveguidanceassessingyourinfra", "dfa_dateofdamageto",
-                        "dfa_eligiblegst"
+                        "dfa_eligiblegst", 
+                        /* EMCRI-1066: Authorized Representative */
+                        "dfa_arbusinessphone", "dfa_ardeclaration1", "dfa_ardeclaration2", 
+                        "dfa_aremail", "dfa_arfirstname", "dfa_arlastname", "dfa_arpositiontitle"
                     },
                     Filter = $"dfa_appapplicationid eq {appId}"
                 });
@@ -485,7 +491,14 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_causeofdamagestorm2 = objApp.dfa_causeofdamagestorm2,
                                    dfa_causeofdamagewildfire2 = objApp.dfa_causeofdamagewildfire2,
                                    dfa_receiveguidanceassessingyourinfra = objApp.dfa_receiveguidanceassessingyourinfra,
-                                   dfa_eligiblegst = objApp.dfa_eligiblegst
+                                   dfa_eligiblegst = objApp.dfa_eligiblegst,
+                                   dfa_arbusinessphone = objApp.dfa_arbusinessphone,
+                                   dfa_ardeclaration1 = objApp.dfa_ardeclaration1,
+                                   dfa_ardeclaration2 = objApp.dfa_ardeclaration2,
+                                   dfa_aremail = objApp.dfa_aremail,
+                                   dfa_arfirstname = objApp.dfa_arfirstname,
+                                   dfa_arlastname = objApp.dfa_arlastname,
+                                   dfa_arpositiontitle = objApp.dfa_arpositiontitle
                                }).AsEnumerable().OrderByDescending(m => DateTime.Parse(m.createdon));
 
                 return lstApps.FirstOrDefault();

@@ -4,6 +4,13 @@ import { StatusBar } from './status-bar';
 export interface CurrentApplication {
   applicationId?: string;
   applicationType?: string;
+  arBusinessPhone?: null | string;
+  arEmail?: null | string;
+  arFirstDeclaration?: null | boolean;
+  arFirstName?: null | string;
+  arLastName?: null | string;
+  arPositionTitle?: null | string;
+  arSecondDeclaration?: null | boolean;
   caseNumber?: string;
   damagedAddress?: string;
   dateFileClosed?: string;

@@ -1233,6 +1233,95 @@ export class SupportingDocumentsForm {
   }
 }
 
+/* EMCRI-1066: Authorized Representative */
+export class AuthorizedRepresentative {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  positionTitle?: string;
+  businessPhone?: string;
+  firstDeclaration?: boolean;
+  secondDeclaration?: boolean;
+}
+
+export class AuthorizedRepresentativeForm {
+  firstName = new UntypedFormControl();
+  lastName = new UntypedFormControl();
+  email = new UntypedFormControl();
+  positionTitle = new UntypedFormControl();
+  businessPhone = new UntypedFormControl();
+  firstDeclaration = new UntypedFormControl();
+  secondDeclaration = new UntypedFormControl();
+
+  constructor(
+    authorizedRepresentative: AuthorizedRepresentative,
+    customValidator: CustomValidationService
+  ) {
+
+    if (authorizedRepresentative.firstName) {
+      this.firstName.setValue(authorizedRepresentative.firstName);
+    }
+    this.firstName.setValidators([      
+      Validators.required,
+      customValidator
+        .maxLengthValidator(49)  // have to fit firstname and lastname and one space and comma into dfa_name
+        .bind(customValidator)
+    ]);
+
+    if (authorizedRepresentative.lastName) {
+      this.lastName.setValue(authorizedRepresentative.lastName);
+    }
+    this.lastName.setValidators([      
+      Validators.required,
+      customValidator
+        .maxLengthValidator(49)  // have to fit firstname and lastname and one space and comma into dfa_name
+        .bind(customValidator)
+    ]);
+
+    if (authorizedRepresentative.businessPhone) {
+      this.businessPhone.setValue(authorizedRepresentative.businessPhone);
+    }
+    this.businessPhone.setValidators([      
+      customValidator.maskedNumberLengthValidator().bind(customValidator),
+      Validators.required
+    ]);
+
+    if (authorizedRepresentative.email) {
+      this.email.setValue(authorizedRepresentative.email);
+    }
+    this.email.setValidators([      
+      Validators.required,
+      customValidator
+        .maxLengthValidator(100)
+        .bind(customValidator)
+    ]);
+
+    if (authorizedRepresentative.positionTitle) {
+      this.positionTitle.setValue(authorizedRepresentative.positionTitle);
+    }
+    this.positionTitle.setValidators([      
+      Validators.required,
+      customValidator
+        .maxLengthValidator(100)
+        .bind(customValidator)
+    ]);
+
+    if (authorizedRepresentative.firstDeclaration) {
+      this.firstDeclaration.setValue(authorizedRepresentative.firstDeclaration);
+    }
+    this.firstDeclaration.setValidators([      
+      Validators.required
+    ]);
+
+    if (authorizedRepresentative.secondDeclaration) {
+      this.secondDeclaration.setValue(authorizedRepresentative.secondDeclaration);
+    }
+    this.secondDeclaration.setValidators([      
+      Validators.required
+    ]);
+  }
+}
+
 export class SignAndSubmit {
   applicantSignature?: null | SignatureBlock;
   secondaryApplicantSignature?: null | SignatureBlock;
@@ -1278,5 +1367,6 @@ export interface DfaApplicationMain {
   applicationDetails?: ApplicationDetails;
   applicationContacts?: ApplicationContacts;
   otherContact?: OtherContact[];
+  authorizedRepresentative?: AuthorizedRepresentative;
   deleteFlag?: boolean;
 }

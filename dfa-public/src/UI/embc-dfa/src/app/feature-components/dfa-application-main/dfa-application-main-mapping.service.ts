@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { DfaApplicationMain, FullTimeOccupant, SecondaryApplicant, OtherContact, DamagedRoom, CleanUpLogItem } from 'src/app/core/model/dfa-application-main.model';
+import { DfaApplicationMain, FullTimeOccupant, SecondaryApplicant, OtherContact, DamagedRoom, CleanUpLogItem, AuthorizedRepresentative } from 'src/app/core/model/dfa-application-main.model';
 import { DFAApplicationMainDataService } from './dfa-application-main-data.service';
 import { FormCreationService } from '../../core/services/formCreation.service';
 
@@ -31,6 +31,14 @@ export class DFAApplicationMainMappingService {
     this.setContactDetails(dfaApplicationMain);
   }
 
+  mapDFAApplicationMainAuthorizedRepresentative(dfaApplicationMain: DfaApplicationMain): void {
+    this.dfaApplicationMainDataService.setDFAApplicationMain(dfaApplicationMain);
+    this.setExistingDFAApplicationMainAuthorizedRepresentative(dfaApplicationMain);
+  }
+
+  setExistingDFAApplicationMainAuthorizedRepresentative(dfaApplicationMain: DfaApplicationMain): void {
+    this.setAuthorizedRepresentativeDetails(dfaApplicationMain);
+  }
 
   private setApplicationDetails(dfaApplicationMain: DfaApplicationMain): void {
     let formGroup: UntypedFormGroup;
@@ -46,6 +54,7 @@ export class DFAApplicationMainMappingService {
       });
     this.dfaApplicationMainDataService.applicationDetails = dfaApplicationMain.applicationDetails;
     this.dfaApplicationMainDataService.contacts = dfaApplicationMain.applicationContacts;
+    this.dfaApplicationMainDataService.authorizedRepresentative = dfaApplicationMain.authorizedRepresentative ?? new AuthorizedRepresentative();
   }
 
   // EMCRI-663 waynezen
@@ -67,5 +76,27 @@ export class DFAApplicationMainMappingService {
      });
     //this.dfaApplicationMainDataService.applicationDetails = dfaApplicationMain.applicationDetails;
     this.dfaApplicationMainDataService.contacts = dfaApplicationMain.applicationContacts;
+  }
+  
+  /* EMCRI-1066: Authorized Representative */
+  private setAuthorizedRepresentativeDetails(dfaApplicationMain: DfaApplicationMain): void {
+    let formGroup: UntypedFormGroup;
+    this.formCreationService
+      .getAuthorizedRepresentativeForm()
+      .pipe(first())
+      .subscribe((authorizedRepresentative) => {
+        authorizedRepresentative.setValue({
+          ...dfaApplicationMain?.authorizedRepresentative,
+          firstName: dfaApplicationMain?.authorizedRepresentative?.firstName ?? null,
+          lastName: dfaApplicationMain?.authorizedRepresentative?.lastName ?? null,
+          businessPhone: dfaApplicationMain?.authorizedRepresentative?.businessPhone ?? null,
+          email: dfaApplicationMain?.authorizedRepresentative?.email ?? null,
+          positionTitle: dfaApplicationMain?.authorizedRepresentative?.positionTitle ?? null,
+          firstDeclaration: dfaApplicationMain?.authorizedRepresentative?.firstDeclaration === true ? 'true' : (dfaApplicationMain?.authorizedRepresentative?.firstDeclaration === false ? 'false' : null),
+          secondDeclaration: dfaApplicationMain?.authorizedRepresentative?.secondDeclaration === true ? 'true' : (dfaApplicationMain?.authorizedRepresentative?.secondDeclaration === false ? 'false' : null)
+        });
+        formGroup = authorizedRepresentative;
+      });
+    this.dfaApplicationMainDataService.authorizedRepresentative = dfaApplicationMain.authorizedRepresentative ?? new AuthorizedRepresentative();
   }
 }

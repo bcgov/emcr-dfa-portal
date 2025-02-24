@@ -35,8 +35,7 @@ import { LoginService } from '../../core/services/login.service';
   styleUrls: ['./dfa-application-main.component.scss']
 })
 export class DFAApplicationMainComponent
-  implements OnInit, AfterViewInit, AfterViewChecked
-{
+  implements OnInit, AfterViewInit, AfterViewChecked {
   @ViewChild('dfaApplicationMainStepper') dfaApplicationMainStepper: MatStepper;
   isEditable = true;
   steps: Array<ComponentMetaDataModel> = new Array<ComponentMetaDataModel>();
@@ -81,10 +80,16 @@ export class DFAApplicationMainComponent
   // 2024-10-11 EMCRI-809 waynezen;
   applicationDetailsForm$: Subscription;
   applicationDetailsForm: UntypedFormGroup;
-  applicationDetailsValid: boolean = false;  
+  applicationDetailsValid: boolean = false;
   contactsForm$: Subscription;
   contactsForm: UntypedFormGroup;
   contactsValid: boolean = false;
+
+  /* EMCRI-1066: Authorized Representative */
+  authorizedRepresentativeForm$: Subscription;
+  authorizedRepresentativeForm: UntypedFormGroup;
+  authorizedRepresentativeValid: boolean = false;
+
   primaryContactValidated: boolean = false;
 
   constructor(
@@ -125,12 +130,15 @@ export class DFAApplicationMainComponent
     this.formCreationService.clearContactsData();
     this.formCreationService.clearOtherContactsData();
 
+    /* EMCRI-1066: Authorized Representative */
+    this.formCreationService.clearAuthorizedRepresentativeData();
+
     this.vieworedit = this.dfaApplicationMainDataService.getViewOrEdit();
     this.steps = this.componentService.createDFAApplicationMainSteps();
-    
+
     //2024-10-11 EMCRI-820 waynezen;
     this.componentService.modifyDFAApplicationMainStepsforSubmitted(this.steps, this.vieworedit);
-    
+
     this.editstep = this.dfaApplicationMainDataService.getEditStep();
     //this.showStepper = true;
     this.dfaApplicationMainHeading = 'Create your Application'
@@ -138,11 +146,30 @@ export class DFAApplicationMainComponent
     // 2024-10-11 EMCRI-809 waynezen; listen for changes to validation status
     this.applicationDetailsForm$ = this.formCreationService.getApplicationDetailsForm().subscribe((applicationDetails) => {
       this.applicationDetailsForm = applicationDetails;
-      this.applicationDetailsValid = this.applicationDetailsForm.valid && applicationDetails.value.legalName!=null;
+      this.applicationDetailsValid = this.applicationDetailsForm.valid && applicationDetails.value.legalName != null;
     });
     this.contactsForm$ = this.formCreationService.getContactsForm().subscribe((contacts) => {
       this.contactsForm = contacts;
-      this.contactsValid = this.contactsForm.valid&& contacts.value.primaryContactValidated!=null;
+      this.contactsValid = this.contactsForm.valid && contacts.value.primaryContactValidated != null;
+    });
+
+    /* EMCRI-1066: Authorized Representative */
+    this.authorizedRepresentativeForm$ = this.formCreationService.getAuthorizedRepresentativeForm().subscribe((authorizedRepresentative) => {
+      this.authorizedRepresentativeForm = authorizedRepresentative;
+      this.authorizedRepresentativeValid = this.authorizedRepresentativeForm.valid && authorizedRepresentative.value
+      this.validateAuthorizedRepresentative();
+    })
+
+    this.formCreationService.authorizedRepresentativeChanged.subscribe(authorizedRepresentative => {
+      this.authorizedRepresentativeForm = authorizedRepresentative;
+      this.authorizedRepresentativeValid = this.authorizedRepresentativeForm.valid && authorizedRepresentative.value
+      this.validateAuthorizedRepresentative();
+    });
+
+    this.dfaApplicationMainDataService.authorizedRepresentativeDataChangedEvent.subscribe((changed) => {
+      if (changed) {
+        this.validateAuthorizedRepresentative()
+      }
     });
 
     this.dfaApplicationMainDataService.primaryContactValidatedEvent.subscribe((verifiedornot) => {
@@ -169,7 +196,7 @@ export class DFAApplicationMainComponent
   }
 
   ngAfterViewInit(): void {
-    
+
   }
 
   navigateToStep(stepIndex: number) {
@@ -197,9 +224,13 @@ export class DFAApplicationMainComponent
     let appForm = this.formCreationService.applicationDetailsForm.value;
     appForm.updateValueAndValidity();
     this.applicationDetailsValid = (appForm.disabled) ? true : appForm.valid;
-    
+
     let contactForm = this.formCreationService.contactsForm.value;
     this.contactsValid = contactForm.valid;
+
+    /* EMCRI-1066 */
+    let authorizedRepresentativeForm = this.formCreationService.authorizedRepresentativeForm.value;
+    this.authorizedRepresentativeValid = authorizedRepresentativeForm.valid;
 
     if (appForm && event.previouslySelectedIndex == 0) {
       this.setFormData('application-details');
@@ -207,6 +238,10 @@ export class DFAApplicationMainComponent
 
     if (contactForm && event.previouslySelectedIndex == 1) {
       this.setFormData('contacts');
+    }
+
+    if (authorizedRepresentativeForm && event.previouslySelectedIndex == 2) {
+      this.setFormData('review');
     }
   }
 
@@ -234,12 +269,12 @@ export class DFAApplicationMainComponent
    * @param component current component name
    */
   goForward(stepper: MatStepper, isLast: boolean, component: string): void {
-    
+
     if (component === 'application-details' || component === 'contacts') {
       this.setFormData(component);
       let application = this.dfaApplicationMainDataService.createDFAApplicationMainDTO();
       application.applicationDetails.appStatus = null; //to fix console error, actual status being set when user clicks submit/save button
-      this.dfaApplicationMainMapping.mapDFAApplicationMain(application);  
+      this.dfaApplicationMainMapping.mapDFAApplicationMain(application);
 
       // 2024-10-11 EMCRI-809 waynezen; force Application Details & Contacts screen to update validators
       // Modified the logic by removing if conditions as save button doesn't display
@@ -249,6 +284,9 @@ export class DFAApplicationMainComponent
 
       let contactForm = this.formCreationService.contactsForm.value;
       this.contactsValid = contactForm.valid;
+
+      let authorizedRepresentativeForm = this.formCreationService.authorizedRepresentativeForm.value;
+      this.authorizedRepresentativeValid = authorizedRepresentativeForm.valid;
 
       this.dfaApplicationMainStepper.selected.completed = true;
       //this.submitFile();
@@ -283,10 +321,10 @@ export class DFAApplicationMainComponent
         stepper.next();
         this.form.markAllAsTouched();
       },
-      error => {
-        console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
-      });
+        error => {
+          console.error(error);
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        });
     }
   }
 
@@ -306,13 +344,13 @@ export class DFAApplicationMainComponent
 
     if (isInsuranceTemplateUploaded == true
       && (this.isResidentialTenant == true ? (isIdentificationUploaded == true && isTenancyProofUploaded == true) : true)
-      && ((this.isSmallBusinessOwner == true  && this.isGeneral == true) ? (isT1GeneralIncomeTaxReturnUploaded == true && isFinancialStatementsUploaded == true) : true )
-      && ((this.isSmallBusinessOwner == true  && this.isCorporate == true) ? (isT2CorporateIncomeTaxReturnUploaded == true && isFinancialStatementsUploaded == true && isProofOfOwnershipUploaded) : true )
-      && ((this.isSmallBusinessOwner == true  && this.isLandlord == true) ? (isT1GeneralIncomeTaxReturnUploaded == true && isT776Uploaded == true && isResidentialTenancyAgreementUploaded == true) : true )
-      && ((this.isFarmOwner == true  && this.isGeneral == true) ? (isT1GeneralIncomeTaxReturnUploaded == true && isFinancialStatementsUploaded == true) : true )
-      && ((this.isFarmOwner == true  && this.isCorporate == true) ? (isT2CorporateIncomeTaxReturnUploaded == true && isFinancialStatementsUploaded == true && isProofOfOwnershipUploaded) : true )
-      && ((this.isCharitableOrganization == true) ? (isDirectorsListingUploaded == true && isRegistrationProofUploaded == true && isStructureAndPurposeUploaded) : true )
-      ) return true;
+      && ((this.isSmallBusinessOwner == true && this.isGeneral == true) ? (isT1GeneralIncomeTaxReturnUploaded == true && isFinancialStatementsUploaded == true) : true)
+      && ((this.isSmallBusinessOwner == true && this.isCorporate == true) ? (isT2CorporateIncomeTaxReturnUploaded == true && isFinancialStatementsUploaded == true && isProofOfOwnershipUploaded) : true)
+      && ((this.isSmallBusinessOwner == true && this.isLandlord == true) ? (isT1GeneralIncomeTaxReturnUploaded == true && isT776Uploaded == true && isResidentialTenancyAgreementUploaded == true) : true)
+      && ((this.isFarmOwner == true && this.isGeneral == true) ? (isT1GeneralIncomeTaxReturnUploaded == true && isFinancialStatementsUploaded == true) : true)
+      && ((this.isFarmOwner == true && this.isCorporate == true) ? (isT2CorporateIncomeTaxReturnUploaded == true && isFinancialStatementsUploaded == true && isProofOfOwnershipUploaded) : true)
+      && ((this.isCharitableOrganization == true) ? (isDirectorsListingUploaded == true && isRegistrationProofUploaded == true && isStructureAndPurposeUploaded) : true)
+    ) return true;
     else return false;
   }
 
@@ -344,32 +382,42 @@ export class DFAApplicationMainComponent
         //this.dfaApplicationMainDataService.otherContacts = 
         //this.otherContactsForm.get('otherContact').getRawValue()
         break;
-        case 'contacts':
-          // 2024-09-16 EMCRI-663 waynezen; new Contacts form
-          this.dfaApplicationMainDataService.contacts.doingBusinessAs = this.form.get('doingBusinessAs').value;
-          this.dfaApplicationMainDataService.contacts.businessNumber = this.form.get('businessNumber').value
-          this.dfaApplicationMainDataService.contacts.addressLine1 = this.form.get('addressLine1').value
-          this.dfaApplicationMainDataService.contacts.addressLine2 = this.form.get('addressLine2').value
-          this.dfaApplicationMainDataService.contacts.city = this.form.get('city').value
-          this.dfaApplicationMainDataService.contacts.community = this.form.get('community').value
-          this.dfaApplicationMainDataService.contacts.stateProvince = this.form.get('stateProvince').value
-          this.dfaApplicationMainDataService.contacts.postalCode = this.form.get('postalCode').value
-          this.dfaApplicationMainDataService.contacts.isDamagedAddressVerified = this.form.get('isDamagedAddressVerified').value;
-          this.dfaApplicationMainDataService.contacts.primaryContactSearch = this.form.get('primaryContactSearch').value
-          this.dfaApplicationMainDataService.contacts.guidanceSupport = this.form.get('guidanceSupport').value == 'true' ? true : (this.form.get('guidanceSupport').value == 'false' ? false : null);
-          this.dfaApplicationMainDataService.contacts.pcFirstName = this.form.get('pcFirstName').value
-          this.dfaApplicationMainDataService.contacts.pcLastName = this.form.get('pcLastName').value
-          this.dfaApplicationMainDataService.contacts.pcDepartment = this.form.get('pcDepartment').value
-          this.dfaApplicationMainDataService.contacts.pcBusinessPhone = this.form.get('pcBusinessPhone').value
-          this.dfaApplicationMainDataService.contacts.pcEmailAddress = this.form.get('pcEmailAddress').value
-          this.dfaApplicationMainDataService.contacts.pcCellPhone = this.form.get('pcCellPhone').value
-          this.dfaApplicationMainDataService.contacts.pcJobTitle = this.form.get('pcJobTitle').value        
-          this.dfaApplicationMainDataService.contacts.pcNotes = this.form.get('pcNotes').value;
+      case 'contacts':
+        // 2024-09-16 EMCRI-663 waynezen; new Contacts form
+        this.dfaApplicationMainDataService.contacts.doingBusinessAs = this.form.get('doingBusinessAs').value;
+        this.dfaApplicationMainDataService.contacts.businessNumber = this.form.get('businessNumber').value
+        this.dfaApplicationMainDataService.contacts.addressLine1 = this.form.get('addressLine1').value
+        this.dfaApplicationMainDataService.contacts.addressLine2 = this.form.get('addressLine2').value
+        this.dfaApplicationMainDataService.contacts.city = this.form.get('city').value
+        this.dfaApplicationMainDataService.contacts.community = this.form.get('community').value
+        this.dfaApplicationMainDataService.contacts.stateProvince = this.form.get('stateProvince').value
+        this.dfaApplicationMainDataService.contacts.postalCode = this.form.get('postalCode').value
+        this.dfaApplicationMainDataService.contacts.isDamagedAddressVerified = this.form.get('isDamagedAddressVerified').value;
+        this.dfaApplicationMainDataService.contacts.primaryContactSearch = this.form.get('primaryContactSearch').value
+        this.dfaApplicationMainDataService.contacts.guidanceSupport = this.form.get('guidanceSupport').value == 'true' ? true : (this.form.get('guidanceSupport').value == 'false' ? false : null);
+        this.dfaApplicationMainDataService.contacts.pcFirstName = this.form.get('pcFirstName').value
+        this.dfaApplicationMainDataService.contacts.pcLastName = this.form.get('pcLastName').value
+        this.dfaApplicationMainDataService.contacts.pcDepartment = this.form.get('pcDepartment').value
+        this.dfaApplicationMainDataService.contacts.pcBusinessPhone = this.form.get('pcBusinessPhone').value
+        this.dfaApplicationMainDataService.contacts.pcEmailAddress = this.form.get('pcEmailAddress').value
+        this.dfaApplicationMainDataService.contacts.pcCellPhone = this.form.get('pcCellPhone').value
+        this.dfaApplicationMainDataService.contacts.pcJobTitle = this.form.get('pcJobTitle').value
+        this.dfaApplicationMainDataService.contacts.pcNotes = this.form.get('pcNotes').value;
 
-          break;
+        break;
       case 'occupants':
         break;
+      //case 'review':
       default:
+        this.dfaApplicationMainDataService.authorizedRepresentative.businessPhone = this.authorizedRepresentativeForm.get('businessPhone')?.value;
+        this.dfaApplicationMainDataService.authorizedRepresentative.email = this.authorizedRepresentativeForm.get('email')?.value;
+        this.dfaApplicationMainDataService.authorizedRepresentative.firstDeclaration = this.authorizedRepresentativeForm.get('firstDeclaration')?.value == 'true' ? true : (this.authorizedRepresentativeForm.get('firstDeclaration')?.value == 'false' ? false : null);
+        this.dfaApplicationMainDataService.authorizedRepresentative.firstName = this.authorizedRepresentativeForm.get('firstName')?.value;
+        this.dfaApplicationMainDataService.authorizedRepresentative.lastName = this.authorizedRepresentativeForm.get('lastName')?.value;
+        this.dfaApplicationMainDataService.authorizedRepresentative.positionTitle = this.authorizedRepresentativeForm.get('positionTitle')?.value;
+        this.dfaApplicationMainDataService.authorizedRepresentative.secondDeclaration = this.authorizedRepresentativeForm.get('secondDeclaration')?.value == 'true' ? true : (this.authorizedRepresentativeForm.get('secondDeclaration')?.value == 'false' ? false : null);
+        break;
+      //default:
         break;
     }
   }
@@ -382,11 +430,11 @@ export class DFAApplicationMainComponent
   loadStepForm(index: number): void {
     switch (index) {
       case 0:
-         this.form$ = this.formCreationService
-           .getApplicationDetailsForm()
-           .subscribe((applicationDetails) => {
-             this.form = applicationDetails;
-           });
+        this.form$ = this.formCreationService
+          .getApplicationDetailsForm()
+          .subscribe((applicationDetails) => {
+            this.form = applicationDetails;
+          });
 
         break;
       case 1:
@@ -401,7 +449,7 @@ export class DFAApplicationMainComponent
   }
 
   saveAndBackToDashboard() {
-    
+
     this.isLoading = !this.isLoading;
     this.setFormData(this.steps[this.dfaApplicationMainStepper.selectedIndex]?.component.toString());
     let application = this.dfaApplicationMainDataService.createDFAApplicationMainDTO();
@@ -412,8 +460,8 @@ export class DFAApplicationMainComponent
     },
       error => {
         this.isLoading = !this.isLoading;
-      console.error(error);
-      document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        console.error(error);
+        document.location.href = 'https://dfa.gov.bc.ca/error.html';
       });
 
     //this.returnToDashboard();
@@ -423,6 +471,11 @@ export class DFAApplicationMainComponent
     this.dfaApplicationMainDataService.setApplicationId(null);
     // 2024-07-22 EMCRI-301 waynezen; new dashboard
     this.router.navigate(['/dfa-dashboard']);
+  }
+
+  validateAuthorizedRepresentative(){
+    let authorizedRepresentativeForm = this.formCreationService.authorizedRepresentativeForm.value;
+    this.authorizedRepresentativeValid = authorizedRepresentativeForm.valid;
   }
 
   submitFile(): void {
@@ -451,6 +504,7 @@ export class DFAApplicationMainComponent
           this.setFormData(this.steps[this.dfaApplicationMainStepper.selectedIndex]?.component.toString());
           let application = this.dfaApplicationMainDataService.createDFAApplicationMainDTO();
           application.applicationDetails.appStatus = ApplicationStageOptionSet.SUBMIT;
+          this.dfaApplicationMainMapping.mapDFAApplicationMain(application);
 
           this.dfaApplicationMainService.upsertApplication(application).subscribe(x => {
             this.isLoading = !this.isLoading;
@@ -464,9 +518,9 @@ export class DFAApplicationMainComponent
           },
             error => {
               this.isLoading = !this.isLoading;
-            console.error(error);
-            document.location.href = 'https://dfa.gov.bc.ca/error.html';
-          });
+              console.error(error);
+              document.location.href = 'https://dfa.gov.bc.ca/error.html';
+            });
         }
       });
   }

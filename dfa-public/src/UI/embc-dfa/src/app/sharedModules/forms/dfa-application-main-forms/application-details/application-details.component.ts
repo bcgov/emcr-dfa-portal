@@ -50,6 +50,8 @@ export default class PropertyDamageComponent implements OnInit, OnDestroy {
   formCreationService: FormCreationService;
   otherContactsForm: UntypedFormGroup;
   otherContactsForm$: Subscription;
+  authorizedRepresentativeForm: UntypedFormGroup;
+  authorizedRepresentativeForm$: Subscription;
   remainingLength: number = 200;
   todayDate = new Date().toISOString();
   public ApplicantOptions = ApplicantOption;
@@ -176,6 +178,24 @@ export default class PropertyDamageComponent implements OnInit, OnDestroy {
         this.applicationDetailsForm.updateValueAndValidity();
       });
 
+    /* EMCRI-1066: Authorized Representative */
+    this.authorizedRepresentativeForm$ = this.formCreationService
+      .getAuthorizedRepresentativeForm()
+      .subscribe((authorizedRepresentative) => {
+        this.authorizedRepresentativeForm = authorizedRepresentative;
+        //this.setViewOrEditControls();
+        this.dfaApplicationMainDataService.authorizedRepresentative = {
+          firstName: null,
+          lastName: null,
+          businessPhone: null,
+          email: null,
+          positionTitle: null,
+          firstDeclaration: null,
+          secondDeclaration: null
+        }
+          
+      });
+      
     this.otherContactsForm$ = this.formCreationService
       .getOtherContactsForm()
       .subscribe((otherContacts) => {
@@ -300,8 +320,7 @@ export default class PropertyDamageComponent implements OnInit, OnDestroy {
     });
 
     this.getApplicationDetails(this.dfaApplicationMainDataService.getApplicationId());
-    this.getOtherContactsForApplication(this.dfaApplicationMainDataService.getApplicationId());
-    
+    this.getOtherContactsForApplication(this.dfaApplicationMainDataService.getApplicationId());    
 
     if (this.dfaApplicationMainDataService.getViewOrEdit() == 'viewOnly' || this.dfaApplicationMainDataService.getViewOrEdit() == 'view') {
       this.applicationDetailsForm.disable();
@@ -419,7 +438,8 @@ export default class PropertyDamageComponent implements OnInit, OnDestroy {
           }
 
           this.dfaApplicationMainMapping.mapDFAApplicationMain(dfaApplicationMain);
-          
+          this.dfaApplicationMainMapping.mapDFAApplicationMainAuthorizedRepresentative(dfaApplicationMain);
+
           var objSelected = this.ApplicantSubCategories.filter(m => m.subType == dfaApplicationMain.applicationDetails.applicantSubtype);
           if (objSelected && objSelected.length > 0) {
             this.onSelectApplicantSubType(objSelected[0]);

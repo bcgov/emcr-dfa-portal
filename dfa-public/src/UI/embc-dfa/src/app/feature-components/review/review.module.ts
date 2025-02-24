@@ -13,6 +13,16 @@ import { CaptchaV2Component } from 'src/app/core/components/captcha-v2/captcha-v
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { DashReviewRoutingModule } from './review-routing.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { DirectivesModule } from 'src/app/core/directives/directives.module';
+import { AddressFormsModule } from 'src/app/sharedModules/forms/address-forms/address-forms.module';
 
 @NgModule({
   declarations: [ReviewComponent, CaptchaV2Component],
@@ -27,7 +37,19 @@ import { DashReviewRoutingModule } from './review-routing.module';
     RecaptchaFormsModule,
     RecaptchaModule,
     ReactiveFormsModule,
-    DashReviewRoutingModule
+    DashReviewRoutingModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    DirectivesModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    MatSelectModule,
+    AddressFormsModule
   ],
   exports: [ReviewComponent]
 })

@@ -206,6 +206,14 @@ namespace EMBC.DFA.API.Mappers
                     s.applicationContacts.guidanceSupport.HasValue ?
                     (s.applicationContacts.guidanceSupport.Value == true ? (int?)YesNoOptionSet.Yes : (int?)YesNoOptionSet.No) :
                     null))
+                /* EMCRI-1066: Authorized Representative */
+                .ForMember(d => d.dfa_arbusinessphone, opts => opts.MapFrom(s => s.authorizedRepresentative.businessPhone))
+                .ForMember(d => d.dfa_aremail, opts => opts.MapFrom(s => s.authorizedRepresentative.email))
+                .ForMember(d => d.dfa_ardeclaration1, opts => opts.MapFrom(s => s.authorizedRepresentative.firstDeclaration))
+                .ForMember(d => d.dfa_arfirstname, opts => opts.MapFrom(s => s.authorizedRepresentative.firstName))
+                .ForMember(d => d.dfa_arlastname, opts => opts.MapFrom(s => s.authorizedRepresentative.lastName))
+                .ForMember(d => d.dfa_arpositiontitle, opts => opts.MapFrom(s => s.authorizedRepresentative.positionTitle))
+                .ForMember(d => d.dfa_ardeclaration2, opts => opts.MapFrom(s => s.authorizedRepresentative.secondDeclaration))
                 ;
 
             // 2024-09-16 EMCRI-663 waynezen; Contact form fields
@@ -310,6 +318,17 @@ namespace EMBC.DFA.API.Mappers
                 //.ForMember(d => d.primaryContactValidated, opts => opts.MapFrom(s => s.dfa_primarycontactverified == (int)YesNoOptionSet.Yes ? true : (s.dfa_primarycontactverified == (int)YesNoOptionSet.No ? false : (bool?)null)))
                 .ForMember(d => d.primaryContactValidated, opts => opts.MapFrom(s => s.dfa_primarycontactverified))
                 .ForMember(d => d.guidanceSupport, opts => opts.MapFrom(s => s.dfa_toreceivesupportaccessingdamage == (int)YesNoOptionSet.Yes ? true : (s.dfa_toreceivesupportaccessingdamage == (int)YesNoOptionSet.No ? false : (bool?)null)))
+                ;
+
+            /* EMCRI-1066: Authorized Representative */
+            CreateMap<dfa_appapplicationmain_retrieve, AuthorizedRepresentative>()
+                .ForMember(d => d.businessPhone, opts => opts.MapFrom(s => s.dfa_arbusinessphone))
+                .ForMember(d => d.email, opts => opts.MapFrom(s => s.dfa_aremail))
+                .ForMember(d => d.firstName, opts => opts.MapFrom(s => s.dfa_arfirstname))
+                .ForMember(d => d.lastName, opts => opts.MapFrom(s => s.dfa_arlastname))
+                .ForMember(d => d.positionTitle, opts => opts.MapFrom(s => s.dfa_arpositiontitle))
+                .ForMember(d => d.firstDeclaration, opts => opts.MapFrom(s => s.dfa_ardeclaration1))
+                .ForMember(d => d.secondDeclaration, opts => opts.MapFrom(s => s.dfa_ardeclaration2))
                 ;
 
             CreateMap<dfa_appapplicationmain_retrieve, SignAndSubmit>()
@@ -591,6 +610,13 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.otherDamageText, opts => opts.MapFrom(s => s.dfa_causeofdamageloss))
                 .ForMember(d => d.eligibleGST, opts => opts.MapFrom(s => s.dfa_eligiblegst))
                 .ForMember(d => d.IsProjectSubmission, opts => opts.MapFrom(s => CheckEligibilityForProjectSubmission(s.dfa_applicationcasebpfstages)))
+                .ForMember(d => d.ARBusinessPhone, opts => opts.MapFrom(s => s.dfa_arbusinessphone))
+                .ForMember(d => d.AREmail, opts => opts.MapFrom(s => s.dfa_aremail))
+                .ForMember(d => d.ARFirstDeclaration, opts => opts.MapFrom(s => s.dfa_ardeclaration1))
+                .ForMember(d => d.ARFirstName, opts => opts.MapFrom(s => s.dfa_arfirstname))
+                .ForMember(d => d.ARLastName, opts => opts.MapFrom(s => s.dfa_arlastname))
+                .ForMember(d => d.ARPositionTitle, opts => opts.MapFrom(s => s.dfa_arpositiontitle))
+                .ForMember(d => d.ARSecondDeclaration, opts => opts.MapFrom(s => s.dfa_ardeclaration2))
                 .ForMember(d => d.ApplicationId, opts => opts.MapFrom(s => s.dfa_appapplicationid));
 
             CreateMap<Controllers.Profile, ESS.Shared.Contracts.Events.RegistrantProfile>()
