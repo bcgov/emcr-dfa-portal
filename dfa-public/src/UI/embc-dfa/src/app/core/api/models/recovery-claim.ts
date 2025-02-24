@@ -14,7 +14,7 @@ export interface RecoveryClaim {
   claimStatus?: null | ClaimStageOptionSet;
   claimTotal?: null | string;
   eligiblePayable?: null | string;
-  firstClaimDeductible1000?: null | string;
+  lessFirst1000?: null | string;
   invoices?: null | Array<Invoice>;
   isFirstClaimApproved?: null | boolean;
   isThisFinalClaim?: null | boolean;

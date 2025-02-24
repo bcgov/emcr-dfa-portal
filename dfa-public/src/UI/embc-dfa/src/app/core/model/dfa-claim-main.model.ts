@@ -24,12 +24,12 @@ export class RecoveryClaim {
   claimEligibleGST?: null | string;
   claimTotal?: null | string;
   approvedClaimTotal?: null | string;
-  firstClaimDeductible1000?: null | string;
+  lessFirst1000?: null | string;
   approvedReimbursement?: null | string;
   eligiblePayable?: null | string;
   paidClaimAmount?: null | string;
   paidClaimDate?: null | string;
-  
+
 
   constructor(
     claimNumber?: null | string,
@@ -45,7 +45,7 @@ export class RecoveryClaim {
     claimEligibleGST?: null | string,
     claimTotal?: null | string,
     approvedClaimTotal?: null | string,
-    firstClaimDeductible1000?: null | string,
+    lessFirst1000?: null | string,
     approvedReimbursement?: null | string,
     eligiblePayable?: null | string,
     paidClaimAmount?: null | string,
@@ -67,7 +67,7 @@ export class RecoveryClaimForm {
   claimEligibleGST = new UntypedFormControl();
   claimTotal = new UntypedFormControl();
   approvedClaimTotal = new UntypedFormControl();
-  firstClaimDeductible1000 = new UntypedFormControl();
+  lessFirst1000 = new UntypedFormControl();
   approvedReimbursement = new UntypedFormControl();
   eligiblePayable = new UntypedFormControl();
   paidClaimAmount = new UntypedFormControl();
@@ -77,7 +77,7 @@ export class RecoveryClaimForm {
     recoveryClaim: RecoveryClaim,
     customValidator: CustomValidationService
   ) {
-    
+
     if (recoveryClaim.claimNumber) {
       this.claimNumber.setValue(recoveryClaim.claimNumber);
     }
@@ -170,13 +170,13 @@ export class RecoveryClaimForm {
     }
     this.approvedClaimTotal.setValidators(null);
 
-    if (recoveryClaim.firstClaimDeductible1000) {
-      this.firstClaimDeductible1000.setValue(recoveryClaim.firstClaimDeductible1000);
+    if (recoveryClaim.lessFirst1000) {
+      this.lessFirst1000.setValue(recoveryClaim.lessFirst1000);
     }
     else {
-      this.firstClaimDeductible1000.setValue(0);
+      this.lessFirst1000.setValue(0);
     }
-    this.firstClaimDeductible1000.setValidators(null);
+    this.lessFirst1000.setValidators(null);
 
     if (recoveryClaim.approvedReimbursement) {
       this.approvedReimbursement.setValue(recoveryClaim.approvedReimbursement);

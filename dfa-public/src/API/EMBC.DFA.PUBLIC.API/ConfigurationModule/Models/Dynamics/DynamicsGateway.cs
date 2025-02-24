@@ -1282,7 +1282,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_paidclaimamount = objApp.dfa_paidclaimamount,
                                    dfa_claimbpfstages = objApp.dfa_claimbpfstages,
                                    dfa_claimbpfsubstages = objApp.dfa_claimbpfsubstages,
-                                   dfa_decisioncopy = objApp.dfa_decisioncopy
+                                   dfa_decisioncopy = objApp.dfa_decisioncopy,
+                                   dfa_onetimedeductionamount = objApp.dfa_onetimedeductionamount
 
                                }).AsEnumerable().OrderByDescending(m => m.createdon);
 

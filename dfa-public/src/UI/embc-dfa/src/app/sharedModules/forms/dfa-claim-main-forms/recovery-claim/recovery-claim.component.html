@@ -262,7 +262,7 @@
           </p>
           @if(recoveryClaim?.claim.claimDecision == DecisionEnum.Approved || recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions){
             <mat-form-field appearance="outline" class="mat-form-round">
-              <div class="searchDiv">           
+              <div class="searchDiv">
                   <input
                     (focusin)="setHelpText(15, tooltip)"
                     #currencyBoxclaimEligibleGST
@@ -290,7 +290,7 @@
             Claim Total
           </p>
           @if(recoveryClaim?.claim.claimDecision == DecisionEnum.Approved || recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions){
- 
+
             <mat-form-field appearance="outline" class="mat-form-round">
               <div class="searchDiv">
                 <input
@@ -354,9 +354,9 @@
               <div class="searchDiv">
                 <input
                   (focusin)="setHelpText(15, tooltip)"
-                  #currencyBoxfirstClaimDeductible1000
-                  id="currencyBoxfirstClaimDeductible1000"
-                  formControlName="firstClaimDeductible1000"
+                  #currencyBoxlessFirst1000
+                  id="currencyBoxlessFirst1000"
+                  formControlName="lessFirst1000"
                   matInput
                   mask="separator.2" thousandSeparator="," decimalMarker="."
                   maxlength="100"/>
@@ -384,7 +384,7 @@
               Approved Reimbursement %
             </p>
             @if(recoveryClaim?.claim.claimDecision == DecisionEnum.Approved || recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions){
-              
+
               <mat-form-field appearance="outline" class="mat-form-round">
 
                 <div class="searchDiv">

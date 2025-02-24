@@ -558,7 +558,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.claimEligibleGST, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_totaleligiblegst) ? "0" : s.dfa_totaleligiblegst))
                 .ForMember(d => d.claimTotal, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_claimtotal) ? "0" : s.dfa_claimtotal))
                 .ForMember(d => d.approvedClaimTotal, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_totalapproved) ? "0" : s.dfa_totalapproved))
-                .ForMember(d => d.firstClaimDeductible1000, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_onetimedeductionamount) ? "0" : s.dfa_onetimedeductionamount))
+                .ForMember(d => d.lessFirst1000, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_onetimedeductionamount) ? "0" : s.dfa_onetimedeductionamount))
                 .ForMember(d => d.approvedReimbursement, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_costsharing) ? "0" : s.dfa_costsharing))
                 .ForMember(d => d.eligiblePayable, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_eligiblepayable) ? "0" : s.dfa_eligiblepayable))
                 .ForMember(d => d.paidClaimAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_paidclaimamount) ? "0" : s.dfa_paidclaimamount))

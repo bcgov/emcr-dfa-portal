@@ -61,7 +61,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
 export default class RecoveryClaimComponent implements OnInit, OnDestroy {
 
   DecisionEnum = Decision;
-  
+
   //@ViewChild('projectName') projectName: ElementRef;
   message : string = '';
   recoveryClaimForm: UntypedFormGroup;
@@ -132,12 +132,12 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
      if(text.indexOf('.')<0)
      {
        text=text+'.0'
-     }else 
+     }else
      if(text.indexOf('.')==text.length-1)
        {
          text=text+'0'
        }
-     
+
      let result = patt.test(text);
      return result;
    }
@@ -196,7 +196,7 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
       //  1000
       //);
     }
-    
+
     //this.otherContactsForm.get('onlyOtherContact').setValue(this.onlyOtherContact);
     this.message = "Click on any field in the form to view detailed information " +
       "about what information is required and tips on how to fill " +
@@ -218,7 +218,7 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
     this.recoveryClaimForm.controls.claimEligibleGST.disable();
     this.recoveryClaimForm.controls.claimTotal.disable();
     this.recoveryClaimForm.controls.approvedClaimTotal.disable();
-    this.recoveryClaimForm.controls.firstClaimDeductible1000.disable();
+    this.recoveryClaimForm.controls.lessFirst1000.disable();
     this.recoveryClaimForm.controls.approvedReimbursement.disable();
     this.recoveryClaimForm.controls.eligiblePayable.disable();
     this.recoveryClaimForm.controls.paidClaimAmount.disable();
@@ -251,7 +251,7 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
         next: (dfaClaimMain) => {
           this.recoveryClaim = dfaClaimMain;
           this.dfaClaimMainMapping.mapDFAClaimMain(dfaClaimMain);
-          
+
         },
         error: (error) => {
           //console.error(error);
