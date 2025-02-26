@@ -14,6 +14,8 @@ namespace EMBC.DFA.API.Mappers
 {
     public class Mappings : AutoMapper.Profile
     {
+        public static readonly string CurrencyFormat = "#,###,###,###.##";
+
         public Mappings()
         {
             //(!string.IsNullOrEmpty(s.PersonalDetails.IndigenousStatus) ? (s.PersonalDetails.IndigenousStatus.ToLower() == "yes" ? true : false) : null)
@@ -554,12 +556,12 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.SubmittedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_claimreceivedbyemcrdate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_claimreceivedbyemcrdate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.FirstClaim, opts => opts.MapFrom(s => s.dfa_isfirstclaim))
                 .ForMember(d => d.FinalClaim, opts => opts.MapFrom(s => s.dfa_finalclaim))
-                .ForMember(d => d.ClaimTotal, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_claimtotal) ? "CA$ 0" : "CA$ " + Convert.ToDecimal(s.dfa_claimtotal).ToString("#.##")))
-                .ForMember(d => d.ApprovedClaimTotal, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_totalapproved) || s.dfa_totalapproved == "0" ? "(pending information)" : "CA$ " + Convert.ToDecimal(s.dfa_totalapproved).ToString("#.##")))
-                .ForMember(d => d.LessFirst1000, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_onetimedeductionamount) ? "(pending information)" : "CA$ " + Convert.ToDecimal(s.dfa_onetimedeductionamount).ToString("#.##")))
+                .ForMember(d => d.ClaimTotal, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_claimtotal) ? "CA$ 0" : "CA$ " + Convert.ToDecimal(s.dfa_claimtotal).ToString(CurrencyFormat)))
+                .ForMember(d => d.ApprovedClaimTotal, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_totalapproved) || s.dfa_totalapproved == "0" ? "(pending information)" : "CA$ " + Convert.ToDecimal(s.dfa_totalapproved).ToString(CurrencyFormat)))
+                .ForMember(d => d.LessFirst1000, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_onetimedeductionamount) ? "(pending information)" : "CA$ " + Convert.ToDecimal(s.dfa_onetimedeductionamount).ToString(CurrencyFormat)))
                 .ForMember(d => d.ApprovedReimbursePercent, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_costsharing) ? "(pending information)" : s.dfa_costsharing))
-                .ForMember(d => d.EligiblePayable, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_eligiblepayable) ? "(pending information)" : "CA$ " + Convert.ToDecimal(s.dfa_eligiblepayable).ToString("#.##")))
-                .ForMember(d => d.PaidClaimAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_paidclaimamount) ? "(pending information)" : "CA$ " + Convert.ToDecimal(s.dfa_paidclaimamount).ToString("#.##")))
+                .ForMember(d => d.EligiblePayable, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_eligiblepayable) ? "(pending information)" : "CA$ " + Convert.ToDecimal(s.dfa_eligiblepayable).ToString(CurrencyFormat)))
+                .ForMember(d => d.PaidClaimAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_paidclaimamount) ? "(pending information)" : "CA$ " + Convert.ToDecimal(s.dfa_paidclaimamount).ToString(CurrencyFormat)))
                 .ForMember(d => d.DateFileClosed, opts => opts.MapFrom(s => s.dfa_bpfclosedate))
                 .ForMember(d => d.ClaimId, opts => opts.MapFrom(s => s.dfa_projectclaimid))
                 .ForMember(d => d.Status, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimbpfstages) ? GetEnumDescription((ClaimStages)Convert.ToInt32(s.dfa_claimbpfstages)) : null))

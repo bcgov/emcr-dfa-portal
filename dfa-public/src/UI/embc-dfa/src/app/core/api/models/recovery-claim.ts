@@ -14,10 +14,10 @@ export interface RecoveryClaim {
   claimStatus?: null | ClaimStageOptionSet;
   claimTotal?: null | string;
   eligiblePayable?: null | string;
-  lessFirst1000?: null | string;
   invoices?: null | Array<Invoice>;
   isFirstClaimApproved?: null | boolean;
   isThisFinalClaim?: null | boolean;
+  lessFirst1000?: null | string;
   paidClaimAmount?: null | string;
   paidClaimDate?: null | string;
   stage?: null | string;

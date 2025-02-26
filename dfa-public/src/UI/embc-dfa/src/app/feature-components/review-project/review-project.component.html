@@ -227,8 +227,8 @@
             <span [ngClass]="{'missing-info': !(formCreationService.recoveryPlanForm$ | async)?.value?.estimateCostIncludingTax || (formCreationService.recoveryPlanForm$ | async)?.controls?.estimateCostIncludingTax.invalid}">
               {{
                 (formCreationService.recoveryPlanForm$ | async)?.value
-                  .estimateCostIncludingTax ? (formCreationService.recoveryPlanForm$ | async)?.value
-                  .estimateCostIncludingTax : "Enter required information"
+                  .estimateCostIncludingTax ? ((formCreationService.recoveryPlanForm$ | async)?.value
+                  .estimateCostIncludingTax | currency) : "Enter required information"
               }}
             </span>
           </div>
