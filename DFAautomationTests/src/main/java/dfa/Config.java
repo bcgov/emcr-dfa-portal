@@ -13,6 +13,13 @@ public class Config {
     public static final String ENVIRONMENT_Dynamics = Constants.TST_SupportDynamicsPub; //the environment that will be used for the tests RAFT
 
 
+
+//
+//    // Env to be run
+//    public static final String ENVIRONMENT = Constants.TRN_Public;     //the environment that will be used for the tests Portal
+//    public static final String ENVIRONMENT_Dynamics = Constants.TRN_DynamicsPub; //the environment that will be used for the tests RAFT
+
+
     public static String TEST_SCENARIO = Constants.NOT_SET;
     public static boolean SKIP_SCREENSHOTS_OF_SHOPPING_CART = false;                //not implemented yet
 
