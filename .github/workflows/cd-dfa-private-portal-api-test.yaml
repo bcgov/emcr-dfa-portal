@@ -1,0 +1,39 @@
+name: cd-dfa-private-portal-api-test
+
+on:
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: dfa-portal-api
+  IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
+  IMAGE_CURRENT_ENV_TAG: dev
+  IMAGE_PROMOTE_ENV_TAG: test
+  IMAGE_PROMOTE_ENV_BACKUP_TAG: test-backup
+
+jobs:
+  backup-dfa-private-portal-api:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Promote existing test dfa-portal-api image to test-backup
+        uses: tinact/docker.image-retag@master
+        with:
+          image_name: ${{ env.IMAGE_NAME }}
+          image_old_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
+          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_BACKUP_TAG }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+          registry_username: ${{ secrets.OCP4_USERNAME }}
+          registry_password: ${{ secrets.OCP4_PASSWORD }}
+
+      - name: Promote dfa-portal-api to test
+        uses: tinact/docker.image-retag@master
+        with:
+          image_name: ${{ env.IMAGE_NAME }}
+          image_old_tag: ${{ env.IMAGE_CURRENT_ENV_TAG }}
+          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+          registry_username: ${{ secrets.OCP4_USERNAME }}
+          registry_password: ${{ secrets.OCP4_PASSWORD }}
