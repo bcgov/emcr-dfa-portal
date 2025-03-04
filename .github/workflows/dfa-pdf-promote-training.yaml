@@ -1,0 +1,42 @@
+name: DFA PDF - Promote to Training
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/dfa-pdf-promote-training.yaml"
+
+env:
+  IMAGE_PDF_NAME: dfa-portal-pdf-service
+  IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
+  IMAGE_CURRENT_ENV_TAG: test
+  IMAGE_PROMOTE_ENV_TAG: training
+  IMAGE_PROMOTE_ENV_BACKUP_TAG: training-backup
+
+jobs:
+  promote-dfa-pdf:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Retag existing training dfa-portal-pdf-service image to training-backup
+        uses: tinact/docker.image-retag@master
+        with:
+          image_name: ${{ env.IMAGE_API_NAME }}
+          image_old_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
+          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_BACKUP_TAG }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+          registry_username: ${{ secrets.OCP4_USERNAME }}
+          registry_password: ${{ secrets.OCP4_PASSWORD }}
+
+      - name: Promote dfa-portal-pdf-service to training
+        uses: tinact/docker.image-retag@master
+        with:
+          image_name: ${{ env.IMAGE_API_NAME }}
+          image_old_tag: ${{ env.IMAGE_CURRENT_ENV_TAG }}
+          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+          registry_username: ${{ secrets.OCP4_USERNAME }}
+          registry_password: ${{ secrets.OCP4_PASSWORD }}
