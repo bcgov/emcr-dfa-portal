@@ -1,5 +1,4 @@
-# GitHub Actions pipeline for DFA API Public Portal component
-name: cd-dfa-portal-public-api
+name: DFA Public Portal - Build API Image
 
 on:
   push:
@@ -8,7 +7,7 @@ on:
       - develop
     paths:
       - "dfa-public/src/API/**"
-      - ".github/workflows/cd-dfa-portal-public-api.yml"
+      - ".github/workflows/dfa-public-portal-build-api.yaml"
 
   workflow_dispatch:
 
