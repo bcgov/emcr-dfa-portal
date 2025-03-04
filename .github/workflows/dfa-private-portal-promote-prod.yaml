@@ -1,0 +1,70 @@
+name: DFA Private Portal - Promote to Production
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/dfa-private-portal-promote-prod.yaml"
+
+env:
+  IMAGE_API_NAME: dfa-portal-api
+  IMAGE_UI_NAME: dfa-portal-ui
+  IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
+  IMAGE_CURRENT_ENV_TAG: training
+  IMAGE_PROMOTE_ENV_TAG: prod
+  IMAGE_PROMOTE_ENV_BACKUP_TAG: prod-backup
+
+jobs:
+  promote-dfa-private-portal-api:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Retag existing prod dfa-portal-api image to prod-backup
+        uses: tinact/docker.image-retag@master
+        with:
+          image_name: ${{ env.IMAGE_API_NAME }}
+          image_old_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
+          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_BACKUP_TAG }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+          registry_username: ${{ secrets.OCP4_USERNAME }}
+          registry_password: ${{ secrets.OCP4_PASSWORD }}
+
+      - name: Promote dfa-portal-api to prod
+        uses: tinact/docker.image-retag@master
+        with:
+          image_name: ${{ env.IMAGE_API_NAME }}
+          image_old_tag: ${{ env.IMAGE_CURRENT_ENV_TAG }}
+          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+          registry_username: ${{ secrets.OCP4_USERNAME }}
+          registry_password: ${{ secrets.OCP4_PASSWORD }}
+
+  promote-dfa-private-portal-ui:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Retag existing prod dfa-portal-ui image to prod-backup
+        uses: tinact/docker.image-retag@master
+        with:
+          image_name: ${{ env.IMAGE_UI_NAME }}
+          image_old_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
+          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_BACKUP_TAG }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+          registry_username: ${{ secrets.OCP4_USERNAME }}
+          registry_password: ${{ secrets.OCP4_PASSWORD }}
+
+      - name: Promote dfa-portal-ui to prod
+        uses: tinact/docker.image-retag@master
+        with:
+          image_name: ${{ env.IMAGE_UI_NAME }}
+          image_old_tag: ${{ env.IMAGE_CURRENT_ENV_TAG }}
+          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+          registry_username: ${{ secrets.OCP4_USERNAME }}
+          registry_password: ${{ secrets.OCP4_PASSWORD }}

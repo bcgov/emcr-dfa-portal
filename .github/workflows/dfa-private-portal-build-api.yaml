@@ -1,23 +1,22 @@
-#CD pipeline for DFA UI
-name: cd-dfa-portal-support-ui
+name: DFA Private Portal - Build API Image
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - support-develop
 
     paths:
-      - "dfa/src/UI/**"
-      - ".github/workflows/cd-dfa-portal-project-ui.yml"
+      - "dfa/src/API/**"
+      - ".github/workflows/dfa-private-portal-build-api.yaml"
 
 env:
-  IMAGE_NAME: dfa-portal-ui
-  WORKING_DIRECTORY: ./dfa/src/UI
+  IMAGE_NAME: dfa-portal-api
+  WORKING_DIRECTORY: ./dfa/src/API
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v3
