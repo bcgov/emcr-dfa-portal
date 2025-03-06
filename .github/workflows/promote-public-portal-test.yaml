@@ -1,4 +1,4 @@
-name: DFA Private Portal - Promote to Test
+name: Promote Public Portal to Test
 
 on:
   push:
@@ -22,16 +22,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Retag existing test dfa-portal-api-public image to test-backup
-        uses: tinact/docker.image-retag@master
-        with:
-          image_name: ${{ env.IMAGE_API_NAME }}
-          image_old_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
-          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_BACKUP_TAG }}
-          registry: ${{ env.IMAGE_REGISTRY }}
-          registry_username: ${{ secrets.OCP4_USERNAME }}
-          registry_password: ${{ secrets.OCP4_PASSWORD }}
       
       - name: Promote dfa-portal-api-public to test
         uses: tinact/docker.image-retag@master
@@ -49,16 +39,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Retag existing test dfa-portal-ui-public image to test-backup
-        uses: tinact/docker.image-retag@master
-        with:
-          image_name: ${{ env.IMAGE_UI_NAME }}
-          image_old_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
-          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_BACKUP_TAG }}
-          registry: ${{ env.IMAGE_REGISTRY }}
-          registry_username: ${{ secrets.OCP4_USERNAME }}
-          registry_password: ${{ secrets.OCP4_PASSWORD }}
 
       - name: Promote dfa-portal-ui-public to test
         uses: tinact/docker.image-retag@master

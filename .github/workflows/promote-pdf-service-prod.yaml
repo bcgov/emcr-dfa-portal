@@ -1,10 +1,10 @@
-name: DFA PDF Service - Promote to Production
+name: Promote PDF Service to Production
 
 on:
   workflow_dispatch:
   push:
     paths:
-      - ".github/workflows/dfa-pdf-promote-prod.yaml"
+      - ".github/workflows/promote-pdf-service-prod.yaml"
 
 env:
   IMAGE_PDF_NAME: dfa-portal-pdf-service
@@ -14,7 +14,7 @@ env:
   IMAGE_PROMOTE_ENV_BACKUP_TAG: prod-backup
 
 jobs:
-  promote-dfa-pdf:
+  promote-pdf-service:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'bcgov'
 

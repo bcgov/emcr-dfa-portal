@@ -1,4 +1,4 @@
-name: DFA Private Portal - Promote to Production
+name: Promote Public Portal to Production
 
 on:
   push:

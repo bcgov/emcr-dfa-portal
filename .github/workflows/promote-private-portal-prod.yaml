@@ -1,4 +1,4 @@
-name: DFA Private Portal - Promote to Production
+name: Promote Private Portal to Production
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ env:
   IMAGE_PROMOTE_ENV_BACKUP_TAG: prod-backup
 
 jobs:
-  promote-dfa-private-portal-api:
+  promote-private-portal-api:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'bcgov'
 
@@ -42,7 +42,7 @@ jobs:
           registry_username: ${{ secrets.OCP4_USERNAME }}
           registry_password: ${{ secrets.OCP4_PASSWORD }}
 
-  promote-dfa-private-portal-ui:
+  promote-private-portal-ui:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'bcgov'
 
