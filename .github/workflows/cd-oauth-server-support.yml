@@ -1,4 +1,4 @@
-name: cd-oauth-server-support
+name: Build oauth-server
 
 on:
   push:

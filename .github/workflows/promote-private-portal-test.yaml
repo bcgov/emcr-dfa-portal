@@ -1,29 +1,28 @@
 name: DFA Private Portal - Promote to Test
 
 on:
+  workflow_dispatch:
   push:
     paths:
-      - ".github/workflows/dfa-public-portal-promote-test.yaml"
-
-  workflow_dispatch:
+      - ".github/workflows/promote-private-portal-test.yaml"
 
 env:
-  IMAGE_API_NAME: dfa-portal-api-public
-  IMAGE_UI_NAME: dfa-portal-ui-public
+  IMAGE_API_NAME: dfa-portal-api
+  IMAGE_UI_NAME: dfa-portal-ui
   IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
   IMAGE_CURRENT_ENV_TAG: dev
   IMAGE_PROMOTE_ENV_TAG: test
   IMAGE_PROMOTE_ENV_BACKUP_TAG: test-backup
 
 jobs:
-  promote-dfa-public-portal-api:
+  promote-dfa-private-portal-api:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'bcgov'
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Retag existing test dfa-portal-api-public image to test-backup
+      - name: Retag existing test dfa-portal-api image to test-backup
         uses: tinact/docker.image-retag@master
         with:
           image_name: ${{ env.IMAGE_API_NAME }}
@@ -32,8 +31,8 @@ jobs:
           registry: ${{ env.IMAGE_REGISTRY }}
           registry_username: ${{ secrets.OCP4_USERNAME }}
           registry_password: ${{ secrets.OCP4_PASSWORD }}
-      
-      - name: Promote dfa-portal-api-public to test
+
+      - name: Promote dfa-portal-api to test
         uses: tinact/docker.image-retag@master
         with:
           image_name: ${{ env.IMAGE_API_NAME }}
@@ -41,16 +40,16 @@ jobs:
           image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
           registry: ${{ env.IMAGE_REGISTRY }}
           registry_username: ${{ secrets.OCP4_USERNAME }}
-          registry_password: ${{ secrets.OCP4_PASSWORD }}      
+          registry_password: ${{ secrets.OCP4_PASSWORD }}
 
-  promote-dfa-public-portal-ui:
+  promote-dfa-private-portal-ui:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'bcgov'
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Retag existing test dfa-portal-ui-public image to test-backup
+      - name: Retag existing test dfa-portal-ui image to test-backup
         uses: tinact/docker.image-retag@master
         with:
           image_name: ${{ env.IMAGE_UI_NAME }}
@@ -60,7 +59,7 @@ jobs:
           registry_username: ${{ secrets.OCP4_USERNAME }}
           registry_password: ${{ secrets.OCP4_PASSWORD }}
 
-      - name: Promote dfa-portal-ui-public to test
+      - name: Promote dfa-portal-ui to test
         uses: tinact/docker.image-retag@master
         with:
           image_name: ${{ env.IMAGE_UI_NAME }}

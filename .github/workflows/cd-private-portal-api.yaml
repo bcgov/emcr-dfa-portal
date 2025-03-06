@@ -1,17 +1,18 @@
-name: DFA Private Portal - Build UI Image
+name: Build Private Portal API
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - support-develop
 
     paths:
-      - "dfa/src/UI/**"
-      - ".github/workflows/dfa-private-portal-build-ui.yaml"
+      - "dfa/src/API/**"
+      - ".github/workflows/cd-private-portal-api.yaml"
 
 env:
-  IMAGE_NAME: dfa-portal-ui
-  DFA_PRIVATE_UI_DOCKERFILE_PATH: ./dfa/src/UI/Dockerfile
+  IMAGE_NAME: dfa-portal-api
+  DFA_PRIVATE_API_DOCKERFILE_PATH: ./dfa/src/API/Dockerfile
   IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
 
 jobs:
@@ -50,10 +51,11 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           build-args: |
-            VERSION=#{{ env.VERSION }}
+            VERSION=${{ env.VERSION }}
           cache-from: |
             ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
-          file: ${{ env.DFA_PRIVATE_UI_DOCKERFILE_PATH }}
+          file: ${{ env.DFA_PRIVATE_API_DOCKERFILE_PATH }}
           push: true
           tags: |
             ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+

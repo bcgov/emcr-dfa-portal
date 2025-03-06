@@ -1,4 +1,4 @@
-name: DFA Public Portal - Build UI Image
+name: Build Public Portal API
 
 on:
   push:
@@ -6,14 +6,14 @@ on:
       - support-develop
       - develop
     paths:
-      - "dfa-public/src/UI/**"
-      - ".github/workflows/dfa-public-portal-build-ui.yaml"
+      - "dfa-public/src/API/**"
+      - ".github/workflows/cd-public-portal-api.yaml"
 
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: dfa-portal-ui-public
-  WORKING_DIRECTORY: ./dfa-public/src/UI
+  IMAGE_NAME: dfa-portal-api-public
+  WORKING_DIRECTORY: ./dfa-public/src/API
   IMAGE_TAG: dev
 
 jobs:
@@ -71,11 +71,11 @@ jobs:
           # Update the Helm values file with the new image tag and version
           DATETIME=$(date +'%Y-%m-%d %H:%M:%S')  # Get current date and time
           
-          sed -i  "s/uipubtag: .*/uipubtag: dev # Image Updated on $DATETIME/" ../deploy/dev_public_values.yaml
-          sed -i  "s/uipubversion: .*/uipubversion: v-${{ steps.short_sha.outputs.SHORT_SHA }} # Version Updated on $DATETIME/" ../deploy/dev_public_values.yaml
+          sed -i  "s/apipubtag: .*/apipubtag: dev # Image Updated on $DATETIME/" ../deploy/dev_public_values.yaml
+          sed -i  "s/apipubversion: .*/apipubversion: v-${{ steps.short_sha.outputs.SHORT_SHA }} # Version Updated on $DATETIME/" ../deploy/dev_public_values.yaml
 
-          sed -i  "s/uipubtag: .*/uipubtag: dev # Image Updated on $DATETIME/"  dfa-portal-ui-public/values.yaml
-          sed -i  "s/uipubversion: .*/uipubversion: v-${{ steps.short_sha.outputs.SHORT_SHA }} # Version Updated on $DATETIME/"  dfa-portal-ui-public/values.yaml
+          sed -i  "s/apipubtag: .*/apipubtag: dev # Image Updated on $DATETIME/"  dfa-portal-api-public/values.yaml
+          sed -i  "s/apipubversion: .*/apipubversion: v-${{ steps.short_sha.outputs.SHORT_SHA }} # Version Updated on $DATETIME/"  dfa-portal-api-public/values.yaml
 
           # Commit and push the changes
           git config --global user.email "actions@github.com"
@@ -95,5 +95,5 @@ jobs:
 
           git add .
 
-          git commit -m "Update Dev UI image tag"
+          git commit -m "Update Dev API image tag"
           git push origin develop  # Update the branch name as needed

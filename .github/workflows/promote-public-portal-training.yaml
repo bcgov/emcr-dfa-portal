@@ -1,9 +1,9 @@
-name: DFA Private Portal - Promote to Production
+name: DFA Private Portal - Promote to Training
 
 on:
   push:
     paths:
-      - ".github/workflows/dfa-public-portal-promote-prod.yaml"
+      - ".github/workflows/promote-public-portal-training.yaml"
 
   workflow_dispatch:
 
@@ -11,9 +11,9 @@ env:
   IMAGE_API_NAME: dfa-portal-api-public
   IMAGE_UI_NAME: dfa-portal-ui-public
   IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
-  IMAGE_CURRENT_ENV_TAG: training
-  IMAGE_PROMOTE_ENV_TAG: prod
-  IMAGE_PROMOTE_ENV_BACKUP_TAG: prod-backup
+  IMAGE_CURRENT_ENV_TAG: test
+  IMAGE_PROMOTE_ENV_TAG: training
+  IMAGE_PROMOTE_ENV_BACKUP_TAG: training-backup
 
 jobs:
   promote-dfa-public-portal-api:
@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Retag existing prod dfa-portal-api-public image to prod-backup
+      - name: Retag existing training dfa-portal-api-public image to training-backup
         uses: tinact/docker.image-retag@master
         with:
           image_name: ${{ env.IMAGE_API_NAME }}
@@ -33,7 +33,7 @@ jobs:
           registry_username: ${{ secrets.OCP4_USERNAME }}
           registry_password: ${{ secrets.OCP4_PASSWORD }}
       
-      - name: Promote dfa-portal-api-public to prod
+      - name: Promote dfa-portal-api-public to training
         uses: tinact/docker.image-retag@master
         with:
           image_name: ${{ env.IMAGE_API_NAME }}
@@ -50,7 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Retag existing prod dfa-portal-ui-public image to prod-backup
+      - name: Retag existing training dfa-portal-ui-public image to training-backup
         uses: tinact/docker.image-retag@master
         with:
           image_name: ${{ env.IMAGE_UI_NAME }}
@@ -60,7 +60,7 @@ jobs:
           registry_username: ${{ secrets.OCP4_USERNAME }}
           registry_password: ${{ secrets.OCP4_PASSWORD }}
 
-      - name: Promote dfa-portal-ui-public to prod
+      - name: Promote dfa-portal-ui-public to training
         uses: tinact/docker.image-retag@master
         with:
           image_name: ${{ env.IMAGE_UI_NAME }}

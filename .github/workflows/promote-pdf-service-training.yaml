@@ -1,4 +1,4 @@
-name: DFA PDF - Promote to Training
+name: DFA PDF Service - Promote to Training
 
 on:
   workflow_dispatch:

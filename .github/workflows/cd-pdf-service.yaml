@@ -1,5 +1,5 @@
 # GitHub Actions pipeline for DFA PDF microservice
-name: DFA PDF - Build PDF Image
+name: Build PDF Service
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - develop
     paths:
       - "pdf-service/**"
-      - ".github/workflows/dfa-pdf-build.yaml"
+      - ".github/workflows/cd-pdf-service.yaml"
   
   workflow_dispatch:
 

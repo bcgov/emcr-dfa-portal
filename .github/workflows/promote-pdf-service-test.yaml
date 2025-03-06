@@ -1,17 +1,17 @@
-name: DFA PDF - Promote to Production
+name: DFA PDF Service - Promote to Test
 
 on:
   workflow_dispatch:
   push:
     paths:
-      - ".github/workflows/dfa-pdf-promote-prod.yaml"
+      - ".github/workflows/dfa-pdf-promote-test.yaml"
 
 env:
   IMAGE_PDF_NAME: dfa-portal-pdf-service
   IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
-  IMAGE_CURRENT_ENV_TAG: training
-  IMAGE_PROMOTE_ENV_TAG: prod
-  IMAGE_PROMOTE_ENV_BACKUP_TAG: prod-backup
+  IMAGE_CURRENT_ENV_TAG: dev
+  IMAGE_PROMOTE_ENV_TAG: test
+  IMAGE_PROMOTE_ENV_BACKUP_TAG: test-backup
 
 jobs:
   promote-dfa-pdf:
@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Retag existing prod dfa-portal-pdf-service image to prod-backup
+      - name: Retag existing test dfa-portal-pdf-service image to test-backup
         uses: tinact/docker.image-retag@master
         with:
           image_name: ${{ env.IMAGE_API_NAME }}
@@ -31,7 +31,7 @@ jobs:
           registry_username: ${{ secrets.OCP4_USERNAME }}
           registry_password: ${{ secrets.OCP4_PASSWORD }}
 
-      - name: Promote dfa-portal-pdf-service to prod
+      - name: Promote dfa-portal-pdf-service to test
         uses: tinact/docker.image-retag@master
         with:
           image_name: ${{ env.IMAGE_API_NAME }}
