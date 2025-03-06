@@ -16,20 +16,14 @@ Image building and pushing occurs via Docker's [`build-push-action`](https://git
 ## Promoting images
 To promote images through their respective subsequent environments, please utilise the table to identify which workflows to run.
 
-| Image                    | Environment to Promote To | Workflow to Dispatch                 |
-| ------------------------ | ------------------------- | ------------------------------------ |
-| `dfa-portal-api`         | Test                      | Promote Private Portal to Test       |
-| `dfa-portal-api`         | Training                  | Promote Private Portal to Training   |
-| `dfa-portal-api`         | Production                | Promote Private Portal to Production |
-| `dfa-portal-ui`          | Test                      | Promote Private Portal to Test       |
-| `dfa-portal-ui`          | Training                  | Promote Private Portal to Training   |
-| `dfa-portal-ui`          | Production                | Promote Private Portal to Production |
-| `dfa-portal-api-public`  | Test                      | Promote Public Portal to Test        |
-| `dfa-portal-api-public`  | Training                  | Promote Public Portal to Training    |
-| `dfa-portal-api-public`  | Production                | Promote Public Portal to Production  |
-| `dfa-portal-ui-public`   | Test                      | Promote Public Portal to Test        |
-| `dfa-portal-ui-public`   | Training                  | Promote Public Portal to Training    |
-| `dfa-portal-ui-public`   | Production                | Promote Public Portal to Production  |
-| `dfa-portal-pdf-service` | Test                      | Promote PDF Service to Test          |
-| `dfa-portal-pdf-service` | Training                  | Promote PDF Service to Training      |
-| `dfa-portal-pdf-service` | Production                | Promote PDF Service to Production    |
+| Image                                              | Environment to Promote To | Workflow to Dispatch                 |
+| -------------------------------------------------- | ------------------------- | ------------------------------------ |
+| `dfa-portal-api`<br/>`dfa-portal-ui`               | Test                      | Promote Private Portal to Test       |
+| `dfa-portal-api`<br/>`dfa-portal-ui`               | Training                  | Promote Private Portal to Training   |
+| `dfa-portal-api`<br/>`dfa-portal-ui`               | Production                | Promote Private Portal to Production |
+| `dfa-portal-api-public`<br/>`dfa-portal-ui-public` | Test                      | Promote Public Portal to Test        |
+| `dfa-portal-api-public`<br/>`dfa-portal-ui-public` | Training                  | Promote Public Portal to Training    |
+| `dfa-portal-api-public`<br/>`dfa-portal-ui-public` | Production                | Promote Public Portal to Production  |
+| `dfa-portal-pdf-service`                           | Test                      | Promote PDF Service to Test          |
+| `dfa-portal-pdf-service`                           | Training                  | Promote PDF Service to Training      |
+| `dfa-portal-pdf-service`                           | Production                | Promote PDF Service to Production    |
