@@ -1,7 +1,6 @@
 name: Build Private Portal API
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - support-develop
@@ -10,9 +9,11 @@ on:
       - "dfa/src/API/**"
       - ".github/workflows/cd-private-portal-api.yaml"
 
+  workflow_dispatch:
+
 env:
+  DOCKER_CONTEXT_DIRECTORY: ./dfa/src/API
   IMAGE_NAME: dfa-portal-api
-  DFA_PRIVATE_API_DOCKERFILE_PATH: ./dfa/src/API/Dockerfile
   IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
 
 jobs:
@@ -54,7 +55,7 @@ jobs:
             VERSION=${{ env.VERSION }}
           cache-from: |
             ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
-          file: ${{ env.DFA_PRIVATE_API_DOCKERFILE_PATH }}
+          context: ${{ env.DOCKER_CONTEXT_DIRECTORY }}
           push: true
           tags: |
             ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:latest

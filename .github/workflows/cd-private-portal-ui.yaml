@@ -8,10 +8,12 @@ on:
     paths:
       - "dfa/src/UI/**"
       - ".github/workflows/cd-private-portal-ui.yaml"
+  
+  workflow_dispatch:
 
 env:
+  DOCKER_CONTEXT_DIRECTORY: ./dfa/src/UI
   IMAGE_NAME: dfa-portal-ui
-  DFA_PRIVATE_UI_DOCKERFILE_PATH: ./dfa/src/UI/Dockerfile
   IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
 
 jobs:
@@ -53,7 +55,7 @@ jobs:
             VERSION=${{ env.VERSION }}
           cache-from: |
             ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
-          file: ${{ env.DFA_PRIVATE_UI_DOCKERFILE_PATH }}
+          file: ${{ env.DOCKER_CONTEXT_DIRECTORY }}
           push: true
           tags: |
             ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
