@@ -55,7 +55,7 @@ jobs:
             VERSION=${{ env.VERSION }}
           cache-from: |
             ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
-          file: ${{ env.DOCKER_CONTEXT_DIRECTORY }}
+          context: ${{ env.DOCKER_CONTEXT_DIRECTORY }}
           push: true
           tags: |
             ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
