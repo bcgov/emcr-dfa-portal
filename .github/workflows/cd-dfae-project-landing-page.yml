@@ -1,0 +1,120 @@
+#CD pipeline for dfa api
+name: cd-dfae-project-landing-page
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+       description: Please select the environment for Landing Page
+       required: true
+       default: 'dev'
+       type: choice
+       options:
+       - dev
+       - test
+       - training
+       - prod
+
+env:
+  IMAGE_NAME: dfa-landing-page
+  WORKING_DIRECTORY: ./landing-page/src
+  INDEX_FILE: index.html
+  ENV_FILE: dev_values.yaml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set working directory
+        id: LandingDir
+        run: |
+          if [[ "${{ github.event.inputs.environment }}" == "dev" ]];then
+              echo "::set-output name=Landing_INDEX_FILE::project-dev.html"
+              echo "::set-output name=ENV_FILE::dev_values.yaml"
+          elif [[ "${{ github.event.inputs.environment }}" == "test" ]];then
+              echo "::set-output name=Landing_INDEX_FILE::project-test.html"
+              echo "::set-output name=ENV_FILE::test_values.yaml"
+          elif [[ "${{ github.event.inputs.environment }}" == "training" ]];then
+              echo "::set-output name=Landing_INDEX_FILE::project-training.html"
+              echo "::set-output name=ENV_FILE::train_values.yaml"
+          elif [[ "${{ github.event.inputs.environment }}" == "prod" ]];then
+              echo "::set-output name=Landing_INDEX_FILE::prod-index.html"
+              echo "::set-output name=ENV_FILE::prod_values.yaml"
+          fi
+
+      - uses: actions/checkout@v3
+
+      - name: Log into registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.DOCKER_PROJECT_REGISTRY }}
+          username: ${{ secrets.DOCKER_PROJECT_USERNAME }}
+          password: ${{ secrets.DOCKER_PROJECT_PASSWORD_BUILDER }}
+
+      - name: Set the index page according to the environment
+        working-directory: ${{env.WORKING_DIRECTORY}}
+        run: |
+          cd html
+          ls -ltr
+          mv ${{steps.LandingDir.outputs.Landing_INDEX_FILE}} ${{env.INDEX_FILE}}
+          ls -ltr
+          cat index.html |grep  "link-light-blue register-dfa-link"
+
+
+      - name: Build Image
+        working-directory: ${{env.WORKING_DIRECTORY}}
+        run: |
+          docker build -t ${{env.IMAGE_NAME}} .
+
+      - name: Tag Image
+        run: |
+          docker tag ${{env.IMAGE_NAME}} ${{ secrets.DOCKER_PROJECT_REGISTRY }}/${{env.IMAGE_NAME}}:${{ github.event.inputs.environment }}
+          #docker tag from_image to_image_name:dev/test/train
+
+      - name: Docker Push
+        run: |
+          docker push ${{ secrets.DOCKER_PROJECT_REGISTRY }}/${{env.IMAGE_NAME}}:${{ github.event.inputs.environment }}
+
+      - name: Checkout ArgoCD Repo
+        id: gitops
+        uses: actions/checkout@v4
+        with:
+          repository: bcgov-c/tenant-gitops-c2ee1a
+          ref: develop
+          token: ${{ secrets.GITOPS_KEY }} # `GH_PAT` is a secret that contains your PAT
+          path: gitops
+
+      - name: Update Helm values in gitops
+        id: helm
+        if: steps.gitops.outcome == 'success'  # Only run if the previous step (publish) was successful
+        run: |
+          # Clone the GitOps deployment configuration repository
+          # Navigate to the directory containing your Helm values file for the environment develop -> DEV, test -> test and
+          cd gitops/charts
+
+          # Update the Helm values file with the new image tag and version
+          DATETIME=$(date +'%Y-%m-%d %H:%M:%S')  # Get current date and time
+
+          sed -i  "s/landingtag: .*/landingtag: ${{ github.event.inputs.environment }} # Image Updated on $DATETIME/" ../deploy/${{steps.LandingDir.outputs.ENV_FILE}}
+
+
+          # Commit and push the changes
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+
+          git add ../deploy/${{steps.LandingDir.outputs.ENV_FILE}}
+
+          # Repackage Helm Chart
+
+          cd dfa-gitops
+
+          helm dependency build
+
+          cd charts
+
+          git add .
+
+          git commit -m "Update Dev Landing image tag"
+          git push origin develop  # Update the branch name as needed
