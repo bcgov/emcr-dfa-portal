@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - support-develop
-      - develop
     paths:
       - "pdf-service/**"
       - ".github/workflows/cd-pdf-service.yaml"
