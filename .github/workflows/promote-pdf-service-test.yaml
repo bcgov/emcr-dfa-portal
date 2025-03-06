@@ -23,7 +23,7 @@ jobs:
       - name: Promote dfa-portal-pdf-service to test
         uses: tinact/docker.image-retag@master
         with:
-          image_name: ${{ env.IMAGE_API_NAME }}
+          image_name: ${{ env.IMAGE_PDF_NAME }}
           image_old_tag: ${{ env.IMAGE_CURRENT_ENV_TAG }}
           image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
           registry: ${{ env.IMAGE_REGISTRY }}

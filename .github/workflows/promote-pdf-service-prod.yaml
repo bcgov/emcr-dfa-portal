@@ -24,7 +24,7 @@ jobs:
       - name: Retag existing prod dfa-portal-pdf-service image to prod-backup
         uses: tinact/docker.image-retag@master
         with:
-          image_name: ${{ env.IMAGE_API_NAME }}
+          image_name: ${{ env.IMAGE_PDF_NAME }}
           image_old_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
           image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_BACKUP_TAG }}
           registry: ${{ env.IMAGE_REGISTRY }}
@@ -34,7 +34,7 @@ jobs:
       - name: Promote dfa-portal-pdf-service to prod
         uses: tinact/docker.image-retag@master
         with:
-          image_name: ${{ env.IMAGE_API_NAME }}
+          image_name: ${{ env.IMAGE_PDF_NAME }}
           image_old_tag: ${{ env.IMAGE_CURRENT_ENV_TAG }}
           image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
           registry: ${{ env.IMAGE_REGISTRY }}
