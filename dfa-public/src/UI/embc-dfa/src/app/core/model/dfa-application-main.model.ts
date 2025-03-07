@@ -1281,15 +1281,17 @@ export class AuthorizedRepresentativeForm {
     if (authorizedRepresentative.businessPhone) {
       this.businessPhone.setValue(authorizedRepresentative.businessPhone);
     }
-    this.businessPhone.setValidators([      
+    this.businessPhone.setValidators([   
       customValidator.maskedNumberLengthValidator().bind(customValidator),
+      customValidator.maxLengthValidator(12).bind(customValidator),
       Validators.required
     ]);
 
     if (authorizedRepresentative.email) {
       this.email.setValue(authorizedRepresentative.email);
     }
-    this.email.setValidators([      
+    this.email.setValidators([ 
+      Validators.email,     
       Validators.required,
       customValidator
         .maxLengthValidator(100)

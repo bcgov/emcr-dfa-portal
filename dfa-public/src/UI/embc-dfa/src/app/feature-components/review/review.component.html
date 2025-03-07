@@ -644,8 +644,8 @@
                   <div class="row">
                     <div class="col-md-3">
                       <mat-form-field appearance="outline">
-                        <mat-label>Position Title</mat-label>
-                        <input formControlName="positionTitle" matInput placeholder="Position Title" maxlength="100"/>
+                        <mat-label>Position/Title</mat-label>
+                        <input formControlName="positionTitle" matInput placeholder="Position/Title" maxlength="100"/>
                         <mat-error
                           *ngIf="
                             authorizedRepresentativeForm.get('positionTitle').invalid &&
@@ -674,7 +674,7 @@
                         <span style="color:red">*</span>
                       </p>
                       <mat-radio-group formControlName="firstDeclaration" class="primary-radio-group horizontal-radio-group" required
-                        aria-label="Select an option">
+                        aria-label="Select an option" (change)="validateAuthorizedRepresentative()">
                         <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
                       </mat-radio-group>
                     </div>
@@ -696,7 +696,7 @@
                         <span style="color:red">*</span>
                       </p>
                       <mat-radio-group formControlName="secondDeclaration" class="primary-radio-group horizontal-radio-group" required
-                        aria-label="Select an option">
+                        aria-label="Select an option" (change)="validateAuthorizedRepresentative()">
                         <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
                       </mat-radio-group>
                     </div>
