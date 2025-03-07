@@ -219,7 +219,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
         error: (error) => {
           console.error(error);
           this.isLoading = false;
-          // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
         }
       });
     } else {
@@ -252,7 +252,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
         error: (error) => {
           console.error(error);
           this.isLoading = false;
-          // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
         }
       });
     } else {
@@ -269,7 +269,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
         error: (error) => {
           console.error(error);
           this.isLoading = false;
-          // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
         }
       });
     }
@@ -366,7 +366,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
        },
        error: (error) => {
          console.error(error);
-         // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+         document.location.href = 'https://dfa.gov.bc.ca/error.html';
        }
       });
     //} else if (element.fileType === Object.keys(this.FileCategories)[Object.values(this.FileCategories).indexOf(this.FileCategories.)]) {
@@ -392,7 +392,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
        },
        error: (error) => {
          console.error(error);
-         // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+         document.location.href = 'https://dfa.gov.bc.ca/error.html';
        }
       });
     }
