@@ -617,6 +617,12 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public Guid AppDocID { get; set; } // required string
     }
 
+    public class dfa_DeleteDocument_params
+    {
+        public Guid DocLocationID { get; set; }
+        public String DocLocationType { get; set; }
+    }
+
     public class dfa_appdamageditems_retrieve
     {
         public string? dfa_appdamageditemid { get; set; } // optional string

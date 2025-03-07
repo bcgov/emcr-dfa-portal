@@ -345,12 +345,12 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
     var form = (element.requiredDocumentType == "InsuranceTemplate" ? this.fileUploadForm :
     (element.requiredDocumentType == "Identification" ? this.fileUploadForm :
     (element.requiredDocumentType == "TenancyAgreement" ? this.fileUploadForm : null)));
+    element.deleteFlag = true;
     if (form != null) {
       let fileUploads = this.formCreationService.fileUploadsForm.value.get('fileUploads').value;
       let foundIndex = fileUploads.findIndex(x => x.requiredDocumentType === element.requiredDocumentType);
-      element.deleteFlag = true;
       element.fileData = element?.fileData?.substring(element?.fileData?.indexOf(',') + 1) // to allow upload as byte array
-      this.attachmentsService.attachmentDeleteProjectAttachment({body: element}).subscribe({
+      this.attachmentsService.attachmentUpsertDeleteProjectAttachment({body: element}).subscribe({
         next: (result) => {
           fileUploads.splice(foundIndex, 1);
           this.formCreationService.fileUploadsForm.value.get('fileUploads').setValue(fileUploads);
@@ -378,9 +378,8 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
     } else {
       let fileUploads = this.formCreationService.fileUploadsForm.value.get('fileUploads').value;
       let index = fileUploads?.indexOf(element);
-      element.deleteFlag = true;
       element.fileData = element?.fileData?.substring(element?.fileData?.indexOf(',') + 1) // to allow upload as byte array
-      this.attachmentsService.attachmentDeleteProjectAttachment({body: element}).subscribe({
+      this.attachmentsService.attachmentUpsertDeleteProjectAttachment({body: element}).subscribe({
         next: (result) => {
           fileUploads[index] = element;
           this.formCreationService.fileUploadsForm.value.get('fileUploads').setValue(fileUploads);

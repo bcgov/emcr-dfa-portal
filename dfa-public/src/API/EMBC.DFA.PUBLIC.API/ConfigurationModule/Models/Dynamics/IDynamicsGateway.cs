@@ -33,7 +33,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> InsertDocumentLocationAsync(SubmissionEntity submission);
         Task<string> InsertDocumentLocationClaimAsync(SubmissionEntityClaim submission);
         Task<string> InsertDocumentLocationApplicationPDFAsync(SubmissionEntityPDF submission);
-        Task<string> DeleteDocumentLocationAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms);
+        Task<string> DeleteDocumentLocationAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms, dfa_DeleteDocument_params dfa_DeleteDocument_params);
         Task<IEnumerable<dfa_projectdocumentlocation>> GetProjectDocumentLocationsListAsync(Guid projectId);
         Task<IEnumerable<dfa_projectclaimdocumentlocation>> GetProjectClaimDocumentLocationsListAsync(Guid claimId);
         // 2024-09-19 EMCRI-676 waynezen; filter applications based on BCeID Org

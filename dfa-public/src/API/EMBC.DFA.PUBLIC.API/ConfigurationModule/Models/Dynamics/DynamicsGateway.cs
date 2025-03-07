@@ -751,15 +751,17 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             }
         }
 
-        public async Task<string> DeleteDocumentLocationAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms)
+        public async Task<string> DeleteDocumentLocationAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms, dfa_DeleteDocument_params dfa_DeleteDocument_params )
         {
             try
             {
-                var result = await api.ExecuteAction("dfa_DFAActionDeleteDocuments", dfa_DFAActionDeleteDocuments_parms);
-
+                var result = dfa_DFAActionDeleteDocuments_parms.AppDocID != Guid.Empty ? 
+                    await api.ExecuteAction("dfa_DFAActionDeleteDocuments", dfa_DFAActionDeleteDocuments_parms) : 
+                    await api.ExecuteAction("dfa_DeleteDocument", dfa_DeleteDocument_params);
                 if (result != null)
                 {
-                    return result.Where(m => m.Key == "RetCode") != null ? result.Where(m => m.Key == "RetCode").ToList()[0].Value.ToString() : string.Empty;
+                    Console.WriteLine(result.ToList()[1]);
+                    return result.Where(m => m.Key == "ReturnCode") != null ? result.Where(m => m.Key == "ReturnCode").ToList()[0].Value.ToString() : string.Empty;
                 }
                 return "Deleted";
             }

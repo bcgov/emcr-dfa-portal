@@ -53,9 +53,10 @@ namespace EMBC.DFA.API.Controllers
         [RequestSizeLimit(36700160)]
         public async Task<ActionResult<string>> DeleteProjectAttachment(FileUpload fileUpload)
         {
-            var parms = new dfa_DFAActionDeleteDocuments_parms();
-            if (fileUpload.id != null) parms.AppDocID = (Guid)fileUpload.id;
-            var result = await handler.DeleteFileUploadAsync(parms);
+            var app_parms = new dfa_DFAActionDeleteDocuments_parms();
+            var proj_parms = new dfa_DeleteDocument_params();
+            if (fileUpload.id != null) app_parms.AppDocID = (Guid)fileUpload.id;
+            var result = await handler.DeleteFileUploadAsync(app_parms, proj_parms);
             return Ok(result);
 
             //return Ok(null);
@@ -78,9 +79,15 @@ namespace EMBC.DFA.API.Controllers
 
             if (fileUpload.deleteFlag == true)
             {
-                var parms = new dfa_DFAActionDeleteDocuments_parms();
-                if (fileUpload.id != null) parms.AppDocID = (Guid)fileUpload.id;
-                var result = await handler.DeleteFileUploadAsync(parms);
+                var app_params = new dfa_DFAActionDeleteDocuments_parms();
+                var proj_params = new dfa_DeleteDocument_params();
+                if (fileUpload.id != null)
+                {
+                    Console.WriteLine("testing doc delete");
+                    proj_params.DocLocationID = (Guid)fileUpload.id;
+                    proj_params.DocLocationType = "Project";
+                }
+                var result = await handler.DeleteFileUploadAsync(app_params, proj_params);
                 return Ok(result);
             }
             else
@@ -113,9 +120,14 @@ namespace EMBC.DFA.API.Controllers
 
             if (fileUpload.deleteFlag == true)
             {
-                var parms = new dfa_DFAActionDeleteDocuments_parms();
-                if (fileUpload.id != null) parms.AppDocID = (Guid)fileUpload.id;
-                var result = await handler.DeleteFileUploadAsync(parms);
+                var app_params = new dfa_DFAActionDeleteDocuments_parms();
+                var claim_params = new dfa_DeleteDocument_params();
+                if (fileUpload.id != null)
+                {
+                    claim_params.DocLocationID = (Guid)fileUpload.id;
+                    claim_params.DocLocationType = "Claim";
+                }
+                var result = await handler.DeleteFileUploadAsync(app_params, claim_params);
                 return Ok(result);
             }
             else

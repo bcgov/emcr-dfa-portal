@@ -43,7 +43,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<IEnumerable<dfa_appcleanuplogs_retrieve>> GetCleanUpLogItemsAsync(Guid applicationId);
         Task<string> HandleFileUploadAsync(SubmissionEntity submission);
         Task<string> HandleFileUploadClaimAsync(SubmissionEntityClaim objDocumentLocation);
-        Task<string> DeleteFileUploadAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms);
+        Task<string> DeleteFileUploadAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms, dfa_DeleteDocument_params dfa_DeleteDocument_params);
         Task<IEnumerable<dfa_projectdocumentlocation>> GetProjectFileUploadsAsync(Guid projectId);
         Task<IEnumerable<dfa_projectclaimdocumentlocation>> GetProjectClaimFileUploadsAsync(Guid claimId);
         // 2024-09-19 EMCRI-676 waynezen; overloaded method that filters application based on BCeID Org
@@ -284,9 +284,9 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             var result = await listsGateway.InsertDocumentLocationApplicationPDFAsync(objDocumentLocation);
             return result;
         }
-        public async Task<string> DeleteFileUploadAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms)
+        public async Task<string> DeleteFileUploadAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms, dfa_DeleteDocument_params dfa_DeleteDocument_params)
         {
-            var result = await listsGateway.DeleteDocumentLocationAsync(dfa_DFAActionDeleteDocuments_parms);
+            var result = await listsGateway.DeleteDocumentLocationAsync(dfa_DFAActionDeleteDocuments_parms, dfa_DeleteDocument_params);
             return result;
         }
 
