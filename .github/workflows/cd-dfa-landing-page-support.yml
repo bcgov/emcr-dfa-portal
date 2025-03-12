@@ -1,74 +1,74 @@
 #CD pipeline for dfa landing page into the support stream
-name: cd-dfa-landing-page-support
+# name: cd-dfa-landing-page-support
 
-on:
-  push:
-    branches:
-      - support-develop
+# on:
+#   push:
+#     branches:
+#       - support-develop
 
-    paths:
-      - "landing-page/**"
-      - ".github/workflows/cd-dfa-landing-page-support.yml"
+#     paths:
+#       - "landing-page/**"
+#       - ".github/workflows/cd-dfa-landing-page-support.yml"
 
-env:
-  IMAGE_NAME: dfa-landing-page
-  WORKING_DIRECTORY: ./landing-page/src
+# env:
+#   IMAGE_NAME: dfa-landing-page
+#   WORKING_DIRECTORY: ./landing-page/src
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     if: github.event_name == 'push'
 
-    steps:
-      - uses: actions/checkout@v3
+#     steps:
+#       - uses: actions/checkout@v3
 
-      - uses: docker/setup-buildx-action@v2
-        id: buildx
-        with:
-          install: true
+#       - uses: docker/setup-buildx-action@v2
+#         id: buildx
+#         with:
+#           install: true
 
-      - name: Log into registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ secrets.DOCKER_SUPPORT_REGISTRY }}
-          username: ${{ secrets.DOCKER_SUPPORT_USERNAME }}
-          password: ${{ secrets.DOCKER_SUPPORT_PASSWORD_BUILDER }}
+#       - name: Log into registry
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ${{ secrets.DOCKER_SUPPORT_REGISTRY }}
+#           username: ${{ secrets.DOCKER_SUPPORT_USERNAME }}
+#           password: ${{ secrets.DOCKER_SUPPORT_PASSWORD_BUILDER }}
 
-      - name: Set image repository
-        id: set_image_repository
-        run: |
-          # Set image repository and change all uppercase to lowercase
-          DOCKER_REPOSITORY=$(echo ${{ secrets.DOCKER_SUPPORT_REGISTRY }}/${{ env.IMAGE_NAME }} | tr '[A-Z]' '[a-z]')
-          echo "::set-output name=docker-repository::$DOCKER_REPOSITORY"
+#       - name: Set image repository
+#         id: set_image_repository
+#         run: |
+#           # Set image repository and change all uppercase to lowercase
+#           DOCKER_REPOSITORY=$(echo ${{ secrets.DOCKER_SUPPORT_REGISTRY }}/${{ env.IMAGE_NAME }} | tr '[A-Z]' '[a-z]')
+#           echo "::set-output name=docker-repository::$DOCKER_REPOSITORY"
           
-      - name: Pull image
-        env:
-          DOCKER_REPOSITORY: ${{ steps.set_image_repository.outputs.docker-repository }}
-        run: docker pull $DOCKER_REPOSITORY:latest || true
+#       - name: Pull image
+#         env:
+#           DOCKER_REPOSITORY: ${{ steps.set_image_repository.outputs.docker-repository }}
+#         run: docker pull $DOCKER_REPOSITORY:latest || true
 
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_prefix: ${{ env.IMAGE_NAME }}=v
-          fetch_all_tags: true
+#       - name: Bump version and push tag
+#         id: tag_version
+#         uses: mathieudutour/github-tag-action@v6.0
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           tag_prefix: ${{ env.IMAGE_NAME }}=v
+#           fetch_all_tags: true
 
-      - name: Build image
-        env:
-          DOCKER_REPOSITORY: ${{ steps.set_image_repository.outputs.docker-repository }}
-        working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: |
-          VERSION=$(echo "${{ steps.tag_version.outputs.new_tag }}" | awk -F=v '{print $NF}')
+#       - name: Build image
+#         env:
+#           DOCKER_REPOSITORY: ${{ steps.set_image_repository.outputs.docker-repository }}
+#         working-directory: ${{ env.WORKING_DIRECTORY }}
+#         run: |
+#           VERSION=$(echo "${{ steps.tag_version.outputs.new_tag }}" | awk -F=v '{print $NF}')
  
-          echo DOCKER_REPOSITORY=${{ env.DOCKER_REPOSITORY }}
-          echo VERSION=$VERSION          
+#           echo DOCKER_REPOSITORY=${{ env.DOCKER_REPOSITORY }}
+#           echo VERSION=$VERSION          
  
-          tar -czh . | docker build --load --tag ${{ env.DOCKER_REPOSITORY }}:latest --cache-from=${{ env.DOCKER_REPOSITORY }}:latest --build-arg VERSION=$VERSION -
-          docker tag ${{ env.DOCKER_REPOSITORY }}:latest ${{ env.DOCKER_REPOSITORY }}:$VERSION
+#           tar -czh . | docker build --load --tag ${{ env.DOCKER_REPOSITORY }}:latest --cache-from=${{ env.DOCKER_REPOSITORY }}:latest --build-arg VERSION=$VERSION -
+#           docker tag ${{ env.DOCKER_REPOSITORY }}:latest ${{ env.DOCKER_REPOSITORY }}:$VERSION
 
-      - name: Push image
-        env:
-          DOCKER_REPOSITORY: ${{ steps.set_image_repository.outputs.docker-repository }}
-        run: |
-          docker push --all-tags ${{ env.DOCKER_REPOSITORY }}
+#       - name: Push image
+#         env:
+#           DOCKER_REPOSITORY: ${{ steps.set_image_repository.outputs.docker-repository }}
+#         run: |
+#           docker push --all-tags ${{ env.DOCKER_REPOSITORY }}
