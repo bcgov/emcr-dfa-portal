@@ -1,0 +1,35 @@
+name: Promote Landing Page to Training
+
+on:
+  push:
+    paths:
+      - ".github/workflows/promote-landing-page-training.yaml"
+  workflow_dispatch:
+
+env:
+  IMAGE_LANDING_PAGE_NAME: dfa-landing-page
+  IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
+  IMAGE_CURRENT_ENV_TAG: test
+  IMAGE_PROMOTE_ENV_TAG: training
+  WORKING_DIRECTORY: ./landing-page/src
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx tooling
+        uses: docker/setup-buildx-action@v3
+
+      - name: Promote dfa-landing-page to training
+        uses: tinact/docker.image-retag@master
+        with:
+          image_name: ${{ env.IMAGE_LANDING_PAGE_NAME }}
+          image_old_tag: ${{ env.IMAGE_CURRENT_ENV_TAG }}
+          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+          registry_username: ${{ secrets.OCP4_USERNAME }}
+          registry_password: ${{ secrets.OCP4_PASSWORD }}
