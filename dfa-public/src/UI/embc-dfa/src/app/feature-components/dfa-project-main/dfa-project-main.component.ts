@@ -320,6 +320,8 @@ export class DFAProjectMainComponent
         this.dfaProjectMainDataService.recoveryPlan.repairDamagedInfrastructure = this.form.get('repairDamagedInfrastructure').value;
         this.dfaProjectMainDataService.recoveryPlan.estimatedCompletionDate = this.form.get('estimatedCompletionDate').value;
         this.dfaProjectMainDataService.recoveryPlan.estimateCostIncludingTax = !this.form.get('estimateCostIncludingTax').value ? null : this.form.get('estimateCostIncludingTax').value;
+        this.dfaProjectMainDataService.recoveryPlan.createdDate = this.form.get('createdDate').value;
+        this.dfaProjectMainDataService.recoveryPlan.submittedDate = this.form.get('submittedDate').value;
 
         break;
       default:

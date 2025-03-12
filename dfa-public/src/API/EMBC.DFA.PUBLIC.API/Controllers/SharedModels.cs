@@ -579,6 +579,8 @@ namespace EMBC.DFA.API.Controllers
         public decimal? paidProjectAmount { get; set; }
         public string? emcrapprovalcomments { get; set; }
         public string? ProjectDecision { get; set; }
+        public string? createdDate { get; set; }
+        public string? submittedDate { get; set; }
 
     }
 

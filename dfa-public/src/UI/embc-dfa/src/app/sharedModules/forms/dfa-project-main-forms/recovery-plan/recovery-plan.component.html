@@ -64,6 +64,38 @@
         </div>
       </div>
       </ng-container>
+      <div class="row my-2">
+        <div class="col-md-3">
+          <p class="label">
+            Created Date
+          </p>
+          <mat-form-field appearance="outline">
+            <input matInput (focusin)="setHelpText(14, tooltip)" [matDatepicker]="createdPicker"
+              [readonly]="isReadOnly === true" formControlName="createdDate">
+            <mat-datepicker-toggle matSuffix [for]="createdPicker"
+              [disabled]="isReadOnly === true"></mat-datepicker-toggle>
+            <mat-datepicker #createdPicker startView="multi-year"
+              [disabled]="isReadOnly === true"></mat-datepicker>
+
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-3">
+          <p class="label">
+            Submitted Date
+          </p>
+          <mat-form-field appearance="outline">
+            <input matInput (focusin)="setHelpText(14, tooltip)" [matDatepicker]="submittedPicker"
+              [readonly]="isReadOnly === true" formControlName="submittedDate">
+            <mat-datepicker-toggle matSuffix [for]="submittedPicker"
+              [disabled]="isReadOnly === true"></mat-datepicker-toggle>
+            <mat-datepicker #submittedPicker startView="multi-year"
+              [disabled]="isReadOnly === true"></mat-datepicker>
+
+          </mat-form-field>
+        </div>
+
+      </div>
       <br />
       <div>
         <ng-container *ngIf="projectDecision === 'Approved' || projectDecision === 'Approved with Exclusions' || projectDecision === 'Withdrawn' || projectDecision === 'Ineligible'">
