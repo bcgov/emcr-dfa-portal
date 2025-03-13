@@ -12,7 +12,6 @@ env:
   IMAGE_CURRENT_ENV_TAG: training
   IMAGE_PROMOTE_ENV_TAG: prod
   IMAGE_PROMOTE_ENV_BACKUP_TAG: prod-backup
-  WORKING_DIRECTORY: ./landing-page/src
 
 jobs:
   build:
@@ -28,7 +27,7 @@ jobs:
       - name: Retag existing prod dfa-landing-page image to prod-backup
         uses: tinact/docker.image-retag@master
         with:
-          image_name: ${{ env.IMAGE_PDF_NAME }}
+          image_name: ${{ env.IMAGE_LANDING_PAGE_NAME }}
           image_old_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
           image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_BACKUP_TAG }}
           registry: ${{ env.IMAGE_REGISTRY }}
