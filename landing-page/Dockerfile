@@ -1,6 +1,6 @@
 FROM trion/ng-cli-karma:18.2.11 AS node-builder
 WORKDIR /src
-COPY ./src/package*.json ./
+COPY ./package*.json ./
 RUN npm install --ignore-scripts --force
 COPY ./src/ .
 
