@@ -1,5 +1,5 @@
 #CD pipeline for dfa landing page into the support stream
-name: cd-dfa-landing-page-support
+name: Build Landing Page
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
       - ".github/workflows/cd-landing-page.yaml"
 
 env:
-  DOCKER_CONTEXT_DIRECTORY: ./landing-page/src
+  DOCKER_CONTEXT_DIRECTORY: ./landing-page
   IMAGE_NAME: dfa-landing-page
   IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
 
