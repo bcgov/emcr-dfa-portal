@@ -9,7 +9,7 @@ on:
 env:
   IMAGE_LANDING_PAGE_NAME: dfa-landing-page
   IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
-  IMAGE_CURRENT_ENV_TAG: dev
+  IMAGE_CURRENT_ENV_TAG: latest
   IMAGE_PROMOTE_ENV_TAG: test
 
 jobs:
