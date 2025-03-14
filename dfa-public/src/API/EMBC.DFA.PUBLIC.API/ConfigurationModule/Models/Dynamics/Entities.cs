@@ -311,6 +311,9 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public decimal? dfa_paidprojectamount { get; set; }
         public string? dfa_emcrapprovalcomments { get; set; }
         public string? dfa_projectdecision { get; set; }
+        public string? dfa_projecttype { get; set; }
+        public string? dfa_projecttypeother { get; set; }
+        
     }
 
     public class dfa_claim_retrieve
@@ -654,6 +657,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public bool? dfa_dateofdamagesameasapplication { get; set; }
         public bool? dfa_createdonportal { get; set; }
         public bool? dfa_portalsubmitted { get; set; }
+        public string? dfa_projecttype { get; set; }
+        public string? dfa_projecttypeother { get; set; }
 
         //public DateTime? dfa_projectapproveddate { get; set; }
 
@@ -987,6 +992,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_bpfclosedate { get; set; }
         public bool? hasAmendments { get; set; }
         public string? dfa_projectdecision { get; set; }
+        public string? dfa_projecttype { get; set; }
+        public string? dfa_projecttypeother { get; set; }
     }
 
     public class dfa_projectamendment
@@ -1122,6 +1129,23 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
 
         [Description("Approved with Exclusions")]
         ApprovedwithExclusions = 222710003,
+    }
+    public enum ProjectTypes
+    {
+        [Description("Infrastructure Repair")]
+        InfrastructureRepair = 222710000,
+
+        [Description("Debris Cleanup")]
+        DebrisCleanup = 222710001,
+
+        [Description("Engineering")]
+        Engineering = 222710002,
+
+        [Description("Planning & Design")]
+        PlanningDesign = 222710003,
+        
+        [Description("Other")]
+        Other = 222710004,
     }
 
     public enum ProjectAmendmentStages

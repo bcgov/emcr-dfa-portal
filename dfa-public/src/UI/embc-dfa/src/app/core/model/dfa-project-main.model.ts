@@ -145,6 +145,8 @@ export class RecoveryPlan {
   paidProjectAmount?: null | number;
   emcrapprovalcomments?: null | string;
   projectDecision?: null | string;
+  projectType?: null | string;
+  projectTypeOther?: null | string;
 
   constructor(
     sitelocationdamageFromDate?: null | string,
@@ -171,7 +173,9 @@ export class RecoveryPlan {
     approvedTotal?: null | number,
     paidProjectAmount?: null | number,
     emcrapprovalcomments?: null | string,
-    projectDecision?: null | string
+    projectDecision?: null | string,
+    projectType?: null | string,
+    projectTypeOther?: null | string,
   ) { }
 }
 
@@ -201,6 +205,8 @@ export class RecoveryPlanForm {
   paidProjectAmount = new UntypedFormControl();
   emcrapprovalcomments = new UntypedFormControl();
   projectDecision = new UntypedFormControl();
+  projectType =new UntypedFormControl();
+  projectTypeOther = new UntypedFormControl();
 
   constructor(
     recoveryPlan: RecoveryPlan,
@@ -334,6 +340,19 @@ export class RecoveryPlanForm {
     }
     this.projectDecision.setValidators(null);
 
+    if (recoveryPlan.projectType) {
+      this.projectType.setValue(recoveryPlan.projectType);
+    }
+    this.projectType.setValidators([customValidator
+      .isRequired(this.projectType)
+      .bind(customValidator)]);
+
+    if (recoveryPlan.projectTypeOther) {
+      this.projectTypeOther.setValue(recoveryPlan.projectTypeOther);
+    }
+    this.projectTypeOther.setValidators([customValidator
+      .isRequired(this.projectTypeOther)
+      .bind(customValidator)]);
   }
 }
 

@@ -16,6 +16,8 @@ export interface CurrentProject {
   projectId?: string;
   projectName?: string;
   projectNumber?: string;
+  projectType?: string;
+  projectTypeOther?: string;
   siteLocation?: string;
   stage?: string;
   status?: string;
