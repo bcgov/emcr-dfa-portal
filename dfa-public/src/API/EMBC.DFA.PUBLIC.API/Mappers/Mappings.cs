@@ -835,6 +835,8 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.ProjectDecision,opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projectdecision) ? GetEnumDescription((ProjectDecisions)Convert.ToInt32(s.dfa_projectdecision)) : null))
                 .ForMember(d => d.createdDate, opts => opts.MapFrom(s => s.createdon == null ? null : Convert.ToDateTime(s.createdon).ToString("o")))
                 .ForMember(d => d.submittedDate, opts => opts.MapFrom(s => s.dfa_projectsubmitteddate == null ? null : Convert.ToDateTime(s.dfa_projectsubmitteddate).ToString("o")))
+                .ForMember(d => d.projectType,opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projecttype) ? GetEnumDescription((ProjectTypes)Convert.ToInt32(s.dfa_projecttype)) : null))
+                .ForMember(d => d.projectTypeOther,opts => opts.MapFrom(s => s.dfa_projecttypeother))
                 ;
             //.ForMember(d => d.estimatedCompletionDate, opts => opts.MapFrom(s => s.dfa_estimatedcompletiondateofproject));
             //.ForMember(d => d.wildfireDamage, opts => opts.MapFrom(s => s.dfa_causeofdamagewildfire2 == (int)YesNoOptionSet.Yes ? true : (s.dfa_causeofdamagewildfire2 == (int)YesNoOptionSet.No ? false : (bool?)null)))

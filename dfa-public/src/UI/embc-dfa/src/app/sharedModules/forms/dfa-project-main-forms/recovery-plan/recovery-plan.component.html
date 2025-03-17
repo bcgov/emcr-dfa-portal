@@ -298,10 +298,10 @@
                 Project Type Other Description<span style="color:red">*</span>
               </p>
               <mat-form-field appearance="outline">
-                <input (focusin)="setHelpText(2, tooltip)" #projectName formControlName="projectName" matInput required
-                       placeholder="Project Name" maxlength="100" />
+                <input (focusin)="setHelpText(2, tooltip)" #projectName formControlName="projectTypeOther" matInput required
+                       placeholder="Project type other" maxlength="100" />
                 <mat-error *ngIf="
-                recoveryPlanForm.get('projectName').hasError('isRequired')
+                recoveryPlanForm.get('projectTypeOther').hasError('isRequired')
               ">
                   Project Name or Project Number is required to upload documents</mat-error>
               </mat-form-field>

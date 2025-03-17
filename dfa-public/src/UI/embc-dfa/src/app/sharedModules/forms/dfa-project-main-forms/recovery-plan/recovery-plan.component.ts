@@ -185,6 +185,7 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
         //}
         //this.propertyDamageForm.get('otherDamageText').updateValueAndValidity();
         //this.propertyDamageForm.updateValueAndValidity();
+        console.log(this.recoveryPlanForm);
       });
 
     this.projectService.projectGetProjectTypes().subscribe({
@@ -323,6 +324,9 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
           if (dfaProjectMain && dfaProjectMain.project && dfaProjectMain.project.isdamagedDateSameAsApplication == false) {
             this.showDates = true;
           }
+          if (dfaProjectMain && dfaProjectMain.project && dfaProjectMain.project.projectType === "Other" ){
+            this.projTypeSelectedOther = true;
+          }
 
           dfaProjectMain.project.estimateCostIncludingTax = dfaProjectMain.project.estimateCostIncludingTax ? toFixedWithZeros(dfaProjectMain.project.estimateCostIncludingTax,2) : null;
 
@@ -348,8 +352,7 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
   onSelectProjectType(objSelected) {
     objSelected.type === "Other" ?
       this.projTypeSelectedOther = true :
-      this.projTypeSelectedOther = false
-    console.log(this.recoveryPlanForm)
+      this.projTypeSelectedOther = false;
   }
 
 

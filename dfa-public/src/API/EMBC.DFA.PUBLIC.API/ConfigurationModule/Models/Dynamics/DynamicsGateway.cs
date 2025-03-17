@@ -960,8 +960,9 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             try
             {
                 var jsonVal = JsonConvert.SerializeObject(project);
+                Console.WriteLine(JsonConvert.SerializeObject(jsonVal));
                 var result = await api.ExecuteAction("dfa_DFAPortalCreateProject", project);
-
+                
                 if (result != null)
                 {
                     return result.Where(m => m.Key == "output") != null ? result.Where(m => m.Key == "output").ToList()[0].Value.ToString() : string.Empty;
@@ -998,7 +999,6 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                 },
                 Filter = $"dfa_projectid eq {projectId}"
             });
-
             return list.List.FirstOrDefault();
         }
 
