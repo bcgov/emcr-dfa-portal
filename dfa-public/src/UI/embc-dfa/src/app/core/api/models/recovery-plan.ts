@@ -7,6 +7,7 @@ export interface RecoveryPlan {
   approvedTotal?: null | number;
   causeofDamageDetails?: null | string;
   claimTotal?: null | number;
+  createdDate?: null | string;
   describeDamageDetails?: null | string;
   describeDamagedInfrastructure?: null | string;
   differentDamageDatesReason?: null | string;
@@ -27,7 +28,5 @@ export interface RecoveryPlan {
   siteLocation?: null | string;
   sitelocationdamageFromDate?: null | string;
   sitelocationdamageToDate?: null | string;
-  /* EMCRI-827 */
-  createdDate?: null | string;
   submittedDate?: null | string;
 }

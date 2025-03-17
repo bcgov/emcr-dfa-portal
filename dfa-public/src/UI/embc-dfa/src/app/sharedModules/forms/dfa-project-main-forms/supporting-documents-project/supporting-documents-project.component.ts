@@ -193,7 +193,6 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
 
     if (this.dfaApplicationMainDataService.getViewOrEdit() == 'viewOnly') {
       this.supportingDocumentsForm.disable();
-      this.fileUploadForm.disable();
     }
 
     if (!this.isReadOnly) {
