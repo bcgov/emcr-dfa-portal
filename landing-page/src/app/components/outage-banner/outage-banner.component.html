@@ -1,21 +1,21 @@
 <div class="container outageBanner">
-    <div style="max-width: 660px;">
+    <div style="max-width: 720px;">
         <h2>
             PLANNED OUTAGE ALERT
         </h2>
         <p>
             There is a scheduled system outage of the Disaster Financial Assistance portal from
-            <span class="underline">{{environment?.outageStart | date : "EEEE, MMMM d, y, h:mm:ss a"}}.</span> to 
-            <span class="underline">{{environment?.outageEnd | date:"EEEE, MMMM d, y, h:mm:ss a"}}.</span>
+            <span class="italic">{{environment?.outageStart | date : "EEEE, MMMM d 'at' h:mm a"}}.</span> to 
+            <span class="italic">{{environment?.outageEnd | date:"EEEE, MMMM d 'at' h:mm a"}}.</span>
             which will disrupt our services and access to the portal.
         </p>
         <p>
             Please ensure you are logged out of the portal by <span
-                class="underline">{{environment?.outageEnd | date:"EEEE, MMMM d, y, h:mm:ss a"}}.</span>
+                class="underline">{{environment?.outageStart | date:"h:mm a 'on 'EEEE, MMMM d"}}</span>
             to ensure that your application information is saved.
         </p>
         <p>
-            We apologize for any inconvenience caused and thank you for your patience.
+            We apologize for any inconvenience caused and thank you for your patience. <br>
             If you have any questions, please contact <a class="--link-white"
                 href="mailto:DFA.Private&#64;gov.bc.ca">DFA.Private&#64;gov.bc.ca</a>
         </p>
