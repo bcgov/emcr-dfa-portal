@@ -313,7 +313,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_projectdecision { get; set; }
         public string? dfa_projecttype { get; set; }
         public string? dfa_projecttypeother { get; set; }
-        
+        public DateTime? createdon { get; set; }
+        public DateTime? dfa_projectsubmitteddate { get; set; }
     }
 
     public class dfa_claim_retrieve

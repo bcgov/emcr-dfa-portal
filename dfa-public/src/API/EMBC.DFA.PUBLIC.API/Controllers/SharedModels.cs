@@ -603,6 +603,8 @@ namespace EMBC.DFA.API.Controllers
         public string? ProjectDecision { get; set; }
         public string? projectType { get; set; }
         public string? projectTypeOther { get; set; }
+        public string? createdDate { get; set; }
+        public string? submittedDate { get; set; }
 
     }
 

@@ -59,7 +59,7 @@ namespace EMBC.Utilities.S3
                     ContentType = !string.IsNullOrEmpty(cmd.File.ContentType) ? cmd.File.ContentType : null,
                     InputStream = new MemoryStream(file.Content),
                     BucketName = bucketName,
-                    TagSet = GetTagSet(cmd.FileTag?.Tags ?? new List<Tag>()),
+                    //TagSet = GetTagSet(cmd.FileTag?.Tags ?? new List<Tag>()),
                 };
                 request.Metadata.Add("contenttype", file.ContentType);
                 request.Metadata.Add("filename", HttpUtility.HtmlEncode(file.FileName));
@@ -69,8 +69,12 @@ namespace EMBC.Utilities.S3
                         request.Metadata.Add(md.Key, md.Value);
                 }
 
+                
                 var response = await _amazonS3Client.PutObjectAsync(request, cancellationToken);
                 response.EnsureSuccess();
+                
+
+                
 
                 if (cmd?.Key != null)
                 {

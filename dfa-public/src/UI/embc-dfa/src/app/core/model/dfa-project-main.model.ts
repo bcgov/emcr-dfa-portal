@@ -145,6 +145,9 @@ export class RecoveryPlan {
   paidProjectAmount?: null | number;
   emcrapprovalcomments?: null | string;
   projectDecision?: null | string;
+  /* EMCRI-827 */
+  createdDate?: null | string;
+  submittedDate?: null | string;
   projectType?: null | string;
   projectTypeOther?: null | string;
 
@@ -174,6 +177,8 @@ export class RecoveryPlan {
     paidProjectAmount?: null | number,
     emcrapprovalcomments?: null | string,
     projectDecision?: null | string,
+    createdDate?: null | string,
+    submittedDate?: null | string,
     projectType?: null | string,
     projectTypeOther?: null | string,
   ) { }
@@ -205,6 +210,9 @@ export class RecoveryPlanForm {
   paidProjectAmount = new UntypedFormControl();
   emcrapprovalcomments = new UntypedFormControl();
   projectDecision = new UntypedFormControl();
+  /* EMCRI-827 */
+  createdDate = new UntypedFormControl();
+  submittedDate = new UntypedFormControl();
   projectType =new UntypedFormControl();
   projectTypeOther = new UntypedFormControl();
 

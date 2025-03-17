@@ -1,0 +1,313 @@
+.container {
+	/*max-width: 1262px;*/
+	margin: 0 auto;
+}
+
+p {
+    font-family: "BCSans-Regular", "BC Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 18px;
+    color: #000000;
+    line-height: 24px;
+    margin-bottom: 20px;
+}
+
+p.headerText {
+    font-size: 14px;
+    line-height: 24px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+h1 {
+	font-size: 28px;
+	font-weight: bold;
+	/*max-width: 540px;*/
+	margin-bottom: 10px;
+}
+
+h2 {
+	font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 22px;
+    color: #000000;
+}
+
+h3 {
+	font-size: 20px;
+	font-weight: 700;
+	margin-bottom: 10px;
+}
+
+
+.--link-black {
+	color: black;
+	cursor: pointer;
+}
+
+/** Site Header **/
+.site-header {
+	background-color: #003366;
+	width: 100%;
+	height: 64px;
+	border-bottom: 2px solid #FCBA19;
+}
+
+.site-header-content {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	height: 64px;
+}
+
+.site-logo {
+	max-width: 154px;
+	width: 100%;
+}
+
+
+/** Hero **/
+.hero {
+    position: relative;
+    background-color: #003366;
+    color: #ffffff;
+}
+.hero-content {
+padding: 24px;
+max-width: 1084px;
+margin: 0 auto;
+}
+.hero-content h1,
+.hero-content p{
+color:#ffffff !important;
+}
+
+
+
+/** Application Content **/
+.application{
+    position: relative;
+    background-color: rgba(216, 234, 253, 1);
+    padding: 20px;
+}
+
+.card{
+    display: flex;
+    gap:20px;
+    justify-content: center;
+	flex-wrap: wrap;
+    
+}
+
+.cardContent{
+    flex: 1 1 auto;
+    min-width:300px;
+	max-width: 560px;
+}
+
+.cardHeader{
+    text-align: center;
+}
+
+.links{
+    text-decoration: underline;
+    color: #255A90;
+}
+
+.icon{
+    width:80px
+}
+
+.icon-text {
+    display: flex;
+    align-items: center;
+    line-height: 32px;
+	padding-left: 20px;
+	gap:10px;
+}
+
+.checkIcon{
+color: #F8BB47;
+width: 40px;
+}
+
+.infoIcon{
+    color: #31B0E6;
+    transform: scale(1.5);
+	width: 56px;
+}
+
+.padding-left{
+	padding-left: 50px;
+}
+
+.applyButton{
+    width: 100%;
+    height: 62px;
+    background: inherit;
+    background-color: rgba(1, 51, 102, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(1, 51, 102, 1);
+    border-radius: 4px;
+    filter: drop-shadow(none);
+    transition: none;
+    font-family: "BCSans-Regular", "BC Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    color: #FFFFFF;
+	cursor: pointer;
+}
+
+.loginText{
+    font-size: 16px;
+    color: #797979;
+    text-align: center;
+}
+/** Contact **/
+
+.contact{
+    display: flex;
+	flex-wrap: wrap;
+    justify-content: center;
+    gap: 50px;
+	padding: 24px;
+}
+
+.contactIcon{
+    width: 150px;
+    padding: 100px;
+}
+
+.content-divider{
+	border-bottom: 1px solid #333333;
+}
+/** Footer **/
+
+.footerText{
+	font-family: "BCSans-Regular", "BC Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    color: #333333;
+}
+
+.site-footer {
+    background-color: #ffffff;
+    width: 100%;
+    min-height: 60px;
+    padding-top: 20px;
+    //border-top: 2px solid #FCBA19;
+    display: inline-block;
+    align-content: space-around;
+	font-size: 14px;
+}
+
+.--site-footer-layout {
+	display: flex;
+	flex-direction: column;
+    padding-top: 30px;
+    border-top: 1px solid black;
+    width: 70%;
+	font-family: "BCSans-Regular", "BC Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    color: #333333;
+}
+
+@media (min-width: 720px) {
+	.--site-footer-layout {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		flex-wrap: wrap;
+	}
+}
+
+
+.site-footer-links {
+	list-style: none;
+	margin-bottom: 0;
+	
+}
+
+.site-footer-links li {
+	margin-bottom: 16px;
+}
+
+.site-footer-links a {
+	font-family: "BCSans-Regular", "BC Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    text-decoration: underline;
+    color: #333333;
+	
+}
+
+.site-footer-links a:hover {
+	text-decoration: underline;
+	color: #31B0E6;
+}
+
+
+.divider {
+	color: #333;
+	display: none;
+}
+
+@media (min-width: 720px) {
+	.divider {
+		display: inline-block;
+		padding: 0 10px;
+	}
+}
+
+.site-footer-phone-number {
+	padding: 20px;
+}
+
+@media (min-width: 720px) {
+	.site-footer-links {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		list-style: none;
+
+	}
+
+	.site-footer-links li {
+		margin-bottom: 0;
+	}
+
+    // .hero-text {
+    //     padding: 30px 0 10px 0;
+    //     /*width: 50%;*/
+    // }
+
+    .fontweight90 {
+        font-weight: bold;
+		text-align: center;
+    }
+	.environment-banner {
+		max-width: 100%;
+		padding: 10px 0px;
+		justify-content: space-between;
+		text-align: center;
+		color: white;
+		background-color: #097d8c;
+		p {
+			margin-top: 10px;
+		}
+	}
+}
+
+

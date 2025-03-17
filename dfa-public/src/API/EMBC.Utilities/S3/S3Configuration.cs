@@ -24,6 +24,7 @@ namespace EMBC.Utilities.S3
                         settings.SecretKey,
                         new AmazonS3Config
                         {
+                            UseArnRegion = false,
                             ServiceURL = settings.Url,
                             ForcePathStyle = true,
                         }));
@@ -34,7 +35,7 @@ namespace EMBC.Utilities.S3
                 services.AddSingleton<IS3Provider, S3Provider>();
             }
 
-                return services;
+            return services;
         }
 
         private static S3StorageProviderSettings? GetSettings(IConfiguration configuration)

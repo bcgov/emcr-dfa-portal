@@ -37,8 +37,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Amazon.Extensions.S3.Encryption" Version="2.2.1" />
-        <PackageReference Include="AWSSDK.S3" Version="3.7.415.9" />
         <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.13" />
 

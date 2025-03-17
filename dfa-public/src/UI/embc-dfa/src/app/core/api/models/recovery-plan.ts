@@ -29,4 +29,7 @@ export interface RecoveryPlan {
   siteLocation?: null | string;
   sitelocationdamageFromDate?: null | string;
   sitelocationdamageToDate?: null | string;
+  /* EMCRI-827 */
+  createdDate?: null | string;
+  submittedDate?: null | string;
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
@@ -18,6 +19,7 @@ using EMBC.Utilities.Configuration;
 using EMBC.Utilities.Telemetry;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +29,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
@@ -62,9 +65,44 @@ namespace EMBC.DFA.API
             // 2024-08-14 EMCRI-216 waynezen: add extra diagnostics
             var oidcConfig = configuration.GetSection("auth:oidc");
 
-            services.AddAuthentication()
-             //JWT tokens handling
-             .AddJwtBearer("jwt", options =>
+
+            var defaultScheme = "Bearer_OR_SSO";
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = defaultScheme;
+                options.DefaultChallengeScheme = defaultScheme;
+            })
+            // JWT for Service Account    
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                options.MetadataAddress = configuration.GetValue<string>("jwt:metadataAddress");
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidateIssuer = true,
+                    RequireSignedTokens = true,
+                    RequireAudience = true,
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromSeconds(60),
+                    NameClaimType = ClaimTypes.Upn,
+                    RoleClaimType = ClaimTypes.Role,
+                    ValidateActor = true,
+                    ValidateIssuerSigningKey = true,
+                };
+
+                configuration.GetSection("jwt").Bind(options);
+
+
+#pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                
+                options.Validate();
+
+            })
+            //JWT token handling - SSO for BCeID login
+            .AddJwtBearer("SSO", options =>
              {
                  options.BackchannelHttpHandler = new HttpClientHandler
                  {
@@ -136,8 +174,49 @@ namespace EMBC.DFA.API
                          logger.LogError(ctx?.Result?.Failure, "Introspection authantication failed");
                      }
                  };
-             });
+             })
 
+             .AddPolicyScheme(defaultScheme, defaultScheme, options =>
+            {
+                options.ForwardDefaultSelector = context =>
+                {
+                    string? authorization = context.Request.Headers[HeaderNames.Authorization];
+
+                    if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer "))
+                    {
+                        var token = authorization["Bearer ".Length..].Trim();
+                        var jwtHandler = new JwtSecurityTokenHandler();
+
+                        if (jwtHandler.CanReadToken(token))
+                        {
+                            JwtSecurityToken jwtToken = jwtHandler.ReadJwtToken(token);
+                            var identityProviderClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "aud");
+                            if (identityProviderClaim != null && identityProviderClaim.Value.Equals(configuration.GetValue<string>("SSO:jwt:audience"), StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                return "SSO";
+                            }
+                            else
+                                return JwtBearerDefaults.AuthenticationScheme;
+                        }
+                        return JwtBearerDefaults.AuthenticationScheme;
+                    }
+                    return JwtBearerDefaults.AuthenticationScheme;
+                };
+                options.Validate();
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
+                {
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                        .RequireAuthenticatedUser()
+                        .RequireClaim("user_info");
+                });
+                var ssoPolicyBuilder = new AuthorizationPolicyBuilder("SSO");
+                options.AddPolicy("OnlySSO", ssoPolicyBuilder.RequireAuthenticatedUser().Build());
+            });
+            /*
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
@@ -150,7 +229,7 @@ namespace EMBC.DFA.API
 
                 options.DefaultPolicy = options.GetPolicy(JwtBearerDefaults.AuthenticationScheme) ?? null!;
             });
-
+            */
             services.Configure<OpenApiDocumentMiddlewareSettings>(options =>
             {
                 options.Path = "/api/openapi/{documentName}/openapi.json";

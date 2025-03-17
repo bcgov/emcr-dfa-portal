@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using Amazon.Runtime;
 using Amazon.S3;
 using EMBC.Utilities.Configuration;
 using EMBC.Utilities.Extensions;

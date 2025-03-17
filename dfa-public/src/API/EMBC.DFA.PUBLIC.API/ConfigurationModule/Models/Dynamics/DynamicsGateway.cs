@@ -993,7 +993,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     "dfa_projectid", "dfa_projectbusinessprocesssubstages",
                     "dfa_descriptionofdamage", "dfa_projectapproveddate", "dfa_18monthdeadline",
                     "dfa_approvedcost", "dfa_approvedamendedprojectcost", "dfa_claimtotal", "dfa_approvedtotal","dfa_paidprojectamount",
-                    "dfa_emcrapprovalcomments", "dfa_projectdecision", "dfa_projecttype", "dfa_projecttypeother"
+                    "dfa_emcrapprovalcomments", "dfa_projectdecision", "dfa_projecttype", "dfa_projecttypeother","createdon", "dfa_projectsubmitteddate"
 
                 },
                 Filter = $"dfa_projectid eq {projectId}"

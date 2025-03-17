@@ -30,7 +30,7 @@ namespace EMBC.Utilities.Hosting
                 .Enrich.WithEnvironmentName()
                 .Enrich.WithEnvironmentUserName()
                 .Enrich.WithCorrelationId()
-                .Enrich.WithCorrelationIdHeader()
+                //.Enrich.WithCorrelationIdHeader()
                 //.Enrich.WithClientAgent()
                 .Enrich.WithClientIp()
                 .Enrich.WithSpan()
