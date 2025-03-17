@@ -137,6 +137,46 @@ namespace EMBC.DFA.API.Controllers
 
             return Ok(lstProjectAmendments);
         }
+        
+        /// <summary>
+        /// Get the applicant subtype records
+        /// </summary>
+        /// <returns>applicant subtype records</returns>
+        [HttpGet("projecttypes")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<List<ProjectTypes>> GetProjectTypes()
+        {
+            var lstProjecttypes = new List<ProjectType>()
+            {
+                new ProjectType()
+                {
+                    id = "1",
+                    type = GetEnumMemberAttrValue(ProjectTypeCategories.InfrastructureRepair),
+                },
+                new ProjectType()
+                {
+                    id = "2",
+                    type = GetEnumMemberAttrValue(ProjectTypeCategories.DebrisCleanup),
+                },
+                new ProjectType()
+                {
+                    id = "3",
+                    type = GetEnumMemberAttrValue(ProjectTypeCategories.Engineering),
+                },
+                new ProjectType()
+                {
+                    id = "4",
+                    type = GetEnumMemberAttrValue(ProjectTypeCategories.PlanningDesign),
+                },
+                new ProjectType()
+                {
+                    id = "5",
+                    type = GetEnumMemberAttrValue(ProjectTypeCategories.Other),
+                }
+            };
+            return Ok(lstProjecttypes);
+        }
 
         public static string GetEnumDescription(System.Enum value)
         {
@@ -151,6 +191,20 @@ namespace EMBC.DFA.API.Controllers
 
             return value.ToString();
         }
+        
+        public string GetEnumMemberAttrValue<T>(T enumVal)
+        {
+            var enumType = typeof(T);
+            var memInfo = enumType.GetMember(enumVal.ToString());
+            var attr = memInfo.FirstOrDefault()?.GetCustomAttributes(false).OfType<EnumMemberAttribute>().FirstOrDefault();
+            if (attr != null)
+            {
+                return attr.Value;
+            }
+
+            return null;
+        }
+        
     }
 
     public class CurrentProjectAmendment
@@ -203,8 +257,15 @@ namespace EMBC.DFA.API.Controllers
         public bool IsClaimSubmission { get; set; }
         public bool HasAmendment { get; set; }
         public string ProjectDecision { get; set; }
+        public string ProjectType { get; set; }
+        public string ProjectTypeOther { get; set; }
     }
 
+    public class ProjectType
+    {
+        public string id { get; set; }
+        public string type { get; set; }
+    }
     public class ProjectStatusBar
     {
         public string Status { get; set; }

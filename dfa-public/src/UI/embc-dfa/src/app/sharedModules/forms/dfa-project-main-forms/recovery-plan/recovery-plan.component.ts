@@ -25,7 +25,12 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
-import {ApplicantOption, ApplicantSubtypeSubCategories, CurrentApplication} from 'src/app/core/api/models';
+import {
+  ApplicantOption,
+  ApplicantSubtypeSubCategories,
+  CurrentApplication,
+  ProjectTypes
+} from 'src/app/core/api/models';
 import { MatTableModule } from '@angular/material/table';
 import { CustomPipeModule } from 'src/app/core/pipe/customPipe.module';
 import { DFADeleteConfirmDialogComponent } from '../../../../core/components/dialog-components/dfa-confirm-delete-dialog/dfa-confirm-delete.component';
@@ -81,6 +86,8 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
   caseNumber: string = "";
   damageTypes: string = '';
   hideHelp: boolean = true;
+  projectTypes: ProjectTypes[]
+  projTypeSelectedOther: boolean = false;
   timerID;
   readonly phoneMask = [
     /\d/,
@@ -179,6 +186,17 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
         //this.propertyDamageForm.get('otherDamageText').updateValueAndValidity();
         //this.propertyDamageForm.updateValueAndValidity();
       });
+
+    this.projectService.projectGetProjectTypes().subscribe({
+      next: (projectTypes) => {
+        this.projectTypes  = projectTypes;
+
+      },
+      error: (error) => {
+        console.error(error);
+        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+      }
+    });
 
     let projectId = this.dfaProjectMainDataService.getProjectId();
     let applicaitonId = this.dfaProjectMainDataService.getApplicationId();
@@ -305,6 +323,9 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
           if (dfaProjectMain && dfaProjectMain.project && dfaProjectMain.project.isdamagedDateSameAsApplication == false) {
             this.showDates = true;
           }
+          if (dfaProjectMain && dfaProjectMain.project && dfaProjectMain.project.projectType === "Other" ){
+            this.projTypeSelectedOther = true;
+          }
 
           dfaProjectMain.project.estimateCostIncludingTax = dfaProjectMain.project.estimateCostIncludingTax ? toFixedWithZeros(dfaProjectMain.project.estimateCostIncludingTax,2) : null;
 
@@ -326,6 +347,13 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
       });
     }
   }
+
+  onSelectProjectType(objSelected) {
+    objSelected.type === "Other" ?
+      this.projTypeSelectedOther = true :
+      this.projTypeSelectedOther = false;
+  }
+
 
   validateFormCauseOfDamage(form: FormGroup) {
     if (form.controls.stormDamage.value !== true &&

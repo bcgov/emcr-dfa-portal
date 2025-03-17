@@ -411,6 +411,28 @@ namespace EMBC.DFA.API.Controllers
     }
 
     /// <summary>
+    /// Project type Categories
+    /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum ProjectTypeCategories
+    {
+        [EnumMember(Value = "Infrastructure Repair")]
+        InfrastructureRepair,
+
+        [EnumMember(Value = "Debris Cleanup")]
+        DebrisCleanup,
+
+        [EnumMember(Value = "Engineering")]
+        Engineering,
+
+        [EnumMember(Value = "Planning & Design")]
+        PlanningDesign,
+
+        [EnumMember(Value = "Other")]
+        Other
+    }
+    
+    /// <summary>
     /// Damaged Property Address
     /// </summary>
     public class DamagedPropertyAddress
@@ -579,6 +601,8 @@ namespace EMBC.DFA.API.Controllers
         public decimal? paidProjectAmount { get; set; }
         public string? emcrapprovalcomments { get; set; }
         public string? ProjectDecision { get; set; }
+        public string? projectType { get; set; }
+        public string? projectTypeOther { get; set; }
         public string? createdDate { get; set; }
         public string? submittedDate { get; set; }
 

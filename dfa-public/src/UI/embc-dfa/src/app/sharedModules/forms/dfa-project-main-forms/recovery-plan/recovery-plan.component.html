@@ -269,19 +269,59 @@
             </mat-form-field>
           </div>
           <div class="col-md-1"></div>
+          <div class="col-md-4">
+            <p style="font-size: 15px">
+              Project Type<span style="color:red">*</span>
+            </p>
+            <mat-form-field appearance="outline">
+              <mat-select [disabled]="isReadOnly === true" formControlName="projectType" matInput placeholder="Select the type of project" required>
+                <div *ngFor="let option of projectTypes ">
+                  <mat-option (click)="onSelectProjectType(option)"
+                              [value]="option.type">
+                    {{ option.type }}
+                  </mat-option>
+                </div>
+              </mat-select>
+              <mat-error
+                *ngIf="
+                  recoveryPlanForm.get('projectType').hasError('required')
+                "
+              >
+                Type of governing body is required</mat-error
+              >
+            </mat-form-field>
+          </div>
+
+          <div class="row" *ngIf="projTypeSelectedOther">
+            <div class="col-md-8">
+              <p style="font-size: 15px">
+                Project Type Other Description<span style="color:red">*</span>
+              </p>
+              <mat-form-field appearance="outline">
+                <input (focusin)="setHelpText(2, tooltip)" #projectName formControlName="projectTypeOther" matInput required
+                       placeholder="Project type other" maxlength="100" />
+                <mat-error *ngIf="
+                recoveryPlanForm.get('projectTypeOther').hasError('isRequired')
+              ">
+                  Project Name or Project Number is required to upload documents</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        <div class="row">
           <div class="col-md-8">
             <p style="font-size: 15px">
               Project Name<span style="color:red">*</span>
             </p>
             <mat-form-field appearance="outline">
               <input (focusin)="setHelpText(2, tooltip)" #projectName formControlName="projectName" matInput required
-                placeholder="Project Name" maxlength="100" />
+                     placeholder="Project Name" maxlength="100" />
               <mat-error *ngIf="
                 recoveryPlanForm.get('projectName').hasError('isRequired')
               ">
                 Project Name or Project Number is required to upload documents</mat-error>
             </mat-form-field>
           </div>
+        </div>
         </div>
         <div class="row">
           <p style="font-size: 15px">

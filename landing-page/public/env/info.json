@@ -1,3 +1,5 @@
+  
+
     {
         "envName": "local",
         "bannerTitle": "You are in the LOCAL version of the Disaster Financial Assistance Tool.",
@@ -8,5 +10,4 @@
         "outageEnd" : "2025-03-20T05:00:00-08:00",
         "dfaPublicUrl": "https://publicsector-dev.dfa.gov.bc.ca/registration-method",
         "dfaPrivateUrl": "https://portal.dev.dfa.gov.bc.ca/registration-method"
-
     }

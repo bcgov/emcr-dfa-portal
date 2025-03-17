@@ -77,7 +77,7 @@ export class DFAProjectMainComponent
     private dfaProjectMainMapping: DFAProjectMainMappingService,
   ) {
     const navigation = this.router.getCurrentNavigation();
-    
+
     if (navigation !== null) {
       if (navigation.extras.state !== undefined) {
         const state = navigation.extras.state as { stepIndex: number };
@@ -90,7 +90,7 @@ export class DFAProjectMainComponent
   ngOnInit(): void {
     this.currentFlow = this.route.snapshot.data.flow ? this.route.snapshot.data.flow : 'verified-registration';
     let projectId = this.dfaProjectMainDataService.getProjectId();
-    
+
     if (projectId) {
       this.dfaProjectMainDataService.setProjectId(projectId);
       this.getFileUploadsForProject(projectId);
@@ -102,7 +102,7 @@ export class DFAProjectMainComponent
     this.steps = this.componentService.createDFAProjectMainSteps();
     this.vieworedit = this.dfaProjectMainDataService.getViewOrEdit();
     this.editstep = this.dfaProjectMainDataService.getEditStep();
-    
+
     //this.showStepper = true;
     this.dfaProjectMainHeading = 'Project Details'
 
@@ -124,10 +124,10 @@ export class DFAProjectMainComponent
     //  //if (idx == 1 && this.formCreationService.recoveryPlanForm.value.get('projectNumber').invalid) {
     //  //  step.editable = false;
     //  //}
-      
+
     //  step.select = () => {
     //    this.selectedStepIndex = idx;
-        
+
     //    switch (idx) {
     //      case 1:
     //        this.setFormData('recovery-plan')
@@ -160,7 +160,7 @@ export class DFAProjectMainComponent
    */
   stepChanged(event: any, stepper: MatStepper): void {
     stepper.selected.interacted = false;
-    
+
     if (event.previouslySelectedIndex == 0) {
       this.setFormData('recovery-plan');
     }
@@ -200,7 +200,7 @@ export class DFAProjectMainComponent
    * @param component current component name
    */
   goForward(stepper: MatStepper, isLast: boolean, component: string): void {
-    
+
     if (isLast && component === 'property-damage') {
       this.setFormData(component);
       this.dfaProjectMainStepper.selected.completed = true;
@@ -281,7 +281,7 @@ export class DFAProjectMainComponent
   requiredDocumentsSupplied(): boolean {
     let isPreEventUploaded = this.formCreationService.fileUploadsForm.getValue().getRawValue()?.fileUploads.filter(x => x.requiredDocumentType === "PreEvent" && x.deleteFlag == false).length >= 1 ? true : false;
     let isPostEventUploaded = this.formCreationService.fileUploadsForm.getValue().getRawValue()?.fileUploads.filter(x => x.requiredDocumentType === "PostEvent" && x.deleteFlag == false).length >= 1 ? true : false;
-   
+
     if (isPreEventUploaded == true
       && isPostEventUploaded) return true;
     else return false;
@@ -293,7 +293,7 @@ export class DFAProjectMainComponent
    * @param component Name of the component
    */
   setFormData(component: string): void {
-    
+
     switch (component) {
       case 'recovery-plan':
         this.dfaProjectMainDataService.recoveryPlan.projectApprovedDate = this.form.get('projectApprovedDate').value;
@@ -307,6 +307,8 @@ export class DFAProjectMainComponent
         this.dfaProjectMainDataService.recoveryPlan.projectName = this.form.get('projectName').value;
         this.dfaProjectMainDataService.recoveryPlan.projectNumber = this.form.get('projectNumber').value;
         this.dfaProjectMainDataService.recoveryPlan.projectStatus = this.form.get('projectStatus').value;
+        this.dfaProjectMainDataService.recoveryPlan.projectType = this.form.get('projectType').value;
+        this.dfaProjectMainDataService.recoveryPlan.projectTypeOther = this.form.get('projectTypeOther').value;
         this.dfaProjectMainDataService.recoveryPlan.isdamagedDateSameAsApplication = this.form.get('isdamagedDateSameAsApplication').value == 'true' ? true : (this.form.get('isdamagedDateSameAsApplication').value == 'false' ? false : null);
         this.dfaProjectMainDataService.recoveryPlan.sitelocationdamageFromDate = this.form.get('sitelocationdamageFromDate').value;
         this.dfaProjectMainDataService.recoveryPlan.sitelocationdamageToDate = this.form.get('sitelocationdamageToDate').value;
@@ -335,7 +337,7 @@ export class DFAProjectMainComponent
    * @param index Step index
    */
   loadStepForm(index: number): void {
-    
+
     switch (index) {
       case 0:
         this.form$ = this.formCreationService
@@ -392,15 +394,14 @@ export class DFAProjectMainComponent
           this.dfaProjectMainDataService.recoveryPlan.projectStatus = ProjectStageOptionSet.SUBMIT;
 
           let project = this.dfaProjectMainDataService.createDFAProjectMainDTO();
-
           this.dfaProjectMainService.upsertProject(project).subscribe(x => {
             this.BackToDashboard();
           },
             error => {
               console.error(error);
-              document.location.href = 'https://dfa.gov.bc.ca/error.html';
+              // document.location.href = 'https://dfa.gov.bc.ca/error.html';
             });
-          
+
           //this.dfaProjectMainService.upsertApplication(application).subscribe(x => {
           //  this.isSubmitted = !this.isSubmitted;
           //  this.alertService.clearAlert();
@@ -423,7 +424,7 @@ export class DFAProjectMainComponent
       next: (attachments) => {
         // initialize list of file uploads
         this.formCreationService.fileUploadsForm.value.get('fileUploads').setValue(attachments);
-        
+
       },
       error: (error) => {
         console.error(error);
@@ -462,7 +463,7 @@ export class ValidateProjectMandatoryFields {
     return (controls: AbstractControl) => {
       //const control = controls.get(controlName);
 
-      if (control.invalid == true) { 
+      if (control.invalid == true) {
         control.setErrors({ isRequired: true });
         return { isRequired: true };
       }

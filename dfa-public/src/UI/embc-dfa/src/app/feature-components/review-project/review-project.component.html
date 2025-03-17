@@ -33,6 +33,31 @@
             </button>
           </div>
         </div>
+        <div class="row info-detail">
+          <div class="col-md-3"><span [ngClass]="{'missing-info': !(formCreationService.recoveryPlanForm$ | async)?.value?.projectType || (formCreationService.recoveryPlanForm$ | async)?.controls?.projectType.invalid}">Project Type:</span></div>
+          <div class="col-md-3">
+            <span [ngClass]="{'missing-info': !(formCreationService.recoveryPlanForm$ | async)?.value?.projectType || (formCreationService.recoveryPlanForm$ | async)?.controls?.projectType.invalid}">
+              {{
+                (formCreationService.recoveryPlanForm$ | async)?.value
+                  .projectType ? (formCreationService.recoveryPlanForm$ | async)?.value
+                  .projectType : "Enter required information"
+              }}
+            </span>
+          </div>
+        </div>
+
+        <div class="row info-detail" *ngIf="(formCreationService.recoveryPlanForm$ | async)?.value.projectType === 'Other'">
+          <div class="col-md-3"><span [ngClass]="{'missing-info': !(formCreationService.recoveryPlanForm$ | async)?.value?.projectTypeOther || (formCreationService.recoveryPlanForm$ | async)?.controls?.projectTypeOther.invalid}">Project Type Other:</span></div>
+          <div class="col-md-3">
+            <span [ngClass]="{'missing-info': !(formCreationService.recoveryPlanForm$ | async)?.value?.projectTypeOther || (formCreationService.recoveryPlanForm$ | async)?.controls?.projectTypeOther.invalid}">
+              {{
+                (formCreationService.recoveryPlanForm$ | async)?.value
+                  .projectTypeOther ? (formCreationService.recoveryPlanForm$ | async)?.value
+                  .projectTypeOther : "Enter required information"
+              }}
+            </span>
+          </div>
+        </div>
 
         <div class="row info-detail">
           <div class="col-md-3"><span [ngClass]="{'missing-info': !(formCreationService.recoveryPlanForm$ | async)?.value?.projectName || (formCreationService.recoveryPlanForm$ | async)?.controls?.projectName.invalid}">Project Name:</span></div>

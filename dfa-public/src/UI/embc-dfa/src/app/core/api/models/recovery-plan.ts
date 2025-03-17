@@ -23,6 +23,8 @@ export interface RecoveryPlan {
   projectName?: null | string;
   projectNumber?: null | string;
   projectStatus?: null | ProjectStageOptionSet;
+  projectType?: null | string;
+  projectTypeOther?: null | string;
   repairDamagedInfrastructure?: null | string;
   repairWorkDetails?: null | string;
   siteLocation?: null | string;

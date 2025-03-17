@@ -148,6 +148,8 @@ export class RecoveryPlan {
   /* EMCRI-827 */
   createdDate?: null | string;
   submittedDate?: null | string;
+  projectType?: null | string;
+  projectTypeOther?: null | string;
 
   constructor(
     sitelocationdamageFromDate?: null | string,
@@ -176,7 +178,9 @@ export class RecoveryPlan {
     emcrapprovalcomments?: null | string,
     projectDecision?: null | string,
     createdDate?: null | string,
-    submittedDate?: null | string    
+    submittedDate?: null | string,
+    projectType?: null | string,
+    projectTypeOther?: null | string,
   ) { }
 }
 
@@ -209,6 +213,8 @@ export class RecoveryPlanForm {
   /* EMCRI-827 */
   createdDate = new UntypedFormControl();
   submittedDate = new UntypedFormControl();
+  projectType =new UntypedFormControl();
+  projectTypeOther = new UntypedFormControl();
 
   constructor(
     recoveryPlan: RecoveryPlan,
@@ -342,16 +348,19 @@ export class RecoveryPlanForm {
     }
     this.projectDecision.setValidators(null);
 
-    if (recoveryPlan.createdDate) {
-      this.createdDate.setValue(recoveryPlan.createdDate);
+    if (recoveryPlan.projectType) {
+      this.projectType.setValue(recoveryPlan.projectType);
     }
-    this.createdDate.setValidators(null);
-    
-    if (recoveryPlan.submittedDate) {
-      this.submittedDate.setValue(recoveryPlan.submittedDate);
-    }
-    this.submittedDate.setValidators(null);
+    this.projectType.setValidators([customValidator
+      .isRequired(this.projectType)
+      .bind(customValidator)]);
 
+    if (recoveryPlan.projectTypeOther) {
+      this.projectTypeOther.setValue(recoveryPlan.projectTypeOther);
+    }
+    this.projectTypeOther.setValidators([customValidator
+      .isRequired(this.projectTypeOther)
+      .bind(customValidator)]);
   }
 }
 

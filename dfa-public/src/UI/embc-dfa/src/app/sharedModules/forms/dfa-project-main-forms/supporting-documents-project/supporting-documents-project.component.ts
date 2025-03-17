@@ -75,6 +75,7 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
   RequiredDocumentTypes = RequiredDocumentType;
   showOtherDocuments: boolean = false;
   vieworedit: string = "";
+  applicationSubSubType: string = "";
 
   constructor(
     @Inject('formBuilder') formBuilder: UntypedFormBuilder,
