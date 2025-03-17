@@ -960,7 +960,6 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             try
             {
                 var jsonVal = JsonConvert.SerializeObject(project);
-                Console.WriteLine(JsonConvert.SerializeObject(jsonVal));
                 var result = await api.ExecuteAction("dfa_DFAPortalCreateProject", project);
                 
                 if (result != null)

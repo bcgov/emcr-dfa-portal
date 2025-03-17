@@ -185,7 +185,6 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
         //}
         //this.propertyDamageForm.get('otherDamageText').updateValueAndValidity();
         //this.propertyDamageForm.updateValueAndValidity();
-        console.log(this.recoveryPlanForm);
       });
 
     this.projectService.projectGetProjectTypes().subscribe({

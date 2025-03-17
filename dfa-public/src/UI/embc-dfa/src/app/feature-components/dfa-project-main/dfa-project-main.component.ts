@@ -394,7 +394,6 @@ export class DFAProjectMainComponent
           this.dfaProjectMainDataService.recoveryPlan.projectStatus = ProjectStageOptionSet.SUBMIT;
 
           let project = this.dfaProjectMainDataService.createDFAProjectMainDTO();
-          console.log(project)
           this.dfaProjectMainService.upsertProject(project).subscribe(x => {
             this.BackToDashboard();
           },
