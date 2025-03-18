@@ -751,7 +751,8 @@ namespace EMBC.DFA.API.Mappers
                                             : (s.Project.projectType == "Other"
                                                 ? Convert.ToInt32(ProjectTypes.Other)
                                                 : (int?)null)))))
-                            : (int?)null));
+                            : (int?)null))
+                .ForMember(d => d.dfa_projecttypeother,opts => opts.MapFrom(s => s.Project.projectTypeOther));
                 
             CreateMap<DFAClaimMain, dfa_claim_params>()
                 .ForMember(d => d.dfa_finalclaim, opts => opts.MapFrom(s => s.Claim != null ? s.Claim.isThisFinalClaim : (bool?)null))
