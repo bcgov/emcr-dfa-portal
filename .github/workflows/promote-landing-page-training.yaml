@@ -1,9 +1,6 @@
 name: Promote Landing Page to Training
 
 on:
-  push:
-    paths:
-      - ".github/workflows/promote-landing-page-training.yaml"
   workflow_dispatch:
 
 env:

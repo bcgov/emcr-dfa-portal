@@ -1,10 +1,6 @@
 name: Promote Public Portal to Training
 
 on:
-  push:
-    paths:
-      - ".github/workflows/promote-public-portal-training.yaml"
-
   workflow_dispatch:
 
 env:

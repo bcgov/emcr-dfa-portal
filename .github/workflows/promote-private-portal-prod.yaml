@@ -2,9 +2,6 @@ name: Promote Private Portal to Production
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/promote-private-portal-prod.yaml"
 
 env:
   IMAGE_API_NAME: dfa-portal-api

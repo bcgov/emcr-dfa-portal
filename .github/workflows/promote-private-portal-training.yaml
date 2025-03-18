@@ -2,9 +2,6 @@ name: Promote Private Portal to Training
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/promote-private-portal-training.yaml"
 
 env:
   IMAGE_API_NAME: dfa-portal-api

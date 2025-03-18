@@ -1,9 +1,6 @@
 name: Promote Landing Page to Production
 
 on:
-  push:
-    paths:
-      - ".github/workflows/promote-landing-page-prod.yaml"
   workflow_dispatch:
 
 env:

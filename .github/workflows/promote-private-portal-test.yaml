@@ -2,9 +2,6 @@ name: Promote Private Portal to Test
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/promote-private-portal-test.yaml"
 
 env:
   IMAGE_API_NAME: dfa-portal-api

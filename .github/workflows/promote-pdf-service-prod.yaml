@@ -2,9 +2,6 @@ name: Promote PDF Service to Production
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - ".github/workflows/promote-pdf-service-prod.yaml"
 
 env:
   IMAGE_PDF_NAME: dfa-portal-pdf-service

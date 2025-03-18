@@ -1,10 +1,6 @@
 name: Promote Public Portal to Test
 
 on:
-  push:
-    paths:
-      - ".github/workflows/promote-public-portal-test.yaml"
-
   workflow_dispatch:
 
 env:

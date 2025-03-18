@@ -1,10 +1,6 @@
 name: Promote Public Portal to Production
 
 on:
-  push:
-    paths:
-      - ".github/workflows/promote-public-portal-prod.yaml"
-
   workflow_dispatch:
 
 env:
