@@ -29,6 +29,7 @@ import {
   ApplicantOption,
   ApplicantSubtypeSubCategories,
   CurrentApplication,
+  ProjectStageOptionSet,
   ProjectTypes
 } from 'src/app/core/api/models';
 import { MatTableModule } from '@angular/material/table';
@@ -88,6 +89,9 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
   hideHelp: boolean = true;
   projectTypes: ProjectTypes[]
   projTypeSelectedOther: boolean = false;
+  /* EMCRI-1151 */
+  isSubmitted: boolean = false;
+
   timerID;
   readonly phoneMask = [
     /\d/,
@@ -331,6 +335,9 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
 
           this.dfaProjectMainMapping.mapDFAProjectMain(dfaProjectMain);
           this.projectDecision = dfaProjectMain.project.projectDecision
+
+          /* EMCRI-1151 */
+          this.isSubmitted = dfaProjectMain.project.projectStatus != null && dfaProjectMain.project.projectStatus !== ProjectStageOptionSet.Draft;
 
           this.calcRemainingCharsCauseDamage();
           this.calcRemainingCharsDescribeDamage();

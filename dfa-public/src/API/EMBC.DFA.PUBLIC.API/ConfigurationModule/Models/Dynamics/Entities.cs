@@ -295,7 +295,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_descriptionofmaterialneededtorepair { get; set; }
         public string? dfa_descriptionofrepairwork { get; set; }
         public string? dfa_descriptionofthecauseofdamage { get; set; }
-        public int? dfa_projectbusinessprocessstages { get; set; }
+        public string? dfa_projectbusinessprocessstages { get; set; }
         public int? dfa_projectbusinessprocesssubstages { get; set; }
         public DateTime? dfa_estimatedcompletiondateofproject { get; set; }
         public decimal? dfa_estimatedcost { get; set; }
@@ -860,15 +860,6 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         SUBMIT = 222710001
     }
 
-    public enum ProjectStageOptionSet
-    {
-        [Description("draft")]
-        DRAFT = 222710000,
-
-        [Description("submit")]
-        SUBMIT = 222710001
-    }
-
     public enum ClaimStageOptionSet
     {
         [Description("draft")]
@@ -1066,7 +1057,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         AdditionalinfoRequired = 222710001,
     }
 
-    public enum ProjectStages
+    public enum ProjectStageOptionSet
     {
         [Description("Draft")]
         Draft = 222710000,
@@ -1082,6 +1073,18 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
 
         [Description("Decision Made")]
         DecisionMade = 222710004,
+
+        [Description("Adjudicator")]
+        Adjudicator = 222710005,
+
+        [Description("Compliance Check")]
+        ComplianceCheck = 222710006,
+
+        [Description("Qualified Receiver")]
+        QualifiedReceiver = 222710007,
+
+        [Description("Expense Authority")]
+        ExpenseAuthority = 222710008,
 
         [Description("Closed")]
         Closed = 222710009

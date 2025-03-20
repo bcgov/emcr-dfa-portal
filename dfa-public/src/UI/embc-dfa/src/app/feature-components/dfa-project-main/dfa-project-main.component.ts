@@ -267,7 +267,7 @@ export class DFAProjectMainComponent
 
   saveAsDraft(): void {
     this.setFormData(this.steps[this.dfaProjectMainStepper.selectedIndex]?.component.toString());
-    this.dfaProjectMainDataService.recoveryPlan.projectStatus = ProjectStageOptionSet.DRAFT;
+    this.dfaProjectMainDataService.recoveryPlan.projectStatus = ProjectStageOptionSet.Draft;
     let project = this.dfaProjectMainDataService.createDFAProjectMainDTO();
     this.dfaProjectMainService.upsertProject(project).subscribe(x => {
         this.BackToDashboard();
@@ -391,9 +391,10 @@ export class DFAProjectMainComponent
           //let application = this.dfaApplicationMainDataService.createDFAApplicationMainDTO();
           //this.dfaApplicationMainMapping.mapDFAApplicationMain(application);
           this.setFormData(this.steps[this.dfaProjectMainStepper.selectedIndex]?.component.toString());
-          this.dfaProjectMainDataService.recoveryPlan.projectStatus = ProjectStageOptionSet.SUBMIT;
+          this.dfaProjectMainDataService.recoveryPlan.projectStatus = ProjectStageOptionSet.Submitted;
 
           let project = this.dfaProjectMainDataService.createDFAProjectMainDTO();
+
           this.dfaProjectMainService.upsertProject(project).subscribe(x => {
             this.BackToDashboard();
           },

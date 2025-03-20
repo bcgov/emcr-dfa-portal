@@ -8,6 +8,7 @@ using EMBC.DFA.API.ConfigurationModule.Models.AuthModels;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.ConfigurationModule.Models.PDF;
 using EMBC.DFA.API.Controllers;
+using Microsoft.IdentityModel.Tokens;
 using BCeID = EMBC.Gov.BCeID;
 
 namespace EMBC.DFA.API.Mappers
@@ -534,7 +535,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.Deadline18Month, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_18monthdeadline).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_18monthdeadline).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.ProjectNumber, opts => opts.MapFrom(s => s.dfa_projectnumber))
                 .ForMember(d => d.ProjectId, opts => opts.MapFrom(s => s.dfa_projectid))
-                .ForMember(d => d.Status, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projectbusinessprocessstages) ? GetEnumDescription((ProjectStages)Convert.ToInt32(s.dfa_projectbusinessprocessstages)) : null))
+                .ForMember(d => d.Status, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projectbusinessprocessstages) ? GetEnumDescription((ProjectStageOptionSet)Convert.ToInt32(s.dfa_projectbusinessprocessstages)) : null))
                 .ForMember(d => d.Stage, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projectbusinessprocesssubstages) ? GetEnumDescription((ProjectSubStages)Convert.ToInt32(s.dfa_projectbusinessprocesssubstages)) : null))
                 .ForMember(d => d.ProjectName, opts => opts.MapFrom(s => s.dfa_projectname))
                 .ForMember(d => d.SiteLocation, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_sitelocation) ? "Not Set" : s.dfa_sitelocation))
@@ -543,7 +544,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.DateFileClosed, opts => opts.MapFrom(s => s.dfa_bpfclosedate))
                 .ForMember(d => d.HasAmendment, opts => opts.MapFrom(s => s.hasAmendments))
                 .ForMember(d => d.IsClaimSubmission, opts => opts.MapFrom(s =>
-                    !string.IsNullOrEmpty(s.dfa_projectbusinessprocessstages) && (Convert.ToInt32(s.dfa_projectbusinessprocessstages) == Convert.ToInt32(ProjectStages.DecisionMade) || Convert.ToInt32(s.dfa_projectbusinessprocessstages) == Convert.ToInt32(ProjectStages.Closed))
+                    !string.IsNullOrEmpty(s.dfa_projectbusinessprocessstages) && (Convert.ToInt32(s.dfa_projectbusinessprocessstages) == Convert.ToInt32(ProjectStageOptionSet.DecisionMade) || Convert.ToInt32(s.dfa_projectbusinessprocessstages) == Convert.ToInt32(ProjectStageOptionSet.Closed))
                     && !string.IsNullOrEmpty(s.dfa_projectbusinessprocesssubstages) &&
                     (Convert.ToInt32(s.dfa_projectbusinessprocesssubstages) == Convert.ToInt32(ProjectSubStages.Approved) ||
                     Convert.ToInt32(s.dfa_projectbusinessprocesssubstages) == Convert.ToInt32(ProjectSubStages.ApprovedwithExclusions)) ? true : false))
@@ -699,11 +700,11 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.dfa_projectbusinessprocessstages,
                     opts => opts.MapFrom(s =>
                         s.Project.projectStatus == null
-                            ? Convert.ToInt32(ProjectStages.Draft)
+                            ? Convert.ToInt32(ProjectStageOptionSet.Draft)
                             : Convert.ToInt32(s.Project.projectStatus)))
                 .ForMember(d => d.dfa_projectbusinessprocesssubstages,
                     opts => opts.MapFrom(s =>
-                        s.Project.projectStatus != null && s.Project.projectStatus.Value == ProjectStageOptionSet.SUBMIT
+                        s.Project.projectStatus != null && s.Project.projectStatus.Value == ProjectStageOptionSet.Submitted
                             ? Convert.ToInt32(ProjectSubStages.Pending)
                             : (int?)null))
                 //.ForMember(d => d.dfa_appcontactid, opts => opts.MapFrom(s => s.ProfileVerification.profileId))
@@ -713,7 +714,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.dfa_createdonportal, opts => opts.MapFrom(s => true))
                 .ForMember(d => d.dfa_portalsubmitted,
                     opts => opts.MapFrom(s =>
-                        s.Project.projectStatus != null && s.Project.projectStatus.Value == ProjectStageOptionSet.SUBMIT
+                        s.Project.projectStatus != null && s.Project.projectStatus.Value == ProjectStageOptionSet.Submitted
                             ? true
                             : (bool?)null))
                 .ForMember(d => d.dfa_dateofdamagefrom,
@@ -811,7 +812,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.projectName, opts => opts.MapFrom(s => s.dfa_projectname))
                 .ForMember(d => d.describeDamagedInfrastructure, opts => opts.MapFrom(s => s.dfa_descriptionofdamagewithmaterial))
                 .ForMember(d => d.repairWorkDetails, opts => opts.MapFrom(s => s.dfa_descriptionofrepairwork))
-                .ForMember(d => d.projectStatus, opts => opts.MapFrom(s => 222710001)) //hardcoded - need to replace with s.dfa_projectbusinessprocessstages
+                .ForMember(d => d.projectStatus, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projectbusinessprocessstages) ? System.Enum.Parse(typeof(ProjectStageOptionSet), s.dfa_projectbusinessprocessstages) : null))
                 .ForMember(d => d.causeofDamageDetails, opts => opts.MapFrom(s => s.dfa_descriptionofthecauseofdamage))
                 .ForMember(d => d.describeDamageDetails, opts => opts.MapFrom(s => s.dfa_descriptionofdamage))
                 .ForMember(d => d.differentDamageDatesReason, opts => opts.MapFrom(s => s.dfa_dateofdamagedifferencereason))

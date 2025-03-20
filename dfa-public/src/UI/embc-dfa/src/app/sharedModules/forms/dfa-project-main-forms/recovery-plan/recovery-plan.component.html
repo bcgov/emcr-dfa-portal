@@ -80,17 +80,13 @@
           </mat-form-field>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3" *ngIf="isSubmitted">
           <p class="label">
             Submitted Date
           </p>
           <mat-form-field appearance="outline">
             <input matInput (focusin)="setHelpText(14, tooltip)" [matDatepicker]="submittedPicker"
-              [readonly]="isReadOnly === true" formControlName="submittedDate">
-            <mat-datepicker-toggle matSuffix [for]="submittedPicker"
-              [disabled]="isReadOnly === true"></mat-datepicker-toggle>
-            <mat-datepicker #submittedPicker startView="multi-year"
-              [disabled]="isReadOnly === true"></mat-datepicker>
+              [readonly]="true" formControlName="submittedDate">
 
           </mat-form-field>
         </div>
