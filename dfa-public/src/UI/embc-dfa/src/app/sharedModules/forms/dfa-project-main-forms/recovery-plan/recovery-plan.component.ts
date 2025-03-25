@@ -181,14 +181,6 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
           projectNumber: null,
           isdamagedDateSameAsApplication: null
         }
-        //this.propertyDamageForm.addValidators([this.validateFormCauseOfDamage]);
-        //if (this.propertyDamageForm.get('otherDamage').value === 'true') {
-        //  this.propertyDamageForm.get('otherDamageText').setValidators([Validators.required, Validators.maxLength(100)]);
-        //} else {
-        //  this.propertyDamageForm.get('otherDamageText').setValidators([Validators.maxLength(100)]);
-        //}
-        //this.propertyDamageForm.get('otherDamageText').updateValueAndValidity();
-        //this.propertyDamageForm.updateValueAndValidity();
       });
 
     this.projectService.projectGetProjectTypes().subscribe({
@@ -317,11 +309,6 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
     if (projectId) {
       this.projectService.projectGetProjectMain({ projectId: projectId }).subscribe({
         next: (dfaProjectMain) => {
-          //console.log('dfaApplicationMain: ' + JSON.stringify(dfaApplicationMain))
-          //if (dfaApplicationMain.notifyUser == true) {
-          //  //this.notifyAddressChange();
-          //}
-          //debugger
           const toFixedWithZeros = (num, precision) =>
             num?.toFixed(precision).replace(/\.0+$/, '');
           if (dfaProjectMain && dfaProjectMain.project && dfaProjectMain.project.isdamagedDateSameAsApplication == false) {
@@ -348,8 +335,8 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
 
         },
         error: (error) => {
-          //console.error(error);
-          //document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          console.error(error);
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
         }
       });
     }

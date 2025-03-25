@@ -132,14 +132,9 @@
             </p>
             <mat-form-field appearance="outline">
               <mat-label>18 month deadline</mat-label>
-              <input matInput (focusin)="setHelpText(14, tooltip)" [matDatepicker]="deadlinePicker"
+              <input matInput (focusin)="setHelpText(14, tooltip)"
                 [readonly]="isReadOnly === true" formControlName="project18MonthDeadline">
               <mat-hint>MM/DD/YYYY</mat-hint>
-              <mat-datepicker-toggle matSuffix [for]="deadlinePicker"
-                [disabled]="isReadOnly === true"></mat-datepicker-toggle>
-              <mat-datepicker #deadlinePicker startView="multi-year"
-                [disabled]="isReadOnly === true"></mat-datepicker>
-
             </mat-form-field>
           </div>
 
