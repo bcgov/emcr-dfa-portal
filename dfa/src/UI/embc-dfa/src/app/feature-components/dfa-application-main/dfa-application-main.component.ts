@@ -76,6 +76,40 @@ export class DFAApplicationMainComponent
   signAndSubmitForm: UntypedFormGroup;
   InsuranceOptions = InsuranceOption;
   isNoInsurance: boolean = false;
+
+  /* DEVOPS-268 */
+  applicationDetailsForm$: Subscription;
+  applicationDetailsForm: UntypedFormGroup;
+  applicationDetailsValid: boolean = false;
+  damagedPropertyAddressForm$: Subscription;
+  damagedPropertyAddressForm: UntypedFormGroup;
+  damagedPropertyAddressValid: boolean = false;
+  propertyDamageForm$: Subscription;
+  propertyDamageForm: UntypedFormGroup;
+  propertyDamageValid: boolean = false;
+  fullTimeOccupantsForm$: Subscription;
+  fullTimeOccupantsForm: UntypedFormGroup;
+  fullTimeOccupantsValid: boolean = false;
+  otherContactsForm$: Subscription;
+  otherContactsForm: UntypedFormGroup;
+  otherContactsValid: boolean = false;
+  secondaryApplicantsForm$: Subscription;
+  secondaryApplicantsForm: UntypedFormGroup;
+  secondaryApplicantsValid: boolean = false;
+  cleanUpLogForm$: Subscription;
+  cleanUpLogForm: UntypedFormGroup;
+  cleanUpLogValid: boolean = false;
+  cleanUpLogItemsForm$: Subscription;
+  cleanUpLogItemsForm: UntypedFormGroup;
+  cleanUpLogItemsValid: boolean = false;
+  damagedRoomsForm$: Subscription;
+  damagedRoomsForm: UntypedFormGroup;
+  damagedRoomsValid: boolean = false;
+  supportingDocumentsForm$: Subscription;
+  supportingDocumentsForm: UntypedFormGroup;
+  supportingDocumentsValid: boolean = false;
+
+
   constructor(
     private router: Router,
     private componentService: ComponentCreationService,
@@ -189,7 +223,44 @@ export class DFAApplicationMainComponent
     this.vieworedit = this.dfaApplicationMainDataService.getViewOrEdit();
     this.editstep = this.dfaApplicationMainDataService.getEditStep();
 
-    //this.dfaApplicationMainDataService.setViewOrEdit('');
+    /* DEVOPS-268: Listen for changes to validation status */
+    this.applicationDetailsForm$ = this.formCreationService.getApplicationDetailsForm().subscribe((applicationDetails) => {
+      this.applicationDetailsForm = applicationDetails;
+      this.applicationDetailsValid = this.applicationDetailsForm.valid && applicationDetails.value != null;
+    });
+    this.damagedPropertyAddressForm$ = this.formCreationService.getDamagedPropertyAddressForm().subscribe((damagedPropertyAddress) => {
+      this.damagedPropertyAddressForm = damagedPropertyAddress;
+      this.damagedPropertyAddressValid = this.damagedPropertyAddressForm.valid && damagedPropertyAddress.value != null;
+    });
+    this.propertyDamageForm$ = this.formCreationService.getPropertyDamageForm().subscribe((propertyDamage) => {
+      this.propertyDamageForm = propertyDamage;
+      this.propertyDamageValid = this.propertyDamageForm.valid && propertyDamage.value != null;
+    });
+    this.otherContactsForm$ = this.formCreationService.getOtherContactsForm().subscribe((otherContacts) => {
+      this.otherContactsForm = otherContacts;
+      this.otherContactsValid = otherContacts.value != null;
+    });
+    this.fullTimeOccupantsForm$ = this.formCreationService.getFullTimeOccupantsForm().subscribe((fullTimeOccupants) => {
+      this.fullTimeOccupantsForm = fullTimeOccupants;
+      this.fullTimeOccupantsValid = this.fullTimeOccupantsForm.valid && fullTimeOccupants.value != null;
+    });
+    this.cleanUpLogForm$ = this.formCreationService.getCleanUpLogForm().subscribe((cleanUpLog) => {
+      this.cleanUpLogForm = cleanUpLog;
+      this.cleanUpLogValid = this.cleanUpLogForm.valid && cleanUpLog.value != null;
+    });
+    this.cleanUpLogItemsForm$ = this.formCreationService.getCleanUpLogItemsForm().subscribe((cleanUpLogItems) => {
+      this.cleanUpLogItemsForm = cleanUpLogItems;
+      this.cleanUpLogItemsValid = this.cleanUpLogItemsForm.valid && cleanUpLogItems.value != null;
+    });
+    this.damagedRoomsForm$ = this.formCreationService.getDamagedRoomsForm().subscribe((damagedRooms) => {
+      this.damagedRoomsForm = damagedRooms;
+      this.damagedRoomsValid = this.damagedRoomsForm.valid && damagedRooms.value != null;
+    });
+    this.supportingDocumentsForm$ = this.formCreationService.getSupportingDocumentsForm().subscribe((supportingDocuments) => {
+      this.supportingDocumentsForm = supportingDocuments;
+      this.supportingDocumentsValid = this.supportingDocumentsForm.valid && supportingDocuments.value != null;
+    });
+
     this.formCreationService.signaturesChanged.subscribe(signAndSubmit => {
       signAndSubmit.get('applicantSignature').get('dateSigned').updateValueAndValidity();
       this.isApplicantSigned = this.formCreationService.signAndSubmitForm.value.controls.applicantSignature.valid;
@@ -210,6 +281,7 @@ export class DFAApplicationMainComponent
           }
           this.checkSignaturesValid();
         });
+
 
   }
 
@@ -292,6 +364,46 @@ export class DFAApplicationMainComponent
       })
   }
 
+  validateForms(){
+    let appForm = this.formCreationService.applicationDetailsForm.value;
+    appForm.updateValueAndValidity();
+    this.applicationDetailsValid = appForm.valid;
+
+    let damagedPropertyAddressForm = this.formCreationService.damagedPropertyAddressForm.value;
+    damagedPropertyAddressForm.updateValueAndValidity();
+    this.damagedPropertyAddressValid = damagedPropertyAddressForm.valid;
+
+    let propertyDamageForm = this.formCreationService.propertyDamageForm.value;
+    propertyDamageForm.updateValueAndValidity();
+    this.propertyDamageValid = propertyDamageForm.valid;
+
+    let fullTimeOccupantsForm = this.formCreationService.fullTimeOccupantsForm.value;
+    fullTimeOccupantsForm.updateValueAndValidity();
+    let onlyOccupantInHome = fullTimeOccupantsForm.get('onlyOccupantInHome').value;
+    this.fullTimeOccupantsValid = fullTimeOccupantsForm.valid || onlyOccupantInHome;
+
+    let otherContactsForm = this.formCreationService.otherContactsForm.value;
+    otherContactsForm.updateValueAndValidity();
+    let onlyOtherContact = otherContactsForm.get('onlyOtherContact').value;
+    this.otherContactsValid = otherContactsForm.valid || onlyOtherContact;
+
+    let cleanUpLogForm = this.formCreationService.cleanUpLogForm.value;
+    cleanUpLogForm.updateValueAndValidity();
+    this.cleanUpLogValid = cleanUpLogForm.valid;
+
+    let cleanUpLogItemsForm = this.formCreationService.cleanUpLogItemsForm.value;
+    cleanUpLogItemsForm.updateValueAndValidity();
+    this.cleanUpLogItemsValid = cleanUpLogItemsForm.valid;
+
+    let damagedRoomsForm = this.formCreationService.damagedRoomsForm.value;
+    damagedRoomsForm.updateValueAndValidity();
+    this.damagedRoomsValid = damagedRoomsForm.valid;
+
+    let supportingDocumentsForm = this.formCreationService.supportingDocumentsForm.value;
+    supportingDocumentsForm.updateValueAndValidity();
+    this.supportingDocumentsValid = supportingDocumentsForm.valid;
+  }
+
   navigateToStep(stepIndex: number) {
     this.dfaApplicationMainStepper.selectedIndex = stepIndex;
   }
@@ -315,6 +427,13 @@ export class DFAApplicationMainComponent
    */
   stepChanged(event: any, stepper: MatStepper): void {
     stepper.selected.interacted = false;
+
+    this.validateForms();
+    this.setCompletedSteps();
+/*     this.form.updateValueAndValidity();
+    if (this.form.valid) stepper.selected.completed = true;
+    else stepper.selected.completed = false; */
+
   }
 
   /**
@@ -324,6 +443,7 @@ export class DFAApplicationMainComponent
    * @param lastStep stepIndex
    */
   goBack(stepper: MatStepper, lastStep): void {
+    this.validateForms();
     if (lastStep === 0) {
       stepper.previous();
     } else if (lastStep === -1) {
@@ -394,6 +514,16 @@ export class DFAApplicationMainComponent
         document.location.href = 'https://dfa.gov.bc.ca/error.html';
       });
     }
+  }
+
+  setCompletedSteps(){
+    this.dfaApplicationMainStepper.steps.get(0).completed = this.applicationDetailsValid;
+    this.dfaApplicationMainStepper.steps.get(1).completed = this.damagedPropertyAddressValid;
+    this.dfaApplicationMainStepper.steps.get(2).completed = this.propertyDamageValid;
+    this.dfaApplicationMainStepper.steps.get(3).completed = this.otherContactsValid && this.fullTimeOccupantsValid;
+    this.dfaApplicationMainStepper.steps.get(4).completed = this.cleanUpLogValid;
+    this.dfaApplicationMainStepper.steps.get(5).completed = this.cleanUpLogItemsValid;
+    this.dfaApplicationMainStepper.steps.get(6).completed = this.supportingDocumentsValid;
   }
 
   requiredDocumentsSupplied(): boolean {
