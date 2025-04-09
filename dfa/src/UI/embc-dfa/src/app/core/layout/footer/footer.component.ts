@@ -7,6 +7,7 @@ import { DialogContent } from '../../model/dialog-content.model';
 
 @Component({
   selector: 'app-footer',
+  standalone: false,
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })

@@ -17,6 +17,7 @@ import { DisasterEvent } from 'src/app/core/api/models';
 
 @Component({
   selector: 'app-dfa-dashboard',
+  standalone: false,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

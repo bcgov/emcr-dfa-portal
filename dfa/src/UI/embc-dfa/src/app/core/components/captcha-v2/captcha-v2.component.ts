@@ -4,6 +4,7 @@ import { ConfigService } from '../../services/config.service';
 
 @Component({
   selector: 'app-captcha-v2',
+  standalone: false,
   templateUrl: './captcha-v2.component.html',
   styleUrls: ['./captcha-v2.component.scss']
 })

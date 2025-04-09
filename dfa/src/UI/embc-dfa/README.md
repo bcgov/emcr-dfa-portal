@@ -1,6 +1,7 @@
 # EmbcEvacuee
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.
+This project was originally generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.
+Current angular version of the UI project is 19.
 
 ## Development server
 

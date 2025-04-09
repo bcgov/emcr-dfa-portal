@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dfa-file-delete-dialog',
+  standalone: false,
   templateUrl: './dfa-file-delete.component.html',
   styleUrls: ['./dfa-file-delete.component.scss']
 })

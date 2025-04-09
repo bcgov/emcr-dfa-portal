@@ -28,6 +28,7 @@ import { DFAApplicationStartDataService } from 'src/app/feature-components/dfa-a
 
 @Component({
   selector: 'apptype-insurance',
+  standalone: false,
   templateUrl: './apptype-insurance.component.html',
   styleUrls: ['./apptype-insurance.component.scss']
 })

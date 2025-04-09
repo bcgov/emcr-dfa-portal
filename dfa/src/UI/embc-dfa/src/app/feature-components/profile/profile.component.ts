@@ -21,6 +21,7 @@ import { CustomValidationService } from 'src/app/core/services/customValidation.
 
 @Component({
   selector: 'app-profile',
+  standalone: false,
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })

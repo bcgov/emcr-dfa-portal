@@ -3,6 +3,7 @@ import { DialogContent } from 'src/app/core/model/dialog-content.model';
 
 @Component({
   selector: 'app-information-dialog',
+  standalone: false,
   templateUrl: './information-dialog.component.html',
   styleUrls: ['./information-dialog.component.scss']
 })

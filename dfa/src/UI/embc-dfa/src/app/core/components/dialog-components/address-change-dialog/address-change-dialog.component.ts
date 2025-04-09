@@ -5,6 +5,7 @@ import { ProfileService } from 'src/app/core/api/services';
 
 @Component({
   selector: 'app-addresschange-dialog',
+  standalone: false,
   templateUrl: './address-change-dialog.component.html',
   styleUrls: ['./address-change-dialog.component.scss']
 })

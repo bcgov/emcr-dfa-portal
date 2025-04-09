@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dfa-cleanuplog-delete-dialog',
+  standalone: false,
   templateUrl: './dfa-cleanuplog-delete.component.html',
   styleUrls: ['./dfa-cleanuplog-delete.component.scss']
 })

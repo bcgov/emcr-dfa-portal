@@ -3,6 +3,7 @@ import { Idle } from '@ng-idle/core';
 
 @Component({
   selector: 'app-time-out-dialog',
+  standalone: false,
   templateUrl: './time-out-dialog.component.html',
   styleUrls: ['./time-out-dialog.component.scss']
 })

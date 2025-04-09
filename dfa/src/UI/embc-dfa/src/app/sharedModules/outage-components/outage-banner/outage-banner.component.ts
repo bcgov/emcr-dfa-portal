@@ -4,6 +4,7 @@ import { OutageService } from 'src/app/feature-components/outage/outage.service'
 
 @Component({
   selector: 'app-outage-banner',
+  standalone: false,
   templateUrl: './outage-banner.component.html',
   styleUrls: ['./outage-banner.component.scss']
 })

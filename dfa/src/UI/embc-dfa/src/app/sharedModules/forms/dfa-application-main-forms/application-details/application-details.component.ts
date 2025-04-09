@@ -28,6 +28,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-application-details',
+  standalone: false,
   templateUrl: './application-details.component.html',
   styleUrls: ['./application-details.component.scss']
 })

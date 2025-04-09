@@ -6,6 +6,7 @@ import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-environment-banner',
+  standalone: false,
   templateUrl: './environment-banner.component.html',
   styleUrls: ['./environment-banner.component.scss']
 })

@@ -14,6 +14,7 @@ import { AppSessionService } from 'src/app/core/services/appSession.service';
 
 @Component({
   selector: 'app-edit',
+  standalone: false,
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss']
 })

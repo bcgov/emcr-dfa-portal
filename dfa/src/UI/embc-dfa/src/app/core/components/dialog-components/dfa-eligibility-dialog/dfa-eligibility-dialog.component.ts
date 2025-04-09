@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dfa-eligibility-dialog',
+  standalone: false,
   templateUrl: './dfa-eligibility-dialog.component.html',
   styleUrls: ['./dfa-eligibility-dialog.component.scss']
 })

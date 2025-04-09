@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-collection-notice',
+  standalone: false,
   templateUrl: './collection-notice.component.html',
   styleUrls: ['./collection-notice.component.scss']
 })

@@ -14,6 +14,7 @@ const SCRIPT_PATH = 'http://ws1.postescanada-canadapost.ca/js/addresscomplete-2.
 
 @Component({
   selector: 'app-root',
+  standalone: false,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

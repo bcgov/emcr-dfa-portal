@@ -29,6 +29,7 @@ export class BcscCustomErrorMailMatcher implements ErrorStateMatcher {
 
 @Component({
   selector: 'app-bcsc-invite-dialog',
+  standalone: false,
   templateUrl: './bcsc-invite-dialog.component.html',
   styleUrls: ['./bcsc-invite-dialog.component.scss']
 })

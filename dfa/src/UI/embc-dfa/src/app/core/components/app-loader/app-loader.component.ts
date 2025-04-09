@@ -3,6 +3,7 @@ import { ThemePalette } from '@angular/material/core';
 
 @Component({
   selector: 'app-loader',
+  standalone: false,
   templateUrl: './app-loader.component.html',
   styleUrls: ['./app-loader.component.scss']
 })

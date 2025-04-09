@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'enumToArray' })
+@Pipe({ name: 'enumToArray', standalone: false })
 export class EnumToArrayPipe implements PipeTransform {
   transform(value): Array<string> {
     return Object.keys(value).filter((e) => e);

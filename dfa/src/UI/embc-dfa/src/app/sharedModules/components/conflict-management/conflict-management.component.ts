@@ -18,6 +18,7 @@ import * as globalConst from '../../../core/services/globalConstants';
 
 @Component({
   selector: 'app-conflict-management',
+  standalone: false,
   templateUrl: './conflict-management.component.html',
   styleUrls: ['./conflict-management.component.scss']
 })

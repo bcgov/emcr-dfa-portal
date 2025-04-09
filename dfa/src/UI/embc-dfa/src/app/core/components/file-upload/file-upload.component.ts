@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-file-upload',
+  standalone: false,
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })

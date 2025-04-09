@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
 
-@Pipe({ name: 'customDate' })
+@Pipe({ name: 'customDate', standalone: false })
 export class CustomDate implements PipeTransform {
   transform(value): string {
     if (value !== null && value !== undefined) {
