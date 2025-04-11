@@ -1,0 +1,21 @@
+name: Run Cypress for Public Portal Dev Environment
+
+on:
+  push:
+    branches:
+      - main
+      - support-develop
+  workflow_dispatch:
+
+jobs:  
+  cypress-run-public-portal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Cypress against Public Portal (Chrome)
+        uses: cypress-io/github-action@v6
+        with:
+          build: npm run build
+          start: npm start
+          browser: chrome
