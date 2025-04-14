@@ -88,6 +88,10 @@ namespace EMBC.DFA.API.Controllers
                 Captcha = new CaptchaConfiguration
                 {
                     Key = configuration.GetValue<string>("captcha:key")
+                },
+                S3 = new S3Configuration
+                {
+                    UseS3 = configuration.GetValue<bool>("FEATURE_USE_S3")
                 }
             };
 
@@ -191,6 +195,7 @@ namespace EMBC.DFA.API.Controllers
         public OutageInformation OutageInfo { get; set; }
         public TimeoutConfiguration TimeoutInfo { get; set; }
         public CaptchaConfiguration Captcha { get; set; }
+        public S3Configuration S3 { get; set; }
     }
 
     public class OidcOptions
@@ -233,6 +238,11 @@ namespace EMBC.DFA.API.Controllers
     public class CaptchaConfiguration
     {
         public string Key { get; set; }
+    }
+
+    public class S3Configuration
+    {
+        public bool UseS3 { get; set; }
     }
 
     public class AreaCommunity

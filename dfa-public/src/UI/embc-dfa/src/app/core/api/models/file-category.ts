@@ -9,5 +9,5 @@ export enum FileCategory {
   PostEvent = 'Post Event Condition',
   Reports = 'Reports',
   AdditionalDocuments = 'Additional Supporting Documents',
-  AppplicationPDF = 'Appplication PDF'
+  ApplicationPDF = 'Application PDF'
 }

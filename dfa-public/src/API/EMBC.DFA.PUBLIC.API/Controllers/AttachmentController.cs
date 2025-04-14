@@ -8,11 +8,19 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.Services;
+using EMBC.DFA.PUBLIC.API.Controllers;
+using EMBC.DFA.PUBLIC.API.Services;
+using EMBC.Utilities.S3;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Namotion.Reflection;
+using Org.BouncyCastle.Asn1.Ocsp;
+using Pipelines.Sockets.Unofficial.Arenas;
 
 namespace EMBC.DFA.API.Controllers
 {
@@ -21,22 +29,30 @@ namespace EMBC.DFA.API.Controllers
     [Authorize]
     public class AttachmentController : ControllerBase
     {
+        private readonly IConfiguration configuration;
         private readonly IHostEnvironment env;
         private readonly IMapper mapper;
         private readonly IConfigurationHandler handler;
         // 2024-08-15 EMCRI-595 waynezen; BCeID Authentication
         private readonly IUserService userService;
+        private readonly IS3Provider s3Provider;
+        private readonly ErrorParser errorParser;
 
         public AttachmentController(
+            IConfiguration configuration,
             IHostEnvironment env,
             IMapper mapper,
             IConfigurationHandler handler,
-            IUserService userService)
+            IUserService userService,
+            IS3Provider s3Provider)
         {
+            this.configuration = configuration;
             this.env = env;
             this.mapper = mapper;
             this.handler = handler;
             this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            this.s3Provider = s3Provider;
+            this.errorParser = new ErrorParser();
         }
 
         private string currentUserId => userService.GetBCeIDBusinessId();
@@ -53,13 +69,26 @@ namespace EMBC.DFA.API.Controllers
         [RequestSizeLimit(36700160)]
         public async Task<ActionResult<string>> DeleteProjectAttachment(FileUpload fileUpload)
         {
-            var app_parms = new dfa_DFAActionDeleteDocuments_parms();
-            var proj_parms = new dfa_DeleteDocument_params();
-            if (fileUpload.id != null) app_parms.AppDocID = (Guid)fileUpload.id;
-            var result = await handler.DeleteFileUploadAsync(app_parms, proj_parms);
-            return Ok(result);
+            var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
 
-            //return Ok(null);
+            if (useS3)
+            {
+                var metadataDeleteParams = new MetadataDeleteParams();
+                if (fileUpload.id != null)
+                {
+                    metadataDeleteParams.DocumentMetadataId = fileUpload.id.ToString();
+                }
+                var result = await handler.HandleDeleteFileMetadataAsync(metadataDeleteParams);
+                return Ok(result);
+            }
+            else
+            {
+                var app_parms = new dfa_DFAActionDeleteDocuments_parms();
+                var proj_parms = new dfa_DeleteDocument_params();
+                if (fileUpload.id != null) app_parms.AppDocID = (Guid)fileUpload.id;
+                var result = await handler.DeleteFileUploadAsync(app_parms, proj_parms);
+                return Ok(result);
+            }
         }
 
         /// <summary>
@@ -77,30 +106,71 @@ namespace EMBC.DFA.API.Controllers
             if (fileUpload.fileData == null && fileUpload.deleteFlag == false) return BadRequest("FileUpload data cannot be empty.");
             if (fileUpload.id == null && fileUpload.deleteFlag == true) return BadRequest("FileUpload id cannot be empty on delete");
 
-            if (fileUpload.deleteFlag == true)
+            var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
+
+            if (useS3)
             {
-                var app_params = new dfa_DFAActionDeleteDocuments_parms();
-                var proj_params = new dfa_DeleteDocument_params();
-                if (fileUpload.id != null)
+                if (fileUpload.deleteFlag == true)
                 {
-                    Console.WriteLine("testing doc delete");
-                    proj_params.DocLocationID = (Guid)fileUpload.id;
-                    proj_params.DocLocationType = "Project";
+                    var metadataDeleteParams = new MetadataDeleteParams();
+                    if (fileUpload.id != null)
+                    {
+                        metadataDeleteParams.DocumentMetadataId = fileUpload.id.ToString();
+                    }
+                    var result = await handler.HandleDeleteFileMetadataAsync(metadataDeleteParams);
+                    return Ok(result);
                 }
-                var result = await handler.DeleteFileUploadAsync(app_params, proj_params);
-                return Ok(result);
+                else
+                {
+                    if (fileUpload.fileSize >= (51 * 1024 * 1024))
+                    {
+                        throw new Exception("File size exceeds 50MB limit");
+                    }
+
+                    var submissionEntity = mapper.Map<S3SubmissionEntity>(fileUpload);
+                    /* Switch based on the regarding entity type where the doc is uploaded to
+                        case : incident 
+                        application : dfa_appapplication
+                        project : dfa_project
+                        recoveryClaim : dfa_projectclaim"  */
+                    submissionEntity.RegardingEntitySchemaName = "dfa_project";
+
+                    /* switch based on entity type to which the document is being uploaded
+                        case : bcgov_caseid
+                        application : dfa_appapplication
+                        project : dfa_project
+                        recoveryClaim : dfa_recoveryclaim */
+                    submissionEntity.RegardingEntityLookUpFieldName = "dfa_project";
+
+                    var result = await handler.HandleS3FileUploadAsync(submissionEntity);
+                    return Ok(new ApplicationResult { Id = result });
+                }
             }
             else
             {
-                var mappedFileUpload = mapper.Map<AttachmentEntity>(fileUpload);
-                var submissionEntity = mapper.Map<SubmissionEntity>(fileUpload);
-                submissionEntity.documentCollection = Enumerable.Empty<AttachmentEntity>();
-                submissionEntity.documentCollection = submissionEntity.documentCollection.Append<AttachmentEntity>(mappedFileUpload);
-                var result = await handler.HandleFileUploadAsync(submissionEntity);
-                return Ok(result);
+                if (fileUpload.deleteFlag == true)
+                {
+                    var app_params = new dfa_DFAActionDeleteDocuments_parms();
+                    var proj_params = new dfa_DeleteDocument_params();
+                    if (fileUpload.id != null)
+                    {
+                        Console.WriteLine("testing doc delete");
+                        proj_params.DocLocationID = (Guid)fileUpload.id;
+                        proj_params.DocLocationType = "Project";
+                    }
+                    var result = await handler.DeleteFileUploadAsync(app_params, proj_params);
+                    return Ok(result);
+                }
+                else
+                {
+                    var mappedFileUpload = mapper.Map<AttachmentEntity>(fileUpload);
+                    var submissionEntity = mapper.Map<SubmissionEntity>(fileUpload);
+                    submissionEntity.documentCollection = Enumerable.Empty<AttachmentEntity>();
+                    submissionEntity.documentCollection = submissionEntity.documentCollection.Append<AttachmentEntity>(mappedFileUpload);
+                    var result = await handler.HandleFileUploadAsync(submissionEntity);
+                    return Ok(result);
+                }
             }
-
-            //return Ok(null);
         }
 
         /// <summary>
@@ -118,29 +188,65 @@ namespace EMBC.DFA.API.Controllers
             if (fileUpload.fileData == null && fileUpload.deleteFlag == false) return BadRequest("FileUpload data cannot be empty.");
             if (fileUpload.id == null && fileUpload.deleteFlag == true) return BadRequest("FileUpload id cannot be empty on delete");
 
-            if (fileUpload.deleteFlag == true)
+            var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
+
+            if (useS3) 
             {
-                var app_params = new dfa_DFAActionDeleteDocuments_parms();
-                var claim_params = new dfa_DeleteDocument_params();
-                if (fileUpload.id != null)
+                if (fileUpload.deleteFlag == true)
                 {
-                    claim_params.DocLocationID = (Guid)fileUpload.id;
-                    claim_params.DocLocationType = "Claim";
+                    var metadataDeleteParams = new MetadataDeleteParams();
+                    if (fileUpload.id != null)
+                    {
+                        metadataDeleteParams.DocumentMetadataId = fileUpload.id.ToString();
+                    }
+                    var result = await handler.HandleDeleteFileMetadataAsync(metadataDeleteParams);
+                    return Ok(result);
                 }
-                var result = await handler.DeleteFileUploadAsync(app_params, claim_params);
-                return Ok(result);
+                else
+                {
+                    var submissionEntity = mapper.Map<S3SubmissionEntity>(fileUpload);
+                    /* Switch based on the regarding entity type where the doc is uploaded to
+                        case : incident 
+                        application : dfa_appapplication
+                        project : dfa_project
+                        recoveryClaim : dfa_projectclaim"  */
+                    submissionEntity.RegardingEntitySchemaName = "dfa_projectclaim";
+
+                    /* switch based on entity type to which the document is being uploaded
+                        case : bcgov_caseid
+                        application : dfa_appapplication
+                        project : dfa_project
+                        recoveryClaim : dfa_recoveryclaim */
+                    submissionEntity.RegardingEntityLookUpFieldName = "dfa_recoveryclaim";
+
+                    var result = await handler.HandleS3FileUploadAsync(submissionEntity);
+                    return Ok(new ApplicationResult { Id = result });
+                }
             }
             else
             {
-                var mappedFileUpload = mapper.Map<AttachmentEntity>(fileUpload);
-                var submissionEntity = mapper.Map<SubmissionEntityClaim>(fileUpload);
-                submissionEntity.documentCollection = Enumerable.Empty<AttachmentEntity>();
-                submissionEntity.documentCollection = submissionEntity.documentCollection.Append<AttachmentEntity>(mappedFileUpload);
-                var result = await handler.HandleFileUploadClaimAsync(submissionEntity);
-                return Ok(result);
+                if (fileUpload.deleteFlag == true)
+                {
+                    var app_params = new dfa_DFAActionDeleteDocuments_parms();
+                    var claim_params = new dfa_DeleteDocument_params();
+                    if (fileUpload.id != null)
+                    {
+                        claim_params.DocLocationID = (Guid)fileUpload.id;
+                        claim_params.DocLocationType = "Claim";
+                    }
+                    var result = await handler.DeleteFileUploadAsync(app_params, claim_params);
+                    return Ok(result);
+                }
+                else
+                {
+                    var mappedFileUpload = mapper.Map<AttachmentEntity>(fileUpload);
+                    var submissionEntity = mapper.Map<SubmissionEntityClaim>(fileUpload);
+                    submissionEntity.documentCollection = Enumerable.Empty<AttachmentEntity>();
+                    submissionEntity.documentCollection = submissionEntity.documentCollection.Append<AttachmentEntity>(mappedFileUpload);
+                    var result = await handler.HandleFileUploadClaimAsync(submissionEntity);
+                    return Ok(result);
+                }
             }
-
-            //return Ok(null);
         }
 
         /// <summary>
@@ -156,20 +262,43 @@ namespace EMBC.DFA.API.Controllers
             [Required]
             Guid projectId)
         {
-            IEnumerable<dfa_projectdocumentlocation> dfa_projectdocumentlocations = await handler.GetProjectFileUploadsAsync(projectId);
-            IEnumerable<FileUpload> fileUploads = new FileUpload[] { };
-            if (dfa_projectdocumentlocations != null)
+            var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
+
+            if (useS3)
             {
-                foreach (dfa_projectdocumentlocation dfa_projectdocumentlocation in dfa_projectdocumentlocations)
+                IEnumerable<bcgov_documenturl> bcgovDocumentUrls = await handler.GetS3ProjectDocumentListAsync(projectId);
+                IEnumerable<FileUpload> fileUploads = new FileUpload[] { };
+                if (bcgovDocumentUrls != null)
                 {
-                    FileUpload fileUpload = mapper.Map<FileUpload>(dfa_projectdocumentlocation);
-                    fileUploads = fileUploads.Append<FileUpload>(fileUpload);
+                    foreach (bcgov_documenturl bcgovDocumentUrl in bcgovDocumentUrls)
+                    {
+                        FileUpload fileUpload = mapper.Map<FileUpload>(bcgovDocumentUrl);
+                        fileUploads = fileUploads.Append<FileUpload>(fileUpload);
+                    }
+                    return Ok(fileUploads);
                 }
-                return Ok(fileUploads);
+                else
+                {
+                    return Ok(null);
+                }
             }
             else
             {
-                return Ok(null);
+                IEnumerable<dfa_projectdocumentlocation> dfa_projectdocumentlocations = await handler.GetProjectFileUploadsAsync(projectId);
+                IEnumerable<FileUpload> fileUploads = new FileUpload[] { };
+                if (dfa_projectdocumentlocations != null)
+                {
+                    foreach (dfa_projectdocumentlocation dfa_projectdocumentlocation in dfa_projectdocumentlocations)
+                    {
+                        FileUpload fileUpload = mapper.Map<FileUpload>(dfa_projectdocumentlocation);
+                        fileUploads = fileUploads.Append<FileUpload>(fileUpload);
+                    }
+                    return Ok(fileUploads);
+                }
+                else
+                {
+                    return Ok(null);
+                }
             }
         }
 
@@ -186,20 +315,43 @@ namespace EMBC.DFA.API.Controllers
             [Required]
             Guid claimId)
         {
-            IEnumerable<dfa_projectclaimdocumentlocation> dfa_projectclaimdocumentlocations = await handler.GetProjectClaimFileUploadsAsync(claimId);
-            IEnumerable<FileUploadClaim> fileUploads = new FileUploadClaim[] { };
-            if (dfa_projectclaimdocumentlocations != null)
+            var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
+
+            if (useS3)
             {
-                foreach (dfa_projectclaimdocumentlocation dfa_projectclaimdocumentlocation in dfa_projectclaimdocumentlocations)
+                IEnumerable<bcgov_documenturl> bcgovDocumentUrls = await handler.GetS3ProjectClaimDocumentListAsync(claimId);
+                IEnumerable<FileUploadClaim> fileUploads = new FileUploadClaim[] { };
+                if (bcgovDocumentUrls != null)
                 {
-                    FileUploadClaim fileUpload = mapper.Map<FileUploadClaim>(dfa_projectclaimdocumentlocation);
-                    fileUploads = fileUploads.Append<FileUploadClaim>(fileUpload);
+                    foreach (bcgov_documenturl bcgovDocumentUrl in bcgovDocumentUrls)
+                    {
+                        FileUploadClaim fileUpload = mapper.Map<FileUploadClaim>(bcgovDocumentUrl);
+                        fileUploads = fileUploads.Append<FileUploadClaim>(fileUpload);
+                    }
+                    return Ok(fileUploads);
                 }
-                return Ok(fileUploads);
+                else
+                {
+                    return Ok(null);
+                }
             }
             else
             {
-                return Ok(null);
+                IEnumerable<dfa_projectclaimdocumentlocation> dfa_projectclaimdocumentlocations = await handler.GetProjectClaimFileUploadsAsync(claimId);
+                IEnumerable<FileUploadClaim> fileUploads = new FileUploadClaim[] { };
+                if (dfa_projectclaimdocumentlocations != null)
+                {
+                    foreach (dfa_projectclaimdocumentlocation dfa_projectclaimdocumentlocation in dfa_projectclaimdocumentlocations)
+                    {
+                        FileUploadClaim fileUpload = mapper.Map<FileUploadClaim>(dfa_projectclaimdocumentlocation);
+                        fileUploads = fileUploads.Append<FileUploadClaim>(fileUpload);
+                    }
+                    return Ok(fileUploads);
+                }
+                else
+                {
+                    return Ok(null);
+                }
             }
         }
     }
@@ -211,6 +363,7 @@ namespace EMBC.DFA.API.Controllers
     {
         public Guid? projectId { get; set; }
         public Guid? id { get; set; }
+        public Guid? documentMetadataId { get; set; }
         public string? fileName { get; set; }
         public string? fileDescription { get; set; }
         public FileCategory? fileType { get; set; }

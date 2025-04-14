@@ -10,6 +10,7 @@ import { RequiredDocumentType } from './required-document-type';
 export interface FileUpload {
   contentType?: null | string;
   deleteFlag?: boolean;
+  documentMetadataId?: null | string;
   fileData?: null | string;
   fileDescription?: null | string;
   fileName?: null | string;
