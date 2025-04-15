@@ -198,6 +198,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
       let fileUploads = this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').value;
       if (fileUploads?.find(x => x.fileName === fileUpload.fileName && x.deleteFlag !== true)) {
         this.warningDialog("A file with the name " + fileUpload.fileName + " has already been uploaded.");
+        this.formCreationService.fileUploadsClaimForm.value.get('supportingFilesFileUpload').reset();
         return;
       }
 
@@ -219,6 +220,8 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
           this.showSupportingFileForm = !this.showSupportingFileForm;
           //if (fileUpload.requiredDocumentType == Object.keys(this.RequiredDocumentTypes)[Object.values(this.RequiredDocumentTypes).indexOf(this.RequiredDocumentTypes.PreEvent)])
           //  this.supportingDocumentsForm.get('hasCopyOfARentalAgreementOrLease').setValue(true);
+          // Reset Form feilds
+          this.formCreationService.fileUploadsClaimForm.value.get('supportingFilesFileUpload').reset();
           this.isLoading = false;
         },
         error: (error) => {
@@ -237,6 +240,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
     let fileUploads = this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').value;
     if (fileUploads?.find(x => x.fileName === fileUpload.fileName && x.deleteFlag !== true)) {
       this.warningDialog("A file with the name " + fileUpload.fileName + " has already been uploaded.");
+      this.formCreationService.fileUploadsClaimForm.value.get(claimFileUploadFormGroup).reset();
       return;
     }
 

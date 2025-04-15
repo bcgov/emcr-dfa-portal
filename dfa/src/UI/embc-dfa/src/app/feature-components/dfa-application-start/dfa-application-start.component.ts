@@ -26,6 +26,7 @@ import { DFAPrescreeningDataService } from '../dfa-prescreening/dfa-prescreening
 
 @Component({
   selector: 'app-dfa-application-start',
+  standalone: false,
   templateUrl: './dfa-application-start.component.html',
   styleUrls: ['./dfa-application-start.component.scss']
 })

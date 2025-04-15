@@ -16,6 +16,7 @@ namespace EMBC.DFA.API.Mappers
     public class Mappings : AutoMapper.Profile
     {
         public static readonly string CurrencyFormat = "#,###,###,###.##";
+        public static readonly string ORIGIN_CODE_PORTAL = "931490000";
 
         public Mappings()
         {
@@ -436,6 +437,32 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.modifiedBy, opts => opts.MapFrom(s => s.dfa_modifiedby))
                 .ForMember(d => d.deleteFlag, opts => opts.MapFrom(s => false));
 
+            CreateMap<bcgov_documenturl, FileUpload>()
+                .ForMember(d => d.projectId, opts => opts.MapFrom(s => s._dfa_project_value))
+                .ForMember(d => d.id, opts => opts.MapFrom(s => s.bcgov_documenturlid))
+                .ForMember(d => d.fileName, opts => opts.MapFrom(s => s.bcgov_filename))
+                .ForMember(d => d.fileType, opts => opts.MapFrom(s => ConvertStringToFileCategory(s.dfa_category)))
+                .ForMember(d => d.fileTypeText, opts => opts.MapFrom(s => s.dfa_category))
+                .ForMember(d => d.requiredDocumentType, opts => opts.MapFrom(s => ConvertStringToRequiredDocumentType(s.dfa_requireddocumenttype)))
+                .ForMember(d => d.fileDescription, opts => opts.MapFrom(s => s.dfa_description))
+                .ForMember(d => d.fileSize, opts => opts.MapFrom(s => s.bcgov_size))
+                .ForMember(d => d.uploadedDate, opts => opts.MapFrom(s => s.createdon))
+                .ForMember(d => d.modifiedBy, opts => opts.MapFrom(s => s._modifiedby_value))
+                .ForMember(d => d.contentType, opts => opts.MapFrom(s => s.bcgov_mimetype))
+                .ForMember(d => d.deleteFlag, opts => opts.MapFrom(s => false));
+
+            CreateMap<FileUpload, bcgov_documenturl>()
+                .ForMember(d => d._dfa_project_value, opts => opts.MapFrom(s => s.projectId))
+                .ForMember(d => d.bcgov_documenturlid, opts => opts.MapFrom(s => s.id))
+                .ForMember(d => d.bcgov_filename, opts => opts.MapFrom(s => s.fileName))
+                .ForMember(d => d.dfa_category, opts => opts.MapFrom(s => s.fileType.ToString()))
+                .ForMember(d => d.dfa_requireddocumenttype, opts => opts.MapFrom(s => s.requiredDocumentType.ToString()))
+                .ForMember(d => d.dfa_description, opts => opts.MapFrom(s => s.fileDescription))
+                .ForMember(d => d.bcgov_size, opts => opts.MapFrom(s => s.fileSize))
+                .ForMember(d => d.createdon, opts => opts.MapFrom(s => s.uploadedDate))
+                .ForMember(d => d._modifiedby_value, opts => opts.MapFrom(s => s.modifiedBy))
+                .ForMember(d => d.bcgov_mimetype, opts => opts.MapFrom(s => s.contentType));
+
             CreateMap<dfa_projectclaimdocumentlocation, FileUploadClaim>()
                 .ForMember(d => d.claimId, opts => opts.MapFrom(s => s._dfa_projectclaimid_value))
                 .ForMember(d => d.id, opts => opts.MapFrom(s => s.dfa_projectclaimdocumentlocationid))
@@ -447,6 +474,70 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.uploadedDate, opts => opts.MapFrom(s => s.createdon))
                 .ForMember(d => d.modifiedBy, opts => opts.MapFrom(s => s.dfa_modifiedby))
                 .ForMember(d => d.deleteFlag, opts => opts.MapFrom(s => false));
+
+            CreateMap<bcgov_documenturl, FileUploadClaim>()
+                .ForMember(d => d.claimId, opts => opts.MapFrom(s => s._dfa_project_value))
+                .ForMember(d => d.id, opts => opts.MapFrom(s => s.bcgov_documenturlid))
+                .ForMember(d => d.fileName, opts => opts.MapFrom(s => s.bcgov_filename))
+                .ForMember(d => d.fileType, opts => opts.MapFrom(s => ConvertStringToFileCategory(s.dfa_category)))
+                .ForMember(d => d.fileTypeText, opts => opts.MapFrom(s => s.dfa_category))
+                .ForMember(d => d.requiredDocumentType, opts => opts.MapFrom(s => ConvertStringToRequiredDocumentType(s.dfa_requireddocumenttype)))
+                .ForMember(d => d.fileDescription, opts => opts.MapFrom(s => s.dfa_description))
+                .ForMember(d => d.fileSize, opts => opts.MapFrom(s => s.bcgov_size))
+                .ForMember(d => d.uploadedDate, opts => opts.MapFrom(s => s.createdon))
+                .ForMember(d => d.modifiedBy, opts => opts.MapFrom(s => s._modifiedby_value))
+                .ForMember(d => d.contentType, opts => opts.MapFrom(s => s.bcgov_mimetype))
+                .ForMember(d => d.deleteFlag, opts => opts.MapFrom(s => false));
+
+            CreateMap<FileUploadClaim, bcgov_documenturl>()
+                .ForMember(d => d._dfa_project_value, opts => opts.MapFrom(s => s.claimId))
+                .ForMember(d => d.bcgov_documenturlid, opts => opts.MapFrom(s => s.id))
+                .ForMember(d => d.bcgov_filename, opts => opts.MapFrom(s => s.fileName))
+                .ForMember(d => d.dfa_category, opts => opts.MapFrom(s => s.fileType.ToString()))
+                .ForMember(d => d.dfa_requireddocumenttype, opts => opts.MapFrom(s => s.requiredDocumentType.ToString()))
+                .ForMember(d => d.dfa_description, opts => opts.MapFrom(s => s.fileDescription))
+                .ForMember(d => d.bcgov_size, opts => opts.MapFrom(s => s.fileSize))
+                .ForMember(d => d.createdon, opts => opts.MapFrom(s => s.uploadedDate))
+                .ForMember(d => d._modifiedby_value, opts => opts.MapFrom(s => s.modifiedBy))
+                .ForMember(d => d.bcgov_mimetype, opts => opts.MapFrom(s => s.contentType));
+
+            CreateMap<FileUpload, MetadataSubmissionEntity>()
+                .ForMember(d => d.RegardingEntityID, opts => opts.MapFrom(s => s.project.Id))
+                .ForMember(d => d.OriginCode, opts => opts.MapFrom(s => ORIGIN_CODE_PORTAL))
+                .ForMember(d => d.Metadata_1, opts => opts.MapFrom(s => s.fileTypeText)) // category
+                .ForMember(d => d.Metadata_2, opts => opts.MapFrom(s => s.requiredDocumentType))
+                .ForMember(d => d.Metadata_3, opts => opts.MapFrom(s => s.fileDescription))
+                .ForMember(d => d.DocumentSize, opts => opts.MapFrom(s => s.fileSize))
+                .ForMember(d => d.ReceivedDate, opts => opts.MapFrom(s => s.uploadedDate))
+                .ForMember(d => d.DocumentFileName, opts => opts.MapFrom(s => s.fileName))
+                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.contentType))
+                ;
+
+            CreateMap<FileUpload, S3SubmissionEntity>()
+                .ForMember(d => d.RegardingEntityID, opts => opts.MapFrom(s => s.project.Id))
+                .ForMember(d => d.OriginCode, opts => opts.MapFrom(s => ORIGIN_CODE_PORTAL))
+                .ForMember(d => d.Metadata_1, opts => opts.MapFrom(s => s.fileTypeText))
+                .ForMember(d => d.Metadata_2, opts => opts.MapFrom(s => s.requiredDocumentType))
+                .ForMember(d => d.Metadata_3, opts => opts.MapFrom(s => s.fileDescription))
+                .ForMember(d => d.DocumentSize, opts => opts.MapFrom(s => s.fileSize))
+                .ForMember(d => d.ReceivedDate, opts => opts.MapFrom(s => s.uploadedDate))
+                .ForMember(d => d.DocumentFileName, opts => opts.MapFrom(s => s.fileName))
+                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.contentType))
+                .ForMember(d => d.DocumentContent, opts => opts.MapFrom(s => s.fileData))
+                ;
+            
+            CreateMap<FileUploadClaim, S3SubmissionEntity>()
+                .ForMember(d => d.RegardingEntityID, opts => opts.MapFrom(s => s.claimId))
+                .ForMember(d => d.OriginCode, opts => opts.MapFrom(s => ORIGIN_CODE_PORTAL))
+                .ForMember(d => d.Metadata_1, opts => opts.MapFrom(s => s.fileTypeText))
+                .ForMember(d => d.Metadata_2, opts => opts.MapFrom(s => s.requiredDocumentType))
+                .ForMember(d => d.Metadata_3, opts => opts.MapFrom(s => s.fileDescription))
+                .ForMember(d => d.DocumentSize, opts => opts.MapFrom(s => s.fileSize))
+                .ForMember(d => d.ReceivedDate, opts => opts.MapFrom(s => s.uploadedDate))
+                .ForMember(d => d.DocumentFileName, opts => opts.MapFrom(s => s.fileName))
+                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.contentType))
+                .ForMember(d => d.DocumentContent, opts => opts.MapFrom(s => s.fileData))
+                ;
 
             CreateMap<FileUpload, AttachmentEntity>()
                 .ForMember(d => d.filename, opts => opts.MapFrom(s => s.fileName))
@@ -496,6 +587,18 @@ namespace EMBC.DFA.API.Mappers
               .ForMember(d => d.dfa_requireddocumenttype, opts => RequiredDocumentType.PostEvent.ToString())
               .ForMember(d => d.dfa_description, opts => opts.MapFrom(s => s.fileDescription))
               .ForMember(d => d.dfa_appapplicationid, opts => opts.MapFrom(s => s.dfa_appapplicationid));
+
+            CreateMap<ApplicationReviewPDFUpload, S3SubmissionEntity>()
+                .ForMember(d => d.RegardingEntityID, opts => opts.MapFrom(s => s.dfa_appapplicationid))
+                .ForMember(d => d.OriginCode, opts => opts.MapFrom(s => ORIGIN_CODE_PORTAL))
+                .ForMember(d => d.Metadata_1, opts => opts.MapFrom(s => s.fileType))
+                .ForMember(d => d.Metadata_2, opts => RequiredDocumentType.PostEvent.ToString())
+                .ForMember(d => d.Metadata_3, opts => opts.MapFrom(s => s.fileDescription))
+                .ForMember(d => d.DocumentSize, opts => opts.MapFrom(s => s.fileSize))
+                .ForMember(d => d.ReceivedDate, opts => opts.MapFrom(s => s.uploadedDate))
+                .ForMember(d => d.DocumentFileName, opts => opts.MapFrom(s => s.fileName))
+                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.contentType))
+                .ForMember(d => d.DocumentContent, opts => opts.MapFrom(s => s.fileData));
 
             CreateMap<FileUpload, SubmissionEntity>()
                 .ForMember(d => d.dfa_projectid, opts => opts.MapFrom(s => s.project.Id)) // s.projectId

@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-warning-dialog',
+  standalone: false,
   templateUrl: './file-upload-warning-dialog.component.html',
   styleUrls: ['./file-upload-warning-dialog.component.scss']
 })

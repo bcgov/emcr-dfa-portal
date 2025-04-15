@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-invite-error',
+  standalone: false,
   templateUrl: './invite-error.component.html',
   styleUrls: ['./invite-error.component.scss']
 })

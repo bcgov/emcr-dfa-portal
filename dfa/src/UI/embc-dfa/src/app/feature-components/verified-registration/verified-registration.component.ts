@@ -11,6 +11,7 @@ import { EmailInviteService } from '../../core/services/emailInvite.service';
 
 @Component({
   selector: 'app-verified-registration',
+  standalone: false,
   templateUrl: './verified-registration.component.html',
   styleUrls: ['./verified-registration.component.scss']
 })

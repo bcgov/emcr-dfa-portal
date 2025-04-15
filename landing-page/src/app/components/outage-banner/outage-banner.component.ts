@@ -15,12 +15,25 @@ export class OutageBannerComponent implements OnInit {
   
   public environment?: EnvironmentInformation;
 
+  public starttime = "";
+   public endtime = "";
+
   constructor(private environmentBannerService: EnvironmentBannerService) { }
 
   ngOnInit(): void {
     this.environmentBannerService.getEnvironment().subscribe(environment => {
       this.environment = environment;
-    });
+      if (this.environment?.outageStart) {
+        const outageDate = new Date(this.environment.outageStart);
+        const hours = outageDate.getHours();
+        this.starttime = hours >= 12 ? 'p.m.' : 'a.m.';
+      }
+      if (this.environment?.outageEnd) {
+        const outageDate = new Date(this.environment.outageEnd);
+        const hours = outageDate.getHours();
+        this.endtime = hours >= 12 ? 'p.m.' : 'a.m.';
+    }
+  });
   }
 
 }

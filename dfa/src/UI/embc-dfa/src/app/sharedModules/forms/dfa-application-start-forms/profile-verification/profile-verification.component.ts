@@ -47,6 +47,7 @@ export class CustomErrorMailMatcher implements ErrorStateMatcher {
 
 @Component({
   selector: 'app-profile-verification',
+  standalone: false,
   templateUrl: './profile-verification.component.html',
   styleUrls: ['./profile-verification.component.scss']
 })

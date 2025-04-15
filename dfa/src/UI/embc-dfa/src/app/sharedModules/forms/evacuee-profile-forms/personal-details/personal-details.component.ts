@@ -17,6 +17,7 @@ import { IMaskModule } from 'angular-imask';
 
 @Component({
   selector: 'app-personal-details',
+  standalone: false,
   templateUrl: './personal-details.component.html',
   styleUrls: ['./personal-details.component.scss']
 })

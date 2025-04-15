@@ -28,6 +28,7 @@ import { ApplicantOption } from 'src/app/core/api/models';
 
 @Component({
   selector: 'app-property-damage',
+  standalone: false,
   templateUrl: './property-damage.component.html',
   styleUrls: ['./property-damage.component.scss']
 })

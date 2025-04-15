@@ -31,6 +31,7 @@ import { IMaskModule } from 'angular-imask';
 
 @Component({
   selector: 'app-occupants',
+  standalone: false,
   templateUrl: './occupants.component.html',
   styleUrls: ['./occupants.component.scss']
 })

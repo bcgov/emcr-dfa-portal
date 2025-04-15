@@ -7,7 +7,7 @@
 
   <div class="site-header">
     <div class="site-header-content">
-      <a href="/" class="site-logo"><img src="https://dfa.gov.bc.ca/img/gov_bc_logo.svg" alt="Government of B.C."></a>
+      <a href="/" class="site-logo"><img src="images/gov_bc_logo.svg" alt="Government of B.C."></a>
     </div>
   </div>
 
@@ -21,7 +21,7 @@
   <div class="hero">
     <div>
       <div class="hero-content">
-        <h1>Disaster Financial Assistance (DFA)</h1>
+        <div class="dfaHeading">Disaster Financial Assistance (DFA)</div>
         <p>After a disaster, the provincial government may declare the event eligible for Disaster Financial Assistance
           (DFA). On this page you will be able to access the correct portal for your application type.</p>
         <p><a style="color: white;"
@@ -47,8 +47,8 @@
         <mat-card class="cardContent">
           <mat-card-content>
             <div>
-              <div class="cardHeader" style="padding-top: 16px;">
-                <div>
+              <div class="cardHeader">
+                <div style="padding-top: 12px;">
                   <img src="images/u67.svg" alt="Individuals and Organizations" class="icon">
                 </div>
                 <h2>
@@ -56,57 +56,76 @@
                 </h2>
               </div>
               <div class="content-divider">
-                <p>
-                  Private sector applicant may receive DFA assistance to restore uninsurable losses critical to homes,
-                  livelihoods, or community services.
-                </p>
-                <p>
-                  <b>
-                    Want more information about eligibility?
-                    <a class="links"
-                      href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/preparedbc/evacuation-recovery/disaster-financial-assistance"
-                      target="_blank">See Private sector information</a>
-                  </b>
-                </p>
+                <div style="padding-top: 10px;">
+                  <p>
+                    Private sector applicant may receive DFA assistance to restore uninsurable losses critical to homes,
+                    livelihoods, or community services.
+                  </p>
+                  <p >
+                    <b>
+                      Want more information about eligibility?
+                      <a class="links"
+                        href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/preparedbc/evacuation-recovery/disaster-financial-assistance"
+                        target="_blank">See Private sector information</a>
+                    </b>
+                  </p>
+                </div>
+                
               </div>
             </div>
             <div>
-              <div class="icon-text">
-                <mat-icon class="infoIcon">info</mat-icon>
+              <div class="icon-text" style="padding-top: 12px;">
+                <img src="images/info.svg" alt="Info" class="infoIcon">
                 <span>
                   <h2>Use this portal if you are a:</h2>
                 </span>
               </div>
-              <div class="padding-left">
+              <div class="padding-left" style="padding-top: 8px;">
                 <div class="icon-text">
                   <mat-icon class="checkIcon">check_circle</mat-icon>
-                  <span>Homeowner</span>
+                  <span class="font">Homeowner</span>
                 </div>
                 <div class="icon-text">
                   <mat-icon class="checkIcon">check_circle</mat-icon>
-                  <span>Residential tenant</span>
+                  <span class="font">Residential tenant</span>
                 </div>
                 <div class="icon-text">
                   <mat-icon class="checkIcon">check_circle</mat-icon>
-                  <span>Small businesses (including landlords)</span>
+                  <span class="font">Small businesses (including landlords)</span>
                 </div>
                 <div class="icon-text">
                   <mat-icon class="checkIcon">check_circle</mat-icon>
-                  <span>Farms</span>
+                  <span class="font">Farms</span>
                 </div>
                 <div class="icon-text">
                   <mat-icon class="checkIcon">check_circle</mat-icon>
-                  <span>Charitable organization</span>
+                  <span class="font">Charitable/Volunteer Organizations</span>
                 </div>
               </div>
             </div>
 
-            <div>
-              <button class="applyButton" (click)="naviagteToPrivateDFA()">
-                Apply to Private DFA
+            <div style="padding-top: 15px;">
+              @if (environment?.disablePrivateUrl) {
+                <button disabled 
+                class="disableButton" 
+                #tooltip="matTooltip"
+                matTooltip="New applications are not currently being accepted"
+                tooltipClass="my-custom-class"
+                [matTooltipPosition]="position.value!">
+                  Register to apply to Private DFA
+                </button>
+              } @else { 
+                <button class="applyButton" (click)="naviagteToPrivateDFA()">
+                  Register to apply to Private DFA
+                </button>
+              }
+
+              <button class="loginButton" (click)="naviagteToPrivateDFA()">
+                Login into to Private DFA
               </button>
-              <div class="loginText">
-                <p>
+
+              <div>
+                <p class="loginText">
                   You will need your BC Services card to log in
                 </p>
               </div>
@@ -119,17 +138,17 @@
           <mat-card-content>
             <div class="cardHeader">
               <div>
-                <img src="images/u80.svg" alt="Individuals and Organizations" class="icon">
+                <img src="images/u394.svg" alt="Individuals and Organizations" class="icon">
               </div>
-              <h2>Indigenous Governing Bodies and Local Authorities</h2>
+              <h2>Indigenous Governing Bodies <br> and Local Authorities</h2>
             </div>
             <div class="content-divider">
               <p>
                 Public sector applicants may receive financial assistance from the DFA program for damaged
                 infrastructure.
               </p>
-              <p>
-                <b>
+              <p style="padding-top: 24px;">
+                <b >
                   Want more information about eligibility?
                   <a class="links"
                     href="https://www2.gov.bc.ca/gov/content/safety/emergency-management/local-emergency-programs/financial/communities-dfa"
@@ -139,7 +158,7 @@
             </div>
             <div>
               <div class="icon-text">
-                <mat-icon class="infoIcon">info</mat-icon>
+                <img src="images/info.svg" alt="Info" class="infoIcon">
                 <span>
                   <h2>Use this portal if you are representing a local government:</h2>
                 </span>
@@ -147,21 +166,41 @@
               <div class="padding-left">
                 <div class="icon-text">
                   <mat-icon class="checkIcon">check_circle</mat-icon>
-                  <span>Indigenous Governing Bodies</span>
+                  <span class="font">Indigenous Governing Bodies</span>
                 </div>
                 <div class="icon-text">
                   <mat-icon class="checkIcon">check_circle</mat-icon>
-                  <span>Local Authorities</span>
+                  <span class="font">Local Authorities</span>
                 </div>
               </div>
             </div>
-            <div style="padding-top: 65px;">
-              <button class="applyButton" (click)="naviagteToPublicDFA()">
-                Apply to Public DFA
-              </button>
-              <div class="loginText">
-                <p>
-                  You will need your BC BCeID to log in
+            <div style="padding-top: 100px;">
+
+              @if (environment?.disablePublicUrl || environment?.newApplicationNotAccepted) {
+                <button disabled 
+                class="disableButton" 
+                #tooltip="matTooltip"
+                matTooltip="New applications are not currently being accepted"
+                tooltipClass="my-custom-class"
+                [matTooltipPosition]="position.value!">
+                  Register to apply to Public DFA
+                </button>
+              } @else { 
+                <button class="applyButton" (click)="naviagteToPublicDFA()">
+                  Register to apply to Public DFA
+                </button>
+              }
+         
+              @if(!environment?.newApplicationNotAccepted) {
+                <button class="loginButton" (click)="naviagteToPublicDFA()">
+                  Login into to Public DFA
+                </button>
+  
+              }
+           
+              <div>
+                <p  class="loginText">
+                  You will need your BCeID to log in
                 </p>
               </div>
             </div>
@@ -177,49 +216,48 @@
 
   </div>
 
-
-  <div class="site-footer">
-    <div class="contact">
+  <div class="contact">
+    <div class="contactInfo">
+      <img src="images/phonecontact.png" alt="contact" class="contactIcon">
+    </div>
+    <div style="flex: 1 1 400px;">
+      <h2 style="font-size: 24px;">Contact Us</h2>
       <div>
-        <img src="images/phonecontact.png" alt="contact" class="contactIcon">
+        <h2>
+          For General Assistance
+        </h2>
+        <p class="contactTextColor">For questions or more information, contact the Disaster Financial Assistance team toll-free at</p>
+        <a class="--link-black" href="tel:18882574777" style="font-size: 18px;">1-888-257-4777</a>
 
       </div>
       <div>
-        <h2>Contact us</h2>
-        <div>
-          <h2>
-            For General Assistance
-          </h2>
-          <p>For questions or more information, contact the Disaster Financial Assistance team toll-free at</p>
-          <a class="--link-black" href="tel:18882574777" style="font-size: 18px;">1-888-257-4777</a>
-
-        </div>
-        <div>
-          <h2>
-            Individuals, small businesses, farms or charitable organizations
-          </h2>
-          <p>
-            Email: <a class="--link-black" href="mailto:DFA.Private&#64;gov.bc.ca">DFA.Private&#64;gov.bc.ca</a>
-          </p>
-        </div>
-        <div>
-          <h2>
-            Indigenous Governing Bodies and Local Authorities
-          </h2>
-          <p>
-            Email:<a class="--link-black" href="mailto:DFA.Public&#64;gov.bc.ca">DFA.Public&#64;gov.bc.ca</a>
-          </p>
-        </div>
-        <div>
-          <h2>
-            Technical Support
-          </h2>
-          <p>
-            <a class="--link-black" href="mailto:DFA.private@gov.bc.ca">Send a Technical Inquiry</a>
-          </p>
-        </div>
+        <h2>
+          Individuals, small businesses, farms or charitable/volunteer organizations
+        </h2>
+        <p class="contactTextColor">
+          email: <a class="--link-black" href="mailto:DFA.Private&#64;gov.bc.ca">DFA.Private&#64;gov.bc.ca</a>
+        </p>
+      </div>
+      <div>
+        <h2>
+          Indigenous Governing Bodies and Local Authorities
+        </h2>
+        <p class="contactTextColor">
+          email: <a class="--link-black" href="mailto:DFA.Public&#64;gov.bc.ca">DFA.Public&#64;gov.bc.ca</a>
+        </p>
+      </div>
+      <div>
+        <h2>
+          Technical Support
+        </h2>
+        <p>
+          <a class="--link-black" href="mailto:DFA.private@gov.bc.ca">Send a Technical Inquiry</a>
+        </p>
       </div>
     </div>
+  </div>
+  <div class="site-footer">
+   
     <div class="container --site-footer-layout">
       <div class="site-footer-phone-number">
         Contact DFA Support toll-free at <a class="--link-black" href="tel:18882574777">1-888-257-4777</a>

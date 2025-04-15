@@ -18,6 +18,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-security-questions',
+  standalone: false,
   templateUrl: './security-questions.component.html',
   styleUrls: ['./security-questions.component.scss']
 })

@@ -34,6 +34,7 @@ import { IMaskModule } from 'angular-imask';
 
 @Component({
   selector: 'app-clean-up-log',
+  standalone: false,
   templateUrl: './clean-up-log.component.html',
   styleUrls: ['./clean-up-log.component.scss']
 })

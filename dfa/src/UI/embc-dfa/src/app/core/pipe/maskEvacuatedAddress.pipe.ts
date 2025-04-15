@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { RegAddress } from '../model/address';
 import { Community, LocationService } from '../services/location.service';
-import * as _ from 'lodash';
+import { escape } from 'lodash-es';
 
-@Pipe({ name: 'maskEvacuatedaddress' })
+@Pipe({ name: 'maskEvacuatedaddress', standalone: false })
 export class MaskEvacuatedAddressPipe implements PipeTransform {
   constructor(
     private locationService: LocationService,
@@ -38,9 +38,9 @@ export class MaskEvacuatedAddressPipe implements PipeTransform {
       }
 
       // All values must be HTML-sanitized for us to include <br> line break.
-      let addressStr = _.escape(line1);
+      let addressStr = escape(line1);
 
-      if (line2.length > 0) addressStr += '<br>' + _.escape(line2);
+      if (line2.length > 0) addressStr += '<br>' + escape(line2);
 
       return this.sanitizer.bypassSecurityTrustHtml(addressStr);
     }

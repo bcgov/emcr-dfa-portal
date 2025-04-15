@@ -37,6 +37,7 @@ import { IMaskModule } from 'angular-imask';
 
 @Component({
   selector: 'app-damaged-property-address',
+  standalone: false,
   templateUrl: './damaged-property-address.component.html',
   styleUrls: ['./damaged-property-address.component.scss']
 })

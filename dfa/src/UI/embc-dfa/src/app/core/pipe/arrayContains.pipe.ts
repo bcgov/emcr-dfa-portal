@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ProfileDataConflict } from '../api/models';
 
-@Pipe({ name: 'arrayContains' })
+@Pipe({ name: 'arrayContains', standalone: false })
 export class ArrayContains implements PipeTransform {
   transform(array: Array<ProfileDataConflict>, value: string): boolean {
     if (array) {

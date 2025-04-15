@@ -12,6 +12,9 @@ export interface EnvironmentInformation {
     outageEnd?: null| string;
     dfaPublicUrl?: null| string;
     dfaPrivateUrl?: null| string;
+    disablePublicUrl?: null| string;
+    disablePrivateUrl?: null| string;
+    newApplicationNotAccepted?: null| string;
 
   }
 

@@ -8,6 +8,7 @@ import * as globalConst from '../../../core/services/globalConstants';
 
 @Component({
   selector: 'app-dashboard',
+  standalone: false,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

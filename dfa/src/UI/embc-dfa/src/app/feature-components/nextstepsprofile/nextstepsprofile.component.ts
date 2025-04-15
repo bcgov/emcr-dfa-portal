@@ -5,6 +5,7 @@ import { EligibilityService } from 'src/app/core/api/services';
 
 @Component({
   selector: 'app-nextstepsprofile',
+  standalone: false,
   templateUrl: './nextstepsprofile.component.html',
   styleUrls: ['./nextstepsprofile.component.scss']
 })

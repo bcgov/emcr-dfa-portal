@@ -28,6 +28,7 @@ import { AddressChangeComponent } from 'src/app/core/components/dialog-component
 
 @Component({
   selector: 'app-dfa-application-main',
+  standalone: false,
   templateUrl: './dfa-application-main.component.html',
   styleUrls: ['./dfa-application-main.component.scss']
 })

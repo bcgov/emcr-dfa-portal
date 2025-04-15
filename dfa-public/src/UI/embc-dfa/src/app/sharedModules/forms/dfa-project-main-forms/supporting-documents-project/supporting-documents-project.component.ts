@@ -229,6 +229,7 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
       let fileUploads = this.formCreationService.fileUploadsForm.value.get('fileUploads').value;
       if (fileUploads?.find(x => x.fileName === fileUpload.fileName && x.deleteFlag !== true)) {
         this.warningDialog("A file with the name " + fileUpload.fileName + " has already been uploaded.");
+        this.formCreationService.fileUploadsForm.value.get('supportingFilesFileUpload').reset();
         return;
       }
     if (this.fileUploadForm.get('supportingFilesFileUpload').status === 'VALID') {
@@ -247,6 +248,7 @@ export default class SupportingDocumentsProjectComponent implements OnInit, OnDe
           this.showSupportingFileForm = !this.showSupportingFileForm;
           //if (fileUpload.requiredDocumentType == Object.keys(this.RequiredDocumentTypes)[Object.values(this.RequiredDocumentTypes).indexOf(this.RequiredDocumentTypes.PreEvent)])
           //  this.supportingDocumentsForm.get('hasCopyOfARentalAgreementOrLease').setValue(true);
+          this.formCreationService.fileUploadsForm.value.get('supportingFilesFileUpload').reset();
           this.isLoading = false;
         },
         error: (error) => {

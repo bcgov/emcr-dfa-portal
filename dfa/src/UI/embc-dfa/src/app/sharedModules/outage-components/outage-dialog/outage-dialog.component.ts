@@ -4,6 +4,7 @@ import { OutageInformation } from 'src/app/core/api/models';
 
 @Component({
   selector: 'app-outage-dialog',
+  standalone: false,
   templateUrl: './outage-dialog.component.html',
   styleUrls: ['./outage-dialog.component.scss']
 })

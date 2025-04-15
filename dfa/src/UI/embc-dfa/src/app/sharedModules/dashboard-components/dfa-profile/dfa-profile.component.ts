@@ -5,6 +5,7 @@ import { AppSessionService } from 'src/app/core/services/appSession.service';
 
 @Component({
   selector: 'app-dfa-profile',
+  standalone: false,
   templateUrl: './dfa-profile.component.html',
   styleUrls: ['./dfa-profile.component.scss']
 })

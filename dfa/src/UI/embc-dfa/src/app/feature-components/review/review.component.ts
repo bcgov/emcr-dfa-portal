@@ -13,6 +13,7 @@ import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-review',
+  standalone: false,
   templateUrl: './review.component.html',
   styleUrls: ['./review.component.scss']
 })

@@ -22,6 +22,7 @@ import { SecondaryApplicant } from 'src/app/core/model/dfa-application-main.mode
 
 @Component({
   selector: 'app-sign-and-submit',
+  standalone: false,
   templateUrl: './sign-and-submit.component.html',
   styleUrls: ['./sign-and-submit.component.scss']
 })

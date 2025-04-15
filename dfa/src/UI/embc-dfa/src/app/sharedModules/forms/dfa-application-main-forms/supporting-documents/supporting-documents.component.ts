@@ -37,6 +37,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-supporting-documents',
+  standalone: false,
   templateUrl: './supporting-documents.component.html',
   styleUrls: ['./supporting-documents.component.scss']
 })

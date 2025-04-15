@@ -15,12 +15,14 @@ using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.ConfigurationModule.Models.PDF;
 using EMBC.DFA.API.ConfigurationModule.Models.PDF.PDFService;
 using EMBC.DFA.API.Services;
+using EMBC.DFA.PUBLIC.API.Controllers;
 using EMBC.Gov.BCeID;
 using Google.Protobuf.WellKnownTypes;
 using HandlebarsDotNet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -40,6 +42,7 @@ namespace EMBC.DFA.API.Controllers
         private readonly PDFServiceHandler pDFServiceHandler;
         private readonly IBCeIDBusinessQuery bceidQuery;
         private readonly ILogger<ApplicationController> logger;
+        private readonly IConfiguration configuration;
 
         public ApplicationController(
             IHostEnvironment env,
@@ -48,7 +51,8 @@ namespace EMBC.DFA.API.Controllers
             IConfigurationHandler handler,
             IUserService userService,
             PDFServiceHandler pdfServiceHandler,
-            IBCeIDBusinessQuery query)
+            IBCeIDBusinessQuery query,
+            IConfiguration configuration)
         {
             this.env = env;
             this.mapper = mapper;
@@ -57,6 +61,7 @@ namespace EMBC.DFA.API.Controllers
             this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
             this.pDFServiceHandler = pdfServiceHandler ?? throw new ArgumentNullException($"{nameof(pdfServiceHandler)}");
             this.bceidQuery = query ?? throw new ArgumentNullException($"{nameof(query)}");
+            this.configuration = configuration;
         }
 
         private string currentUserId => userService.GetBCeIDBusinessId();
@@ -221,12 +226,43 @@ namespace EMBC.DFA.API.Controllers
                         throw new Exception("Error in GetPdfApplicationData() function");
                     }
 
-                    applicationReviewPDFUpload = BuildApplicationReviewPDFUpload(mappedApplication, file);
-                    var mappedFileUpload = mapper.Map<AttachmentEntity>(applicationReviewPDFUpload);
-                    var submissionEntity = mapper.Map<SubmissionEntityPDF>(applicationReviewPDFUpload);
-                    submissionEntity.documentCollection = Enumerable.Empty<AttachmentEntity>();
-                    submissionEntity.documentCollection = submissionEntity.documentCollection.Append<AttachmentEntity>(mappedFileUpload);
-                    var fileUploadResult = await handler.HandleFileUploadApplicationPDFAsync(submissionEntity);
+                    var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
+
+                    if (useS3) 
+                    {
+                        applicationReviewPDFUpload = BuildApplicationReviewPDFUpload(mappedApplication, file);
+                        if (applicationReviewPDFUpload.fileSize >= (51 * 1024 * 1024))
+                        {
+                            throw new Exception("File size exceeds 50MB limit");
+                        }
+
+                        var submissionEntity = mapper.Map<S3SubmissionEntity>(applicationReviewPDFUpload);
+                        /* Switch based on the regarding entity type where the doc is uploaded to
+                            case : incident 
+                            application : dfa_appapplication
+                            project : dfa_project
+                            recoveryClaim : dfa_projectclaim"  */
+                        submissionEntity.RegardingEntitySchemaName = "dfa_appapplication";
+
+                        /* switch based on entity type to which the document is being uploaded
+                            case : bcgov_caseid
+                            application : dfa_appapplication
+                            project : dfa_project
+                            recoveryClaim : dfa_recoveryclaim */
+                        submissionEntity.RegardingEntityLookUpFieldName = "dfa_appapplication";
+
+                        var uploadResult = await handler.HandleS3FileUploadAsync(submissionEntity);
+                        return Ok(new ApplicationResult { Id = uploadResult });
+                    }
+                    else
+                    {
+                        applicationReviewPDFUpload = BuildApplicationReviewPDFUpload(mappedApplication, file);
+                        var mappedFileUpload = mapper.Map<AttachmentEntity>(applicationReviewPDFUpload);
+                        var submissionEntity = mapper.Map<SubmissionEntityPDF>(applicationReviewPDFUpload);
+                        submissionEntity.documentCollection = Enumerable.Empty<AttachmentEntity>();
+                        submissionEntity.documentCollection = submissionEntity.documentCollection.Append<AttachmentEntity>(mappedFileUpload);
+                        var fileUploadResult = await handler.HandleFileUploadApplicationPDFAsync(submissionEntity);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -243,9 +279,9 @@ namespace EMBC.DFA.API.Controllers
                 dfa_appapplicationid = Guid.Parse(mappedApplication.dfa_appapplicationid),
                 contentType = "application/pdf",
                 fileData = file,
-                fileType = FileCategory.AppplicationPDF,
+                fileType = FileCategory.ApplicationPDF,
                 fileName = $"{mappedApplication.dfa_appapplicationid}.pdf",
-                fileDescription = "Appplication PDF",
+                fileDescription = "Application PDF",
                 uploadedDate = DateTime.Now.ToString()
             };
         }

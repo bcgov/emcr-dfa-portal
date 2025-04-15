@@ -197,7 +197,7 @@
                 || !(formCreationService.supportingDocumentsForm$ | async)?.valid
                 || !(formCreationService.otherContactsForm$ | async)?.valid
                 || !(formCreationService.fullTimeOccupantsForm$ | async)?.valid
-                || !(this.requiredDocumentsSupplied())
+                || !requiredDocumentsSupplied()
                  )
             && (vieworedit === 'add' || vieworedit === 'update')">
           <span style="color:red">Enter all required information and sign before submitting.</span>

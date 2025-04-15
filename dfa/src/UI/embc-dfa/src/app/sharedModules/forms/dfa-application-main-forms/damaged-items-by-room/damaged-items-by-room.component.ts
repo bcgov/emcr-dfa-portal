@@ -32,6 +32,7 @@ import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog
 
 @Component({
   selector: 'app-damaged-items-by-room',
+  standalone: false,
   templateUrl: './damaged-items-by-room.component.html',
   styleUrls: ['./damaged-items-by-room.component.scss']
 })

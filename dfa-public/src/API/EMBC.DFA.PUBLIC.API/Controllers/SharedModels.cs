@@ -225,8 +225,8 @@ namespace EMBC.DFA.API.Controllers
         [EnumMember(Value = "Additional Supporting Documents")]
         AdditionalDocuments,
 
-        [EnumMember(Value = "Appplication PDF")]
-        AppplicationPDF
+        [EnumMember(Value = "Application PDF")]
+        ApplicationPDF
     }
 
     /// <summary>

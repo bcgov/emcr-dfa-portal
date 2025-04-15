@@ -12,6 +12,7 @@ using EMBC.DFA.API.Controllers;
 using EMBC.DFA.API.Mappers;
 using EMBC.Utilities.Caching;
 using Microsoft.Extensions.Logging;
+using Pipelines.Sockets.Unofficial.Arenas;
 using Xrm.Tools.WebAPI;
 using Xrm.Tools.WebAPI.Requests;
 using static Pipelines.Sockets.Unofficial.SocketConnection;
@@ -42,9 +43,14 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> HandleCleanUpLogItemAsync(dfa_appcleanuplogs_params objCleanUpLogItem);
         Task<IEnumerable<dfa_appcleanuplogs_retrieve>> GetCleanUpLogItemsAsync(Guid applicationId);
         Task<string> HandleFileUploadAsync(SubmissionEntity submission);
+        Task<string> HandleS3FileUploadAsync(S3SubmissionEntity objDocumentLocation);
+        Task<string> HandleCreateFileMetadataAsync(MetadataSubmissionEntity submission);
+        Task<string> HandleDeleteFileMetadataAsync(MetadataDeleteParams parameters);
         Task<string> HandleFileUploadClaimAsync(SubmissionEntityClaim objDocumentLocation);
         Task<string> DeleteFileUploadAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms, dfa_DeleteDocument_params dfa_DeleteDocument_params);
         Task<IEnumerable<dfa_projectdocumentlocation>> GetProjectFileUploadsAsync(Guid projectId);
+        Task<IEnumerable<bcgov_documenturl>> GetS3ProjectDocumentListAsync(Guid projectId);
+        Task<IEnumerable<bcgov_documenturl>> GetS3ProjectClaimDocumentListAsync(Guid claimId);
         Task<IEnumerable<dfa_projectclaimdocumentlocation>> GetProjectClaimFileUploadsAsync(Guid claimId);
         // 2024-09-19 EMCRI-676 waynezen; overloaded method that filters application based on BCeID Org
         Task<List<CurrentApplication>> HandleApplicationList(BceidUserData bceidUser);
@@ -274,6 +280,24 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             return result;
         }
 
+        public async Task<string> HandleS3FileUploadAsync(S3SubmissionEntity objDocumentLocation)
+        {
+            var result = await listsGateway.InsertS3DocumentAsync(objDocumentLocation);
+            return result;
+        }
+
+        public async Task<string> HandleCreateFileMetadataAsync(MetadataSubmissionEntity submission)
+        {
+            var result = await listsGateway.CreateDocumentMetadataAsync(submission);
+            return result;
+        }
+
+        public async Task<string> HandleDeleteFileMetadataAsync(MetadataDeleteParams parameters)
+        {
+            var result = await listsGateway.DeleteDocumentMetadataAsync(parameters);
+            return result;
+        }
+
         public async Task<string> HandleFileUploadClaimAsync(SubmissionEntityClaim objDocumentLocation)
         {
             var result = await listsGateway.InsertDocumentLocationClaimAsync(objDocumentLocation);
@@ -293,6 +317,16 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public async Task<IEnumerable<dfa_projectdocumentlocation>> GetProjectFileUploadsAsync(Guid projectId)
         {
             return await listsGateway.GetProjectDocumentLocationsListAsync(projectId);
+        }
+
+        public async Task<IEnumerable<bcgov_documenturl>> GetS3ProjectDocumentListAsync(Guid projectId)
+        {
+            return await listsGateway.GetS3ProjectDocumentListAsync(projectId);
+        }
+
+        public async Task<IEnumerable<bcgov_documenturl>> GetS3ProjectClaimDocumentListAsync(Guid claimId)
+        {
+            return await listsGateway.GetS3ProjectClaimDocumentListAsync(claimId);
         }
 
         public async Task<IEnumerable<dfa_projectclaimdocumentlocation>> GetProjectClaimFileUploadsAsync(Guid claimId)

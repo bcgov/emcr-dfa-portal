@@ -5,6 +5,7 @@ import { FormCreationService } from '../../../core/services/formCreation.service
 
 @Component({
   selector: 'app-component-wrapper',
+  standalone: false,
   templateUrl: './component-wrapper.component.html',
   styleUrls: ['./component-wrapper.component.scss']
 })

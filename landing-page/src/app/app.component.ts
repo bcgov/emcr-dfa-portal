@@ -1,23 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import {MatCard, MatCardModule} from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { EnvironmentBannerComponent } from './components/environment-banner/environment-banner.component';
 import { OutageBannerComponent } from './components/outage-banner/outage-banner.component';
 import { EnvironmentBannerService, EnvironmentInformation } from './services/environment.service';
+import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
+import { FormControl } from '@angular/forms';
 
 
 @Component({
   selector: 'app-root',
   imports: [
-  RouterOutlet,
   MatCardModule, 
   MatCard,
   MatIconModule,
   MatButtonModule,
   EnvironmentBannerComponent,
-  OutageBannerComponent
+  OutageBannerComponent,
+  MatTooltipModule,
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -30,6 +31,9 @@ export class AppComponent implements OnInit {
   startDisplayOutageBanner?: number;
   outageEnd?: number;
 
+  positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
+  position = new FormControl(this.positionOptions[0]);
+  
   constructor(private environmentBannerService: EnvironmentBannerService) { }
 
   ngOnInit(): void {

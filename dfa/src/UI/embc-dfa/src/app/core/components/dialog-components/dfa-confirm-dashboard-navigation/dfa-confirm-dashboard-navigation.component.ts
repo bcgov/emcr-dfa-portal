@@ -5,6 +5,7 @@ import { LoginService } from 'src/app/core/services/login.service';
 
 @Component({
   selector: 'app-dfa-confirm-dashboard-navigation-dialog',
+  standalone: false,
   templateUrl: './dfa-confirm-dashboard-navigation.component.html',
   styleUrls: ['./dfa-confirm-dashboard-navigation.component.scss']
 })
