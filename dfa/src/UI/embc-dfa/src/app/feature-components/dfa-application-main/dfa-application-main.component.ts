@@ -239,7 +239,7 @@ export class DFAApplicationMainComponent
     });
     this.otherContactsForm$ = this.formCreationService.getOtherContactsForm().subscribe((otherContacts) => {
       this.otherContactsForm = otherContacts;
-      this.otherContactsValid = otherContacts.value != null;
+      this.otherContactsValid = this.otherContactsForm.valid && otherContacts.value != null;
     });
     this.fullTimeOccupantsForm$ = this.formCreationService.getFullTimeOccupantsForm().subscribe((fullTimeOccupants) => {
       this.fullTimeOccupantsForm = fullTimeOccupants;
@@ -282,8 +282,6 @@ export class DFAApplicationMainComponent
           }
           this.checkSignaturesValid();
         });
-
-
   }
 
 
@@ -309,7 +307,7 @@ export class DFAApplicationMainComponent
   }
 
   ngAfterViewChecked(): void {
-    this.cd.detectChanges();
+    this.cd.detectChanges();         
   }
 
   ngAfterViewInit(): void {
@@ -380,13 +378,11 @@ export class DFAApplicationMainComponent
 
     let fullTimeOccupantsForm = this.formCreationService.fullTimeOccupantsForm.value;
     fullTimeOccupantsForm.updateValueAndValidity();
-    let onlyOccupantInHome = fullTimeOccupantsForm.get('onlyOccupantInHome').value;
-    this.fullTimeOccupantsValid = fullTimeOccupantsForm.valid || onlyOccupantInHome;
+    this.fullTimeOccupantsValid = fullTimeOccupantsForm.valid || this.isOccupantValid();
 
     let otherContactsForm = this.formCreationService.otherContactsForm.value;
     otherContactsForm.updateValueAndValidity();
-    let onlyOtherContact = otherContactsForm.get('onlyOtherContact').value;
-    this.otherContactsValid = otherContactsForm.valid || onlyOtherContact;
+    this.otherContactsValid = otherContactsForm.valid || this.isOtherContactValid();
 
     let cleanUpLogForm = this.formCreationService.cleanUpLogForm.value;
     cleanUpLogForm.updateValueAndValidity();
@@ -402,7 +398,7 @@ export class DFAApplicationMainComponent
 
     let supportingDocumentsForm = this.formCreationService.supportingDocumentsForm.value;
     supportingDocumentsForm.updateValueAndValidity();
-    this.supportingDocumentsValid = supportingDocumentsForm.valid;
+    this.supportingDocumentsValid = supportingDocumentsForm.valid && this.requiredDocumentsSupplied();
   }
 
   navigateToStep(stepIndex: number) {
@@ -431,10 +427,6 @@ export class DFAApplicationMainComponent
 
     this.validateForms();
     this.setCompletedSteps();
-/*     this.form.updateValueAndValidity();
-    if (this.form.valid) stepper.selected.completed = true;
-    else stepper.selected.completed = false; */
-
   }
 
   /**
@@ -521,10 +513,10 @@ export class DFAApplicationMainComponent
     this.dfaApplicationMainStepper.steps.get(0).completed = this.applicationDetailsValid;
     this.dfaApplicationMainStepper.steps.get(1).completed = this.damagedPropertyAddressValid;
     this.dfaApplicationMainStepper.steps.get(2).completed = this.propertyDamageValid;
-    this.dfaApplicationMainStepper.steps.get(3).completed = this.otherContactsValid && this.fullTimeOccupantsValid;
+    this.dfaApplicationMainStepper.steps.get(3).completed = this.areOccupantsValid();
     this.dfaApplicationMainStepper.steps.get(4).completed = this.cleanUpLogValid;
     this.dfaApplicationMainStepper.steps.get(5).completed = this.cleanUpLogItemsValid;
-    this.dfaApplicationMainStepper.steps.get(6).completed = this.supportingDocumentsValid;
+    this.dfaApplicationMainStepper.steps.get(6).completed = this.requiredDocumentsSupplied();
   }
 
   requiredDocumentsSupplied(): boolean {
@@ -550,6 +542,29 @@ export class DFAApplicationMainComponent
       && ((this.isCharitableOrganization == true) ? (isDirectorsListingUploaded == true && isRegistrationProofUploaded == true && isStructureAndPurposeUploaded) : true )
       ) return true;
     else return false;
+  }
+
+  areOccupantsValid(): boolean {
+    if (this.isOtherContactValid() && this.isOccupantValid()){
+      return true;
+    }
+    return false;
+  }
+
+  isOtherContactValid(): boolean {
+    let onlyOtherContact = this.otherContactsForm.get('onlyOtherContact').value;
+    if (this.otherContactsForm.valid || onlyOtherContact){
+      return true;
+    }
+    return false;    
+  }
+
+  isOccupantValid(): boolean {
+    let onlyOccupantInHome = this.fullTimeOccupantsForm.get('onlyOccupantInHome').value;
+    if (this.fullTimeOccupantsForm.valid || onlyOccupantInHome){
+      return true;
+    }
+    return false;    
   }
 
   /**

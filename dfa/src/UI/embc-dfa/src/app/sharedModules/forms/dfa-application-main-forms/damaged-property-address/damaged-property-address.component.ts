@@ -199,6 +199,7 @@ export default class DamagedPropertyAddressComponent implements OnInit, OnDestro
             this.accountLegalNameLabel = "farm's"
             this.accountPlaceHolderLabel = "Farm";
           } else if (this.isCharitableOrganization) {
+            this.damagedPropertyAddressForm.controls.businessLegalName.setValidators([Validators.maxLength(100), Validators.required]);
             this.damagedPropertyAddressForm.controls.charityExistsAtLeast12Months.setValidators([Validators.required]);
             this.damagedPropertyAddressForm.controls.charityRegistered.setValidators([Validators.required]);
             this.damagedPropertyAddressForm.controls.charityProvidesCommunityBenefit.setValidators([Validators.required]);
