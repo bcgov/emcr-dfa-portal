@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using System.Reflection;
+using Amazon.S3;
 using EMBC.Utilities.Configuration;
 using EMBC.Utilities.Extensions;
+using EMBC.Utilities.S3;
 using EMBC.Utilities.Telemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +14,44 @@ namespace EMBC.Utilities.Hosting
 {
     public static class ConfigurationHelpers
     {
+        public static IServiceCollection AddS3Storage(this IServiceCollection services, IConfiguration configuration)
+        {
+            var settings = GetSettings(configuration);
+
+            if (settings?.Url != null)
+            {
+                services.AddOptions<S3StorageProviderSettings>().Bind(configuration.GetSection("S3"));
+
+                services.AddSingleton<IAmazonS3>(_ =>
+                    new AmazonS3Client(
+                        settings.AccessKey,
+                        settings.SecretKey,
+                        new AmazonS3Config
+                        {
+                            ServiceURL = settings.Url,
+                            ForcePathStyle = true,
+                        }));
+                services.AddSingleton<IS3Provider, S3Provider>();
+            }
+            else
+            {
+                services.AddSingleton<IAmazonS3>(_ =>
+                    new AmazonS3Client(
+                        string.Empty,
+                        string.Empty,
+                        new AmazonS3Config
+                        {
+                            ServiceURL = string.Empty,
+                            ForcePathStyle = true,
+                        }));
+                services.AddSingleton<IS3Provider, S3Provider>();
+            }
+            return services;
+        }
+
+        private static S3StorageProviderSettings? GetSettings(IConfiguration configuration)
+            => configuration.GetSection("S3").Get<S3StorageProviderSettings>();
+
         public static void ConfigureComponentServices(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment, TelemetryProvider telemetryProvider, params Assembly[] assemblies)
         {
             var reporter = telemetryProvider.Get(nameof(ConfigureComponentServices));

@@ -23,6 +23,8 @@
 
 
     <ItemGroup>
+        <PackageReference Include="AWSSDK.Core" Version="3.5.3.9" />
+        <PackageReference Include="AWSSDK.S3" Version="3.5.10.2" />
         <PackageReference Include="Handlebars.Net" Version="2.1.2" />
         <PackageReference Include="MailKit" Version="3.4.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.*" />
@@ -45,6 +47,10 @@
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
             <_Parameter1>EMBC.Tests.Unit.ESS</_Parameter1>
         </AssemblyAttribute>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="S3\" />
     </ItemGroup>
 
 </Project>

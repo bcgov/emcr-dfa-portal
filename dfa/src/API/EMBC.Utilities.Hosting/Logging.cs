@@ -31,7 +31,7 @@ namespace EMBC.Utilities.Hosting
                 .Enrich.WithEnvironmentUserName()
                 .Enrich.WithCorrelationId()
                 .Enrich.WithCorrelationIdHeader()
-                .Enrich.WithClientAgent()
+                //.Enrich.WithClientAgent()
                 .Enrich.WithClientIp()
                 .Enrich.WithSpan()
                 .WriteTo.Console(outputTemplate: LogOutputTemplate)

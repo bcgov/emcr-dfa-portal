@@ -398,6 +398,29 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string dfa_requireddocumenttype { get; set; }
     }
 
+    public class bcgov_documenturl
+    {
+        public Guid? _dfa_project_value { get; set; }
+        public Guid? _dfa_appapplication_value { get; set; }
+        public string bcgov_filename { get; set; }
+        public string createdon { get; set; }
+        public string bcgov_url { get; set; }
+        public string bcgov_filesize { get; set; }
+        public string bcgov_origincode { get; set; }
+        public string bcgov_documenturlid { get; set; }
+        public string statuscode { get; set; }
+        public string statecode { get; set; }
+        public string dfa_requireddocumenttype { get; set; }
+        public string dfa_recoveryclaim { get; set; }
+        public string bcgov_mimetype { get; set; }
+        public string bcgov_size { get; set; }
+        public string bcgov_fileextension { get; set; }
+        public string dfa_description { get; set; }
+        public string bcgov_fileclassification { get; set; }
+        public string dfa_category { get; set; }
+        public string _modifiedby_value { get; set; }
+    }
+
     public class AttachmentEntity
     {
         [JsonProperty("@odata.type")]
@@ -416,6 +439,41 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string dfa_modifiedby { get; set; } // pass in modified by
         public string fileType { get; set; } // pass in string for fileType (business defined type e.g. damage photo)
         public string? dfa_requireddocumenttype { get; set; } // for required documents TODO: uncomment
+    }
+    public class S3SubmissionEntity
+    {
+        public string RegardingEntitySchemaName { get; set; }
+        public string RegardingEntityID { get; set; }
+        public string RegardingEntityLookUpFieldName { get; set; }
+        public int OriginCode { get; set; }
+        public string Metadata_1 { get; set; }
+        public string Metadata_2 { get; set; }
+        public string Metadata_3 { get; set; }
+        public decimal DocumentSize { get; set; }
+        public DateTime ReceivedDate { get; set; }
+        public string DocumentFileName { get; set; }
+        public string MimeType { get; set; }
+        public byte[] DocumentContent { get; set; }
+    }
+
+    public class MetadataSubmissionEntity
+    {
+        public string RegardingEntitySchemaName { get; set; }
+        public string RegardingEntityID { get; set; }
+        public string RegardingEntityLookUpFieldName { get; set; }
+        public int OriginCode { get; set; }
+        public string Metadata_1 { get; set; }
+        public string Metadata_2 { get; set; }
+        public string Metadata_3 { get; set; }
+        public decimal DocumentSize { get; set; }
+        public DateTime ReceivedDate { get; set; }
+        public string DocumentFileName { get; set; }
+        public string MimeType { get; set; }
+    }
+
+    public class MetadataDeleteParams
+    {
+        public string DocumentMetadataId { get; set; }
     }
 
     public class dfa_DFAActionDeleteDocuments_parms

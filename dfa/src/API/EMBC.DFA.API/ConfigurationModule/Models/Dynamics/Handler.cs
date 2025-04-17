@@ -11,6 +11,7 @@ using EMBC.Utilities.Caching;
 using Microsoft.Extensions.Logging;
 using Xrm.Tools.WebAPI;
 using Xrm.Tools.WebAPI.Requests;
+using static System.Net.Mime.MediaTypeNames;
 using static Pipelines.Sockets.Unofficial.SocketConnection;
 using Profile = EMBC.DFA.API.Controllers.Profile;
 
@@ -40,6 +41,10 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> HandleFileUploadAsync(SubmissionEntity submission);
         Task<string> DeleteFileUploadAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms);
         Task<IEnumerable<dfa_appdocumentlocation>> GetFileUploadsAsync(Guid applicationId);
+        Task<IEnumerable<bcgov_documenturl>> GetS3ApplicationDocumentListAsync(Guid applicationId);
+        Task<string> HandleS3FileUploadAsync(S3SubmissionEntity objDocumentLocation);
+        Task<string> HandleCreateFileMetadataAsync(MetadataSubmissionEntity submission);
+        Task<string> HandleDeleteFileMetadataAsync(MetadataDeleteParams parameters);
         Task<List<CurrentApplication>> HandleApplicationList(string profileId);
         Task<int> HandleEvents();
         Task<IEnumerable<dfa_event>> HandleOpenEventList();
@@ -210,6 +215,29 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         {
             var result = await listsGateway.DeleteDocumentLocationAsync(dfa_DFAActionDeleteDocuments_parms);
             return result;
+        }
+
+        public async Task<string> HandleS3FileUploadAsync(S3SubmissionEntity objDocumentLocation)
+        {
+            var result = await listsGateway.InsertS3DocumentAsync(objDocumentLocation);
+            return result;
+        }
+
+        public async Task<string> HandleCreateFileMetadataAsync(MetadataSubmissionEntity submission)
+        {
+            var result = await listsGateway.CreateDocumentMetadataAsync(submission);
+            return result;
+        }
+
+        public async Task<string> HandleDeleteFileMetadataAsync(MetadataDeleteParams parameters)
+        {
+            var result = await listsGateway.DeleteDocumentMetadataAsync(parameters);
+            return result;
+        }
+
+        public async Task<IEnumerable<bcgov_documenturl>> GetS3ApplicationDocumentListAsync(Guid applicationId)
+        {
+            return await listsGateway.GetS3ApplicationDocumentListAsync(applicationId);
         }
 
         public async Task<IEnumerable<dfa_appdocumentlocation>> GetFileUploadsAsync(Guid applicationId)

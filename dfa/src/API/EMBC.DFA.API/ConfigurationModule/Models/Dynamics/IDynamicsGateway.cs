@@ -30,6 +30,10 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<IEnumerable<dfa_appcleanuplogs_retrieve>> GetCleanUpLogItemsListAsync(Guid applicationId);
         Task<string> InsertDocumentLocationAsync(SubmissionEntity submission);
         Task<string> DeleteDocumentLocationAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms);
+        Task<string> InsertS3DocumentAsync(S3SubmissionEntity submission);
+        Task<string> CreateDocumentMetadataAsync(MetadataSubmissionEntity parameters);
+        Task<string> DeleteDocumentMetadataAsync(MetadataDeleteParams parameters);
+        Task<IEnumerable<bcgov_documenturl>> GetS3ApplicationDocumentListAsync(Guid applicationId);
         Task<IEnumerable<dfa_appdocumentlocation>> GetDocumentLocationsListAsync(Guid applicationId);
         Task<IEnumerable<dfa_appapplication>> GetApplicationListAsync(string profileId);
         Task<int> GetEventCount();

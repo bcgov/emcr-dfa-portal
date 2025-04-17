@@ -13,6 +13,7 @@ using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Mozilla;
+using Pipelines.Sockets.Unofficial.Arenas;
 using Xrm.Tools.WebAPI;
 using Xrm.Tools.WebAPI.Requests;
 using static System.Net.Mime.MediaTypeNames;
@@ -694,6 +695,84 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             catch (Exception ex)
             {
                 throw new Exception($"Failed to insert/delete document {ex.Message}", ex);
+            }
+        }
+
+        public async Task<string> InsertS3DocumentAsync(S3SubmissionEntity submission)
+        {
+            try
+            {
+                var result = await api.ExecuteAction("dfa_UploadDocumentToS3andCreateDocumentMetadata", submission);
+
+                if (result != null)
+                {
+                    return result.Where(m => m.Key == "Result") != null ? result.Where(m => m.Key == "Result").ToList()[0].Value?.ToString() : string.Empty;
+                }
+                return "Submitted";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to insert S3 document {ex.Message}", ex);
+            }
+        }
+
+        public async Task<string> CreateDocumentMetadataAsync(MetadataSubmissionEntity parameters)
+        {
+            try
+            {
+                var result = await api.ExecuteAction("dfa_CreateDocumentMetadata", parameters);
+
+                if (result != null)
+                {
+                    return result.Where(m => m.Key == "DocumentGuid") != null ? result.Where(m => m.Key == "DocumentGuid").ToList()[0].Value?.ToString() : string.Empty;
+                }
+                return "Created";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to create document metadata {ex.Message}", ex);
+            }
+        }
+
+        public async Task<string> DeleteDocumentMetadataAsync(MetadataDeleteParams parameters)
+        {
+            try
+            {
+                var result = await api.ExecuteAction("dfa_DeleteS3DocumentMetadata", parameters);
+
+                if (result != null)
+                {
+                    return result.Where(m => m.Key == "Result") != null ? result.Where(m => m.Key == "Result").ToList()[0].Value?.ToString() : string.Empty;
+                }
+                return "Deleted";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to delete document metadata {ex.Message}", ex);
+            }
+        }
+
+        public async Task<IEnumerable<bcgov_documenturl>> GetS3ApplicationDocumentListAsync(Guid applicationId)
+        {
+            try
+            {
+                var applicationIdString = applicationId.ToString();
+                var list = await api.GetList<bcgov_documenturl>("bcgov_documenturls", new CRMGetListOptions
+                {
+                    Select = new[]
+                    {
+                        "bcgov_filename", "createdon", "bcgov_url", "bcgov_filesize", "bcgov_origincode", "bcgov_documenturlid", "statuscode", "statecode",
+                        "dfa_requireddocumenttype", "_dfa_project_value", "bcgov_mimetype", "bcgov_size", "bcgov_fileextension", "dfa_description",
+                        "bcgov_fileclassification", "dfa_category", "_dfa_appapplication_value", "_modifiedby_value"
+                    },
+                    Filter = $"_dfa_appapplication_value eq {applicationIdString} and statecode eq 0 and bcgov_origincode eq 931490000"
+                });
+
+                return list.List;
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Failed to get documents {ex.Message}", ex);
             }
         }
 

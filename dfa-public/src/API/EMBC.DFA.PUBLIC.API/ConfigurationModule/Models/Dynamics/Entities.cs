@@ -674,7 +674,6 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
 
     public class MetadataDeleteParams
     {
-        //public bcgov_documenturl DocumentUrl { get; set; } 
         public string DocumentMetadataId { get; set; }
     }
 
