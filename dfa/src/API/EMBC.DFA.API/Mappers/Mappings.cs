@@ -414,7 +414,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d._dfa_appapplication_value, opts => opts.MapFrom(s => s.applicationId))
                 .ForMember(d => d.bcgov_documenturlid, opts => opts.MapFrom(s => s.id))
                 .ForMember(d => d.bcgov_filename, opts => opts.MapFrom(s => s.fileName))
-                .ForMember(d => d.dfa_category, opts => opts.MapFrom(s => s.fileType.ToString()))
+                .ForMember(d => d.dfa_category, opts => opts.MapFrom(s => s.fileType))
                 .ForMember(d => d.dfa_requireddocumenttype, opts => opts.MapFrom(s => s.requiredDocumentType.ToString()))
                 .ForMember(d => d.dfa_description, opts => opts.MapFrom(s => s.fileDescription))
                 .ForMember(d => d.bcgov_size, opts => opts.MapFrom(s => s.fileSize))
