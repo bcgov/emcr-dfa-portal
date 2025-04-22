@@ -38,6 +38,8 @@ namespace EMBC.DFA.API.Controllers
         private readonly IS3Provider s3Provider;
         private readonly ErrorParser errorParser;
 
+        private static readonly int MAXFILESIZE = 104857600;
+
         public AttachmentController(
             IConfiguration configuration,
             IHostEnvironment env,
@@ -66,7 +68,6 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [RequestSizeLimit(36700160)]
         public async Task<ActionResult<string>> DeleteProjectAttachment(FileUpload fileUpload)
         {
             var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
@@ -100,7 +101,7 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [RequestSizeLimit(36700160)]
+        [RequestSizeLimit(104857600)]
         public async Task<ActionResult<string>> UpsertDeleteProjectAttachment(FileUpload fileUpload)
         {
             if (fileUpload.fileData == null && fileUpload.deleteFlag == false) return BadRequest("FileUpload data cannot be empty.");
@@ -122,9 +123,9 @@ namespace EMBC.DFA.API.Controllers
                 }
                 else
                 {
-                    if (fileUpload.fileSize >= (51 * 1024 * 1024))
+                    if (fileUpload.fileSize >= MAXFILESIZE)
                     {
-                        throw new Exception("File size exceeds 50MB limit");
+                        throw new Exception("File size exceeds 100MB limit");
                     }
 
                     var submissionEntity = mapper.Map<S3SubmissionEntity>(fileUpload);
@@ -182,7 +183,7 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [RequestSizeLimit(36700160)]
+        [RequestSizeLimit(104857600)]
         public async Task<ActionResult<string>> UpsertDeleteClaimAttachment(FileUploadClaim fileUpload)
         {
             if (fileUpload.fileData == null && fileUpload.deleteFlag == false) return BadRequest("FileUpload data cannot be empty.");
@@ -204,6 +205,11 @@ namespace EMBC.DFA.API.Controllers
                 }
                 else
                 {
+                    if (fileUpload.fileSize >= MAXFILESIZE)
+                    {
+                        throw new Exception("File size exceeds 100MB limit");
+                    }
+
                     var submissionEntity = mapper.Map<S3SubmissionEntity>(fileUpload);
                     /* Switch based on the regarding entity type where the doc is uploaded to
                         case : incident 
