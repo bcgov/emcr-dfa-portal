@@ -7,7 +7,7 @@ env:
   IMAGE_API_NAME: dfa-portal-api
   IMAGE_UI_NAME: dfa-portal-ui
   IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
-  IMAGE_CURRENT_ENV_TAG: dev
+  IMAGE_CURRENT_ENV_TAG: latest
   IMAGE_PROMOTE_ENV_TAG: test
 
 jobs:

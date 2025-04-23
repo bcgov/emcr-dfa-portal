@@ -10,9 +10,9 @@ ENV VERSION=$VERSION
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 # install diagnostics tools
-RUN dotnet tool install --tool-path /tools dotnet-trace
-RUN dotnet tool install --tool-path /tools dotnet-counters
-RUN dotnet tool install --tool-path /tools dotnet-dump
+# RUN dotnet tool install --tool-path /tools dotnet-trace
+# RUN dotnet tool install --tool-path /tools dotnet-counters
+# RUN dotnet tool install --tool-path /tools dotnet-dump
 
 WORKDIR /src
 COPY ["EMBC.DFA.PUBLIC.API/EMBC.DFA.PUBLIC.API.csproj", "EMBC.DFA.PUBLIC.API/"]
@@ -37,8 +37,8 @@ RUN dotnet publish "EMBC.DFA.PUBLIC.API/EMBC.DFA.PUBLIC.API.csproj" -c Release -
 
 FROM base AS final
 # copy diagnostics tools
-WORKDIR /tools
-COPY --from=build /tools .
+# WORKDIR /tools
+# COPY --from=build /tools .
 # copy app
 WORKDIR /app
 COPY --from=publish /app/publish .
