@@ -121,8 +121,8 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
             this.onlyOccupantInHome = this.dfaApplicationMainDataService.getIsOnlyOccupantInHome();
             this.onlyOtherContact = this.dfaApplicationMainDataService.getIsOnlyOtherContact();
             
-            setTimeout(
-              function () {
+            // setTimeout(
+            //   function () {
                 this.onlyOccupantInHome = this.dfaApplicationMainDataService.getIsOnlyOccupantInHome();
                 this.onlyOtherContact = this.dfaApplicationMainDataService.getIsOnlyOtherContact();
                 this.hideOccupantButton = this.onlyOccupantInHome;
@@ -131,17 +131,20 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
                 if (this.isHomeowner || this.isResidentialTenant)
                   this.fullTimeOccupantsForm.get('onlyOccupantInHome').setValue(this.onlyOccupantInHome);
 
+                console.log('Before patch', this.otherContactsForm.get('onlyOtherContact')?.value);
                 this.otherContactsForm.get('onlyOtherContact').setValue(this.onlyOtherContact);
                 this.otherContactsForm.get('onlyOtherContact').updateValueAndValidity();
+                console.log('After patch', this.otherContactsForm.get('onlyOtherContact')?.value);
+                console.log('Form valid?', this.otherContactsForm.valid);
 
                 if (this.isHomeowner || this.isResidentialTenant) {
                   this.updateFullTimeOccupantOnlyOccupantInHome(this.onlyOccupantInHome);
                 }
 
                 this.updateOnlyOtherContact(this.onlyOtherContact);
-              }.bind(this),
-              1000
-            );
+            //   }.bind(this),
+            //   1000
+            // );
             
           }
           });

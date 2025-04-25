@@ -36,8 +36,13 @@
 		}
 	}
 
+	# Proxy API calls to the backend update
+	# reverse_proxy /api* — this is not valid syntax in modern Caddy v2.
+	handle /api/* {
+        reverse_proxy {$API_URL}
+    }
+
 	handle {
-		reverse_proxy /api* {$API_URL}
 		try_files {path} {path}/ /index.html?{query}
 		file_server
 	}

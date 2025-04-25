@@ -21,9 +21,20 @@ RUN xcaddy build \
 FROM caddy:2 as final
 ARG VERSION
 ENV VERSION=$VERSION
-ENV API_URL=http://localhost:5020
+# API_URL gets replaced at deployment time
+# ENV API_URL=http://localhost:5020
+ENV API_URL=http://host.containers.internal:5020
 RUN chmod +rw /config/caddy
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY --from=ng-builder src/dist/embc-dfa /site
+
+# Use if you need to run the container in your local dev setup
+RUN mkdir -p /site/env && echo '{ \
+    "envName": "local", \
+    "bannerTitle": "You are in the **LOCAL** version of the **Disaster Financial Assistance Tool**.", \
+    "bannerSubTitle": "All information entered here will be treated as **LOCAL** data.", \
+    "bannerColor": "#097d8c" \
+}' > /site/env/info.json
+
 EXPOSE 2015 2016
