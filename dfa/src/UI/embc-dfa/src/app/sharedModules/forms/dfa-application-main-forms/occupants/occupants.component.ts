@@ -131,11 +131,12 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
                 if (this.isHomeowner || this.isResidentialTenant)
                   this.fullTimeOccupantsForm.get('onlyOccupantInHome').setValue(this.onlyOccupantInHome);
 
-                console.log('Before patch', this.otherContactsForm.get('onlyOtherContact')?.value);
+                console.log('Init Before patch', this.otherContactsForm.get('onlyOtherContact')?.value);
                 this.otherContactsForm.get('onlyOtherContact').setValue(this.onlyOtherContact);
+                this.otherContactsForm.markAsTouched();
                 this.otherContactsForm.get('onlyOtherContact').updateValueAndValidity();
-                console.log('After patch', this.otherContactsForm.get('onlyOtherContact')?.value);
-                console.log('Form valid?', this.otherContactsForm.valid);
+                console.log('Init After patch', this.otherContactsForm.get('onlyOtherContact')?.value);
+                console.log('Init Form valid?', this.otherContactsForm.valid);
 
                 if (this.isHomeowner || this.isResidentialTenant) {
                   this.updateFullTimeOccupantOnlyOccupantInHome(this.onlyOccupantInHome);
