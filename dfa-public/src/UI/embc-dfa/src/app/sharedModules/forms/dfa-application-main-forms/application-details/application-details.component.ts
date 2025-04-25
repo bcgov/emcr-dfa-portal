@@ -423,7 +423,8 @@ export default class PropertyDamageComponent implements OnInit, OnDestroy {
       this.applicationService.applicationGetApplicationMain({ applicationId: applicationId }).subscribe({
         next: (dfaApplicationMain) => {
 
-          if (dfaApplicationMain.applicationDetails && dfaApplicationMain.applicationDetails.eventId) {
+          // DFA-34: Changed to populate matching events regardless of whether an event was chosen
+          if (dfaApplicationMain.applicationDetails) {
             this.openDisasterEvents.forEach(disasterEvent => {
               if (new Date(new Date(disasterEvent.endDate).toDateString()) >= new Date(new Date(dfaApplicationMain.applicationDetails.damageFromDate).toDateString())  &&
                 new Date(new Date(disasterEvent.startDate).toDateString()) <= new Date(new Date(dfaApplicationMain.applicationDetails.damageFromDate).toDateString())) {
