@@ -100,114 +100,137 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.initFullTimeOccupantsForm();
+    this.initOtherContactsForm();
+    this.initSecondaryApplicantsForm();
+
+    this.getFullTimeOccupantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
+    this.getOtherContactsForApplication(this.dfaApplicationMainDataService.getApplicationId());
+    this.getSecondaryApplicantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
+  
+    this.applyViewModePermissions();
+
+    // Re-set the values after all initializations (important for UI sync or late changes)
+    if (this.fullTimeOccupantsForm) {
+      console.log('onlyOccupantInHome BEFORE:', this.onlyOccupantInHome);
+      const control = this.fullTimeOccupantsForm.get('onlyOccupantInHome');
+      if (control) {
+        control.setValue(this.onlyOccupantInHome);
+        console.log('onlyOccupantInHome AFTER:', control.value);
+      } else {
+        console.warn('Control "onlyOccupantInHome" not found in form');
+      }
+
+      console.log('Init2 onlyOtherContact before', this.otherContactsForm.get('onlyOtherContact')?.value);
+      this.fullTimeOccupantsForm.get('onlyOccupantInHome').setValue(this.onlyOccupantInHome);
+      console.log('Init2 onlyOtherContact after', this.otherContactsForm.get('onlyOtherContact')?.value);
+      console.log('Init2 Form valid?', this.otherContactsForm.valid);
+      
+    }
+
+    
+  }
+
+  private initFullTimeOccupantsForm(): void {
     this.fullTimeOccupantsForm$ = this.formCreationService
       .getFullTimeOccupantsForm()
       .subscribe((fullTimeOccupants) => {
         this.fullTimeOccupantsForm = fullTimeOccupants;
         this.dfaApplicationMainDataService.getDfaApplicationStart().subscribe(application => {
           if (application) {
-            this.isResidentialTenant = (application.appTypeInsurance.applicantOption == Object.keys(this.ApplicantOptions)[Object.values(this.ApplicantOptions).indexOf(this.ApplicantOptions.ResidentialTenant)]);
-            this.isHomeowner = (application.appTypeInsurance.applicantOption == Object.keys(this.ApplicantOptions)[Object.values(this.ApplicantOptions).indexOf(this.ApplicantOptions.Homeowner)]);
-            this.isSmallBusinessOwner = (application.appTypeInsurance.applicantOption == Object.keys(this.ApplicantOptions)[Object.values(this.ApplicantOptions).indexOf(this.ApplicantOptions.SmallBusinessOwner)]);
-            this.isFarmOwner = (application.appTypeInsurance.applicantOption == Object.keys(this.ApplicantOptions)[Object.values(this.ApplicantOptions).indexOf(this.ApplicantOptions.FarmOwner)]);
-            this.isCharitableOrganization = (application.appTypeInsurance.applicantOption == Object.keys(this.ApplicantOptions)[Object.values(this.ApplicantOptions).indexOf(this.ApplicantOptions.CharitableOrganization)]);
-            if (this.isHomeowner || this.isResidentialTenant) this.fullTimeOccupantsForm.get('fullTimeOccupants').setValidators([Validators.required]);
-            else this.fullTimeOccupantsForm.get('fullTimeOccupants').setValidators(null);
-
-            this.fullTimeOccupantsForm
-              .get('fullTimeOccupants')
-              .updateValueAndValidity();
-
+            const option = application.appTypeInsurance.applicantOption;
+            const keys = Object.keys(this.ApplicantOptions);
+            const values = Object.values(this.ApplicantOptions);
+  
+            this.isResidentialTenant = (option == keys[values.indexOf(this.ApplicantOptions.ResidentialTenant)]);
+            this.isHomeowner = (option == keys[values.indexOf(this.ApplicantOptions.Homeowner)]);
+            this.isSmallBusinessOwner = (option == keys[values.indexOf(this.ApplicantOptions.SmallBusinessOwner)]);
+            this.isFarmOwner = (option == keys[values.indexOf(this.ApplicantOptions.FarmOwner)]);
+            this.isCharitableOrganization = (option == keys[values.indexOf(this.ApplicantOptions.CharitableOrganization)]);
+  
+            if (this.isHomeowner || this.isResidentialTenant) {
+              this.fullTimeOccupantsForm.get('fullTimeOccupants').setValidators([Validators.required]);
+            } else {
+              this.fullTimeOccupantsForm.get('fullTimeOccupants').setValidators(null);
+            }
+  
+            this.fullTimeOccupantsForm.get('fullTimeOccupants').updateValueAndValidity();
+  
             this.onlyOccupantInHome = this.dfaApplicationMainDataService.getIsOnlyOccupantInHome();
             this.onlyOtherContact = this.dfaApplicationMainDataService.getIsOnlyOtherContact();
-            
-            // setTimeout(
-            //   function () {
-                this.onlyOccupantInHome = this.dfaApplicationMainDataService.getIsOnlyOccupantInHome();
-                this.onlyOtherContact = this.dfaApplicationMainDataService.getIsOnlyOtherContact();
-                this.hideOccupantButton = this.onlyOccupantInHome;
-                this.hideOtherContactButton = this.onlyOtherContact;
-
-                if (this.isHomeowner || this.isResidentialTenant)
-                  this.fullTimeOccupantsForm.get('onlyOccupantInHome').setValue(this.onlyOccupantInHome);
-
-                console.log('Init Before patch', this.otherContactsForm.get('onlyOtherContact')?.value);
-                this.otherContactsForm.get('onlyOtherContact').setValue(this.onlyOtherContact);
-                this.otherContactsForm.markAsTouched();
-                this.otherContactsForm.get('onlyOtherContact').updateValueAndValidity();
-                console.log('Init After patch', this.otherContactsForm.get('onlyOtherContact')?.value);
-                console.log('Init Form valid?', this.otherContactsForm.valid);
-
-                if (this.isHomeowner || this.isResidentialTenant) {
-                  this.updateFullTimeOccupantOnlyOccupantInHome(this.onlyOccupantInHome);
-                }
-
-                this.updateOnlyOtherContact(this.onlyOtherContact);
-            //   }.bind(this),
-            //   1000
-            // );
-            
+  
+            this.hideOccupantButton = this.onlyOccupantInHome;
+            this.hideOtherContactButton = this.onlyOtherContact;
+  
+            if (this.isHomeowner || this.isResidentialTenant) {
+              this.fullTimeOccupantsForm.get('onlyOccupantInHome').setValue(this.onlyOccupantInHome);
+            }
+  
+            if (this.isHomeowner || this.isResidentialTenant) {
+              this.updateFullTimeOccupantOnlyOccupantInHome(this.onlyOccupantInHome);
+            }
+  
+            this.updateOnlyOtherContact(this.onlyOtherContact);
           }
-          });
+        });
       });
-      
-    this.fullTimeOccupantsForm
-      .get('onlyOccupantInHome')
-      .valueChanges.subscribe((value) =>
-        this.updateFullTimeOccupantOnlyOccupantInHome(value)
-    );
-    
-    this.fullTimeOccupantsForm
-      .get('addNewFullTimeOccupantIndicator')
-      .valueChanges.subscribe((value) => this.updateFullTimeOccupantOnVisibility());
-    this.getFullTimeOccupantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
-
-    this.otherContactsForm$ = this.formCreationService
-      .getOtherContactsForm()
-      .subscribe((otherContacts) => {
-        this.otherContactsForm = otherContacts;
-      });
-
-    this.otherContactsForm
-      .get('onlyOtherContact')
-      .valueChanges.subscribe((value) =>
-        this.updateOnlyOtherContact(value)
-      );
-
-    this.otherContactsForm
-      .get('addNewOtherContactIndicator')
-      .valueChanges.subscribe((value) => this.updateOtherContactOnVisibility());
-    this.getOtherContactsForApplication(this.dfaApplicationMainDataService.getApplicationId());
-
-    this.secondaryApplicantsForm$ = this.formCreationService
-      .getSecondaryApplicantsForm()
-      .subscribe((secondaryApplicants) => {
-        this.secondaryApplicantsForm = secondaryApplicants;
-      });
-
-    this.secondaryApplicantsForm
-      .get('addNewSecondaryApplicantIndicator')
-      .valueChanges.subscribe((value) => this.updateSecondaryApplicantOnVisibility());
-    this.getSecondaryApplicantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
-
-    if (this.vieworedit === 'view'
-      || this.vieworedit === 'edit'
-      || this.vieworedit === 'viewOnly') {
-        this.secondaryApplicantsForm.disable();
-      this.fullTimeOccupantsForm.disable();
-      this.disableOnlyOccupant = true;
-      //this.disableOnlyOtherContact = true;
-      }
-
-    if (this.dfaApplicationMainDataService.getViewOrEdit() == 'viewOnly') {
-      this.secondaryApplicantsForm.disable();
-    }
-
-    this.fullTimeOccupantsForm.get('onlyOccupantInHome').setValue(this.onlyOccupantInHome);
-    this.otherContactsForm.get('onlyOtherContact').setValue(this.onlyOtherContact);
-    this.otherContactsForm.get('onlyOtherContact').updateValueAndValidity();
   }
   
+
+  private initSecondaryApplicantsForm() {
+    this.secondaryApplicantsForm$ = this.formCreationService.getSecondaryApplicantsForm().subscribe(form => {
+      this.secondaryApplicantsForm = form;
+      this.secondaryApplicantsForm
+        .get('addNewSecondaryApplicantIndicator')
+        .valueChanges.subscribe(() => this.updateSecondaryApplicantOnVisibility());
+    });
+  }
+  
+  private initOtherContactsForm() {
+    this.otherContactsForm$ = this.formCreationService.getOtherContactsForm().subscribe(form => {
+      this.otherContactsForm = form;
+  
+      // Get the actual current value from the form
+      let onlyOtherContactValue = this.otherContactsForm.get('onlyOtherContact')?.value;
+  
+      // Fallback: if the value is missing (e.g. first load), get it from the service
+      if (onlyOtherContactValue == null) {
+        onlyOtherContactValue = this.dfaApplicationMainDataService.getIsOnlyOtherContact();
+        this.otherContactsForm.get('onlyOtherContact')?.setValue(onlyOtherContactValue);
+      }
+  
+      // Sync component property and apply validators
+      this.onlyOtherContact = onlyOtherContactValue;
+      this.updateOnlyOtherContact(onlyOtherContactValue);
+  
+      // Watch for future changes to onlyOtherContact and update dynamically
+      this.otherContactsForm.get('onlyOtherContact')?.valueChanges.subscribe(value => {
+        this.onlyOtherContact = value;
+        this.updateOnlyOtherContact(value);
+      });
+  
+      // Also handle visibility logic when this other control changes
+      this.otherContactsForm.get('addNewOtherContactIndicator')?.valueChanges.subscribe(() => {
+        this.updateOtherContactOnVisibility();
+      });
+    });
+  }
+  
+  private applyViewModePermissions() {
+    const mode = this.vieworedit || this.dfaApplicationMainDataService.getViewOrEdit();
+  
+    if (['view', 'edit', 'viewOnly'].includes(mode)) {
+      this.secondaryApplicantsForm?.disable();
+      this.fullTimeOccupantsForm?.disable();
+      this.disableOnlyOccupant = true;
+      // this.disableOnlyOtherContact = true;
+    }
+  
+    if (mode === 'viewOnly') {
+      this.secondaryApplicantsForm?.disable();
+    }
+  }
+
   onChecked(e) {
     if (e.checked) {
       this.hideOccupantButton = true;
@@ -523,15 +546,18 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
       .updateValueAndValidity();
   }
 
-  updateOnlyOtherContact(value): void {
-    value == true ?
-      this.otherContactsForm.get('otherContacts').setValidators(null) :
-      this.otherContactsForm.get('otherContacts').setValidators([Validators.required]);
-    this.dfaApplicationMainDataService.setIsOnlyOtherContact(value);
+  updateOnlyOtherContact(value: boolean): void {
+    const otherContactsControl = this.otherContactsForm.get('otherContacts');
+    if (!otherContactsControl) return;
 
-    this.otherContactsForm
-      .get('otherContacts')
-      .updateValueAndValidity();
+    if (value === true) {
+      otherContactsControl.setValidators(null);
+    } else {
+      otherContactsControl.setValidators([Validators.required]);
+    }
+
+    this.dfaApplicationMainDataService.setIsOnlyOtherContact(value);
+    otherContactsControl.updateValueAndValidity();
   }
 
   updateFullTimeOccupantOnVisibility(): void {
