@@ -536,9 +536,7 @@ export class OtherContactsForm {
   addNewOtherContactIndicator = new UntypedFormControl(false);
   otherContact: UntypedFormGroup;
   otherContacts = new UntypedFormControl([], Validators.required);
-
-  // create control set inintial state to false 
-  onlyOtherContact = new UntypedFormControl(false);
+  onlyOtherContact = new UntypedFormControl();
 
   constructor(
     otherContacts: Array<OtherContact>,
@@ -625,9 +623,7 @@ export class OtherContactsForm {
             .maxLengthValidator(100)
             .bind(customValidator)
         ]
-      ],
-      // Adding the onlyOtherContact form control here
-      onlyOtherContact: [false]
+      ]
     });
   }
 }

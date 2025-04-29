@@ -10,7 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription, takeUntil } from 'rxjs';
 import { DirectivesModule } from '../../../../core/directives/directives.module';
 import { CustomValidationService } from 'src/app/core/services/customValidation.service';
 import { MatTableModule } from '@angular/material/table';
@@ -93,14 +93,18 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
     this.vieworedit = this.dfaApplicationMainDataService.getViewOrEdit();
     this.contactonly = this.dfaApplicationMainDataService.getContactOnlyView();
 
-    this.dfaApplicationMainDataService.changeViewOrEdit.subscribe((vieworedit) => {
+    this.dfaApplicationMainDataService.changeViewOrEdit
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((vieworedit) => {
       this.vieworedit = vieworedit;
-    })
-    
+    });
   }
+
+  private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
     this.initFullTimeOccupantsForm();
+    
     this.initOtherContactsForm();
     this.initSecondaryApplicantsForm();
 
@@ -109,34 +113,17 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
     this.getSecondaryApplicantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
   
     this.applyViewModePermissions();
-
-    // Re-set the values after all initializations (important for UI sync or late changes)
-    if (this.fullTimeOccupantsForm) {
-      console.log('onlyOccupantInHome BEFORE:', this.onlyOccupantInHome);
-      const control = this.fullTimeOccupantsForm.get('onlyOccupantInHome');
-      if (control) {
-        control.setValue(this.onlyOccupantInHome);
-        console.log('onlyOccupantInHome AFTER:', control.value);
-      } else {
-        console.warn('Control "onlyOccupantInHome" not found in form');
-      }
-
-      console.log('Init2 onlyOtherContact before', this.otherContactsForm.get('onlyOtherContact')?.value);
-      this.fullTimeOccupantsForm.get('onlyOccupantInHome').setValue(this.onlyOccupantInHome);
-      console.log('Init2 onlyOtherContact after', this.otherContactsForm.get('onlyOtherContact')?.value);
-      console.log('Init2 Form valid?', this.otherContactsForm.valid);
-      
-    }
-
-    
   }
 
   private initFullTimeOccupantsForm(): void {
     this.fullTimeOccupantsForm$ = this.formCreationService
       .getFullTimeOccupantsForm()
+      .pipe(takeUntil(this.destroy$))
       .subscribe((fullTimeOccupants) => {
         this.fullTimeOccupantsForm = fullTimeOccupants;
-        this.dfaApplicationMainDataService.getDfaApplicationStart().subscribe(application => {
+        this.dfaApplicationMainDataService.getDfaApplicationStart()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(application => {
           if (application) {
             const option = application.appTypeInsurance.applicantOption;
             const keys = Object.keys(this.ApplicantOptions);
@@ -155,65 +142,74 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
             }
   
             this.fullTimeOccupantsForm.get('fullTimeOccupants').updateValueAndValidity();
-  
             this.onlyOccupantInHome = this.dfaApplicationMainDataService.getIsOnlyOccupantInHome();
-            this.onlyOtherContact = this.dfaApplicationMainDataService.getIsOnlyOtherContact();
-  
             this.hideOccupantButton = this.onlyOccupantInHome;
-            this.hideOtherContactButton = this.onlyOtherContact;
-  
+      
             if (this.isHomeowner || this.isResidentialTenant) {
               this.fullTimeOccupantsForm.get('onlyOccupantInHome').setValue(this.onlyOccupantInHome);
-            }
-  
-            if (this.isHomeowner || this.isResidentialTenant) {
               this.updateFullTimeOccupantOnlyOccupantInHome(this.onlyOccupantInHome);
             }
-  
-            this.updateOnlyOtherContact(this.onlyOtherContact);
+
+            //defers execution just one microtask — enough to let Angular stabilize
+            // this is needed for the UI "View Application" button execution 
+            Promise.resolve().then(() => {
+              this.onlyOtherContact = this.dfaApplicationMainDataService.getIsOnlyOtherContact();
+              this.hideOtherContactButton = this.onlyOtherContact;
+              this.updateOnlyOtherContact(this.onlyOtherContact);
+            });
           }
         });
+        this.fullTimeOccupantsForm.get('onlyOccupantInHome')
+              .valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => this.updateFullTimeOccupantOnlyOccupantInHome(value));
+
+        this.fullTimeOccupantsForm.get('addNewFullTimeOccupantIndicator')
+              .valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateFullTimeOccupantOnVisibility());
       });
+    
+    this.getFullTimeOccupantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
   }
-  
 
   private initSecondaryApplicantsForm() {
-    this.secondaryApplicantsForm$ = this.formCreationService.getSecondaryApplicantsForm().subscribe(form => {
+    this.secondaryApplicantsForm$ = this.formCreationService.getSecondaryApplicantsForm()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(form => {
       this.secondaryApplicantsForm = form;
       this.secondaryApplicantsForm
         .get('addNewSecondaryApplicantIndicator')
-        .valueChanges.subscribe(() => this.updateSecondaryApplicantOnVisibility());
+        .valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateSecondaryApplicantOnVisibility());
     });
   }
   
   private initOtherContactsForm() {
-    this.otherContactsForm$ = this.formCreationService.getOtherContactsForm().subscribe(form => {
+    this.otherContactsForm$ = this.formCreationService.getOtherContactsForm()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(form => {
       this.otherContactsForm = form;
-  
+
       // Get the actual current value from the form
       let onlyOtherContactValue = this.otherContactsForm.get('onlyOtherContact')?.value;
-  
+
       // Fallback: if the value is missing (e.g. first load), get it from the service
-      if (onlyOtherContactValue == null) {
+      if (onlyOtherContactValue == null) { 
         onlyOtherContactValue = this.dfaApplicationMainDataService.getIsOnlyOtherContact();
         this.otherContactsForm.get('onlyOtherContact')?.setValue(onlyOtherContactValue);
       }
   
-      // Sync component property and apply validators
+      // Sync component property and apply validators based on checkbox state
       this.onlyOtherContact = onlyOtherContactValue;
       this.updateOnlyOtherContact(onlyOtherContactValue);
   
       // Watch for future changes to onlyOtherContact and update dynamically
-      this.otherContactsForm.get('onlyOtherContact')?.valueChanges.subscribe(value => {
+      this.otherContactsForm.get('onlyOtherContact')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
         this.onlyOtherContact = value;
         this.updateOnlyOtherContact(value);
       });
   
       // Also handle visibility logic when this other control changes
-      this.otherContactsForm.get('addNewOtherContactIndicator')?.valueChanges.subscribe(() => {
+      this.otherContactsForm.get('addNewOtherContactIndicator')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
         this.updateOtherContactOnVisibility();
       });
-    });
+    }); 
   }
   
   private applyViewModePermissions() {
@@ -231,36 +227,20 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChecked(e) {
-    if (e.checked) {
-      this.hideOccupantButton = true;
-      this.fullTimeOccupantsForm.get('onlyOccupantInHome').setValue(true);
-    } else {
-      this.hideOccupantButton = false;
-      this.fullTimeOccupantsForm.get('onlyOccupantInHome').setValue(false);
-    }
-
+  onChecked(e): void {
+    const checked = e.checked === true;
+    this.hideOccupantButton = checked;
+    this.fullTimeOccupantsForm.get('onlyOccupantInHome')?.setValue(checked);
   }
 
-  onCheckedNoOtherContact(e) {
-    if (e.checked) {
-      this.hideOtherContactButton = true;
-      this.otherContactsForm.get('onlyOtherContact').setValue(true);
-      this.otherContactsForm
-      .get('otherContacts')
-      .updateValueAndValidity();
-    } else {
-      this.hideOtherContactButton = false;
-      this.otherContactsForm.get('onlyOtherContact').setValue(false);
-      this.otherContactsForm
-      .get('otherContacts')
-      .updateValueAndValidity();
-    }
-
+  onCheckedNoOtherContact(e): void {
+    const checked = e.checked === true;
+    this.hideOtherContactButton = checked;
+    this.otherContactsForm.get('onlyOtherContact')?.setValue(checked);
+    this.otherContactsForm.get('otherContacts')?.updateValueAndValidity();
   }
 
   getSecondaryApplicantsForApplication(applicationId: string) {
-
     if (applicationId === undefined) {
       applicationId = this.dfaApplicationMainDataService.getApplicationId();
     }
@@ -279,7 +259,6 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
   }
 
   getOtherContactsForApplication(applicationId: string) {
-
     if (applicationId === undefined) {
       applicationId = this.dfaApplicationMainDataService.getApplicationId();
     }
@@ -290,6 +269,11 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
         this.otherContactsDataSource.next(this.otherContactsData);
         this.otherContactsForm.get('otherContacts').setValue(this.otherContactsData);
         this.disableOnlyOtherContact = this.otherContactsDataSource.getValue().length > 0
+
+        // Apply validator logic only after data is loaded and form is populated
+        const formValue = this.otherContactsForm.get('onlyOtherContact')?.value;
+        this.onlyOtherContact = formValue;
+        this.updateOnlyOtherContact(formValue);
       },
       error: (error) => {
         console.error(error);
@@ -299,12 +283,12 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
   }
 
   getFullTimeOccupantsForApplication(applicationId: string) {
-    
     if (applicationId === undefined) {
       applicationId = this.dfaApplicationMainDataService.getApplicationId();
     }
 
-    this.fullTimeOccupantsService.fullTimeOccupantGetFullTimeOccupants({applicationId: applicationId}).subscribe({
+    this.fullTimeOccupantsService.fullTimeOccupantGetFullTimeOccupants({applicationId: applicationId})
+      .subscribe({
       next: (fullTimeOccupants) => {
         this.fullTimeOccupantsData = fullTimeOccupants;
         this.fullTimeOccupantsDataSource.next(this.fullTimeOccupantsData);
@@ -329,7 +313,8 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
   saveFullTimeOccupants(): void {
     if (this.fullTimeOccupantsForm.get('fullTimeOccupant').status === 'VALID') {
-      this.fullTimeOccupantsService.fullTimeOccupantUpsertDeleteFullTimeOccupant({body: this.fullTimeOccupantsForm.get('fullTimeOccupant').getRawValue()}).subscribe({
+      this.fullTimeOccupantsService.fullTimeOccupantUpsertDeleteFullTimeOccupant({body: this.fullTimeOccupantsForm.get('fullTimeOccupant').getRawValue()})
+        .subscribe({
         next: (fullTimeOccupantId) => {
         this.fullTimeOccupantsForm.get('fullTimeOccupant').get('id').setValue(fullTimeOccupantId);
         this.fullTimeOccupantsData.push(this.fullTimeOccupantsForm.get('fullTimeOccupant').value);
@@ -477,6 +462,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
           disableClose: true
         })
         .afterClosed()
+        .pipe(takeUntil(this.destroy$))
         .subscribe((result) => {
           
         });
@@ -547,15 +533,24 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
   }
 
   updateOnlyOtherContact(value: boolean): void {
+    if (!this.otherContactsForm) {
+      // otherContactsForm is not initialized when updateOnlyOtherContact() is called
+      return;
+    }
+  
     const otherContactsControl = this.otherContactsForm.get('otherContacts');
-    if (!otherContactsControl) return;
-
-    if (value === true) {
+    if (!otherContactsControl) {
+      // otherContacts control is missing in the form
+      return;
+    }
+  
+    if (value === true || this.hideOtherContactButton === true) {
+      // No contact required if checkbox checked OR UI is hidden
       otherContactsControl.setValidators(null);
     } else {
       otherContactsControl.setValidators([Validators.required]);
     }
-
+  
     this.dfaApplicationMainDataService.setIsOnlyOtherContact(value);
     otherContactsControl.updateValueAndValidity();
   }
@@ -623,9 +618,8 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.fullTimeOccupantsForm$.unsubscribe();
-    this.otherContactsForm$.unsubscribe();
-    this.secondaryApplicantsForm$.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
 

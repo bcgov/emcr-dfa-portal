@@ -625,9 +625,6 @@ export class DFAApplicationMainComponent
         this.dfaApplicationMainDataService.propertyDamage.wereYouEvacuated = this.form.get('wereYouEvacuated').value == 'true' ? true : (this.form.get('wereYouEvacuated').value == 'false' ? false : null);
         break;
       case 'occupants':
-        console.log('Run onlyOtherContact value', this.otherContactsForm.get('onlyOtherContact')?.value);
-        console.log('Run onlyOtherContact  isOtherContactValid() result' , this.isOtherContactValid());
-        console.log('Run Form valid?', this.otherContactsForm.valid);
         break;
       case 'clean-up-log':
         this.dfaApplicationMainDataService.cleanUpLog.haveInvoicesOrReceiptsForCleanupOrRepairs = this.form.get('haveInvoicesOrReceiptsForCleanupOrRepairs').value == 'true' ? true : (this.form.get('haveInvoicesOrReceiptsForCleanupOrRepairs').value == 'false' ? false : null);
