@@ -36,8 +36,7 @@ export class AppComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     try {
-      //this.environment = await this.configService.loadEnvironmentBanner();
-      this.environment = null;
+      this.environment = await this.configService.loadEnvironmentBanner();
       await this.bootstrapService.init();
       // await this.loginService.tryLogin();
     } catch (error) {
@@ -75,3 +74,4 @@ export class AppComponent implements OnInit {
     this.outageService.closeBannerbyUser = !$event;
   }
 }
+

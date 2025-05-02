@@ -21,7 +21,7 @@ import * as globalConst from '../services/globalConstants';
 })
 export class ConfigService {
   public environmentBanner: EnvironmentInformation;
-  private configurationGetEnvironmentInfoPath = '/env/info.json';
+  private configurationGetEnvironmentInfoPath = 'assets/env/info.json';
 
   public get configuration(): Configuration {
     return JSON.parse(this.cacheService.get('configuration'));
@@ -130,8 +130,9 @@ export class ConfigService {
     return environment;
   }
 
-  private getEnvironment(): Observable<EnvironmentInformation> {
-    const envUrl = this.configurationGetEnvironmentInfoPath;
-    return this.http.get(envUrl);
+  public getEnvironment(): Observable<EnvironmentInformation> {
+    const envUrl = this.configurationGetEnvironmentInfoPath
+    return this.http.get<EnvironmentInformation>(envUrl);
   }
 }
+

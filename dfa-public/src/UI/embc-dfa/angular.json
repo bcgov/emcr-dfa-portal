@@ -26,6 +26,7 @@
               "src/favicon.ico",
               "src/dfa/favicon.ico",
               "src/assets",
+              "src/assets/env",
               "src/dfa",
               "src/dfa/img",
               {

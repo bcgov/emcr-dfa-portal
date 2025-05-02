@@ -4,10 +4,7 @@
     (closeEvent)="closeOutageBanner($event)"
   ></app-outage-banner>
 
-  <!--<app-environment-banner
-    [environment]="environment"
-    *ngIf="environment !== null && environment !== undefined"
-  ></app-environment-banner>-->
+  <app-environment-banner *ngIf="environment?.envName !== 'prod'" [environment]="environment"></app-environment-banner>
 
   <app-header
     [ngStyle]="
@@ -60,3 +57,4 @@
   >
   </app-loader>
 </div>
+
