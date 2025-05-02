@@ -144,7 +144,7 @@ namespace EMBC.DFA.API.Controllers
                     submissionEntity.RegardingEntityLookUpFieldName = "dfa_project";
 
                     var result = await handler.HandleS3FileUploadAsync(submissionEntity);
-                    return Ok(new ApplicationResult { Id = result });
+                    return Ok(result);
                 }
             }
             else
@@ -226,7 +226,7 @@ namespace EMBC.DFA.API.Controllers
                     submissionEntity.RegardingEntityLookUpFieldName = "dfa_recoveryclaim";
 
                     var result = await handler.HandleS3FileUploadAsync(submissionEntity);
-                    return Ok(new ApplicationResult { Id = result });
+                    return Ok(result);
                 }
             }
             else

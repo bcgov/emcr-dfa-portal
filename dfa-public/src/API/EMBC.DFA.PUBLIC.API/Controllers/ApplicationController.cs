@@ -252,7 +252,7 @@ namespace EMBC.DFA.API.Controllers
                         submissionEntity.RegardingEntityLookUpFieldName = "dfa_appapplication";
 
                         var uploadResult = await handler.HandleS3FileUploadAsync(submissionEntity);
-                        return Ok(new ApplicationResult { Id = uploadResult });
+                        return Ok(result);
                     }
                     else
                     {

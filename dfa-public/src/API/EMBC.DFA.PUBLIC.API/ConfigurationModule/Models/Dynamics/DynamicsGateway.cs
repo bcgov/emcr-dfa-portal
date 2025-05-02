@@ -798,7 +798,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
 
                 if (result != null)
                 {
-                    return result.Where(m => m.Key == "Result") != null ? result.Where(m => m.Key == "Result").ToList()[0].Value?.ToString() : string.Empty;
+                    return result.Where(m => m.Key == "DocumentMetadataId") != null ? result.Where(m => m.Key == "DocumentMetadataId").ToList()[0].Value?.ToString() : string.Empty;
                 }
                 return "Submitted";
             }
