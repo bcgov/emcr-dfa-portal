@@ -69,6 +69,11 @@ export class DFAApplicationMainService {
     }
     this.otherContacts = otherContactsArray;
     this.dfaApplicationMainDataService.otherContacts = this.otherContacts;
+
+    // Ensure onlyOtherContact is false if there are any other contacts
+    if (this.otherContacts.length > 0) {
+      this.dfaApplicationMainDataService.setIsOnlyOtherContact(false);
+    }
   }
 
   public get secondaryApplicants(): Array<SecondaryApplicant> {

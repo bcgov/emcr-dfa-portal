@@ -4,7 +4,7 @@
     <p class="sub-heading" style="font-size: 20px">Occupants, Secondary Applicants and Contacts</p>
     <br />
 
-    <form [formGroup]="fullTimeOccupantsForm" *ngIf="isHomeowner || isResidentialTenant">
+    <form *ngIf="fullTimeOccupantsForm && (isHomeowner || isResidentialTenant)" [formGroup]="fullTimeOccupantsForm">
       <div formGroupName="fullTimeOccupant">
         <ng-container>
           <div class="row">
@@ -200,7 +200,7 @@
       </div><br/><br/>
     </form>
 
-    <form [formGroup]="secondaryApplicantsForm">
+    <form *ngIf="secondaryApplicantsForm" [formGroup]="secondaryApplicantsForm">
       <div formGroupName="secondaryApplicant">
         <ng-container>
           <div class="row">
@@ -471,8 +471,8 @@
       </div><br/><br/>
     </form>
 
-    <form [formGroup]="otherContactsForm">
-      <div formGroupName="otherContact">
+    <form *ngIf="otherContactsForm" [formGroup]="otherContactsForm">
+      <div *ngIf="otherContactsForm.get('contactDetails')" formGroupName="contactDetails">
         <ng-container>
           <div class="row">
             <div class="col-md-12">
@@ -483,8 +483,8 @@
                 We recommend that you provide the name of one other contact person in case the DFA can't reach you. The Ministry of Emergency Management (EMCR) can't and won't speak with the contact about your application, but will ask the person to have you contact us.
                 <br />
                 If you don't have an alternate contact, please indicate here:&nbsp;
-                <mat-checkbox (change)="onCheckedNoOtherContact($event)" [disabled]="disableOnlyOtherContact" [checked]="onlyOtherContact" id="onlyOtherContact">
-                I don't have an Other Contact
+                <mat-checkbox formControlName="onlyOtherContact">
+                  I don't have an Other Contact
                 </mat-checkbox>
               </p>
 
@@ -569,7 +569,7 @@
                 <br /><br/>
               </div>
 
-              <div *ngIf="otherContactsForm.get('otherContacts').invalid && otherContactsForm.get('otherContacts').hasError('required')">
+              <div *ngIf="otherContactsForm?.get('otherContacts')?.invalid && otherContactsForm?.get('otherContacts')?.hasError('required')">
                 <span style="color:red">At least one other contact is required.</span>
               </div>
 
@@ -595,17 +595,17 @@
                       <input formControlName="firstName" matInput placeholder="Contact first name" required maxlength="49"/>
                       <mat-error
                         *ngIf="
-                          otherContactsForm.get('otherContact').controls.firstName.invalid &&
-                          otherContactsForm.get('otherContact').controls.firstName.hasError('required') &&
-                          otherContactsForm.get('otherContact').controls.firstName.touched
+                          otherContactsForm.get('contactDetails').controls.firstName.invalid &&
+                          otherContactsForm.get('contactDetails').controls.firstName.hasError('required') &&
+                          otherContactsForm.get('contactDetails').controls.firstName.touched
                         "
                       >
                         First Name is required</mat-error
                       >
                       <mat-error
                         *ngIf="
-                          otherContactsForm.get('otherContact').controls.firstName.invalid &&
-                          otherContactsForm.get('otherContact').controls.firstName.hasError('maxLength')
+                          otherContactsForm.get('contactDetails').controls.firstName.invalid &&
+                          otherContactsForm.get('contactDetails').controls.firstName.hasError('maxLength')
                         "
                       >
                         Maximum length is 49 characters</mat-error
@@ -618,17 +618,17 @@
                       <input formControlName="lastName" matInput placeholder="Contact last name" required maxlength="49"/>
                       <mat-error
                         *ngIf="
-                          otherContactsForm.get('otherContact').controls.lastName.invalid &&
-                          otherContactsForm.get('otherContact').controls.lastName.hasError('required') &&
-                          otherContactsForm.get('otherContact').controls.lastName.touched
+                          otherContactsForm.get('contactDetails').controls.lastName.invalid &&
+                          otherContactsForm.get('contactDetails').controls.lastName.hasError('required') &&
+                          otherContactsForm.get('contactDetails').controls.lastName.touched
                         "
                       >
                         Last Name is required</mat-error
                       >
                       <mat-error
                         *ngIf="
-                          otherContactsForm.get('otherContact').controls.lastName.invalid &&
-                          otherContactsForm.get('otherContact').controls.lastName.hasError('maxLength')
+                          otherContactsForm.get('contactDetails').controls.lastName.invalid &&
+                          otherContactsForm.get('contactDetails').controls.lastName.hasError('maxLength')
                         "
                       >
                         Maximum length is 49 characters</mat-error
@@ -645,17 +645,17 @@
                         [imask]="phoneMask"/>
                         <mat-error
                         *ngIf="
-                          otherContactsForm.get('otherContact').controls.phoneNumber.invalid &&
-                          otherContactsForm.get('otherContact').controls.phoneNumber.hasError('required') &&
-                          otherContactsForm.get('otherContact').controls.phoneNumber.touched
+                          otherContactsForm.get('contactDetails').controls.phoneNumber.invalid &&
+                          otherContactsForm.get('contactDetails').controls.phoneNumber.hasError('required') &&
+                          otherContactsForm.get('contactDetails').controls.phoneNumber.touched
                         "
                       >
                        Telephone number is required</mat-error
                       >
                       <mat-error
                         *ngIf="
-                          otherContactsForm.get('otherContact').controls.phoneNumber.invalid &&
-                          otherContactsForm.get('otherContact').controls.phoneNumber.hasError('incorrectLength')
+                          otherContactsForm.get('contactDetails').controls.phoneNumber.invalid &&
+                          otherContactsForm.get('contactDetails').controls.phoneNumber.hasError('incorrectLength')
                         "
                       >
                         Telephone number must have 10 digits</mat-error
@@ -668,24 +668,24 @@
                       <input formControlName="email" required matInput placeholder="Contact email" type="email" maxlength="100" />
                       <mat-error
                         *ngIf="
-                          otherContactsForm.get('otherContact').controls.email.invalid &&
-                          otherContactsForm.get('otherContact').controls.email.hasError('required') &&
-                          otherContactsForm.get('otherContact').controls.email.touched
+                          otherContactsForm.get('contactDetails').controls.email.invalid &&
+                          otherContactsForm.get('contactDetails').controls.email.hasError('required') &&
+                          otherContactsForm.get('contactDetails').controls.email.touched
                         "
                       >
                         Email is required</mat-error
                       >
                       <mat-error
                       *ngIf="
-                        otherContactsForm.get('otherContact').controls.email.invalid
+                        otherContactsForm.get('contactDetails').controls.email.invalid
                       "
                     >
                       Invalid email address</mat-error
                     >
                       <mat-error
                         *ngIf="
-                          otherContactsForm.get('otherContact').controls.email.invalid &&
-                          otherContactsForm.get('otherContact').controls.email.hasError('maxLength')
+                          otherContactsForm.get('contactDetails').controls.email.invalid &&
+                          otherContactsForm.get('contactDetails').controls.email.hasError('maxLength')
                         "
                       >
                         Maximum length is 100 characters</mat-error

@@ -526,104 +526,90 @@ export class OtherContact {
 }
 
 export class OtherContactsForm {
-  applicationId = new UntypedFormControl();
-  deleteFlag = new UntypedFormControl();
-  id = new UntypedFormControl();
-  firstName = new UntypedFormControl();
-  lastName = new UntypedFormControl();
-  phoneNumber = new UntypedFormControl();
-  email = new UntypedFormControl();
-  addNewOtherContactIndicator = new UntypedFormControl(false);
-  otherContact: UntypedFormGroup;
-  otherContacts = new UntypedFormControl([], Validators.required);
-  onlyOtherContact = new UntypedFormControl();
-
-  constructor(
-    otherContacts: Array<OtherContact>,
+  static createForm(
     customValidator: CustomValidationService,
     builder: UntypedFormBuilder
-  ) {
-    this.otherContact = builder.group({
-      deleteFlag: [
-        false,
-        [
-          customValidator
-            .conditionalValidation(
-              () => this.addNewOtherContactIndicator.value,
-              Validators.required
-            )
-            .bind(customValidator)
+  ): UntypedFormGroup {
+    const addNewOtherContactIndicator = new UntypedFormControl(false);
+
+    return builder.group({
+      otherContacts: new UntypedFormControl([], Validators.required),
+      addNewOtherContactIndicator,
+      contactDetails: builder.group({
+        onlyOtherContact: new UntypedFormControl(false),
+        deleteFlag: [
+          false,
+          [
+            customValidator
+              .conditionalValidation(
+                () => addNewOtherContactIndicator.value,
+                Validators.required
+              )
+              .bind(customValidator)
+          ]
+        ],
+        applicationId: [
+          '',
+          [
+            customValidator
+              .conditionalValidation(
+                () => addNewOtherContactIndicator.value,
+                Validators.required
+              )
+              .bind(customValidator)
+          ]
+        ],
+        id: [''],
+        firstName: [
+          '',
+          [
+            customValidator
+              .conditionalValidation(
+                () => addNewOtherContactIndicator.value,
+                Validators.required
+              )
+              .bind(customValidator),
+            customValidator.maxLengthValidator(49).bind(customValidator)
+          ]
+        ],
+        lastName: [
+          '',
+          [
+            customValidator
+              .conditionalValidation(
+                () => addNewOtherContactIndicator.value,
+                Validators.required
+              )
+              .bind(customValidator),
+            customValidator.maxLengthValidator(49).bind(customValidator)
+          ]
+        ],
+        phoneNumber: [
+          '',
+          [
+            customValidator.maskedNumberLengthValidator().bind(customValidator),
+            customValidator
+              .conditionalValidation(
+                () => addNewOtherContactIndicator.value,
+                Validators.required
+              )
+              .bind(customValidator)
+          ]
+        ],
+        email: [
+          '',
+          [
+            Validators.email,
+            customValidator
+              .conditionalValidation(
+                () => addNewOtherContactIndicator.value,
+                Validators.required
+              )
+              .bind(customValidator),
+            customValidator.maxLengthValidator(100).bind(customValidator)
+          ]
         ]
-      ],
-      applicationId: [
-        '',
-        [
-          customValidator
-            .conditionalValidation(
-              () => this.addNewOtherContactIndicator.value,
-              Validators.required
-            )
-            .bind(customValidator)
-        ]
-      ],
-      id: [
-        ''
-      ],
-      firstName: [
-        '',
-        [
-          customValidator
-            .conditionalValidation(
-              () => this.addNewOtherContactIndicator.value,
-              Validators.required
-            )
-            .bind(customValidator),
-          customValidator
-            .maxLengthValidator(49)  // have to fit firstname and lastname and one space and comma into dfa_name
-            .bind(customValidator)
-        ]
-      ],
-      lastName: [
-        '',
-        [
-          customValidator
-            .conditionalValidation(
-              () => this.addNewOtherContactIndicator.value,
-              Validators.required
-            )
-            .bind(customValidator),
-          customValidator
-            .maxLengthValidator(49)
-            .bind(customValidator)
-        ]
-      ],
-      phoneNumber: [
-        '',
-        [
-          customValidator.maskedNumberLengthValidator().bind(customValidator),
-          customValidator
-            .conditionalValidation(
-              () => this.addNewOtherContactIndicator.value,
-              Validators.required
-            )
-            .bind(customValidator)
-        ]
-      ],
-      email: [
-        '',
-        [
-          Validators.email,
-          customValidator
-            .conditionalValidation(
-              () => this.addNewOtherContactIndicator.value,
-              Validators.required,
-            )
-            .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
-        ]
-      ]
+      })
     });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, NgModule, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -8,32 +8,45 @@ import {
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
-import { BehaviorSubject, Subject, Subscription, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription, take, takeUntil } from 'rxjs';
 import { DirectivesModule } from '../../../../core/directives/directives.module';
 import { CustomValidationService } from 'src/app/core/services/customValidation.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-
 import { CustomPipeModule } from 'src/app/core/pipe/customPipe.module';
 import { ApplicantOption, SecondaryApplicantTypeOption } from 'src/app/core/api/models';
 import { MatSelectModule } from '@angular/material/select';
 import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
-import { FullTimeOccupantService, OtherContactService, SecondaryApplicantService } from 'src/app/core/api/services';
-import { DFADeleteConfirmDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-delete-dialog/dfa-confirm-delete.component';
+import { ApplicationService, FullTimeOccupantService, OtherContactService, SecondaryApplicantService } from 'src/app/core/api/services';
 import { MatDialog } from '@angular/material/dialog';
 import { SecondaryApplicantWarningDialogComponent } from '../../../../core/components/dialog-components/secondary-applicant-warning-dialog/secondary-applicant-warning-dialog.component';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { IMaskModule } from 'angular-imask';
 
 @Component({
   selector: 'app-occupants',
-  standalone: false,
+  standalone: true,
   templateUrl: './occupants.component.html',
-  styleUrls: ['./occupants.component.scss']
+  styleUrls: ['./occupants.component.scss'],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    IMaskModule,
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatSelectModule,
+    CustomPipeModule,
+    DirectivesModule
+  ]
 })
 export default class OccupantsComponent implements OnInit, OnDestroy {
   fullTimeOccupantsForm: UntypedFormGroup;
@@ -84,6 +97,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
     public dfaApplicationMainDataService: DFAApplicationMainDataService,
     private secondaryApplicantsService: SecondaryApplicantService,
     private otherContactsService: OtherContactService,
+    private applicationService: ApplicationService,
     private fullTimeOccupantsService: FullTimeOccupantService,
     public dialog: MatDialog
   ) {
@@ -103,16 +117,32 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
-    this.initFullTimeOccupantsForm();
-    
-    this.initOtherContactsForm();
-    this.initSecondaryApplicantsForm();
+    this.newApplicationRemoveCache();
 
-    this.getFullTimeOccupantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
-    this.getOtherContactsForApplication(this.dfaApplicationMainDataService.getApplicationId());
-    this.getSecondaryApplicantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
-  
-    this.applyViewModePermissions();
+    // Call the API manually and wait for it to finish
+    this.dfaApplicationMainDataService
+    .loadApplicationById(this.dfaApplicationMainDataService.getApplicationId())
+    .pipe(take(1))
+    .subscribe({
+      next: () => {
+        this.initFullTimeOccupantsForm();
+        this.initOtherContactsForm();
+        this.initSecondaryApplicantsForm();
+        this.applyViewModePermissions();
+      },
+      error: (err) => {
+        console.error('Error loading application', err);
+        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+      }
+    });
+  }
+
+  private newApplicationRemoveCache(): void {
+    const mode = this.vieworedit || this.dfaApplicationMainDataService.getViewOrEdit();
+    if (!mode || mode === 'add') {
+      // Only reset cache and in-memory state for new applications
+      this.dfaApplicationMainDataService.resetApplicationState();
+    }
   }
 
   private initFullTimeOccupantsForm(): void {
@@ -124,49 +154,49 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
         this.dfaApplicationMainDataService.getDfaApplicationStart()
           .pipe(takeUntil(this.destroy$))
           .subscribe(application => {
-          if (application) {
-            const option = application.appTypeInsurance.applicantOption;
-            const keys = Object.keys(this.ApplicantOptions);
-            const values = Object.values(this.ApplicantOptions);
-  
-            this.isResidentialTenant = (option == keys[values.indexOf(this.ApplicantOptions.ResidentialTenant)]);
-            this.isHomeowner = (option == keys[values.indexOf(this.ApplicantOptions.Homeowner)]);
-            this.isSmallBusinessOwner = (option == keys[values.indexOf(this.ApplicantOptions.SmallBusinessOwner)]);
-            this.isFarmOwner = (option == keys[values.indexOf(this.ApplicantOptions.FarmOwner)]);
-            this.isCharitableOrganization = (option == keys[values.indexOf(this.ApplicantOptions.CharitableOrganization)]);
-  
-            if (this.isHomeowner || this.isResidentialTenant) {
-              this.fullTimeOccupantsForm.get('fullTimeOccupants').setValidators([Validators.required]);
-            } else {
-              this.fullTimeOccupantsForm.get('fullTimeOccupants').setValidators(null);
+            if (application && application.appTypeInsurance) {
+              const option = application.appTypeInsurance.applicantOption;
+              const keys = Object.keys(this.ApplicantOptions);
+              const values = Object.values(this.ApplicantOptions);
+    
+              this.isResidentialTenant = (option == keys[values.indexOf(this.ApplicantOptions.ResidentialTenant)]);
+              this.isHomeowner = (option == keys[values.indexOf(this.ApplicantOptions.Homeowner)]);
+              this.isSmallBusinessOwner = (option == keys[values.indexOf(this.ApplicantOptions.SmallBusinessOwner)]);
+              this.isFarmOwner = (option == keys[values.indexOf(this.ApplicantOptions.FarmOwner)]);
+              this.isCharitableOrganization = (option == keys[values.indexOf(this.ApplicantOptions.CharitableOrganization)]);
+    
+              if (this.isHomeowner || this.isResidentialTenant) {
+                this.fullTimeOccupantsForm.get('fullTimeOccupants').setValidators([Validators.required]);
+              } else {
+                this.fullTimeOccupantsForm.get('fullTimeOccupants').setValidators(null);
+              }
+    
+              this.fullTimeOccupantsForm.get('fullTimeOccupants').updateValueAndValidity();
+              this.onlyOccupantInHome = this.dfaApplicationMainDataService.getIsOnlyOccupantInHome();
+              this.hideOccupantButton = this.onlyOccupantInHome;
+            
+              if (this.isHomeowner || this.isResidentialTenant) {
+                const onlyOccupantCtrl = this.fullTimeOccupantsForm.get('onlyOccupantInHome');
+                if (onlyOccupantCtrl && onlyOccupantCtrl.enabled) {
+                  onlyOccupantCtrl.setValue(this.onlyOccupantInHome);
+                  this.updateFullTimeOccupantOnlyOccupantInHome(this.onlyOccupantInHome);
+                }
+              }
             }
-  
-            this.fullTimeOccupantsForm.get('fullTimeOccupants').updateValueAndValidity();
-            this.onlyOccupantInHome = this.dfaApplicationMainDataService.getIsOnlyOccupantInHome();
-            this.hideOccupantButton = this.onlyOccupantInHome;
-      
-            if (this.isHomeowner || this.isResidentialTenant) {
-              this.fullTimeOccupantsForm.get('onlyOccupantInHome').setValue(this.onlyOccupantInHome);
-              this.updateFullTimeOccupantOnlyOccupantInHome(this.onlyOccupantInHome);
-            }
-
-            //defers execution just one microtask — enough to let Angular stabilize
-            // this is needed for the UI "View Application" button execution 
-            Promise.resolve().then(() => {
-              this.onlyOtherContact = this.dfaApplicationMainDataService.getIsOnlyOtherContact();
-              this.hideOtherContactButton = this.onlyOtherContact;
-              this.updateOnlyOtherContact(this.onlyOtherContact);
-            });
-          }
         });
         this.fullTimeOccupantsForm.get('onlyOccupantInHome')
-              .valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => this.updateFullTimeOccupantOnlyOccupantInHome(value));
+          .valueChanges
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((value) => this.updateFullTimeOccupantOnlyOccupantInHome(value));
 
         this.fullTimeOccupantsForm.get('addNewFullTimeOccupantIndicator')
-              .valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateFullTimeOccupantOnVisibility());
+          .valueChanges
+          .pipe(takeUntil(this.destroy$)).subscribe(() => this.updateFullTimeOccupantOnVisibility());
+
+        this.getFullTimeOccupantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
       });
     
-    this.getFullTimeOccupantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
+    
   }
 
   private initSecondaryApplicantsForm() {
@@ -177,38 +207,56 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
       this.secondaryApplicantsForm
         .get('addNewSecondaryApplicantIndicator')
         .valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateSecondaryApplicantOnVisibility());
+        this.getSecondaryApplicantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
     });
   }
   
   private initOtherContactsForm() {
     this.otherContactsForm$ = this.formCreationService.getOtherContactsForm()
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(form => {
-      this.otherContactsForm = form;
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(form => {
+        this.otherContactsForm = form;
 
-      // Get the actual current value from the form
-      let onlyOtherContactValue = this.otherContactsForm.get('onlyOtherContact')?.value;
+        // Always get the current value from the service — don't rely on form's initial state
+        const onlyOtherContactValue = this.dfaApplicationMainDataService.getIsOnlyOtherContact();
+        const onlyOtherContactCtrl = this.otherContactsForm.get('contactDetails.onlyOtherContact');
 
-      // Fallback: if the value is missing (e.g. first load), get it from the service
-      if (onlyOtherContactValue == null) { 
-        onlyOtherContactValue = this.dfaApplicationMainDataService.getIsOnlyOtherContact();
-        this.otherContactsForm.get('onlyOtherContact')?.setValue(onlyOtherContactValue);
-      }
+        // Enable the checkbox if we’re going to show it
+        const shouldDisable = this.shouldDisableOnlyOtherContact();
+        this.disableOnlyOtherContact = shouldDisable;
+
+        if (onlyOtherContactCtrl) {
+          if (shouldDisable) {
+            onlyOtherContactCtrl.disable({ emitEvent: false });
+          } else {
+            onlyOtherContactCtrl.enable({ emitEvent: false });
+            onlyOtherContactCtrl.setValue(onlyOtherContactValue, { emitEvent: false });
+          }
+        }
+        
+        // Sync component property and apply validators based on checkbox state
+        this.onlyOtherContact = onlyOtherContactValue;
+        this.hideOtherContactButton = onlyOtherContactValue;
+        this.updateOnlyOtherContact(onlyOtherContactValue);
+
+        // Watch for future changes to onlyOtherContact and update dynamically
+        this.otherContactsForm.get('contactDetails.onlyOtherContact')?.valueChanges
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(value => {
+            this.onlyOtherContact = value;
+            this.hideOtherContactButton = value;
+            this.updateOnlyOtherContact(value);
+          });
   
-      // Sync component property and apply validators based on checkbox state
-      this.onlyOtherContact = onlyOtherContactValue;
-      this.updateOnlyOtherContact(onlyOtherContactValue);
-  
-      // Watch for future changes to onlyOtherContact and update dynamically
-      this.otherContactsForm.get('onlyOtherContact')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
-        this.onlyOtherContact = value;
-        this.updateOnlyOtherContact(value);
-      });
-  
-      // Also handle visibility logic when this other control changes
-      this.otherContactsForm.get('addNewOtherContactIndicator')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-        this.updateOtherContactOnVisibility();
-      });
+        // Also handle visibility logic when this other control changes
+        this.otherContactsForm.get('addNewOtherContactIndicator')?.valueChanges
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(() => {
+            this.updateOtherContactOnVisibility();
+          });
+
+        // Load any saved contacts from the service
+        this.getOtherContactsForApplication(this.dfaApplicationMainDataService.getApplicationId());
     }); 
   }
   
@@ -219,7 +267,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
       this.secondaryApplicantsForm?.disable();
       this.fullTimeOccupantsForm?.disable();
       this.disableOnlyOccupant = true;
-      // this.disableOnlyOtherContact = true;
+      this.disableOnlyOtherContact = true;
     }
   
     if (mode === 'viewOnly') {
@@ -231,13 +279,6 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
     const checked = e.checked === true;
     this.hideOccupantButton = checked;
     this.fullTimeOccupantsForm.get('onlyOccupantInHome')?.setValue(checked);
-  }
-
-  onCheckedNoOtherContact(e): void {
-    const checked = e.checked === true;
-    this.hideOtherContactButton = checked;
-    this.otherContactsForm.get('onlyOtherContact')?.setValue(checked);
-    this.otherContactsForm.get('otherContacts')?.updateValueAndValidity();
   }
 
   getSecondaryApplicantsForApplication(applicationId: string) {
@@ -259,26 +300,38 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
   }
 
   getOtherContactsForApplication(applicationId: string) {
-    if (applicationId === undefined) {
+    if (!applicationId) {
       applicationId = this.dfaApplicationMainDataService.getApplicationId();
     }
 
-    this.otherContactsService.otherContactGetOtherContacts({applicationId: applicationId}).subscribe({
-      next: (otherContacts) => {
-        this.otherContactsData = otherContacts;
-        this.otherContactsDataSource.next(this.otherContactsData);
-        this.otherContactsForm.get('otherContacts').setValue(this.otherContactsData);
-        this.disableOnlyOtherContact = this.otherContactsDataSource.getValue().length > 0
+    this.otherContactsService.otherContactGetOtherContacts({applicationId: applicationId})
+      .subscribe({
+        next: (otherContacts) => {
+          this.otherContactsData = otherContacts;
+          this.otherContactsDataSource.next(this.otherContactsData);
+          
+          // Ensure the control exists before setting the value
+          const otherContactsCtrl = this.otherContactsForm.get('otherContacts');
+          if (otherContactsCtrl) {
+            otherContactsCtrl.setValue(this.otherContactsData);
+          } else {
+            console.error("Form control 'otherContacts' not found.");
+          }
 
-        // Apply validator logic only after data is loaded and form is populated
-        const formValue = this.otherContactsForm.get('onlyOtherContact')?.value;
-        this.onlyOtherContact = formValue;
-        this.updateOnlyOtherContact(formValue);
-      },
-      error: (error) => {
-        console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
-      }
+          this.updateOnlyOtherContactState();
+
+          // Apply validator logic only after data is loaded and form is populated
+          const onlyOtherContactCtrl = this.otherContactsForm.get('contactDetails.onlyOtherContact');
+          if (onlyOtherContactCtrl) {
+            const formValue = onlyOtherContactCtrl.value;
+            this.onlyOtherContact = formValue;
+            this.updateOnlyOtherContact(formValue);
+          }
+        },
+        error: (error) => {
+          console.error(error);
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        }
     });
   }
 
@@ -289,16 +342,16 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
     this.fullTimeOccupantsService.fullTimeOccupantGetFullTimeOccupants({applicationId: applicationId})
       .subscribe({
-      next: (fullTimeOccupants) => {
-        this.fullTimeOccupantsData = fullTimeOccupants;
-        this.fullTimeOccupantsDataSource.next(this.fullTimeOccupantsData);
-        this.fullTimeOccupantsForm.get('fullTimeOccupants').setValue(this.fullTimeOccupantsData);
-        this.disableOnlyOccupant = this.fullTimeOccupantsDataSource.getValue().length > 0
-      },
-      error: (error) => {
-        console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
-      }
+        next: (fullTimeOccupants) => {
+          this.fullTimeOccupantsData = fullTimeOccupants;
+          this.fullTimeOccupantsDataSource.next(this.fullTimeOccupantsData);
+          this.fullTimeOccupantsForm.get('fullTimeOccupants').setValue(this.fullTimeOccupantsData);
+          this.disableOnlyOccupant = this.fullTimeOccupantsDataSource.getValue().length > 0
+        },
+        error: (error) => {
+          console.error(error);
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        }
     });
   }
 
@@ -342,7 +395,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
   deleteFullTimeOccupantRow(index: number): void {
     this.fullTimeOccupantsData[index].deleteFlag = true;
     this.fullTimeOccupantsService.fullTimeOccupantUpsertDeleteFullTimeOccupant({body: this.fullTimeOccupantsData[index]}).subscribe({
-      next: (result) => {
+      next: () => {
         this.fullTimeOccupantsData.splice(index, 1);
         this.fullTimeOccupantsDataSource.next(this.fullTimeOccupantsData);
         this.fullTimeOccupantsForm.get('fullTimeOccupants').setValue(this.fullTimeOccupantsData);
@@ -362,51 +415,117 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
   addOtherContact(): void {
     this.otherContactText = 'New Other Contact'
-    this.otherContactsForm.get('otherContact').reset();
+    this.otherContactsForm.get('contactDetails').reset();
     this.showOtherContactForm = !this.showOtherContactForm;
     this.otherContactsForm.get('addNewOtherContactIndicator').setValue(true);
-    this.otherContactsForm.get('otherContact.deleteFlag').setValue(false);
-    this.otherContactsForm.get('otherContact.applicationId').setValue(this.dfaApplicationMainDataService.getApplicationId());
-    this.disableOnlyOtherContact = true;
+    this.otherContactsForm.get('contactDetails.deleteFlag').setValue(false);
+    this.otherContactsForm.get('contactDetails.applicationId').setValue(this.dfaApplicationMainDataService.getApplicationId());
+    this.dfaApplicationMainDataService.setIsOnlyOtherContact(false);
+    this.otherContactsForm.get('contactDetails.onlyOtherContact').setValue(false);
+
+    // Disable the 'onlyOtherContact' checkbox when adding a new contact
+    const onlyOtherContactCtrl = this.otherContactsForm.get('contactDetails.onlyOtherContact');
+    if (onlyOtherContactCtrl && onlyOtherContactCtrl.enabled) {
+      onlyOtherContactCtrl.disable({ emitEvent: false });
+      this.disableOnlyOtherContact = true; // keep UI state consistent
+    }
   }
 
   saveOtherContact(): void {
-    if (this.otherContactsForm.get('otherContact').status === 'VALID') {
-      if (this.otherContactsEditIndex !== undefined && this.otherContactsRowEdit) {
-        this.otherContactsService.otherContactUpsertDeleteOtherContact({ body: this.otherContactsForm.get('otherContact').getRawValue() }).subscribe({
-          next: (result) => {
-            this.otherContactsData[this.otherContactsEditIndex] = this.otherContactsForm.get('otherContact').value;
-            this.otherContactsRowEdit = !this.otherContactsRowEdit;
-            this.otherContactsEditIndex = undefined;
-            this.otherContactsDataSource.next(this.otherContactsData);
-            this.otherContactsForm.get('otherContacts').setValue(this.otherContactsData);
-            this.showOtherContactForm = !this.showOtherContactForm;
-            this.otherContactsEditFlag = !this.otherContactsEditFlag;
-            this.disableOnlyOtherContact = this.otherContactsDataSource.getValue().length > 0
-          },
-          error: (error) => {
-            console.error(error);
-            document.location.href = 'https://dfa.gov.bc.ca/error.html';
-          }
-        });
-      } else {
-        this.otherContactsService.otherContactUpsertDeleteOtherContact({ body: this.otherContactsForm.get('otherContact').getRawValue() }).subscribe({
-          next: (otherContactId) => {
-            this.otherContactsForm.get('otherContact').get('id').setValue(otherContactId);
-            this.otherContactsData.push(this.otherContactsForm.get('otherContact').value);
-            this.otherContactsDataSource.next(this.otherContactsData);
-            this.otherContactsForm.get('otherContacts').setValue(this.otherContactsData);
-            this.showOtherContactForm = !this.showOtherContactForm;
-            this.disableOnlyOtherContact = this.otherContactsDataSource.getValue().length > 0
-          },
-          error: (error) => {
-            console.error(error);
-            document.location.href = 'https://dfa.gov.bc.ca/error.html';
-          }
-        });
+    const contactDetails = this.otherContactsForm.get('contactDetails');
+    if (contactDetails?.status !== 'VALID') {
+      contactDetails?.markAllAsTouched();
+      return;
+    }
+
+    // Ensure onlyOtherContact is enabled before saving
+    const onlyOtherContactCtrl = contactDetails.get('onlyOtherContact');
+    if (onlyOtherContactCtrl && onlyOtherContactCtrl.disabled) {
+      onlyOtherContactCtrl.enable({ emitEvent: false });
+    }
+  
+    const afterSave = () => {
+      this.showOtherContactForm = false;
+      this.updateOnlyOtherContactState();
+
+      // Reset onlyOtherContact to false after saving
+      if (onlyOtherContactCtrl && onlyOtherContactCtrl.value !== false) {
+        onlyOtherContactCtrl.setValue(false, { emitEvent: false });
       }
+    };
+  
+    const rawContactData = contactDetails.getRawValue();
+
+    // Ensure onlyOtherContact is explicitly set
+    const contactData = {
+      ...rawContactData,
+      onlyOtherContact: onlyOtherContactCtrl?.value ?? false
+    };
+  
+    if (this.otherContactsEditIndex !== undefined && this.otherContactsRowEdit) {
+      // Update/Edit existing
+      this.otherContactsService.otherContactUpsertDeleteOtherContact({ body: contactData }).subscribe({
+        next: () => {
+          // Update the row
+          this.otherContactsData[this.otherContactsEditIndex!] = { ...contactDetails.value };
+          this.otherContactsRowEdit = false;
+          this.otherContactsEditIndex = undefined;
+  
+          this.otherContactsDataSource.next(this.otherContactsData);
+          this.otherContactsForm.get('otherContacts')?.setValue(this.otherContactsData);
+  
+          this.otherContactsEditFlag = false;
+          afterSave();
+        },
+        error: (error) => {
+          console.error(error);
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        }
+      });
     } else {
-      this.otherContactsForm.get('otherContact').markAllAsTouched();
+      // Create new contact
+      // First ensure 'onlyOtherContact' is false when adding any contact
+      const onlyOtherContactCtrl = contactDetails.get('onlyOtherContact');
+      if (onlyOtherContactCtrl) {
+        onlyOtherContactCtrl.enable({ emitEvent: false });
+        onlyOtherContactCtrl.setValue(false, { emitEvent: false });
+        this.dfaApplicationMainDataService.setIsOnlyOtherContact(false);
+      }
+      
+      const contactData = contactDetails.getRawValue();
+
+      this.otherContactsService.otherContactUpsertDeleteOtherContact({ body: contactData })
+        .subscribe({
+          next: (otherContactId) => {
+            contactDetails.get('id')?.setValue(otherContactId);
+    
+            // Push a deep copy to avoid shared reference issues
+            const newContact = { ...contactDetails.value };
+            this.otherContactsData.push(newContact);
+    
+            this.otherContactsDataSource.next(this.otherContactsData);
+            this.otherContactsForm.get('otherContacts')?.setValue(this.otherContactsData);
+    
+            afterSave();
+          },
+          error: (error) => {
+            console.error(error);
+            document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          }
+      });
+    }
+  }
+  
+  private updateOnlyOtherContactState(): void {
+    this.disableOnlyOtherContact = this.shouldDisableOnlyOtherContact();
+    const ctrl = this.otherContactsForm.get('contactDetails.onlyOtherContact');
+    if (ctrl) {
+      if (this.disableOnlyOtherContact) {
+        ctrl.disable({ emitEvent: false });
+      } else {
+        ctrl.enable({ emitEvent: false });
+      }
+      this.updateOnlyOtherContact(ctrl.value);
     }
   }
 
@@ -414,40 +533,65 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
     this.showOtherContactForm = !this.showOtherContactForm;
     this.otherContactsForm.get('addNewOtherContactIndicator').setValue(false);
     this.otherContactText = 'New Other Contact'
-    this.disableOnlyOtherContact = this.otherContactsDataSource.getValue().length > 0
-  }
 
+    const shouldDisable = this.shouldDisableOnlyOtherContact();
+    const onlyOtherContactCtrl = this.otherContactsForm.get('contactDetails.onlyOtherContact');
+  
+    if (onlyOtherContactCtrl) {
+      shouldDisable
+        ? onlyOtherContactCtrl.disable({ emitEvent: false })
+        : onlyOtherContactCtrl.enable({ emitEvent: false });
+
+      // Update shared state after cancel
+      this.dfaApplicationMainDataService.setIsOnlyOtherContact(onlyOtherContactCtrl.value);
+    }
+  
+    this.disableOnlyOtherContact = shouldDisable;
+  }
 
   editOtherContactsRow(element, index): void {
     this.otherContactText = 'Edit Other Contact'
     this.otherContactsEditIndex = index;
     this.otherContactsRowEdit = !this.otherContactsRowEdit;
-    this.otherContactsForm.get('otherContact').setValue(element);
+    this.otherContactsForm.get('contactDetails').setValue(element);
     this.showOtherContactForm = !this.showOtherContactForm;
     this.otherContactsEditFlag = !this.otherContactsEditFlag;
-    this.otherContactsForm
-      .get('addNewOtherContactIndicator').setValue(true);
+    this.otherContactsForm.get('addNewOtherContactIndicator').setValue(true);
   }
-
 
   deleteOtherContactRow(index: number): void {
     this.otherContactsData[index].deleteFlag = true;
-    this.otherContactsService.otherContactUpsertDeleteOtherContact({body: this.otherContactsData[index]}).subscribe({
-      next: (result) => {
-        this.otherContactsData.splice(index, 1);
-        this.otherContactsDataSource.next(this.otherContactsData);
-        this.otherContactsForm.get('otherContacts').setValue(this.otherContactsData);
-        this.disableOnlyOtherContact = this.showOtherContactForm
-        if (this.otherContactsData.length === 0) {
-          this.otherContactsForm
-            .get('addNewOtherContactIndicator')
-            .setValue(false);
+    this.otherContactsService.otherContactUpsertDeleteOtherContact({body: this.otherContactsData[index]})
+      .subscribe({
+        next: () => {
+          this.otherContactsData.splice(index, 1);
+          this.otherContactsDataSource.next(this.otherContactsData);
+          this.otherContactsForm.get('otherContacts').setValue(this.otherContactsData);
+
+          this.updateOnlyOtherContactState();
+
+          if (this.otherContactsData.length === 0) {
+            this.otherContactsForm
+              .get('addNewOtherContactIndicator')
+              .setValue(false);
+
+            const ctrl = this.otherContactsForm.get('contactDetails.onlyOtherContact');
+            if (ctrl) {
+              // Enable first if disabled (so setValue works)
+              if (ctrl.disabled) {
+                ctrl.enable({ emitEvent: false });
+              }
+              ctrl.setValue(false, { emitEvent: false });
+            }
+            this.onlyOtherContact = false;
+            this.hideOtherContactButton = false;
+            this.dfaApplicationMainDataService.setIsOnlyOtherContact(false);
+          }
+        },
+        error: (error) => {
+          console.error(error);
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
         }
-      },
-      error: (error) => {
-        console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
-      }
     });
   }
 
@@ -463,7 +607,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
         })
         .afterClosed()
         .pipe(takeUntil(this.destroy$))
-        .subscribe((result) => {
+        .subscribe(() => {
           
         });
     }
@@ -504,7 +648,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
   deleteSecondaryApplicantRow(index: number): void {
     this.secondaryApplicantsData[index].deleteFlag = true;
     this.secondaryApplicantsService.secondaryApplicantUpsertDeleteSecondaryApplicant({body: this.secondaryApplicantsData[index]}).subscribe({
-      next: (result) => {
+      next: () => {
           this.secondaryApplicantsData.splice(index, 1);
           this.secondaryApplicantsDataSource.next(this.secondaryApplicantsData);
           this.secondaryApplicantsForm.get('secondaryApplicants').setValue(this.secondaryApplicantsData);
@@ -539,7 +683,8 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
     }
   
     const otherContactsControl = this.otherContactsForm.get('otherContacts');
-    if (!otherContactsControl) {
+    const onlyOtherContactControl = this.otherContactsForm.get('contactDetails.onlyOtherContact');
+    if (!otherContactsControl || !onlyOtherContactControl) {
       // otherContacts control is missing in the form
       return;
     }
@@ -569,16 +714,16 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
   updateOtherContactOnVisibility(): void {
     this.otherContactsForm
-      .get('otherContact.firstName')
+      .get('contactDetails.firstName')
       .updateValueAndValidity();
     this.otherContactsForm
-      .get('otherContact.lastName')
+      .get('contactDetails.lastName')
       .updateValueAndValidity();
     this.otherContactsForm
-      .get('otherContact.phoneNumber')
+      .get('contactDetails.phoneNumber')
       .updateValueAndValidity();
     this.otherContactsForm
-      .get('otherContact.email')
+      .get('contactDetails.email')
       .updateValueAndValidity();
   }
 
@@ -604,6 +749,10 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
     this.deleteOtherContactRow(index);
   }
 
+  private shouldDisableOnlyOtherContact(): boolean {
+    return this.otherContactsDataSource.getValue().length > 0;
+  }
+
   /**
    * Returns the control of the form
    */
@@ -623,22 +772,4 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
   }
 }
 
-@NgModule({
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    IMaskModule,
-    CustomPipeModule,
-    MatSelectModule,
-    MatInputModule,
-    MatIconModule,
-    ReactiveFormsModule,
-    DirectivesModule,
-    MatCheckboxModule
-  ],
-  declarations: [OccupantsComponent]
-})
 class OccupantsModule {}

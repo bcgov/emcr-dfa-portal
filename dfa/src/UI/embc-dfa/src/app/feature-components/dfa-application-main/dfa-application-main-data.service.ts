@@ -4,8 +4,7 @@ import { DfaApplicationStart,  } from 'src/app/core/api/models';
 import { DFAApplicationStartDataService } from '../dfa-application-start/dfa-application-start-data.service';
 import { CleanUpLog, DfaApplicationMain, DamagedPropertyAddress, PropertyDamage, SupportingDocuments, SignAndSubmit, FullTimeOccupant, OtherContact, SecondaryApplicant, DamagedRoom, FileUpload, CleanUpLogItem } from 'src/app/core/model/dfa-application-main.model';
 import { ApplicationService, AttachmentService } from 'src/app/core/api/services';
-import { DFAApplicationStartService } from '../dfa-application-start/dfa-application-start.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class DFAApplicationMainDataService {
@@ -209,11 +208,12 @@ export class DFAApplicationMainDataService {
   public getIsOnlyOtherContact(): boolean {
     return this._onlyOtherContact;
   }
+
   public setIsOnlyOtherContact(value: boolean): void {
     this._onlyOtherContact = value;
   }
 
-   public createDFAApplicationMainDTO(): DfaApplicationMain {
+  public createDFAApplicationMainDTO(): DfaApplicationMain {
     return {
       id: this._applicationId,
       cleanUpLog: this.cleanUpLog,
@@ -225,5 +225,31 @@ export class DFAApplicationMainDataService {
       onlyOccupantInHome: this._onlyOccupantInHome,
       onlyOtherContact: this._onlyOtherContact,
     };
+  }
+
+  public resetApplicationState(): void {
+    this._onlyOtherContact = false;
+    this._onlyOccupantInHome = false;
+    this._dfaApplicationMain = null;
+    this._fullTimeOccupants = [];
+    this._otherContacts = [];
+    this._secondaryApplicants = [];
+    this._cleanUpLogItems = [];
+    this._damagedRooms = [];
+    this._fileUploads = [];
+    this._requiredDocuments = [];
+    this._isSubmitted = false;
+  
+    this.cacheService.remove('dfa-application-main');
+  }
+
+  public loadApplicationById(applicationId: string): Observable<DfaApplicationStart> {
+    return this.applicationService.applicationGetApplicationMain({ applicationId }).pipe(
+      tap((application: DfaApplicationMain) => {
+        this.setDFAApplicationMain(application);
+        this.setDfaApplicationStart(application); // emits to BehaviorSubject
+      }),
+      map(app => app) // keep the original response
+    );
   }
 }

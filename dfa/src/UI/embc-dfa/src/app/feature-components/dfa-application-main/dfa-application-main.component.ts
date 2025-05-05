@@ -133,7 +133,7 @@ export class DFAApplicationMainComponent
     }
 
     this.dfaApplicationMainDataService.getDfaApplicationStart().subscribe(application => {
-      if (application) {
+      if (application && application.appTypeInsurance ) {
         this.isNoInsurance = (application.appTypeInsurance.insuranceOption == Object.keys(this.InsuranceOptions)[Object.values(this.InsuranceOptions).indexOf(this.InsuranceOptions.No)]);
         this.isResidentialTenant = (application.appTypeInsurance.applicantOption == Object.keys(this.AppOptions)[Object.values(this.AppOptions).indexOf(this.AppOptions.ResidentialTenant)]);
         this.isHomeowner = (application.appTypeInsurance.applicantOption == Object.keys(this.AppOptions)[Object.values(this.AppOptions).indexOf(this.AppOptions.Homeowner)]);
@@ -208,7 +208,7 @@ export class DFAApplicationMainComponent
       });
 
     this.dfaApplicationMainDataService.getDfaApplicationStart().subscribe(application => {
-      if (application) {
+      if (application && application.appTypeInsurance) {
         this.event = application.eventName;
         if (application.id == applicationId) this.getFileUploadsForApplication(applicationId);
         this.dfaApplicationMainHeading = ApplicantOption[application.appTypeInsurance.applicantOption] + ' Application';
@@ -552,11 +552,8 @@ export class DFAApplicationMainComponent
   }
 
   isOtherContactValid(): boolean {
-    let onlyOtherContact = this.otherContactsForm.get('onlyOtherContact').value;
-    if (this.otherContactsForm.valid || onlyOtherContact){
-      return true;
-    }
-    return false;    
+    const onlyOtherContact = this.otherContactsForm.get('contactDetails.onlyOtherContact')?.value ?? false;
+    return this.otherContactsForm.valid || onlyOtherContact;   
   }
 
   isOccupantValid(): boolean {

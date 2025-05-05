@@ -173,14 +173,8 @@ export class FormCreationService {
 
   otherContactsForm: BehaviorSubject<UntypedFormGroup | undefined> =
     new BehaviorSubject(
-      this.formBuilder.group(
-       new OtherContactsForm(
-         new Array<OtherContact>(),
-         this.customValidator,
-         this.formBuilder
-       )
-     )
-   );
+      OtherContactsForm.createForm(this.customValidator, this.formBuilder)
+    );
 
   otherContactsForm$: Observable<UntypedFormGroup | undefined> =
     this.otherContactsForm.asObservable();
@@ -479,13 +473,7 @@ export class FormCreationService {
 
   clearOtherContactsData(): void {
     this.otherContactsForm.next(
-      this.formBuilder.group(
-        new OtherContactsForm(
-          new Array<OtherContact>(),
-          this.customValidator,
-          this.formBuilder
-        )
-      )
+      OtherContactsForm.createForm(this.customValidator, this.formBuilder)
     );
   }
 

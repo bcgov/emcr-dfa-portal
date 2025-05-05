@@ -107,7 +107,7 @@ export default class PropertyDamageComponent implements OnInit, OnDestroy {
       .subscribe((propertyDamage) => {
         this.propertyDamageForm = propertyDamage;
         this.dfaApplicationMainDataService.getDfaApplicationStart().subscribe(application => {
-          if (application) {
+          if (application && application.appTypeInsurance) {
             this.isResidentialTenant = (application.appTypeInsurance.applicantOption == Object.keys(this.ApplicantOptions)[Object.values(this.ApplicantOptions).indexOf(this.ApplicantOptions.ResidentialTenant)]);
             this.isHomeowner = (application.appTypeInsurance.applicantOption == Object.keys(this.ApplicantOptions)[Object.values(this.ApplicantOptions).indexOf(this.ApplicantOptions.Homeowner)]);
             this.isSmallBusinessOwner = (application.appTypeInsurance.applicantOption == Object.keys(this.ApplicantOptions)[Object.values(this.ApplicantOptions).indexOf(this.ApplicantOptions.SmallBusinessOwner)]);

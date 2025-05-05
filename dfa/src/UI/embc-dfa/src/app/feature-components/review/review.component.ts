@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Observable, Subscription, mapTo } from 'rxjs';
+import { Observable, Subscription, map, mapTo, startWith } from 'rxjs';
 import { NavigationExtras, Router } from '@angular/router';
 import { FormCreationService } from '../../core/services/formCreation.service';
 import {
@@ -9,7 +9,7 @@ import {
 import { ApplicantOption, FarmOption, FileCategory, FileUpload, InsuranceOption, RoomType, SmallBusinessOption } from 'src/app/core/api/models';
 import { MatTableDataSource } from '@angular/material/table';
 import { DFAApplicationMainDataService } from '../dfa-application-main/dfa-application-main-data.service';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormArray, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-review',
@@ -78,7 +78,7 @@ export class ReviewComponent implements OnInit {
       .subscribe((appTypeInsurance) => {
         this.appTypeInsuranceForm = appTypeInsurance;
         this.dfaApplicationMainDataService.getDfaApplicationStart().subscribe(application => { // setting these fields in fileUploadForm for validation checking
-          if (application) {
+          if (application && application.appTypeInsurance) {
             this.isResidentialTenant = (application.appTypeInsurance.applicantOption == Object.keys(this.ApplicantOptions)[Object.values(this.ApplicantOptions).indexOf(this.ApplicantOptions.ResidentialTenant)]);
             this.isHomeowner = (application.appTypeInsurance.applicantOption == Object.keys(this.ApplicantOptions)[Object.values(this.ApplicantOptions).indexOf(this.ApplicantOptions.Homeowner)]);
             this.isSmallBusinessOwner = (application.appTypeInsurance.applicantOption == Object.keys(this.ApplicantOptions)[Object.values(this.ApplicantOptions).indexOf(this.ApplicantOptions.SmallBusinessOwner)]);
@@ -134,11 +134,21 @@ export class ReviewComponent implements OnInit {
         ).subscribe(data => this.secondaryApplicantsDataSource.data = _secondaryApplicantsFormArray.getRawValue());
 
     // subscribe to changes in other contacts
-    const _otherContactsFormArray = this.formCreationService.otherContactsForm.value.get('otherContacts');
-    _otherContactsFormArray.valueChanges
-      .pipe(
-        mapTo(_otherContactsFormArray.getRawValue())
-        ).subscribe(data => this.otherContactsDataSource.data = _otherContactsFormArray.getRawValue());
+    const form = this.formCreationService.otherContactsForm.value;
+    const otherContactsArray = form?.get('otherContacts') as FormArray;
+
+    if (otherContactsArray) {
+      otherContactsArray.valueChanges
+        .pipe(
+          startWith(otherContactsArray.value), // emit initial value immediately
+          map(() => otherContactsArray.getRawValue())
+        )
+        .subscribe(data => {
+          this.otherContactsDataSource.data = data;
+        });
+    }
+  
+  
 
     // subscribe to changes in clean up logs
     const _cleanUpWorkFormArray = this.formCreationService.cleanUpLogItemsForm.value.get('cleanuplogs');
