@@ -1000,8 +1000,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_bpfclosedate { get; set; }
         public string? dfa_onetimedeductionamount { get; set; }
         public string? dfa_paidclaimamount { get; set; }
-
-        public string?  dfa_decisioncopy { get; set; }
+        public string? dfa_decisioncopy { get; set; }
     }
 
     public class dfa_recoveryinvoice
@@ -1342,6 +1341,15 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         ApprovedwithExclusion = 222710008,
     }
 
+    public enum ClaimSubmittedBPFStages
+    {
+        [Description("Pending")]
+        Pending = 222710000,
+
+        [Description("Received")]
+        Received = 222710001,
+    }
+
     public enum ClaimDecisions
     {
         [Description("Approved")]
@@ -1356,6 +1364,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         [Description("Approved with Exclusions")]
         ApprovedwithExclusion = 222710003,
     }
+
     public enum EMCRDecision
     {
         [Description("Approved Total")]

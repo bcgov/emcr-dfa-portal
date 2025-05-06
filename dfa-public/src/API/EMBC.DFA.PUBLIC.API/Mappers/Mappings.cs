@@ -656,7 +656,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.ProjectType,opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projecttype) ? GetEnumDescription((ProjectTypes)Convert.ToInt32(s.dfa_projecttype)) : null))
                 .ForMember(d => d.ProjectTypeOther,opts => opts.MapFrom(s => s.dfa_projecttypeother));
 
-            CreateMap<dfa_projectclaim, CurrentClaim>() 
+            CreateMap<dfa_projectclaim, CurrentClaim>()
                 .ForMember(d => d.ClaimNumber, opts => opts.MapFrom(s => s.dfa_name))
                 .ForMember(d => d.CreatedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.createdon).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.createdon).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.SubmittedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_claimreceivedbyemcrdate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_claimreceivedbyemcrdate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
@@ -671,9 +671,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.DateFileClosed, opts => opts.MapFrom(s => s.dfa_bpfclosedate))
                 .ForMember(d => d.ClaimId, opts => opts.MapFrom(s => s.dfa_projectclaimid))
                 .ForMember(d => d.Status, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimbpfstages) ? GetEnumDescription((ClaimStages)Convert.ToInt32(s.dfa_claimbpfstages)) : null))
-                .ForMember(d => d.Stage, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimbpfsubstages) ?
-                    (Convert.ToInt32(s.dfa_claimbpfstages) == Convert.ToInt32(ClaimStages.Draft) ? null : GetEnumDescription((ClaimSubStages)Convert.ToInt32(s.dfa_claimbpfsubstages)))
-                    : null))
+                .ForMember(d => d.Stage, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimbpfsubstages) ? GetEnumDescription((ClaimSubStages)Convert.ToInt32(s.dfa_claimbpfsubstages)) : null))
                 .ForMember(d => d.PaidClaimDate, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_claimpaiddate) ? "(pending information)" : Convert.ToDateTime(s.dfa_claimpaiddate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.ClaimDecision, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_decisioncopy) ? GetEnumDescription((ClaimDecisions)Convert.ToInt32(s.dfa_decisioncopy)) : null));
 

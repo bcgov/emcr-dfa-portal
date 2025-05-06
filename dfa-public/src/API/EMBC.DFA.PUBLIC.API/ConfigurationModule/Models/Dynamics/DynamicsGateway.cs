@@ -1323,7 +1323,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_bpfclosedate = !string.IsNullOrEmpty(objClaim.dfa_bpfclosedate) ? DateTime.Parse(objClaim.dfa_bpfclosedate).ToLocalTime().ToString() : objClaim.dfa_bpfclosedate,
                                    dfa_onetimedeductionamount = objClaim.dfa_onetimedeductionamount,
                                    dfa_paidclaimamount = objClaim.dfa_paidclaimamount,
-                                   dfa_decisioncopy = objClaim.dfa_decisioncopy
+                                   dfa_decisioncopy = objClaim.dfa_decisioncopy,
                                }).AsEnumerable().OrderByDescending(m => m.createdon);
 
                 return lstClaims;
