@@ -12,16 +12,16 @@ import {
 } from '../api/models';
 import { ConfigurationService } from '../api/services';
 import { EnvironmentInformation } from '../model/environment-information.model';
+import * as globalConst from '../services/globalConstants';
 import { AlertService } from './alert.service';
 import { CacheService } from './cache.service';
-import * as globalConst from '../services/globalConstants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfigService {
   public environmentBanner: EnvironmentInformation;
-  private configurationGetEnvironmentInfoPath = 'assets/env/info.json';
+  private configurationGetEnvironmentInfoPath: string;
 
   public get configuration(): Configuration {
     return JSON.parse(this.cacheService.get('configuration'));
@@ -37,7 +37,17 @@ export class ConfigService {
     public http: HttpClient,
     public alertService: AlertService,
     @Inject(APP_BASE_HREF) public baseHref: string
-  ) {}
+  ) {
+    // Set path based on hostname
+    if (
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1'
+    ) {
+      this.configurationGetEnvironmentInfoPath = 'assets/env/info.json';
+    } else {
+      this.configurationGetEnvironmentInfoPath = 'env/info.json';
+    }
+  }
 
   public async loadConfig(): Promise<Configuration> {
     if (this.configuration !== null) {
@@ -131,8 +141,8 @@ export class ConfigService {
   }
 
   public getEnvironment(): Observable<EnvironmentInformation> {
-    const envUrl = this.configurationGetEnvironmentInfoPath
-    return this.http.get<EnvironmentInformation>(envUrl);
+    return this.http.get<EnvironmentInformation>(
+      this.configurationGetEnvironmentInfoPath
+    );
   }
 }
-
