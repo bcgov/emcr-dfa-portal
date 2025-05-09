@@ -213,6 +213,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
 
       this.attachmentsService.attachmentUpsertDeleteClaimAttachment({ body: fileUpload }).subscribe({
         next: (fileUploadId) => {
+          console.info("File Upload ID: " + fileUploadId);
           fileUpload.id = fileUploadId;
           if (fileUploads) fileUploads.push(fileUpload);
           else fileUploads = [ fileUpload ];
@@ -253,6 +254,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
     if (fileUploads?.filter(x => x.requiredDocumentType === fileUpload.requiredDocumentType).length > 0) {
       this.attachmentsService.attachmentUpsertDeleteClaimAttachment({ body: fileUpload }).subscribe({
         next: (fileUploadId) => {
+          console.info("File Upload ID: " + fileUploadId);
           fileUpload.id = fileUploadId;
           let requiredDocumentTypeFoundIndex = fileUploads.findIndex(x => x.requiredDocumentType === fileUpload.requiredDocumentType);
           fileUploads[requiredDocumentTypeFoundIndex] = fileUpload;
@@ -270,6 +272,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
     } else {
       this.attachmentsService.attachmentUpsertDeleteClaimAttachment({body: fileUpload }).subscribe({
         next: (fileUploadId) => {
+          console.info("File Upload ID: " + fileUploadId);
           fileUpload.id = fileUploadId;
           if (fileUploads) fileUploads.push(fileUpload);
           else fileUploads = [fileUpload];
@@ -332,6 +335,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
       let fileUploads = this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').value;
       let foundIndex = fileUploads.findIndex(x => x.requiredDocumentType === element.requiredDocumentType);
       element.fileData = element?.fileData?.substring(element?.fileData?.indexOf(',') + 1) // to allow upload as byte array
+      console.info("File to delete: " + element);
       this.attachmentsService.attachmentUpsertDeleteClaimAttachment({body: element}).subscribe({
        next: (result) => {
          fileUploads.splice(foundIndex, 1);
