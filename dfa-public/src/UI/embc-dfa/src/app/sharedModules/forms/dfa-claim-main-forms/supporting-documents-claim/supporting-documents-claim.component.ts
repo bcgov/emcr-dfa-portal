@@ -208,6 +208,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
       //let project = this.dfaProjectMainDataService.createDFAProjectMainDTO();
       //this.dfaProjectMainMapping.mapDFAProjectMain(project);
       fileUpload.claimId = this.dfaClaimMainDataService.getClaimId();
+      console.info("Claim ID: " + fileUpload.claimId);
       fileUpload.requiredDocumentType = null;
       this.isLoading = true;
 
@@ -251,6 +252,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
 
     fileUpload.fileData = fileUpload?.fileData?.substring(fileUpload?.fileData?.indexOf(',') + 1) // to allow upload as byte array
     fileUpload.claimId = this.dfaClaimMainDataService.getClaimId();
+    console.info("Claim ID: " + fileUpload.claimId);
     if (fileUploads?.filter(x => x.requiredDocumentType === fileUpload.requiredDocumentType).length > 0) {
       this.attachmentsService.attachmentUpsertDeleteClaimAttachment({ body: fileUpload }).subscribe({
         next: (fileUploadId) => {
@@ -277,8 +279,6 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
           if (fileUploads) fileUploads.push(fileUpload);
           else fileUploads = [fileUpload];
           this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').setValue(fileUploads);
-          //if (fileUpload.requiredDocumentType == Object.keys(this.RequiredDocumentTypes)[Object.values(this.RequiredDocumentTypes).indexOf(this.RequiredDocumentTypes.TenancyAgreement)])
-          //  this.supportingDocumentsForm.get('hasCopyOfARentalAgreementOrLease').setValue(true);
            // Reset the file upload fields
           this.formCreationService.fileUploadsClaimForm.value.get(claimFileUploadFormGroup).reset();
           this.isLoading = false;
@@ -320,7 +320,6 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
         data: {
           content: message
         },
-        // height: '250px',
         width: '350px',
         disableClose: true
       });
@@ -331,6 +330,8 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
     (element.requiredDocumentType == "Identification" ? this.fileUploadForm :
     (element.requiredDocumentType == "TenancyAgreement" ? this.fileUploadForm : null)));
     element.deleteFlag = true;
+    element.claimId = this.dfaClaimMainDataService.getClaimId();
+    console.info("Claim ID: " + element.claimId);
     if (form != null) {
       let fileUploads = this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').value;
       let foundIndex = fileUploads.findIndex(x => x.requiredDocumentType === element.requiredDocumentType);
@@ -388,10 +389,6 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
          document.location.href = 'https://dfa.gov.bc.ca/error.html';
        }
       });
-    //} else if (element.fileType === Object.keys(this.FileCategories)[Object.values(this.FileCategories).indexOf(this.FileCategories.)]) {
-    //  this.dfaApplicationMainService.deleteDamagePhoto.emit(element);
-    //} else if (element.fileType === this.FileCategories.Cleanup) {
-    //  this.dfaApplicationMainService.deleteCleanupLog.emit(element);
     } else {
       let fileUploads = this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').value;
       let index = fileUploads?.indexOf(element);
@@ -401,8 +398,6 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
        next: (result) => {
          fileUploads[index] = element;
          this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').setValue(fileUploads);
-         //if (fileUploads?.filter(x => x.requiredDocumentType == Object.keys(this.RequiredDocumentTypes)[Object.values(this.RequiredDocumentTypes).indexOf(this.RequiredDocumentTypes.TenancyAgreement)])?.length == 0)
-         //  this.supportingDocumentsForm.get('hasCopyOfARentalAgreementOrLease').setValue(false);
          if (this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').value.length === 0) {
            this.fileUploadForm
              .get('addNewFileUploadIndicator')
