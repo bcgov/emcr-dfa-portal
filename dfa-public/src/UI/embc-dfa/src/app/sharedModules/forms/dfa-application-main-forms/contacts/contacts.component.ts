@@ -418,12 +418,26 @@ export default class ContactsComponent implements OnInit, OnDestroy {
                 .subscribe({
                   next: (contact) => {
                     if (contact) {
+                      // Update the data service
+                      this.dfaApplicationMainDataService.contacts = {
+                        ...this.dfaApplicationMainDataService.contacts,
+                        pcCellPhone: contact.pcCellPhone,
+                        pcJobTitle: contact.pcJobTitle,
+                        pcNotes: contact.pcNotes
+                      };
+                      // Update the form
                       this.contactsForm.patchValue({
                         pcCellPhone: contact.pcCellPhone,
                         pcJobTitle: contact.pcJobTitle,
                         pcNotes: contact.pcNotes
                       });
                     } else {
+                      this.dfaApplicationMainDataService.contacts = {
+                        ...this.dfaApplicationMainDataService.contacts,
+                        pcCellPhone: '',
+                        pcJobTitle: '',
+                        pcNotes: ''
+                      };
                       this.contactsForm.patchValue({
                         pcCellPhone: '',
                         pcJobTitle: '',

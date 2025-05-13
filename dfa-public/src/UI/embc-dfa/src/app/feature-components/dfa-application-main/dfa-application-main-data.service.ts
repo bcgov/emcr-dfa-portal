@@ -11,7 +11,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class DFAApplicationMainDataService {
   private _damagedPropertyAddress: DamagedPropertyAddress;
   private _applicationDetails: ApplicationDetails;
-  private _contacts: Contacts;
+  private _contacts$ = new BehaviorSubject<Contacts>(null);
   private _cleanUpLog: CleanUpLog;
   private _supportingDocuments: SupportingDocuments;
   private _signAndSubmit: SignAndSubmit;
@@ -157,13 +157,16 @@ export class DFAApplicationMainDataService {
     this._applicationDetails = value;
   }
 
-  // 2024-09-03 EMCRI-663 waynezen; new Contacts form
+  public get contacts$() {
+    return this._contacts$.asObservable();
+  }
+
   public get contacts(): Contacts {
-    return this._contacts;
+    return this._contacts$.value;
   }
 
   public set contacts(value: Contacts) {
-    this._contacts = value;
+    this._contacts$.next(value);
   }
 
   /* EMCRI-1066: Authorized Representative */
@@ -209,7 +212,6 @@ export class DFAApplicationMainDataService {
     if (this._applicationId === null || this._applicationId === undefined) {
       this._applicationId = this.cacheService.get('applicationId');
     }
-
     return this._applicationId;
   }
 
@@ -286,14 +288,18 @@ export class DFAApplicationMainDataService {
 
   public setCanadaPostVerified(verifiedornot: string) : void {
 
-    this._contacts.isDamagedAddressVerified = verifiedornot;
+    const contacts = this._contacts$.value;
+    if (contacts) {
+      contacts.isDamagedAddressVerified = verifiedornot;
+      this._contacts$.next(contacts);
+    }
     this.canadaPostVerified.emit(verifiedornot);
   }
 
    public createDFAApplicationMainDTO(): DfaApplicationMain {
 
     // 2024-09-16 EMCRI-663 waynezen; assign non-homogeneous fields to Contacts form
-    let primaryContact: ApplicationContacts = this._contacts;
+    let primaryContact: ApplicationContacts = this._contacts$.value;
     return {
       id: this._applicationId,
       applicationDetails: this._applicationDetails,
