@@ -28,7 +28,8 @@ namespace EMBC.DFA.API.Controllers
         private readonly IConfigurationHandler handler;
         private readonly ILogger logger;
 
-        private static readonly int MAXFILESIZE = 104857600;
+        // Max file upload in bytes
+        private const int MAXFILESIZE = 100 * 1_048_576; // MB
 
         public AttachmentController(
             IConfiguration configuration,
@@ -55,7 +56,7 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [RequestSizeLimit(104857600)]
+        [RequestSizeLimit(MAXFILESIZE)]
         public async Task<ActionResult<string>> UpsertDeleteAttachment(FileUpload fileUpload)
         {
             if (fileUpload.fileData == null && fileUpload.deleteFlag == false) return BadRequest("FileUpload data cannot be empty.");
@@ -88,9 +89,10 @@ namespace EMBC.DFA.API.Controllers
                 }
                 else
                 {
+                    logger.LogInformation("Upload S3 attachments dfa_appapplication");
                     if (fileUpload.fileSize >= MAXFILESIZE)
                     {
-                        throw new Exception("File size exceeds 100MB limit");
+                        throw new Exception($"File size exceeds {MAXFILESIZE / 1_048_576.0:F2}MB limit");
                     }
 
                     var submissionEntity = mapper.Map<S3SubmissionEntity>(fileUpload);
@@ -107,25 +109,16 @@ namespace EMBC.DFA.API.Controllers
                         project : dfa_project
                         recoveryClaim : dfa_recoveryclaim */
                     submissionEntity.RegardingEntityLookUpFieldName = "dfa_appapplication";
-                    string result = "Submitted";
 
                     try
                     {
-                        result = await handler.HandleS3FileUploadAsync(submissionEntity);
+                        var result = await handler.HandleS3FileUploadAsync(submissionEntity);
+                        return Ok(result);
                     }
                     catch (Exception ex)
                     {
-                        error = true;
-                        logger.LogError(ex, "Error uploading file");
-                    }
-
-                    if (error)
-                    {
-                        return StatusCode(500, "Error uploading file");
-                    }
-                    else
-                    {
-                        return Ok(result);
+                        logger.LogError(ex, "Failed to upload file to S3.");
+                        return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while uploading file.");
                     }
                 }
             }

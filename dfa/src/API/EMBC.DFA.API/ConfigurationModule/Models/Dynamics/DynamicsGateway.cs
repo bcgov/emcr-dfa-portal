@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
@@ -698,21 +699,48 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             }
         }
 
+        // TODO this method should be used to parse all responses from api.ExecuteAction(), see InsertS3DocumentAsync() for usage
+        public async Task<Dictionary<string, object>> ExecuteActionAsync(
+            string actionName,
+            object data,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var response = await api.ExecuteAction(actionName, data);
+
+                if (response is ExpandoObject expando)
+                {
+                    return new Dictionary<string, object>((IDictionary<string, object>)expando);
+                }
+
+                throw new InvalidCastException("Expected ExpandoObject in ExecuteActionAsync response.");
+            }
+            catch (Exception ex)
+            {
+                // Add more context to the error
+                throw new Exception($"Error executing CRM action '{actionName}': {ex.Message}", ex);
+            }
+        }
+
         public async Task<string> InsertS3DocumentAsync(S3SubmissionEntity submission)
         {
             try
             {
-                var result = await api.ExecuteAction("dfa_UploadDocumentToS3andCreateDocumentMetadata", submission);
+                // Call ExecuteActionAsync and get the result as a dictionary
+                var result = await ExecuteActionAsync("dfa_UploadDocumentToS3andCreateDocumentMetadata", submission);
 
-                if (result != null)
+                // Look for the "DocumentMetadataId" key and return its value if found
+                if (result.TryGetValue("DocumentMetadataId", out var documentMetadataId) &&
+                    documentMetadataId != null)
                 {
-                    return result.Where(m => m.Key == "DocumentMetadataId") != null ? result.Where(m => m.Key == "DocumentMetadataId").ToList()[0].Value?.ToString() : string.Empty;
+                    return documentMetadataId.ToString();
                 }
                 return "Submitted";
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to insert S3 document {ex.Message}", ex);
+                throw new Exception($"Failed to insert S3 document: {ex.Message}", ex);
             }
         }
 

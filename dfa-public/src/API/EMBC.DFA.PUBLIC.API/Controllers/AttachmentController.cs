@@ -20,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Namotion.Reflection;
 using Org.BouncyCastle.Asn1.Ocsp;
+using Microsoft.Extensions.Logging;
 using Pipelines.Sockets.Unofficial.Arenas;
 
 namespace EMBC.DFA.API.Controllers
@@ -33,12 +34,15 @@ namespace EMBC.DFA.API.Controllers
         private readonly IHostEnvironment env;
         private readonly IMapper mapper;
         private readonly IConfigurationHandler handler;
+
+        private readonly ILogger logger;
         // 2024-08-15 EMCRI-595 waynezen; BCeID Authentication
         private readonly IUserService userService;
         private readonly IS3Provider s3Provider;
         private readonly ErrorParser errorParser;
 
-        private static readonly int MAXFILESIZE = 104857600;
+        // Max file upload in bytes
+        private const int MAXFILESIZE = 100 * 1_048_576;   // MB
 
         public AttachmentController(
             IConfiguration configuration,
@@ -46,7 +50,8 @@ namespace EMBC.DFA.API.Controllers
             IMapper mapper,
             IConfigurationHandler handler,
             IUserService userService,
-            IS3Provider s3Provider)
+            IS3Provider s3Provider,
+            ILoggerFactory factory)
         {
             this.configuration = configuration;
             this.env = env;
@@ -55,6 +60,7 @@ namespace EMBC.DFA.API.Controllers
             this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
             this.s3Provider = s3Provider;
             this.errorParser = new ErrorParser();
+            logger = factory.CreateLogger<AttachmentController>();
         }
 
         private string currentUserId => userService.GetBCeIDBusinessId();
@@ -101,7 +107,7 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [RequestSizeLimit(104857600)]
+        [RequestSizeLimit(MAXFILESIZE)]
         public async Task<ActionResult<string>> UpsertDeleteProjectAttachment(FileUpload fileUpload)
         {
             if (fileUpload.fileData == null && fileUpload.deleteFlag == false) return BadRequest("FileUpload data cannot be empty.");
@@ -123,9 +129,10 @@ namespace EMBC.DFA.API.Controllers
                 }
                 else
                 {
+                    logger.LogInformation("Upload S3 attachments dfa_project");
                     if (fileUpload.fileSize >= MAXFILESIZE)
                     {
-                        throw new Exception("File size exceeds 100MB limit");
+                        throw new Exception($"File size exceeds {MAXFILESIZE / 1_048_576.0:F2}MB limit");
                     }
 
                     var submissionEntity = mapper.Map<S3SubmissionEntity>(fileUpload);
@@ -143,8 +150,16 @@ namespace EMBC.DFA.API.Controllers
                         recoveryClaim : dfa_recoveryclaim */
                     submissionEntity.RegardingEntityLookUpFieldName = "dfa_project";
 
-                    var result = await handler.HandleS3FileUploadAsync(submissionEntity);
-                    return Ok(result);
+                    try
+                    {
+                        var result = await handler.HandleS3FileUploadAsync(submissionEntity);
+                        return Ok(result);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "Failed to upload file to S3.");
+                        return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while uploading file.");
+                    }
                 }
             }
             else
@@ -183,7 +198,7 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [RequestSizeLimit(104857600)]
+        [RequestSizeLimit(MAXFILESIZE)]
         public async Task<ActionResult<string>> UpsertDeleteClaimAttachment(FileUploadClaim fileUpload)
         {
             if (fileUpload.fileData == null && fileUpload.deleteFlag == false) return BadRequest("FileUpload data cannot be empty.");
@@ -205,9 +220,10 @@ namespace EMBC.DFA.API.Controllers
                 }
                 else
                 {
+                    logger.LogInformation("Upload S3 attachments dfa_projectclaim");
                     if (fileUpload.fileSize >= MAXFILESIZE)
                     {
-                        throw new Exception("File size exceeds 100MB limit");
+                        throw new Exception($"File size exceeds {MAXFILESIZE / 1_048_576.0:F2}MB limit");
                     }
 
                     var submissionEntity = mapper.Map<S3SubmissionEntity>(fileUpload);
@@ -225,8 +241,16 @@ namespace EMBC.DFA.API.Controllers
                         recoveryClaim : dfa_recoveryclaim */
                     submissionEntity.RegardingEntityLookUpFieldName = "dfa_recoveryclaim";
 
-                    var result = await handler.HandleS3FileUploadAsync(submissionEntity);
-                    return Ok(result);
+                    try
+                    {
+                        var result = await handler.HandleS3FileUploadAsync(submissionEntity);
+                        return Ok(result);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "Failed to upload file to S3.");
+                        return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while uploading file.");
+                    }
                 }
             }
             else
