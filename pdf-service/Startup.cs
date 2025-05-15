@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -11,17 +9,14 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 using System;
 using HealthChecks.UI.Client;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
 using pdfservice.Utils;
-using pdfservice.Controllers;
 
 namespace pdfservice
 {
@@ -53,20 +48,15 @@ namespace pdfservice
             services.AddControllers(config =>
             {
                 config.EnableEndpointRouting = false;
-                if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
-                {
-                    var policy = new AuthorizationPolicyBuilder()
-                                 .RequireAuthenticatedUser()
-                                 .Build();
-                    config.Filters.Add(new AuthorizeFilter(policy));
-                }
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .AddAuthenticationSchemes("jwt")
+                    .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
             });
 
-            // Other ConfigureServices() code...
-
             services.AddSwaggerGen(c =>
-            {
-                
+            {            
                 c.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["controller"]}_{e.HttpMethod}");
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "JAG LCRB PDF Service", Version = "v1" });
                 c.ParameterFilter<AutoRestParameterFilter>();
@@ -100,26 +90,8 @@ namespace pdfservice
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultTokenProviders();
 
-            if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
-            {
-                // Configure JWT authentication
-                services.AddAuthentication(o =>
-                {
-                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                }).AddJwtBearer(o =>
-                {
-                    o.SaveToken = true;
-                    o.RequireHttpsMetadata = false;
-                    o.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        //    RequireExpirationTime = false,
-                        ValidIssuer = Configuration["JWT_VALID_ISSUER"],
-                        ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
-                    };
-                });
-            }
+            services.AddAuthentication(Configuration);
+            services.AddAuthorization();
 
             // health checks.
             services.AddHealthChecks();
@@ -159,11 +131,8 @@ namespace pdfservice
                 });
             }
 
-            if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
-            {
-                _logger.LogInformation($"PDF-Service startup: JWT_TOKEN_KEY is not null; enabling Authentication");
-                app.UseAuthentication();
-            }
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseMvc();
             
