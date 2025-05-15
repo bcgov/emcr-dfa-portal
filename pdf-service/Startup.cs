@@ -87,8 +87,8 @@ namespace pdfservice
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication(Configuration);
-            services.AddAuthorization();
+            services.AddSsoAuthentication(Configuration);
+            services.AddSsoAuthorization();
 
             // health checks.
             services.AddHealthChecks();

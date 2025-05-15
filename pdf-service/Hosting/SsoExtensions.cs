@@ -21,7 +21,7 @@ namespace pdfservice;
 
 public static class SsoExtensions
 {
-    public static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddSsoAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication()
             .AddJwtBearer("jwt", options =>
@@ -37,20 +37,20 @@ public static class SsoExtensions
                     {
                         await Task.CompletedTask;
                         var logger = ctx.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                        var userId = ctx.Principal.FindFirst("preferred_username").Value;
-                        //using (logger.PushProperty("Security", "True"))
-                        //{
+                        var userId = ctx.Principal.FindFirst(ClaimTypes.UserId).Value;
+                        using (logger.PushProperty("Security", "True"))
+                        {
                             logger.LogInformation($"JWT token validated. UserId: {userId}");
-                        //}
+                        }
                     },
                     OnAuthenticationFailed = async ctx =>
                     {
                         await Task.CompletedTask;
                         var logger = ctx.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                        //using (logger.PushProperty("Security", "True"))
-                        //{
+                        using (logger.PushProperty("Security", "True"))
+                        {
                             logger.LogWarning("JWT authentication failed: {0}", $"jwt:authority={options.Authority}");
-                        //}
+                        }
                     }
                 };
             });
@@ -66,7 +66,7 @@ public static class SsoExtensions
             .Build();  
     }
 
-    public static IServiceCollection AddAuthorization(this IServiceCollection services)
+    public static IServiceCollection AddSsoAuthorization(this IServiceCollection services)
     {
         services.AddAuthorization(options =>
         {
@@ -76,4 +76,9 @@ public static class SsoExtensions
 
         return services;
     }
+}
+
+public class ClaimTypes
+{
+    public const string UserId = "preferred_username";
 }
