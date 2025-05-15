@@ -48,10 +48,7 @@ namespace pdfservice
             services.AddControllers(config =>
             {
                 config.EnableEndpointRouting = false;
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .AddAuthenticationSchemes("jwt")
-                    .Build();
+                var policy = SsoExtensions.GetPolicy();
                 config.Filters.Add(new AuthorizeFilter(policy));
             });
 
