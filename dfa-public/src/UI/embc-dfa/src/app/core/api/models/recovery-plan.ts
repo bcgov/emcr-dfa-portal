@@ -2,6 +2,8 @@
 /* eslint-disable */
 import { ProjectStageOptionSet } from './project-stage-option-set';
 export interface RecoveryPlan {
+  advancedPaymentsBalance?: null | number;
+  advancedPaymentsMade?: null | number;
   approvedAmendedProjectCost?: null | number;
   approvedCost?: null | number;
   approvedTotal?: null | number;

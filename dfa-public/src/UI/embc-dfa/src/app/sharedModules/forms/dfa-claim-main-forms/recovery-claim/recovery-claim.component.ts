@@ -222,6 +222,7 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
     this.recoveryClaimForm.controls.approvedReimbursement.disable();
     this.recoveryClaimForm.controls.eligiblePayable.disable();
     this.recoveryClaimForm.controls.paidClaimAmount.disable();
+    this.recoveryClaimForm.controls.advancedDrawdownAmount.disable();
     this.recoveryClaimForm.controls.paidClaimDate.disable();
   }
 

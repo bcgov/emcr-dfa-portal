@@ -2,6 +2,7 @@
 /* eslint-disable */
 import { ClaimStatusBar } from './claim-status-bar';
 export interface CurrentClaim {
+  advancedDrawdownAmount?: string;
   applicationId?: string;
   approvedClaimTotal?: string;
   approvedReimbursePercent?: string;

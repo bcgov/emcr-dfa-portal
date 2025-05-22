@@ -605,6 +605,9 @@ namespace EMBC.DFA.API.Controllers
         public string? projectTypeOther { get; set; }
         public string? createdDate { get; set; }
         public string? submittedDate { get; set; }
+        /* D4P-112 */
+        public decimal? advancedPaymentsMade { get; set; }
+        public decimal? advancedPaymentsBalance { get; set; }
 
     }
 
@@ -645,6 +648,8 @@ namespace EMBC.DFA.API.Controllers
         public string? stage { get; set; }
         public string? status { get; set; }
         public string? claimDecision { get; set; }
+        /* D4P-112 */
+        public string? advancedDrawdownAmount { get; set; }
     }
 
     public class Invoice

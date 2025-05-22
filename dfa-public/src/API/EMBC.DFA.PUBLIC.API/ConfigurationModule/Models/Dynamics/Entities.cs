@@ -316,6 +316,9 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_projecttypeother { get; set; }
         public DateTime? createdon { get; set; }
         public DateTime? dfa_projectsubmitteddate { get; set; }
+        /* D4P-112 */
+        public decimal? dfa_totaladvancedpaymentamount { get; set; }
+        public decimal? dfa_advancedpaymentbalance { get; set; }
     }
 
     public class dfa_claim_retrieve
@@ -339,9 +342,9 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_onetimedeductionamount { get; set; }
         public string? dfa_claimbpfstages { get; set; }
         public string? dfa_claimbpfsubstages { get; set; }
-
         public string? dfa_decisioncopy { get; set; }
-
+        /* D4P-112 */
+        public string? dfa_advancepaymentamount { get; set; }
     }
 
     public class dfa_appapplicationmain_retrieve
@@ -1001,6 +1004,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_onetimedeductionamount { get; set; }
         public string? dfa_paidclaimamount { get; set; }
         public string? dfa_decisioncopy { get; set; }
+        /* D4P-112 */
+        public string? dfa_advancepaymentamount { get; set; }
     }
 
     public class dfa_recoveryinvoice

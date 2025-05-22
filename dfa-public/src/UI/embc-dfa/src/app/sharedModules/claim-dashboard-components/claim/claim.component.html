@@ -94,13 +94,17 @@
     </div>-->
     <mat-card class="mat-elevation-z4 content" [ngStyle]="{'border-left': '20px solid ' + applItem.statusColor}" >
       <div style="border-bottom: 1px solid lightgrey; padding-bottom: 15px; display: flex;">
-        <div class="col-md-5">
+        <div class="col-md-4">
           <span><b>Claim Number - </b></span>
           <span>{{applItem.claimNumber}}</span>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <span><b>Submitted Date - </b></span>
           <span>{{applItem.submittedDate}}</span>
+        </div>
+        <div class="col-md-2">
+          <span><b>Paid Date - </b></span>
+          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.paidClaimDate : ""}}</span>
         </div>
         <div class="col-md-3" style="display: flex; justify-content: flex-end">
           <button
@@ -181,11 +185,12 @@
         <div class="col-md-2">
           <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.approvedReimbursePercent : ""}}</span>
         </div>
+
         <div class="col-md-2">
-          <span><b>Paid Claim Date -</b></span>
+          <span><b>Advanced Drawdown Amount -</b></span>
         </div>
         <div class="col-md-2">
-          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.paidClaimDate : ""}}</span>
+          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.advancedDrawdownAmount : ""}}</span>
         </div>
 
       </div>

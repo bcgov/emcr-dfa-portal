@@ -150,6 +150,9 @@ export class RecoveryPlan {
   submittedDate?: null | string;
   projectType?: null | string;
   projectTypeOther?: null | string;
+  /* D4P-112 */
+  advancedPaymentsMade?: null | number;
+  advancedPaymentsBalance?: null | number;
 
   constructor(
     sitelocationdamageFromDate?: null | string,
@@ -181,6 +184,8 @@ export class RecoveryPlan {
     submittedDate?: null | string,
     projectType?: null | string,
     projectTypeOther?: null | string,
+    advancedPaymentsMade?: null | number,
+    advancedPaymentsBalance?: null | number
   ) { }
 }
 
@@ -215,6 +220,9 @@ export class RecoveryPlanForm {
   submittedDate = new UntypedFormControl();
   projectType =new UntypedFormControl();
   projectTypeOther = new UntypedFormControl();
+  /* D4P-112 */
+  advancedPaymentsMade = new UntypedFormControl();
+  advancedPaymentsBalance = new UntypedFormControl();
 
   constructor(
     recoveryPlan: RecoveryPlan,
@@ -361,6 +369,18 @@ export class RecoveryPlanForm {
     this.projectTypeOther.setValidators([customValidator
       .isRequired(this.projectTypeOther)
       .bind(customValidator)]);
+      
+    /* D4P-112 */
+    if (recoveryPlan.advancedPaymentsMade) {
+      this.advancedPaymentsMade.setValue(recoveryPlan.advancedPaymentsMade);
+    }
+    this.advancedPaymentsMade.setValidators(null);
+
+    if (recoveryPlan.advancedPaymentsBalance) {
+      this.advancedPaymentsBalance.setValue(recoveryPlan.advancedPaymentsBalance);
+    }
+    this.advancedPaymentsBalance.setValidators(null);
+
   }
 }
 

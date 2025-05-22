@@ -49,7 +49,7 @@ export class DFAClaimMainMappingService {
           totalInvoicesBeingClaimed: dfaClaimMain.claim.totalInvoicesBeingClaimed,
           isFirstClaimApproved: dfaClaimMain.claim.isFirstClaimApproved === true ? 'true' : (dfaClaimMain.claim.isFirstClaimApproved === false ? 'false' : null),
           isThisFinalClaim: dfaClaimMain.claim.isThisFinalClaim === true ? 'true' : (dfaClaimMain.claim.isThisFinalClaim === false ? 'false' : null),
-         
+          advancedDrawdownAmount: dfaClaimMain.claim.advancedDrawdownAmount
         });
         formGroup = claim;
       });

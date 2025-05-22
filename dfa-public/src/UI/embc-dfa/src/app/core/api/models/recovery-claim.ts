@@ -3,6 +3,7 @@
 import { ClaimStageOptionSet } from './claim-stage-option-set';
 import { Invoice } from './invoice';
 export interface RecoveryClaim {
+  advancedDrawdownAmount?: null | string;
   approvedClaimTotal?: null | string;
   approvedReimbursement?: null | string;
   claimDecision?: null | string;

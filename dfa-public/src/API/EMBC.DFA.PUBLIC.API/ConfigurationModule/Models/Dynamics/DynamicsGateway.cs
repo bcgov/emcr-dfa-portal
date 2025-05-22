@@ -1096,8 +1096,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     "dfa_projectid", "dfa_projectbusinessprocesssubstages",
                     "dfa_descriptionofdamage", "dfa_projectapproveddate", "dfa_18monthdeadline",
                     "dfa_approvedcost", "dfa_approvedamendedprojectcost", "dfa_claimtotal", "dfa_approvedtotal","dfa_paidprojectamount",
-                    "dfa_emcrapprovalcomments", "dfa_projectdecision", "dfa_projecttype", "dfa_projecttypeother","createdon", "dfa_projectsubmitteddate"
-
+                    "dfa_emcrapprovalcomments", "dfa_projectdecision", "dfa_projecttype", "dfa_projecttypeother","createdon", "dfa_projectsubmitteddate",
+                    "dfa_totaladvancedpaymentamount", "dfa_advancedpaymentbalance"
                 },
                 Filter = $"dfa_projectid eq {projectId}"
             });
@@ -1294,7 +1294,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         "dfa_claimbpfstages", "dfa_claimbpfsubstages", "dfa_claimtotal",
                         "createdon", "dfa_costsharing", "dfa_eligiblepayable",
                         "dfa_bpfclosedate", "dfa_onetimedeductionamount",
-                        "dfa_paidclaimamount",  "dfa_decisioncopy"
+                        "dfa_paidclaimamount",  "dfa_decisioncopy",
+                        "dfa_advancepaymentamount"
                     },
                     Filter = $"_dfa_recoveryplanid_value eq {projectId}"
                 });
@@ -1324,6 +1325,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_onetimedeductionamount = objClaim.dfa_onetimedeductionamount,
                                    dfa_paidclaimamount = objClaim.dfa_paidclaimamount,
                                    dfa_decisioncopy = objClaim.dfa_decisioncopy,
+                                   dfa_advancepaymentamount = objClaim.dfa_advancepaymentamount
                                }).AsEnumerable().OrderByDescending(m => m.createdon);
 
                 return lstClaims;
@@ -1374,7 +1376,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         "dfa_finalclaim", "createdon", "dfa_claimreceivedbyemcrdate",
                         "dfa_totaleligiblegst", "dfa_totaloftotaleligible", "dfa_totalapproved", "dfa_lessfirst1000",
                         "dfa_costsharing", "dfa_eligiblepayable", "dfa_totalpaid", "dfa_claimpaiddate",
-                        "dfa_claimtotal", "dfa_paidclaimamount", "dfa_onetimedeductionamount", "dfa_claimbpfstages", "dfa_claimbpfsubstages", "dfa_decisioncopy"
+                        "dfa_claimtotal", "dfa_paidclaimamount", "dfa_onetimedeductionamount", "dfa_claimbpfstages", "dfa_claimbpfsubstages", "dfa_decisioncopy",
+                        "dfa_advancepaymentamount"
                     },
                     Filter = $"dfa_projectclaimid eq {claimId}"
                 });
@@ -1401,8 +1404,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_claimbpfstages = objApp.dfa_claimbpfstages,
                                    dfa_claimbpfsubstages = objApp.dfa_claimbpfsubstages,
                                    dfa_decisioncopy = objApp.dfa_decisioncopy,
-                                   dfa_onetimedeductionamount = objApp.dfa_onetimedeductionamount
-
+                                   dfa_onetimedeductionamount = objApp.dfa_onetimedeductionamount,
+                                   dfa_advancepaymentamount = objApp.dfa_advancepaymentamount
                                }).AsEnumerable().OrderByDescending(m => m.createdon);
 
                 return lstApps.FirstOrDefault();

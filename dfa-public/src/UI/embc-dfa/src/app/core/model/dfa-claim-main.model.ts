@@ -29,6 +29,7 @@ export class RecoveryClaim {
   eligiblePayable?: null | string;
   paidClaimAmount?: null | string;
   paidClaimDate?: null | string;
+  advancedDrawdownAmount?: null | string;
 
 
   constructor(
@@ -49,7 +50,8 @@ export class RecoveryClaim {
     approvedReimbursement?: null | string,
     eligiblePayable?: null | string,
     paidClaimAmount?: null | string,
-    paidClaimDate?: null | string
+    paidClaimDate?: null | string,
+    advancedDrawdownAmount?: null | string
   ) { }
 }
 
@@ -72,6 +74,7 @@ export class RecoveryClaimForm {
   eligiblePayable = new UntypedFormControl();
   paidClaimAmount = new UntypedFormControl();
   paidClaimDate = new UntypedFormControl();
+  advancedDrawdownAmount = new UntypedFormControl();
 
   constructor(
     recoveryClaim: RecoveryClaim,
@@ -206,6 +209,14 @@ export class RecoveryClaimForm {
       this.paidClaimDate.setValue(recoveryClaim.paidClaimDate);
     }
     this.paidClaimDate.setValidators(null);
+
+    if (recoveryClaim.advancedDrawdownAmount) {
+      this.advancedDrawdownAmount.setValue(recoveryClaim.advancedDrawdownAmount);
+    }
+    else{
+      this.advancedDrawdownAmount.setValue(0);
+    }
+    this.advancedDrawdownAmount.setValidators(null);
   }
 }
 

@@ -56,13 +56,8 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<CurrentClaim>>> GetDFAClaims(string projectId)
         {
-            //var userId = currentUserId;
-            //var profile = await handler.HandleGetUser(userId);
-            //if (profile == null) return NotFound(userId);
-            //var profileId = profile.Id;
             var lstClaims = await handler.HandleClaimList(projectId);
-            //lstClaims.Add(new CurrentClaim() {
-            //});
+
             foreach (var claim in lstClaims)
             {
                 claim.ApprovedReimbursePercent = FixDecimalPlaces(claim.ApprovedReimbursePercent);
@@ -71,6 +66,7 @@ namespace EMBC.DFA.API.Controllers
                 claim.EligiblePayable = FixDecimalPlaces(claim.EligiblePayable);
                 claim.PaidClaimAmount = FixDecimalPlaces(claim.PaidClaimAmount);
                 claim.ClaimTotal = FixDecimalPlaces(claim.ClaimTotal);
+                claim.AdvancedDrawdownAmount = FixDecimalPlaces(claim.AdvancedDrawdownAmount);
             }
 
             return Ok(lstClaims);
@@ -191,8 +187,9 @@ namespace EMBC.DFA.API.Controllers
         public bool IsHidden { get; set; } = true;
         public string StatusColor { get; set; }
         public string DateFileClosed { get; set; }
-
         public string ClaimDecision { get; set; }
+        /* D4P-112 */
+        public string AdvancedDrawdownAmount { get; set; }
     }
 
     public class ClaimStatusBar

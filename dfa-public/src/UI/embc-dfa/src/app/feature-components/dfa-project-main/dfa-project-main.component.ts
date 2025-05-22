@@ -324,6 +324,8 @@ export class DFAProjectMainComponent
         this.dfaProjectMainDataService.recoveryPlan.estimateCostIncludingTax = !this.form.get('estimateCostIncludingTax').value ? null : this.form.get('estimateCostIncludingTax').value;
         this.dfaProjectMainDataService.recoveryPlan.createdDate = this.form.get('createdDate').value;
         this.dfaProjectMainDataService.recoveryPlan.submittedDate = this.form.get('submittedDate').value;
+        this.dfaProjectMainDataService.recoveryPlan.advancedPaymentsMade = !this.form.get('advancedPaymentsMade').value ? null : this.form.get('advancedPaymentsMade').value;
+        this.dfaProjectMainDataService.recoveryPlan.advancedPaymentsBalance = !this.form.get('advancedPaymentsBalance').value ? null : this.form.get('advancedPaymentsBalance').value;
 
         break;
       default:
