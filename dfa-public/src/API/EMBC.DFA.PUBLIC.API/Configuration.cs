@@ -171,7 +171,7 @@ namespace EMBC.DFA.API
                      {
                          await Task.CompletedTask;
                          var logger = ctx.HttpContext.RequestServices.GetRequiredService<ITelemetryProvider>().Get<JwtBearerEvents>();
-                         logger.LogError(ctx?.Result?.Failure, "Introspection authantication failed");
+                         logger.LogError(ctx?.Result?.Failure, "Introspection authentication failed");
                      }
                  };
              })

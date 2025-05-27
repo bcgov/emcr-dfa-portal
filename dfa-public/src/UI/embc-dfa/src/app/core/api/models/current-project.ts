@@ -1,7 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
+import { CurrentProjectAppeal } from './current-project-appeal';
 import { ProjectStatusBar } from './project-status-bar';
 export interface CurrentProject {
+  appeals?: Array<CurrentProjectAppeal>;
   applicationId?: string;
   createdDate?: string;
   dateFileClosed?: string;
@@ -12,6 +14,7 @@ export interface CurrentProject {
   isClaimSubmission?: boolean;
   isErrorInStatus?: boolean;
   isHidden?: boolean;
+  projectApprovedDate?: string;
   projectDecision?: string;
   projectId?: string;
   projectName?: string;

@@ -306,6 +306,33 @@ export class DfaDashProjectComponent implements OnInit {
     this.router.navigate([urlPrj + applItem.projectId]);
   }
 
+  canAppeal(project: CurrentProject): boolean {
+    return project.projectDecision && (project.projectDecision.toLowerCase() === 'approved with exclusions' || project.projectDecision.toLowerCase() === 'ineligible')
+      && this.remainingDays(project) > 0;
+  }
+
+  remainingDays(project: CurrentProject): number {
+    const oneDay = 24 * 60 * 60 * 1000;       // milliseconds in a day
+    let endDateStr = project.projectDecision?.toLowerCase() === 'approved with exclusions'
+      ? project.projectApprovedDate
+      : project.dateFileClosed;
+    endDateStr = project.projectApprovedDate;
+    let endDate = new Date(endDateStr);
+    endDate.setDate(endDate.getDate() + 60);  // add 60 days
+    return Math.round((endDate.getTime() - new Date().getTime()) / oneDay);
+  }
+
+  appealButtonTitle(project: CurrentProject): string {
+    return this.remainingDays(project) < 0 ? 'The 60 day deadline has passed and eligibility of this project cannot be appealed.' : '';
+  }
+
+  appealButtonClass(project: CurrentProject): string {
+    return this.canAppeal(project) ? 'application-button' : 'disabled-button';
+  }
+
+  appealDecision(): void {
+    console.log("Appeal Decision");
+  }
 }
 
 export interface ProjectExtended extends CurrentProject {

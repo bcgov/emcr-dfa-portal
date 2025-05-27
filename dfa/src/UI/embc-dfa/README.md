@@ -5,7 +5,12 @@ Current angular version of the UI project is 19.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run the following commands to run local:
+```
+# forcing is not ideal, we should straighten out our mismatched dependencies
+npm install --force 
+npm run startlocal
+```
 
 ## Code scaffolding
 
