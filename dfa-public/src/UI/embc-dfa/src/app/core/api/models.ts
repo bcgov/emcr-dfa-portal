@@ -44,6 +44,7 @@ export { ClaimStageOptionSet } from './models/claim-stage-option-set';
 export { Invoice } from './models/invoice';
 export { CurrentProject } from './models/current-project';
 export { ProjectStatusBar } from './models/project-status-bar';
+export { CurrentProjectAppeal } from './models/current-project-appeal';
 export { CleanUpLogItem } from './models/clean-up-log-item';
 export { Configuration } from './models/configuration';
 export { OidcOptions } from './models/oidc-options';
