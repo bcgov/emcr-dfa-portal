@@ -1,0 +1,89 @@
+<mat-card
+  appearance="outlined"
+  class="card-align"
+  style="border: none"
+  [class.mat-elevation-z0]="true"
+>
+  <mat-card-content>
+    <form [formGroup]="appealReasonForm">
+      <ng-container>
+        <app-case-details [caseDetails]="caseDetails"></app-case-details>
+        <br />
+
+        <div class="row">
+          <div class="col-md-12">
+            <p class="sub-heading">Original Eligibility Decision</p>
+          </div>
+        </div>
+        <div class="row">
+          <p style="font-size: 15px">
+            Your application for DFA was determined to be ineligible for one or
+            more reasons outlined in your DFA ineligibility letter. To appeal an
+            eligibility determination, you must provide reasoning as to why you
+            believe your application should have been determined to be eligible.
+          </p>
+        </div>
+        <div class="row">
+          <p class="note" style="text-align: center">
+            <b
+              >Please ensure you have reviewed your ineligibility letter prior
+              to submitting an appeal.</b
+            >
+          </p>
+        </div>
+        <br />
+
+        <div class="row">
+          <div class="col-md-12">
+            <mat-label class="sub-heading">
+              Appeal Reason
+              <span style="color:red">*</span>
+            </mat-label>
+            <div class="appeal-description">
+              Please provide your appeal reasoning here. If you require more
+              space, you can provide it as a supporting document below. Any
+              supporting documentation you can provide in addition to the
+              reasoning is encouraged. Appeal staff may reach out to you if more
+              information is required.
+            </div>
+            <textarea
+              formControlName="reason"
+              rows="6"
+              maxlength="1000"
+              placeholder="Please provide reasoning for your appeal* (0/1000)"
+              class="form-control"
+            ></textarea>
+            <div class="char-count">
+              {{ appealReasonForm.get('reason').value?.length || 0 }}/1000
+            </div>
+            <div
+              class="error-message"
+              *ngIf="
+                appealReasonForm.get('reason').hasError('required') &&
+                appealReasonForm.get('reason').touched
+              "
+            >
+              Appeal Reason is required
+            </div>
+            <div
+              class="error-message"
+              *ngIf="appealReasonForm.get('reason').hasError('maxlength')"
+            >
+              Maximum 1000 characters allowed
+            </div>
+          </div>
+        </div>
+        <br />
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="add-docs-btn" (click)="addSupportingDocuments()">
+              <span class="plus-icon">+</span> Add Supporting Documents
+              (Optional)
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </form>
+  </mat-card-content>
+</mat-card>

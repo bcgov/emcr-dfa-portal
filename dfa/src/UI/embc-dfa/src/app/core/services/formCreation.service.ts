@@ -1,22 +1,59 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
+import { EventEmitter, Injectable } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { BehaviorSubject, Observable } from 'rxjs';
 import {
-  PersonDetailsForm,
-  PersonDetails,
-  ContactDetailsForm,
-  ContactDetails,
-  AddressForm,
+  AppealReason,
+  AppealReasonForm,
+  SignAndSubmit as AppealSignAndSubmit,
+  AppealSignAndSubmitForm
+} from '../model/dfa-appeals-main.model';
+import {
+  CleanUpLog,
+  CleanUpLogForm,
+  CleanUpLogItem,
+  CleanUpLogItemsForm,
+  DamagedPropertyAddress,
+  DamagedPropertyAddressForm,
+  DamagedRoom,
+  DamagedRoomsForm,
+  FileUpload,
+  FileUploadsForm,
+  FullTimeOccupant,
+  FullTimeOccupantsForm,
+  OtherContactsForm,
+  PropertyDamage,
+  PropertyDamageForm,
+  SecondaryApplicant,
+  SecondaryApplicantsForm,
+  SignAndSubmit,
+  SignAndSubmitForm,
+  SupportingDocuments,
+  SupportingDocumentsForm
+} from '../model/dfa-application-main.model';
+import {
+  ApplicationDetails,
+  ApplicationDetailsForm,
+  AppTypeInsurance,
+  AppTypeInsuranceForm,
+  Consent,
+  ConsentForm,
+  ProfileVerification,
+  ProfileVerificationForm
+} from '../model/dfa-application-start.model';
+import {
+  DfaPrescreening,
+  DfaPrescreeningForm
+} from '../model/dfa-prescreening.model';
+import {
   Address,
-  RestrictionForm,
+  AddressForm,
+  ContactDetails,
+  ContactDetailsForm,
+  PersonDetails,
+  PersonDetailsForm,
   Restriction,
+  RestrictionForm
 } from '../model/profile.model';
-import { AppTypeInsurance, AppTypeInsuranceForm, Consent, ConsentForm, ProfileVerification, ProfileVerificationForm, ApplicationDetails, ApplicationDetailsForm } from '../model/dfa-application-start.model';
-import { DfaPrescreening, DfaPrescreeningForm } from '../model/dfa-prescreening.model';
-import { InsuranceOption } from 'src/app/core/api/models';
-import { PropertyDamageForm, DamagedPropertyAddressForm, DamagedPropertyAddress, PropertyDamage, SignAndSubmit, SupportingDocuments, DamagedRoomsForm,
-  FullTimeOccupantsForm, SecondaryApplicantsForm, OtherContactsForm,
-  CleanUpLogForm, SignAndSubmitForm, SupportingDocumentsForm, CleanUpLog, CleanUpLogItemsForm, SecondaryApplicant, FileUploadsForm, FullTimeOccupant, OtherContact, CleanUpLogItem, FileUpload, DamagedRoom  } from '../model/dfa-application-main.model';
 import { CustomValidationService } from './customValidation.service';
 
 @Injectable({ providedIn: 'root' })
@@ -261,16 +298,52 @@ export class FormCreationService {
 
   signAndSubmitForm: BehaviorSubject<UntypedFormGroup | undefined> =
     new BehaviorSubject(
-      this.formBuilder.group(
-       new SignAndSubmitForm(
-         new SignAndSubmit(),
-         this.formBuilder
-       )
-     )
-   );
+      this.formBuilder.group({
+        applicantSignature: this.formBuilder.group({
+          signedName: ['', Validators.required],
+          signature: ['', Validators.required],
+          dateSigned: ['', Validators.required]
+        }, { updateOn: 'change' }),
+        secondaryApplicantSignature: this.formBuilder.group({
+          signedName: [''],
+          signature: [''],
+          dateSigned: ['']
+        }, { updateOn: 'change' })
+      })
+    );
 
   signAndSubmitForm$: Observable<UntypedFormGroup | undefined> =
     this.signAndSubmitForm.asObservable();
+
+  //Appeal Forms
+  appealReasonForm: BehaviorSubject<UntypedFormGroup | undefined> =
+    new BehaviorSubject(
+      this.formBuilder.group(
+        new AppealReasonForm(new AppealReason(), this.customValidator)
+      )
+    );
+
+  appealReasonForm$: Observable<UntypedFormGroup | undefined> =
+    this.appealReasonForm.asObservable();
+
+  AppealSignAndSubmitForm: BehaviorSubject<UntypedFormGroup | undefined> =
+    new BehaviorSubject(
+      this.formBuilder.group({
+        applicantSignature: this.formBuilder.group({
+          signedName: ['', [Validators.required]],
+          signature: ['', [Validators.required]],
+          dateSigned: ['', [Validators.required]]
+        }),
+        secondaryApplicantSignature: this.formBuilder.group({
+          signedName: [''],
+          signature: [''],
+          dateSigned: ['']
+        })
+      })
+    );
+
+  AppealSignAndSubmitForm$: Observable<UntypedFormGroup | undefined> =
+    this.AppealSignAndSubmitForm.asObservable();
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -281,7 +354,7 @@ export class FormCreationService {
     this.farmOptionChanged = new EventEmitter<any>();
     this.smallBusinessOptionChanged = new EventEmitter<any>();
     this.appTypeInsuranceFormValidityChange = new EventEmitter<string>();
-    this.signaturesChanged = new EventEmitter<UntypedFormGroup>;
+    this.signaturesChanged = new EventEmitter<UntypedFormGroup>();
   }
 
   getPersonalDetailsForm(): Observable<UntypedFormGroup> {
@@ -327,7 +400,6 @@ export class FormCreationService {
         new ContactDetailsForm(new ContactDetails(), this.customValidator)
       )
     );
-
   }
 
   getAppTypeInsuranceForm(): Observable<UntypedFormGroup> {
@@ -626,6 +698,39 @@ export class FormCreationService {
         new ApplicationDetailsForm(
           new ApplicationDetails()
         )
+      )
+    );
+  }
+
+  // Appeal forms
+  getAppealReasonForm(): Observable<UntypedFormGroup> {
+    return this.appealReasonForm$;
+  }
+
+  setAppealReasonForm(appealReasonForm: UntypedFormGroup): void {
+    this.appealReasonForm.next(appealReasonForm);
+  }
+
+  clearAppealReasonData(): void {
+    this.appealReasonForm.next(
+      this.formBuilder.group(
+        new AppealReasonForm(new AppealReason(), this.customValidator)
+      )
+    );
+  }
+
+  getAppealSignAndSubmitForm(): Observable<UntypedFormGroup> {
+    return this.AppealSignAndSubmitForm$;
+  }
+
+  setAppealSignAndSubmitForm(AppealSignAndSubmitForm: UntypedFormGroup): void {
+    this.AppealSignAndSubmitForm.next(AppealSignAndSubmitForm);
+  }
+
+  clearAppealSignAndSubmitData(): void {
+    this.AppealSignAndSubmitForm.next(
+      this.formBuilder.group(
+        new AppealSignAndSubmitForm(new AppealSignAndSubmit(), this.formBuilder)
       )
     );
   }

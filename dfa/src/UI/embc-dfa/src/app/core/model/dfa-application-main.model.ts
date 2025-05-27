@@ -2887,9 +2887,9 @@ export class SignAndSubmitForm {
     this.applicantSignature?.controls.signedName.setValue(signAndSubmit?.applicantSignature?.signedName);
 
     this.secondaryApplicantSignature = fb.group({
-      signature: null,
-      dateSigned: null,
-      signedName: null
+      signature: [null, Validators.required],
+      dateSigned: [null, Validators.required],
+      signedName: [null, Validators.required]
     });
     this.secondaryApplicantSignature?.controls.signature.setValue(signAndSubmit?.secondaryApplicantSignature?.signature);
     this.secondaryApplicantSignature?.controls.dateSigned.setValue(signAndSubmit?.secondaryApplicantSignature?.dateSigned);

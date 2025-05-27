@@ -1,4 +1,5 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { fromEvent } from 'rxjs';
 import { switchMap, takeUntil, pairwise } from 'rxjs/operators'
 import { SignatureBlock } from 'src/app/core/api/models';
@@ -20,6 +21,7 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
   @Input() initialDateSigned: string;
   @Input() isReadOnly: boolean;
   @Input() initialSignature: string;
+  @Input() signatureFormGroup: FormGroup;
   @Output() public signature: EventEmitter<SignatureBlock> = new EventEmitter<SignatureBlock>();
 
   private canvasEl: HTMLCanvasElement;
@@ -28,6 +30,12 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
 
   constructor() {
     this.signatureBlock = { signedName: null, dateSigned: null, signature: null};
+  }
+
+  ngOnInit() {
+    this.signatureFormGroup.get('signedName').valueChanges.subscribe(() => {
+      this.updateSignatureBlock();
+    });
   }
 
   ngAfterViewInit(): void {
@@ -42,22 +50,26 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges(event: SimpleChanges): void {
-    // reformat date from mm/dd/yyyy to yyyy-mm-dd
+    // Set initial dateSigned using the form group
     if (event["initialDateSigned"]?.currentValue) {
-      this.signatureBlock.dateSigned = new Date(event["initialDateSigned"].currentValue)?.toISOString();
-    } else { // default to today date
-      this.signatureBlock.dateSigned = new Date().toISOString();
+      // Try to parse as Date, fallback to today if invalid
+      const parsedDate = new Date(event["initialDateSigned"].currentValue);
+      this.signatureFormGroup.get('dateSigned')?.setValue(isNaN(parsedDate.getTime()) ? new Date() : parsedDate);
+    } else {
+      this.signatureFormGroup.get('dateSigned')?.setValue(new Date());
     }
 
+    // Set initial signedName using the form group
     const initialSignedName = event["initialSignedName"]?.currentValue;
-    if (initialSignedName && !this.signatureBlock.signedName) {
-      this.signatureBlock.signedName = initialSignedName;
+    if (initialSignedName && !this.signatureFormGroup.get('signedName')?.value) {
+      this.signatureFormGroup.get('signedName')?.setValue(initialSignedName);
     }
 
     // Draw signature
     const initialSignature = event["initialSignature"]?.currentValue;
     if (initialSignature && !this.signatureBlock.signature) {
       this.signatureBlock.signature = initialSignature;
+      this.signatureFormGroup.get('signature')?.setValue(initialSignature);
       const canvasEl: HTMLCanvasElement = this.canvas?.nativeElement;
       var ctxt = canvasEl?.getContext("2d");
       var background = new Image();
@@ -72,12 +84,17 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
   updateCanvas() {
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     this.signatureBlock.signature = canvasEl.toDataURL();
+    this.signatureFormGroup.get('signature')?.setValue(this.signatureBlock.signature);
     this.updateSignatureBlock();
   }
 
-  // emit changes to parent component
+  // emit changes to parent component directly from the form group
   updateSignatureBlock() {
-    this.signature.emit(this.signatureBlock);
+    this.signature.emit({
+      signedName: this.signatureFormGroup.get('signedName')?.value,
+      dateSigned: this.signatureFormGroup.get('dateSigned')?.value,
+      signature: this.signatureBlock.signature
+    });
   }
 
   // For touch drawing prevent scrolling of page with mouse button down within canvas

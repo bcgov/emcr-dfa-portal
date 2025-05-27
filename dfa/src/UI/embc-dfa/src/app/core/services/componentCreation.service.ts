@@ -171,6 +171,27 @@ export class ComponentCreationService {
 
   ];
 
+  dfaAppealComponents: Array<any> = [
+    {
+      component: 'appeal-reason',
+      nextButtonLabel: 'Next – Sign & Submit',
+      backButtonLabel: 'Cancel Appeal',
+      isLast: false,
+      loadWrapperButton: false,
+      lastStep: -2,
+      stepName: 'Appeal Reason'
+    },
+    {
+      component: 'sign-and-submit',
+      nextButtonLabel: 'Submit Appeal',
+      backButtonLabel: 'Go Back & Edit',
+      isLast: true,
+      loadWrapperButton: false,
+      lastStep: 0,
+      stepName: 'Sign & Submit'
+    }
+  ];
+
     getProfileComponents(): Observable<any> {
     const profile = new Observable((observer) => {
       observer.next(this.dynamicComponents);
@@ -210,6 +231,15 @@ export class ComponentCreationService {
     const componentArr: Array<ComponentMetaDataModel> =
       new Array<ComponentMetaDataModel>();
     for (const comp of this.dfaProjectMainComponents) {
+      componentArr.push(Object.assign(new ComponentMetaDataModel(), comp));
+    }
+    return componentArr;
+  }
+
+  createDFAAppealSteps(appealType: string): Array<ComponentMetaDataModel> {
+    const componentArr: Array<ComponentMetaDataModel> =
+      new Array<ComponentMetaDataModel>();
+    for (const comp of this.dfaAppealComponents) {
       componentArr.push(Object.assign(new ComponentMetaDataModel(), comp));
     }
     return componentArr;

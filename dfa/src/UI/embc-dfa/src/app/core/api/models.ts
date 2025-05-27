@@ -4,6 +4,8 @@
 
 export type { Address } from './models/address';
 export type { AddressDataConflict } from './models/address-data-conflict';
+export type { AppealModel } from './models/appeal-model';
+export type { AppealReasonModel } from './models/appeal-reason-model';
 export { ApplicantOption } from './models/applicant-option';
 export type { AppTypeInsurance } from './models/app-type-insurance';
 export type { AreaCommunity } from './models/area-community';
@@ -50,7 +52,9 @@ export { RoomType } from './models/room-type';
 export type { SecondaryApplicant } from './models/secondary-applicant';
 export { SecondaryApplicantTypeOption } from './models/secondary-applicant-type-option';
 export type { SignAndSubmit } from './models/sign-and-submit';
+export type { SignAndSubmitModel } from './models/sign-and-submit-model';
 export type { SignatureBlock } from './models/signature-block';
+export type { SignatureBlockModel } from './models/signature-block-model';
 export { SmallBusinessOption } from './models/small-business-option';
 export type { StatusBar } from './models/status-bar';
 export type { SupportingDocuments } from './models/supporting-documents';

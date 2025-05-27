@@ -129,18 +129,11 @@ export default class SignAndSubmitComponent implements OnInit, OnDestroy {
     return this.signAndSubmitForm.controls;
   }
 
-  updateApplicantSignature(event: SignatureBlock) {
-    this.signAndSubmitForm.get('applicantSignature').get('signedName').setValue(event.signedName);
-    this.signAndSubmitForm.get('applicantSignature').get('dateSigned').setValue(event.dateSigned);
-    this.signAndSubmitForm.get('applicantSignature').get('signature').setValue(event.signature);
-    this.formCreationService.signaturesChanged.emit(this.signAndSubmitForm);
-  }
-
-  updateSecondaryApplicantSignature(event: SignatureBlock) {
-    this.signAndSubmitForm.get('secondaryApplicantSignature').get('signedName').setValue(event.signedName);
-    this.signAndSubmitForm.get('secondaryApplicantSignature').get('dateSigned').setValue(event.dateSigned);
-    this.signAndSubmitForm.get('secondaryApplicantSignature').get('signature').setValue(event.signature);
-    this.formCreationService.signaturesChanged.emit(this.signAndSubmitForm);
+  onSignatureChanged() {
+    // Notify the service or parent that the signature has changed
+    this.formCreationService.signaturesChanged.emit(
+      this.signAndSubmitForm
+    );
   }
 
 

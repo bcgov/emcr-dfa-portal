@@ -1,0 +1,262 @@
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { SecondaryApplicant } from 'src/app/core/api/models';
+import { ComponentMetaDataModel } from '../../core/model/componentMetaData.model';
+import { ComponentCreationService } from '../../core/services/componentCreation.service';
+import { FormCreationService } from '../../core/services/formCreation.service';
+import { DFAAppealDataService } from './dfa-appeal-data.service';
+import { DfaAppealService } from './dfa-appeal.service';
+
+@Component({
+  selector: 'app-dfa-appeal',
+  standalone: false,
+  templateUrl: './dfa-appeal.component.html',
+  styleUrls: ['./dfa-appeal.component.scss']
+})
+export class DfaAppealComponent implements OnInit {
+  @ViewChild('dfaAppealStepper') dfaAppealStepper: MatStepper;
+  steps: Array<ComponentMetaDataModel>;
+  dfaAppealFolderPath = 'dfa-appeal-forms';
+  isLoading = false;
+  form: FormGroup;
+  form$: Subscription;
+  isSubmitted = false;
+  isApplicantSigned: boolean = false;
+  isSecondaryApplicantSigned: boolean = false;
+  isSecondaryApplicant: boolean = false;
+  secondaryApplicants: SecondaryApplicant[] = [];
+  isSignaturesValid: boolean = false;
+  caseId: string;
+  appealType: string;
+  appealReasonForm$: Subscription;
+  appealReasonForm: FormGroup;
+  signAndSubmitForm: FormGroup;
+  appealReasonValid: boolean = false;
+  signAndSubmitValid: boolean = false;
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private componentService: ComponentCreationService,
+    private formCreationService: FormCreationService,
+    private cd: ChangeDetectorRef,
+    private dfaAppealDataService: DFAAppealDataService,
+    private dfaAppealService: DfaAppealService
+  ) {
+  }
+
+  ngOnInit(): void {
+    // Get appeal type and case ID from route params
+    this.route.params.subscribe((params) => {
+      this.appealType = params['type'];
+      this.caseId = params['caseId'];
+
+      this.loadCaseDetails();
+
+      // Clear old data and forms
+      this.dfaAppealDataService.appealReason = null;
+      this.dfaAppealDataService.signAndSubmit = null;
+      this.formCreationService.clearAppealReasonData();
+      this.formCreationService.clearAppealSignAndSubmitData();
+
+      // Create steps based on appeal type
+      this.steps = this.componentService.createDFAAppealSteps(this.appealType);
+    });
+  }
+
+  /**
+   * Loads case details from the service
+   */
+  loadCaseDetails(): void {};
+
+  setFormData(component: string): void {
+    switch (component) {
+      case 'appeal-reason':
+        if (this.appealReasonForm) {
+          this.dfaAppealDataService.appealReason = {
+            ...this.dfaAppealDataService.appealReason,
+            ...this.appealReasonForm.value
+          };
+        }
+        break;
+      case 'sign-and-submit':
+        if (this.signAndSubmitForm) {
+          this.dfaAppealDataService.signAndSubmit = this.signAndSubmitForm.getRawValue();
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  /**
+   * Go back to previous step or dashboard
+   */
+  goBack(stepper: MatStepper, lastStep: number): void {
+    if (lastStep === -2) {
+      this.returnToDashboard();
+    } else {
+      stepper.selectedIndex = lastStep;
+    }
+  }
+
+  /**
+   * Custom next stepper function
+   */
+  goForward(stepper: MatStepper, isLast: boolean, component: string): void {
+    if (isLast && component === 'sign-and-submit') {
+      this.dfaAppealStepper.selected.completed = true;
+      this.submitAppeal();
+    } else {
+      this.setFormData(component);
+      let appeal = this.dfaAppealDataService.createAppealDTO();
+      this.dfaAppealService.upsertAppeal(appeal).subscribe(x => {
+        // determine if step is complete
+        switch (component) {
+          case 'appeal-reason':
+            if (this.form.valid) stepper.selected.completed = true;
+            else stepper.selected.completed = false;
+            break;
+          case 'sign-and-submit':
+            if (this.form.valid) stepper.selected.completed = true;
+            else stepper.selected.completed = false;
+            break;
+          default:
+            break;
+        }
+        this.form$.unsubscribe();
+        stepper.next();
+        this.form.markAllAsTouched();
+      },
+      error => {
+        console.error(error);
+        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+      })
+    }
+  }
+
+  /**
+   * Validates all forms
+   */
+  validateForms(): void {
+    this.formCreationService.getAppealReasonForm().subscribe((form) => {
+      if (form) {
+        form.updateValueAndValidity();
+        this.appealReasonValid = form.valid;
+        this.cd.detectChanges();
+      }
+    });
+
+    this.formCreationService.getAppealSignAndSubmitForm().subscribe((form) => {
+      if (form) {
+        form.updateValueAndValidity();
+        this.signAndSubmitValid = form.valid;
+        this.cd.detectChanges();
+      }
+    });
+  }
+
+  navigateToStep(stepIndex: number) {
+    this.dfaAppealStepper.selectedIndex = stepIndex;
+  }
+
+  /**
+   * Loads form for every step based on index
+   *
+   * @param index step index
+   */
+  currentStep(index: number): void {
+    this.loadStepForm(index);
+    this.cd.detectChanges();
+  }
+
+  /**
+   * Triggered on the step change animation event
+   *
+   * @param event animation event
+   * @param stepper stepper instance
+   */
+  stepChanged(event: any, stepper: MatStepper): void {
+    stepper.selected.interacted = false;
+
+    this.validateForms();
+    this.setCompletedSteps();
+  }
+
+  /**
+   * Sets completed steps in the stepper
+   */
+  setCompletedSteps(): void {
+    if (this.dfaAppealStepper) {
+      this.dfaAppealStepper.steps.get(0).completed =
+        this.appealReasonValid;
+    }
+  }
+
+  /**
+   * Loads appropriate forms based on the current step
+   */
+  loadStepForm(index: number): void {
+    if (this.form$) {
+      this.form$.unsubscribe();
+    }
+    
+    switch (index) {
+      case 0:
+        this.form$ = this.formCreationService
+          .getAppealReasonForm()
+          .subscribe((appealReasonForm) => {
+            if (appealReasonForm) {
+              this.form = appealReasonForm;
+              this.appealReasonForm = appealReasonForm;
+            }
+          });
+        break;
+      case 1:
+        this.form$ = this.formCreationService
+          .getAppealSignAndSubmitForm()
+          .subscribe((signAndSubmitForm) => {
+            if (signAndSubmitForm) {
+              this.form = signAndSubmitForm;
+              this.signAndSubmitForm = signAndSubmitForm;
+            }
+          });
+        break;
+    }
+  }
+
+  /**
+   * Submits the appeal
+   */
+  submitAppeal(): void {
+    this.isLoading = true;
+    this.setFormData('sign-and-submit');
+    
+    let appeal = this.dfaAppealDataService.createAppealDTO();
+    appeal.status = 'Submitted';
+    
+    this.dfaAppealService.upsertAppeal(appeal).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.cd.detectChanges();
+        this.returnToDashboard();
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.cd.detectChanges();
+        console.error(error);
+        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+      }
+    });
+  }
+
+  /**
+   * Navigates back to dashboard
+   */
+  returnToDashboard(): void {
+    this.router.navigate(['/verified-registration/dashboard']);
+  }
+}
