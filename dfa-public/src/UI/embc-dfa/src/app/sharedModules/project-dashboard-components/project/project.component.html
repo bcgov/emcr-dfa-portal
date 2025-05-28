@@ -184,7 +184,7 @@
       </div>
 
       <div style="display: flex; margin-top:30px">
-        <div class="col-md-9">
+        <div class="col-md-12">
           <span *ngIf="applItem.isErrorInStatus == true" style="color: red;">Error in displaying status<br /><br /></span>
           <table cellpadding="0" cellspacing="0">
             <tr>
@@ -222,8 +222,9 @@
             </tr>
           </table>
         </div>
-
-        <div [featureEnabled]="'useAppeals'" class="col-md-3" style="display: flex; justify-content: flex-end; padding-right:32px">
+      </div>
+      <div [featureEnabled]="'useAppeals'" style="display: flex; margin-top:30px">
+        <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right:32px">
           <div class="button-column">
             <button
               [class]="appealButtonClass(applItem)"
@@ -234,42 +235,8 @@
             </button>
           </div>
         </div>
-        <!--<div *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}" class="stepsDesc col-md-2">
-          <span class="stepText">{{item.label}}</span>
-        </div>
-        <br style="clear: both;" />
-        <div *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}">-->
-          <!--<span [ngClass]="item.isCompleted == true ? 'material-icons' : 'material-symbols-outlined'" style="color: rgb(0, 128, 55);">
-            {{item.isCompleted == true ? 'check_circle' : 'circle'}}
-          </span>-->
-          <!--<div [ngClass]="i == 0 ? 'nocircle col-md-1' : ( item.currentStep == true ? 'currentStatus ' : 'circle col-md-1')">
-            <span *ngIf="item.isCompleted == true && applItem.isErrorInStatus == false" class="material-icons" style="color: rgb(21 178 89);">
-              check_circle
-            </span>
-            <span *ngIf="item.isCompleted == false && item.currentStep == true && applItem.isErrorInStatus == false"  style="color: darkblue">
-              Additional Information Requested
-            </span>
-            <span *ngIf="item.isCompleted == false && item.currentStep == false && applItem.isErrorInStatus == false" class="material-symbols-outlined" style="color: lightgrey">
-              circle
-            </span>
-            <span *ngIf="applItem.isErrorInStatus == true" class="material-symbols-outlined" style="color: lightgrey">
-              circle
-            </span>
-          </div>
-          <div class="line adjustLineWidth" *ngIf="item.currentStep == true"></div>
-          <div class="line adjustLineWidth" *ngIf="applItem.statusBar[i+1] && applItem.statusBar[i+1].currentStep == true"></div>
-          <div class="line col-md-1" *ngIf="item.currentStep == false && applItem.statusBar[i+1] && applItem.statusBar[i+1].currentStep == false"></div>-->
-
-          <!--<mat-icon>circle</mat-icon>
-          <span class="material-symbols-outlined">
-          circle
-          </span>-->
-        <!--</div>-->
-        <!--<div *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}" [ngClass]="item.currentStep == true ? 'stepsDesc col-md-2' : 'stepsDesc col-md-2'">
-            <span *ngIf="item.currentStep == true && applItem.isErrorInStatus == false && item.isCompleted == false" class="youAreHere">You are here</span>
-          </div>-->
       </div>
-      <div *ngIf="canAppeal(applItem)" class="col-md-12" style="display: flex; justify-content: flex-end; padding: 10px 32px 0 0;">
+      <div [featureEnabled]="'useAppeals'" *ngIf="canAppeal(applItem)" class="col-md-12" style="display: flex; justify-content: flex-end; padding: 10px 32px 0 0;">
         <span>Project Approval decision can be appealed for {{ remainingDays(applItem) }} days</span>
       </div>
     </mat-card>
