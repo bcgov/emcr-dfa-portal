@@ -52,6 +52,7 @@ export { OutageInformation } from './models/outage-information';
 export { TimeoutConfiguration } from './models/timeout-configuration';
 export { CaptchaConfiguration } from './models/captcha-configuration';
 export { S3Configuration } from './models/s-3-configuration';
+export { FeatureFlagConfiguration } from './models/feature-flag-configuration';
 export { Code } from './models/code';
 export { CommunityCode } from './models/community-code';
 export { CommunityType } from './models/community-type';
