@@ -222,7 +222,8 @@
             </tr>
           </table>
         </div>
-        <div class="col-md-3" style="display: flex; justify-content: flex-end; padding-right:32px">
+
+        <div [featureEnabled]="'useAppeals'" class="col-md-3" style="display: flex; justify-content: flex-end; padding-right:32px">
           <div class="button-column">
             <button
               [class]="appealButtonClass(applItem)"
