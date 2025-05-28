@@ -21,4 +21,4 @@ jobs:
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.12.0
         with:
-          target: "https://dfa-public-sector-dev.apps.silver.devops.gov.bc.ca"
+          target: "https://publicsector-dev.dfa.gov.bc.ca"
