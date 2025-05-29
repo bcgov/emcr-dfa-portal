@@ -1,0 +1,97 @@
+<div class="container container-frame">
+
+  <div class="row heading-container">
+    <div class="col-8">
+      <span class="page-heading">Project Eligibility Appeal</span>
+    </div>
+  </div>
+
+  <mat-horizontal-stepper
+    class="stepper-style"
+    labelPosition="bottom"
+    (animationDone)="currentStep(stepper?.selectedIndex)"
+    (selectionChange)="stepChanged($event, stepper)"
+    #stepper
+    [linear]="false"
+  >
+    <mat-step *ngFor="let step of steps" [stepControl]="form">
+      <ng-template matStepLabel>{{ step.stepName }}</ng-template>
+      <app-component-wrapper
+        [componentName]="step.component"
+        [folderPath]="formFolderPath"
+      ></app-component-wrapper>
+      <br />
+      <div class="row">
+        <div class="col-md-6">
+          <button
+            class="button-s align-back-button"
+            mat-button
+            type="button"
+            (click)="goBack(stepper, step.lastStep)"
+          >
+            {{ step.backButtonLabel }}
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button
+            class="button-p"
+            mat-stroked-button
+            type="button"
+            (click)="goForward(stepper, step.isLast, step.component)"
+          >
+            {{step.nextButtonLabel}}
+          </button>
+        </div>
+        <br/>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Review and Submit</ng-template>
+      <app-review
+        [type]="type"
+        [showHeading]="true"
+        [parentPageName]="parentPageName"
+        [currentFlow]="currentFlow"
+        [allowEdit]="true"
+        (stepToNavigate)="navigateToStep($event)"
+      >
+      </app-review>
+      <br />
+
+      <div class="row">
+        <div class="col-md-6">
+          <button
+            class="button-s"
+            mat-button
+            type="button"
+            (click)="stepper.previous()"
+          >
+            <span>Go Back</span>
+          </button>
+        </div>
+        <div class="col-md-6" *ngIf="!isSubmitted && applicationDetailsValid && contactsValid && primaryContactValidated && authorizedRepresentativeValid ">
+        <button
+          class="button-p save-button"
+          mat-stroked-button
+          type="button"
+          (click)="submitFile()"
+        >
+          <span>Save</span>
+        </button>
+      </div>
+        <br/><br/>
+      </div>
+    </mat-step>
+    <ng-template matStepperIcon="edit" let-index="index">
+      {{ index + 1 }}
+    </ng-template>
+  </mat-horizontal-stepper>
+  <app-loader
+    class="spinner"
+    [showLoader]="isLoading"
+    [strokeWidth]="10"
+    [diameter]="50"
+    [color]="'green'"
+  >
+  </app-loader>
+</div>

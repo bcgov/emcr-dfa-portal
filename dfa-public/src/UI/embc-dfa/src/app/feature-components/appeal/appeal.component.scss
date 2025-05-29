@@ -1,0 +1,38 @@
+.save-button {
+    width: 120px;
+    height:40px !important;
+    vertical-align: middle;
+}
+
+.infoHeader {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/*:host ::ng-deep .mat-horizontal-stepper-header-container {
+  display: none;
+}*/
+
+@media screen and (max-width: 768px) {
+    ::ng-deep .mat-step-label {
+        display: none !important;
+    }
+}
+/*
+.spinner {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.32);
+  z-index: 2000;
+}
+*/
+
+.align-back-button {
+    margin-right: 10px;
+}
