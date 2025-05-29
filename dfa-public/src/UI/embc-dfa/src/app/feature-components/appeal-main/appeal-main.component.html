@@ -1,0 +1,82 @@
+<div class="container container-frame">
+
+  <div class="row heading-container">
+    <div class="col-8">
+      <span class="page-heading">Project Eligibility Appeal</span>
+    </div>
+  </div>
+
+  <mat-horizontal-stepper
+    class="stepper-style"
+    labelPosition="bottom"
+    #stepper
+    [linear]="false"
+  >
+    <mat-step>
+      <ng-template matStepLabel>Test</ng-template>
+      <br />
+      <div class="row">
+        <div class="col-md-6">
+          <button
+            class="button-s align-back-button"
+            mat-button
+            type="button"
+            (click)="goBack()"
+          >
+            Back
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button
+            class="button-p"
+            mat-stroked-button
+            type="button"
+            (click)="goForward()"
+          >
+            Next
+          </button>
+        </div>
+        <br/>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Review and Submit</ng-template>
+      <br />
+
+      <div class="row">
+        <div class="col-md-6">
+          <button
+            class="button-s"
+            mat-button
+            type="button"
+            (click)="stepper.previous()"
+          >
+            <span>Go Back</span>
+          </button>
+        </div>
+        <div class="col-md-6">
+        <button
+          class="button-p save-button"
+          mat-stroked-button
+          type="button"
+          (click)="save()"
+        >
+          <span>Save</span>
+        </button>
+      </div>
+        <br/><br/>
+      </div>
+    </mat-step>
+    <ng-template matStepperIcon="edit" let-index="index">
+      {{ index + 1 }}
+    </ng-template>
+  </mat-horizontal-stepper>
+  <!-- <app-loader
+    class="spinner"
+    [showLoader]="isLoading"
+    [strokeWidth]="10"
+    [diameter]="50"
+    [color]="'green'"
+  >
+  </app-loader> -->
+</div>

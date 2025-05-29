@@ -45,6 +45,14 @@ const routes: Routes = [
     canActivate: [AutoLoginPartialRoutesGuard]
   },
   {
+    path: 'appeal-main',
+    loadChildren: () =>
+      import(
+        './feature-components/appeal-main/appeal-main.module'
+      ).then((m) => m.AppealMainModule),
+    canActivate: [AutoLoginPartialRoutesGuard]
+  },
+  {
     path: 'dfa-application-main',
     loadChildren: () =>
       import(
