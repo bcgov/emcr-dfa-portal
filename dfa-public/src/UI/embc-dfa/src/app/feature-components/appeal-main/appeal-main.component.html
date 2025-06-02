@@ -19,10 +19,10 @@
 <div class="row">
   <h1>Project Details</h1><br />
   <div class="col-md-6">
-    <b>Project Name:</b> Project Name<br />
-    <b>Project Number:</b> Project Number<br />
-    <b>Project Type:</b> <br />
-    <b>Date of Damage:</b> <br />
+    <b>Project Name:</b> {{ this.project?.projectName }}<br />
+    <b>Project Number:</b> {{ this.project?.projectNumber }}<br />
+    <b>Project Type:</b> {{ this.project?.projectType }}<br />
+    <b>Date of Damage:</b> {{ this.application?.dateOfDamage }}<br />
     <b>Original Application Date:</b> <br />
     <b>Original DFA Decision Date:</b> <br />
     <b>Original DFA Eligibility Decision:</b> <br />
