@@ -9,6 +9,8 @@ import { ComponentWrapperModule } from '../../sharedModules/components/component
 import { ReviewModule } from '../review/review.module';
 import { CoreModule } from '../../core/core.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatInputModule } from '@angular/material/input';
+
 
 @NgModule({
   declarations: [AppealMainComponent],
@@ -16,6 +18,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     CommonModule,
     AppealRoutingModule,
     ReactiveFormsModule,
+    MatInputModule,
     MatStepperModule,
     MatSelectModule,
     ComponentWrapperModule,

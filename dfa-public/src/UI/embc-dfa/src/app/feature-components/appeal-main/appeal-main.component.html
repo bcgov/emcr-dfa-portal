@@ -6,14 +6,81 @@
     </div>
   </div>
 
+<form [formGroup]="appealForm">
   <mat-horizontal-stepper
     class="stepper-style"
     labelPosition="bottom"
     #stepper
     [linear]="false"
   >
+    <mat-step [stepControl]="appealForm">
+      <ng-template matStepLabel>Appeal Rationale</ng-template>
+
+<div class="row">
+  <h1>Project Details</h1><br />
+  <div class="col-md-6">
+    <b>Project Name:</b> Project Name<br />
+    <b>Project Number:</b> Project Number<br />
+    <b>Project Type:</b> <br />
+    <b>Date of Damage:</b> <br />
+    <b>Original Application Date:</b> <br />
+    <b>Original DFA Decision Date:</b> <br />
+    <b>Original DFA Eligibility Decision:</b> <br />
+  </div>
+  <div class="col-md-6">
+    <b>Appeal Number:</b> <br />
+    <b>Appeal Submission Date:</b> <br />
+    <b>Appeal Decision:</b> <br />
+  </div>
+</div>
+<br />
+
+<div class="row">
+  <div class="md-12">
+    <h2>Project Eligibility Appeal Process</h2>
+    <p>
+      If you believe that the DFA program incorrectly determined the eligibility for this project, whether it is for the entire project or a specific cost(s), you may appeal the determination within 60 days of the date on the notice being appealed.
+    </p>
+    <p>
+      Submitting an appeal does not guarantee that the DFA determination will be overturned. Appeal determinations may overturn or uphold the DFA determination being appeald.
+    </p>
+    <br />
+    <h1>Appeal Reason<span class="required">*</span></h1><br />
+    <p>
+      Please provide a detailed appeal reasoning here. If you require more space to provide your reasoning, please provide it as a supporting document below. Any supporting documentation you can provide in addition to the reasoning is encouraged. Appeal staff may reach out to you if more information is required.
+    </p>
+    <textarea formControlName="reason" rows="5" cols="100" title="Detailed reasoning and/or evidence that explains and/or supports why the appellant believes the DFA determination was incorrect."></textarea>
+
+  </div>
+</div>
+
+      <br />
+      <div class="row">
+        <div class="col-md-6">
+          <button
+            class="button-s align-back-button"
+            mat-button
+            type="button"
+            (click)="goBack()"
+          >
+            Back
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button
+            class="button-p"
+            mat-stroked-button matStepperNext
+            type="button"
+            (click)="goForward()"
+          >
+            Next - Upload Documents
+          </button>
+        </div>
+        <br/>
+      </div>
+    </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Test</ng-template>
+      <ng-template matStepLabel>Upload Documents</ng-template>
       <br />
       <div class="row">
         <div class="col-md-6">
@@ -79,4 +146,5 @@
     [color]="'green'"
   >
   </app-loader> -->
+</form>
 </div>

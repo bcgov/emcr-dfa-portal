@@ -45,7 +45,7 @@ const routes: Routes = [
     canActivate: [AutoLoginPartialRoutesGuard]
   },
   {
-    path: 'appeal-main',
+    path: 'dfa-appeal-main/:id',
     loadChildren: () =>
       import(
         './feature-components/appeal-main/appeal-main.module'
