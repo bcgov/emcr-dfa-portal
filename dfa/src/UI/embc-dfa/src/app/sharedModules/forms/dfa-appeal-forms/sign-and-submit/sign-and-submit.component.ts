@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
@@ -14,14 +14,19 @@ export default class SignAndSubmitComponent implements OnInit, OnDestroy {
   signAndSubmitForm: UntypedFormGroup;
   signAndSubmitForm$: Subscription;
   isReadOnly: boolean = false;
+  caseDetails: any;
 
   constructor(
     @Inject('formCreationService') private formCreationService: FormCreationService,
-    public dfaAppealDataService: DFAAppealDataService
+    private appealDataService: DFAAppealDataService,
+    private cdr: ChangeDetectorRef
   ) {
   }
 
   ngOnInit(): void {
+    this.caseDetails = this.appealDataService.getCaseDetails();
+    this.cdr.detectChanges();
+
     this.signAndSubmitForm$ = this.formCreationService
       .getAppealSignAndSubmitForm()
       .subscribe((signAndSubmit) => {

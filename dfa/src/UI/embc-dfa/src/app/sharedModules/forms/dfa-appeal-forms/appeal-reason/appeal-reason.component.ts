@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { DFAAppealDataService } from 'src/app/feature-components/dfa-appeal/dfa-appeal-data.service';
@@ -16,12 +16,14 @@ export default class AppealReasonComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private formCreationService: FormCreationService,
-    private appealDataService: DFAAppealDataService
+    private appealDataService: DFAAppealDataService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
     // Get case details from data service
     this.caseDetails = this.appealDataService.getCaseDetails();
+    this.cdr.detectChanges();
     
     // Initialize form
     this.formCreationService.getAppealReasonForm().subscribe(form => {
@@ -35,5 +37,3 @@ export default class AppealReasonComponent implements OnInit {
     // Implementation for adding supporting documents
   }
 }
-
-

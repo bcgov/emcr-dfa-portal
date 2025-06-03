@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 
 
 import { CoreModule } from 'src/app/core/core.module';
-import CaseDetailsComponent from '../../components/case-details/case-details.component';
+import CaseDetailsComponent  from 'src/app/sharedModules/components/case-details/case-details.component';
 import AppealReasonComponent from './appeal-reason/appeal-reason.component';
 import SignAndSubmitComponent from './sign-and-submit/sign-and-submit.component';
 
@@ -16,7 +16,7 @@ import SignAndSubmitComponent from './sign-and-submit/sign-and-submit.component'
   declarations: [
     AppealReasonComponent,
     SignAndSubmitComponent,
-    CaseDetailsComponent,
+    CaseDetailsComponent
   ],
   imports: [
     CommonModule,

@@ -230,11 +230,19 @@ export class DfaApplicationComponent implements OnInit {
     return diffDays;
   }
 
-  viewAppeals(applItem: ApplicationExtended): void {
+  viewAppeals(applItem: ApplicationExtended, type: string): void {
+    const caseId = applItem.applicationId;
+    if (!caseId || !type) {
+      return;
+    }
     this.dialog
           .open(AppealConfirmationDialogComponent, {
             data: {
-              content: applItem ,
+              content: {
+                ...applItem,
+                caseId,
+                type
+              }
             },
             height: '600px',
             width: '700px',

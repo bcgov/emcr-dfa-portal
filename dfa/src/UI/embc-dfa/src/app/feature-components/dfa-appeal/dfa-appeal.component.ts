@@ -36,6 +36,7 @@ export class DfaAppealComponent implements OnInit {
   signAndSubmitForm: FormGroup;
   appealReasonValid: boolean = false;
   signAndSubmitValid: boolean = false;
+  caseDetails: any;
 
   constructor(
     private router: Router,
@@ -54,7 +55,7 @@ export class DfaAppealComponent implements OnInit {
       this.appealType = params['type'];
       this.caseId = params['caseId'];
 
-      this.loadCaseDetails();
+      this.caseDetails = this.dfaAppealDataService.getCaseDetails();
 
       // Clear old data and forms
       this.dfaAppealDataService.appealReason = null;
