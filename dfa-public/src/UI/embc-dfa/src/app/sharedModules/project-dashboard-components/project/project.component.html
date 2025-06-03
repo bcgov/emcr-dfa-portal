@@ -183,7 +183,7 @@
         </div>
       </div>
 
-      <div style="display: flex; margin-top:30px">
+      <div style="display: flex; margin:30px 30px;">
         <div class="col-md-12">
           <span *ngIf="applItem.isErrorInStatus == true" style="color: red;">Error in displaying status<br /><br /></span>
           <table cellpadding="0" cellspacing="0">
@@ -223,21 +223,53 @@
           </table>
         </div>
       </div>
-      <div [featureEnabled]="'useAppeals'" style="display: flex; margin-top:30px">
-        <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right:32px">
+      <div [featureEnabled]="'useAppeals'" style="margin-top: 30px; border-top: 1px solid lightgrey; padding-top: 30px;">
+        <div style="display: flex; margin:30px 30px;">
+          <div class="col-md-12">
+            <table cellpadding="0" cellspacing="0">
+              <tr>
+                <td colspan="3" *ngFor="let item of getItems(applItem.appealStatusBar); let i=index" id="item{{i}}" [ngClass]="'headerlabelStyle'">
+                  <span *ngIf="item.status != ''" class="stepText">{{item.status}}</span>
+                </td>
+              </tr>
+              <tr>
+                <td *ngFor="let item of applItem.appealStatusBar; let i=index" id="item{{i}}" [ngClass]="item.status != '' ? 'labelStyle' : 'labelEmptyWidth'">
+                  <div *ngIf="item.status != ''" [ngClass]="item.currentStep == false || item.status == 'Closed' ? 'alignStatus' : 'alignStatus'">
+                    <span *ngIf="item.isCompleted == false && item.currentStep == true && item.stage != ''" class="material-symbols-outlined" style="color: #FDCB52">
+                      circle
+                    </span>
+                    <span *ngIf="item.isCompleted == false && item.currentStep == false" class="material-symbols-outlined" style="color: #FDCB52">
+                      circle
+                    </span>
+                  </div>
+                  <div class="lineConnector" *ngIf="item.status == '' && i > 1 && (i+1) < applItem.appealStatusBar.length"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 32px;">
           <div class="button-column">
             <button
               [class]="appealButtonClass(applItem)"
               (click)="appealDecision(applItem)"
               type="button"
               [disabled]="!canAppeal(applItem)"
-              [title]="appealButtonTitle(applItem)">Appeal Decision
+              [title]="appealButtonTitle(applItem)"
+            >
+              Appeal Decision
             </button>
           </div>
         </div>
-      </div>
-      <div [featureEnabled]="'useAppeals'" *ngIf="canAppeal(applItem)" class="col-md-12" style="display: flex; justify-content: flex-end; padding: 10px 32px 0 0;">
-        <span>Project Approval decision can be appealed for {{ remainingDays(applItem) }} days</span>
+        <div
+          *ngIf="canAppeal(applItem)"
+          class="col-md-12"
+          style="display: flex; justify-content: flex-end; padding: 10px 32px 0 0;"
+        >
+          <span>
+            Project Approval decision can be appealed for {{ remainingDays(applItem) }} days
+          </span>
+        </div>
       </div>
     </mat-card>
   </div>
