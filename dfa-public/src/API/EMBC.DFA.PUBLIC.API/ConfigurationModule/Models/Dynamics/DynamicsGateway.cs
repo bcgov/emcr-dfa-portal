@@ -1193,7 +1193,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         "dfa_estimatedcompletiondateofproject",
                         "dfa_approvedcost", "dfa_18monthdeadline", "statuscode",
                         "dfa_projectid", "createdon", "dfa_projectbusinessprocessstages",
-                        "dfa_projectbusinessprocesssubstages", "dfa_bpfclosedate", "dfa_projectdecision"
+                        "dfa_projectbusinessprocesssubstages", "dfa_bpfclosedate", "dfa_projectdecision", "dfa_projectapproveddate"
                     },
                     Filter = $"_dfa_applicationid_value eq {applicationId}"
                 });
@@ -1217,29 +1217,44 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     {
                         project.hasAmendments = false;
                     }
+
+                    var lstAppeal = await api.GetList<dfa_appeal>("dfa_appeals", new CRMGetListOptions
+                    {
+                        Select = new[]
+                        {
+                            "dfa_appealstatus",
+                            "dfa_appealtype"
+                        },
+                        Filter = $"_dfa_projectid_value eq {project.dfa_projectid}"
+                    });
+                    project.dfa_appeal = lstAppeal.List;
                 }
 
-                var lstApps = (from objApp in list.List
-                               select new dfa_project
-                               {
-                                   dfa_projectid = objApp.dfa_projectid,
-                                   dfa_projectnumber = objApp.dfa_projectnumber,
-                                   dfa_projectname = objApp.dfa_projectname,
-                                   dfa_sitelocation = objApp.dfa_sitelocation,
-                                   dfa_estimatedcompletiondateofproject = objApp.dfa_estimatedcompletiondateofproject,
-                                   //dfa_event = objAppEvent != null ? objAppEvent.dfa_eventname : null,
-                                   dfa_approvedcost = objApp.dfa_approvedcost.HasValue ? Math.Round(objApp.dfa_approvedcost.Value, 2) : objApp.dfa_approvedcost,
-                                   dfa_18monthdeadline = objApp.dfa_18monthdeadline,
-                                   createdon = objApp.createdon,
-                                   statuscode = objApp.statuscode,
-                                   hasAmendments = objApp.hasAmendments,
-                                   dfa_projectbusinessprocessstages = objApp.dfa_projectbusinessprocessstages,
-                                   dfa_projectbusinessprocesssubstages = objApp.dfa_projectbusinessprocesssubstages,
-                                   dfa_projectdecision = objApp.dfa_projectdecision,
-                                   dfa_bpfclosedate = !string.IsNullOrEmpty(objApp.dfa_bpfclosedate) ? DateTime.Parse(objApp.dfa_bpfclosedate).ToLocalTime().ToString() : objApp.dfa_bpfclosedate,
-                                   useAmendments = useAmendments
-                               }).AsEnumerable().OrderByDescending(m => m.createdon);
-
+                var lstApps = (
+                    from objApp in list.List
+                    select new dfa_project
+                    {
+                        dfa_projectid = objApp.dfa_projectid,
+                        dfa_projectnumber = objApp.dfa_projectnumber,
+                        dfa_projectname = objApp.dfa_projectname,
+                        dfa_sitelocation = objApp.dfa_sitelocation,
+                        dfa_estimatedcompletiondateofproject = objApp.dfa_estimatedcompletiondateofproject,
+                        //dfa_event = objAppEvent != null ? objAppEvent.dfa_eventname : null,
+                        dfa_approvedcost = objApp.dfa_approvedcost.HasValue ? Math.Round(objApp.dfa_approvedcost.Value, 2) : objApp.dfa_approvedcost,
+                        dfa_18monthdeadline = objApp.dfa_18monthdeadline,
+                        createdon = objApp.createdon,
+                        statuscode = objApp.statuscode,
+                        hasAmendments = objApp.hasAmendments,
+                        dfa_projectbusinessprocessstages = objApp.dfa_projectbusinessprocessstages,
+                        dfa_projectbusinessprocesssubstages = objApp.dfa_projectbusinessprocesssubstages,
+                        dfa_projectdecision = objApp.dfa_projectdecision,
+                        dfa_bpfclosedate = !string.IsNullOrEmpty(objApp.dfa_bpfclosedate) ? DateTime.Parse(objApp.dfa_bpfclosedate).ToLocalTime().ToString() : objApp.dfa_bpfclosedate,
+                        dfa_projectapproveddate = objApp.dfa_projectapproveddate,
+                        dfa_appeal = objApp.dfa_appeal,
+                        useAmendments = useAmendments
+                    })
+                        .AsEnumerable()
+                        .OrderByDescending(m => m.createdon);
                 return lstApps;
             }
             catch (System.Exception ex)

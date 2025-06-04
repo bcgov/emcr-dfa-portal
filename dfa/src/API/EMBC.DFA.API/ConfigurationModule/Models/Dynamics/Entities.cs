@@ -588,7 +588,93 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string dfa_smallbusinesstype { get; set; }
         public string dfa_accountlegalname { get; set; }
         public string dfa_appealcloseddate { get; set; }
-        //public string dfa_statuslastupdated { get; set; }
+        public string dfa_eligibilitystatus { get; set; }
+        public IEnumerable<dfa_appeal>? dfa_appeal { get; set; }
+    }
+
+    public class dfa_appeal
+    {
+        public string dfa_appealstatus { get; set; }
+        // Amount, Eligibility, Other
+        public string dfa_appealtype { get; set; }
+    }
+
+    public enum AppealStatusOptionSet
+    {
+        [Description("In eApprovals")]
+        InEApprovals = 222710006,
+
+        [Description("In Progress")]
+        InProgress = 222710007,
+
+        [Description("In Progress - with legal")]
+        InProgressWithLegal = 222710008,
+
+        [Description("In Progress - with SME")]
+        InProgressWithSme = 222710009,
+
+        [Description("In Progress - 21-day letter issued")]
+        InProgressWith21LetterIssued = 222710010,
+
+        [Description("In Progress - with Appeals Officer")]
+        InProgressWithAppealsOfficer = 222710011,
+
+        [Description("In Progress - with Evaluator")]
+        InProgressWithEvaluator = 222710012,
+
+        [Description("Received")]
+        Received = 222710013,
+
+        [Description("Pending Decision")]
+        PendingDecision = 222710000,
+
+        [Description("Upheld")]
+        UpHeld = 222710001,
+
+        [Description("Overturned")]
+        Overturned = 222710002,
+
+        [Description("Withdrawn")]
+        Withdrawn = 222710003,
+
+        [Description("Other")]
+        Other = 222710004,
+    }
+
+    public enum AppealTypeOptionSet
+    {
+        [Description("Amount")]
+        Amount = 222710000,
+
+        [Description("Eligibility")]
+        Eligibility = 222710001,
+
+        [Description("Other")]
+        Other = 222710002
+    }
+
+    public enum CaseEligibilityOptionSet
+    {
+        [Description("Eligible")]
+        Eligible = 222710000,
+
+        [Description("Ineligible")]
+        Ineligible = 222710001,
+
+        [Description("On hold; pending DFA decision")]
+        OnHoldPendingDFADecision = 222710005,
+
+        [Description("Under Review")]
+        UnderReview = 222710002,
+
+        [Description("Waiting for applicant information")]
+        WaitingForApplicantInformation = 222710004,
+
+        [Description("Waiting on insurance settlement decision")]
+        WaitingOnInsuranceSettlementDecision = 222710006,
+
+        [Description("Withdrawn")]
+        Withdrawn = 222710003,
     }
 
     public class dfa_event
@@ -621,6 +707,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string incidentid { get; set; }
         public string ticketnumber { get; set; }
         public string dfa_datefileclosed { get; set; }
+        public string dfa_eligibilitystatus { get; set; }
     }
 
     public enum SameAddressOptionSet

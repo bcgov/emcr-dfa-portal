@@ -1052,6 +1052,16 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_projecttype { get; set; }
         public string? dfa_projecttypeother { get; set; }
         public bool? useAmendments { get; set; }
+
+        public DateTime? dfa_projectapproveddate { get; set; }
+        public IEnumerable<dfa_appeal>? dfa_appeal { get; set; }
+    }
+
+    public class dfa_appeal
+    {
+        public string dfa_appealstatus { get; set; }
+        // Amount, Eligibility, Other
+        public string dfa_appealtype { get; set; }
     }
 
     public class dfa_projectamendment
@@ -1076,6 +1086,60 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public DateTime createdon { get; set; }
 
         public string? dfa_amendmentdecision { get; set; }
+    }
+
+    public enum AppealStatusOptionSet
+    {
+        [Description("In eApprovals")]
+        InEApprovals = 222710006,
+
+        [Description("In Progress")]
+        InProgress = 222710007,
+
+        [Description("In Progress - with legal")]
+        InProgressWithLegal = 222710008,
+
+        [Description("In Progress - with SME")]
+        InProgressWithSme = 222710009,
+
+        [Description("In Progress - 21-day letter issued")]
+        InProgressWith21LetterIssued = 222710010,
+
+        [Description("In Progress - with Appeals Officer")]
+        InProgressWithAppealsOfficer = 222710011,
+
+        [Description("In Progress - with Evaluator")]
+        InProgressWithEvaluator = 222710012,
+
+        [Description("Received")]
+        Received = 222710013,
+
+        [Description("Pending Decision")]
+        PendingDecision = 222710000,
+
+        [Description("Upheld")]
+        UpHeld = 222710001,
+
+        [Description("Overturned")]
+        Overturned = 222710002,
+
+        [Description("Withdrawn")]
+        Withdrawn = 222710003,
+
+        [Description("Other")]
+        Other = 222710004,
+    }
+
+    public enum AppealTypeOptionSet
+    {
+        [Description("Amount")]
+        Amount = 222710000,
+
+        [Description("Eligibility")]
+        Eligibility = 222710001,
+
+        [Description("Other")]
+        Other = 222710002
     }
 
     public enum EventType

@@ -35,3 +35,6 @@ dfa-public/src/UI/embc-dfa/package-lock.json
 /DFAautomationTests/DFAautomationTests.iml
 /DFAautomationTests/src/main/java/dfa/WebDriverManager.java
 /DFAautomationTests/src/test/java/CreateNewApplicationHomeowner.java
+
+# Ignore Pycache
+*__pycache__*

@@ -193,81 +193,94 @@
         </div>
       </div>
 
-      <div style="width: 90%; min-width: 725px; display: flex; flex-direction: column;">
-        <div class="col-md-3" style="margin-top: 20px;">
-          <span *ngIf="applItem.isErrorInStatus == true" style="color: red;">Error in displaying status<br /></span>
-        </div>
-        <table cellpadding="0" cellspacing="0">
-          <tr>
-            <td colspan="3" *ngFor="let item of getItems(applItem.statusBar); let i=index" id="item{{i}}" [ngClass]="'headerlabelStyle'">
-              <span *ngIf="item.status != ''" class="stepText">{{item.status}}</span>
-            </td>
+      <div style="display: flex; margin:30px 30px;">
+        <div class="col-md-12">
+          <span *ngIf="applItem.isErrorInStatus == true" style="color: red;">Error in displaying status<br /><br /></span>
+          <table cellpadding="0" cellspacing="0">
+            <tr>
+              <td colspan="3" *ngFor="let item of getItems(applItem.statusBar); let i=index" id="item{{i}}" [ngClass]="'headerlabelStyle'">
+                <span *ngIf="item.status != ''" class="stepText">{{item.status}}</span>
+              </td>
 
-          </tr>
-          <tr>
-            <td *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}" [ngClass]="item.status != '' ? 'labelStyle' : 'labelEmptyWidth'">
-              <!--<div *ngIf="item.status != '' && item.currentStep == false" [ngClass]=" i == 0 ? 'removeBorder' : 'lineConnector'"></div>-->
-              <div *ngIf="item.status != ''" [ngClass]="item.currentStep == false || item.status == 'Closed' ? 'alignStatus': (item.stage == '' ? 'alignStatus' : 'currentStatus')">
-                <span *ngIf="applItem.status != 'Closed' && item.isCompleted == true && applItem.isErrorInStatus == false" class="material-icons" [ngStyle]="{'color': item.stage == 'Ineligible' || item.stage == 'Withdrawn' ? 'red' : 'rgb(21 178 89)'}">
-                  {{ item.stage == 'Ineligible' || item.stage == 'Withdrawn' ? 'cancel' : 'check_circle' }}
-                </span>
-                <span *ngIf="applItem.status == 'Closed' && item.isCompleted == true && applItem.isErrorInStatus == false" class="material-icons" [ngStyle]="{'color': item.status == 'Decision Made' && (applItem.stage == 'Ineligible' || applItem.stage == 'Withdrawn') ? 'red' : 'rgb(21 178 89)'}">
-                  {{ item.status == 'Decision Made' && (applItem.stage == 'Ineligible' || applItem.stage == 'Withdrawn')  ? 'cancel' : 'check_circle' }}
-                </span>
-                <span *ngIf="item.isCompleted == false && item.currentStep == true && applItem.isErrorInStatus == false && item.stage != ''">
-                  {{item.stage}}
-                </span>
-                <span *ngIf="item.isCompleted == false && item.currentStep == true && applItem.isErrorInStatus == false && item.stage == ''" class="material-symbols-outlined" [ngStyle]="{'color': item.status == 'Draft' ? '#639DD4' : '#FDCB52'}">
-                  {{ item.status == 'Draft' ? 'check_circle' : 'circle' }}
-                </span>
-                <span *ngIf="item.isCompleted == false && item.currentStep == false && applItem.isErrorInStatus == false" class="material-symbols-outlined" style="color: #FDCB52">
-                  circle
-                </span>
-                <span *ngIf="applItem.isErrorInStatus == true" class="material-symbols-outlined" style="color: #FDCB52">
-                  circle
-                </span>
-              </div>
-              <!--<div *ngIf="item.status != '' && item.currentStep == false && (i+1) < applItem.statusBar.length" class="lineConnector"></div>-->
-              <div class="lineConnector" *ngIf="item.status == '' && i > 1 && (i+1) < applItem.statusBar.length"></div>
-            </td>
-          </tr>
-        </table>
-        <!--<div *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}" class="stepsDesc col-md-2">
-          <span class="stepText">{{item.label}}</span>
+            </tr>
+            <tr>
+              <td *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}" [ngClass]="item.status != '' ? 'labelStyle' : 'labelEmptyWidth'">
+                <!--<div *ngIf="item.status != '' && item.currentStep == false" [ngClass]=" i == 0 ? 'removeBorder' : 'lineConnector'"></div>-->
+                <div *ngIf="item.status != ''" [ngClass]="item.currentStep == false || item.status == 'Closed' ? 'alignStatus': (item.stage == '' ? 'alignStatus' : 'currentStatus')">
+                  <span *ngIf="applItem.status != 'Closed' && item.isCompleted == true && applItem.isErrorInStatus == false" class="material-icons" [ngStyle]="{'color': item.stage == 'Ineligible' || item.stage == 'Withdrawn' ? 'red' : 'rgb(21 178 89)'}">
+                    {{ item.stage == 'Ineligible' || item.stage == 'Withdrawn' ? 'cancel' : 'check_circle' }}
+                  </span>
+                  <span *ngIf="applItem.status == 'Closed' && item.isCompleted == true && applItem.isErrorInStatus == false" class="material-icons" [ngStyle]="{'color': item.status == 'Decision Made' && (applItem.stage == 'Ineligible' || applItem.stage == 'Withdrawn') ? 'red' : 'rgb(21 178 89)'}">
+                    {{ item.status == 'Decision Made' && (applItem.stage == 'Ineligible' || applItem.stage == 'Withdrawn')  ? 'cancel' : 'check_circle' }}
+                  </span>
+                  <span *ngIf="item.isCompleted == false && item.currentStep == true && applItem.isErrorInStatus == false && item.stage != ''">
+                    {{item.stage}}
+                  </span>
+                  <span *ngIf="item.isCompleted == false && item.currentStep == true && applItem.isErrorInStatus == false && item.stage == ''" class="material-symbols-outlined" [ngStyle]="{'color': item.status == 'Draft' ? '#639DD4' : '#FDCB52'}">
+                    {{ item.status == 'Draft' ? 'check_circle' : 'circle' }}
+                  </span>
+                  <span *ngIf="item.isCompleted == false && item.currentStep == false && applItem.isErrorInStatus == false" class="material-symbols-outlined" style="color: #FDCB52">
+                    circle
+                  </span>
+                  <span *ngIf="applItem.isErrorInStatus == true" class="material-symbols-outlined" style="color: #FDCB52">
+                    circle
+                  </span>
+                </div>
+                <!--<div *ngIf="item.status != '' && item.currentStep == false && (i+1) < applItem.statusBar.length" class="lineConnector"></div>-->
+                <div class="lineConnector" *ngIf="item.status == '' && i > 1 && (i+1) < applItem.statusBar.length"></div>
+              </td>
+            </tr>
+          </table>
         </div>
-        <br style="clear: both;" />
-        <div *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}">-->
-          <!--<span [ngClass]="item.isCompleted == true ? 'material-icons' : 'material-symbols-outlined'" style="color: rgb(0, 128, 55);">
-            {{item.isCompleted == true ? 'check_circle' : 'circle'}}
-          </span>-->
-          <!--<div [ngClass]="i == 0 ? 'nocircle col-md-1' : ( item.currentStep == true ? 'currentStatus ' : 'circle col-md-1')">
-            <span *ngIf="item.isCompleted == true && applItem.isErrorInStatus == false" class="material-icons" style="color: rgb(21 178 89);">
-              check_circle
-            </span>
-            <span *ngIf="item.isCompleted == false && item.currentStep == true && applItem.isErrorInStatus == false"  style="color: darkblue">
-              Additional Information Requested
-            </span>
-            <span *ngIf="item.isCompleted == false && item.currentStep == false && applItem.isErrorInStatus == false" class="material-symbols-outlined" style="color: lightgrey">
-              circle
-            </span>
-            <span *ngIf="applItem.isErrorInStatus == true" class="material-symbols-outlined" style="color: lightgrey">
-              circle
-            </span>
-          </div>
-          <div class="line adjustLineWidth" *ngIf="item.currentStep == true"></div>
-          <div class="line adjustLineWidth" *ngIf="applItem.statusBar[i+1] && applItem.statusBar[i+1].currentStep == true"></div>
-          <div class="line col-md-1" *ngIf="item.currentStep == false && applItem.statusBar[i+1] && applItem.statusBar[i+1].currentStep == false"></div>-->
-
-          <!--<mat-icon>circle</mat-icon>
-          <span class="material-symbols-outlined">
-          circle
-          </span>-->
-        <!--</div>-->
-        <!--<div *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}" [ngClass]="item.currentStep == true ? 'stepsDesc col-md-2' : 'stepsDesc col-md-2'">
-            <span *ngIf="item.currentStep == true && applItem.isErrorInStatus == false && item.isCompleted == false" class="youAreHere">You are here</span>
-          </div>-->
       </div>
-
+      <div [featureEnabled]="'useAppeals'" style="margin-top: 30px; border-top: 1px solid lightgrey; padding-top: 30px;">
+        <div style="display: flex; margin:30px 30px;">
+          <div class="col-md-12">
+            <table cellpadding="0" cellspacing="0">
+              <tr>
+                <td colspan="3" *ngFor="let item of getItems(applItem.appealStatusBar); let i=index" id="item{{i}}" [ngClass]="'headerlabelStyle'">
+                  <span *ngIf="item.status != ''" class="stepText">{{item.status}}</span>
+                </td>
+              </tr>
+              <tr>
+                <td *ngFor="let item of applItem.appealStatusBar; let i=index" id="item{{i}}" [ngClass]="item.status != '' ? 'labelStyle' : 'labelEmptyWidth'">
+                  <div *ngIf="item.status != ''" [ngClass]="item.currentStep == false || item.status == 'Closed' ? 'alignStatus' : 'alignStatus'">
+                    <span *ngIf="item.isCompleted == false && item.currentStep == true && item.stage != ''" class="material-symbols-outlined" style="color: #FDCB52">
+                      circle
+                    </span>
+                    <span *ngIf="item.isCompleted == false && item.currentStep == false" class="material-symbols-outlined" style="color: #FDCB52">
+                      circle
+                    </span>
+                  </div>
+                  <div class="lineConnector" *ngIf="item.status == '' && i > 1 && (i+1) < applItem.appealStatusBar.length"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 32px;">
+          <div class="button-column">
+            <button
+              [class]="appealButtonClass(applItem)"
+              (click)="appealDecision(applItem)"
+              type="button"
+              [disabled]="!canAppeal(applItem)"
+              [title]="appealButtonTitle(applItem)"
+            >
+              Appeal Decision
+            </button>
+          </div>
+        </div>
+        <div
+          *ngIf="canAppeal(applItem)"
+          class="col-md-12"
+          style="display: flex; justify-content: flex-end; padding: 10px 32px 0 0;"
+        >
+          <span>
+            Project Approval decision can be appealed for {{ remainingDays(applItem) }} days
+          </span>
+        </div>
+      </div>
     </mat-card>
   </div>
 </div>

@@ -20,7 +20,8 @@
               [isRequired]="true"
               [isReadOnly]="isReadOnly"
               whoseSignature="Applicant"
-              (signature)="updateApplicantSignature($event)"
+              [signatureFormGroup]="signAndSubmitForm.get('applicantSignature')"
+              (signature)="onSignatureChanged()"
               [initialSignature]="initialApplicantSignature.signature"
               [initialDateSigned]="initialApplicantSignature.dateSigned"
               [initialSignedName]="initialApplicantSignature.signedName"></app-signature>
@@ -31,7 +32,8 @@
               [isReadOnly]="isReadOnly"
               [isRequired]="true"
               whoseSignature="Secondary Applicant"
-              (signature)="updateSecondaryApplicantSignature($event)"
+              [signatureFormGroup]="signAndSubmitForm.get('secondaryApplicantSignature')"
+              (signature)="onSignatureChanged()"
               [initialSignature]="initialSecondaryApplicantSignature.signature"
               [initialDateSigned]="initialSecondaryApplicantSignature.dateSigned"
               [initialSignedName]="initialSecondaryApplicantSignature.signedName"></app-signature>

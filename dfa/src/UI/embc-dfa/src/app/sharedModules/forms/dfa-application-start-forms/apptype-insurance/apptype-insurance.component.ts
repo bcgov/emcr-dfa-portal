@@ -157,22 +157,6 @@ export default class AppTypeInsuranceComponent implements OnInit, OnDestroy {
 
   }
 
-  updateApplicantSignature(event: SignatureBlock) {
-    this.appTypeInsuranceForm?.get('applicantSignature').get('signedName').setValue(event.signedName);
-    this.appTypeInsuranceForm?.get('applicantSignature').get('dateSigned').setValue(event.dateSigned);
-    this.appTypeInsuranceForm?.get('applicantSignature').get('signature').setValue(event.signature);
-    this.formCreationService.insuranceOptionChanged.emit();
-    this.appTypeInsuranceForm?.updateValueAndValidity();
-  }
-
-  updateSecondaryApplicantSignature(event: SignatureBlock) {
-    this.appTypeInsuranceForm?.get('secondaryApplicantSignature').get('signedName').setValue(event.signedName);
-    this.appTypeInsuranceForm?.get('secondaryApplicantSignature').get('dateSigned').setValue(event.dateSigned);
-    this.appTypeInsuranceForm?.get('secondaryApplicantSignature').get('signature').setValue(event.signature);
-    this.formCreationService.insuranceOptionChanged.emit();
-    this.appTypeInsuranceForm?.updateValueAndValidity();
-  }
-
   yesFullyInsured(): void {
     this.dialog
       .open(DFAEligibilityDialogComponent, {
@@ -228,15 +212,33 @@ export default class AppTypeInsuranceComponent implements OnInit, OnDestroy {
 
   // check for No Ins & valid signature information
   validateNoInsuranceHasSignatures(form: FormGroup) {
-
     let enumKey = Object.keys(InsuranceOption)[Object.values(InsuranceOption).indexOf(InsuranceOption.No)];
     if (form.controls.insuranceOption.value !== enumKey) return null; // Yes or Yes, but
 
-    if (!form.get('applicantSignature.signature').value ||
-      !form.get('applicantSignature.dateSigned').value ||
-      !form.get('applicantSignature.signedName').value)
+    // Check applicant signature (always required)
+    if (
+      !form.get('applicantSignature.signature').value ||
+      !form.get('applicantSignature.signedName').value ||
+      !form.get('applicantSignature.dateSigned').value
+    ) {
       return { invalidSignature: true };
+    }
 
+    // Check secondary applicant signature (optional, but if any field is filled, require all)
+    const sec = form.get('secondaryApplicantSignature');
+    const secName = sec.get('signedName').value;
+    const secSig = sec.get('signature').value;
+    const secDate = sec.get('dateSigned').value;
+
+    // Only consider the group "started" if signedName or signature is filled
+    const secondaryStarted = !!(secName || secSig);
+
+    // If started, require all three fields
+    if (secondaryStarted && !(secName && secSig && secDate)) {
+      return { invalidSecondarySignature: true };
+    }
+
+    // If applicant signature is valid, and secondary is either empty or fully filled, form is valid
     return null;
   }
 }

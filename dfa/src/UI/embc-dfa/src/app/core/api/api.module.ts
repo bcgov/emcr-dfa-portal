@@ -6,6 +6,7 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { AppealService } from './services/appeal.service';
 import { ApplicationService } from './services/application.service';
 import { AttachmentService } from './services/attachment.service';
 import { CleanUpLogItemService } from './services/clean-up-log-item.service';
@@ -25,6 +26,7 @@ import { SecondaryApplicantService } from './services/secondary-applicant.servic
   exports: [],
   declarations: [],
   providers: [
+    AppealService,
     ApplicationService,
     AttachmentService,
     CleanUpLogItemService,

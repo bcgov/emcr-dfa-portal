@@ -31,6 +31,7 @@ import { AuthConfigModule } from './auth/auth-config.module';
 import { BceidAuthInterceptor } from './core/interceptors/bceid-auth.interceptor'
 import { environment } from '../environments/environment';
 import { NgxMaskConfig, provideEnvironmentNgxMask } from 'ngx-mask';
+
 const maskConfigFunction: () => Partial<NgxMaskConfig> = () => {
     return {
       validation: false,
@@ -40,7 +41,7 @@ const maskConfigFunction: () => Partial<NgxMaskConfig> = () => {
     exports: [
         MatIconModule,
     ],
-    bootstrap: [AppComponent], 
+    bootstrap: [AppComponent],
     imports: [BrowserModule,
         CommonModule,
         MatDatepickerModule,
@@ -56,7 +57,9 @@ const maskConfigFunction: () => Partial<NgxMaskConfig> = () => {
         ButtonsModule,
         MatIconModule,
         MatAutocompleteModule,
-        AuthConfigModule], providers: [ provideEnvironmentNgxMask(maskConfigFunction),
+        AuthConfigModule
+    ],
+    providers: [ provideEnvironmentNgxMask(maskConfigFunction),
         {
             provide: APP_BASE_HREF,
             useFactory: (s: PlatformLocation) => {
@@ -74,7 +77,7 @@ const maskConfigFunction: () => Partial<NgxMaskConfig> = () => {
         },
         ScriptService,
         // 2024-07-04 EMCRI-217 waynezen: send BCeID Access_token along with API calls
-        // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, 
+        // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: BceidAuthInterceptor, multi: true },
         provideHttpClient(withFetch()),
     ] })

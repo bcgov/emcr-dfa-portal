@@ -91,6 +91,10 @@ namespace EMBC.DFA.API.Controllers
                 Captcha = new CaptchaConfiguration
                 {
                     Key = configuration.GetValue<string>("captcha:key")
+                },
+                FeatureFlags = new FeatureFlagConfiguration
+                {
+                     UseAppeals = !string.IsNullOrEmpty(configuration["FEATURE_USE_APPEALS"])
                 }
             };
 
@@ -210,6 +214,8 @@ namespace EMBC.DFA.API.Controllers
         public OutageInformation OutageInfo { get; set; }
         public TimeoutConfiguration TimeoutInfo { get; set; }
         public CaptchaConfiguration Captcha { get; set; }
+
+        public FeatureFlagConfiguration FeatureFlags { get; set; }
     }
 
     public class OidcOptions
@@ -254,6 +260,10 @@ namespace EMBC.DFA.API.Controllers
         public string Key { get; set; }
     }
 
+    public class FeatureFlagConfiguration
+    {
+        public bool UseAppeals { get; set; }
+    }
     public class AreaCommunity
     {
         public string AreaCommunityId { get; set; }

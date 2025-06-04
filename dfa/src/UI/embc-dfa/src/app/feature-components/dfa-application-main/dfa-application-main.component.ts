@@ -264,8 +264,10 @@ export class DFAApplicationMainComponent
 
     this.formCreationService.signaturesChanged.subscribe(signAndSubmit => {
       signAndSubmit.get('applicantSignature').get('dateSigned').updateValueAndValidity();
-      this.isApplicantSigned = this.formCreationService.signAndSubmitForm.value.controls.applicantSignature.valid;
-      this.isSecondaryApplicantSigned = this.formCreationService.signAndSubmitForm.value.controls.secondaryApplicantSignature.valid;
+      // Use the actual form group, not the value object
+      const form = this.formCreationService.signAndSubmitForm.getValue();
+      this.isApplicantSigned = form.get('applicantSignature').valid;
+      this.isSecondaryApplicantSigned = form.get('secondaryApplicantSignature').valid;
       this.checkSignaturesValid();
     });
 
@@ -301,9 +303,15 @@ export class DFAApplicationMainComponent
   }
 
   checkSignaturesValid() {
-    if (this.isSecondaryApplicant == false && this.isApplicantSigned == true) this.isSignaturesValid = true; // no secondary applicant and primary applicant signature valid
-    else if (this.isSecondaryApplicant == true && this.isApplicantSigned == true && this.isSecondaryApplicantSigned == true) this.isSignaturesValid = true; // secondary and primary signatures valid
-    else this.isSignaturesValid = false;
+    if (this.isSecondaryApplicant == false && this.isApplicantSigned == true) {
+      this.isSignaturesValid = true;
+    }
+    else if (this.isSecondaryApplicant == true && this.isApplicantSigned == true && this.isSecondaryApplicantSigned == true) {
+      this.isSignaturesValid = true;
+    }
+    else {
+      this.isSignaturesValid = false;
+    }
   }
 
   ngAfterViewChecked(): void {
@@ -411,7 +419,6 @@ export class DFAApplicationMainComponent
    * @param index step index
    */
   currentStep(index: number): void {
-    console.log('currentStep', index);
     this.loadStepForm(index);
     this.cd.detectChanges();
   }
@@ -570,7 +577,6 @@ export class DFAApplicationMainComponent
    * @param component Name of the component
    */
   setFormData(component: string): void {
-    console.log('setFormData', component);
     switch (component) {
       case 'damaged-property-address':
         this.dfaApplicationMainDataService.damagedPropertyAddress.addressLine1 = this.form.get('addressLine1').value;

@@ -1,41 +1,41 @@
 {
   "/api/*": {
-    "target": "https://dfa-portal-test.apps.silver.devops.gov.bc.ca",
+    "target": "https://portal.test.dfa.gov.bc.ca",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/login": {
-    "target": "https://dfa-portal-test.apps.silver.devops.gov.bc.ca",
+    "target": "https://portal.test.dfa.gov.bc.ca",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/token": {
-    "target": "https://dfa-portal-test.apps.silver.devops.gov.bc.ca",
+    "target": "https://portal.test.dfa.gov.bc.ca",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/signin-oidc": {
-    "target": "https://dfa-portal-test.apps.silver.devops.gov.bc.ca",
+    "target": "https://portal.test.dfa.gov.bc.ca",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/join": {
-    "target": "https://dfa-portal-test.apps.silver.devops.gov.bc.ca",
+    "target": "https://portal.test.dfa.gov.bc.ca",
     "secure": false,
     "logLevel": "debug"
   },
   "/env/info.json": {
-    "target": "https://dfa-portal-test.apps.silver.devops.gov.bc.ca",
+    "target": "https://portal.test.dfa.gov.bc.ca",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
   },
   "/version": {
-    "target": "https://dfa-portal-test.apps.silver.devops.gov.bc.ca",
+    "target": "https://portal.test.dfa.gov.bc.ca",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

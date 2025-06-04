@@ -28,13 +28,9 @@ namespace EMBC.DFA.API.Services
             // Construct the body of the request
             var pairs = new List<KeyValuePair<string, string>>
                 {
-                    // TODO : uncomment these three lines and remove hard-coded resource name, clientid, clientsecret
                     new KeyValuePair<string, string>("resource", options.ResourceName),
                     new KeyValuePair<string, string>("client_id", options.ClientId),
                     new KeyValuePair<string, string>("client_secret", options.ClientSecret),
-                    //new KeyValuePair<string, string>("resource", "https://embc-dfa.dev.jag.gov.bc.ca/api/data/v9.0/"),
-                    //new KeyValuePair<string, string>("client_id", "32ceda11-e0e1-46ee-99b0-83ae3653221d"),
-                    //new KeyValuePair<string, string>("client_secret", "rXSIYOGdXEQ82atQ4UPr2-7bpO7Sp8o4Bu_EFMtb"),
                     new KeyValuePair<string, string>("username", $"{options.ServiceAccountDomain}\\{options.ServiceAccountName}"),
                     new KeyValuePair<string, string>("password", options.ServiceAccountPassword),
                     new KeyValuePair<string, string>("scope", "openid"),

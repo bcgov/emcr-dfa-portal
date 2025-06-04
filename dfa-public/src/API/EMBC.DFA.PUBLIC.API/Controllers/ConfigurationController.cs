@@ -92,6 +92,10 @@ namespace EMBC.DFA.API.Controllers
                 S3 = new S3Configuration
                 {
                     UseS3 = configuration.GetValue<bool>("FEATURE_USE_S3")
+                },
+                FeatureFlags = new FeatureFlagConfiguration
+                {
+                    UseAppeals = !string.IsNullOrEmpty(configuration["FEATURE_USE_APPEALS"])
                 }
             };
 
@@ -196,6 +200,7 @@ namespace EMBC.DFA.API.Controllers
         public TimeoutConfiguration TimeoutInfo { get; set; }
         public CaptchaConfiguration Captcha { get; set; }
         public S3Configuration S3 { get; set; }
+        public FeatureFlagConfiguration FeatureFlags { get; set; }
     }
 
     public class OidcOptions
@@ -243,6 +248,11 @@ namespace EMBC.DFA.API.Controllers
     public class S3Configuration
     {
         public bool UseS3 { get; set; }
+    }
+
+    public class FeatureFlagConfiguration
+    {
+        public bool UseAppeals { get; set; }
     }
 
     public class AreaCommunity

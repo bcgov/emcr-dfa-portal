@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/services/auth.guard';
 
 const routes: Routes = [
@@ -38,6 +38,14 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'dfa-appeal/:type/:caseId',
+    loadChildren: () =>
+      import(
+        './feature-components/dfa-appeal/dfa-appeal.module'
+      ).then((m) => m.DfaAppealModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'dfa-prescreening',
     loadChildren: () =>
       import(
@@ -73,3 +81,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
+

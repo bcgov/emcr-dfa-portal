@@ -350,7 +350,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                 {
                     Select = new[]
                     {
-                        "incidentid", "ticketnumber", "dfa_datefileclosed"
+                        "incidentid", "ticketnumber", "dfa_datefileclosed", "dfa_eligibilitystatus"
                     }
                 });
                 var list = await api.GetList<dfa_appapplication>("dfa_appapplications", new CRMGetListOptions
@@ -390,6 +390,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                        dfa_casenumber = objCaseEvent != null ? objCaseEvent.ticketnumber : null,
                                        dfa_primaryapplicantsigneddate = objApp.dfa_primaryapplicantsigneddate,
                                        dfa_datefileclosed = objCaseEvent != null ? objCaseEvent.dfa_datefileclosed : null,
+                                       dfa_eligibilitystatus = objCaseEvent != null ? objCaseEvent.dfa_eligibilitystatus : null,
                                        dfa_applicationstatusportal = objApp.dfa_applicationstatusportal,
                                        createdon = objApp.createdon,
                                        dfa_farmtype = objApp.dfa_farmtype,

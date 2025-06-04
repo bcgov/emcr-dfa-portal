@@ -171,7 +171,7 @@ namespace EMBC.DFA.API
                      {
                          await Task.CompletedTask;
                          var logger = ctx.HttpContext.RequestServices.GetRequiredService<ITelemetryProvider>().Get<JwtBearerEvents>();
-                         logger.LogError(ctx?.Result?.Failure, "Introspection authantication failed");
+                         logger.LogError(ctx?.Result?.Failure, "Introspection authentication failed");
                      }
                  };
              })
@@ -310,8 +310,8 @@ namespace EMBC.DFA.API
                 //policy.AllowAnyMethod();
                 policy.WithMethods("GET", "POST", "PUT");
 
-                //policy.WithOrigins("https://dfa-portal-dev.apps.silver.devops.gov.bc.ca",
-                //                "https://dfa-landing-page-dev.apps.silver.devops.gov.bc.ca");
+                //policy.WithOrigins("https://portal.dev.dfa.gov.bc.ca",
+                //                "https://dev.dfa.gov.bc.ca");
 
                 //try to get array of origins from section array
                 var corsOrigins = configuration.GetSection("cors:origins").GetChildren().Select(c => c.Value).ToArray();

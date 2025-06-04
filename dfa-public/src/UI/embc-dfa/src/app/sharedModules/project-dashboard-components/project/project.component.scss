@@ -42,6 +42,23 @@
   border-radius: 5px;
 }
 
+.disabled-button {
+  float: left !important;
+  /* background-color: #ffffff; */
+  color: lightgrey;
+  height: 32px;
+  font-size: 15px;
+  padding-left: 16px;
+  padding-right: 16px;
+  max-width: 200px;
+  min-width: 180px;
+  margin: 3px;
+  font-weight: bold;
+  border: 1px solid lightgrey !important;
+  background: #f9fbfe 0% 0% no-repeat padding-box;
+  border-radius: 5px;
+}
+
 .whitebutton {
   background-color: white;
   color: grey;

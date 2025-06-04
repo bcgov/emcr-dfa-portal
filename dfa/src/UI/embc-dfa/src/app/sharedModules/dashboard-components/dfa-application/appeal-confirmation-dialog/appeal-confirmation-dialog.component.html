@@ -1,0 +1,68 @@
+<div class="dialog">
+    @if(this.content.caseEligibility === this.CaseElibilityEnum.Eligible) {
+    <h2 class="dialog-title"><b>Please confirm that you are waiting to appeal the DFA's Payment Decision on:</b></h2>
+    }
+
+    @if(this.content.caseEligibility === this.CaseElibilityEnum.Ineligible) {
+    <h2 class="dialog-title"><b>Please confirm that you are waiting to appeal the DFA's eligibility Decision on:</b>
+    </h2>
+    }
+
+    <mat-dialog-content>
+        <div class="row">
+            <div>
+                <b>Damaged Property Address:</b> {{this.content.damagedAddress}}
+            </div>
+            <div>
+                <b>Date of Damage: </b> {{this.content.dateOfDamage | date : "yyyy/MM/dd"}}
+            </div>
+            <div>
+                <b>Event ID:</b> {{this.content.eventId === null ? "To Be Assigned" : this.content.eventId}}
+            </div>
+            <div>
+                <b>Original Application Date :</b> {{this.content.applicationDate | date : "yyyy/MM/dd"}}
+            </div>
+            <div>
+                <b>Case Number :</b> {{this.content.caseNumber === null ? "To Be Assigned" : this.content.caseNumber}}
+            </div>
+            <div>
+                <b>Applicant Type:</b> {{this.content.applicationType}} {{this.content.applicationSubType}}
+            </div>
+        </div>
+
+        @if(this.content.caseEligibility === this.CaseElibilityEnum.Eligible){
+        <div class="note">
+            <p>
+                Note that by submitting an appeal for amounts paid by DFA, your entire case may be re-evaluated.
+                Re-evaluation may result in higher or lower payment amounts being determined. In the event a lower
+                payment amount is determined, you will be asked to repay those amounts within 60 Days of appeal
+                determination.
+            </p>
+        </div>
+        }
+        @if(this.content.caseEligibility === this.CaseElibilityEnum.Ineligible){
+        <div>
+            <p>
+                To complete this process, you will be requiered to provide reasoning and/or documentation to support
+                your appeal.
+            </p>
+        </div>
+        }
+    </mat-dialog-content>
+
+    <mat-dialog-actions>
+        <div class="button-container">
+
+            <button class="button-s button-width" mat-button (click)="cancel()">
+                No, I do not want to appeal at this time
+            </button>
+
+            <!-- Add Navigation to appeals decision page -->
+            <button class="button-p button-width" mat-button (click)="confirmAppeal()">
+                Yes, I want to appeal the decision
+            </button>
+
+        </div>
+
+    </mat-dialog-actions>
+</div>

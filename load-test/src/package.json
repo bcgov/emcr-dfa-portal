@@ -41,6 +41,6 @@
     "loadTest": "k6 run ./dist/load-test.js",
     "benchmark": "k6 run ./dist/benchmark-test.js",
     "stressTest": "k6 run ./dist/stress-test.js",
-    "gen-dfa-api": "ng-openapi-gen -i https://dfa-portal-dev.apps.silver.devops.gov.bc.ca/api/openapi/v1/openapi.json -o ./src/api/dfa --ignoreUnusedModels false"
+    "gen-dfa-api": "ng-openapi-gen -i https://portal.dev.dfa.gov.bc.ca/api/openapi/v1/openapi.json -o ./src/api/dfa --ignoreUnusedModels false"
   }
 }
