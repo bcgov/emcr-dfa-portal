@@ -1,30 +1,31 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AppealRoutingModule } from './appeal-main-routing.module';
-import { AppealMainComponent } from './appeal-main.component';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { CoreModule } from '../../core/core.module';
 import { ComponentWrapperModule } from '../../sharedModules/components/component-wrapper/component-wrapper.module';
 import { ReviewModule } from '../review/review.module';
-import { CoreModule } from '../../core/core.module';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatInputModule } from '@angular/material/input';
-
+import { AppealRoutingModule } from './appeal-main-routing.module';
+import { AppealMainComponent } from './appeal-main.component';
 
 @NgModule({
   declarations: [AppealMainComponent],
   imports: [
-    CommonModule,
     AppealRoutingModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatStepperModule,
-    MatSelectModule,
+    CommonModule,
     ComponentWrapperModule,
-    ReviewModule,
     CoreModule,
-    MatTooltipModule
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatStepperModule,
+    MatTooltipModule,
+    ReactiveFormsModule,
+    ReviewModule
   ]
 })
 export class AppealMainModule {}

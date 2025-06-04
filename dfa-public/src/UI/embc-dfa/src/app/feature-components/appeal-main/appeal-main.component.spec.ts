@@ -9,8 +9,7 @@ describe('AppealMainComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppealMainComponent]
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AppealMainComponent);
     component = fixture.componentInstance;
