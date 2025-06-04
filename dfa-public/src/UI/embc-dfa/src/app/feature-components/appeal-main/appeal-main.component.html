@@ -7,108 +7,116 @@
 
   <form [formGroup]="appealForm">
     <mat-horizontal-stepper class="stepper-style" labelPosition="bottom" #stepper [linear]="false">
-      <mat-step [stepControl]="appealForm">
+      <mat-step [stepControl]="appealForm.get('step1')">
         <ng-template matStepLabel>Appeal Rationale</ng-template>
 
-        <div class="row">
-          <div class="container">
-            <div class="row">
-              <h2 class="sub-heading mb-0">Project Details</h2>
-            </div>
-            <div class="row mb-4">
-              <div class="col-md-6">
-                <b>Project Name:</b>
-                {{ project?.projectName }}
-                <br />
-                <b>Project Number:</b>
-                {{ project?.projectNumber }}
-                <br />
-                <b>Project Type:</b>
-                {{ project?.projectType }}
-                <br />
-                <b>Date of Damage:</b>
-                {{ application?.dateOfDamage }}
-                <br />
-                <b>Original Application Date:</b>
-                TBD
-                <br />
-                <b>Original DFA Decision Date:</b>
-                TBD
-                <br />
-                <b>Original DFA Eligibility Decision:</b>
-                TBD
-                <br />
-              </div>
-              <div class="col-md-6">
-                <b>Appeal Number:</b>
-                TBD
-                <br />
-                <b>Appeal Submission Date:</b>
-                TBD
-                <br />
-                <b>Appeal Decision:</b>
-                TBD
-                <br />
-              </div>
+        <div formGroupName="step1">
+          <div class="row">
+            <app-appeal-project-details
+              [projectId]="projectId"
+              [project]="project"
+              [application]="application"
+              [appeal]="appeal"></app-appeal-project-details>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <h2 class="sub-heading mb-0">Project Eligibility Appeal Process</h2>
+              <p>
+                If you believe that the DFA program incorrectly determined the eligibility for this project, whether it
+                is for the entire project or a specific cost(s), you may appeal the determination within 60 days of the
+                date on the notice being appealed.
+              </p>
+              <p>
+                Submitting an appeal does not guarantee that the DFA determination will be overturned. Appeal
+                determinations may overturn or uphold the DFA determination being appeald.
+              </p>
             </div>
           </div>
-        </div>
 
-        <div class="row mb-4">
-          <div class="col-md-12">
-            <h2 class="sub-heading mb-0">Project Eligibility Appeal Process</h2>
-            <p>
-              If you believe that the DFA program incorrectly determined the eligibility for this project, whether it is
-              for the entire project or a specific cost(s), you may appeal the determination within 60 days of the date
-              on the notice being appealed.
-            </p>
-            <p>
-              Submitting an appeal does not guarantee that the DFA determination will be overturned. Appeal
-              determinations may overturn or uphold the DFA determination being appeald.
-            </p>
-
-            <h2 class="sub-heading requiredField mb-0">Appeal Reason</h2>
-
-            <p>
-              Please provide a detailed appeal reasoning here. If you require more space to provide your reasoning,
-              please provide it as a supporting document below. Any supporting documentation you can provide in addition
-              to the reasoning is encouraged. Appeal staff may reach out to you if more information is required.
-            </p>
-            <mat-form-field appearance="outline" class="w-100">
-              <textarea
-                formControlName="reason"
-                rows="5"
-                class="w-100"
-                title="Detailed reasoning and/or evidence that explains and/or supports why the appellant believes the DFA determination was incorrect."
-                [maxlength]="reasonMaxLength"
-                matInput
-                (keyup)="updateReasonRemainingChars()"></textarea>
-              <mat-hint>{{ reasonRemainingLength }} characters remaining.</mat-hint>
-            </mat-form-field>
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <h2 class="sub-heading requiredField mb-0">Appeal Reason</h2>
+              <p>
+                Please provide a detailed appeal reasoning here. If you require more space to provide your reasoning,
+                please provide it as a supporting document below. Any supporting documentation you can provide in
+                addition to the reasoning is encouraged. Appeal staff may reach out to you if more information is
+                required.
+              </p>
+              <mat-form-field appearance="outline" class="w-100">
+                <textarea
+                  formControlName="reason"
+                  rows="5"
+                  class="w-100"
+                  title="Detailed reasoning and/or evidence that explains and/or supports why the appellant believes the DFA determination was incorrect."
+                  [maxlength]="reasonMaxLength"
+                  matInput
+                  (keyup)="updateReasonRemainingChars()"></textarea>
+                <mat-hint>{{ reasonRemainingLength }} characters remaining.</mat-hint>
+              </mat-form-field>
+            </div>
           </div>
-        </div>
 
-        <div class="row mb-4">
-          <div class="col-md-6">
-            <button class="button-s align-back-button" mat-button type="button" (click)="goBack()">Back</button>
-          </div>
-          <div class="col-md-6">
-            <button class="button-p" mat-stroked-button matStepperNext type="button" (click)="goForward()">
-              Next - Upload Documents
-            </button>
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <button class="button-s align-back-button" mat-button type="button" (click)="cancelAppeal()">
+                Cancel Appeal
+              </button>
+            </div>
+            <div class="col-md-6">
+              <button class="button-p" mat-stroked-button matStepperNext type="button">Next - Upload Documents</button>
+            </div>
           </div>
         </div>
       </mat-step>
 
-      <mat-step>
+      <mat-step [stepControl]="appealForm.get('step2')">
         <ng-template matStepLabel>Upload Documents</ng-template>
 
-        <div class="row">
-          <div class="col-md-6">
-            <button class="button-s align-back-button" mat-button type="button" (click)="goBack()">Back</button>
+        <div formGroupName="step2">
+          <div class="row">
+            <app-appeal-project-details
+              [projectId]="projectId"
+              [project]="project"
+              [application]="application"
+              [appeal]="appeal"></app-appeal-project-details>
           </div>
-          <div class="col-md-6">
-            <button class="button-p" mat-stroked-button type="button" (click)="goForward()">Next</button>
+
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <h2 class="sub-heading mb-0">Appeal Support</h2>
+              <p>
+                Evidence or supporting documentation should be included wherever possible (e.g. technical reports, code
+                and standards evidence, bylaws, photos, assessments, pictures, usage logs, timesheets, etc.).
+              </p>
+            </div>
+          </div>
+          <div class="row justify-content-start mb-4">
+            <div>
+              <button mat-button type="button" class="link-button" (click)="addDocument()">
+                <mat-icon class="sub-heading">add</mat-icon>
+                <span class="sub-heading">Add Supporting Documents (Optional)</span>
+              </button>
+            </div>
+            <div>
+              <app-appeal-documents></app-appeal-documents>
+            </div>
+            <div>
+              <div *ngFor="let document of appealForm.get('step2.documents').value">
+                <div>
+                  <span>{{ document.fileName }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <button class="button-s align-back-button" mat-button matStepperPrevious type="button">Back</button>
+            </div>
+            <div class="col-md-6">
+              <button class="button-p" mat-stroked-button matStepperNext type="button">Next</button>
+            </div>
           </div>
         </div>
       </mat-step>
@@ -117,9 +125,17 @@
         <ng-template matStepLabel>Review and Submit</ng-template>
 
         <div class="row">
+          <app-appeal-project-details
+            [projectId]="projectId"
+            [project]="project"
+            [application]="application"
+            [appeal]="appeal"></app-appeal-project-details>
+        </div>
+
+        <div class="row">
           <div class="col-md-6">
-            <button class="button-s" mat-button type="button" (click)="stepper.previous()">
-              <span>Go Back</span>
+            <button class="button-s" mat-button matStepperPrevious type="button">
+              <span>Back</span>
             </button>
           </div>
           <div class="col-md-6">
@@ -130,7 +146,7 @@
         </div>
       </mat-step>
       <ng-template matStepperIcon="edit" let-index="index">
-        {{ index + 1 }}
+        {{ index }}
       </ng-template>
     </mat-horizontal-stepper>
     <!-- <app-loader
