@@ -132,6 +132,30 @@ const routes: Routes = [
       ).then((m) => m.DFAProjectAmendmentModule),
     canActivate: [AutoLoginPartialRoutesGuard]
   },
+    {
+    path: 'dfa-project-amendments/:id',
+    loadChildren: () =>
+      import(
+        './feature-components/dfa-amendment-dashboard/dfa-amendment-dashboard.module'
+      ).then((m) => m.DFAAmendmentModule),
+    canActivate: [AutoLoginPartialRoutesGuard]
+  },
+    {
+    path: 'dfa-amendment-main',
+    loadChildren: () =>
+      import(
+        './feature-components/dfa-amendment-main/dfa-amendment-main.module'
+      ).then((m) => m.DFAAmendmentMainModule),
+      canActivate: [AutoLoginPartialRoutesGuard]
+  },
+  {
+    path: 'dfa-amendment-main/:id',
+    loadChildren: () =>
+      import(
+        './feature-components/dfa-amendment-main/dfa-amendment-main.module'
+      ).then((m) => m.DFAAmendmentMainModule),
+      canActivate: [AutoLoginPartialRoutesGuard]
+  },
   {
     path: 'dfa-claim-main',
     loadChildren: () =>

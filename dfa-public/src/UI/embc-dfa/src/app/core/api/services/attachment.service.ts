@@ -272,6 +272,68 @@ export class AttachmentService extends BaseService {
   }
 
   /**
+   * Path part for operation attachmentGetAmendmentAttachments
+   */
+  static readonly AttachmentGetAmendmentAttachmentsPath = '/api/attachments/byProjectId';
+
+  /**
+   * Get a list of amendment attachments by project Id.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `attachmentGetAmendmentAttachments()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  attachmentGetAmendmentAttachments$Response(params?: {
+
+    /**
+     * The project Id.
+     */
+    projectId?: string;
+  }): Observable<StrictHttpResponse<Array<FileUpload>>> {
+
+    const rb = new RequestBuilder(this.rootUrl, AttachmentService.AttachmentGetAmendmentAttachmentsPath, 'get');
+    if (params) {
+      rb.query('projectId', params.projectId, {});
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'application/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<Array<FileUpload>>;
+      })
+    );
+  }
+
+  /**
+   * Get a list of amendment attachments by project Id.
+   *
+   *
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `attachmentGetAmendmentAttachments$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  attachmentGetAmendmentAttachments(params?: {
+
+    /**
+     * The project Id.
+     */
+    projectId?: string;
+  }): Observable<Array<FileUpload>> {
+
+    return this.attachmentGetAmendmentAttachments$Response(params).pipe(
+      map((r: StrictHttpResponse<Array<FileUpload>>) => r.body as Array<FileUpload>)
+    );
+  }
+
+  /**
    * Path part for operation attachmentGetClaimAttachments
    */
   static readonly AttachmentGetClaimAttachmentsPath = '/api/attachments/byclaimId';

@@ -952,6 +952,53 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             }
         }
 
+        public async Task<IEnumerable<dfa_projectdocumentlocation>> GetAmendmentDocumentLocationsListAsync(Guid projectId)
+        {
+            try
+            {
+                var projectIdString = projectId.ToString();
+                var amendmentCategoryString = "Amendment"; 
+                var list = await api.GetList<dfa_projectdocumentlocation>("dfa_projectdocumentlocations", new CRMGetListOptions
+                {
+                    Select = new[]
+                    {
+                        "dfa_projectdocumentlocationid", "_dfa_projectid_value", "dfa_name", "dfa_description", "createdon", "dfa_documenttype", "dfa_modifiedby", "dfa_requireddocumenttype"
+                    },
+                    Filter = $"_dfa_projectid_value eq {projectIdString} and dfa_documenttype eq {amendmentCategoryString}"
+                });
+
+                return list.List;
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Failed to get documents {ex.Message}", ex);
+            }
+        }
+
+        public async Task<IEnumerable<bcgov_documenturl>> GetS3AmendmentDocumentListAsync(Guid projectId)
+        {
+            try
+            {
+                var projectIdString = projectId.ToString();
+                var amendmentCategoryString = "Amendment";
+                var list = await api.GetList<bcgov_documenturl>("bcgov_documenturls", new CRMGetListOptions
+                {
+                    Select = new[]
+                    {
+                        "bcgov_filename", "createdon", "bcgov_url", "bcgov_filesize", "bcgov_origincode", "bcgov_documenturlid", "statuscode", "statecode",
+                        "dfa_requireddocumenttype", "_dfa_project_value", "bcgov_mimetype", "bcgov_size", "bcgov_fileextension", "dfa_description",
+                        "bcgov_fileclassification", "dfa_category", "_dfa_appapplication_value", "_modifiedby_value"
+                    },
+                    Filter = $"_dfa_project_value eq {projectIdString} and dfa_documenttype eq {amendmentCategoryString} and statecode eq 0 and bcgov_origincode eq 931490000"
+                });
+
+                return list.List;
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Failed to get documents {ex.Message}", ex);
+            }
+        }
         public async Task<IEnumerable<bcgov_documenturl>> GetS3ProjectClaimDocumentListAsync(Guid claimId)
         {
             try
@@ -1133,7 +1180,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             return list.List.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<dfa_project>> GetProjectListAsync(string applicationId)
+        public async Task<IEnumerable<dfa_project>> GetProjectListAsync(string applicationId, bool useAmendments = false)
         {
             try
             {
@@ -1190,6 +1237,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_projectbusinessprocesssubstages = objApp.dfa_projectbusinessprocesssubstages,
                                    dfa_projectdecision = objApp.dfa_projectdecision,
                                    dfa_bpfclosedate = !string.IsNullOrEmpty(objApp.dfa_bpfclosedate) ? DateTime.Parse(objApp.dfa_bpfclosedate).ToLocalTime().ToString() : objApp.dfa_bpfclosedate,
+                                   useAmendments = useAmendments
                                }).AsEnumerable().OrderByDescending(m => m.createdon);
 
                 return lstApps;

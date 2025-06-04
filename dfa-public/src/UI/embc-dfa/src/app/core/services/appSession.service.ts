@@ -10,6 +10,8 @@ export class AppSessionService {
   public pastProjectsCount: EventEmitter<number> = new EventEmitter<number>();
   public openClaimsCount: EventEmitter<number> = new EventEmitter<number>();
   public closedClaimsCount: EventEmitter<number> = new EventEmitter<number>();
+  public openAmendmentsCount: EventEmitter<number> = new EventEmitter<number>();
+  public closedAmendmentsCount: EventEmitter<number> = new EventEmitter<number>();
 
   constructor(private cacheService: CacheService) {}
 

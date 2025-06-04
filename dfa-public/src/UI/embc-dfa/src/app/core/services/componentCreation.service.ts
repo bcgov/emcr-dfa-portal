@@ -161,6 +161,19 @@ export class ComponentCreationService {
 
   ];
 
+  dfaAmendmentMainComponents: Array<any> = [
+    {
+      component: 'amendment',
+      nextButtonLabel: 'Next - Upload Documents',
+      backButtonLabel: 'Go Back',
+      isLast: true,
+      loadWrapperButton: false,
+      lastStep: 0,
+      stepName: 'Amendment Submission',
+      editable: true
+    }
+  ];
+
     getProfileComponents(): Observable<any> {
     const profile = new Observable((observer) => {
       observer.next(this.dynamicComponents);
@@ -224,6 +237,15 @@ export class ComponentCreationService {
     const componentArr: Array<ComponentMetaDataModel> =
       new Array<ComponentMetaDataModel>();
     for (const comp of this.dfaClaimMainComponents) {
+      componentArr.push(Object.assign(new ComponentMetaDataModel(), comp));
+    }
+    return componentArr;
+  }
+
+    createDFAAmendmentMainSteps(): Array<ComponentMetaDataModel> {
+    const componentArr: Array<ComponentMetaDataModel> =
+      new Array<ComponentMetaDataModel>();
+    for (const comp of this.dfaAmendmentMainComponents) {
       componentArr.push(Object.assign(new ComponentMetaDataModel(), comp));
     }
     return componentArr;

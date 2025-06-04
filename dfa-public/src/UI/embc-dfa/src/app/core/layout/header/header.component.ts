@@ -85,12 +85,21 @@ export class HeaderComponent implements OnInit {
       excluded: false,
       islink: true
     },
+        {
+      label: 'Amendment Dashboard',
+      link: 'dfa-project-main/prjid/project-amendments',
+      icon: 'pan_tool',
+      path: '/project-amendments',
+      level: 4,
+      excluded: false,
+      islink: true
+    },
     {
       label: 'View Amendment',
       link: 'dfa-project-amendment/prjid',
       icon: 'pan_tool',
       path: '/dfa-project-amendment/',
-      level: 4,
+      level: 5,
       excluded: true,
       islink: true
     },

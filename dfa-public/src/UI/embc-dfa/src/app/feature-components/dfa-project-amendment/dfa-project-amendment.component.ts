@@ -43,7 +43,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DFAProjectMainMappingService } from '../dfa-project-main/dfa-project-main-mapping.service';
-import { ProjectAmendment } from '../../core/model/dfa-project-main.model';
+import { ProjectAmendment } from '../../core/model/dfa-amendment-main.model';
 import { DFAGeneralInfoDialogComponent } from '../../core/components/dialog-components/dfa-general-info-dialog/dfa-general-info-dialog.component';
 import { Decision } from 'src/app/models/decision.enum';
 
@@ -128,9 +128,9 @@ export class DFAProjectAmendmentComponent
     this.appId = this.dfaProjectMainDataService.getApplicationId(); //this.route.snapshot.paramMap.get('id');
     this.projectId = this.dfaProjectMainDataService.getProjectId();
     this.applicationNumber = 'Application';
-    this.getApplicationDetials(this.appId);
+    this.getApplicationDetails(this.appId);
     this.getRecoveryPlan(this.projectId);
-    this.getAmendmentDetials(this.projectId);
+    this.getAmendmentDetails(this.projectId);
 
     this.dfaProjectMainDataService.setApplicationId(this.appId);
     this.disableFormfields();
@@ -152,7 +152,7 @@ export class DFAProjectAmendmentComponent
     this.projectAmendmentForm.controls.approvedAdditionalProjectCost.disable();
   }
 
-  getApplicationDetials(applicationId: string) {
+  getApplicationDetails(applicationId: string) {
     if (applicationId) {
       this.applicationService.applicationGetApplicationDetailsForProject({ applicationId: applicationId }).subscribe({
         next: (dfaApplicationMain) => {
@@ -220,7 +220,7 @@ export class DFAProjectAmendmentComponent
 
   SyncAmendmentDetails(): void {
     this.projectId = this.dfaProjectMainDataService.getProjectId();
-    this.getAmendmentDetials(this.projectId);
+    this.getAmendmentDetails(this.projectId);
   }
 
   getRecoveryPlan(projectId: string) {
@@ -238,7 +238,7 @@ export class DFAProjectAmendmentComponent
     }
   }
 
-  getAmendmentDetials(projectId: string) {
+  getAmendmentDetails(projectId: string) {
     if (projectId) {
       this.projectService.projectGetDfaProjectAmendments({ projectId: projectId }).subscribe({
         next: (dfaAmendment) => {

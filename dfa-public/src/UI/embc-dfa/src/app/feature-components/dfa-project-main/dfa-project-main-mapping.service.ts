@@ -4,7 +4,8 @@ import { first } from 'rxjs/operators';
 import { DfaApplicationMain, FullTimeOccupant, SecondaryApplicant, OtherContact, DamagedRoom, CleanUpLogItem } from 'src/app/core/model/dfa-application-main.model';
 import { DFAProjectMainDataService } from './dfa-project-main-data.service';
 import { FormCreationService } from '../../core/services/formCreation.service';
-import { DfaProjectMain, ProjectAmendment } from '../../core/model/dfa-project-main.model';
+import { DfaProjectMain } from '../../core/model/dfa-project-main.model';
+import { ProjectAmendment } from 'src/app/core/model/dfa-amendment-main.model';
 
 @Injectable({ providedIn: 'root' })
 export class DFAProjectMainMappingService {

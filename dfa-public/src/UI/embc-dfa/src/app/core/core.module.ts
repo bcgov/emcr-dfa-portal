@@ -43,6 +43,7 @@ import { SecondaryApplicantWarningDialogComponent } from './components/dialog-co
 import { DFAApplicationSubmissionMsgDialogComponent } from './components/dialog-components/dfa-application-submission-msg-dialog/dfa-application-submission-msg.component';
 import { DFADeleteConfirmInvoiceDialogComponent } from './components/dialog-components/dfa-confirm-delete-invoice-dialog/dfa-confirm-delete-invoice.component';
 import { DFAConfirmClaimCreateDialogComponent } from './components/dialog-components/dfa-confirm-claim-create-dialog/dfa-confirm-claim-create-dialog.component';
+import { DFAConfirmAmendmentCreateDialogComponent } from './components/dialog-components/dfa-confirm-amendment-create-dialog/dfa-confirm-amendment-create-dialog.component'
 import { DFAConfirmProjectCreateDialogComponent } from './components/dialog-components/dfa-confirm-project-create-dialog/dfa-confirm-project-create-dialog.component';
 import { DFAGeneralInfoDialogComponent } from './components/dialog-components/dfa-general-info-dialog/dfa-general-info-dialog.component';
 import { ContactNotFoundComponent } from 'src/app/sharedModules/forms/dfa-application-main-forms/contacts/contact-not-found.component';
@@ -95,6 +96,7 @@ import { ContactNotFoundComponent } from 'src/app/sharedModules/forms/dfa-applic
     DFAApplicationSubmissionMsgDialogComponent,
     DFADeleteConfirmInvoiceDialogComponent,
     DFAConfirmClaimCreateDialogComponent,
+    DFAConfirmAmendmentCreateDialogComponent,
     DFAConfirmProjectCreateDialogComponent,
     DFAGeneralInfoDialogComponent,
     ContactNotFoundComponent
@@ -126,6 +128,7 @@ import { ContactNotFoundComponent } from 'src/app/sharedModules/forms/dfa-applic
     DFAApplicationSubmissionMsgDialogComponent,
     DFADeleteConfirmInvoiceDialogComponent,
     DFAConfirmClaimCreateDialogComponent,
+    DFAConfirmAmendmentCreateDialogComponent,
     DFAGeneralInfoDialogComponent,
     DFAConfirmProjectCreateDialogComponent,
     ContactNotFoundComponent

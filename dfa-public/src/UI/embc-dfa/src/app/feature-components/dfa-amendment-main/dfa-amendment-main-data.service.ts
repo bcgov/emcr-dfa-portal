@@ -2,31 +2,32 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { CacheService } from 'src/app/core/services/cache.service';
 import { ApplicationService, AttachmentService } from 'src/app/core/api/services';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { DfaProjectMain, FileUpload, RecoveryPlan } from '../../core/model/dfa-project-main.model';
+import { DfaProjectMain, FileUpload } from '../../core/model/dfa-project-main.model';
+import { DfaAmendmentMain, ProjectAmendment } from 'src/app/core/model/dfa-amendment-main.model';
 
 @Injectable({ providedIn: 'root' })
-export class DFAProjectMainDataService {
-  private _recoveryPlan: RecoveryPlan;
+export class DFAAmendmentMainDataService {
+  private _projectAmendment: ProjectAmendment;
   private _fileUploads = [];
+  private _dfaAmendmentMain: DfaAmendmentMain;
   private _dfaProjectMain: DfaProjectMain;
   private _isSubmitted: boolean = false;
   private _applicationId: string;
   private _projectId: string;
-  private _claimId: string;
   private _amendmentId: string;
-  private _appUrl: string;
+  private _invoiceId: string = null;
+  private _eligibleGST: boolean;
   private _vieworedit: string;
   private _stepselected: string;
   private _isdisabled: string;
   private _editstep: string;
   private _stage: string;
-  private _projectDecision: string;
+  private _amendmentDecision: string;
   private _requiredDocuments = [];
   public changeViewOrEdit: EventEmitter<string> = new EventEmitter<string>();
-  public changeAppUrl: EventEmitter<string> = new EventEmitter<string>();
   public changeDisableFileUpload: EventEmitter<string> = new EventEmitter<string>();
   public stepSelected: EventEmitter<string> = new EventEmitter<string>();
-  public changeProjectId: EventEmitter<string> = new EventEmitter<string>();
+  public changeAmendmentId: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(
     private cacheService: CacheService,
@@ -35,14 +36,13 @@ export class DFAProjectMainDataService {
   ) {
   }
 
-  public get recoveryPlan(): RecoveryPlan {
-    return this._recoveryPlan;
+  public get amendment(): ProjectAmendment {
+    return this._projectAmendment;
   }
 
-  public set recoveryPlan(value: RecoveryPlan) {
-    this._recoveryPlan = value;
+  public set amendment(value: ProjectAmendment) {
+    this._projectAmendment = value;
   }
-
 
   public get requiredDocuments(): Array<string> {
     return this._requiredDocuments;
@@ -60,10 +60,10 @@ export class DFAProjectMainDataService {
   }
 
   public getDFAProjectMain(): DfaProjectMain {
-    if (this._dfaProjectMain === null || undefined) {
-      this._dfaProjectMain = JSON.parse(this.cacheService.get('dfa-project-main'));
+    if (this._dfaAmendmentMain === null || undefined) {
+      this._dfaAmendmentMain = JSON.parse(this.cacheService.get('dfa-amendment-main'));
     }
-    return this._dfaProjectMain;
+    return this._dfaAmendmentMain;
   }
 
   public get isSubmitted(): boolean {
@@ -73,9 +73,9 @@ export class DFAProjectMainDataService {
     this._isSubmitted = value;
   }
 
-  public setDFAProjectMain(dfaProjectMain: DfaProjectMain): void {
-    this._dfaProjectMain = dfaProjectMain;
-    this.cacheService.set('dfa-project-main', dfaProjectMain);
+  public setDFAAmendmentMain(dfaAmendmentMain: DfaAmendmentMain): void {
+    this._dfaAmendmentMain = dfaAmendmentMain;
+    this.cacheService.set('dfa-amendment-main', dfaAmendmentMain);
   }
 
   public setApplicationId(applicationId: string): void {
@@ -94,7 +94,6 @@ export class DFAProjectMainDataService {
   public setProjectId(projectId: string): void {
     this._projectId = projectId;
     this.cacheService.set('projectId', projectId);
-    this.changeProjectId.emit(projectId);
   }
 
   public getProjectId(): string {
@@ -105,22 +104,10 @@ export class DFAProjectMainDataService {
     return this._projectId;
   }
 
-  public setClaimId(claimId: string): void {
-    this._claimId = claimId;
-    this.cacheService.set('claimId', claimId);
-  }
-
-  public getClaimId(): string {
-    if (this._claimId === null || this._claimId === undefined) {
-      this._claimId = this.cacheService.get('claimId');
-    }
-
-    return this._claimId;
-  }
-
   public setAmendmentId(amendmentId: string): void {
     this._amendmentId = amendmentId;
     this.cacheService.set('amendmentId', amendmentId);
+    this.changeAmendmentId.emit(amendmentId);
   }
 
   public getAmendmentId(): string {
@@ -129,6 +116,27 @@ export class DFAProjectMainDataService {
     }
 
     return this._amendmentId;
+  }
+
+  public setInvoiceId(invoiceId: string): void {
+    this._invoiceId = invoiceId;
+    this.cacheService.set('invoiceId', invoiceId);
+  }
+
+  public getInvoiceId(): string {
+    if (this._invoiceId === null || this._invoiceId === undefined) {
+      this._invoiceId = this.cacheService.get('invoiceId');
+    }
+
+    return this._invoiceId;
+  }
+
+  public setEligibleGST(eligibleGST: boolean): void {
+    this._eligibleGST = eligibleGST;
+  }
+
+  public getEligibleGST(): boolean {
+    return this._eligibleGST;
   }
 
   public setViewOrEdit(vieworedit: string): void {
@@ -171,7 +179,7 @@ export class DFAProjectMainDataService {
   public getEditStep(): string {
     return this._editstep;
   }
-
+  
   public setStage(stage: string): void {
     this._stage = stage;
   }
@@ -179,18 +187,18 @@ export class DFAProjectMainDataService {
     return this._stage;
   }
 
-  public setProjectDecision(projectDecision: string): void {
-    this._projectDecision = projectDecision;
+  public setAmendmentDecision(amendmentDecision: string): void {
+    this._amendmentDecision = amendmentDecision;
   }
-  public getProjectDecision(): string {
-    return this._projectDecision;
+  public getAmendmentDecision(): string {
+    return this._amendmentDecision;
   }
 
-   public createDFAProjectMainDTO(): DfaProjectMain {
+   public createDFAAmendmentMainDTO(): DfaAmendmentMain {
     return {
-      id: this._projectId,
-      applicationId: this._applicationId,
-      project: this._recoveryPlan
+      id: this._amendmentId,
+      projectId: this._projectId,
+      amendment: this._projectAmendment
     };
   }
 }

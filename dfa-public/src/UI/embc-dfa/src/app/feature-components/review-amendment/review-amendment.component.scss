@@ -1,0 +1,65 @@
+.review-heading {
+    font-weight: 700;
+    font-style: normal;
+    font-size: 30px;
+    color: #169bd5;
+}
+
+.review-profile-head{
+    margin: 0px !important;
+}
+
+.edit-image img:last-child {
+    display: none;
+}
+
+.edit-image:hover img:last-child {
+    display: block;
+}
+
+.edit-image:hover img:first-child {
+    display: none;
+}
+
+.info-detail {
+  padding: 10px 10px 10px 20px;
+}
+
+.wrap-text {
+    word-wrap: break-word;
+}
+
+.no-bottom-margin {
+    margin-bottom: 0;
+}
+
+.contentStyle {
+  border: 1px solid lightgrey;
+  padding: 10px
+}
+
+.missing-info {
+  color: red;
+}
+
+.card-heading {
+  padding-top: 15px;
+}
+
+.example-element-row {
+  height: 51px !important;
+  border: 1px solid;
+  border-color: rgb(204, 204, 204);
+}
+
+tr.mat-mdc-header-row {
+  background: #38598A 0% 0% no-repeat !important;
+}
+
+th.mat-mdc-header-cell {
+  color: white;
+}
+
+.align-left {
+  padding-left: 10px;
+}

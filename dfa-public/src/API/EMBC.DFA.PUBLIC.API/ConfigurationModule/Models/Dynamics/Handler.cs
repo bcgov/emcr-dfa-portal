@@ -50,6 +50,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> DeleteFileUploadAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms, dfa_DeleteDocument_params dfa_DeleteDocument_params);
         Task<IEnumerable<dfa_projectdocumentlocation>> GetProjectFileUploadsAsync(Guid projectId);
         Task<IEnumerable<bcgov_documenturl>> GetS3ProjectDocumentListAsync(Guid projectId);
+        Task<IEnumerable<dfa_projectdocumentlocation>> GetAmendmentFileUploadsAsync(Guid projectId);
+        Task<IEnumerable<bcgov_documenturl>> GetS3AmendmentDocumentListAsync(Guid projectId);
         Task<IEnumerable<bcgov_documenturl>> GetS3ProjectClaimDocumentListAsync(Guid claimId);
         Task<IEnumerable<dfa_projectclaimdocumentlocation>> GetProjectClaimFileUploadsAsync(Guid claimId);
         // 2024-09-19 EMCRI-676 waynezen; overloaded method that filters application based on BCeID Org
@@ -59,7 +61,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<IEnumerable<dfa_effectedregioncommunities>> HandleEffectedRegionCommunityList();
         Task<List<AreaCommunity>> HandleGetAreaCommunities();
         Task<dfa_projectmain_retrieve> GetProjectMainAsync(Guid projectId);
-        Task<List<CurrentProject>> HandleProjectList(string applicationId);
+        Task<List<CurrentProject>> HandleProjectList(string applicationId, bool useAmendments = false);
         Task<List<CurrentProjectAmendment>> HandleProjectAmendmentList(string projectId);
         Task<CurrentApplication> HandleApplicationDetails(string applicationId);
         Task<CurrentProject> HandleProjectDetails(string projectId);
@@ -176,9 +178,9 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             return dfa_project;
         }
 
-        public async Task<List<CurrentProject>> HandleProjectList(string applicationId)
+        public async Task<List<CurrentProject>> HandleProjectList(string applicationId, bool useAmendments = false)
         {
-            var lstApps = await listsGateway.GetProjectListAsync(applicationId);
+            var lstApps = await listsGateway.GetProjectListAsync(applicationId, useAmendments);
             var mappedProjects = mapper.Map<List<CurrentProject>>(lstApps);
             return mappedProjects;
         }
@@ -322,6 +324,16 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public async Task<IEnumerable<bcgov_documenturl>> GetS3ProjectDocumentListAsync(Guid projectId)
         {
             return await listsGateway.GetS3ProjectDocumentListAsync(projectId);
+        }
+
+        public async Task<IEnumerable<dfa_projectdocumentlocation>> GetAmendmentFileUploadsAsync(Guid projectId)
+        {
+            return await listsGateway.GetAmendmentDocumentLocationsListAsync(projectId);
+        }
+
+        public async Task<IEnumerable<bcgov_documenturl>> GetS3AmendmentDocumentListAsync(Guid projectId)
+        {
+            return await listsGateway.GetS3AmendmentDocumentListAsync(projectId);
         }
 
         public async Task<IEnumerable<bcgov_documenturl>> GetS3ProjectClaimDocumentListAsync(Guid claimId)

@@ -1,0 +1,35 @@
+.save-button {
+    width: 120px;
+    height:40px !important;
+    vertical-align: middle;
+}
+
+.infoHeader {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.nextNsave {
+  height: 40px !important;
+  vertical-align: middle;
+  font-weight: bold;
+  margin: 5px;
+  border-radius: 5px !important;
+  min-width: 100px;
+}
+
+.projectbutton {
+  color: #003366 !important;
+  font-weight: bold;
+  margin: 5px;
+  height: 40px;
+  border-radius: 5px !important;
+}
+/*:host ::ng-deep .mat-horizontal-stepper-header-container {
+  display: none;
+}*/
+@media screen and (max-width: 768px) {
+  ::ng-deep .mat-step-label {
+    display: none !important;
+  }
+}

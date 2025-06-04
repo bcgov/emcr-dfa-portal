@@ -74,6 +74,12 @@ export const confirmSubmitClaimBody: DialogContent = {
   cancelButton: 'No, I don\'t want to submit the claim now.'
 }
 
+export const confirmSubmitAmendmentBody: DialogContent = {
+  text: 'Are you sure you want to submit the amendment?<br/><br/>',
+  confirmButton: 'Yes, I want to submit the amendment.',
+  cancelButton: 'No, I don\'t want to submit the amendment now.'
+}
+
 export const confirmPrescreeningBody: DialogContent = {
   text: 'You may be eligible for DFA and may submit an application.' +
   '<br/><br/>Please note that during the application process, information that you provide may make you ineligible for DFA. ',
@@ -281,4 +287,10 @@ export const confirmCreateProjectBody: DialogContent = {
   cancelButton: 'No, I don\'t want to create a new project.'
 }
 
+export const confirmCreateAmendmentBody: DialogContent = {
+  text: 'Are you sure you want to create a new amendment?<br/><br/>' +
+    'Once you proceed, a new amendment will be created.<br/><br/><br/>',
+  confirmButton: 'Yes, I want to proceed.',
+  cancelButton: 'No, I don\'t want to create a new amendment.'
+}
 

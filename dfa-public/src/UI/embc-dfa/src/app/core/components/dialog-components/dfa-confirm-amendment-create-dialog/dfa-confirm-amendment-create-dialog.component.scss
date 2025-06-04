@@ -1,0 +1,38 @@
+ng-container::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 0;
+    height: 0;
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 33px;
+}
+
+.h-margin {
+    margin: 20px;
+}
+
+.text-margin {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.p-margin {
+    margin: 25px 0px;
+}
+
+.community-name {
+    font-weight: 700;
+    color: #169bd5;
+}
+
+.button-row {
+    margin-top: 1.5em;
+}
+
+.button-width {
+    width: 95%;
+    margin: 10px;
+    height: 80px;
+}

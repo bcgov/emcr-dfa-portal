@@ -333,6 +333,59 @@ namespace EMBC.DFA.API.Controllers
         }
 
         /// <summary>
+        /// Get a list of amendment attachments by project Id
+        /// </summary>
+        /// <returns> FileUploads </returns>
+        /// <param name="projectId">The project Id.</param>
+        [HttpGet("byProjectId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<FileUpload>>> GetAmendmentAttachments(
+            [FromQuery]
+            [Required]
+            Guid projectId)
+        {
+            var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
+
+            if (useS3)
+            {
+                IEnumerable<bcgov_documenturl> bcgovDocumentUrls = await handler.GetS3ProjectDocumentListAsync(projectId);
+                IEnumerable<FileUpload> fileUploads = new FileUpload[] { };
+                if (bcgovDocumentUrls != null)
+                {
+                    foreach (bcgov_documenturl bcgovDocumentUrl in bcgovDocumentUrls)
+                    {
+                        FileUpload fileUpload = mapper.Map<FileUpload>(bcgovDocumentUrl);
+                        fileUploads = fileUploads.Append<FileUpload>(fileUpload);
+                    }
+                    return Ok(fileUploads);
+                }
+                else
+                {
+                    return Ok(null);
+                }
+            }
+            else
+            {
+                IEnumerable<dfa_projectdocumentlocation> dfa_projectdocumentlocations = await handler.GetProjectFileUploadsAsync(projectId);
+                IEnumerable<FileUpload> fileUploads = new FileUpload[] { };
+                if (dfa_projectdocumentlocations != null)
+                {
+                    foreach (dfa_projectdocumentlocation dfa_projectdocumentlocation in dfa_projectdocumentlocations)
+                    {
+                        FileUpload fileUpload = mapper.Map<FileUpload>(dfa_projectdocumentlocation);
+                        fileUploads = fileUploads.Append<FileUpload>(fileUpload);
+                    }
+                    return Ok(fileUploads);
+                }
+                else
+                {
+                    return Ok(null);
+                }
+            }
+        }
+
+        /// <summary>
         /// Get a list of attachments by claim Id
         /// </summary>
         /// <returns> FileUploads </returns>

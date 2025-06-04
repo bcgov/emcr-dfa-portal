@@ -38,8 +38,10 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> InsertDocumentLocationApplicationPDFAsync(SubmissionEntityPDF submission);
         Task<string> DeleteDocumentLocationAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms, dfa_DeleteDocument_params dfa_DeleteDocument_params);
         Task<IEnumerable<bcgov_documenturl>> GetS3ProjectDocumentListAsync(Guid projectId);
+        Task<IEnumerable<bcgov_documenturl>> GetS3AmendmentDocumentListAsync(Guid projectId);
         Task<IEnumerable<bcgov_documenturl>> GetS3ProjectClaimDocumentListAsync(Guid claimId);
         Task<IEnumerable<dfa_projectdocumentlocation>> GetProjectDocumentLocationsListAsync(Guid projectId);
+        Task<IEnumerable<dfa_projectdocumentlocation>> GetAmendmentDocumentLocationsListAsync(Guid projectId);
         Task<IEnumerable<dfa_projectclaimdocumentlocation>> GetProjectClaimDocumentLocationsListAsync(Guid claimId);
         // 2024-09-19 EMCRI-676 waynezen; filter applications based on BCeID Org
         Task<IEnumerable<dfa_appapplication>> GetApplicationListAsync(BceidUserData bceidUser);
@@ -50,7 +52,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> UpsertProject(dfa_project_params project);
         Task<dfa_projectmain_retrieve> GetProjectMainById(Guid projectId);
         Task<dfa_project> GetProjectDetailsAsync(string projectId);
-        Task<IEnumerable<dfa_project>> GetProjectListAsync(string applicationId);
+        Task<IEnumerable<dfa_project>> GetProjectListAsync(string applicationId, bool useAmendments = false);
         Task<IEnumerable<dfa_projectamendment>> GetProjectAmendmentListAsync(string projectId);
         Task<IEnumerable<dfa_projectclaim>> GetClaimListAsync(string projectId);
         Task<string> UpsertClaim(dfa_claim_params claim);

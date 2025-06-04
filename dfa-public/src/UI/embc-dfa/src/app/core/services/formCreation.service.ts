@@ -19,8 +19,9 @@ import { ApplicationDetailsForm, DamagedPropertyAddressForm, DamagedPropertyAddr
   CleanUpLogForm, SignAndSubmitForm, SupportingDocumentsForm, CleanUpLog, CleanUpLogItemsForm, SecondaryApplicant, FullTimeOccupant, OtherContact, CleanUpLogItem, DamagedRoom,  
   ApplicationDetails, ContactsForm, Contacts, AuthorizedRepresentative, AuthorizedRepresentativeForm} from '../model/dfa-application-main.model';
 import { CustomValidationService } from './customValidation.service';
-import { FileUpload, FileUploadsForm, ProjectAmendment, ProjectAmendmentForm, RecoveryPlan, RecoveryPlanForm } from '../model/dfa-project-main.model';
+import { FileUpload, FileUploadsForm, RecoveryPlan, RecoveryPlanForm } from '../model/dfa-project-main.model';
 import { FileUploadClaim, FileUploadsClaimForm, RecoveryClaim, RecoveryClaimForm } from '../model/dfa-claim-main.model';
+import { ProjectAmendment, ProjectAmendmentForm } from '../model/dfa-amendment-main.model'
 import { Invoice, InvoiceForm } from '../model/dfa-invoice.model';
 
 @Injectable({ providedIn: 'root' })

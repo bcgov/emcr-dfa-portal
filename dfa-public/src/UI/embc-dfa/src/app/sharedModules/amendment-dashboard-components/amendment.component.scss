@@ -1,0 +1,264 @@
+.block{
+    border: 1px solid lightgrey;
+}
+
+.content {
+  margin: 10px 0px;
+  padding: 25px 18px;
+  min-width: 900px;
+}
+
+.downArrow {
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.application-button {
+  float: left !important;
+  /* background-color: #ffffff; */
+  color: #003366;
+  height: 32px;
+  font-size: 15px;
+  padding-left: 16px;
+  padding-right: 16px;
+  /*max-width: 200px;*/
+  margin-left: 2%;
+  font-weight: bold;
+  border: 1px solid #003366 !important;
+  background: #f9fbfe 0% 0% no-repeat padding-box;
+  border-radius: 5px;
+}
+
+.whitebutton {
+  background-color: white;
+  color: grey;
+  border: 1px solid lightgrey !important;
+}
+
+.redbutton {
+  background-color: red;
+  color: white;
+  /*border: 1px solid lightgrey !important;*/
+}
+
+.nocircle {
+  height: 12px;
+  float: left;
+  padding-left: 6%;
+  /*margin-right: -86px;*/
+  margin-top: 60px;
+  margin-right: 24px;
+}
+
+.circle {
+  /*width: 100px;*/
+  height: 12px;
+  float: left;
+  /*  padding-left: 17%;
+  margin-right: 24px;*/
+  /*margin: 60px 24px 0px 24px;*/
+  margin-top: 60px;
+  text-align: center;
+}
+
+.line {
+  /*width: 100px;*/
+  height: 12px;
+  border-bottom: 2px solid black;
+  float: left;
+  /*padding-left: 10%;*/
+  /*margin-right: 24px;*/
+  margin-top: 60px;
+  /*width: 11.5%;*/
+}
+
+.filterStage {
+  padding-bottom: 20px;
+}
+
+.filterStage .boxborder {
+  border: 1px solid #707070;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+#searchBox {
+  width: 100%;
+  padding-right: 30px;
+}
+
+.searchDiv {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+i.material-icons {
+  font-size: 18px;
+  margin-left: -25px;
+  cursor: pointer;
+}
+
+.no-project {
+  background: #F6F9FC 0% 0% no-repeat padding-box;
+  padding-bottom: 75px;
+  padding-top: 75px;
+  border: 1px dashed grey;
+  display: flex;
+  justify-content: center;
+  margin-top: -75px;
+}
+
+.labelStyle {
+  text-align: center;
+  width: 5%;
+  /*border: 1px solid black;*/
+}
+
+.headerlabelStyle {
+  text-align: center;
+  width: 20%;
+}
+
+.removeBorder {
+  float: left;
+  width: 25%;
+  margin-top: 18px;
+}
+
+.lineConnector {
+  border: 1px inset lightgray;
+}
+
+.lineConnectorLeft {
+  float: left;
+  width: 25%;
+  margin-top: 18px;
+}
+
+.alignStatus {
+/*  float: left;
+  width: 50%;*/
+  margin-top: 6px;
+}
+
+.lineConnectorRight {
+  float: right;
+  width: 25%;
+  margin-top: 18px;
+}
+
+.labelEmptyWidth {
+  width: 5%;
+  text-align: center;
+  /*border: 1px solid black;*/
+}
+
+.adjustLineWidth {
+  width: 8% !important;
+  padding-left: 0% !important;
+}
+
+.currentStatus {
+  color: #05325C;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  background: #f3f3f3 0% 0% no-repeat padding-box;
+}
+
+.stepsDesc {
+  /*width: 100px;*/
+  height: 12px;
+  float: left;
+  /*padding-left: 6%;*/
+  /*margin-right: 23px;*/
+  margin-top: 30px;
+  text-align: center;
+}
+
+.youAreHere {
+  background-color: #faf1c9;
+  padding: 4px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+  display: table-row;
+}
+
+.stepText {
+  color: #313132;
+  font-size: 15px;
+  margin-bottom: 10px !important;
+  display: block;
+}
+
+@media (max-width: 1000px) and (min-width: 300px) {
+
+  .removeBorder {
+    float: left;
+    width: 25%;
+    margin-top: 18px;
+  }
+
+  .lineConnector {
+    border: 1px solid black;
+  }
+
+  .lineConnectorLeft {
+    float: left;
+    width: 25%;
+    margin-top: 18px;
+  }
+
+  .alignStatus {
+    float: left;
+    width: 50%;
+    margin-top: 6px;
+  }
+
+  .lineConnectorRight {
+    float: right;
+    width: 25%;
+    margin-top: 18px;
+  }
+
+  .labelEmptyWidth {
+    width: 0%;
+    text-align: center;
+    /*border: 1px solid black;*/
+  }
+
+
+  .nocircle {
+    height: 12px;
+    float: left;
+    padding-left: 8%;
+    margin-right: -86px;
+    margin-top: 60px;
+  }
+
+  .circle {
+    /*width: 100px;*/
+    height: 12px;
+    border-bottom: 2px solid black;
+    float: left;
+    padding-left: 17%;
+    margin-right: 24px;
+    margin-top: 60px;
+  }
+
+  .stepsDesc {
+    /*width: 100px;*/
+    height: 12px;
+    float: left;
+    padding-left: 7%;
+    margin-right: 23px;
+    margin-top: 30px;
+  }
+
+  .youAreHere {
+    display: flex;
+    width: 70px;
+  }
+}
