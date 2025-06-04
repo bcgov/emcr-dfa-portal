@@ -264,7 +264,7 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
 
       this.invoiceForm.controls.emcrDecision.disable();
       this.invoiceForm.controls.emcrApprovedAmount.disable();
-      this.invoiceForm.controls.emcrDecisionDate.disable();
+      this.invoiceForm.controls.decisionDate.disable();
       this.invoiceForm.controls.emcrDecisionComments.disable();
 
       this.hideHelp = true;

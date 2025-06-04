@@ -1029,7 +1029,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public decimal? dfa_totalbeingclaimed { get; set; }
         public decimal? dfa_emcrdecision { get; set; }
         public string? dfa_emcrapprovedamount { get; set; }
-        public DateTime? dfa_emcrdecisiondate { get; set; }
+        public DateTime? dfa_decisiondate { get; set; }
         public string? dfa_emcrdecisioncomments { get; set; }
     }
 
