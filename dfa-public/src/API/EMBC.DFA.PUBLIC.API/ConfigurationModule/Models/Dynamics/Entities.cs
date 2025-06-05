@@ -1051,8 +1051,6 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_projectdecision { get; set; }
         public string? dfa_projecttype { get; set; }
         public string? dfa_projecttypeother { get; set; }
-        public bool? useAmendments { get; set; }
-
         public DateTime? dfa_projectapproveddate { get; set; }
         public IEnumerable<dfa_appeal>? dfa_appeal { get; set; }
     }

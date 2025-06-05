@@ -1180,7 +1180,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             return list.List.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<dfa_project>> GetProjectListAsync(string applicationId, bool useAmendments = false)
+        public async Task<IEnumerable<dfa_project>> GetProjectListAsync(string applicationId)
         {
             try
             {
@@ -1250,8 +1250,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         dfa_projectdecision = objApp.dfa_projectdecision,
                         dfa_bpfclosedate = !string.IsNullOrEmpty(objApp.dfa_bpfclosedate) ? DateTime.Parse(objApp.dfa_bpfclosedate).ToLocalTime().ToString() : objApp.dfa_bpfclosedate,
                         dfa_projectapproveddate = objApp.dfa_projectapproveddate,
-                        dfa_appeal = objApp.dfa_appeal,
-                        useAmendments = useAmendments
+                        dfa_appeal = objApp.dfa_appeal
                     })
                         .AsEnumerable()
                         .OrderByDescending(m => m.createdon);

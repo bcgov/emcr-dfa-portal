@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { attachmentDeleteProjectAttachment } from '../fn/attachment/attachment-delete-project-attachment';
 import { AttachmentDeleteProjectAttachment$Params } from '../fn/attachment/attachment-delete-project-attachment';
+import { attachmentGetAmendmentAttachments } from '../fn/attachment/attachment-get-amendment-attachments';
+import { AttachmentGetAmendmentAttachments$Params } from '../fn/attachment/attachment-get-amendment-attachments';
 import { attachmentGetClaimAttachments } from '../fn/attachment/attachment-get-claim-attachments';
 import { AttachmentGetClaimAttachments$Params } from '../fn/attachment/attachment-get-claim-attachments';
 import { attachmentGetProjectAttachments } from '../fn/attachment/attachment-get-project-attachments';
@@ -162,9 +164,7 @@ export class AttachmentService extends BaseService {
     );
   }
 
-  /**
-   * Path part for operation attachmentGetAmendmentAttachments
-   */
+  /** Path part for operation `attachmentGetAmendmentAttachments()` */
   static readonly AttachmentGetAmendmentAttachmentsPath = '/api/attachments/byProjectId';
 
   /**
@@ -177,28 +177,8 @@ export class AttachmentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  attachmentGetAmendmentAttachments$Response(params?: {
-
-    /**
-     * The project Id.
-     */
-    projectId?: string;
-  }): Observable<StrictHttpResponse<Array<FileUpload>>> {
-
-    const rb = new RequestBuilder(this.rootUrl, AttachmentService.AttachmentGetAmendmentAttachmentsPath, 'get');
-    if (params) {
-      rb.query('projectId', params.projectId, {});
-    }
-
-    return this.http.request(rb.build({
-      responseType: 'json',
-      accept: 'application/json'
-    })).pipe(
-      filter((r: any) => r instanceof HttpResponse),
-      map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<FileUpload>>;
-      })
-    );
+  attachmentGetAmendmentAttachments$Response(params?: AttachmentGetAmendmentAttachments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FileUpload>>> {
+    return attachmentGetAmendmentAttachments(this.http, this.rootUrl, params, context);
   }
 
   /**
@@ -206,27 +186,18 @@ export class AttachmentService extends BaseService {
    *
    *
    *
-   * This method provides access to only to the response body.
+   * This method provides access only to the response body.
    * To access the full response (for headers, for example), `attachmentGetAmendmentAttachments$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  attachmentGetAmendmentAttachments(params?: {
-
-    /**
-     * The project Id.
-     */
-    projectId?: string;
-  }): Observable<Array<FileUpload>> {
-
-    return this.attachmentGetAmendmentAttachments$Response(params).pipe(
-      map((r: StrictHttpResponse<Array<FileUpload>>) => r.body as Array<FileUpload>)
+  attachmentGetAmendmentAttachments(params?: AttachmentGetAmendmentAttachments$Params, context?: HttpContext): Observable<Array<FileUpload>> {
+    return this.attachmentGetAmendmentAttachments$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<FileUpload>>): Array<FileUpload> => r.body)
     );
   }
 
-  /**
-   * Path part for operation attachmentGetClaimAttachments
-   */
+  /** Path part for operation `attachmentGetClaimAttachments()` */
   static readonly AttachmentGetClaimAttachmentsPath = '/api/attachments/byclaimId';
 
   /**

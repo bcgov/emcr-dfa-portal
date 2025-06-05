@@ -58,8 +58,7 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<CurrentProject>>> GetDFAProjects(string applicationId)
         {
-            var useAmendments = configuration.GetValue<bool>("FEATURE_USE_AMENDMENTS");
-            var lstProjects = await handler.HandleProjectList(applicationId, useAmendments);
+            var lstProjects = await handler.HandleProjectList(applicationId);
 
             return Ok(lstProjects);
         }
@@ -260,7 +259,6 @@ namespace EMBC.DFA.API.Controllers
         public string ProjectDecision { get; set; }
         public string ProjectType { get; set; }
         public string ProjectTypeOther { get; set; }
-        public bool useAmendments { get; set; }
         public string ProjectApprovedDate { get; set; }
         public IEnumerable<CurrentProjectAppeal> Appeals { get; set; }
     }

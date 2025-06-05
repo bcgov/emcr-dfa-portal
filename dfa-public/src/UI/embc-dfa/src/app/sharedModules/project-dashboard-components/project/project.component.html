@@ -110,7 +110,7 @@
         </div>
         <div class="col-md-3" style="display: flex; justify-content: flex-end;">
           <div class="button-column">
-            @if(!applItem.useAmendments){
+
             <button
               class="application-button"
               (click)="ViewAmendment(applItem)"
@@ -119,7 +119,7 @@
                     >
               View Amendment
             </button>
-          }
+
            @if(applItem.status != 'Closed') {
               <button
               class="application-button"
@@ -148,7 +148,8 @@
             >
               Complete Project
             </button>
-            @if(applItem.useAmendments){
+
+            <div [featureEnabled]="'useAmendments'">
               <button
                 class="application-button"
                 type="button"
@@ -156,7 +157,7 @@
               >
                 Amendments
               </button>
-            }
+            </div>
           </div>
           <span class="material-symbols-outlined downArrow" (click)="Toggle(applItem)">
             {{ applItem.isHidden ? "keyboard_arrow_down" : "keyboard_arrow_up"}}

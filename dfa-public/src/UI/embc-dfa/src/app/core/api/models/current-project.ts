@@ -29,5 +29,4 @@ export interface CurrentProject {
   statusBar?: Array<ProjectStatusBar>;
   statusColor?: string;
   statusLastUpdated?: string;
-  useAmendments?: boolean;
 }

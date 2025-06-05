@@ -61,7 +61,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<IEnumerable<dfa_effectedregioncommunities>> HandleEffectedRegionCommunityList();
         Task<List<AreaCommunity>> HandleGetAreaCommunities();
         Task<dfa_projectmain_retrieve> GetProjectMainAsync(Guid projectId);
-        Task<List<CurrentProject>> HandleProjectList(string applicationId, bool useAmendments = false);
+        Task<List<CurrentProject>> HandleProjectList(string applicationId);
         Task<List<CurrentProjectAmendment>> HandleProjectAmendmentList(string projectId);
         Task<CurrentApplication> HandleApplicationDetails(string applicationId);
         Task<CurrentProject> HandleProjectDetails(string projectId);
@@ -178,9 +178,9 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             return dfa_project;
         }
 
-        public async Task<List<CurrentProject>> HandleProjectList(string applicationId, bool useAmendments = false)
+        public async Task<List<CurrentProject>> HandleProjectList(string applicationId)
         {
-            var lstApps = await listsGateway.GetProjectListAsync(applicationId, useAmendments);
+            var lstApps = await listsGateway.GetProjectListAsync(applicationId);
             var mappedProjects = mapper.Map<List<CurrentProject>>(lstApps);
             return mappedProjects;
         }

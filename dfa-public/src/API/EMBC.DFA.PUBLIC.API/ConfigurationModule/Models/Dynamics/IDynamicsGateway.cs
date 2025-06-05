@@ -52,7 +52,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> UpsertProject(dfa_project_params project);
         Task<dfa_projectmain_retrieve> GetProjectMainById(Guid projectId);
         Task<dfa_project> GetProjectDetailsAsync(string projectId);
-        Task<IEnumerable<dfa_project>> GetProjectListAsync(string applicationId, bool useAmendments = false);
+        Task<IEnumerable<dfa_project>> GetProjectListAsync(string applicationId);
         Task<IEnumerable<dfa_projectamendment>> GetProjectAmendmentListAsync(string projectId);
         Task<IEnumerable<dfa_projectclaim>> GetClaimListAsync(string projectId);
         Task<string> UpsertClaim(dfa_claim_params claim);

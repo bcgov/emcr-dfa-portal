@@ -101,7 +101,6 @@ export class DfaDashProjectComponent implements OnInit {
   public stageSelected: string = '';
   public sortfieldSelected: string = '';
   public filterbydaysSelected: number;
-  public useAmendments: boolean = false;
 
   constructor(
     private profileDataService: ProfileDataService,

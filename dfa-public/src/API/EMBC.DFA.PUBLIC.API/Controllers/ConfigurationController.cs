@@ -95,8 +95,10 @@ namespace EMBC.DFA.API.Controllers
                 },
                 FeatureFlags = new FeatureFlagConfiguration
                 {
-                    UseAppeals = !string.IsNullOrEmpty(configuration["FEATURE_USE_APPEALS"])
+                    UseAppeals = !string.IsNullOrEmpty(configuration["FEATURE_USE_APPEALS"]),
+                    UseAmendments = !string.IsNullOrEmpty(configuration["FEATURE_USE_AMENDMENTS"])
                 }
+
             };
 
             return Ok(await Task.FromResult(config));
@@ -253,6 +255,7 @@ namespace EMBC.DFA.API.Controllers
     public class FeatureFlagConfiguration
     {
         public bool UseAppeals { get; set; }
+        public bool UseAmendments { get; set; }
     }
 
     public class AreaCommunity
