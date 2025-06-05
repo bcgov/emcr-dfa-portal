@@ -402,7 +402,7 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
               totalBeingClaimed: objInv.totalBeingClaimed,
               emcrDecision: objInv.emcrDecision,
               emcrApprovedAmount: objInv.emcrApprovedAmount,
-              emcrDecisionDate: objInv.emcrDecisionDate ? new Date(objInv.emcrDecisionDate) : objInv.emcrDecisionDate,
+              decisionDate: objInv.decisionDate ? new Date(objInv.decisionDate) : objInv.decisionDate,
               emcrDecisionComments: objInv.emcrDecisionComments,
             });
 

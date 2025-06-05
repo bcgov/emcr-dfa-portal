@@ -66,17 +66,17 @@
                   </p>
                   @if(claimDecision == DecisionEnum.Approved || claimDecision == DecisionEnum.ApprovedWithExclusions || claimDecision == DecisionEnum.Ineligible || claimDecision == DecisionEnum.Withdrawn){
                   <mat-form-field appearance="outline">
-                    <input matInput [matDatepicker]="emcrDecisionDatePicker" [readonly]="isReadOnly === true"
-                      formControlName="emcrDecisionDate">
+                    <input matInput [matDatepicker]="decisionDatePicker" [readonly]="isReadOnly === true"
+                      formControlName="decisionDate">
                     <mat-hint *ngIf="isReadOnly !== true">MM/DD/YYYY</mat-hint>
-                    <mat-datepicker-toggle matSuffix [for]="emcrDecisionDatePicker"
+                    <mat-datepicker-toggle matSuffix [for]="decisionDatePicker"
                       [disabled]="isReadOnly === true"></mat-datepicker-toggle>
-                    <mat-datepicker #emcrDecisionDatePicker [disabled]="isReadOnly === true"></mat-datepicker>
+                    <mat-datepicker #decisionDatePicker [disabled]="isReadOnly === true"></mat-datepicker>
                   </mat-form-field>
                 }@else {
                   <mat-form-field appearance="outline">
                     <input matInput readonly disabled="true"/>
-                    <mat-datepicker #emcrDecisionDatePicker [disabled]="isReadOnly === true"></mat-datepicker>
+                    <mat-datepicker #decisionDatePicker [disabled]="isReadOnly === true"></mat-datepicker>
                   </mat-form-field> 
                 }
                 </div>

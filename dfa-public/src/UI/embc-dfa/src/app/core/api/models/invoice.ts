@@ -4,11 +4,11 @@
 
 export interface Invoice {
   actualInvoiceTotal?: string | null;
+  decisionDate?: string | null;
   eligibleGST?: string | null;
   emcrApprovedAmount?: string | null;
   emcrDecision?: string | null;
   emcrDecisionComments?: string | null;
-  emcrDecisionDate?: string | null;
   goodsReceivedDate?: string | null;
   grossGST?: number | null;
   invoiceDate?: string | null;
