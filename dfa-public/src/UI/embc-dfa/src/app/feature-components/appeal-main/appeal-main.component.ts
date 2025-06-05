@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { CurrentApplication, CurrentProjectAppeal, RecoveryPlan } from 'src/app/core/api/models';
-import { ApplicationService, ProjectService } from 'src/app/core/api/services';
+import { ApplicationService, AttachmentService, ProjectService } from 'src/app/core/api/services';
 import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog-components/file-upload-warning-dialog/file-upload-warning-dialog.component';
 import { AppealDocument } from 'src/app/feature-components/appeal-main/appeal-documents/appeal-documents.component';
 
@@ -20,6 +21,14 @@ import { AppealDocument } from 'src/app/feature-components/appeal-main/appeal-do
   styleUrl: './appeal-main.component.scss'
 })
 export class AppealMainComponent implements OnInit {
+  /**
+   * Specify that the appeal form is read-only.
+   *
+   * @type {boolean}
+   * @memberof AppealMainComponent
+   */
+  @Input() isReadOnly: boolean = false;
+
   appealForm: FormGroup;
   projectId: string;
   project: RecoveryPlan;
@@ -27,8 +36,7 @@ export class AppealMainComponent implements OnInit {
   appeal: CurrentProjectAppeal;
 
   isLoading: boolean = false;
-  isdisabled: boolean = false;
-  isReadOnly: boolean = false;
+  isDisabled: boolean = false;
 
   reasonMaxLength: number = 2000;
   reasonRemainingLength: number = 2000;
@@ -47,16 +55,17 @@ export class AppealMainComponent implements OnInit {
   ];
 
   constructor(
+    private router: Router,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private projectService: ProjectService,
     private applicationService: ApplicationService,
-    // private attachmentsService: AttachmentService,
+    private attachmentsService: AttachmentService,
     private dialog: MatDialog
   ) {
     this.appealForm = this.formBuilder.group({
       step1: this.formBuilder.group({
-        reason: new FormControl(null, [Validators.required])
+        reason: new FormControl(null, [Validators.required, Validators.maxLength(this.reasonMaxLength)])
       }),
       step2: this.formBuilder.group({
         documents: this.formBuilder.array<AppealDocument>([])
@@ -67,10 +76,10 @@ export class AppealMainComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.projectId = params['id'];
-      console.log('Project ID:', this.projectId);
-      // load project data including appeal
+      console.debug('Project ID:', this.projectId);
+      // TODO: load project data including appeal
       this.loadProject(this.projectId);
-      // load application data
+      // TODO: load application data
       // this.loadApplication(this.projectId);
     });
   }
@@ -98,42 +107,135 @@ export class AppealMainComponent implements OnInit {
   loadProject(projectId: string) {
     this.projectService.projectGetProjectMain({ projectId: projectId }).subscribe({
       next: (dfaProjectMain) => {
-        console.log('Project Data:', dfaProjectMain);
+        console.debug('Project Data:', dfaProjectMain);
         if (dfaProjectMain && dfaProjectMain.project)
           // this.projectName = 'Project - ' + dfaProjectMain.project.projectName +' (Amended)';
           this.project = dfaProjectMain.project;
       },
       error: (error) => {
         console.error(error);
+        // TODO: redirect to error page
         // document.location.href = 'https://dfa.gov.bc.ca/error.html';
       }
     });
   }
-
-  addDocument() {}
 
   /**
    * Cancels the appeal process and redirects user.
    *
    * @memberof AppealMainComponent
    */
-  cancelAppeal() {}
+  cancel() {
+    this.router.navigate(['/dfa-dashboard']);
+  }
 
   /**
-   * Submits the appeal form.
+   * Submits the appeal form, validating it first.
+   *
+   * @return {*}  {Promise<void>}
+   * @memberof AppealMainComponent
+   */
+  async submit(): Promise<void> {
+    console.debug('Form Data:', this.appealForm.value);
+
+    if (this.isDisabled || this.isReadOnly || this.isLoading) {
+      return;
+    }
+
+    if (!this.isValid()) {
+      this.warningDialog('Please fill in all required fields before submitting the appeal.');
+      return;
+    }
+
+    this.isLoading = true;
+    this.isDisabled = true;
+    this.appealForm.disable({ emitEvent: false });
+
+    // TODO: Submit appeal form.
+    // TODO: Upload appeal documents (before or after submitting form? Is there an ID we need to create first?).
+
+    this.appealForm.enable({ emitEvent: false });
+    this.isDisabled = false;
+    this.isLoading = false;
+  }
+
+  /**
+   * Validates the appeal form.
+   *
+   * @return {*}  {boolean} `true` if the form is valid, otherwise `false`.
+   * @memberof AppealMainComponent
+   */
+  isValid(): boolean {
+    return this.appealForm.valid;
+  }
+
+  /**
+   * Uploads the documents from the appeal form's documents array.
+   *
+   * @return {*}  {Promise<void>}
+   * @memberof AppealMainComponent
+   */
+  async uploadDocuments(): Promise<void> {
+    let documents: AppealDocument[] = this.appealForm.get('step2.documents').value as AppealDocument[];
+
+    if (!documents?.length) {
+      return;
+    }
+
+    // Upload documents one at a time
+    for (const document of documents) {
+      // TODO: Define type with correct properties
+      const documentPayload: any = {
+        contentType: document.contentType,
+        deleteFlag: false,
+        fileData: document.fileData,
+        fileDescription: document.fileDescription,
+        fileName: document.fileName,
+        fileSize: document.fileSize
+      };
+
+      // TODO: replace "attachmentUpsertDeleteClaimAttachment" with the correct API call.
+      await firstValueFrom(this.attachmentsService.attachmentUpsertDeleteClaimAttachment({ body: documentPayload }))
+        .then((_fileUploadId) => {})
+        .catch((error) => {
+          // TODO: handle error
+          console.error(error);
+          return;
+        });
+    }
+  }
+
+  /**
+   * Updates the remaining character count for the appeal reason field.
    *
    * @memberof AppealMainComponent
    */
-  save() {
-    console.log('Form Submitted', this.appealForm.value);
-    console.log('Form Group', this.appealForm);
-  }
-
   updateReasonRemainingChars() {
-    this.reasonRemainingLength = this.reasonMaxLength - this.appealForm.get('step1.reason').value?.length;
+    this.reasonRemainingLength = this.reasonMaxLength - (this.appealForm.get('step1.reason').value?.length ?? 0);
   }
 
+  /**
+   * Removes a document from the appeal form's document array.
+   *
+   * @param {number} index
+   * @memberof AppealMainComponent
+   */
+  removeDocument(index: number) {
+    const documents = this.appealForm.get('step2.documents') as FormArray;
+
+    if (documents?.length > index) {
+      documents.removeAt(index);
+    }
+  }
+
+  /**
+   * Displays a warning dialog with the provided message.
+   *
+   * @param {string} message
+   * @memberof AppealMainComponent
+   */
   warningDialog(message: string) {
+    // TODO: Fix ugly warning dialog
     this.dialog.open(FileUploadWarningDialogComponent, {
       data: {
         content: message
@@ -143,69 +245,36 @@ export class AppealMainComponent implements OnInit {
     });
   }
 
-  // saveRequiredForm(fileUpload: FileUpload): void {
-  //   // dont allow same filename twice
-  //   let fileUploads = this.appealForm.get('step2.fileUploads').value;
+  /**
+   * Retrieves the reason for the appeal from the form, or returns a default message if its null.
+   *
+   * @return {*}  {string}
+   * @memberof AppealMainComponent
+   */
+  getReason(): string {
+    const reason = this.appealForm.get('step1.reason').value;
 
-  //   console.log(fileUploads);
+    if (!reason) {
+      return 'No rationale provided.';
+    }
 
-  //   if (fileUploads?.find((item) => item.fileName === fileUpload.fileName && item.deleteFlag !== true)) {
-  //     this.warningDialog('A document with the name ' + fileUpload.fileName + ' has already been uploaded.');
-  //     return;
-  //   }
+    return reason;
+  }
 
-  //   this.isLoading = true;
+  /**
+   * Retrieves the list of document file names from the form, or returns a default message if no documents were
+   * uploaded.
+   *
+   * @return {*}  {string}
+   * @memberof AppealMainComponent
+   */
+  getDocumentFileNamesList(): string {
+    const documents = this.appealForm.get('step2.documents').value;
 
-  //   // let project = this.dfaProjectMainDataService.createDFAProjectMainDTO();
-  //   // fileUpload.project = project;
+    if (!documents?.length) {
+      return 'No supporting documents provided.';
+    }
 
-  //   fileUpload.fileData = fileUpload?.fileData?.substring(fileUpload?.fileData?.indexOf(',') + 1); // to allow upload as byte array
-
-  //   if (fileUploads?.filter((x) => x.requiredDocumentType === fileUpload.requiredDocumentType).length > 0) {
-  //     this.attachmentsService.attachmentUpsertDeleteProjectAttachment({ body: fileUpload }).subscribe({
-  //       next: (fileUploadId) => {
-  //         fileUpload.id = fileUploadId;
-
-  //         let requiredDocumentTypeFoundIndex = fileUploads.findIndex(
-  //           (x) => x.requiredDocumentType === fileUpload.requiredDocumentType
-  //         );
-
-  //         fileUploads[requiredDocumentTypeFoundIndex] = fileUpload;
-
-  //         this.appealForm.get('step2.fileUploads').setValue(fileUploads);
-
-  //         this.isLoading = false;
-  //       },
-  //       error: (error) => {
-  //         console.error(error);
-
-  //         this.isLoading = false;
-  //         document.location.href = 'https://dfa.gov.bc.ca/error.html';
-  //       }
-  //     });
-  //   } else {
-  //     this.attachmentsService.attachmentUpsertDeleteProjectAttachment({ body: fileUpload }).subscribe({
-  //       next: (fileUploadId) => {
-  //         fileUpload.id = fileUploadId;
-
-  //         if (fileUploads) {
-  //           fileUploads.push(fileUpload);
-  //         } else {
-  //           fileUploads = [fileUpload];
-  //         }
-
-  //         this.appealForm.get('step2.fileUploads').setValue(fileUploads);
-  //         //if (fileUpload.requiredDocumentType == Object.keys(this.RequiredDocumentTypes)[Object.values(this.RequiredDocumentTypes).indexOf(this.RequiredDocumentTypes.TenancyAgreement)])
-  //         //  this.supportingDocumentsForm.get('hasCopyOfARentalAgreementOrLease').setValue(true);
-  //         this.isLoading = false;
-  //       },
-  //       error: (error) => {
-  //         console.error(error);
-
-  //         this.isLoading = false;
-  //         document.location.href = 'https://dfa.gov.bc.ca/error.html';
-  //       }
-  //     });
-  //   }
-  // }
+    return documents.map((doc) => doc.fileName).join('\n');
+  }
 }

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ControlContainer, FormArray, FormControl, FormGroup, FormGroupDirective } from '@angular/forms';
+import { ControlContainer, FormArray, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CurrentApplication, CurrentProjectAppeal, RecoveryPlan } from 'src/app/core/api/models';
 import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog-components/file-upload-warning-dialog/file-upload-warning-dialog.component';
@@ -16,6 +16,10 @@ export type AppealDocument = {
 /**
  * Appeal Documents Component.
  *
+ * Renders the drag-and-drop file upload area for appeal documents.
+ * Renders the list of selected documents.
+ * Does not upload selected documents to the backend.
+ *
  * @export
  * @class AppealDocumentsComponent
  * @implements {OnInit}
@@ -27,10 +31,19 @@ export type AppealDocument = {
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }]
 })
 export class AppealDocumentsComponent implements OnInit {
+  // TODO: Remove unused imports
   @Input() projectId: string;
   @Input() project: RecoveryPlan;
   @Input() application: CurrentApplication;
   @Input() appeal: CurrentProjectAppeal;
+  @Input() isReadOnly: boolean = false;
+  @Input() isDisabled: boolean = false;
+  /**
+   * Callback fired when the remove document button is clicked.
+   *
+   * @memberof AppealDocumentsComponent
+   */
+  @Input() onRemoveDocument: (index: number) => void;
 
   noOfAttachments: number = 10;
   allowedFileTypes = [
@@ -47,7 +60,9 @@ export class AppealDocumentsComponent implements OnInit {
   ];
   allowedFileExtensionsList = '.pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx';
 
-  form: FormGroup;
+  fileDescriptionMaxLength: number = 100;
+
+  appealForm: FormGroup;
 
   constructor(
     private dialog: MatDialog,
@@ -55,7 +70,7 @@ export class AppealDocumentsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.form = this.controlContainer.control as FormGroup;
+    this.appealForm = this.controlContainer.control as FormGroup;
   }
 
   /**
@@ -68,18 +83,20 @@ export class AppealDocumentsComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsDataURL(event);
     reader.onload = () => {
-      const documents = this.form.get('step2.documents') as FormArray;
+      const documents = this.appealForm.get('step2.documents') as FormArray;
 
       // Show warning and exit early if a document already exists with the same file name
       if (documents.controls.some((document) => document.get('fileName')?.value === event.name)) {
-        this.warningDialog('TEST');
-        return;
+        this.warningDialog('A file with the name ' + event.name + ' has already been added.');
       }
 
       documents.push(
         new FormGroup({
           fileName: new FormControl(event.name),
-          fileDescription: new FormControl(event.name),
+          fileDescription: new FormControl(event.name, [
+            Validators.required,
+            Validators.maxLength(this.fileDescriptionMaxLength)
+          ]),
           fileData: new FormControl(reader.result),
           contentType: new FormControl('Appeal Support'),
           fileSize: new FormControl(event.size),

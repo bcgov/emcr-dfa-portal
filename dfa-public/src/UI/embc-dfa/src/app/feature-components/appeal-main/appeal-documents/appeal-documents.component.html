@@ -1,7 +1,42 @@
-<div>
+<div formGroupName="step2">
   <app-file-upload
     [noOfAttachments]="noOfAttachments"
     [allowedFileTypes]="allowedFileTypes"
     [allowedFileExtensionsList]="allowedFileExtensionsList"
-    (attachedFile)="onAttachedFile($event)"></app-file-upload>
+    (attachedFile)="onAttachedFile($event)"
+    [isDisabled]="isDisabled"></app-file-upload>
+  <div formArrayName="documents">
+    <div
+      *ngFor="let documentGroup of appealForm.get('step2.documents')['controls']; let i = index"
+      [formGroupName]="i"
+      class="row card-list">
+      <div class="col-12">
+        <div class="card-content d-flex justify-content-between align-items-center">
+          <div class="flex-grow-1 me-2">
+            <div class="mb-3">
+              <div>
+                <span class="form-label fw-bold me-1">File Name:</span>
+                <span class="text-muted">{{ documentGroup.get('fileName').value }}</span>
+              </div>
+            </div>
+            <mat-form-field appearance="outline" class="w-100 card-content-field">
+              <mat-label>File Description</mat-label>
+              <input matInput formControlName="fileDescription" />
+            </mat-form-field>
+          </div>
+          <!-- Right side: centered delete button -->
+          <div class="d-flex align-items-center">
+            <button
+              mat-icon-button
+              color="warn"
+              type="button"
+              (click)="onRemoveDocument(i)"
+              aria-label="Remove document">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

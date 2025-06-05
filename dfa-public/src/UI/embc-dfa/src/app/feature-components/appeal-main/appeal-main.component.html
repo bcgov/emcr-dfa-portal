@@ -5,6 +5,13 @@
     </div>
   </div>
 
+  <app-loader
+    class="spinner"
+    [showLoader]="isLoading"
+    [strokeWidth]="10"
+    [diameter]="50"
+    [color]="'green'"></app-loader>
+
   <form [formGroup]="appealForm">
     <mat-horizontal-stepper class="stepper-style" labelPosition="bottom" #stepper [linear]="false">
       <mat-step [stepControl]="appealForm.get('step1')">
@@ -46,11 +53,12 @@
               <mat-form-field appearance="outline" class="w-100">
                 <textarea
                   formControlName="reason"
+                  matInput
                   rows="5"
                   class="w-100"
                   title="Detailed reasoning and/or evidence that explains and/or supports why the appellant believes the DFA determination was incorrect."
                   [maxlength]="reasonMaxLength"
-                  matInput
+                  [readonly]="isReadOnly"
                   (keyup)="updateReasonRemainingChars()"></textarea>
                 <mat-hint>{{ reasonRemainingLength }} characters remaining.</mat-hint>
               </mat-form-field>
@@ -59,7 +67,7 @@
 
           <div class="row mb-4">
             <div class="col-md-6">
-              <button class="button-s align-back-button" mat-button type="button" (click)="cancelAppeal()">
+              <button class="button-s align-back-button" mat-button type="button" (click)="cancel()">
                 Cancel Appeal
               </button>
             </div>
@@ -92,21 +100,11 @@
             </div>
           </div>
           <div class="row justify-content-start mb-4">
-            <div>
-              <button mat-button type="button" class="link-button" (click)="addDocument()">
-                <mat-icon class="sub-heading">add</mat-icon>
-                <span class="sub-heading">Add Supporting Documents (Optional)</span>
-              </button>
-            </div>
-            <div>
-              <app-appeal-documents></app-appeal-documents>
-            </div>
-            <div>
-              <div *ngFor="let document of appealForm.get('step2.documents').value">
-                <div>
-                  <span>{{ document.fileName }}</span>
-                </div>
-              </div>
+            <div class="mb-2">
+              <app-appeal-documents
+                [onRemoveDocument]="removeDocument"
+                [isReadOnly]="isReadOnly"
+                [isDisabled]="isDisabled"></app-appeal-documents>
             </div>
           </div>
 
@@ -132,30 +130,73 @@
             [appeal]="appeal"></app-appeal-project-details>
         </div>
 
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <h2 class="sub-heading mb-0">Appeal Process</h2>
+
+            <div class="row">
+              <div class="col-md-12">
+                <p>You are submitting a project eligbility appeal, based on the following rationale</p>
+                <mat-form-field appearance="outline" class="w-100">
+                  <textarea
+                    rows="5"
+                    class="w-100"
+                    matInput
+                    readonly
+                    style="resize: none"
+                    [value]="getReason()"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-0">
+              <div class="col-md-12">
+                <p>You have also provided the following supporting documents</p>
+                <mat-form-field appearance="outline" class="w-100">
+                  <textarea
+                    rows="5"
+                    class="w-100"
+                    matInput
+                    readonly
+                    style="resize: none"
+                    [value]="getDocumentFileNamesList()"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-md-12">
+            <h2 class="sub-heading mb-0">Appeal Submission</h2>
+            <p>
+              Submitting an appeal does not guarantee that the DFA determination will be overturned. Appeal
+              determinations may overturn or uphold the DFA determination being appealed.
+            </p>
+          </div>
+        </div>
+
         <div class="row">
           <div class="col-md-6">
-            <button class="button-s" mat-button matStepperPrevious type="button">
+            <button class="button-s" mat-button matStepperPrevious type="button" [disabled]="isDisabled">
               <span>Back</span>
             </button>
           </div>
           <div class="col-md-6">
-            <button class="button-p save-button" mat-stroked-button type="button" (click)="save()">
-              <span>Save</span>
+            <button
+              class="button-p save-button"
+              mat-stroked-button
+              type="button"
+              [disabled]="isDisabled"
+              (click)="submit()">
+              <span>Submit Appeal</span>
             </button>
           </div>
         </div>
       </mat-step>
       <ng-template matStepperIcon="edit" let-index="index">
-        {{ index }}
+        {{ index + 1 }}
       </ng-template>
     </mat-horizontal-stepper>
-    <!-- <app-loader
-    class="spinner"
-    [showLoader]="isLoading"
-    [strokeWidth]="10"
-    [diameter]="50"
-    [color]="'green'"
-  >
-  </app-loader> -->
   </form>
 </div>

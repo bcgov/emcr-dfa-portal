@@ -14,6 +14,7 @@ import { CurrentApplication, CurrentProjectAppeal, RecoveryPlan } from 'src/app/
   styleUrl: './appeal-project-details.component.scss'
 })
 export class AppealProjectDetailsComponent implements OnInit {
+  // TODO: Remove unused imports
   @Input() projectId: string;
   @Input() project: RecoveryPlan;
   @Input() application: CurrentApplication;
