@@ -12,6 +12,7 @@ import { DFAAppealDataService } from 'src/app/feature-components/dfa-appeal/dfa-
 export default class AppealReasonComponent implements OnInit {
   appealReasonForm: FormGroup;
   caseDetails: any;
+  appealType: string;
   
   constructor(
     private formBuilder: FormBuilder,
@@ -23,6 +24,8 @@ export default class AppealReasonComponent implements OnInit {
   ngOnInit(): void {
     // Get case details from data service
     this.caseDetails = this.appealDataService.getCaseDetails();
+    this.appealType = this.caseDetails.type;
+
     this.cdr.detectChanges();
     
     // Initialize form

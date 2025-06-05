@@ -12,32 +12,58 @@
 
         <div class="row">
           <div class="col-md-12">
-            <p class="sub-heading">Original Eligibility Decision</p>
+            <p class="sub-heading">
+              Original
+              {{
+                appealType === 'amount' ? 'Payment Amount' : 'Eligibility'
+              }}
+              Decision
+            </p>
           </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="appealType === 'eligibility'">
           <p style="font-size: 15px">
             Your application for DFA was determined to be ineligible for one or
             more reasons outlined in your DFA ineligibility letter. To appeal an
             eligibility determination, you must provide reasoning as to why you
             believe your application should have been determined to be eligible.
           </p>
+          <div class="row">
+            <p class="note">
+              <b
+                >Please ensure you have reviewed your ineligibility letter prior
+                to submitting an appeal.</b
+              >
+            </p>
+          </div>
         </div>
-        <div class="row">
-          <p class="note" style="text-align: center">
-            <b
-              >Please ensure you have reviewed your ineligibility letter prior
-              to submitting an appeal.</b
-            >
+        <div class="row" *ngIf="appealType === 'amount'">
+          <p style="font-size: 15px">
+            To appeal DFA amount determinations, you must provide reasoning as
+            to why you believe your application should have resulted in a
+            greater payment amount. Appeals staff recommend reviewing your Field
+            Manager report and DFA payment letter, listing the costs or tasks
+            you believe are missing or miscalculated in those documents, and
+            stating why you believe they are missing or miscalculated. Please
+            note, DFA uses industry standard rates at the time of the event to
+            determine repair costs and the cost of a basic model to determine
+            replacement costs. Invoices can be helpful supporting documentation,
+            but DFA amounts are not necessarily determined by invoice amounts.
           </p>
+          <mat-label class="sub-heading">
+            Have you reviewed your evaluator report that was included with your
+            payment letter <span style="color: red">*</span>
+          </mat-label>
+          <mat-radio-group formControlName="reviewedEvaluatorReport" required class="mb-4">
+            <mat-radio-button value="yes" class="mr-3">Yes</mat-radio-button>
+            <mat-radio-button value="no">No</mat-radio-button>
+          </mat-radio-group>
         </div>
-        <br />
-
         <div class="row">
           <div class="col-md-12">
             <mat-label class="sub-heading">
               Appeal Reason
-              <span style="color:red">*</span>
+              <span style="color: red">*</span>
             </mat-label>
             <div class="appeal-description">
               Please provide your appeal reasoning here. If you require more
