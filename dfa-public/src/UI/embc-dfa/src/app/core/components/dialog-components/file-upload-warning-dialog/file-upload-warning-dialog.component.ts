@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { DialogContent } from 'src/app/core/model/dialog-content.model';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-
+import { DialogContent } from 'src/app/core/model/dialog-content.model';
 
 @Component({
   selector: 'app-warning-dialog',
@@ -11,10 +10,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class FileUploadWarningDialogComponent {
   public content: DialogContent;
 
-  constructor(public dialogRef: MatDialogRef<FileUploadWarningDialogComponent>,
+  constructor(
+    public dialogRef: MatDialogRef<FileUploadWarningDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-    ) {
-      this.content = this.data.content;
+  ) {
+    this.content = this.data.content;
   }
 
   cancel() {

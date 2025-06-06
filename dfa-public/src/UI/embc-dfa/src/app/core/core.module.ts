@@ -46,6 +46,7 @@ import { DFAConfirmClaimCreateDialogComponent } from './components/dialog-compon
 import { DFAConfirmProjectCreateDialogComponent } from './components/dialog-components/dfa-confirm-project-create-dialog/dfa-confirm-project-create-dialog.component';
 import { DFAGeneralInfoDialogComponent } from './components/dialog-components/dfa-general-info-dialog/dfa-general-info-dialog.component';
 import { ContactNotFoundComponent } from 'src/app/sharedModules/forms/dfa-application-main-forms/contacts/contact-not-found.component';
+import { WarningDialogComponent } from 'src/app/core/components/dialog-components/warning-dialog/warning-dialog.component';
 
 
 @NgModule({
@@ -97,7 +98,8 @@ import { ContactNotFoundComponent } from 'src/app/sharedModules/forms/dfa-applic
     DFAConfirmClaimCreateDialogComponent,
     DFAConfirmProjectCreateDialogComponent,
     DFAGeneralInfoDialogComponent,
-    ContactNotFoundComponent
+    ContactNotFoundComponent,
+    WarningDialogComponent
   ],
   exports: [
     AppLoaderComponent,
@@ -128,7 +130,8 @@ import { ContactNotFoundComponent } from 'src/app/sharedModules/forms/dfa-applic
     DFAConfirmClaimCreateDialogComponent,
     DFAGeneralInfoDialogComponent,
     DFAConfirmProjectCreateDialogComponent,
-    ContactNotFoundComponent
+    ContactNotFoundComponent,
+    WarningDialogComponent
   ]
 })
 export class CoreModule {}

@@ -8,7 +8,7 @@ export type AppealDocument = {
   fileName: string;
   fileDescription: string;
   fileData: string | ArrayBuffer;
-  contentType: 'Appeal Support';
+  contentType: 'Appeal Support'; // TODO: Update to use FileCategory type when available
   fileSize: number;
   uploadedDate: Date;
 };
@@ -88,6 +88,7 @@ export class AppealDocumentsComponent implements OnInit {
       // Show warning and exit early if a document already exists with the same file name
       if (documents.controls.some((document) => document.get('fileName')?.value === event.name)) {
         this.warningDialog('A file with the name ' + event.name + ' has already been added.');
+        return;
       }
 
       documents.push(
@@ -117,7 +118,7 @@ export class AppealDocumentsComponent implements OnInit {
       data: {
         content: message
       },
-      width: '350px',
+      width: '500px',
       disableClose: true
     });
   }

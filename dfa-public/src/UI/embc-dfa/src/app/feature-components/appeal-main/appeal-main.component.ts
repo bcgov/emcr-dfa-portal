@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CurrentApplication, CurrentProjectAppeal, RecoveryPlan } from 'src/app/core/api/models';
 import { ApplicationService, AttachmentService, ProjectService } from 'src/app/core/api/services';
-import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog-components/file-upload-warning-dialog/file-upload-warning-dialog.component';
+import { WarningDialogComponent } from 'src/app/core/components/dialog-components/warning-dialog/warning-dialog.component';
 import { AppealDocument } from 'src/app/feature-components/appeal-main/appeal-documents/appeal-documents.component';
 
 /**
@@ -143,7 +143,10 @@ export class AppealMainComponent implements OnInit {
     }
 
     if (!this.isValid()) {
-      this.warningDialog('Please fill in all required fields before submitting the appeal.');
+      this.warningDialog({
+        title: 'Cannot Submit Appeal',
+        content: 'Please fill in all required fields before submitting the appeal.'
+      });
       return;
     }
 
@@ -231,16 +234,16 @@ export class AppealMainComponent implements OnInit {
   /**
    * Displays a warning dialog with the provided message.
    *
-   * @param {string} message
+   * @param {{title: string, content: string}} options
    * @memberof AppealMainComponent
    */
-  warningDialog(message: string) {
-    // TODO: Fix ugly warning dialog
-    this.dialog.open(FileUploadWarningDialogComponent, {
+  warningDialog(options: { title: string; content: string }) {
+    this.dialog.open(WarningDialogComponent, {
       data: {
-        content: message
+        title: options.title,
+        content: options.content
       },
-      width: '350px',
+      width: '500px',
       disableClose: true
     });
   }

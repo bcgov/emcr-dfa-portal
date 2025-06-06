@@ -113,7 +113,7 @@
               <button class="button-s align-back-button" mat-button matStepperPrevious type="button">Back</button>
             </div>
             <div class="col-md-6">
-              <button class="button-p" mat-stroked-button matStepperNext type="button">Next</button>
+              <button class="button-p" mat-stroked-button matStepperNext type="button">Next - Review and Submit</button>
             </div>
           </div>
         </div>
@@ -143,6 +143,7 @@
                     class="w-100"
                     matInput
                     readonly
+                    [ngClass]="{ 'missing-info': appealForm.get('step1.reason')?.invalid }"
                     style="resize: none"
                     [value]="getReason()"></textarea>
                 </mat-form-field>
