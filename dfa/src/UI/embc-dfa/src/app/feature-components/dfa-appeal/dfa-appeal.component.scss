@@ -20,22 +20,29 @@
 }
 
 .button-s {
-  background-color: white;
-  color: #003366;
-  border: 1px solid #003366;
-  padding: 10px 20px;
+  border: 1px solid #bdbdbd !important;
+  background-color: #fff !important;
+  color:#757575 !important;
+  font-weight: 500 !important;
+  padding: 10px 45px;
   min-width: 150px;
+  font-size: 16px;
+  box-shadow: none;
   margin-right: 10px;
 }
 
 .button-p {
-  background-color: #003366;
-  color: white;
-  padding: 10px 20px;
+  background: #234075 !important;
+  color: #fff !important;
+  font-weight: 500 !important;
+  padding: 10px 25px;
   min-width: 150px;
+  font-size: 16px;
+  box-shadow: none;
 
   &:disabled {
-    background-color: #ccc;
+    background-color: #ccc !important;
+    color: #fff !important;
     cursor: not-allowed;
   }
 }

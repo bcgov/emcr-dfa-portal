@@ -11,6 +11,7 @@ import { CoreModule } from 'src/app/core/core.module';
 import CaseDetailsComponent  from 'src/app/sharedModules/components/case-details/case-details.component';
 import AppealReasonComponent from './appeal-reason/appeal-reason.component';
 import SignAndSubmitComponent from './sign-and-submit/sign-and-submit.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import SignAndSubmitComponent from './sign-and-submit/sign-and-submit.component'
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatRadioModule,
     CoreModule
   ],
   exports: [
