@@ -680,7 +680,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.Stage, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimbpfsubstages) ? GetEnumDescription((ClaimSubStages)Convert.ToInt32(s.dfa_claimbpfsubstages)) : null))
                 .ForMember(d => d.PaidClaimDate, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_claimpaiddate) ? "(pending information)" : Convert.ToDateTime(s.dfa_claimpaiddate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.ClaimDecision, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_decisioncopy) ? GetEnumDescription((ClaimDecisions)Convert.ToInt32(s.dfa_decisioncopy)) : null))
-                .ForMember(d => d.AdvancedDrawdownAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_advancepaymentamount) ? "(pending information)" : "CA$ " + Convert.ToDecimal(s.dfa_advancepaymentamount).ToString(CurrencyFormat)));
+                .ForMember(d => d.AdvancedDrawdownAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_advanceddrawdownamount) ? "(pending information)" : "CA$ " + Convert.ToDecimal(s.dfa_advanceddrawdownamount).ToString(CurrencyFormat)));
 
             CreateMap<dfa_claim_retrieve, RecoveryClaim>()
                 .ForMember(d => d.claimNumber, opts => opts.MapFrom(s => s.dfa_name))
@@ -700,7 +700,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.stage, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimbpfsubstages) ?
                     (Convert.ToInt32(s.dfa_claimbpfstages) == Convert.ToInt32(ClaimStages.Draft) ? null : GetEnumDescription((ClaimSubStages)Convert.ToInt32(s.dfa_claimbpfsubstages)))
                     : null))
-                .ForMember(d => d.advancedDrawdownAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_advancepaymentamount) ? "0" : s.dfa_advancepaymentamount))
+                .ForMember(d => d.advancedDrawdownAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_advanceddrawdownamount) ? "0" : s.dfa_advanceddrawdownamount))
                 .ForMember(d => d.claimDecision, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_decisioncopy) ? GetEnumDescription((ClaimDecisions)Convert.ToInt32(s.dfa_decisioncopy)) : null));
                 
 
