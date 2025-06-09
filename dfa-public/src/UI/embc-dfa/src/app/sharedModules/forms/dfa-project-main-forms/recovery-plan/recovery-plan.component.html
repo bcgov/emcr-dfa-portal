@@ -219,36 +219,38 @@
           </div>
         </div>
 
-        <ng-container *ngIf="advancedPaymentsMade != 0">
-          <div class="row">
-            <div class="col-md-4">
-              <p class="label">
-                Advanced Payments Made
-              </p>
-              <mat-form-field appearance="outline" class="mat-form-round">
-                <div class="searchDiv">
-                  <input (focusin)="setHelpText(15, tooltip)" #currencyBox id="currencyBox"
-                    formControlName="advancedPaymentsMade" matInput required placeholder="Advanced Payments Made"
-                    mask="separator.2" thousandSeparator="," decimalMarker="." maxlength="100" />
-                  <span class="currencyText">CA$</span>
-                </div>
-              </mat-form-field>
+        <div [featureEnabled]="'useAdvancedPayments'">
+          <ng-container *ngIf="showAdvancedPayments">
+            <div class="row">
+              <div class="col-md-4">
+                <p class="label">
+                  Advanced Payments Made
+                </p>
+                <mat-form-field appearance="outline" class="mat-form-round">
+                  <div class="searchDiv">
+                    <input (focusin)="setHelpText(15, tooltip)" #currencyBox id="currencyBox"
+                      formControlName="advancedPaymentsMade" matInput required placeholder="Advanced Payments Made"
+                      mask="separator.2" thousandSeparator="," decimalMarker="." maxlength="100" />
+                    <span class="currencyText">CA$</span>
+                  </div>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <p class="label">
+                  Advanced Payments Balance
+                </p>
+                <mat-form-field appearance="outline" class="mat-form-round">
+                  <div class="searchDiv">
+                    <input (focusin)="setHelpText(15, tooltip)" #currencyBox id="currencyBox"
+                      formControlName="advancedPaymentsBalance" matInput required placeholder="Advanced Payments Balance"
+                      mask="separator.2" thousandSeparator="," decimalMarker="." maxlength="100" />
+                    <span class="currencyText">CA$</span>
+                  </div>
+                </mat-form-field>
+              </div>
             </div>
-            <div class="col-md-4">
-              <p class="label">
-                Advanced Payments Balance
-              </p>
-              <mat-form-field appearance="outline" class="mat-form-round">
-                <div class="searchDiv">
-                  <input (focusin)="setHelpText(15, tooltip)" #currencyBox id="currencyBox"
-                    formControlName="advancedPaymentsBalance" matInput required placeholder="Advanced Payments Balance"
-                    mask="separator.2" thousandSeparator="," decimalMarker="." maxlength="100" />
-                  <span class="currencyText">CA$</span>
-                </div>
-              </mat-form-field>
-            </div>
-          </div>
-        </ng-container>
+          </ng-container>
+        </div>
       </ng-container>
       <ng-container *ngIf="projectDecision === 'Approved' || projectDecision === 'Approved with Exclusions' || projectDecision === 'Withdrawn' || projectDecision === 'Ineligible'">
         <div class="row">

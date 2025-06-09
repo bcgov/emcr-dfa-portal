@@ -186,10 +186,10 @@
           <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.approvedReimbursePercent : ""}}</span>
         </div>
 
-        <div class="col-md-2">
+        <div [featureEnabled]="'useAdvancedPayments'" class="col-md-2">
           <span><b>Advanced Drawdown Amount -</b></span>
         </div>
-        <div class="col-md-2">
+        <div [featureEnabled]="'useAdvancedPayments'" class="col-md-2">
           <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == DecisionEnum.ApprovedWithExclusions ? applItem.advancedDrawdownAmount : ""}}</span>
         </div>
 

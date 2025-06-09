@@ -91,6 +91,8 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
   projTypeSelectedOther: boolean = false;
   /* EMCRI-1151 */
   isSubmitted: boolean = false;
+  /* D4P-112 */
+  showAdvancedPayments: boolean = false;
 
   timerID;
   readonly phoneMask = [
@@ -333,6 +335,13 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
           this.calcRemainingCharsDescribeRepairMaterial();
           this.calcRemainingCharsInfrastructure();
 
+          /* D4P-112 */
+          if (dfaProjectMain.project.advancedPaymentsMade > 0){
+            this.showAdvancedPayments = true;
+          }
+          else{
+            this.showAdvancedPayments = false;            
+          }
         },
         error: (error) => {
           console.error(error);
