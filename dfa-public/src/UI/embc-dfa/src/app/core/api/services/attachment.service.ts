@@ -19,6 +19,8 @@ import { attachmentGetProjectAttachments } from '../fn/attachment/attachment-get
 import { AttachmentGetProjectAttachments$Params } from '../fn/attachment/attachment-get-project-attachments';
 import { attachmentUpsertDeleteClaimAttachment } from '../fn/attachment/attachment-upsert-delete-claim-attachment';
 import { AttachmentUpsertDeleteClaimAttachment$Params } from '../fn/attachment/attachment-upsert-delete-claim-attachment';
+import { attachmentUpsertDeleteProjectAppealAttachment } from '../fn/attachment/attachment-upsert-delete-project-appeal-attachment';
+import { AttachmentUpsertDeleteProjectAppealAttachment$Params } from '../fn/attachment/attachment-upsert-delete-project-appeal-attachment';
 import { attachmentUpsertDeleteProjectAttachment } from '../fn/attachment/attachment-upsert-delete-project-attachment';
 import { AttachmentUpsertDeleteProjectAttachment$Params } from '../fn/attachment/attachment-upsert-delete-project-attachment';
 import { FileUpload } from '../models/file-upload';
@@ -125,6 +127,39 @@ export class AttachmentService extends BaseService {
    */
   attachmentUpsertDeleteClaimAttachment(params: AttachmentUpsertDeleteClaimAttachment$Params, context?: HttpContext): Observable<string> {
     return this.attachmentUpsertDeleteClaimAttachment$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
+    );
+  }
+
+  /** Path part for operation `attachmentUpsertDeleteProjectAppealAttachment()` */
+  static readonly AttachmentUpsertDeleteProjectAppealAttachmentPath = '/api/attachments/projectAppealDocument';
+
+  /**
+   * Create / update / delete a project appeal attachment.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `attachmentUpsertDeleteProjectAppealAttachment()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  attachmentUpsertDeleteProjectAppealAttachment$Response(params: AttachmentUpsertDeleteProjectAppealAttachment$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return attachmentUpsertDeleteProjectAppealAttachment(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create / update / delete a project appeal attachment.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `attachmentUpsertDeleteProjectAppealAttachment$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  attachmentUpsertDeleteProjectAppealAttachment(params: AttachmentUpsertDeleteProjectAppealAttachment$Params, context?: HttpContext): Observable<string> {
+    return this.attachmentUpsertDeleteProjectAppealAttachment$Response(params, context).pipe(
       map((r: StrictHttpResponse<string>): string => r.body)
     );
   }

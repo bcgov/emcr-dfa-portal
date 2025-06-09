@@ -280,6 +280,176 @@ namespace EMBC.DFA.API.Controllers
         }
 
         /// <summary>
+        /// Create / update / delete a project appeal attachment.
+        /// </summary>
+        /// <param name="fileUpload">The attachment information</param>
+        /// <returns>file upload id</returns>
+        [HttpPost("projectAppealDocument")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [RequestSizeLimit(MAXFILESIZE)]
+        public async Task<ActionResult<string>> UpsertDeleteProjectAppealAttachment(
+            FileUpload fileUpload
+        )
+        {
+            var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
+            if (useS3)
+            {
+                if (fileUpload.deleteFlag == true)
+                {
+                    return await DeleteProjectAppealS3Attachment(fileUpload);
+                }
+
+                return await UpsertProjectAppealS3Attachment(fileUpload);
+            }
+
+            if (fileUpload.deleteFlag == true)
+            {
+                return await DeleteProjectAppealAttachment(fileUpload);
+            }
+
+            return await UpsertProjectAppealAttachment(fileUpload);
+        }
+
+        /// <summary>
+        /// Delete a project appeal S3 attachment.
+        /// </summary>
+        /// <param name="fileUpload"></param>
+        /// <returns></returns>
+        private async Task<ActionResult<string>> DeleteProjectAppealS3Attachment(
+            FileUpload fileUpload
+        )
+        {
+            if (fileUpload.id == null && fileUpload.deleteFlag == true)
+            {
+                return BadRequest("FileUpload id cannot be empty on delete");
+            }
+
+            var metadataDeleteParams = new MetadataDeleteParams();
+
+            if (fileUpload.id != null)
+            {
+                metadataDeleteParams.DocumentMetadataId = fileUpload.id.ToString();
+            }
+
+            var result = await handler.HandleDeleteFileMetadataAsync(metadataDeleteParams);
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Delete a project appeal attachment. (Non-S3).
+        /// </summary>
+        /// <param name="fileUpload"></param>
+        /// <returns></returns>
+        private async Task<ActionResult<string>> DeleteProjectAppealAttachment(
+            FileUpload fileUpload
+        )
+        {
+            if (fileUpload.id == null && fileUpload.deleteFlag == true)
+            {
+                return BadRequest("FileUpload id cannot be empty on delete");
+            }
+
+            var app_params = new dfa_DFAActionDeleteDocuments_parms();
+            var proj_params = new dfa_DeleteDocument_params();
+
+            if (fileUpload.id != null)
+            {
+                Console.WriteLine("testing doc delete");
+                proj_params.DocLocationID = (Guid)fileUpload.id;
+                proj_params.DocLocationType = "Project";
+            }
+
+            var result = await handler.DeleteFileUploadAsync(app_params, proj_params);
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Upsert a project appeal S3 attachment.
+        /// </summary>
+        /// <param name="fileUpload"></param>
+        /// <returns></returns>
+        private async Task<ActionResult<string>> UpsertProjectAppealS3Attachment(
+            FileUpload fileUpload
+        )
+        {
+            if (fileUpload.fileData == null && fileUpload.deleteFlag == false)
+            {
+                return BadRequest("FileUpload data cannot be empty.");
+            }
+
+            logger.LogInformation("Upload S3 attachments dfa_project");
+
+            if (fileUpload.fileSize >= MAXFILESIZE)
+            {
+                throw new Exception($"File size exceeds {MAXFILESIZE / 1_048_576.0:F2}MB limit");
+            }
+
+            var submissionEntity = mapper.Map<S3SubmissionEntity>(fileUpload);
+            /*
+            Switch based on the regarding entity type where the doc is uploaded to.
+            - case: incident
+            - application: dfa_appapplication
+            - project: dfa_project
+            - recoveryClaim: dfa_projectclaim
+            */
+            submissionEntity.RegardingEntitySchemaName = "dfa_project";
+
+            /*
+            Switch based on entity type to which the document is being uploaded.
+            - case: bcgov_caseid
+            - application: dfa_appapplication
+            - project: dfa_project
+            - recoveryClaim: dfa_recoveryclaim
+            */
+            submissionEntity.RegardingEntityLookUpFieldName = "dfa_project";
+
+            try
+            {
+                var result = await handler.HandleS3FileUploadAsync(submissionEntity);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to upload file to S3.");
+
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    "An error occurred while uploading file."
+                );
+            }
+        }
+
+        /// <summary>
+        /// Upsert a project appeal attachment. (Non-S3).
+        /// </summary>
+        /// <param name="fileUpload"></param>
+        /// <returns></returns>
+        private async Task<ActionResult<string>> UpsertProjectAppealAttachment(
+            FileUpload fileUpload
+        )
+        {
+            if (fileUpload.fileData == null && fileUpload.deleteFlag == false)
+            {
+                return BadRequest("FileUpload data cannot be empty.");
+            }
+
+            var mappedFileUpload = mapper.Map<AttachmentEntity>(fileUpload);
+            var submissionEntity = mapper.Map<SubmissionEntity>(fileUpload);
+
+            submissionEntity.documentCollection = Enumerable.Empty<AttachmentEntity>();
+            submissionEntity.documentCollection =
+                submissionEntity.documentCollection.Append<AttachmentEntity>(mappedFileUpload);
+
+            var result = await handler.HandleFileUploadAsync(submissionEntity);
+
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Get a list of attachments by project Id
         /// </summary>
         /// <returns> FileUploads </returns>
