@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { CurrentApplication, CurrentProjectAppeal, RecoveryPlan } from 'src/app/core/api/models';
-import { ApplicationService, AttachmentService, ProjectService } from 'src/app/core/api/services';
+import { ApplicationService, AttachmentService, ProjectAppealService, ProjectService } from 'src/app/core/api/services';
 import { WarningDialogComponent } from 'src/app/core/components/dialog-components/warning-dialog/warning-dialog.component';
 import { AppealDocument } from 'src/app/feature-components/appeal-main/appeal-documents/appeal-documents.component';
 
@@ -60,6 +60,7 @@ export class AppealMainComponent implements OnInit {
     private route: ActivatedRoute,
     private projectService: ProjectService,
     private applicationService: ApplicationService,
+    private projectAppealService: ProjectAppealService,
     private attachmentsService: AttachmentService,
     private dialog: MatDialog
   ) {
@@ -77,10 +78,12 @@ export class AppealMainComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.projectId = params['id'];
       console.debug('Project ID:', this.projectId);
-      // TODO: load project data including appeal
+      // TODO: load project data?
       this.loadProject(this.projectId);
-      // TODO: load application data
+      // TODO: load application data?
       // this.loadApplication(this.projectId);
+      // TODO: load appeal data?
+      // this.loadAppeal(this.projectId);
     });
   }
 
@@ -154,8 +157,11 @@ export class AppealMainComponent implements OnInit {
     this.isDisabled = true;
     this.appealForm.disable({ emitEvent: false });
 
-    // TODO: Submit appeal form.
-    // TODO: Upload appeal documents (before or after submitting form? Is there an ID we need to create first?).
+    if (this.appeal?.id) {
+      this._updateProjectAppeal();
+    } else {
+      this._createProjectAppeal();
+    }
 
     this.appealForm.enable({ emitEvent: false });
     this.isDisabled = false;
@@ -173,6 +179,68 @@ export class AppealMainComponent implements OnInit {
   }
 
   /**
+   * Create a new project appeal.
+   *
+   * @memberof AppealMainComponent
+   */
+  _createProjectAppeal() {
+    this.projectAppealService
+      .projectAppealCreateProjectAppeal({
+        body: {
+          // TODO: Set correct properties
+          caseId: this.projectId,
+          reason: this.getReason()
+        }
+      })
+      .subscribe({
+        next: async (response) => {
+          console.debug('Appeal Created:', response);
+          await this.uploadDocuments();
+          this.router.navigate(['/dfa-dashboard']);
+        },
+        error: (error) => {
+          console.error('Error creating appeal:', error);
+          this.warningDialog({
+            title: 'Error Submitting Appeal',
+            content: 'There was an error submitting your appeal. Please try again later.'
+          });
+        }
+      });
+  }
+
+  /**
+   * Update an existing project appeal.
+   *
+   * @memberof AppealMainComponent
+   */
+  _updateProjectAppeal() {
+    this.projectAppealService
+      .projectAppealUpdateProjectAppeal({
+        id: this.appeal?.id,
+        body: {
+          // TODO: Set correct properties
+          id: this.appeal?.id,
+          caseId: this.projectId,
+          reason: this.getReason()
+        }
+      })
+      .subscribe({
+        next: async (response) => {
+          console.debug('Appeal Updated:', response);
+          await this.uploadDocuments();
+          this.router.navigate(['/dfa-dashboard']);
+        },
+        error: (error) => {
+          console.error('Error updating appeal:', error);
+          this.warningDialog({
+            title: 'Error Updating Appeal',
+            content: 'There was an error updating your appeal. Please try again later.'
+          });
+        }
+      });
+  }
+
+  /**
    * Uploads the documents from the appeal form's documents array.
    *
    * @return {*}  {Promise<void>}
@@ -187,25 +255,33 @@ export class AppealMainComponent implements OnInit {
 
     // Upload documents one at a time
     for (const document of documents) {
-      // TODO: Define type with correct properties
-      const documentPayload: any = {
-        contentType: document.contentType,
-        deleteFlag: false,
-        fileData: document.fileData,
-        fileDescription: document.fileDescription,
-        fileName: document.fileName,
-        fileSize: document.fileSize
-      };
-
-      // TODO: replace "attachmentUpsertDeleteClaimAttachment" with the correct API call.
-      await firstValueFrom(this.attachmentsService.attachmentUpsertDeleteClaimAttachment({ body: documentPayload }))
-        .then((_fileUploadId) => {})
-        .catch((error) => {
-          // TODO: handle error
-          console.error(error);
-          return;
-        });
+      await this.uploadDocument(document);
     }
+  }
+
+  async uploadDocument(document: AppealDocument): Promise<void> {
+    // TODO: Define type with correct properties
+    const documentPayload: any = {
+      contentType: document.contentType,
+      deleteFlag: false,
+      fileData: document.fileData,
+      fileDescription: document.fileDescription,
+      fileName: document.fileName,
+      fileSize: document.fileSize
+    };
+
+    await firstValueFrom(
+      this.attachmentsService.attachmentUpsertDeleteProjectAppealAttachment({ body: documentPayload })
+    )
+      .then((_fileUploadId) => {
+        // TODO: Handle the response
+        console.debug('Document uploaded successfully:', _fileUploadId);
+      })
+      .catch((error) => {
+        // TODO: handle error
+        console.error(error);
+        return;
+      });
   }
 
   /**

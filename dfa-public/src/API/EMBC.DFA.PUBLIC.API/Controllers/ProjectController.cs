@@ -265,6 +265,8 @@ namespace EMBC.DFA.API.Controllers
 
     public class CurrentProjectAppeal
     {
+        public string id { get; set; }
+        public string AppealReason { get; set; }
         public string AppealStatus { get; set; }
         public string AppealType { get; set; }
     }

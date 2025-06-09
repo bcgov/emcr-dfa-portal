@@ -8,20 +8,19 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { FileUpload } from '../../models/file-upload';
 
-export interface AttachmentUpsertDeleteProjectAppealAttachment$Params {
-  
-    /**
-     * The attachment information
-     */
-    body: FileUpload
+export interface AttachmentDeleteProjectAppealAttachment$Params {
+
+/**
+ * The attachment id
+ */
+  id?: string;
 }
 
-export function attachmentUpsertDeleteProjectAppealAttachment(http: HttpClient, rootUrl: string, params: AttachmentUpsertDeleteProjectAppealAttachment$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
-  const rb = new RequestBuilder(rootUrl, attachmentUpsertDeleteProjectAppealAttachment.PATH, 'post');
+export function attachmentDeleteProjectAppealAttachment(http: HttpClient, rootUrl: string, params?: AttachmentDeleteProjectAppealAttachment$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+  const rb = new RequestBuilder(rootUrl, attachmentDeleteProjectAppealAttachment.PATH, 'delete');
   if (params) {
-    rb.body(params.body, 'application/json');
+    rb.query('id', params.id, {});
   }
 
   return http.request(
@@ -34,4 +33,4 @@ export function attachmentUpsertDeleteProjectAppealAttachment(http: HttpClient, 
   );
 }
 
-attachmentUpsertDeleteProjectAppealAttachment.PATH = '/api/attachments/projectAppealDocument';
+attachmentDeleteProjectAppealAttachment.PATH = '/api/attachments/projectAppealDocument';

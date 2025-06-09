@@ -280,7 +280,7 @@ namespace EMBC.DFA.API.Controllers
         }
 
         /// <summary>
-        /// Create / update / delete a project appeal attachment.
+        /// Upsert (create or update) a project appeal attachment.
         /// </summary>
         /// <param name="fileUpload">The attachment information</param>
         /// <returns>file upload id</returns>
@@ -289,49 +289,51 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [RequestSizeLimit(MAXFILESIZE)]
-        public async Task<ActionResult<string>> UpsertDeleteProjectAppealAttachment(
-            FileUpload fileUpload
-        )
+        public async Task<ActionResult<string>> UpsertProjectAppealAttachment(FileUpload fileUpload)
         {
+            // return Ok("WIP: projectAppealDocument");
+
             var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
             if (useS3)
             {
-                if (fileUpload.deleteFlag == true)
-                {
-                    return await DeleteProjectAppealS3Attachment(fileUpload);
-                }
-
                 return await UpsertProjectAppealS3Attachment(fileUpload);
             }
 
-            if (fileUpload.deleteFlag == true)
+            return await UpsertProjectAppealNonS3Attachment(fileUpload);
+        }
+
+        /// <summary>
+        /// Delete a project appeal attachment.
+        /// </summary>
+        /// <param name="id">The attachment id</param>
+        /// <returns>file upload id</returns>
+        [HttpDelete("projectAppealDocument")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> DeleteProjectAppealAttachment(Guid id)
+        {
+            // return Ok("WIP: DeleteProjectAppealAttachment");
+
+            var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
+            if (useS3)
             {
-                return await DeleteProjectAppealAttachment(fileUpload);
+                return await DeleteProjectAppealS3Attachment(id);
             }
 
-            return await UpsertProjectAppealAttachment(fileUpload);
+            return await DeleteProjectAppealNonS3Attachment(id);
         }
 
         /// <summary>
         /// Delete a project appeal S3 attachment.
         /// </summary>
-        /// <param name="fileUpload"></param>
+        /// <param name="id">The attachment id</param>
         /// <returns></returns>
-        private async Task<ActionResult<string>> DeleteProjectAppealS3Attachment(
-            FileUpload fileUpload
-        )
+        private async Task<ActionResult<string>> DeleteProjectAppealS3Attachment(Guid id)
         {
-            if (fileUpload.id == null && fileUpload.deleteFlag == true)
-            {
-                return BadRequest("FileUpload id cannot be empty on delete");
-            }
-
             var metadataDeleteParams = new MetadataDeleteParams();
 
-            if (fileUpload.id != null)
-            {
-                metadataDeleteParams.DocumentMetadataId = fileUpload.id.ToString();
-            }
+            metadataDeleteParams.DocumentMetadataId = id.ToString();
 
             var result = await handler.HandleDeleteFileMetadataAsync(metadataDeleteParams);
 
@@ -339,28 +341,17 @@ namespace EMBC.DFA.API.Controllers
         }
 
         /// <summary>
-        /// Delete a project appeal attachment. (Non-S3).
+        /// Delete a project appeal non-S3 attachment.
         /// </summary>
-        /// <param name="fileUpload"></param>
+        /// <param name="id">The attachment id</param>
         /// <returns></returns>
-        private async Task<ActionResult<string>> DeleteProjectAppealAttachment(
-            FileUpload fileUpload
-        )
+        private async Task<ActionResult<string>> DeleteProjectAppealNonS3Attachment(Guid id)
         {
-            if (fileUpload.id == null && fileUpload.deleteFlag == true)
-            {
-                return BadRequest("FileUpload id cannot be empty on delete");
-            }
-
             var app_params = new dfa_DFAActionDeleteDocuments_parms();
             var proj_params = new dfa_DeleteDocument_params();
 
-            if (fileUpload.id != null)
-            {
-                Console.WriteLine("testing doc delete");
-                proj_params.DocLocationID = (Guid)fileUpload.id;
-                proj_params.DocLocationType = "Project";
-            }
+            proj_params.DocLocationID = id;
+            proj_params.DocLocationType = "Project";
 
             var result = await handler.DeleteFileUploadAsync(app_params, proj_params);
 
@@ -424,11 +415,11 @@ namespace EMBC.DFA.API.Controllers
         }
 
         /// <summary>
-        /// Upsert a project appeal attachment. (Non-S3).
+        /// Upsert a project appeal non-S3 attachment.
         /// </summary>
         /// <param name="fileUpload"></param>
         /// <returns></returns>
-        private async Task<ActionResult<string>> UpsertProjectAppealAttachment(
+        private async Task<ActionResult<string>> UpsertProjectAppealNonS3Attachment(
             FileUpload fileUpload
         )
         {
