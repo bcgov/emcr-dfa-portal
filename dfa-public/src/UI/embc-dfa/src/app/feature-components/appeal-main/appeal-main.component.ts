@@ -34,6 +34,7 @@ export class AppealMainComponent implements OnInit {
   project: RecoveryPlan;
   application: CurrentApplication;
   appeal: CurrentProjectAppeal;
+  documents: AppealDocument[] = [];
 
   isLoading: boolean = false;
   isDisabled: boolean = false;
@@ -80,10 +81,15 @@ export class AppealMainComponent implements OnInit {
       console.debug('Project ID:', this.projectId);
       // TODO: load project data?
       this.loadProject(this.projectId);
+
       // TODO: load application data?
       // this.loadApplication(this.projectId);
+
       // TODO: load appeal data?
       // this.loadAppeal(this.projectId);
+
+      // TODO: load documents
+      // this.loadDocuments();
     });
   }
 
@@ -119,6 +125,34 @@ export class AppealMainComponent implements OnInit {
         console.error(error);
         // TODO: redirect to error page
         // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+      }
+    });
+  }
+
+  loadDocuments() {
+    this.attachmentsService.attachmentGetProjectAppealAttachments({ projectAppealId: this.appeal.id }).subscribe({
+      next: (response) => {
+        console.debug('Documents Loaded:', response);
+        if (response?.length > 0) {
+          this.documents = response.map((doc) => ({
+            id: doc.id,
+            fileName: doc.fileName,
+            fileDescription: doc.fileDescription,
+            fileData: doc.fileData,
+            FileType: doc.fileType,
+            contentType: doc.contentType,
+            fileSize: doc.fileSize,
+            uploadedDate: new Date(doc.uploadedDate)
+          }));
+        }
+      },
+      error: (error) => {
+        console.error('Error loading documents:', error);
+        this.warningDialog({
+          title: 'Error Loading Documents',
+          content:
+            'There was an error loading your documents. Please try again. If the errors persists, please contact support.'
+        });
       }
     });
   }
@@ -187,7 +221,7 @@ export class AppealMainComponent implements OnInit {
     this.projectAppealService
       .projectAppealCreateProjectAppeal({
         body: {
-          // TODO: Set correct properties
+          // TODO: Finalize correct properties
           caseId: this.projectId,
           reason: this.getReason()
         }
@@ -202,7 +236,8 @@ export class AppealMainComponent implements OnInit {
           console.error('Error creating appeal:', error);
           this.warningDialog({
             title: 'Error Submitting Appeal',
-            content: 'There was an error submitting your appeal. Please try again later.'
+            content:
+              'There was an error submitting your appeal. Please try again. If the errors persists, please contact support.'
           });
         }
       });
@@ -218,7 +253,7 @@ export class AppealMainComponent implements OnInit {
       .projectAppealUpdateProjectAppeal({
         id: this.appeal?.id,
         body: {
-          // TODO: Set correct properties
+          // TODO: Finalize correct properties
           id: this.appeal?.id,
           caseId: this.projectId,
           reason: this.getReason()

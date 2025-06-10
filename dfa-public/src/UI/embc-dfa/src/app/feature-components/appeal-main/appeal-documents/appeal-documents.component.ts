@@ -1,14 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ControlContainer, FormArray, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { CurrentApplication, CurrentProjectAppeal, RecoveryPlan } from 'src/app/core/api/models';
+import { CurrentApplication, CurrentProjectAppeal, FileCategory, RecoveryPlan } from 'src/app/core/api/models';
 import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog-components/file-upload-warning-dialog/file-upload-warning-dialog.component';
 
 export type AppealDocument = {
   fileName: string;
   fileDescription: string;
   fileData: string | ArrayBuffer;
-  contentType: 'Appeal Support'; // TODO: Update to use FileCategory type when available
+  FileType: FileCategory;
+  contentType: string;
   fileSize: number;
   uploadedDate: Date;
 };
@@ -99,7 +100,8 @@ export class AppealDocumentsComponent implements OnInit {
             Validators.maxLength(this.fileDescriptionMaxLength)
           ]),
           fileData: new FormControl(reader.result),
-          contentType: new FormControl('Appeal Support'),
+          FileType: new FormControl(FileCategory.Reports), // TODO: Update this to "Appeal Support" when available
+          contentType: new FormControl(event.type),
           fileSize: new FormControl(event.size),
           uploadedDate: new FormControl(new Date())
         })
