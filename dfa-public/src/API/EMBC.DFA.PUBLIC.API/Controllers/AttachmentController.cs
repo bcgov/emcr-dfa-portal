@@ -206,7 +206,7 @@ namespace EMBC.DFA.API.Controllers
 
             var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
 
-            if (useS3) 
+            if (useS3)
             {
                 if (fileUpload.deleteFlag == true)
                 {
@@ -291,7 +291,8 @@ namespace EMBC.DFA.API.Controllers
         [RequestSizeLimit(MAXFILESIZE)]
         public async Task<ActionResult<string>> UpsertProjectAppealAttachment(FileUpload fileUpload)
         {
-            // return Ok("WIP: projectAppealDocument");
+            // TODO: Finalize this function.
+            return Ok("WIP: projectAppealDocument");
 
             var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
             if (useS3)
@@ -313,7 +314,8 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> DeleteProjectAppealAttachment(Guid id)
         {
-            // return Ok("WIP: DeleteProjectAppealAttachment");
+            // TODO: Finalize this function.
+            return Ok("WIP: DeleteProjectAppealAttachment");
 
             var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
             if (useS3)
@@ -544,6 +546,79 @@ namespace EMBC.DFA.API.Controllers
                     return Ok(null);
                 }
             }
+        }
+
+        /// <summary>
+        /// Get a list of attachments by project appeal Id.
+        /// </summary>
+        /// <returns> FileUploads </returns>
+        /// <param name="projectAppealId">The project appeal Id.</param>
+        [HttpGet("byProjectAppealId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<FileUpload>>> GetProjectAppealAttachments(
+            [FromQuery] [Required] Guid projectAppealId
+        )
+        {
+            // TODO: Finalize this function.
+            return Ok([]);
+
+            var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
+            if (useS3)
+            {
+                return await getProjectAppealS3Attachments(projectAppealId);
+            }
+
+            return await getProjectAppealNonS3Attachments(projectAppealId);
+        }
+
+        /// <summary>
+        /// Get a list of S3 attachments by project appeal Id.
+        /// </summary>
+        /// <param name="projectAppealId">The project appeal Id.</param>
+        /// <returns></returns>
+        private async Task<ActionResult<IEnumerable<FileUpload>>> getProjectAppealS3Attachments(
+            Guid projectAppealId
+        )
+        {
+            // TODO: Finalize this function. Add/create appropriate handler.____ function, etc.
+            IEnumerable<bcgov_documenturl> bcgovDocumentUrls =
+                await handler.GetS3ProjectDocumentListAsync(projectAppealId);
+            IEnumerable<FileUpload> fileUploads = new FileUpload[] { };
+
+            foreach (bcgov_documenturl bcgovDocumentUrl in bcgovDocumentUrls)
+            {
+                FileUpload fileUpload = mapper.Map<FileUpload>(bcgovDocumentUrl);
+                fileUploads = fileUploads.Append<FileUpload>(fileUpload);
+            }
+
+            return Ok(fileUploads);
+        }
+
+        /// <summary>
+        /// Get a list of non-S3 attachments by project appeal Id.
+        /// </summary>
+        /// <param name="projectAppealId">The project appeal Id.</param>
+        /// <returns></returns>
+        private async Task<ActionResult<IEnumerable<FileUpload>>> getProjectAppealNonS3Attachments(
+            Guid projectAppealId
+        )
+        {
+            // TODO: Finalize this function. Add/create appropriate handler.____ function, etc.
+            IEnumerable<dfa_projectdocumentlocation> dfa_projectdocumentlocations =
+                await handler.GetProjectFileUploadsAsync(projectAppealId);
+
+            IEnumerable<FileUpload> fileUploads = new FileUpload[] { };
+
+            foreach (
+                dfa_projectdocumentlocation dfa_projectdocumentlocation in dfa_projectdocumentlocations
+            )
+            {
+                FileUpload fileUpload = mapper.Map<FileUpload>(dfa_projectdocumentlocation);
+                fileUploads = fileUploads.Append<FileUpload>(fileUpload);
+            }
+
+            return Ok(fileUploads);
         }
     }
 

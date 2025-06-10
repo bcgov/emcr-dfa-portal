@@ -59,7 +59,7 @@
                   title="Detailed reasoning and/or evidence that explains and/or supports why the appellant believes the DFA determination was incorrect."
                   [maxlength]="reasonMaxLength"
                   [readonly]="isReadOnly"
-                  (keyup)="updateReasonRemainingChars()"></textarea>
+                  (keyup)="updateReasonRemainingCharacters()"></textarea>
                 <mat-hint>{{ reasonRemainingLength }} characters remaining.</mat-hint>
               </mat-form-field>
             </div>
@@ -102,7 +102,7 @@
           <div class="row justify-content-start mb-4">
             <div class="mb-2">
               <app-appeal-documents
-                [onRemoveDocument]="removeDocument"
+                [onRemoveDocument]="deleteDocument"
                 [isReadOnly]="isReadOnly"
                 [isDisabled]="isDisabled"></app-appeal-documents>
             </div>

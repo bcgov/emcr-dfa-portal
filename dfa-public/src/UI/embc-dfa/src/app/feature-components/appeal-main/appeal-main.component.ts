@@ -234,7 +234,8 @@ export class AppealMainComponent implements OnInit {
           console.error('Error updating appeal:', error);
           this.warningDialog({
             title: 'Error Updating Appeal',
-            content: 'There was an error updating your appeal. Please try again later.'
+            content:
+              'There was an error updating your appeal. Please try again. If the errors persists, please contact support.'
           });
         }
       });
@@ -259,29 +260,67 @@ export class AppealMainComponent implements OnInit {
     }
   }
 
+  /**
+   * Uploads a single document.
+   *
+   * @param {AppealDocument} document
+   * @return {*}  {Promise<void>}
+   * @memberof AppealMainComponent
+   */
   async uploadDocument(document: AppealDocument): Promise<void> {
     // TODO: Define type with correct properties
     const documentPayload: any = {
       contentType: document.contentType,
-      deleteFlag: false,
       fileData: document.fileData,
       fileDescription: document.fileDescription,
       fileName: document.fileName,
       fileSize: document.fileSize
     };
 
-    await firstValueFrom(
-      this.attachmentsService.attachmentUpsertDeleteProjectAppealAttachment({ body: documentPayload })
-    )
+    await firstValueFrom(this.attachmentsService.attachmentUpsertProjectAppealAttachment({ body: documentPayload }))
       .then((_fileUploadId) => {
         // TODO: Handle the response
         console.debug('Document uploaded successfully:', _fileUploadId);
       })
       .catch((error) => {
         // TODO: handle error
-        console.error(error);
-        return;
+        console.error('Error uploading document:', error);
+        this.warningDialog({
+          title: 'Error Uploading Document',
+          content:
+            'There was an error uploading the document. Please try again. If the errors persists, please contact support.'
+        });
       });
+  }
+
+  /**
+   * Deletes a document, and removes it from the documents form array.
+   *
+   * @param {number} index
+   * @memberof AppealMainComponent
+   */
+  deleteDocument(index: number) {
+    const documents = this.appealForm.get('step2.documents') as FormArray;
+
+    const id = documents.at(index).get('id')?.value;
+
+    this.attachmentsService.attachmentDeleteProjectAppealAttachment({ id }).subscribe({
+      next: () => {
+        console.debug('Document deleted successfully');
+      },
+      error: (error) => {
+        console.error('Error deleting document:', error);
+        this.warningDialog({
+          title: 'Error Deleting Document',
+          content:
+            'There was an error deleting the document. Please try again. If the errors persists, please contact support.'
+        });
+      }
+    });
+
+    if (documents?.length > index) {
+      documents.removeAt(index);
+    }
   }
 
   /**
@@ -289,22 +328,8 @@ export class AppealMainComponent implements OnInit {
    *
    * @memberof AppealMainComponent
    */
-  updateReasonRemainingChars() {
+  updateReasonRemainingCharacters() {
     this.reasonRemainingLength = this.reasonMaxLength - (this.appealForm.get('step1.reason').value?.length ?? 0);
-  }
-
-  /**
-   * Removes a document from the appeal form's document array.
-   *
-   * @param {number} index
-   * @memberof AppealMainComponent
-   */
-  removeDocument(index: number) {
-    const documents = this.appealForm.get('step2.documents') as FormArray;
-
-    if (documents?.length > index) {
-      documents.removeAt(index);
-    }
   }
 
   /**
