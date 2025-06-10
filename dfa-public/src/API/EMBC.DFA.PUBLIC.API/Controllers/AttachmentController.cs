@@ -292,8 +292,10 @@ namespace EMBC.DFA.API.Controllers
         public async Task<ActionResult<string>> UpsertProjectAppealAttachment(FileUpload fileUpload)
         {
             // TODO: Finalize this function.
+            await Task.Delay(100);
             return Ok("WIP: projectAppealDocument");
 
+            /*
             var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
             if (useS3)
             {
@@ -301,6 +303,7 @@ namespace EMBC.DFA.API.Controllers
             }
 
             return await UpsertProjectAppealNonS3Attachment(fileUpload);
+            */
         }
 
         /// <summary>
@@ -315,8 +318,10 @@ namespace EMBC.DFA.API.Controllers
         public async Task<ActionResult<string>> DeleteProjectAppealAttachment(Guid id)
         {
             // TODO: Finalize this function.
+            await Task.Delay(100);
             return Ok("WIP: DeleteProjectAppealAttachment");
 
+            /*
             var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
             if (useS3)
             {
@@ -324,6 +329,7 @@ namespace EMBC.DFA.API.Controllers
             }
 
             return await DeleteProjectAppealNonS3Attachment(id);
+            */
         }
 
         /// <summary>
@@ -614,8 +620,10 @@ namespace EMBC.DFA.API.Controllers
         )
         {
             // TODO: Finalize this function.
-            return Ok([]);
+            await Task.Delay(100);
+            return Ok(new List<FileUpload>());
 
+            /*
             var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
             if (useS3)
             {
@@ -623,6 +631,7 @@ namespace EMBC.DFA.API.Controllers
             }
 
             return await getProjectAppealNonS3Attachments(projectAppealId);
+            */
         }
 
         /// <summary>
@@ -658,16 +667,14 @@ namespace EMBC.DFA.API.Controllers
         )
         {
             // TODO: Finalize this function. Add/create appropriate handler.____ function, etc.
-            IEnumerable<dfa_projectdocumentlocation> dfa_projectdocumentlocations =
+            IEnumerable<dfa_projectdocumentlocation> projectAppealDocuments =
                 await handler.GetProjectFileUploadsAsync(projectAppealId);
 
             IEnumerable<FileUpload> fileUploads = new FileUpload[] { };
 
-            foreach (
-                dfa_projectdocumentlocation dfa_projectdocumentlocation in dfa_projectdocumentlocations
-            )
+            foreach (dfa_projectdocumentlocation projectAppealDocument in projectAppealDocuments)
             {
-                FileUpload fileUpload = mapper.Map<FileUpload>(dfa_projectdocumentlocation);
+                FileUpload fileUpload = mapper.Map<FileUpload>(projectAppealDocument);
                 fileUploads = fileUploads.Append<FileUpload>(fileUpload);
             }
 
