@@ -43,6 +43,7 @@ import { DFAClaimMainDataService } from '../../../../feature-components/dfa-clai
 import { DFAClaimMainMappingService } from '../../../../feature-components/dfa-claim-main/dfa-claim-main-mapping.service';
 import { ActivatedRoute } from '@angular/router';
 import { Decision } from 'src/app/models/decision.enum';
+import { FeatureEnabledDirective } from 'src/app/core/directives/feature-enabled.directive';
 
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -368,7 +369,8 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
     // 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - new text mask provider
     NgxMaskDirective, NgxMaskPipe,
     MatSelectModule,
-    MatTooltipModule
+    MatTooltipModule,
+    FeatureEnabledDirective
   ],
   declarations: [RecoveryClaimComponent],
   providers: [provideNgxMask()]
