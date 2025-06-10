@@ -665,7 +665,7 @@ namespace EMBC.DFA.API.Mappers
             CreateMap<dfa_projectclaim, CurrentClaim>()
                 .ForMember(d => d.ClaimNumber, opts => opts.MapFrom(s => s.dfa_name))
                 .ForMember(d => d.CreatedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.createdon).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.createdon).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
-                .ForMember(d => d.SubmittedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_claimreceivedbyemcrdate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_claimreceivedbyemcrdate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(d => d.SubmittedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_claimreceiveddate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_claimreceiveddate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.FirstClaim, opts => opts.MapFrom(s => s.dfa_isfirstclaim))
                 .ForMember(d => d.FinalClaim, opts => opts.MapFrom(s => s.dfa_finalclaim))
                 .ForMember(d => d.ClaimTotal, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_claimtotal) ? "CA$ 0" : "CA$ " + Convert.ToDecimal(s.dfa_claimtotal).ToString(CurrencyFormat)))
@@ -694,7 +694,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.approvedReimbursement, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_costsharing) ? "0" : s.dfa_costsharing))
                 .ForMember(d => d.eligiblePayable, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_eligiblepayable) ? "0" : s.dfa_eligiblepayable))
                 .ForMember(d => d.paidClaimAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_paidclaimamount) ? "0" : s.dfa_paidclaimamount))
-                .ForMember(d => d.claimReceivedByEMCRDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_claimreceivedbyemcrdate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_claimreceivedbyemcrdate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(d => d.claimReceivedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_claimreceiveddate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_claimreceiveddate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.paidClaimDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_claimpaiddate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_claimpaiddate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.status, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimbpfstages) ? GetEnumDescription((ClaimStages)Convert.ToInt32(s.dfa_claimbpfstages)) : null))
                 .ForMember(d => d.stage, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimbpfsubstages) ?
@@ -871,7 +871,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.dfa_portalsubmitted, opts => opts.MapFrom(s => s.Claim != null && s.Claim.claimStatus != null && s.Claim.claimStatus.Value == ClaimStageOptionSet.SUBMIT ? true : (bool?)null))
                 .ForMember(d => d.dfa_claimbpfstages, opts => opts.MapFrom(s => s.Claim != null && s.Claim.claimStatus != null ? Convert.ToInt32(s.Claim.claimStatus) : Convert.ToInt32(ClaimStages.Draft)))
                 .ForMember(d => d.dfa_claimbpfsubstages, opts => opts.MapFrom(s => s.Claim != null && s.Claim.claimStatus != null && s.Claim.claimStatus.Value == ClaimStageOptionSet.SUBMIT ? Convert.ToInt32(ClaimSubStages.Pending) : (int?)null))
-                .ForMember(d => d.dfa_claimreceivedbyemcrdate, opts => opts.MapFrom(s => s.Claim.claimStatus != null && s.Claim.claimStatus.Value == ClaimStageOptionSet.SUBMIT ? DateTime.Now : (DateTime?)null))
+                .ForMember(d => d.dfa_claimreceiveddate, opts => opts.MapFrom(s => s.Claim.claimStatus != null && s.Claim.claimStatus.Value == ClaimStageOptionSet.SUBMIT ? DateTime.Now : (DateTime?)null))
                 .ForMember(d => d.dfa_recoveryplanid, opts => opts.MapFrom(s => s.ProjectId));
             //.ForMember(d => d.dfa_finalclaim, opts => opts.MapFrom(s => s.ProjectId));
 

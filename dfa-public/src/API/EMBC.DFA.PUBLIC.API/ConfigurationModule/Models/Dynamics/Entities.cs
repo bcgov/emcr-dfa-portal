@@ -336,7 +336,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_eligiblepayable { get; set; }
         public string? dfa_totalpaid { get; set; }
         public string? dfa_claimpaiddate { get; set; }
-        public string? dfa_claimreceivedbyemcrdate { get; set; }
+        public string? dfa_claimreceiveddate { get; set; }
         public string? dfa_claimtotal { get; set; }
         public string? dfa_paidclaimamount { get; set; }
         public string? dfa_onetimedeductionamount { get; set; }
@@ -745,7 +745,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_projectclaimid { get; set; }
         public string? dfa_claimbpfstages { get; set; }
         public string? dfa_claimbpfsubstages { get; set; }
-        public DateTime? dfa_claimreceivedbyemcrdate { get; set; }
+        public DateTime? dfa_claimreceiveddate { get; set; }
     }
 
     public class dfa_invoice_params
@@ -985,7 +985,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
     public class dfa_projectclaim
     {
         public string? dfa_name { get; set; }
-        public string? dfa_claimreceivedbyemcrdate { get; set; }
+        public string? dfa_claimreceiveddate { get; set; }
         public string? dfa_isfirstclaim { get; set; }
         public string? dfa_finalclaim { get; set; }
         public string? dfa_totaloftotaleligible { get; set; }

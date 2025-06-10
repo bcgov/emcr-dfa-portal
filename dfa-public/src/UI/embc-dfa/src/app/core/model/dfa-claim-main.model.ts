@@ -12,7 +12,7 @@ import { Invoice } from './dfa-invoice.model';
 
 export class RecoveryClaim {
   claimNumber?: null | string;
-  claimReceivedByEMCRDate?: null | string;
+  claimReceivedDate?: null | string;
   claimStatus?: null | ClaimStageOptionSet;
   isFirstClaimApproved?: null | boolean;
   isThisFinalClaim?: null | boolean;
@@ -34,7 +34,7 @@ export class RecoveryClaim {
 
   constructor(
     claimNumber?: null | string,
-    claimReceivedByEMCRDate?: null | string,
+    claimReceivedDate?: null | string,
     claimStatus?: null | ClaimStageOptionSet,
     isFirstClaimApproved?: null | boolean,
     isThisFinalClaim?: null | boolean,
@@ -57,7 +57,7 @@ export class RecoveryClaim {
 
 export class RecoveryClaimForm {
   claimNumber = new UntypedFormControl();
-  claimReceivedByEMCRDate = new UntypedFormControl();
+  claimReceivedDate = new UntypedFormControl();
   claimStatus = new UntypedFormControl();
   isFirstClaimApproved = new UntypedFormControl();
   isThisFinalClaim = new UntypedFormControl();
@@ -89,10 +89,10 @@ export class RecoveryClaimForm {
     }
     this.claimNumber.setValidators(null);
 
-    if (recoveryClaim.claimReceivedByEMCRDate) {
-      this.claimReceivedByEMCRDate.setValue(recoveryClaim.claimReceivedByEMCRDate);
+    if (recoveryClaim.claimReceivedDate) {
+      this.claimReceivedDate.setValue(recoveryClaim.claimReceivedDate);
     }
-    this.claimReceivedByEMCRDate.setValidators(null);
+    this.claimReceivedDate.setValidators(null);
 
     if (recoveryClaim.claimStatus) {
       this.claimStatus.setValue(recoveryClaim.claimStatus);

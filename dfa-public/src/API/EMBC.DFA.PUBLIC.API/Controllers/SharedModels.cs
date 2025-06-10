@@ -643,7 +643,7 @@ namespace EMBC.DFA.API.Controllers
         public string? eligiblePayable { get; set; }
         public string? paidClaimAmount { get; set; }
         public string? paidClaimDate { get; set; }
-        public string? claimReceivedByEMCRDate { get; set; }
+        public string? claimReceivedDate { get; set; }
         public Invoice[]? invoices { get; set; }
         public string? stage { get; set; }
         public string? status { get; set; }

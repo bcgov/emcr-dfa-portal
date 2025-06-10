@@ -13,7 +13,7 @@ export interface RecoveryClaim {
   claimGrossGST?: string | null;
   claimNumber?: string | null;
   claimPST?: string | null;
-  claimReceivedByEMCRDate?: string | null;
+  claimReceivedDate?: string | null;
   claimStatus?: ClaimStageOptionSet | null;
   claimTotal?: string | null;
   eligiblePayable?: string | null;

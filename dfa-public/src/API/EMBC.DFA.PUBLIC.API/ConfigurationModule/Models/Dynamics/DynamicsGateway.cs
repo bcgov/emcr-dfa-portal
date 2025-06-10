@@ -1377,7 +1377,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                 {
                     Select = new[]
                     {
-                        "dfa_name", "dfa_claimreceivedbyemcrdate",
+                        "dfa_name", "dfa_claimreceiveddate",
                         "dfa_isfirstclaim",
                         "dfa_finalclaim",
                         "dfa_totaloftotaleligible", "dfa_totalapproved", "dfa_lessfirst1000",
@@ -1397,7 +1397,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                select new dfa_projectclaim
                                {
                                    dfa_name = objClaim.dfa_name,
-                                   dfa_claimreceivedbyemcrdate = objClaim.dfa_claimreceivedbyemcrdate,
+                                   dfa_claimreceiveddate = objClaim.dfa_claimreceiveddate,
                                    dfa_isfirstclaim = objClaim.dfa_isfirstclaim,
                                    dfa_finalclaim = objClaim.dfa_finalclaim,
                                    dfa_totaloftotaleligible = objClaim.dfa_totaloftotaleligible,
@@ -1464,7 +1464,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     Select = new[]
                     {
                         "dfa_name", "dfa_projectclaimid", "dfa_isfirstclaim",
-                        "dfa_finalclaim", "createdon", "dfa_claimreceivedbyemcrdate",
+                        "dfa_finalclaim", "createdon", "dfa_claimreceiveddate",
                         "dfa_totaleligiblegst", "dfa_totaloftotaleligible", "dfa_totalapproved", "dfa_lessfirst1000",
                         "dfa_costsharing", "dfa_eligiblepayable", "dfa_totalpaid", "dfa_claimpaiddate",
                         "dfa_claimtotal", "dfa_paidclaimamount", "dfa_onetimedeductionamount", "dfa_claimbpfstages", "dfa_claimbpfsubstages", "dfa_decisioncopy",
@@ -1481,7 +1481,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_isfirstclaim = objApp.dfa_isfirstclaim,
                                    dfa_finalclaim = objApp.dfa_finalclaim,
                                    createdon = objApp.createdon,
-                                   dfa_claimreceivedbyemcrdate = !string.IsNullOrEmpty(objApp.dfa_claimreceivedbyemcrdate) ? DateTime.Parse(objApp.dfa_claimreceivedbyemcrdate).ToLocalTime().ToString() : objApp.dfa_claimreceivedbyemcrdate,
+                                   dfa_claimreceiveddate = !string.IsNullOrEmpty(objApp.dfa_claimreceiveddate) ? DateTime.Parse(objApp.dfa_claimreceiveddate).ToLocalTime().ToString() : objApp.dfa_claimreceiveddate,
                                    dfa_claimpaiddate = !string.IsNullOrEmpty(objApp.dfa_claimpaiddate) ? DateTime.Parse(objApp.dfa_claimpaiddate).ToLocalTime().ToString() : objApp.dfa_claimpaiddate,
                                    dfa_totaleligiblegst = objApp.dfa_totaleligiblegst,
                                    dfa_totaloftotaleligible = objApp.dfa_totaloftotaleligible,

@@ -37,7 +37,7 @@ export class DFAClaimMainMappingService {
           claimGrossGST: dfaClaimMain.claim.claimGrossGST,
           approvedReimbursement: dfaClaimMain.claim.approvedReimbursement,
           claimPST: dfaClaimMain.claim.claimPST,
-          claimReceivedByEMCRDate : dfaClaimMain.claim.claimReceivedByEMCRDate,
+          claimReceivedDate : dfaClaimMain.claim.claimReceivedDate,
           claimStatus: dfaClaimMain.claim.claimStatus,
           claimTotal: dfaClaimMain.claim.claimTotal,
           eligiblePayable: dfaClaimMain.claim.eligiblePayable,
@@ -53,7 +53,7 @@ export class DFAClaimMainMappingService {
         });
         formGroup = claim;
       });
-      
+
     this.dfaClaimMainDataService.recoveryClaim = dfaClaimMain.claim;
   }
 
@@ -78,7 +78,7 @@ export class DFAClaimMainMappingService {
           grossGST: isNaN(dfaInvoiceMain.invoice.grossGST) ? null : Number(dfaInvoiceMain.invoice.grossGST),
           netInvoiceBeingClaimed: isNaN(dfaInvoiceMain.invoice.netInvoiceBeingClaimed) ? null : Number(dfaInvoiceMain.invoice.netInvoiceBeingClaimed),
           isGoodsReceivedonInvoiceDate: dfaInvoiceMain.invoice.isGoodsReceivedonInvoiceDate === true ? 'true' : (dfaInvoiceMain.invoice.isGoodsReceivedonInvoiceDate === false ? 'false' : null),
-          isClaimforPartofTotalInvoice: dfaInvoiceMain.invoice.isClaimforPartofTotalInvoice === true ? 'true' : (dfaInvoiceMain.invoice.isClaimforPartofTotalInvoice === false ? 'false' : null),        
+          isClaimforPartofTotalInvoice: dfaInvoiceMain.invoice.isClaimforPartofTotalInvoice === true ? 'true' : (dfaInvoiceMain.invoice.isClaimforPartofTotalInvoice === false ? 'false' : null),
         });
         formGroup = invoice;
       });
