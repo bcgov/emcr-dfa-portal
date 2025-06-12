@@ -42,12 +42,14 @@
 
         <PackageReference Include="NSwag.AspNetCore" Version="14.2.0" />
 
-        <PackageReference Include="System.ServiceModel.Http" Version="8.1.1" />
+        <PackageReference Include="System.ServiceModel.Http" Version="8.1.2" />
         <PackageReference Include="System.ServiceModel.Security" Version="6.0.0" />
         <PackageReference Include="Xrm.Tools.CRMWebAPI" Version="1.0.25" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\..\shared\src\EMBC.Database.Resources\Resources.csproj" />
+      <ProjectReference Include="..\..\..\..\shared\src\EMBC.Database\Database.csproj" />
       <ProjectReference Include="..\EMBC.BCeID\EMBC.Gov.BCeID.csproj" />
       <ProjectReference Include="..\EMBC.ESS.Shared.Contracts\EMBC.ESS.Shared.Contracts.csproj" />
       <ProjectReference Include="..\EMBC.Utilities.Caching\EMBC.Utilities.Caching.csproj" />
