@@ -1,27 +1,10 @@
 mat-form-field {
-    width: 100%;
+  width: 100%;
 }
 
 .recoveryPlan p {
   margin: 0 0 5px !important;
 }
-
-/*::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick {
-  color: green;
-}
-
-::ng-deep .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
-  color: yellow;
-}
-*/
-/*::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-end {
-  border-radius: 21px !important;
-}
-
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start {
-  border-radius: 30px !important;*/
-  /*border: none !important;*/
-/*}*/
 
 ::ng-deep .mat-form-field {
   .mat-form-field-outline {
@@ -35,16 +18,10 @@ mat-form-field {
   }
 }
 
-
 .boxborder {
   border: 1px solid #707070;
   border-radius: 5px;
   padding: 8px;
-}
-
-#searchBox {
-  width: 100%;
-  padding-right: 30px;
 }
 
 .searchDiv {
@@ -54,42 +31,25 @@ mat-form-field {
 }
 
 .currencyText {
-    position: relative;
-    /*left: -50px;*/
-    padding-left: 20px;
-    border-left: 1px solid black;
+  position: relative;
+  padding-left: 20px;
+  border-left: 1px solid black;
 }
-/*
-::ng-deep .costCurrency .mat-form-field-infix {
-  border-right: 50px solid transparent;
-}*/
 
 ::ng-deep .mat-form-field-infix {
   border-top: 6px solid transparent;
 }
 
 .primary-radio-group {
-    display: flex;
-    flex-direction: column;
-    margin: 15px 0;
-}
-
-.primary-radio-button {
-    margin: 5px;
-}
-
-.highlight {
-    font-weight: 700;
-    color: #169bd5;
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
 }
 
 .horizontal-radio-group {
-  display: flex; flex-direction: row;
+  display: flex;
+  flex-direction: row;
   margin: 0;
-}
-
-.topSpace{
-    margin-top: 15px;
 }
 
 ::ng-deep .mat-select-panel .mat-option {
@@ -107,33 +67,6 @@ mat-form-field {
   height: 51px;
 }
 
-.example-element-row {
-  height: 51px !important;
-  border: 1px solid;
-  border-color: rgb(204, 204, 204);
-}
-
-.example-element-detail {
-  overflow: hidden;
-  display: flex;
-}
-
-
-
-.details-button {
-  width: 100%;
-}
-
-.family-button {
-  border: 2px solid #169bd5 !important;
-  color: #169bd5;
-  background-color: #ffffff !important;
-}
-
-.save-button {
-  height: 55px;
-}
-
 table {
   width: 99.99%;
   box-shadow: none;
@@ -149,32 +82,6 @@ table {
   text-align: right;
   justify-content: flex-end;
 }
-
-
-.delete-image img:last-child {
-  display: none;
-}
-
-.delete-image:hover img:last-child {
-  display: block;
-}
-
-.delete-image:hover img:first-child {
-  display: none;
-}
-
-.edit-image img:last-child {
-  display: none;
-}
-
-.edit-image:hover img:last-child {
-  display: block;
-}
-
-.edit-image:hover img:first-child {
-  display: none;
-}
-
 
 .infoText {
   background: #F6F9FC 0% 0% no-repeat padding-box;
@@ -195,29 +102,15 @@ table {
 }
 
 @media (max-width: 600px) {
-  .mobile-label {
-    width: 80px;
-    display: inline-block;
-    font-weight: bold;
-  }
-
   .help-button {
     top: 200px;
   }
 }
 
 @media (max-width: 750px) {
-
   .help-button {
     top: 200px !important;
   }
-}
-
-.services-info {
-  background-color: #fcba19;
-  border-color: #fcba19;
-  margin: 7px;
-  padding: 15px;
 }
 
 .help-button {
@@ -240,8 +133,8 @@ table {
   z-index: 1;
 }
 
-.help-button .ques{
-    font-size: 20px
+.help-button .ques {
+  font-size: 20px
 }
 
 ::ng-deep .tooltip-custom {
@@ -250,7 +143,6 @@ table {
   color: #313132 !important;
   background-color: #F6F9FC;
 }
-/**/
 
 ::ng-deep .mat-tooltip {
   display: inline-flex;

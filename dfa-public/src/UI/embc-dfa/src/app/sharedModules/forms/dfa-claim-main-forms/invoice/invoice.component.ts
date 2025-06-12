@@ -1,48 +1,44 @@
-import { Component, OnInit, NgModule, Inject, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { CommonModule, KeyValue } from '@angular/common';
+import { Component, Inject, NgModule, OnDestroy, OnInit } from '@angular/core';
 import {
+  AbstractControl,
+  FormGroup,
+  ReactiveFormsModule,
   UntypedFormBuilder,
   UntypedFormGroup,
-  AbstractControl,
-  FormsModule,
-  Validators,
-  FormGroup,
-  FormControl
+  Validators
 } from '@angular/forms';
-import { CommonModule, KeyValue } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import {MatNativeDateModule} from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormCreationService } from 'src/app/core/services/formCreation.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { DirectivesModule } from '../../../../core/directives/directives.module';
-import { CustomValidationService } from 'src/app/core/services/customValidation.service';
-import { distinctUntilChanged, first } from 'rxjs/operators';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatRadioModule } from '@angular/material/radio';
+import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatInputModule } from '@angular/material/input';
-import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
-import { ApplicantOption, ApplicantSubtypeSubCategories } from 'src/app/core/api/models';
-import { MatTableModule } from '@angular/material/table';
-import { CustomPipeModule } from 'src/app/core/pipe/customPipe.module';
-import { DFADeleteConfirmDialogComponent } from '../../../../core/components/dialog-components/dfa-confirm-delete-dialog/dfa-confirm-delete.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-// 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - TextMaskModule not compatible
-//import { TextMaskModule } from 'angular2-text-mask';
-import { NgxMaskDirective, NgxMaskPipe, NgxMaskService, provideNgxMask } from 'ngx-mask';
-import { ApplicationService, OtherContactService, ProjectService } from 'src/app/core/api/services';
-import { DFAApplicationMainMappingService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-mapping.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import {
+  MAT_TOOLTIP_DEFAULT_OPTIONS,
+  MatTooltip,
+  MatTooltipDefaultOptions,
+  MatTooltipModule
+} from '@angular/material/tooltip';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { Subscription } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
+import { ProjectService } from 'src/app/core/api/services';
+import { CustomPipeModule } from 'src/app/core/pipe/customPipe.module';
+import { CustomValidationService } from 'src/app/core/services/customValidation.service';
+import { FormCreationService } from 'src/app/core/services/formCreation.service';
+import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
+import { Decision } from 'src/app/models/decision.enum';
+import { DirectivesModule } from '../../../../core/directives/directives.module';
+import { DFAClaimMainDataService } from '../../../../feature-components/dfa-claim-main/dfa-claim-main-data.service';
+import { DFAClaimMainMappingService } from '../../../../feature-components/dfa-claim-main/dfa-claim-main-mapping.service';
 import { DFAProjectMainDataService } from '../../../../feature-components/dfa-project-main/dfa-project-main-data.service';
 import { DFAProjectMainMappingService } from '../../../../feature-components/dfa-project-main/dfa-project-main-mapping.service';
-import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
-import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
-import { DFAClaimMainDataService } from '../../../../feature-components/dfa-claim-main/dfa-claim-main-data.service';
-import { Invoice } from '../../../../core/model/dfa-invoice.model';
-import { DFAClaimMainMappingService } from '../../../../feature-components/dfa-claim-main/dfa-claim-main-mapping.service';
-import { Decision } from 'src/app/models/decision.enum';
 
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -59,80 +55,52 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   providers: [{ provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults }]
 })
 export default class InvoiceComponent implements OnInit, OnDestroy {
-  //@ViewChild('projectName') projectName: ElementRef;
-  message : string = '';
+  message: string = '';
   invoiceForm: UntypedFormGroup;
-  formBuilder: UntypedFormBuilder;
   invoiceForm$: Subscription;
-  formCreationService: FormCreationService;
   remainingLength: number = 200;
   todayDate = new Date().toISOString();
-  vieworedit: string = "";
-  addeditInvoiceText: string = "Add";
+  vieworedit: string = '';
+  addeditInvoiceText: string = 'Add';
   isReadOnly: boolean = false;
   showDates: boolean = false;
   hideHelp: boolean = true;
   eligibleGST: boolean = false;
   invoiceId: string = null;
   timerID;
-  readonly phoneMask = [
-    /\d/,
-    /\d/,
-    /\d/,
-    '-',
-    /\d/,
-    /\d/,
-    /\d/,
-    '-',
-    /\d/,
-    /\d/,
-    /\d/,
-    /\d/
-  ];
+  readonly phoneMask = [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
-  claimDecision: string = "";
+  claimDecision: string = '';
   DecisionEnum = Decision;
 
   constructor(
-    //@Inject('formBuilder') formBuilder: UntypedFormBuilder,
-    //@Inject('formCreationService') formCreationService: FormCreationService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<InvoiceComponent>,
-    private formBuilderObj: UntypedFormBuilder,
-    private formCreationServiceObj: FormCreationService,
+    public formCreationService: FormCreationService,
     public customValidator: CustomValidationService,
     public dfaApplicationMainDataService: DFAApplicationMainDataService,
     public dfaProjectMainDataService: DFAProjectMainDataService,
     private dfaClaimMainDataService: DFAClaimMainDataService,
     private projectService: ProjectService,
-    private dfaApplicationMainMapping: DFAApplicationMainMappingService,
     private dfaProjectMainMapping: DFAProjectMainMappingService,
     private dfaClaimMainMapping: DFAClaimMainMappingService,
-    private otherContactsService: OtherContactService,
     public dialog: MatDialog
-  ) {
-    this.formBuilder = formBuilderObj;
-    this.formCreationService = formCreationServiceObj;
-  }
+  ) {}
 
   numericOnly(event): boolean {
     let patt = /^\d+(\.\d{1,2})?$/;
-    let text = event.target.value+event.key;
-     if(text.indexOf('.')<0)
-     {
-       text=text+'.0'
-     }else 
-     if(text.indexOf('.')==text.length-1)
-       {
-         text=text+'0'
-       }
-     
-     let result = patt.test(text);
-     return result;
-   }
+    let text = event.target.value + event.key;
+    if (text.indexOf('.') < 0) {
+      text = text + '.0';
+    } else if (text.indexOf('.') == text.length - 1) {
+      text = text + '0';
+    }
+
+    let result = patt.test(text);
+    return result;
+  }
 
   CalculateInvoice(event): void {
-
     var netInvoice = Number(this.invoiceForm.controls.netInvoiceBeingClaimed.value);
     var PST = Number(this.invoiceForm.controls.pst.value);
     var GrossGST = Number(this.invoiceForm.controls.grossGST.value);
@@ -140,10 +108,6 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
 
     this.invoiceForm.controls.totalBeingClaimed.setValue((netInvoice + PST + EligibleGST).toFixed(2));
     this.invoiceForm.controls.actualInvoiceTotal.setValue((netInvoice + PST + GrossGST).toFixed(2));
-  }
-
-  setFocus() {
-    //this.projectName.nativeElement.focus();
   }
 
   setViewOrEditControls() {
@@ -163,49 +127,36 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
     if (!objInvData) {
       this.formCreationService.clearInvoiceData();
     }
-    
+
     if (passData.invoiceId) {
       this.invoiceId = passData.invoiceId;
     }
 
-    if (passData.claimDecision){
+    if (passData.claimDecision) {
       this.claimDecision = passData.claimDecision;
     }
 
-    this.invoiceForm$ = this.formCreationService
-      .getInvoiceForm()
-      .subscribe((invoice) => {
-        //if (objInvData != null) {
-        //  invoice.setValue({
-        //    objInvData
-        //  });
-        //}
-        this.invoiceForm = invoice;
-        //this.setViewOrEditControls();
-        //this.propertyDamageForm.addValidators([this.validateFormCauseOfDamage]);
-        
-        if (this.invoiceForm.get('isGoodsReceivedonInvoiceDate').value === 'false') {
-          this.invoiceForm.get('goodsReceivedDate').setValidators([Validators.required]);
-        } else {
-          this.invoiceForm.get('goodsReceivedDate').setValidators(null);
-        }
+    this.invoiceForm$ = this.formCreationService.getInvoiceForm().subscribe((invoice) => {
+      this.invoiceForm = invoice;
 
-        if (this.invoiceForm.get('isClaimforPartofTotalInvoice').value === 'true') {
-          this.invoiceForm.get('reasonClaimingPartofTotalInvoice').setValidators([Validators.required]);
-        } else {
-          this.invoiceForm.get('reasonClaimingPartofTotalInvoice').setValidators(null);
-        }
+      if (this.invoiceForm.get('isGoodsReceivedonInvoiceDate').value === 'false') {
+        this.invoiceForm.get('goodsReceivedDate').setValidators([Validators.required]);
+      } else {
+        this.invoiceForm.get('goodsReceivedDate').setValidators(null);
+      }
 
-        this.invoiceForm.markAsUntouched();
-        this.invoiceForm.updateValueAndValidity();
+      if (this.invoiceForm.get('isClaimforPartofTotalInvoice').value === 'true') {
+        this.invoiceForm.get('reasonClaimingPartofTotalInvoice').setValidators([Validators.required]);
+      } else {
+        this.invoiceForm.get('reasonClaimingPartofTotalInvoice').setValidators(null);
+      }
 
-        
-        this.invoiceForm.get('isClaimforPartofTotalInvoice').markAsUntouched();
-        this.invoiceForm.get('isGoodsReceivedonInvoiceDate').markAsUntouched();
+      this.invoiceForm.markAsUntouched();
+      this.invoiceForm.updateValueAndValidity();
 
-        //this.propertyDamageForm.get('otherDamageText').updateValueAndValidity();
-        //this.propertyDamageForm.updateValueAndValidity();
-      });
+      this.invoiceForm.get('isClaimforPartofTotalInvoice').markAsUntouched();
+      this.invoiceForm.get('isGoodsReceivedonInvoiceDate').markAsUntouched();
+    });
 
     this.invoiceForm
       .get('isGoodsReceivedonInvoiceDate')
@@ -241,8 +192,7 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
 
     if (objInvData != null) {
       this.dfaClaimMainMapping.mapDFAInvoiceMain({ invoice: objInvData });
-      //this.formCreationService.setInvoiceForm(objInvData);
-      this.addeditInvoiceText = "Update";
+      this.addeditInvoiceText = 'Update';
     }
 
     if (passData.header) {
@@ -270,10 +220,8 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
       this.hideHelp = true;
       this.isReadOnly = true;
 
-      document.getElementById("invHeadr").scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('invHeadr').scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-
-    //let projectId = this.dfaProjectMainDataService.getProjectId();
 
     this.eligibleGST = this.dfaClaimMainDataService.getEligibleGST();
 
@@ -282,11 +230,10 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
     } else {
       this.invoiceForm.controls.eligibleGST.disable();
     }
-    
+
     if (this.dfaClaimMainDataService.getViewOrEdit() == 'viewOnly') {
       this.invoiceForm.disable();
-    }
-    else {
+    } else {
       setTimeout(
         function () {
           this.hideHelp = false;
@@ -294,17 +241,13 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
         1000
       );
     }
-    
-    //this.otherContactsForm.get('onlyOtherContact').setValue(this.onlyOtherContact);
-    this.message = "Click on any field in the form to view detailed information " +
-      "about what information is required and tips on how to fill " +
-      "it out.\r\n" +
-      "If you need more guidance, select the field and the " +
-      "relevant details will be displayed to assist you.";
+
+    this.message =
+      'Click on any field in the form to view detailed information about what information is required and tips on how to fill it out.\r\nIf you need more guidance, select the field and the relevant details will be displayed to assist you.';
 
     setTimeout(
       function () {
-        document.getElementById("invHeadr").scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.getElementById('invHeadr').scrollIntoView({ behavior: 'smooth', block: 'center' });
       }.bind(this),
       200
     );
@@ -312,7 +255,7 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
 
   originalOrder = (a: KeyValue<number, string>, b: KeyValue<number, string>): number => {
     return 0;
-  }
+  };
 
   calcRemainingChars() {
     this.remainingLength = 200 - this.invoiceForm.get('subtypeOtherDetails').value?.length;
@@ -321,8 +264,7 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
   selectDamageDates(choice: any) {
     if (choice.value == 'true') {
       this.showDates = false;
-    }
-    else if (choice.value == 'false') {
+    } else if (choice.value == 'false') {
       this.showDates = true;
     }
   }
@@ -331,30 +273,27 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
     if (projectId) {
       this.projectService.projectGetProjectMain({ projectId: projectId }).subscribe({
         next: (dfaProjectMain) => {
-          //console.log('dfaApplicationMain: ' + JSON.stringify(dfaApplicationMain))
-          //if (dfaApplicationMain.notifyUser == true) {
-          //  //this.notifyAddressChange();
-          //}
-          //debugger
-          if (dfaProjectMain && dfaProjectMain.project && dfaProjectMain.project.isdamagedDateSameAsApplication == false) {
+          if (
+            dfaProjectMain &&
+            dfaProjectMain.project &&
+            dfaProjectMain.project.isdamagedDateSameAsApplication == false
+          ) {
             this.showDates = true;
           }
           this.dfaProjectMainMapping.mapDFAProjectMain(dfaProjectMain);
-          
         },
-        error: (error) => {
-          //console.error(error);
-          //document.location.href = 'https://dfa.gov.bc.ca/error.html';
-        }
+        error: (_error) => {}
       });
     }
   }
 
   validateFormCauseOfDamage(form: FormGroup) {
-    if (form.controls.stormDamage.value !== true &&
+    if (
+      form.controls.stormDamage.value !== true &&
       form.controls.landslideDamage.value !== true &&
       form.controls.otherDamage.value !== true &&
-      form.controls.floodDamage.value !== true) {
+      form.controls.floodDamage.value !== true
+    ) {
       return { noCauseOfDamage: true };
     }
     return null;
@@ -374,7 +313,7 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
     this.invoiceForm.get('isClaimforPartofTotalInvoice').setValidators([Validators.required]);
     this.invoiceForm.get('isClaimforPartofTotalInvoice').markAsTouched();
     this.invoiceForm.get('isClaimforPartofTotalInvoice').updateValueAndValidity();
-    
+
     if (!this.invoiceForm.valid) {
       this.invoiceForm.markAllAsTouched();
       return false;
@@ -384,8 +323,7 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
 
     if (this.addeditInvoiceText == 'Update') {
       this.dialogRef.close({ event: 'update', invData: invObj });
-    }
-    else {
+    } else {
       this.dialogRef.close({ event: 'confirm', invData: invObj });
     }
   }
@@ -404,33 +342,35 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
   setHelpText(inputSelection, tooltip: MatTooltip): void {
     switch (inputSelection) {
       case 1:
-        this.message = "Invoice date\r\n\r\nAn invoice may include a bill of sale, receipt, or other documentation";
+        this.message = 'Invoice date.\r\n\r\nAn invoice may include a bill of sale, receipt, or other documentation';
         break;
       case 2:
-        this.message = "Please state why you are claiming only a portion of the total invoice.\r\n\r\nIf the invoice is for more than one project, include the project number and name of all the other projects this invoice is being shared with";
+        this.message =
+          'Please state why you are claiming only a portion of the total invoice.\r\n\r\nIf the invoice is for more than one project, include the project number and name of all the other projects this invoice is being shared with';
         break;
       case 3:
-        this.message = "Net invoiced being claimed\r\n\r\nYou may claim a portion of the invoice amount.";
+        this.message = 'Net invoiced being claimed.\r\n\r\nYou may claim a portion of the invoice amount.';
         break;
       case 4:
-        this.message = "PST\r\n\r\nIf claiming a portion of the invoice amount, you must calculate and provide the proportion of PST.";
+        this.message =
+          'PST.\r\n\r\nIf claiming a portion of the invoice amount, you must calculate and provide the proportion of PST.';
         break;
       case 5:
-        this.message = "Gross GST\r\n\r\nIf claiming a portion of the invoice amount, you must calculate and provide the proportion of Gross GST.";
+        this.message =
+          'Gross GST.\r\n\r\nIf claiming a portion of the invoice amount, you must calculate and provide the proportion of Gross GST.';
         break;
       case 6:
-        this.message = "Eligible GST\r\n\r\nGST is reimbursed at the portion not recoverable by the GST rebate, as per the Public Service Body Rebate (GST) Regulations: municipalities 0%, public hospitals 17%, schools 32% and universities/public colleges 33%."
-          + "\r\n\r\nIf claiming a portion of the invoice amount, you must calculate and provide the proportion of GST.";
+        this.message =
+          'Eligible GST.\r\n\r\nGST is reimbursed at the portion not recoverable by the GST rebate, as per the Public Service Body Rebate (GST) Regulations: municipalities 0%, public hospitals 17%, schools 32% and universities/public colleges 33%.' +
+          '\r\n\r\nIf claiming a portion of the invoice amount, you must calculate and provide the proportion of GST.';
         break;
       case 7:
-        this.message = "Total being claimed\r\n\r\nTotal being claimed is the total of (Net invoiced costs) + (PST) + (Eligible GST)";
+        this.message =
+          'Total being claimed.\r\n\r\nTotal being claimed is the total of (Net invoiced costs) + (PST) + (Eligible GST)';
         break;
       default:
-        this.message = "Click on any field in the form to view detailed information " +
-          "about what information is required and tips on how to fill " +
-          "it out.\r\n" +
-          "If you need more guidance, select the field and the " +
-          "relevant details will be displayed to assist you.";
+        this.message =
+          'Click on any field in the form to view detailed information about what information is required and tips on how to fill it out.\r\nIf you need more guidance, select the field and the relevant details will be displayed to assist you.';
     }
 
     clearTimeout(this.timerID);
@@ -460,13 +400,12 @@ export default class InvoiceComponent implements OnInit, OnDestroy {
     DirectivesModule,
     MatTableModule,
     CustomPipeModule,
-    // 2024-07-31 EMCRI-216 waynezen; upgrade to Angular 18 - new text mask provider
-    NgxMaskDirective, NgxMaskPipe,
+    NgxMaskDirective,
+    NgxMaskPipe,
     MatSelectModule,
-    MatTooltipModule,
+    MatTooltipModule
   ],
   declarations: [InvoiceComponent],
   providers: [provideNgxMask()]
 })
 class InvoiceModule {}
-

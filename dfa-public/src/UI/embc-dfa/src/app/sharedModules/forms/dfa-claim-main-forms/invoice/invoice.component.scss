@@ -1,5 +1,5 @@
 mat-form-field {
-    width: 100%;
+  width: 100%;
 }
 
 .header-align-inv {
@@ -7,7 +7,7 @@ mat-form-field {
 }
 
 .hr-align {
-    border: 1px solid gray;
+  border: 1px solid gray;
 }
 
 .align-cancel-col {
@@ -52,22 +52,7 @@ mat-form-field {
   font-size: 15px;
   float: right;
 }
-/*::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick {
-  color: green;
-}
 
-::ng-deep .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
-  color: yellow;
-}
-*/
-/*::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-end {
-  border-radius: 21px !important;
-}
-
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start {
-  border-radius: 30px !important;*/
-/*border: none !important;*/
-/*}*/
 ::ng-deep .mat-mdc-form-field {
   .mat-form-field-appearance-outline {
     &-end {
@@ -88,12 +73,6 @@ mat-form-field {
   height: 30px !important;
 }
 
-.boxborder {
-  border: 1px solid #707070;
-  border-radius: 5px;
-  padding: 8px;
-}
-
 #searchBox {
   width: 100%;
   padding-right: 30px;
@@ -106,10 +85,10 @@ mat-form-field {
 }
 
 .currencyText {
-    position: relative;
-    /*left: -50px;*/
-    padding-left: 20px;
-    border-left: 1px solid black;
+  position: relative;
+  /*left: -50px;*/
+  padding-left: 20px;
+  border-left: 1px solid black;
 }
 
 ::ng-deep .costCurrency .mat-mdc-form-field-infix {
@@ -141,7 +120,7 @@ mat-form-field {
 }
 
 ::ng-deep .mat-mdc-form-field-error {
-    align-content: center;
+  align-content: center;
 }
 
 .pst-box .inputCurrency {
@@ -156,7 +135,7 @@ mat-form-field {
 }
 
 .inputCurrency input {
-    text-align: right;
+  text-align: right;
 }
 
 .primary-radio-group {
@@ -165,22 +144,10 @@ mat-form-field {
   margin: 15px 0;
 }
 
-.primary-radio-button {
-    margin: 5px;
-}
-
-.highlight {
-    font-weight: 700;
-    color: #169bd5;
-}
-
 .horizontal-radio-group {
-  display: flex; flex-direction: row;
+  display: flex;
+  flex-direction: row;
   margin: 0;
-}
-
-.topSpace{
-    margin-top: 15px;
 }
 
 ::ng-deep .mat-select-panel .mat-option {
@@ -196,33 +163,6 @@ mat-form-field {
   font-size: 15px;
   color: black;
   height: 51px;
-}
-
-.example-element-row {
-  height: 51px !important;
-  border: 1px solid;
-  border-color: rgb(204, 204, 204);
-}
-
-.example-element-detail {
-  overflow: hidden;
-  display: flex;
-}
-
-
-
-.details-button {
-  width: 100%;
-}
-
-.family-button {
-  border: 2px solid #169bd5 !important;
-  color: #169bd5;
-  background-color: #ffffff !important;
-}
-
-.save-button {
-  height: 55px;
 }
 
 table {
@@ -266,49 +206,16 @@ table {
   display: none;
 }
 
-
-.infoText {
-  background: #F6F9FC 0% 0% no-repeat padding-box;
-  border: 1px solid #003366;
-  border-radius: 10px;
-  padding: 12px;
-  margin-top: 10px;
-}
-
-.infoIconCol {
-  width: 20px;
-  padding-top: 4px;
-}
-
-.infoIconStyle {
-  font-size: 17px;
-  color: #003366;
-}
-
 @media (max-width: 600px) {
-  .mobile-label {
-    width: 80px;
-    display: inline-block;
-    font-weight: bold;
-  }
-
   .help-button {
     top: 200px;
   }
 }
 
 @media (max-width: 750px) {
-
   .help-button {
     top: 200px !important;
   }
-}
-
-.services-info {
-  background-color: #fcba19;
-  border-color: #fcba19;
-  margin: 7px;
-  padding: 15px;
 }
 
 .help-button {
@@ -331,8 +238,8 @@ table {
   z-index: 1;
 }
 
-.help-button .ques{
-    font-size: 20px
+.help-button .ques {
+  font-size: 20px
 }
 
 ::ng-deep .tooltip-custom {
@@ -341,7 +248,6 @@ table {
   color: #313132 !important;
   background-color: #F6F9FC;
 }
-/**/
 
 ::ng-deep .mat-tooltip {
   display: inline-flex;
