@@ -1,4 +1,4 @@
-﻿namespace Resources;
+﻿namespace EMBC.Database.Resources;
 
 public class RecoveryClaimMapper : Profile
 {

@@ -24,7 +24,15 @@ You can also use Tool Library to update the existing plugins.
 - Cisco vpn.gov.bc.ca connection
 
 
-### Setup new database
+### Project Structure
+- EMBC.Database: DatabaseContext and all the entities, messages, and optionsets; for the configured Dynamics database
+- EMBC.Database.Contract: DTOs, enums, and other shared types used by the Manager project
+- EMBC.Database.Resources: Repositories, mappers, and services needed to access the database
+- EMBC.Database.Shared.Contract: Common utility classes and interfaces for all dataverse solutions
+- EMBC.Database.Shared.Database: Common database code for all dataverse solutions e.g. generic repository, common mappers, extensions
+
+
+### Setup new database project for a new solution
 1. Add a new class library project to your .NET solution e.g. "Database"
 2. See below on how to create a new connection
 3. Open XrmToolBox -> Tool "Early Bound Generator V2" and save the default settings to the project folder

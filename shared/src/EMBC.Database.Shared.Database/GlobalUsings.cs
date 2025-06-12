@@ -9,7 +9,7 @@ global using Microsoft.Xrm.Sdk;
 global using Microsoft.Xrm.Sdk.Client;
 global using Microsoft.Xrm.Sdk.Messages;
 global using Microsoft.Xrm.Sdk.Metadata;
-global using Shared.Contract;
+global using EMBC.Database.Shared.Contract;
 global using System.Collections.Concurrent;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Linq.Expressions;

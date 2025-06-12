@@ -1,4 +1,4 @@
-﻿namespace Model;
+﻿namespace EMBC.Database.Contract;
 
 public record Stob : IDto
 {
@@ -7,4 +7,6 @@ public record Stob : IDto
 
     [MaxLength(100)]
     public string? Code { get; set; }   // Dynamics Optional emcr_code
+
+    // TODO add remaining properties here, match DFA_Stob entity
 }

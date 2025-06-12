@@ -1,10 +1,7 @@
 ﻿global using AutoMapper;
-global using Database;
-global using Model;
+global using EMBC.Database;
+global using EMBC.Database.Contract;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
-global using Microsoft.AspNetCore.Hosting;
-global using Microsoft.Extensions.FileProviders;
-global using Microsoft.Extensions.Hosting;
-global using Resources;
+global using EMBC.Database.Resources;

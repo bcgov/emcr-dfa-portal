@@ -1,4 +1,4 @@
-﻿namespace Shared.Contract;
+﻿namespace EMBC.Database.Shared.Contract;
 
 public enum StateCode
 {

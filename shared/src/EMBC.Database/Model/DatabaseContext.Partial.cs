@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xrm.Sdk;
 
-namespace Database.Model;
+namespace EMBC.Database.Model;
     
 public partial class DatabaseContext
 {

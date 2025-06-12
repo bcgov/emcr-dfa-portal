@@ -1,4 +1,4 @@
-﻿namespace Database;
+﻿namespace EMBC.Database;
 
 public static class ServiceCollectionExtensions
 {

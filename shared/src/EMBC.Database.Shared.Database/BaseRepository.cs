@@ -1,4 +1,4 @@
-namespace Shared.Database;
+﻿namespace EMBC.Database.Shared.Database;
 
 public abstract class BaseRepository<TEntity, TDto> 
     where TEntity : Entity
@@ -33,7 +33,7 @@ public abstract class BaseRepository<TEntity, TDto>
     {
         var entities = MapExpression(predicates)
             .ToList();
-        return _mapper.Map<IEnumerable<TEntity>, IEnumerable<TDto>>(entities);
+        return Map(entities);
     }
 
     public virtual Guid Upsert(TDto dto)

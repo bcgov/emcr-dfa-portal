@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EMBC.Database.Shared.Contract\Shared.Contract.csproj" />
+    <ProjectReference Include="..\EMBC.Database.Shared.Contract\EMBC.Database.Shared.Contract.csproj" />
   </ItemGroup>
 
 </Project>

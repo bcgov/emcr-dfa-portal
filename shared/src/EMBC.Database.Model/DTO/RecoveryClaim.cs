@@ -1,4 +1,4 @@
-﻿namespace Model;
+﻿namespace EMBC.Database.Contract;
 
 public record RecoveryClaimQuery //: IRequest<IEnumerable<RecoveryClaim>>
 {

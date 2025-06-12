@@ -1,4 +1,4 @@
-﻿namespace Resources;
+﻿namespace EMBC.Database.Resources;
 
 public interface IRecoveryClaimRepository : IQueryRepository<RecoveryClaimQuery, RecoveryClaim>, IBaseRepository<RecoveryClaim>
 {

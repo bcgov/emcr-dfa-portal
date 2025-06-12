@@ -114,7 +114,7 @@
   "messagesTypesFolder": "Messages",
   "metadataProviderService": "DLaB.ModelBuilderExtensions.MetadataProviderService,DLaB.ModelBuilderExtensions",
   "metadataQueryProviderService": "DLaB.ModelBuilderExtensions.MetadataQueryProviderService,DLaB.ModelBuilderExtensions",
-  "namespace": "Database.Model",
+  "namespace": "EMBC.Database.Model",
   "namingService": "DLaB.ModelBuilderExtensions.NamingService,DLaB.ModelBuilderExtensions",
   "optionSetsTypesFolder": "OptionSets",
   "serviceContextName": "DatabaseContext",

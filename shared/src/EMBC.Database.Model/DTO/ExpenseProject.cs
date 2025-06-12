@@ -1,4 +1,4 @@
-﻿namespace Model;
+﻿namespace EMBC.Database.Contract;
 
 public record ExpenseProject : IDto
 {
@@ -7,4 +7,6 @@ public record ExpenseProject : IDto
 
     [MaxLength(100)]
     public required string Code { get; set; }   // Dynamics Business Required emcr_code
+
+    // TODO add remaining properties here, match EMCR_ExpenseProject entity
 }

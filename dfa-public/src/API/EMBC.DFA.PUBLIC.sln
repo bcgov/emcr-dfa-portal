@@ -23,17 +23,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMBC.Gov.BCeID", "EMBC.BCeI
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "..\..\..\shared\src\EMBC.Database\Database.csproj", "{960576A6-00C6-A1AD-0037-355B73F44FE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMBC.Database", "..\..\..\shared\src\EMBC.Database\EMBC.Database.csproj", "{960576A6-00C6-A1AD-0037-355B73F44FE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "..\..\..\shared\src\EMBC.Database.Model\Model.csproj", "{DA1FB813-C8D1-A964-3E8E-9485907F4353}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMBC.Database.Contract", "..\..\..\shared\src\EMBC.Database.Model\EMBC.Database.Contract.csproj", "{DA1FB813-C8D1-A964-3E8E-9485907F4353}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resources", "..\..\..\shared\src\EMBC.Database.Resources\Resources.csproj", "{92E6A5E9-3AE9-B806-3234-075433C35AA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMBC.Database.Resources", "..\..\..\shared\src\EMBC.Database.Resources\EMBC.Database.Resources.csproj", "{92E6A5E9-3AE9-B806-3234-075433C35AA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Contract", "..\..\..\shared\src\EMBC.Database.Shared.Contract\Shared.Contract.csproj", "{B4F378DD-1D9B-73AF-C99F-C7B5A6DB82D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMBC.Database.Shared.Contract", "..\..\..\shared\src\EMBC.Database.Shared.Contract\EMBC.Database.Shared.Contract.csproj", "{B4F378DD-1D9B-73AF-C99F-C7B5A6DB82D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Database", "..\..\..\shared\src\EMBC.Database.Shared.Database\Shared.Database.csproj", "{8A2537A6-211E-A3BA-116B-59D3171063BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMBC.Database.Shared.Database", "..\..\..\shared\src\EMBC.Database.Shared.Database\EMBC.Database.Shared.Database.csproj", "{8A2537A6-211E-A3BA-116B-59D3171063BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "..\..\..\shared\src\EMBC.Database.Test\Test.csproj", "{1DA47D24-494B-C7F9-6008-7E9242DE80E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMBC.Database.Test", "..\..\..\shared\src\EMBC.Database.Test\EMBC.Database.Test.csproj", "{1DA47D24-494B-C7F9-6008-7E9242DE80E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

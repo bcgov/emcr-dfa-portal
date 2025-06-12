@@ -1,4 +1,4 @@
-﻿namespace Shared.Contract;
+﻿namespace EMBC.Database.Shared.Contract;
 
 // Query, Find, and Base Handler
 public class FindQueryBaseHandlers<TRepository, TDto, TFindQuery, TQuery> : QueryBaseHandlers<TRepository, TDto, TQuery>

@@ -1,4 +1,4 @@
-﻿namespace Shared.Database;
+﻿namespace EMBC.Database.Shared.Database;
 
 public class SharedMapper : Profile
 {

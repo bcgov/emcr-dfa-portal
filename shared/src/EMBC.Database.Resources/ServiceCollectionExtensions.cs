@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Resources;
+namespace EMBC.Database.Resources;
 
 // TODO move this to Repository?
 public static class ServiceCollectionExtensions
