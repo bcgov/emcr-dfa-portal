@@ -97,7 +97,8 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="hasInvoiceClaimAmounts">
+          <h3><strong>Claim Amounts</strong></h3>
 
           <div class="col-md-3 costCurrency">
             <p  style="font-size: 15px; margin-bottom: 10px !important">
@@ -508,7 +509,7 @@
               }
 
           </div>
-        </div>        
+        </div>
         <div class="row">
           <div class="col-md-3">
             <p  style="font-size: 15px">

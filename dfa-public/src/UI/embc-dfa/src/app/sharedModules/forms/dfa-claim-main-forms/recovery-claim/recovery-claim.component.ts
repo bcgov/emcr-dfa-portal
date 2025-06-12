@@ -280,6 +280,17 @@ export default class RecoveryClaimComponent implements OnInit, OnDestroy {
     return this.recoveryClaimForm.controls;
   }
 
+  /**
+   * Return `true` if the total actual invoiced claim amount is greater than 0, `false` otherwise.
+   *
+   * @readonly
+   * @type {boolean}
+   * @memberof RecoveryClaimComponent
+   */
+  get hasInvoiceClaimAmounts(): boolean {
+    return this.recoveryClaimForm.get('totalActualClaim').value > 0;
+  }
+
   ngOnDestroy(): void {
     this.recoveryClaimForm$.unsubscribe();
   }
