@@ -52,6 +52,8 @@ namespace EMBC.DFA.API.Controllers
         public string? CellPhoneNumber { get; set; }
 
         public string? AlternatePhone { get; set; }
+
+        public bool? OptOutNonEssential { get; set; }
     }
 
     /// <summary>

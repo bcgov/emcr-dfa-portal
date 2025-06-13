@@ -81,6 +81,7 @@ export class ContactDetails {
   //hidePhoneRequired: boolean;
   residencePhone: string;
   alternatePhone: string;
+  optOutNonEssential?: boolean;
   constructor() {}
 }
 
@@ -93,6 +94,7 @@ export class ContactDetailsForm {
   //hidePhoneRequired = new UntypedFormControl(false);
   residencePhone = new UntypedFormControl();
   alternatePhone = new UntypedFormControl();
+  optOutNonEssential = new UntypedFormControl(false, Validators.required);
 
   constructor(
     contactDetails: ContactDetails,
@@ -151,6 +153,13 @@ export class ContactDetailsForm {
        )
        .bind(customValidator)
     ]);
+
+    this.optOutNonEssential.setValue(
+      contactDetails.optOutNonEssential !== undefined
+        ? contactDetails.optOutNonEssential
+        : false
+    );
+    this.optOutNonEssential.setValidators([Validators.required]);
 
     //this.phone.setValue(contactDetails.phone);
     //this.phone.setValidators([
