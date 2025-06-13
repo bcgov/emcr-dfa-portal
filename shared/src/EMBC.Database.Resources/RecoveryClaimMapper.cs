@@ -27,7 +27,7 @@ public class RecoveryClaimMapper : Profile
             .ForMember(dest => dest.LastCodingBlockSubmissionError, opt => opt.MapFrom(src => src.DFA_LastCodingBlockSubmissionError));
 
         // Keep these mappings in sync with the above
-        CreateMap<ProjectClaimEntity, RecoveryClaim>()
+        CreateMap<ProjectClaimComposite, RecoveryClaim>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ProjectClaim.Id))
             .ForMember(dest => dest.ClientCodeKey, opt => opt.MapFrom(src => src.ProjectClaim.DFA_ClientCodeId))
             .ForMember(dest => dest.ClientCode, opt => opt.MapFrom(src => src.ClientCode))

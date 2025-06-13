@@ -30,7 +30,7 @@ public class RecoveryClaimRepository : BaseRepository<DFA_ProjectClaim, Recovery
             where pc.DFA_CodingBlockSubmissionStatus == DFA_CodingBlockSubmissionStatus.PendingSubmission || pc.DFA_CodingBlockSubmissionStatus == DFA_CodingBlockSubmissionStatus.Failed
             select new { ProjectClaim = pc, QualifiedReceiver = su, ClientCode = cc, ExpenseProject = ep, Stob = s, ResponsibilityCentre = rc, ServiceLine = sl })
                 .ToList()
-                .Select(x => new ProjectClaimEntity(x.ProjectClaim, x.QualifiedReceiver, x.ClientCode, x.ExpenseProject, x.Stob, x.ResponsibilityCentre, x.ServiceLine));
+                .Select(x => new ProjectClaimComposite(x.ProjectClaim, x.QualifiedReceiver, x.ClientCode, x.ExpenseProject, x.Stob, x.ResponsibilityCentre, x.ServiceLine));
 
         // TODO this is not as performant as it could be, we are filtering the results AFTER the database call
         // it is likely possible to add the commented out clauses below to the above query but it requires reading the documentation and working around the limitations of LINQ support
@@ -112,7 +112,7 @@ public class RecoveryClaimRepository : BaseRepository<DFA_ProjectClaim, Recovery
     }
 }
 
-public record ProjectClaimEntity(DFA_ProjectClaim ProjectClaim, SystemUser QualifiedReceiver, DFA_ClientCode ClientCode, EMCR_ExpenseProject ExpenseProject, EMCR_Stob Stob, EMCR_ResponsibilityCentre ResponsibilityCentre, EMCR_ServiceLine ServiceLine);
+public record ProjectClaimComposite(DFA_ProjectClaim ProjectClaim, SystemUser QualifiedReceiver, DFA_ClientCode ClientCode, EMCR_ExpenseProject ExpenseProject, EMCR_Stob Stob, EMCR_ResponsibilityCentre ResponsibilityCentre, EMCR_ServiceLine ServiceLine);
 
 public static class RecoveryClaimRepositoryExtensions
 {

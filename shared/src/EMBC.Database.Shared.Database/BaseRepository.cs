@@ -26,7 +26,7 @@ public abstract class BaseRepository<TEntity, TDto>
     {
         var entity = MapExpression(predicates)
             .FirstOrDefault();
-        return _mapper.Map<TEntity, TDto>(entity);
+        return Map(entity);
     }
 
     public IEnumerable<TDto> Where(Expression<Func<TDto, bool>> predicates)
@@ -169,6 +169,11 @@ public abstract class BaseRepository<TEntity, TDto>
     private TEntity Map(TDto dto)
     {
         return _mapper.Map<TEntity>(dto);
+    }
+
+    private TDto Map(TEntity dto)
+    {
+        return _mapper.Map<TDto>(dto);
     }
 
     private IEnumerable<TDto> Map(IEnumerable<TEntity> dto)

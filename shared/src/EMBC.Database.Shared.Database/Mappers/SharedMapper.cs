@@ -20,19 +20,19 @@ public class SharedMapper : Profile
             .ConvertUsing(src => src.Id);
         CreateMap<EntityReference, Guid?>()
             .ConvertUsing(src => src.Id);
-        CreateMap<DynamicReference, EntityReference>()
+        CreateMap<MultipleReferenceKey, EntityReference>()
             .ConvertUsing(src => new EntityReference(src.SchemaName, src.Id));
-        CreateMap<DynamicReference?, EntityReference>()
+        CreateMap<MultipleReferenceKey?, EntityReference>()
             .ConvertUsing(src => src != null ? new EntityReference(src.SchemaName, src.Id) : null);
-        CreateMap<EntityReference, DynamicReference>()
-            .ConvertUsing(src => new DynamicReference(src.Id, src.LogicalName));
-        CreateMap<StaticReference, EntityReference>()
+        CreateMap<EntityReference, MultipleReferenceKey>()
+            .ConvertUsing(src => new MultipleReferenceKey(src.Id, src.LogicalName));
+        CreateMap<SingleReferenceKey, EntityReference>()
             .ConvertUsing(src => new EntityReference(src.SchemaName, src.Id));
-        CreateMap<EntityReference, StaticReference>()
-            .ConvertUsing(src => new StaticReference(src.Id, src.LogicalName));
-        CreateMap<StaticReference?, EntityReference>()
+        CreateMap<EntityReference, SingleReferenceKey>()
+            .ConvertUsing(src => new SingleReferenceKey(src.Id, src.LogicalName));
+        CreateMap<SingleReferenceKey?, EntityReference>()
             .ConvertUsing(src => src != null ? new EntityReference(src.SchemaName, src.Id) : null);
-        CreateMap<EntityReference, StaticReference?>()
-            .ConvertUsing(src => src != null ? new StaticReference(src.Id, src.LogicalName) : null);
+        CreateMap<EntityReference, SingleReferenceKey?>()
+            .ConvertUsing(src => src != null ? new SingleReferenceKey(src.Id, src.LogicalName) : null);
     }
 }

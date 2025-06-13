@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="RecoveryClaimService.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EMBC.Database.Model\EMBC.Database.Contract.csproj" />
     <ProjectReference Include="..\EMBC.Database.Shared.Contract\EMBC.Database.Shared.Contract.csproj" />
     <ProjectReference Include="..\EMBC.Database.Shared.Database\EMBC.Database.Shared.Database.csproj" />

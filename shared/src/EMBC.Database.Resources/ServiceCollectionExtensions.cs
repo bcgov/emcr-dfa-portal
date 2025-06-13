@@ -2,7 +2,6 @@
 
 namespace EMBC.Database.Resources;
 
-// TODO move this to Repository?
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services)

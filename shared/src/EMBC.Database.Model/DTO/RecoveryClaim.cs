@@ -29,12 +29,12 @@ public record RecoveryClaim : IDto
     public PayGroup? PayGroup { get; set; }     // Dynamics Optional dfa_paygroup
     public DateTime? DateGoodsReceived { get; set; } // Dynamics Optional dfa_dategoodsandservicesreceived
     public DateTime? DateInvoiceReceived { get; set; }  // Dynamics Optional dfa_claimreceiveddate
-    public StaticReference? QualifiedReceiverKey { get; set; } // Dynamics Optional dfa_qualifiedreceiver, relationship dfa_systemuser
-    public StaticReference? ResponsibilityCentreKey { get; set; } // Dynamics Optional dfa_resp
-    public StaticReference? ClientCodeKey { get; set; } // Dynamics Optional dfa_clientcodeid, relationship dfa_clientcode
-    public StaticReference? ExpenseProjectKey { get; set; }    // Dynamics Optional dfa_expenseproject -> dfa_projectnumber
-    public StaticReference? ServiceLineKey { get; set; } // Dynamics Optional dfa_serviceline -> dfa_emcr_serviceline
-    public StaticReference? StobKey { get; set; } // Dynamics Optional dfa_stob -> dfa_emcr_stob
+    public SingleReferenceKey? QualifiedReceiverKey { get; set; } // Dynamics Optional dfa_qualifiedreceiver, relationship dfa_systemuser
+    public SingleReferenceKey? ResponsibilityCentreKey { get; set; } // Dynamics Optional dfa_resp
+    public SingleReferenceKey? ClientCodeKey { get; set; } // Dynamics Optional dfa_clientcodeid, relationship dfa_clientcode
+    public SingleReferenceKey? ExpenseProjectKey { get; set; }    // Dynamics Optional dfa_expenseproject -> dfa_projectnumber
+    public SingleReferenceKey? ServiceLineKey { get; set; } // Dynamics Optional dfa_serviceline -> dfa_emcr_serviceline
+    public SingleReferenceKey? StobKey { get; set; } // Dynamics Optional dfa_stob -> dfa_emcr_stob
 
     [MaxLength(40)]
     public string? PaymentAdviceComments { get; set; }   // Dynamics Optional dfa_paymentadvicecomments
