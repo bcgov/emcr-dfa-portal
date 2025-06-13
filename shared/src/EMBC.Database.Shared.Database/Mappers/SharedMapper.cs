@@ -21,6 +21,7 @@ public class SharedMapper : Profile
             .ConvertUsing(src => src.Id);
         CreateMap<EntityReference, Guid?>()
             .ConvertUsing(src => src.Id);
+
         CreateMap<MultipleReferenceKey, EntityReference>()
             .ConvertUsing(src => new EntityReference(src.SchemaName, src.Id));
         CreateMap<MultipleReferenceKey?, EntityReference>()

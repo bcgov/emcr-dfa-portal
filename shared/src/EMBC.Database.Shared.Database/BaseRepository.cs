@@ -181,7 +181,7 @@ public abstract class BaseRepository<TEntity, TDto>
         return _mapper.Map<IEnumerable<TDto>>(dto);
     }
 
-    private IQueryable<TEntity> MapExpression(Expression<Func<TDto, bool>> predicates)
+    protected IQueryable<TEntity> MapExpression(Expression<Func<TDto, bool>> predicates)
     {
         var entityPredicateExpression = _mapper.MapExpression<Expression<Func<TEntity, bool>>>(predicates);
         return _databaseContext

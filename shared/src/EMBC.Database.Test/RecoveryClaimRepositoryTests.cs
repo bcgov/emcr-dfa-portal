@@ -3,6 +3,15 @@
     // WARNING these are not valid unit tests and depend on data in Dynamics not changing, use for local testing purposes only
 
     [Fact]
+    public void FirstOrDefault()
+    {
+        var id = new Guid("a33ca996-86cd-ec11-b832-00505683fbf4");
+        var recoveryClaim = repository.FirstOrDefault(x => x.Id == id);
+
+        Assert.NotNull(recoveryClaim);
+    }
+
+    [Fact]
     public void Query()
     {
         var query = new RecoveryClaimQuery
