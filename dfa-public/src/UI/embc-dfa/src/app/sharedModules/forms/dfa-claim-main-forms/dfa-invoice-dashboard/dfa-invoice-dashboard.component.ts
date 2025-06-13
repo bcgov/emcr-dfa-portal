@@ -481,8 +481,8 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
           claimDecision: this.dfaClaimMainDataService.getClaimDecision(),
           header: 'View'
         },
-        maxHeight: '90vh',
-        maxWidth: '80vw',
+        height: '665px',
+        width: '1200px',
         disableClose: true
       })
       .afterClosed()
@@ -504,8 +504,8 @@ export default class DFAInvoiceDashboardComponent implements OnInit, OnDestroy {
           invoiceId: this.dfaClaimMainDataService.getInvoiceId(),
           claimDecision: this.dfaClaimMainDataService.getClaimDecision()
         },
-        maxHeight: '90vh',
-        maxWidth: '80vw',
+        height: '665px',
+        width: '1200px',
         disableClose: true
       })
       .afterClosed()

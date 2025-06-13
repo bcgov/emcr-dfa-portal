@@ -1,18 +1,32 @@
+.card-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: none;
+}
+
+.card-header-container {
+  padding: 1rem 1.25rem 0 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.card-content-container {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0.25rem 1.25rem;
+}
+
+.card-actions-container {
+  padding: 0 1.25rem 1rem 1.25rem;
+  margin-top: 1rem;
+}
+
 mat-form-field {
   width: 100%;
 }
 
-.header-align-inv {
-  margin-bottom: 20px !important;
-}
-
 .hr-align {
   border: 1px solid gray;
-}
-
-.align-cancel-col {
-  display: flex;
-  justify-content: flex-end;
 }
 
 .recoveryPlan p {
@@ -91,6 +105,7 @@ mat-form-field {
   border-left: 1px solid black;
 }
 
+
 ::ng-deep .costCurrency .mat-mdc-form-field-infix {
   padding: 9px !important;
 }
@@ -100,11 +115,6 @@ mat-form-field {
   background-color: white;
 }
 
-/*
-::ng-deep .costCurrency .mat-form-field-infix {
-  border-right: 50px solid transparent;
-}*/
-
 ::ng-deep .pst-box .mat-mdc-form-field-infix {
   /*border-top: 6px solid transparent;*/
   padding: 5px !important;
@@ -113,10 +123,6 @@ mat-form-field {
 ::ng-deep .pst-box .mat-form-field-appearance-outline {
   border-radius: 6px;
   background-color: white;
-}
-
-::ng-deep .mat-mdc-card-content {
-  padding: 30px !important;
 }
 
 ::ng-deep .mat-mdc-form-field-error {
