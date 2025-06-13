@@ -146,8 +146,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
       .pipe(
         mapTo(_documentSummaryFormArray.getRawValue())
     ).subscribe(
-      data =>  {
-        console.log(data);
+      _data =>  {
         this.claimDocumentSummaryDataSource.data = _documentSummaryFormArray.getRawValue()?.filter(x => x.deleteFlag == false)
     });
 
@@ -386,7 +385,7 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
       let fileUploads = this.formCreationService.fileUploadsClaimForm.value.get('fileUploads').value;
       let index = fileUploads?.indexOf(element);
       element.fileData = element?.fileData?.substring(element?.fileData?.indexOf(',') + 1) // to allow upload as byte array
-      console.log(element);
+
       this.attachmentsService.attachmentUpsertDeleteClaimAttachment({body: element}).subscribe({
        next: (result) => {
          fileUploads[index] = element;

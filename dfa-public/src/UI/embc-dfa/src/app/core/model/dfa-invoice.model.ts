@@ -26,7 +26,7 @@ export class Invoice {
   totalBeingClaimed?: null | string;
   emcrDecision?: null | string;
   emcrApprovedAmount?: null | string;
-  emcrDecisionDate?: null | string;
+  decisionDate?: null | string;
   emcrDecisionComments?: null | string;
 
   constructor(
@@ -46,7 +46,7 @@ export class Invoice {
     totalBeingClaimed?: null | string,
     emcrDecision?: null | string,
     emcrApprovedAmount?: null | string,
-    emcrDecisionDate?: null | string,
+    decisionDate?: null | string,
     emcrDecisionComments?: null | string,
   ) { }
 }
@@ -68,14 +68,14 @@ export class InvoiceForm {
   totalBeingClaimed = new UntypedFormControl();
   emcrDecision = new UntypedFormControl();
   emcrApprovedAmount = new UntypedFormControl();
-  emcrDecisionDate = new UntypedFormControl();
+  decisionDate = new UntypedFormControl();
   emcrDecisionComments = new UntypedFormControl();
 
   constructor(
     invoice: Invoice,
     customValidator: CustomValidationService
   ) {
-    
+
     if (invoice.invoiceNumber) {
       this.invoiceNumber.setValue(invoice.invoiceNumber);
     }
@@ -159,16 +159,16 @@ export class InvoiceForm {
     }
     this.emcrApprovedAmount.setValidators(null);
 
-    if (invoice.emcrDecisionDate) {
-      this.emcrDecisionDate.setValue(invoice.emcrDecisionDate);
+    if (invoice.decisionDate) {
+      this.decisionDate.setValue(invoice.decisionDate);
     }
-    this.emcrDecisionDate.setValidators(null);
+    this.decisionDate.setValidators(null);
 
     if (invoice.emcrDecisionComments) {
       this.emcrDecisionComments.setValue(invoice.emcrDecisionComments);
     }
     this.emcrDecisionComments.setValidators(null);
-    
+
   }
 }
 
