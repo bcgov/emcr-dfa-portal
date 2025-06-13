@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Amazon.S3;
+using EMBC.Database;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.ConfigurationModule.Models.PDF.PDFService;
 using EMBC.DFA.API.Services;
@@ -17,6 +18,7 @@ using EMBC.Gov.BCeID;
 using EMBC.Gov.BCeID.Models;
 using EMBC.Utilities.Configuration;
 using EMBC.Utilities.Telemetry;
+using EMBC.Database.Resources;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -331,6 +333,11 @@ namespace EMBC.DFA.API
 
             services.Configure<BCeIDWebSvcOptions>(bceidSection);
             services.AddScoped<IBCeIDBusinessQuery, BCeIDBusinessQuery>();
+
+            // Dataverse
+            services.AddServices();
+            services.AddAutoMapperMappings();
+            services.AddDatabase(configuration);
 
             //sp => new BCeIDBusinessQuery(options: sp.GetRequiredService<IOptions<BCeIDWebSvcOptions>>())
         }
