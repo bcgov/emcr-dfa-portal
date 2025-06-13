@@ -6,4 +6,5 @@ export interface FeatureFlagConfiguration {
   useAdvancedPayments?: boolean;
   useAmendments?: boolean;
   useAppeals?: boolean;
+  useAutoNotifications?: boolean;
 }
