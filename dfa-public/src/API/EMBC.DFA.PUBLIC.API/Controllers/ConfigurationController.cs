@@ -95,10 +95,10 @@ namespace EMBC.DFA.API.Controllers
                 },
                 FeatureFlags = new FeatureFlagConfiguration
                 {
-                    UseAppeals = !string.IsNullOrEmpty(configuration["FEATURE_USE_APPEALS"]),
-                    UseAmendments = !string.IsNullOrEmpty(configuration["FEATURE_USE_AMENDMENTS"]),
-                    UseAdvancedPayments = !string.IsNullOrEmpty(configuration["FEATURE_USE_ADVANCED_PAYMENTS"]),
-                    UseAutoNotifications = !string.IsNullOrEmpty(configuration["FEATURE_USE_AUTO_NOTIFICATIONS"])
+                    UseAppeals = configuration.GetValue<bool>("FEATURE_USE_APPEALS"),
+                    UseAmendments = configuration.GetValue<bool>("FEATURE_USE_AMENDMENTS"),
+                    UseAdvancedPayments = configuration.GetValue<bool>("FEATURE_USE_ADVANCED_PAYMENTS"),
+                    UseAutoNotifications = configuration.GetValue<bool>("FEATURE_USE_AUTO_NOTIFICATIONS")
                 }
 
             };
