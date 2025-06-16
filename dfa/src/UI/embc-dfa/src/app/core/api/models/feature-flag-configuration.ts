@@ -4,4 +4,5 @@
 
 export interface FeatureFlagConfiguration {
   useAppeals?: boolean;
+  useAutoNotifications?: boolean;
 }
