@@ -77,7 +77,7 @@ public class RecoveryClaimRepository : BaseRepository<DFA_ProjectClaim, Recovery
             var queryResults = _databaseContext.DFA_ProjectClaimSet
                 .Where(query)
                 .ToList();
-            return _mapper.Map<IEnumerable<RecoveryClaim>>(queryResults);
+            return Map(queryResults);
         }
     }
 }

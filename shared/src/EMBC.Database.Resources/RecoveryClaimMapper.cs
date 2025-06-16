@@ -53,6 +53,27 @@ public class RecoveryClaimMapper : Profile
             .ForMember(dest => dest.QualifiedReceiver, opt => opt.MapFrom(src => src.QualifiedReceiver))
             .ForMember(dest => dest.LastCodingBlockSubmissionError, opt => opt.MapFrom(src => src.ProjectClaim.DFA_LastCodingBlockSubmissionError));
 
+        CreateMap<RecoveryClaim, DFA_ProjectClaim>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.DFA_ClientCodeId, opt => opt.MapFrom(src => src.ClientCodeKey))
+            .ForMember(dest => dest.DFA_Resp, opt => opt.MapFrom(src => src.ResponsibilityCentreKey))
+            .ForMember(dest => dest.DFA_ServiceLine, opt => opt.MapFrom(src => src.ServiceLineKey))
+            .ForMember(dest => dest.DFA_Stob, opt => opt.MapFrom(src => src.StobKey))
+            .ForMember(dest => dest.DFA_ProjectNumber, opt => opt.MapFrom(src => src.ExpenseProjectKey))
+            .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => (StateCode)src.StateCode))
+            .ForMember(dest => dest.DFA_CodingBlockSubmissionStatus, opt => opt.MapFrom(src => src.CodingBlockSubmissionStatus))
+            .ForMember(dest => dest.DFA_SupplierNumber, opt => opt.MapFrom(src => src.SupplierNumber))
+            .ForMember(dest => dest.DFA_Site, opt => opt.MapFrom(src => src.SupplierSiteNumber))
+            .ForMember(dest => dest.DFA_InvoiceDate, opt => opt.MapFrom(src => src.InvoiceDate))
+            .ForMember(dest => dest.DFA_InvoiceNumber, opt => opt.MapFrom(src => src.InvoiceNumber))
+            .ForMember(dest => dest.DFA_CasInvoiceAmount, opt => opt.MapFrom(src => src.InvoiceAmount))
+            .ForMember(dest => dest.DFA_PayGroupType, opt => opt.MapFrom(src => src.PayGroup))
+            .ForMember(dest => dest.DFA_DateGoodsAndServicesReceived, opt => opt.MapFrom(src => src.DateGoodsReceived))
+            .ForMember(dest => dest.DFA_ClaimReceivedDate, opt => opt.MapFrom(src => src.DateInvoiceReceived))
+            .ForMember(dest => dest.DFA_QualifiedReceiver, opt => opt.MapFrom(src => src.QualifiedReceiverKey))
+            .ForMember(dest => dest.DFA_PaymentAdviceComments, opt => opt.MapFrom(src => src.PaymentAdviceComments))
+            .ForMember(dest => dest.DFA_LastCodingBlockSubmissionError, opt => opt.MapFrom(src => src.LastCodingBlockSubmissionError));
+
         CreateMap<EMCR_ResponsibilityCentre, ResponsibilityCentre>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.EMCR_ResponsibilityCentreId))
             .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.EMCR_Code));

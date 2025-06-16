@@ -16,7 +16,7 @@
     {
         var query = new RecoveryClaimQuery
         {
-            //IncludeChildren = true,
+            IncludeChildren = true,
             //Id = new Guid("<guid>"),
             CodingBlockSubmissionStatus = CodingBlockSubmissionStatus.PendingSubmission,
             AfterInvoiceDate = new DateTime(2023, 1, 1),
@@ -25,7 +25,6 @@
         };
         var recoveryClaims = repository.Query(query);
 
-        // Assert
         Assert.NotNull(recoveryClaims);
     }
 
@@ -34,14 +33,34 @@
     //{
     //    var id = new Guid("a33ca996-86cd-ec11-b832-00505683fbf4");
 
-    //    repository.Update(id, x => x.CodingBlockSubmissionStatus == CodingBlockSubmissionStatus.Failed);
+    [Fact]
+    public void Update_Id_Success()
+    {
+        var codingBlockSubmissionStatus = CodingBlockSubmissionStatus.Failed;
+        var id = new Guid("<guid>");
 
-    //    var updatedClaim = repository
-    //        .Query(new RecoveryClaimQuery { Id = id })
-    //        .FirstOrDefault();
-    //    Assert.NotNull(updatedClaim);
-    //    Assert.Equal(CodingBlockSubmissionStatus.Failed, updatedClaim.CodingBlockSubmissionStatus);
-    //}
+        repository.Update(id, x => x.CodingBlockSubmissionStatus == CodingBlockSubmissionStatus.Draft);
+
+        var updatedClaim = repository
+            .FirstOrDefault(x => x.Id == id);
+        Assert.NotNull(updatedClaim);
+        Assert.Equal(codingBlockSubmissionStatus, updatedClaim.CodingBlockSubmissionStatus);
+    }
+
+    [Fact]
+    public void Update_Dto_Success()
+    {
+        var recoveryClaim = new RecoveryClaim();
+        recoveryClaim.Id = new Guid("<guid>");
+        recoveryClaim.CodingBlockSubmissionStatus = CodingBlockSubmissionStatus.Failed;
+
+        repository.Update(recoveryClaim, x => x.CodingBlockSubmissionStatus);
+
+        var updatedClaim = repository
+            .FirstOrDefault(x => x.Id == recoveryClaim.Id);
+        Assert.NotNull(updatedClaim);
+        Assert.Equal(CodingBlockSubmissionStatus.Failed, updatedClaim.CodingBlockSubmissionStatus);
+    }
 
     [Fact]
     public void Where()
