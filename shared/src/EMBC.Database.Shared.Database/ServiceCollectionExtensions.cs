@@ -35,7 +35,7 @@ public static class ServiceCollectionExtensions
             { "client_secret", _configuration["Dynamics:ADFS:ClientSecret"]},
             { "resource", _configuration["Dynamics:ADFS:ResourceName"] },
             { "scope", "openid" },
-            { "username", _configuration["Dynamics:ADFS:serviceAccountName"] ?? throw new ArgumentNullException("Dynamics:ADFS:serviceAccountName") },
+            { "username", $"{_configuration["Dynamics:ADFS:serviceAccountDomain"]}\\{_configuration["Dynamics:ADFS:serviceAccountName"]}" ?? throw new ArgumentNullException("Dynamics:ADFS:serviceAccountName") },
             { "password", _configuration["Dynamics:ADFS:serviceAccountPassword"] ?? throw new ArgumentNullException("Dynamics:ADFS:serviceAccountPassword") },
         });
 
