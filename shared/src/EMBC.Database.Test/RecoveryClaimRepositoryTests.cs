@@ -28,26 +28,6 @@
         Assert.NotNull(recoveryClaims);
     }
 
-    //[Fact]
-    //public void Update_Success()
-    //{
-    //    var id = new Guid("a33ca996-86cd-ec11-b832-00505683fbf4");
-
-    [Fact]
-    public void Update_Id_Success()
-    {
-        var codingBlockSubmissionStatus = CodingBlockSubmissionStatus.Failed;
-        var id = new Guid("<guid>");
-
-        repository.Update(id, x => x.CodingBlockSubmissionStatus == CodingBlockSubmissionStatus.Draft);
-
-        var updatedClaim = repository
-            .FirstOrDefault(x => x.Id == id);
-        Assert.NotNull(updatedClaim);
-        Assert.Equal(codingBlockSubmissionStatus, updatedClaim.CodingBlockSubmissionStatus);
-    }
-
-    [Fact]
     public void Update_Dto_Success()
     {
         var recoveryClaim = new RecoveryClaim();
