@@ -46,7 +46,7 @@
     public void Update_Dto_Multiple_Success()
     {
         var recoveryClaim = new RecoveryClaim();
-        recoveryClaim.Id = new Guid("a33ca996-86cd-ec11-b832-00505683fbf4");
+        recoveryClaim.Id = new Guid("<guid>");
         recoveryClaim.CodingBlockSubmissionStatus = CodingBlockSubmissionStatus.Failed;
         recoveryClaim.PaymentAdviceComments = "TEST";
 
