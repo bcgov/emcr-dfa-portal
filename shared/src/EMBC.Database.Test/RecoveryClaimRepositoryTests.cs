@@ -5,7 +5,7 @@
     [Fact]
     public void FirstOrDefault()
     {
-        var id = new Guid("a33ca996-86cd-ec11-b832-00505683fbf4");
+        var id = new Guid("<guid>");
         var recoveryClaim = repository.FirstOrDefault(x => x.Id == id);
 
         Assert.NotNull(recoveryClaim);
