@@ -295,7 +295,7 @@ namespace EMBC.DFA.API
             services.AddHttpClient("captcha");
             services.AddScoped(sp =>
             {
-                var dynamicsApiEndpoint = configuration.GetValue<string>("Dynamics:DynamicsApiEndpoint");
+                var dynamicsApiEndpoint = configuration.GetValue<string>("Dynamics:ADFS:ApiEndpoint");
                 var tokenProvider = sp.GetRequiredService<ITokenProvider>();
                 return new CRMWebAPI(new CRMWebAPIConfig
                 {

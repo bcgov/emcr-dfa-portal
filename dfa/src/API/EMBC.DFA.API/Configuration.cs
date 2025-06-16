@@ -5,6 +5,8 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using EMBC.Database;
+using EMBC.Database.Resources;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.Services;
 using EMBC.Utilities.Configuration;
@@ -159,7 +161,7 @@ namespace EMBC.DFA.API
             services.AddHttpClient("captcha");
             services.AddScoped(sp =>
             {
-                var dynamicsApiEndpoint = configuration.GetValue<string>("Dynamics:DynamicsApiEndpoint");
+                var dynamicsApiEndpoint = configuration.GetValue<string>("Dynamics:ADFS:ApiEndpoint");
                 var tokenProvider = sp.GetRequiredService<ITokenProvider>();
                 return new CRMWebAPI(new CRMWebAPIConfig
                 {
@@ -187,6 +189,11 @@ namespace EMBC.DFA.API
                 }
             }));
             services.AddMemoryCache();
+
+            // Dataverse
+            services.AddServices();
+            services.AddAutoMapperMappings();
+            services.AddDatabase(configuration);
         }
 
         public void ConfigurePipeline(PipelineServices services)

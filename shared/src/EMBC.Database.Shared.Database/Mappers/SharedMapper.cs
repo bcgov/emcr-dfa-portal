@@ -5,9 +5,8 @@ public class SharedMapper : Profile
     public SharedMapper()
     {
         // TODO move to GlobalMapper
-        RecognizeDestinationPrefixes(["DFA_", "dfa_", "EMCR_", "emcr_"]);
-        RecognizePrefixes(["DFA_", "dfa_", "EMCR_", "emcr"]);
-
+        RecognizeDestinationPrefixes(new string[] { "DFA_", "dfa_", "EMCR_", "emcr_" });
+        RecognizePrefixes(new string[] { "DFA_", "dfa_", "EMCR_", "emcr" });
 
         RecognizeDestinationPostfixes("Id");
         RecognizePostfixes("Id");

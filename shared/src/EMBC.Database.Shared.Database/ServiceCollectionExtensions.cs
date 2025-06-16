@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IOrganizationServiceAsync>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<ServiceClient>>();
-            var uri = new Uri(configuration["DYNAMICS_ODATA_URI"]);
+            var uri = new Uri(configuration["Dynamics:ADFS:ResourceName"]);
             var client = new ServiceClient(uri, TokenProviderAdfs, false, logger);
             if (!client.IsReady) throw new InvalidOperationException($"Failed to connect to Dataverse: {client.LastError}", client.LastException);
             return client;
@@ -25,18 +25,18 @@ public static class ServiceCollectionExtensions
         // TODO add caching
 
         var http = new HttpClient();
-        var adfsUrl = _configuration["ADFS_OAUTH2_URI"] ?? throw new ArgumentNullException("ADFS_OAUTH2_URI");
+        var adfsUrl = _configuration["Dynamics:ADFS:OAuth2TokenEndpoint"] ?? throw new ArgumentNullException("Dynamics:ADFS:OAuth2TokenEndpoint");
         var request = new HttpRequestMessage(HttpMethod.Post, adfsUrl);
         request.Headers.Add("Accept", "application/json");
         var content = new FormUrlEncodedContent(new Dictionary<string, string>() {
             { "grant_type", "password" },
             { "response_mode", "form_post"},
-            { "client_id", _configuration["DYNAMICS_APP_GROUP_CLIENT_ID"] ?? throw new ArgumentNullException("DYNAMICS_APP_GROUP_CLIENT_ID") },
-            { "client_secret", _configuration["DYNAMICS_APP_GROUP_SECRET"]},
-            { "resource", _configuration["DYNAMICS_APP_GROUP_RESOURCE"] },
+            { "client_id", _configuration["Dynamics:ADFS:ClientId"] ?? throw new ArgumentNullException("Dynamics:ADFS:ClientId") },
+            { "client_secret", _configuration["Dynamics:ADFS:ClientSecret"]},
+            { "resource", _configuration["Dynamics:ADFS:ResourceName"] },
             { "scope", "openid" },
-            { "username", _configuration["DYNAMICS_USERNAME"] ?? throw new ArgumentNullException("Username") },
-            { "password", _configuration["DYNAMICS_PASSWORD"] ?? throw new ArgumentNullException("Password") },
+            { "username", _configuration["Dynamics:ADFS:serviceAccountName"] ?? throw new ArgumentNullException("Dynamics:ADFS:serviceAccountName") },
+            { "password", _configuration["Dynamics:ADFS:serviceAccountPassword"] ?? throw new ArgumentNullException("Dynamics:ADFS:serviceAccountPassword") },
         });
 
         var response = await http.PostAsync(adfsUrl, content);
