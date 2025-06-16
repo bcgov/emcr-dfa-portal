@@ -130,23 +130,6 @@ public abstract class BaseRepository<TEntity, TDto>
             .SaveChanges()
             .HasError;
     }
-        if (!_databaseContext.IsAttached(entity))
-        {
-            _databaseContext.Attach(entity);
-        }
-
-        foreach (var lambda in properties)
-        {
-            var entityExpression = _mapper
-                .MapExpression<Expression<Func<TEntity, object>>>(lambda)
-                .Compile();
-            entityExpression.Invoke(entity);
-        }
-
-        return !_databaseContext
-            .SaveChanges()
-            .HasError;
-    }
 
     public virtual bool Update(TDto dto)
     {
@@ -230,19 +213,24 @@ public abstract class BaseRepository<TEntity, TDto>
         return result;
     }
 
-    private TEntity Map(TDto dto)
+    protected TEntity Map(TDto dto)
     {
         return _mapper.Map<TEntity>(dto);
     }
 
-    private TDto Map(TEntity dto)
+    protected TDto Map(TEntity entity)
     {
-        return _mapper.Map<TDto>(dto);
+        return _mapper.Map<TDto>(entity);
     }
 
-    private IEnumerable<TDto> Map(IEnumerable<TEntity> dto)
+    protected IEnumerable<TDto> Map(IEnumerable<TEntity> entity)
     {
-        return _mapper.Map<IEnumerable<TDto>>(dto);
+        return _mapper.Map<IEnumerable<TDto>>(entity);
+    }
+
+    protected IEnumerable<TEntity> Map(IEnumerable<TDto> dto)
+    {
+        return _mapper.Map<IEnumerable<TEntity>>(dto);
     }
 
     protected IQueryable<TEntity> MapExpression(Expression<Func<TDto, bool>> predicates)
