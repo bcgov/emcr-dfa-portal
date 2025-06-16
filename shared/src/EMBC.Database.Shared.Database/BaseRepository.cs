@@ -69,6 +69,8 @@ public abstract class BaseRepository<TEntity, TDto>
         // use this to get the mapped values of the properties
         var mappedEntity = Map(dto);
 
+        // map the expression to entity expression and parse the value from the mapped entity
+        // apply each value to the tracked entity
         foreach (var expression in properties)
         {
             var entityExpression = _mapper.MapExpression<Expression<Func<TEntity, object>>>(expression);
@@ -77,6 +79,8 @@ public abstract class BaseRepository<TEntity, TDto>
             var value = mappedEntity.Attributes.Single(x => x.Key == attributeName).Value;
             entity.Attributes[attributeName] = value;
         }
+
+        // only the properties changed on the entity will be updated
         _databaseContext.UpdateObject(entity);
 
         return !_databaseContext
@@ -84,6 +88,7 @@ public abstract class BaseRepository<TEntity, TDto>
             .HasError;
     }
 
+    [Obsolete("Use Update(dto, properties) instead.")]
     public virtual bool Update(Guid id, params Expression<Func<TDto, object>>[] properties)
     {
         var entity = _databaseContext
