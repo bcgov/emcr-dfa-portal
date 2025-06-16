@@ -7,17 +7,19 @@
     id="fileDrop"
     (change)="onFileDropped($event.target.files)"
     (click)="fileDrop.value = null"
-    required
-  />
+    [disabled]="isDisabled"
+    required />
   <img src="/assets/images/attachIcon.svg" width="53" height="61" />
   <p class="drag-text">
-    Drag and drop or <a class="browse-link"><u>browse</u></a> your files
+    Drag and drop or
+    <a class="browse-link"><u>browse</u></a>
+    your files
   </p>
-  <p class="file-type">Allowed file types - {{allowedFileExtensionsList}}</p>
+  <p class="file-type">Allowed file types - {{ allowedFileExtensionsList }}</p>
   <p class="file-format">Restricted characters in file name:</p>
   <p class="invalid-characters">
-    ~ " # % & * : . &lt; &gt; ? / &#123; | &#125;. Leading and trailing spaces
-    in file name aren't allowed. The maximum file size is {{ maxFileSize / 1048576 | number:'1.2-2' }}MB.
+    ~ " # % & * : . &lt; &gt; ? / &#123; | &#125;. Leading and trailing spaces in file name aren't allowed. The maximum
+    file size is {{ maxFileSize / 1048576 | number: '1.2-2' }}MB.
   </p>
 </div>
 <div *ngIf="attachSizeError" style="color: red">

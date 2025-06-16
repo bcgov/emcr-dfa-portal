@@ -1,70 +1,63 @@
-<mat-card class="card-align recoveryPlan" style="border:none;" [class.mat-elevation-z0]="true">
+<mat-card class="card-align recoveryPlan" style="border: none" [class.mat-elevation-z0]="true">
   <mat-card-content>
     <form [formGroup]="recoveryClaimForm">
-
-      <button type="button"
-          #tooltip="matTooltip" [hidden]="hideHelp"
-      (mouseenter)="$event.stopImmediatePropagation()"
-      (click)="tooltip.show()"
-      class="help-button"
-      matTooltipClass="tooltip-custom"
-      [matTooltip]="message || ''">
-      <span class="ques">?</span>&nbsp; HELP
-    </button>
-      <!--<mat-form-field class="example-user-input">
-        <mat-label>Tooltip message</mat-label>
-        <input style="display:none" value="test test test value" matInput [formControl]="message">
-      </mat-form-field>-->
-      <!--<button (click)="tooltip.toggle()" mat-raised-button #tooltip="matTooltip"
-        matTooltip="Info about the action"
-        matTooltipPosition="right"
-        aria-tooltip="Button that displays and hides a tooltip triggered by other buttons">
-        Action
-      </button>-->
-      <div class="col-12 content-container infoText" >
+      <button
+        type="button"
+        #tooltip="matTooltip"
+        [hidden]="hideHelp"
+        (mouseenter)="$event.stopImmediatePropagation()"
+        (click)="tooltip.show()"
+        class="help-button"
+        matTooltipClass="tooltip-custom"
+        [matTooltip]="message || ''">
+        <span class="ques">?</span>&nbsp; HELP
+      </button>
+      <div class="col-12 content-container infoText">
         <div class="row">
           <div class="infoIconCol">
             <div class="material-icons infoIconStyle">info</div>
           </div>
           <div class="col-md-11">
-            Please review and complete the form below. You may start a claim, save it, and continue to add to it later. Required fields are marked with a red asterisk <span style="color:red" >*</span>
+            Please review and complete the form below. You may start a claim, save it, and continue to add to it later.
+            Required fields are marked with a red asterisk <span style="color: red">*</span>
           </div>
           <div class="col-md-6"></div>
-
-          </div>
-          <div class="col-md-6"></div>
+        </div>
+        <div class="col-md-6"></div>
       </div>
-      <div class="col-12 content-container infoText" style="line-height: normal;">
+      <div class="col-12 content-container infoText" style="line-height: normal">
         <div class="row">
           <div class="infoIconCol">
             <div class="material-icons infoIconStyle">info</div>
           </div>
           <div class="col-md-11">
-            A claim is a single payment made to your community that is comprised of one or more approved invoices. Supporting documentation must be included with each claim to confirm accuracy of costs and compliance with the approved recovery plan.
+            A claim is a single payment made to your community that is comprised of one or more approved invoices.
+            Supporting documentation must be included with each claim to confirm accuracy of costs and compliance with
+            the approved recovery plan.
             <br /><br />
-            For every invoice you include, you must also attach an invoice record, and proof of payment for that invoice record. Please view the Recovery Claim document checklist and tipsheet for information on specific documentation requirements.
+            For every invoice you include, you must also attach an invoice record, and proof of payment for that invoice
+            record. Please view the Recovery Claim document checklist and tipsheet for information on specific
+            documentation requirements.
             <br /><br />
-            The total of all claims cannot exceed the total approved project cost. If you are exceeding the approved project cost, please contact the DFA program to discuss submitting an amendment to the project.
+            The total of all claims cannot exceed the total approved project cost. If you are exceeding the approved
+            project cost, please contact the DFA program to discuss submitting an amendment to the project.
           </div>
           <div class="col-md-6"></div>
-
-          </div>
-          <div class="col-md-6"></div>
+        </div>
+        <div class="col-md-6"></div>
       </div>
-      <br/>
+      <br />
       <ng-container>
         <div class="row">
           <div class="col-md-3">
-            <p  style="font-size: 15px">
-              Claim Number
-            </p>
+            <p style="font-size: 15px">Claim Number</p>
             <mat-form-field appearance="outline" class="mat-form-round">
               <input
                 id="claimNumber"
-                     (focusin)="setHelpText(1, tooltip)"
+                (focusin)="setHelpText(1, tooltip)"
                 formControlName="claimNumber"
                 matInput
-                maxlength="100"/>
+                maxlength="100" />
             </mat-form-field>
           </div>
           <div class="col-md-3" *ngIf="isReadOnly == true">
@@ -77,34 +70,31 @@
                      (focusin)="setHelpText(1, tooltip)"
                 formControlName="claimReceivedDate"
                 matInput
-                maxlength="100"/>
+                maxlength="100" />
             </mat-form-field>
           </div>
         </div>
         <div class="row">
           <div class="col-md-3">
-            <p  style="font-size: 15px">
-              Is this the final claim for this project?<span style="color:red" >*</span>
-            </p>
+            <p style="font-size: 15px">Is this the final claim for this project?<span style="color: red">*</span></p>
             <mat-radio-group
               formControlName="isThisFinalClaim"
               class="primary-radio-group horizontal-radio-group"
               required
               (change)="selectDamageDates($event)"
               aria-label="Select an option">
-              <mat-radio-button value=true>Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value=false>No</mat-radio-button>
-            </mat-radio-group><br/><br/>
+              <mat-radio-button value="true">Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value="false"
+                >No</mat-radio-button
+              > </mat-radio-group
+            ><br /><br />
           </div>
         </div>
 
-        <div class="row">
-
+        <div class="row" *ngIf="hasInvoiceClaimAmounts">
+          <h3><strong>Claim Amounts</strong></h3>
           <div class="col-md-3 costCurrency">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
-              Total Net Invoices being Claimed
-            </p>
+            <p style="font-size: 15px; margin-bottom: 10px !important">Total Net Invoices being Claimed</p>
             <mat-form-field appearance="outline" class="mat-form-round">
-
               <div class="searchDiv">
                 <input
                   (focusin)="setHelpText(15, tooltip)"
@@ -112,19 +102,17 @@
                   id="currencyBoxTotalInvoicesBeingClaimed"
                   formControlName="totalInvoicesBeingClaimed"
                   matInput
-                  mask="separator.2" thousandSeparator="," decimalMarker="."
-                  maxlength="100"/>
+                  mask="separator.2"
+                  thousandSeparator=","
+                  decimalMarker="."
+                  maxlength="100" />
                 <span class="currencyText">CA$</span>
               </div>
-
             </mat-form-field>
           </div>
           <div class="col-md-3 costCurrency">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
-              Claim PST
-            </p>
+            <p style="font-size: 15px; margin-bottom: 10px !important">Claim PST</p>
             <mat-form-field appearance="outline" class="mat-form-round">
-
               <div class="searchDiv">
                 <input
                   (focusin)="setHelpText(15, tooltip)"
@@ -132,19 +120,17 @@
                   id="currencyBoxClaimPST"
                   formControlName="claimPST"
                   matInput
-                  mask="separator.2" thousandSeparator="," decimalMarker="."
-                  maxlength="100"/>
+                  mask="separator.2"
+                  thousandSeparator=","
+                  decimalMarker="."
+                  maxlength="100" />
                 <span class="currencyText">CA$</span>
               </div>
-
             </mat-form-field>
           </div>
           <div class="col-md-3 costCurrency">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
-              Claim Gross GST
-            </p>
+            <p style="font-size: 15px; margin-bottom: 10px !important">Claim Gross GST</p>
             <mat-form-field appearance="outline" class="mat-form-round">
-
               <div class="searchDiv">
                 <input
                   (focusin)="setHelpText(15, tooltip)"
@@ -152,19 +138,17 @@
                   id="currencyBoxClaimGrossGST"
                   formControlName="claimGrossGST"
                   matInput
-                  mask="separator.2" thousandSeparator="," decimalMarker="."
-                  maxlength="100"/>
+                  mask="separator.2"
+                  thousandSeparator=","
+                  decimalMarker="."
+                  maxlength="100" />
                 <span class="currencyText">CA$</span>
               </div>
-
             </mat-form-field>
           </div>
           <div class="col-md-3 costCurrency">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
-              Total Actual Claim
-            </p>
+            <p style="font-size: 15px; margin-bottom: 10px !important">Total Actual Claim</p>
             <mat-form-field appearance="outline" class="mat-form-round">
-
               <div class="searchDiv">
                 <input
                   (focusin)="setHelpText(15, tooltip)"
@@ -172,21 +156,18 @@
                   id="currencyBoxTotalActualClaim"
                   formControlName="totalActualClaim"
                   matInput
-                  mask="separator.2" thousandSeparator="," decimalMarker="."
-                  maxlength="100"/>
+                  mask="separator.2"
+                  thousandSeparator=","
+                  decimalMarker="."
+                  maxlength="100" />
                 <span class="currencyText">CA$</span>
               </div>
-
             </mat-form-field>
           </div>
 
-
           <div class="col-md-3 costCurrency">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
-               Total Being Claimed
-            </p>
+            <p style="font-size: 15px; margin-bottom: 10px !important">Total Being Claimed</p>
             <mat-form-field appearance="outline" class="mat-form-round">
-
               <div class="searchDiv">
                 <input
                   (focusin)="setHelpText(15, tooltip)"
@@ -194,20 +175,18 @@
                   id="currencyBoxTotalBeingClaimed"
                   formControlName="claimTotal"
                   matInput
-                  mask="separator.2" thousandSeparator="," decimalMarker="."
-                  maxlength="100"/>
+                  mask="separator.2"
+                  thousandSeparator=","
+                  decimalMarker="."
+                  maxlength="100" />
                 <span class="currencyText">CA$</span>
               </div>
-
             </mat-form-field>
           </div>
 
           <div class="col-md-3 costCurrency">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
-              Claim Eligible GST
-            </p>
+            <p style="font-size: 15px; margin-bottom: 10px !important">Claim Eligible GST</p>
             <mat-form-field appearance="outline" class="mat-form-round">
-
               <div class="searchDiv">
                 <input
                   (focusin)="setHelpText(15, tooltip)"
@@ -215,20 +194,18 @@
                   id="currencyBoxClaimEligibleGST"
                   formControlName="claimEligibleGST"
                   matInput
-                  mask="separator.2" thousandSeparator="," decimalMarker="."
-                  maxlength="100"/>
+                  mask="separator.2"
+                  thousandSeparator=","
+                  decimalMarker="."
+                  maxlength="100" />
                 <span class="currencyText">CA$</span>
               </div>
-
             </mat-form-field>
           </div>
 
           <div class="col-md-3 costCurrency">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
-              Claim Total
-            </p>
+            <p style="font-size: 15px; margin-bottom: 10px !important">Claim Total</p>
             <mat-form-field appearance="outline" class="mat-form-round">
-
               <div class="searchDiv">
                 <input
                   (focusin)="setHelpText(15, tooltip)"
@@ -236,16 +213,14 @@
                   id="currencyBoxTotalBeingClaimed"
                   formControlName="claimTotal"
                   matInput
-                  mask="separator.2" thousandSeparator="," decimalMarker="."
-                  maxlength="100"/>
+                  mask="separator.2"
+                  thousandSeparator=","
+                  decimalMarker="."
+                  maxlength="100" />
                 <span class="currencyText">CA$</span>
               </div>
-
             </mat-form-field>
           </div>
-
-
-
         </div>
       </ng-container>
       <br />
@@ -254,139 +229,138 @@
         <div class="row decisionHeader">
           <b>Decision</b>
         </div>
-       <div class="row">
-        <div class="col-md-3 costCurrency">
-
-          <p  style="font-size: 15px; margin-bottom: 10px !important">
-            Claim Eligible GST
-          </p>
-          @if(recoveryClaim?.claim.claimDecision == DecisionEnum.Approved || recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions){
-            <mat-form-field appearance="outline" class="mat-form-round">
-              <div class="searchDiv">
+        <div class="row">
+          <div class="col-md-3 costCurrency">
+            <p style="font-size: 15px; margin-bottom: 10px !important">Claim Eligible GST</p>
+            @if (
+              recoveryClaim?.claim.claimDecision == DecisionEnum.Approved ||
+              recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions
+            ) {
+              <mat-form-field appearance="outline" class="mat-form-round">
+                <div class="searchDiv">
                   <input
                     (focusin)="setHelpText(15, tooltip)"
                     #currencyBoxclaimEligibleGST
                     id="currencyBoxclaimEligibleGST"
                     formControlName="claimEligibleGST"
                     matInput
-                    mask="separator.2" thousandSeparator="," decimalMarker="."
-                    maxlength="100"/>
-                <span class="currencyText">CA$</span>
-              </div>
-
-            </mat-form-field>
-          }@else{
-            <mat-form-field appearance="outline" class="mat-form-round">
-              <div class="searchDiv">
-                <input matInput appearance="outline" readonly disabled="true" />
-                <span class="currencyText">CA$</span>
-              </div>
-            </mat-form-field>
-          }
-        </div>
-
-        <div class="col-md-3 costCurrency">
-          <p  style="font-size: 15px; margin-bottom: 10px !important">
-            Claim Total
-          </p>
-          @if(recoveryClaim?.claim.claimDecision == DecisionEnum.Approved || recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions){
-
-            <mat-form-field appearance="outline" class="mat-form-round">
-              <div class="searchDiv">
-                <input
-                  (focusin)="setHelpText(15, tooltip)"
-                  #currencyBoxclaimTotal
-                  id="currencyBoxclaimTotal"
-                  formControlName="claimTotal"
-                  matInput
-                  mask="separator.2" thousandSeparator="," decimalMarker="."
-                  maxlength="100"/>
-                <span class="currencyText">CA$</span>
-              </div>
-            </mat-form-field>
-
-          }@else{
-            <mat-form-field appearance="outline" class="mat-form-round">
-              <div class="searchDiv">
-                <input matInput appearance="outline" readonly disabled="true" />
-                <span class="currencyText">CA$</span>
-              </div>
-            </mat-form-field>
-          }
-        </div>
-        <div class="col-md-3 costCurrency">
-          <p  style="font-size: 15px; margin-bottom: 10px !important">
-            Approved Claim Total
-          </p>
-          @if(recoveryClaim?.claim.claimDecision == DecisionEnum.Approved || recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions){
-            <mat-form-field appearance="outline" class="mat-form-round">
-
-              <div class="searchDiv">
-                <input
-                  (focusin)="setHelpText(15, tooltip)"
-                  #currencyBoxapprovedClaimTotal
-                  id="currencyBoxapprovedClaimTotal"
-                  formControlName="approvedClaimTotal"
-                  matInput
-                  mask="separator.2" thousandSeparator="," decimalMarker="."
-                  maxlength="100"/>
-                <span class="currencyText">CA$</span>
-              </div>
-
-            </mat-form-field>
-          }@else{
-            <mat-form-field appearance="outline" class="mat-form-round">
-              <div class="searchDiv">
-                <input matInput appearance="outline" readonly disabled="true" />
-                <span class="currencyText">CA$</span>
-              </div>
-            </mat-form-field>
-          }
-        </div>
-        <div class="col-md-3 costCurrency">
-          <p  style="font-size: 15px; margin-bottom: 10px !important">
-            Less First $1,000
-          </p>
-          @if(recoveryClaim?.claim.claimDecision == DecisionEnum.Approved || recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions){
-
-            <mat-form-field appearance="outline" class="mat-form-round">
-
-              <div class="searchDiv">
-                <input
-                  (focusin)="setHelpText(15, tooltip)"
-                  #currencyBoxlessFirst1000
-                  id="currencyBoxlessFirst1000"
-                  formControlName="lessFirst1000"
-                  matInput
-                  mask="separator.2" thousandSeparator="," decimalMarker="."
-                  maxlength="100"/>
-                <span class="currencyText">CA$</span>
-              </div>
-
-            </mat-form-field>
-
-          }@else{
-            <mat-form-field appearance="outline" class="mat-form-round">
-              <div class="searchDiv">
-                <input matInput appearance="outline" readonly disabled="true" />
-                <span class="currencyText">CA$</span>
-              </div>
-            </mat-form-field>
-          }
-        </div>
-
-      </div>
-
-         <div class="row">
+                    mask="separator.2"
+                    thousandSeparator=","
+                    decimalMarker="."
+                    maxlength="100" />
+                  <span class="currencyText">CA$</span>
+                </div>
+              </mat-form-field>
+            } @else {
+              <mat-form-field appearance="outline" class="mat-form-round">
+                <div class="searchDiv">
+                  <input matInput appearance="outline" readonly disabled="true" />
+                  <span class="currencyText">CA$</span>
+                </div>
+              </mat-form-field>
+            }
+          </div>
 
           <div class="col-md-3 costCurrency">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
-              Approved Reimbursement %
-            </p>
-            @if(recoveryClaim?.claim.claimDecision == DecisionEnum.Approved || recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions){
-
+            <p style="font-size: 15px; margin-bottom: 10px !important">Claim Total</p>
+            @if (
+              recoveryClaim?.claim.claimDecision == DecisionEnum.Approved ||
+              recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions
+            ) {
               <mat-form-field appearance="outline" class="mat-form-round">
+                <div class="searchDiv">
+                  <input
+                    (focusin)="setHelpText(15, tooltip)"
+                    #currencyBoxclaimTotal
+                    id="currencyBoxclaimTotal"
+                    formControlName="claimTotal"
+                    matInput
+                    mask="separator.2"
+                    thousandSeparator=","
+                    decimalMarker="."
+                    maxlength="100" />
+                  <span class="currencyText">CA$</span>
+                </div>
+              </mat-form-field>
+            } @else {
+              <mat-form-field appearance="outline" class="mat-form-round">
+                <div class="searchDiv">
+                  <input matInput appearance="outline" readonly disabled="true" />
+                  <span class="currencyText">CA$</span>
+                </div>
+              </mat-form-field>
+            }
+          </div>
+          <div class="col-md-3 costCurrency">
+            <p style="font-size: 15px; margin-bottom: 10px !important">Approved Claim Total</p>
+            @if (
+              recoveryClaim?.claim.claimDecision == DecisionEnum.Approved ||
+              recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions
+            ) {
+              <mat-form-field appearance="outline" class="mat-form-round">
+                <div class="searchDiv">
+                  <input
+                    (focusin)="setHelpText(15, tooltip)"
+                    #currencyBoxapprovedClaimTotal
+                    id="currencyBoxapprovedClaimTotal"
+                    formControlName="approvedClaimTotal"
+                    matInput
+                    mask="separator.2"
+                    thousandSeparator=","
+                    decimalMarker="."
+                    maxlength="100" />
+                  <span class="currencyText">CA$</span>
+                </div>
+              </mat-form-field>
+            } @else {
+              <mat-form-field appearance="outline" class="mat-form-round">
+                <div class="searchDiv">
+                  <input matInput appearance="outline" readonly disabled="true" />
+                  <span class="currencyText">CA$</span>
+                </div>
+              </mat-form-field>
+            }
+          </div>
+          <div class="col-md-3 costCurrency">
+            <p style="font-size: 15px; margin-bottom: 10px !important">Less First $1,000</p>
+            @if (
+              recoveryClaim?.claim.claimDecision == DecisionEnum.Approved ||
+              recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions
+            ) {
+              <mat-form-field appearance="outline" class="mat-form-round">
+                <div class="searchDiv">
+                  <input
+                    (focusin)="setHelpText(15, tooltip)"
+                    #currencyBoxlessFirst1000
+                    id="currencyBoxlessFirst1000"
+                    formControlName="lessFirst1000"
+                    matInput
+                    mask="separator.2"
+                    thousandSeparator=","
+                    decimalMarker="."
+                    maxlength="100" />
+                  <span class="currencyText">CA$</span>
+                </div>
+              </mat-form-field>
+            } @else {
+              <mat-form-field appearance="outline" class="mat-form-round">
+                <div class="searchDiv">
+                  <input matInput appearance="outline" readonly disabled="true" />
+                  <span class="currencyText">CA$</span>
+                </div>
+              </mat-form-field>
+            }
+          </div>
+        </div>
 
+        <div class="row">
+          <div class="col-md-3 costCurrency">
+            <p style="font-size: 15px; margin-bottom: 10px !important">Approved Reimbursement %</p>
+            @if (
+              recoveryClaim?.claim.claimDecision == DecisionEnum.Approved ||
+              recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions
+            ) {
+              <mat-form-field appearance="outline" class="mat-form-round">
                 <div class="searchDiv">
                   <input
                     (focusin)="setHelpText(15, tooltip)"
@@ -394,14 +368,14 @@
                     id="currencyBoxapprovedReimbursement"
                     formControlName="approvedReimbursement"
                     matInput
-                    mask="separator.2" thousandSeparator="," decimalMarker="."
-                    maxlength="100"/>
+                    mask="separator.2"
+                    thousandSeparator=","
+                    decimalMarker="."
+                    maxlength="100" />
                   <span class="currencyText">CA$</span>
                 </div>
-
               </mat-form-field>
-
-            }@else{
+            } @else {
               <mat-form-field appearance="outline" class="mat-form-round">
                 <div class="searchDiv">
                   <input matInput appearance="outline" readonly disabled="true" />
@@ -411,13 +385,12 @@
             }
           </div>
           <div class="col-md-3 costCurrency">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
-              Eligible Payable
-            </p>
-            @if(recoveryClaim?.claim.claimDecision == DecisionEnum.Approved || recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions){
-
+            <p style="font-size: 15px; margin-bottom: 10px !important">Eligible Payable</p>
+            @if (
+              recoveryClaim?.claim.claimDecision == DecisionEnum.Approved ||
+              recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions
+            ) {
               <mat-form-field appearance="outline" class="mat-form-round">
-
                 <div class="searchDiv">
                   <input
                     (focusin)="setHelpText(15, tooltip)"
@@ -425,14 +398,14 @@
                     id="currencyBoxeligiblePayable"
                     formControlName="eligiblePayable"
                     matInput
-                    mask="separator.2" thousandSeparator="," decimalMarker="."
-                    maxlength="100"/>
+                    mask="separator.2"
+                    thousandSeparator=","
+                    decimalMarker="."
+                    maxlength="100" />
                   <span class="currencyText">CA$</span>
                 </div>
-
               </mat-form-field>
-
-            }@else{
+            } @else {
               <mat-form-field appearance="outline" class="mat-form-round">
                 <div class="searchDiv">
                   <input matInput appearance="outline" readonly disabled="true" />
@@ -442,106 +415,96 @@
             }
           </div>
           <div class="col-md-3 costCurrency">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
-              Paid Claim Amount
-            </p>
+            <p style="font-size: 15px; margin-bottom: 10px !important">Paid Claim Amount</p>
 
-              @if(recoveryClaim?.claim.claimDecision == DecisionEnum.Approved || recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions){
-
-                <mat-form-field appearance="outline" class="mat-form-round">
-
-                  <div class="searchDiv">
-                    <input
-                      (focusin)="setHelpText(15, tooltip)"
-                      #currencyBoxpaidClaimAmount
-                      id="currencyBoxpaidClaimAmount"
-                      formControlName="paidClaimAmount"
-                      matInput
-                      mask="separator.2" thousandSeparator="," decimalMarker="."
-                      maxlength="100"/>
-                    <span class="currencyText">CA$</span>
-                  </div>
-
-                </mat-form-field>
-
-              }@else{
-                <mat-form-field appearance="outline" class="mat-form-round">
-                  <div class="searchDiv">
-                    <input matInput appearance="outline" readonly disabled="true" />
-                    <span class="currencyText">CA$</span>
-                  </div>
-                </mat-form-field>
-              }
-
+            @if (
+              recoveryClaim?.claim.claimDecision == DecisionEnum.Approved ||
+              recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions
+            ) {
+              <mat-form-field appearance="outline" class="mat-form-round">
+                <div class="searchDiv">
+                  <input
+                    (focusin)="setHelpText(15, tooltip)"
+                    #currencyBoxpaidClaimAmount
+                    id="currencyBoxpaidClaimAmount"
+                    formControlName="paidClaimAmount"
+                    matInput
+                    mask="separator.2"
+                    thousandSeparator=","
+                    decimalMarker="."
+                    maxlength="100" />
+                  <span class="currencyText">CA$</span>
+                </div>
+              </mat-form-field>
+            } @else {
+              <mat-form-field appearance="outline" class="mat-form-round">
+                <div class="searchDiv">
+                  <input matInput appearance="outline" readonly disabled="true" />
+                  <span class="currencyText">CA$</span>
+                </div>
+              </mat-form-field>
+            }
           </div>
 
           <div [featureEnabled]="'useAdvancedPayments'" class="col-md-3 costCurrency">
-            <p  style="font-size: 15px; margin-bottom: 10px !important">
-              Advanced Drawdown Amount
-            </p>
+            <p style="font-size: 15px; margin-bottom: 10px !important">Advanced Drawdown Amount</p>
 
-              @if(recoveryClaim?.claim.claimDecision == DecisionEnum.Approved || recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions){
-
-                <mat-form-field appearance="outline" class="mat-form-round">
-
-                  <div class="searchDiv">
-                    <input
-                      (focusin)="setHelpText(15, tooltip)"
-                      #currencyBoxadvancedDrawdownAmount
-                      id="currencyBoxadvancedDrawdownAmount"
-                      formControlName="advancedDrawdownAmount"
-                      matInput
-                      mask="separator.2" thousandSeparator="," decimalMarker="."
-                      maxlength="100"/>
-                    <span class="currencyText">CA$</span>
-                  </div>
-
-                </mat-form-field>
-
-              }@else{
-                <mat-form-field appearance="outline" class="mat-form-round">
-                  <div class="searchDiv">
-                    <input matInput appearance="outline" readonly disabled="true" />
-                    <span class="currencyText">CA$</span>
-                  </div>
-                </mat-form-field>
-              }
-
+            @if (
+              recoveryClaim?.claim.claimDecision == DecisionEnum.Approved ||
+              recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions
+            ) {
+              <mat-form-field appearance="outline" class="mat-form-round">
+                <div class="searchDiv">
+                  <input
+                    (focusin)="setHelpText(15, tooltip)"
+                    #currencyBoxadvancedDrawdownAmount
+                    id="currencyBoxadvancedDrawdownAmount"
+                    formControlName="advancedDrawdownAmount"
+                    matInput
+                    mask="separator.2"
+                    thousandSeparator=","
+                    decimalMarker="."
+                    maxlength="100" />
+                  <span class="currencyText">CA$</span>
+                </div>
+              </mat-form-field>
+            } @else {
+              <mat-form-field appearance="outline" class="mat-form-round">
+                <div class="searchDiv">
+                  <input matInput appearance="outline" readonly disabled="true" />
+                  <span class="currencyText">CA$</span>
+                </div>
+              </mat-form-field>
+            }
           </div>
         </div>
         <div class="row">
           <div class="col-md-3">
-            <p  style="font-size: 15px">
-              Paid Claim Date
-            </p>
-            @if(recoveryClaim?.claim.claimDecision == DecisionEnum.Approved || recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions){
-
+            <p style="font-size: 15px">Paid Claim Date</p>
+            @if (
+              recoveryClaim?.claim.claimDecision == DecisionEnum.Approved ||
+              recoveryClaim?.claim.claimDecision == DecisionEnum.ApprovedWithExclusions
+            ) {
               <mat-form-field appearance="outline" class="mat-form-round">
                 <div class="searchDiv">
                   <input
                     id="paidClaimDate"
-                        (focusin)="setHelpText(1, tooltip)"
+                    (focusin)="setHelpText(1, tooltip)"
                     formControlName="paidClaimDate"
                     matInput
-                    maxlength="100"/>
+                    maxlength="100" />
                 </div>
               </mat-form-field>
-
-            }@else{
-
+            } @else {
               <mat-form-field appearance="outline" class="mat-form-round">
                 <div class="searchDiv">
                   <input matInput appearance="outline" readonly disabled="true" />
                 </div>
               </mat-form-field>
-
             }
-
           </div>
         </div>
-
       </ng-container>
     </form>
-
   </mat-card-content>
 </mat-card>

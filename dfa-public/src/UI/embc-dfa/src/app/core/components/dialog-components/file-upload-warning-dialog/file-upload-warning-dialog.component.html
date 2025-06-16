@@ -1,19 +1,16 @@
-<h2><b>File Upload Error</b></h2>
+<div class="p-3">
+  <h2>File Upload Error</h2>
 
-<mat-dialog-content>
-  <div class="row">
-    <div class="col-md-3">
-      <img src="/assets/images/warning-icon2.png" width="40px" height="40px" />
-      &nbsp;
+  <mat-dialog-content>
+    <div class="d-flex flex-row">
+      <div class="me-3">
+        <mat-icon color="warn">warning</mat-icon>
+      </div>
+      <div class="flex-grow-1" [innerHTML]="content"></div>
     </div>
-    <div class="col-md-9" [innerHTML]="content"></div>
-  </div>
-</mat-dialog-content>
+  </mat-dialog-content>
 
-<mat-dialog-actions>
-  <div class="col-md-12">
-    <button class="button-s button-width" mat-button (click)="cancel()">
-      Ok
-    </button>
-  </div>
-</mat-dialog-actions>
+  <mat-dialog-actions class="d-flex justify-content-end">
+    <button class="button-s button-width" mat-button (click)="cancel()">Ok</button>
+  </mat-dialog-actions>
+</div>

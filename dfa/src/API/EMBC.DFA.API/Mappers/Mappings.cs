@@ -32,6 +32,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.dfa_cellphonenumber, opts => opts.MapFrom(s => s.ContactDetails.CellPhoneNumber))
                 .ForMember(d => d.dfa_residencetelephonenumber, opts => opts.MapFrom(s => s.ContactDetails.ResidencePhone))
                 .ForMember(d => d.dfa_alternatephonenumber, opts => opts.MapFrom(s => s.ContactDetails.AlternatePhone))
+                // .ForMember(d => d.dfa_optoutnonessential, opts => opts.MapFrom(s => s.ContactDetails.OptOutNonEssential == null ? (int?)null : (s.ContactDetails.OptOutNonEssential == true ? (int?)YesNoOptionSet.Yes : (int?)YesNoOptionSet.No)))
                 .ForMember(d => d.dfa_primaryaddressline1, opts => opts.MapFrom(s => s.PrimaryAddress.AddressLine1))
                 .ForMember(d => d.dfa_primaryaddressline2, opts => opts.MapFrom(s => s.PrimaryAddress.AddressLine2))
                 .ForMember(d => d.dfa_primarycity, opts => opts.MapFrom(s => s.PrimaryAddress.City))

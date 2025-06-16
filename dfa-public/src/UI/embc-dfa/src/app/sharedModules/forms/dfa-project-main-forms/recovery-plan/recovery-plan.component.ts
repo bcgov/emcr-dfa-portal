@@ -48,6 +48,7 @@ import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
 import {MatDividerModule} from "@angular/material/divider";
 import {Decision} from "../../../../models/decision.enum";
+import { FeatureEnabledDirective } from 'src/app/core/directives/feature-enabled.directive';
 
 export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
   showDelay: 0,
@@ -468,7 +469,8 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
     NgxMaskDirective, NgxMaskPipe,
     MatSelectModule,
     MatTooltipModule,
-    MatDividerModule
+    MatDividerModule,
+    FeatureEnabledDirective
   ],
   declarations: [RecoveryPlanComponent],
   providers: [provideNgxMask()]

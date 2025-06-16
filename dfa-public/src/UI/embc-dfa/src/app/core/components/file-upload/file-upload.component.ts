@@ -1,7 +1,7 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog-components/file-upload-warning-dialog/file-upload-warning-dialog.component';
 import * as constant from 'src/app/core/services/globalConstants';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-file-upload',
@@ -13,13 +13,13 @@ export class FileUploadComponent {
   @Input() noOfAttachments: number;
   @Input() allowedFileTypes: string[];
   @Input() allowedFileExtensionsList: string;
+  @Input() isDisabled: boolean = false;
+
   fileAttachments: string[] = [];
   attachSizeError = false;
   maxFileSize: number = 45 * 1024 * 1024; //MB
 
-  constructor(
-    public dialog: MatDialog
-  ) {}
+  constructor(public dialog: MatDialog) {}
 
   /**
    * Listens to file drop event and filters the dropped files before attaching
@@ -40,10 +40,7 @@ export class FileUploadComponent {
         this.warningDialog(constant.fileTypeMessage);
       } else if (!constant.fileNameFormat.test(e.name)) {
         this.warningDialog(constant.invalidFileNameMessage);
-      } else if (
-        this.fileAttachments !== undefined &&
-        this.fileAttachments.length >= this.noOfAttachments
-      ) {
+      } else if (this.fileAttachments !== undefined && this.fileAttachments.length >= this.noOfAttachments) {
         this.attachSizeError = true;
         setTimeout(
           function () {
@@ -58,15 +55,14 @@ export class FileUploadComponent {
     }
   }
 
- warningDialog(message: string) {
-    this.dialog
-      .open(FileUploadWarningDialogComponent, {
-        data: {
-          content: message
-        },
-        // height: '250px',
-        width: '350px',
-        disableClose: true
-      });
+  warningDialog(message: string) {
+    this.dialog.open(FileUploadWarningDialogComponent, {
+      data: {
+        content: message
+      },
+      // height: '250px',
+      width: '350px',
+      disableClose: true
+    });
   }
 }

@@ -650,6 +650,8 @@ namespace EMBC.DFA.API.Controllers
         public string? claimDecision { get; set; }
         /* D4P-112 */
         public string? advancedDrawdownAmount { get; set; }
+
+        public string? decisionDate { get; set; }
     }
 
     public class Invoice

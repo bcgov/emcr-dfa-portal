@@ -65,6 +65,7 @@ export type { Profile } from './models/profile';
 export type { ProfileDataConflict } from './models/profile-data-conflict';
 export type { ProfileName } from './models/profile-name';
 export type { ProfileVerification } from './models/profile-verification';
+export type { ProjectAppealModel } from './models/project-appeal-model';
 export { ProjectStageOptionSet } from './models/project-stage-option-set';
 export type { ProjectStatusBar } from './models/project-status-bar';
 export { ProjectTypes } from './models/project-types';

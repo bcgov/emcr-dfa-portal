@@ -7,6 +7,9 @@
   padding: 20px;
 }
 
+.leftBorder{
+  border-left: 20px solid rgb(98, 163, 112);
+}
 .application-button {
   float: left !important;
   background-color: #234075;
@@ -72,6 +75,13 @@
   margin-top: 30px;
 }
 
+.bfpTimeline{
+  padding-bottom:20px; 
+  height: 210px;
+  width: 100%;
+  min-width: 725px;
+}
+
 .appeal-stages .stepsDesc {
   margin-right: 16px;
   padding-left: 6.5%;
@@ -107,6 +117,7 @@
 .appeals{
   display: flex;
   justify-content: end;
+  padding-top: 12px;
 }
 
 @media (max-width: 1200px) and (min-width: 300px) {

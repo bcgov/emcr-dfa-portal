@@ -1,12 +1,16 @@
 <mat-card appearance="outlined" class="card-align">
   <mat-card-content>
     <p>
-      Your telephone and email address will ONLY be used to contact you about your post-disaster circumstances to determine your eligibility for disaster financial assistance and to exchange information between the Ministry of Emergency Management and Climate Readiness (or its agent) and Provincial Government Ministries and Crown Corporations, to receive
-information and to verify that the information provided by you is accurate.
+      Your telephone and email address will ONLY be used to contact you about
+      your post-disaster circumstances to determine your eligibility for
+      disaster financial assistance and to exchange information between the
+      Ministry of Emergency Management and Climate Readiness (or its agent) and
+      Provincial Government Ministries and Crown Corporations, to receive
+      information and to verify that the information provided by you is
+      accurate. --EDITED 2
     </p>
     <br />
     <form [formGroup]="contactInfoForm">
-
       <ng-container>
         <div class="row">
           <div class="col-md-12">
@@ -23,7 +27,8 @@ information and to verify that the information provided by you is accurate.
                 matInput
                 placeholder="Cellular Telephone Number"
                 required
-                [imask]="phoneMask" />
+                [imask]="phoneMask"
+              />
               <mat-error
                 *ngIf="
                   contactFormControl.cellPhoneNumber.invalid &&
@@ -54,8 +59,9 @@ information and to verify that the information provided by you is accurate.
                 formControlName="residencePhone"
                 matInput
                 placeholder="Residence Telephone Number"
-                [imask]="phoneMask" />
-              
+                [imask]="phoneMask"
+              />
+
               <mat-error
                 *ngIf="
                   contactFormControl.residencePhone.invalid &&
@@ -70,7 +76,8 @@ information and to verify that the information provided by you is accurate.
                 formControlName="alternatePhone"
                 matInput
                 placeholder="Alternate Telephone Number"
-                [imask]="phoneMask" />
+                [imask]="phoneMask"
+              />
               <mat-error
                 *ngIf="
                   contactFormControl.alternatePhone.invalid &&
@@ -78,7 +85,6 @@ information and to verify that the information provided by you is accurate.
                 "
                 >Maximum length is 100 characters</mat-error
               >
-
             </mat-form-field>
           </div>
         </div>
@@ -86,7 +92,9 @@ information and to verify that the information provided by you is accurate.
 
         <div class="row">
           <div class="col-md-12">
-            <p class="sub-heading">Email Address<span style="color:red"><b>*</b></span></p>
+            <p class="sub-heading">
+              Email Address<span style="color: red"><b>*</b></span>
+            </p>
           </div>
         </div>
 
@@ -125,10 +133,17 @@ information and to verify that the information provided by you is accurate.
             </mat-form-field>
           </div>
           <div class="col-md-5">
-            <div class="addressMessage" *ngIf="contactFormControl.confirmEmail.value">
+            <div
+              class="addressMessage"
+              *ngIf="contactFormControl.confirmEmail.value"
+            >
               If you need to update your BC Services Card email address, visit
               <br />
-              <a target="_blank" href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/your-card/change-personal-information">BC Services Card, Change your personal information</a>
+              <a
+                target="_blank"
+                href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/your-card/change-personal-information"
+                >BC Services Card, Change your personal information</a
+              >
             </div>
           </div>
         </div>
@@ -168,7 +183,9 @@ information and to verify that the information provided by you is accurate.
               >
               <mat-error
                 *ngIf="
-                  contactFormControl?.confirmEmail?.parent?.hasError('emailMatch')
+                  contactFormControl?.confirmEmail?.parent?.hasError(
+                    'emailMatch'
+                  )
                 "
               >
                 Email address mismatch</mat-error
@@ -176,9 +193,30 @@ information and to verify that the information provided by you is accurate.
             </mat-form-field>
           </div>
         </div>
-
+        <div [featureEnabled]="'useAutoNotifications'">
+          <div class="row">
+            <div class="col-md-12">
+              <p class="sub-heading">Communication Preference</p>
+              <p>
+                While your application and case are processed, you can be
+                automatically updated of progress and changes to the status of
+                your case by email. You may opt out of these non-essential
+                communication below.
+              </p>
+              <p>
+                Do you wish to opt out of all non-essential communication (not
+                  recommended)?
+              </p>
+              <div class="form-group">
+                <mat-radio-group formControlName="optOutNonEssential">
+                  <mat-radio-button [value]="true" class="radio-spacing">Yes</mat-radio-button>
+                  <mat-radio-button [value]="false">No</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+          </div>
+        </div>
       </ng-container>
     </form>
-
   </mat-card-content>
 </mat-card>

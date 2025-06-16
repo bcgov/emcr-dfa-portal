@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EMBC.Database.Model\EMBC.Database.Contract.csproj" />
+    <ProjectReference Include="..\EMBC.Database.Shared.Contract\EMBC.Database.Shared.Contract.csproj" />
+    <ProjectReference Include="..\EMBC.Database.Shared.Database\EMBC.Database.Shared.Database.csproj" />
+    <ProjectReference Include="..\EMBC.Database\EMBC.Database.csproj" />
+  </ItemGroup>
+
+</Project>

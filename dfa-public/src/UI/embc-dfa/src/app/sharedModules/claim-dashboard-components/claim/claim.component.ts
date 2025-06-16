@@ -280,6 +280,23 @@ export class DfaDashClaimComponent implements OnInit {
     this.router.navigate(['/dfa-claim-main/' + applItem.claimId]);
   }
 
+  canAppealClaims(applItem: ClaimExtended): boolean {
+    // Check if the claim is eligible for appeal based on its status and decision
+    return applItem.claimDecision && (applItem.claimDecision.toLowerCase() === this.DecisionEnum.ApprovedWithExclusions.toLowerCase() || applItem.claimDecision.toLowerCase() === this.DecisionEnum.Ineligible.toLowerCase())
+    && this.remainingDays(applItem) > 0;;
+    
+  }
+
+  remainingDays(claim: ClaimExtended): number {
+    const oneDay = 24 * 60 * 60 * 1000;       // milliseconds in a day
+    let endDateStr = claim.claimDecision?.toLowerCase() === this.DecisionEnum.ApprovedWithExclusions.toLowerCase() || claim.claimDecision?.toLowerCase() === this.DecisionEnum.Ineligible.toLowerCase()
+      ? claim.decisionDate
+      : claim.dateFileClosed;
+    endDateStr = claim.decisionDate;
+    let endDate = new Date(endDateStr);
+    endDate.setDate(endDate.getDate() + 60);  // add 60 days
+    return Math.round((endDate.getTime() - new Date().getTime()) / oneDay);
+  }
 
 }
 

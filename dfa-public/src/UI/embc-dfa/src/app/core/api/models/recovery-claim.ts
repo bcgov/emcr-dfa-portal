@@ -16,6 +16,7 @@ export interface RecoveryClaim {
   claimReceivedDate?: string | null;
   claimStatus?: ClaimStageOptionSet | null;
   claimTotal?: string | null;
+  decisionDate?: string | null;
   eligiblePayable?: string | null;
   invoices?: Array<Invoice> | null;
   isFirstClaimApproved?: boolean | null;

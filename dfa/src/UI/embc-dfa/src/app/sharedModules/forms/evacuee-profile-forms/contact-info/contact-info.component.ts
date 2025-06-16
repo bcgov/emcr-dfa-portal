@@ -29,6 +29,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginService } from 'src/app/core/services/login.service';
 import { IMaskModule } from 'angular-imask';
+import { FeatureEnabledDirective } from 'src/app/core/directives/feature-enabled.directive';
 
 export class CustomErrorMailMatcher implements ErrorStateMatcher {
   isErrorState(
@@ -164,7 +165,8 @@ export default class ContactInfoComponent implements OnInit, OnDestroy {
     MatCheckboxModule,
     DirectivesModule,
     IMaskModule,
-    MatRadioModule
+    MatRadioModule,
+    FeatureEnabledDirective
   ],
   declarations: [ContactInfoComponent]
 })

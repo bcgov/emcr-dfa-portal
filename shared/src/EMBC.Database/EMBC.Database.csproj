@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.2.7" />
+    <PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client.Dynamics" Version="1.2.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EMBC.Database.Shared.Database\EMBC.Database.Shared.Database.csproj" />
+  </ItemGroup>
+
+</Project>

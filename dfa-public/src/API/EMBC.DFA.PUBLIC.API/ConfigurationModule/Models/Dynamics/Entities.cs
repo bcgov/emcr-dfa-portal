@@ -345,6 +345,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_decisioncopy { get; set; }
         /* D4P-112 */
         public string? dfa_advanceddrawdownamount { get; set; }
+        public string? dfa_decisiondate { get; set; }
     }
 
     public class dfa_appapplicationmain_retrieve
@@ -1006,6 +1007,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_decisioncopy { get; set; }
         /* D4P-112 */
         public string? dfa_advanceddrawdownamount { get; set; }
+
+        public string? dfa_decisiondate { get; set; }
     }
 
     public class dfa_recoveryinvoice

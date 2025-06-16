@@ -10,5 +10,6 @@ export interface ContactDetails {
   alternatePhone?: string | null;
   cellPhoneNumber?: string | null;
   email?: string;
+  optOutNonEssential?: boolean | null;
   residencePhone?: string | null;
 }

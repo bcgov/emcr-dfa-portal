@@ -13,6 +13,12 @@
     cursor: pointer;
 }
 
+.appealClaims{
+  display: flex; 
+  justify-content: flex-end; 
+  padding: 10px 32px 0 0;
+}
+
 .application-button {
   float: left !important;
   /* background-color: #ffffff; */
@@ -261,4 +267,5 @@ i.material-icons {
     display: flex;
     width: 70px;
   }
+
 }

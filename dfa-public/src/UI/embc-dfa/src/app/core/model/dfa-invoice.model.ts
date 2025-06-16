@@ -1,13 +1,6 @@
-import {
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import { Community, Country, StateProvince } from './address';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FileCategory, RequiredDocumentType } from 'src/app/core/api/models';
 import { CustomValidationService } from '../services/customValidation.service';
-import { SignatureBlock, SecondaryApplicantTypeOption, FileCategory, RoomType, RequiredDocumentType, ProjectStageOptionSet } from 'src/app/core/api/models';
-
 
 export class Invoice {
   invoiceNumber?: null | string;
@@ -26,7 +19,7 @@ export class Invoice {
   totalBeingClaimed?: null | string;
   emcrDecision?: null | string;
   emcrApprovedAmount?: null | string;
-  emcrDecisionDate?: null | string;
+  decisionDate?: null | string;
   emcrDecisionComments?: null | string;
 
   constructor(
@@ -46,9 +39,9 @@ export class Invoice {
     totalBeingClaimed?: null | string,
     emcrDecision?: null | string,
     emcrApprovedAmount?: null | string,
-    emcrDecisionDate?: null | string,
-    emcrDecisionComments?: null | string,
-  ) { }
+    decisionDate?: null | string,
+    emcrDecisionComments?: null | string
+  ) {}
 }
 
 export class InvoiceForm {
@@ -68,14 +61,10 @@ export class InvoiceForm {
   totalBeingClaimed = new UntypedFormControl();
   emcrDecision = new UntypedFormControl();
   emcrApprovedAmount = new UntypedFormControl();
-  emcrDecisionDate = new UntypedFormControl();
+  decisionDate = new UntypedFormControl();
   emcrDecisionComments = new UntypedFormControl();
 
-  constructor(
-    invoice: Invoice,
-    customValidator: CustomValidationService
-  ) {
-    
+  constructor(invoice: Invoice, customValidator: CustomValidationService) {
     if (invoice.invoiceNumber) {
       this.invoiceNumber.setValue(invoice.invoiceNumber);
     }
@@ -138,8 +127,7 @@ export class InvoiceForm {
 
     if (invoice.eligibleGST) {
       this.eligibleGST.setValue(invoice.eligibleGST);
-    }
-    else {
+    } else {
       this.eligibleGST.setValue(0);
     }
     this.eligibleGST.setValidators(null);
@@ -159,16 +147,15 @@ export class InvoiceForm {
     }
     this.emcrApprovedAmount.setValidators(null);
 
-    if (invoice.emcrDecisionDate) {
-      this.emcrDecisionDate.setValue(invoice.emcrDecisionDate);
+    if (invoice.decisionDate) {
+      this.decisionDate.setValue(invoice.decisionDate);
     }
-    this.emcrDecisionDate.setValidators(null);
+    this.decisionDate.setValidators(null);
 
     if (invoice.emcrDecisionComments) {
       this.emcrDecisionComments.setValue(invoice.emcrDecisionComments);
     }
     this.emcrDecisionComments.setValidators(null);
-    
   }
 }
 
@@ -224,20 +211,13 @@ export class FileUploadsForm {
   fileUploads = new UntypedFormControl([]);
   addNewFileUploadIndicator = new UntypedFormControl(false);
 
-  constructor(
-    fileUploads: Array<FileUpload>,
-    customValidator: CustomValidationService,
-    builder: UntypedFormBuilder
-  ) {
+  constructor(fileUploads: Array<FileUpload>, customValidator: CustomValidationService, builder: UntypedFormBuilder) {
     this.insuranceTemplateFileUpload = builder.group({
       deleteFlag: [
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -245,25 +225,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -271,38 +243,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -310,10 +269,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -321,10 +277,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -332,10 +285,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -343,10 +293,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -356,10 +303,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -367,25 +311,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -393,38 +329,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -432,10 +355,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -443,10 +363,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -454,10 +371,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -465,10 +379,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -478,10 +389,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -489,25 +397,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -515,38 +415,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -554,10 +441,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -565,10 +449,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -576,10 +457,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -587,10 +465,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -600,10 +475,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -611,25 +483,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -637,38 +501,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -676,10 +527,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -687,10 +535,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -698,10 +543,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -709,10 +551,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -722,10 +561,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -733,25 +569,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -759,38 +587,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -798,10 +613,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -809,10 +621,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -820,10 +629,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -831,10 +637,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -844,10 +647,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -855,25 +655,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -881,38 +673,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -920,10 +699,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -931,10 +707,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -942,10 +715,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -953,10 +723,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -966,10 +733,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -977,25 +741,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1003,38 +759,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1042,10 +785,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1053,10 +793,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1064,10 +801,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1075,10 +809,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -1088,10 +819,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1099,25 +827,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1125,37 +845,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ], uploadedDate: [
+      requiredDocumentType: [''],
+      uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1163,10 +871,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1174,10 +879,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1185,10 +887,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1196,10 +895,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -1209,10 +905,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1220,25 +913,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1246,37 +931,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ], uploadedDate: [
+      requiredDocumentType: [''],
+      uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1284,10 +957,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1295,10 +965,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1306,10 +973,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1317,10 +981,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -1330,10 +991,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1341,24 +999,16 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1366,38 +1016,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1405,10 +1042,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1416,10 +1050,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1427,10 +1058,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1438,10 +1066,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -1451,10 +1076,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1462,24 +1084,16 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1487,38 +1101,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1526,10 +1127,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1537,10 +1135,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1548,10 +1143,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1559,10 +1151,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -1572,10 +1161,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1583,25 +1169,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1609,38 +1187,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1648,10 +1213,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1659,10 +1221,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1670,10 +1229,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1681,10 +1237,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -1694,10 +1247,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1705,25 +1255,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1731,38 +1273,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1770,10 +1299,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1781,10 +1307,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1792,10 +1315,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1803,10 +1323,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -1816,10 +1333,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1827,25 +1341,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1853,38 +1359,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1892,10 +1385,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1903,10 +1393,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1914,10 +1401,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1925,10 +1409,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -1938,10 +1419,7 @@ export class FileUploadsForm {
         false,
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1949,25 +1427,17 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      id: [
-        '',
-      ],
+      id: [''],
 
       fileName: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -1975,38 +1445,25 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator),
-          customValidator
-            .maxLengthValidator(100)
-            .bind(customValidator)
+          customValidator.maxLengthValidator(100).bind(customValidator)
         ]
       ],
       fileType: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
-      requiredDocumentType: [
-        ''
-      ],
+      requiredDocumentType: [''],
       uploadedDate: [
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -2014,10 +1471,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -2025,10 +1479,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -2036,10 +1487,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ],
@@ -2047,10 +1495,7 @@ export class FileUploadsForm {
         '',
         [
           customValidator
-            .conditionalValidation(
-              () => this.addNewFileUploadIndicator.value,
-              Validators.required
-            )
+            .conditionalValidation(() => this.addNewFileUploadIndicator.value, Validators.required)
             .bind(customValidator)
         ]
       ]
@@ -2061,16 +1506,13 @@ export class FileUploadsForm {
 export class SupportingDocuments {
   hasCopyOfARentalAgreementOrLease?: boolean;
 
-  constructor(
-  ) { }
+  constructor() {}
 }
 
 export class SupportingDocumentsForm {
   hasCopyOfARentalAgreementOrLease = new UntypedFormControl();
 
-  constructor(
-    supportingDocuments: SupportingDocuments,
-  ) {
+  constructor(supportingDocuments: SupportingDocuments) {
     if (supportingDocuments.hasCopyOfARentalAgreementOrLease != null) {
       this.hasCopyOfARentalAgreementOrLease.setValue(supportingDocuments.hasCopyOfARentalAgreementOrLease);
     }

@@ -10,6 +10,23 @@ import { CurrentApplication } from 'src/app/core/api/models';
 import {CaseEligibility} from 'src/app/core/model/caseEligibilityEnum';
 import { AppealConfirmationDialogComponent } from './appeal-confirmation-dialog/appeal-confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DFAAppealDataService } from 'src/app/feature-components/dfa-appeal/dfa-appeal-data.service';
+
+// Temporary extension until the OpenAPI spec includes appealStatusBar
+// ####################################################################
+interface CurrentCaseWithAppeals extends CurrentApplication {
+  appealStatusBar?: AppealStatusItem[]; // Replace with actual type if available
+}
+
+interface AppealStatusItem {
+  label: string;
+  statusColor?: string;
+  currentStep?: boolean;
+  stage?: string;
+  isCompleted?: boolean;
+  isFinalStep?: boolean;
+}
+// ####################################################################
 
 @Component({
   selector: 'app-dfadashboard-application',
@@ -24,6 +41,8 @@ export class DfaApplicationComponent implements OnInit {
     this.appSessionService.currentApplicationsCount.emit(value);
   }
 
+  
+
   items = [
     { label: "Draft Application", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { label: "Submitted Application", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
@@ -36,7 +55,7 @@ export class DfaApplicationComponent implements OnInit {
     { label: "DFA Decision Made", isCompleted: false, currentStep: false, isFinalStep: true, isErrorInStatus: false },
   ];
 
-  appealitems = [
+  appealItems = [
     { label: "Draft Application", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { label: "Submitted Application", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { label: "Reviewing Application", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
@@ -51,6 +70,16 @@ export class DfaApplicationComponent implements OnInit {
     { label: "Appeal Closed", isCompleted: false, currentStep: false, isFinalStep: true, isErrorInStatus: false },
   ];
 
+  appealstages =[
+    { label: "Appeal Submitted", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { label: "Appeal In Progress", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { label: "Appeal Eligibility Decision", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { label: "Accessing Damage", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { label: "Reviewing Damage Report", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { label: "Appeal Closed", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+  ]
+
+
   lstApplications: ApplicationExtended[] = [];
   matchStatusFound = false;
   isLinear = true;
@@ -59,6 +88,7 @@ export class DfaApplicationComponent implements OnInit {
   private sixtyOneDaysAgo: number;
   public isLoading: boolean = true;
   public color: string = "'#169BD5";
+  appealMatchStatusFound = false;
 
   constructor(
     private profileDataService: ProfileDataService,
@@ -69,6 +99,7 @@ export class DfaApplicationComponent implements OnInit {
     private dfaApplicationStartDataService: DFAApplicationStartDataService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
+    private dfaAppealDataService: DFAAppealDataService
   ) {
     const navigation = this.router.getCurrentNavigation();
     this.appType = this.route.snapshot.data["apptype"];
@@ -84,12 +115,24 @@ export class DfaApplicationComponent implements OnInit {
           var lstDataUnModified = [];
           var initialList = lstData;
           lstDataUnModified.push(initialList);
-          lstData.forEach(objApp => {
-            var isFound = false;
+          lstData.forEach((objApp, i) => {
+            let isFound = false;
             var jsonVal = JSON.stringify(this.items);
 
+            // @TODO: Fix once backend is ready, remove it completely and use backend data and generate the types
+            if(i % 2 == 0) objApp.appeals = [
+              {
+                appealStatus: 'In Progress',
+                appealType: 'DFA Appeal',
+              },
+              { 
+                appealStatus: 'Closed',
+                appealType: 'DFA Appeal',
+              }
+            ];
+
             if (objApp.status && objApp.status.toLowerCase().indexOf('appeal') > -1) {
-              jsonVal = JSON.stringify(this.appealitems);
+              jsonVal = JSON.stringify(this.appealItems);
               objApp.hasAppealStages = true;
             }
 
@@ -123,6 +166,55 @@ export class DfaApplicationComponent implements OnInit {
               }
 
             });
+
+             // This code needs to be updated once the Dynamics API sends the appealStatusBar in the response
+            // #############################################################################################
+            const objAppWithAppeals = objApp as CurrentCaseWithAppeals;
+
+            // Initialize appealStatusBar if it's missing
+            if (!Array.isArray(objAppWithAppeals.appealStatusBar)) {
+              objAppWithAppeals.appealStatusBar = [...this.appealstages];
+            }
+
+            objAppWithAppeals.appealStatusBar.forEach((objStatItem) => {
+              const statusMatch =
+                objApp.status &&
+                objStatItem.label?.toLowerCase() === objApp.status.toLowerCase();
+
+              if (statusMatch) {
+                objStatItem.currentStep = true;
+                isFound = true;
+                this.matchStatusFound = true;
+
+                
+                // Determine statusColor based on logic
+                // if (['Ineligible', 'Withdrawn'].includes(objApp.stage || '')) {
+                //   objApp.statusColor = '#E25E63';
+                // } else if (
+                //   objApp.status?.toLowerCase().includes('decision made') &&
+                //   objApp.stage?.toLowerCase().includes('progress')
+                // ) {
+                //   objApp.statusColor = '#FDCB52';
+                // } else {
+                //   objApp.statusColor = objStatItem.statusColor;
+                // }
+              }
+
+              // Fallback if status not matched
+              if (!isFound) {
+                objStatItem.isCompleted = true;
+              }
+
+              // Final step validation
+              if (objStatItem.isFinalStep) {
+                if (!isFound) {
+                  objApp.isErrorInStatus = true;
+                } else if (statusMatch) {
+                  objStatItem.isCompleted = true;
+                }
+              }
+            });
+            // #############################################################################################
 
             lstDataModified.push(objApp);
           })
@@ -254,6 +346,18 @@ export class DfaApplicationComponent implements OnInit {
     
             //}
           });
+  }
+
+  viewAppealAfterSubmission(applItem: ApplicationExtended, type: string): void {
+    const caseId = applItem.applicationId;
+
+    if (!caseId || !type) {
+      return;
+    }
+
+    this.dfaAppealDataService.setCaseDetails({...applItem, caseId, type });
+    
+    this.router.navigate([`/dfa-appeal/${type}/${caseId}`]);
   }
 
 }
