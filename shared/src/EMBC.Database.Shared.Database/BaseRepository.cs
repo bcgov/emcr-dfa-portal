@@ -88,49 +88,6 @@ public abstract class BaseRepository<TEntity, TDto>
             .HasError;
     }
 
-    [Obsolete("Use Update(dto, properties) instead.")]
-    public virtual bool Update(Guid id, params Expression<Func<TDto, object>>[] properties)
-    {
-        var entity = _databaseContext
-            .CreateQuery<TEntity>()
-            .FirstOrDefault(x => x.Id == id);
-        if (entity == null)
-            return false;
-
-        // parse the value for each expression and set the value to the dto, so that we can map the values back to the entity
-        // this will give use mappedEntity, an entity with all of the values mapped
-        var dto = _mapper.Map<TDto>(entity);
-        foreach (var expression in properties)
-        {
-            var binaryExpression = (expression.Body as UnaryExpression).Operand as BinaryExpression;
-            var propertyName = ((binaryExpression.Left as UnaryExpression).Operand as MemberExpression).Member.Name;
-            var operand = (binaryExpression.Right as UnaryExpression).Operand;
-            var value = Expression.Lambda(operand).Compile().DynamicInvoke();
-            var propertyInfo = dto.GetType().GetProperty(propertyName);
-            propertyInfo.SetValue(dto, value);
-        }
-        var mappedEntity = Map(dto);
-
-        // map the expression to entity expression and parse the value from the mapped entity
-        // apply each value to the tracked entity
-        foreach (var expression in properties)
-        {
-            var entityExpression = _mapper.MapExpression<Expression<Func<TEntity, object>>>(expression);
-            var binaryExpression = (entityExpression.Body as UnaryExpression).Operand as BinaryExpression;
-            var propertyName = ((binaryExpression.Left as UnaryExpression).Operand as MemberExpression).Member.Name;
-            var attributeName = propertyName.ToLower();
-            var value = mappedEntity.Attributes.Single(x => x.Key == attributeName).Value;
-            entity.Attributes[attributeName] = value;
-        }
-
-        // only the properties changed on the entity will be updated
-        _databaseContext.UpdateObject(entity);
-
-        return !_databaseContext
-            .SaveChanges()
-            .HasError;
-    }
-
     public virtual bool Update(TDto dto)
     {
         if (dto.Id == Guid.Empty)
