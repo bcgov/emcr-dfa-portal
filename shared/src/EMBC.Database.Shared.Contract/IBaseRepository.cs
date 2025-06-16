@@ -8,7 +8,6 @@ public interface IBaseRepository<TDto> where TDto : IDto
     IEnumerable<TDto> Where(Expression<Func<TDto, bool>> predicates);
     bool Update(TDto dto);
     bool Update(TDto dto, params Expression<Func<TDto, object>>[] properties);
-    bool Update(Guid id, params Expression<Func<TDto, object>>[] properties);
     bool TryDelete(Guid id);
     bool TryDelete(TDto dto, bool isRecursive = false);
     bool TryDeleteRange(IEnumerable<TDto> invoices, bool isRecursive = false);
