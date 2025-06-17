@@ -33,13 +33,7 @@ public partial class DatabaseContext
     }
 }
 
-public class TransactionContext
+public class TransactionContext(DatabaseContext context)
 {
-    private readonly DatabaseContext _context;
-    public TransactionContext(DatabaseContext context)
-    {
-        _context = context;
-    }
-
-    public void Commit() => _context.CommitTransaction();
+    public void Commit() => context.CommitTransaction();
 }

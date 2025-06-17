@@ -96,6 +96,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string dfa_appapplicationid { get; set; }
     }
 
+    #pragma warning disable CS8981
     public class annotation
     {
         public Guid annotationid { get; set; }
