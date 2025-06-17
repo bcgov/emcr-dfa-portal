@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AppealReason, DfaAppeal, SignAndSubmit } from '../../core/model/dfa-appeals-main.model';
 import { CacheService } from '../../core/services/cache.service';
+import { DfaApplicationMain } from 'src/app/core/api/models';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class DFAAppealDataService {
@@ -9,6 +11,8 @@ export class DFAAppealDataService {
   private _dfaAppeal: DfaAppeal;
   private _applicationId: string;
   private _caseDetails: any;
+  private _fullApplication: BehaviorSubject<DfaApplicationMain> = new BehaviorSubject<DfaApplicationMain>(null);
+  private _fullApplication$: Observable<DfaApplicationMain> = this._fullApplication.asObservable();
 
   constructor(
     private cacheService: CacheService
@@ -57,6 +61,14 @@ export class DFAAppealDataService {
 
   public getCaseDetails(): any {
     return this._caseDetails;
+  }
+
+  setFullApplication(app: any) {
+    this._fullApplication.next(app);
+  }
+
+  getFullApplication() {
+    return this._fullApplication$;
   }
 
   public createAppealDTO(): DfaAppeal {

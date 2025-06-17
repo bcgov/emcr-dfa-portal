@@ -3,7 +3,11 @@ import { FormGroup } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { SecondaryApplicant } from 'src/app/core/api/models';
+import {
+  DfaApplicationMain,
+  SecondaryApplicant
+} from 'src/app/core/api/models';
+import { ApplicationService } from 'src/app/core/api/services';
 import { ComponentMetaDataModel } from '../../core/model/componentMetaData.model';
 import { ComponentCreationService } from '../../core/services/componentCreation.service';
 import { FormCreationService } from '../../core/services/formCreation.service';
@@ -37,6 +41,8 @@ export class DfaAppealComponent implements OnInit {
   appealReasonValid: boolean = false;
   signAndSubmitValid: boolean = false;
   caseDetails: any;
+  fullApplication: DfaApplicationMain | undefined;
+  fullApplication$: Subscription;
 
   constructor(
     private router: Router,
@@ -45,9 +51,9 @@ export class DfaAppealComponent implements OnInit {
     private formCreationService: FormCreationService,
     private cd: ChangeDetectorRef,
     private dfaAppealDataService: DFAAppealDataService,
-    private dfaAppealService: DfaAppealService
-  ) {
-  }
+    private dfaAppealService: DfaAppealService,
+    private applicationService: ApplicationService
+  ) {}
 
   ngOnInit(): void {
     // Get appeal type and case ID from route params
@@ -56,6 +62,13 @@ export class DfaAppealComponent implements OnInit {
       this.caseId = params['caseId'];
 
       this.caseDetails = this.dfaAppealDataService.getCaseDetails();
+
+      // Fetch full application details using ApplicationService
+      this.fullApplication$=this.applicationService.applicationGetApplicationMain({ applicationId: this.caseId })
+        .subscribe(app => {
+          this.fullApplication = app;
+          this.dfaAppealDataService.setFullApplication(app);
+        });
 
       // Clear old data and forms
       this.dfaAppealDataService.appealReason = null;
@@ -66,6 +79,10 @@ export class DfaAppealComponent implements OnInit {
       // Create steps based on appeal type
       this.steps = this.componentService.createDFAAppealSteps(this.appealType);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.fullApplication$.unsubscribe();
   }
 
   /**

@@ -22,7 +22,7 @@
               whoseSignature="Applicant">
             </app-signature>
           </div>
-          <div class="col-md-6 bottomspace">
+          <div class="col-md-6 bottomspace" *ngIf="fullApplication?.signAndSubmit?.secondaryApplicantSignature?.signedName">
             <app-signature
               [signatureFormGroup]="signAndSubmitForm.get('secondaryApplicantSignature')"
               [isReadOnly]="isReadOnly"
