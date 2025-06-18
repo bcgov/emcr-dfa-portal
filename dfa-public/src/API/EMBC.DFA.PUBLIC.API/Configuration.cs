@@ -283,7 +283,9 @@ namespace EMBC.DFA.API
             services.AddTransient<IDynamicsGateway, DynamicsGateway>();
 
             services.Configure<PdfServiceConfigs>(configuration.GetSection("pdfService"));
-            services.AddTransient<PDFServiceHandler, PDFServiceHandler>();
+            services.AddTransient<TokenDelegatingHandler>();
+            services.AddHttpClient<PDFServiceHandler>()
+                .AddHttpMessageHandler<TokenDelegatingHandler>();
             services.AddTransient<BearerTokenProvider>();
 
             // 2024-07-02 EMCRI-363 waynezen: added

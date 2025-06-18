@@ -18,8 +18,7 @@ public class BearerTokenProvider(HttpClient httpClient, IOptions<PdfServiceConfi
 
     public async Task<string> GetAccessTokenAsync()
     {
-        // Add Policy to retrieve token if existing token returns 401 Unauthorized, see CAS Adapter solution for an example
-        //if (_bearerToken == null)
+        if (_bearerToken == null)
             await RefreshTokenAsync();
         return _bearerToken;
     }
