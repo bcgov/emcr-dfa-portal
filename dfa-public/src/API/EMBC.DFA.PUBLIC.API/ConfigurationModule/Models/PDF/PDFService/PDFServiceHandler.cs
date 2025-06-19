@@ -3,13 +3,20 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using EMBC.DFA.API.Services;
 using EMBC.DFA.PUBLIC.API.Services;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace EMBC.DFA.API.ConfigurationModule.Models.PDF.PDFService
 {
+    public class PdfServiceConfigs
+    {
+        public string GeneratePDFFile { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+        public string TokenUrl { get; set; }
+    }
+
     public class PDFServiceHandler
     {
         private PdfServiceConfigs options;

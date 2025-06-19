@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using EMBC.Database.Shared.Contract;
-using EMBC.DFA.API.Services;
+using EMBC.DFA.API.ConfigurationModule.Models.PDF.PDFService;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
