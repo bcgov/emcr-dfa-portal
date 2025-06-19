@@ -1,40 +1,71 @@
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using AutoMapper;
+using EMBC.Database.Contract;
+using EMBC.Database.Resources;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EMBC.DFA.API.Controllers
 {
-    [ApiController]
     [Route("api/appeal")]
+    [ApiController]
     public class AppealController : ControllerBase
     {
-        // POST: api/appeal/create
-        [HttpPost("create")]
-        public IActionResult CreateAppeal([FromBody] AppealModel appeal)
+        private readonly IMapper mapper;
+        private readonly IAppealRepository repository;
+
+        public AppealController(IMapper mapper, IAppealRepository repository)
         {
-            // Add logic to create appeal
-            return Ok(appeal);
+            this.mapper = mapper;
+            this.repository = repository;
         }
 
-        // PUT: api/appeal/{id}
-        [HttpPut("{id}")]
-        public IActionResult UpdateAppeal(string id, [FromBody] AppealModel appeal)
+        private string currentUserId => User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+        /// <summary>
+        /// Create an appeal
+        /// </summary>
+        /// <param name="appeal">The appeal information</param>
+        /// <returns>appeal id</returns>
+        [HttpPost("create")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult CreateAppeal([FromBody] AppealModel appeal)
         {
-            // Add logic to update appeal
-            return Ok(appeal);
+            if (appeal == null) return BadRequest("Appeal details cannot be empty.");
+
+            var mappedAppeal = mapper.Map<Appeal>(appeal);
+            repository.Insert(mappedAppeal);
+            return Ok(mappedAppeal.Id);
+        }
+
+        /// <summary>
+        /// Retrieve an appeal
+        /// </summary>
+        /// <param name="id">The appeal id</param>
+        /// <returns>The appeal information</returns>
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetAppeal(Guid id)
+        {
+            var appeal = repository.GetById(id);
+            if (appeal == null) return NotFound();
+            var model = mapper.Map<AppealModel>(appeal);
+            return Ok(model);
         }
     }
 
     public class AppealModel
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         public string CaseId { get; set; }
-        public AppealReasonModel AppealReason { get; set; }
-        public SignAndSubmitModel SignAndSubmit { get; set; }
-        public string Status { get; set; }
-    }
-
-    public class AppealReasonModel
-    {
         public string Reason { get; set; }
+        public SignAndSubmitModel? SignAndSubmit { get; set; }
+        public string Status { get; set; }
     }
 
     public class SignAndSubmitModel

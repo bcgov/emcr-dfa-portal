@@ -4,14 +4,20 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
+
+using EMBC.Database.Contract;
 using EMBC.DFA.API;
 using EMBC.DFA.API.ConfigurationModule.Models;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.Controllers;
+
 using Google.Protobuf.WellKnownTypes;
+
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.VisualBasic;
+
 using YamlDotNet.Core.Tokens;
+
 using static StackExchange.Redis.Role;
 using Enum = System.Enum;
 
@@ -292,7 +298,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.briefDescription, opts => opts.MapFrom(s => s.dfa_description))
                 .ForMember(d => d.wereYouEvacuated, opts => opts.MapFrom(s => s.dfa_wereyouevacuatedduringtheevent2 == (int)YesNoOptionSet.Yes ? true : (s.dfa_wereyouevacuatedduringtheevent2 == (int)YesNoOptionSet.No ? false : (bool?)null)));
 
-            CreateMap<dfa_appapplicationmain_retrieve, SignAndSubmit>()
+            CreateMap<dfa_appapplicationmain_retrieve, EMBC.DFA.API.Controllers.SignAndSubmit>()
                 .ForMember(d => d.ninetyDayDeadline, opts => opts.MapFrom(s => s.dfa_90daydeadline))
                 .ForPath(d => d.applicantSignature.signedName, opts => opts.MapFrom(s => s.dfa_primaryapplicantprintname))
                 .ForPath(d => d.applicantSignature.dateSigned, opts => opts.MapFrom(s => s.dfa_primaryapplicantsigneddate))
@@ -539,6 +545,32 @@ namespace EMBC.DFA.API.Mappers
             CreateMap<Address, ESS.Shared.Contracts.Events.Address>()
                 .ReverseMap()
                 ;
+
+            //Mapping from AppealModel (API Model) to Appeal (DTO API Layer)
+            CreateMap<AppealModel, Appeal>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? Guid.NewGuid() : Guid.Parse(src.Id)))
+                .ForMember(dest => dest.CaseId, opt => opt.MapFrom(src => src.CaseId))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.Reason))
+                .ForMember(dest => dest.SignAndSubmit, opt => opt.MapFrom(src => src.SignAndSubmit));
+
+            // Fully qualify the destination type for SignAndSubmit and DigitalSignature:
+            CreateMap<SignAndSubmitModel, EMBC.Database.Contract.SignAndSubmit>()
+                .ForMember(dest => dest.NinetyDayDeadline, opt => opt.MapFrom(src =>
+                    string.IsNullOrEmpty(src.NinetyDayDeadline) ? (DateTime?)null : DateTime.Parse(src.NinetyDayDeadline)))
+                .ForMember(dest => dest.ApplicantSignature, opt => opt.MapFrom(src => src.ApplicantSignature))
+                .ForMember(dest => dest.SecondaryApplicantSignature, opt => opt.MapFrom(src => src.SecondaryApplicantSignature));
+
+            CreateMap<SignatureBlockModel, EMBC.Database.Contract.DigitalSignature>()
+                .ForMember(dest => dest.Signature, opt => opt.MapFrom(src => src.Signature))
+                .ForMember(dest => dest.SignedName, opt => opt.MapFrom(src => src.SignedName))
+                .ForMember(dest => dest.DateSigned, opt => opt.MapFrom(src =>
+                    string.IsNullOrEmpty(src.DateSigned) ? DateTime.MinValue : DateTime.Parse(src.DateSigned)));
+
+            // Mapping from Appeal DTO/API Layer to Appeal Model
+            CreateMap<Appeal, AppealModel>();
+            CreateMap<EMBC.Database.Contract.SignAndSubmit, SignAndSubmitModel>();
+            CreateMap<DigitalSignature, SignatureBlockModel>();
         }
 
         public FileCategory ConvertStringToFileCategory(string documenttype)
