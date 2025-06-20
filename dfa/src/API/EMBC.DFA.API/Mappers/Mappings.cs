@@ -548,7 +548,7 @@ namespace EMBC.DFA.API.Mappers
 
             //Mapping from AppealModel (API Model) to Appeal (DTO API Layer)
             CreateMap<AppealModel, Appeal>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? Guid.NewGuid() : Guid.Parse(src.Id)))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.CaseId, opt => opt.MapFrom(src => src.CaseId))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.Reason))

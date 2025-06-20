@@ -34,4 +34,4 @@ export function appealCreateAppeal(http: HttpClient, rootUrl: string, params: Ap
   );
 }
 
-appealCreateAppeal.PATH = '/api/appeal/create';
+appealCreateAppeal.PATH = '/api/Appeal/create';

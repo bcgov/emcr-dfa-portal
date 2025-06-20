@@ -23,7 +23,7 @@ export class AppealService extends BaseService {
   }
 
   /** Path part for operation `appealCreateAppeal()` */
-  static readonly AppealCreateAppealPath = '/api/appeal/create';
+  static readonly AppealCreateAppealPath = '/api/Appeal/create';
 
   /**
    * Create an appeal.
@@ -56,7 +56,7 @@ export class AppealService extends BaseService {
   }
 
   /** Path part for operation `appealGetAppeal()` */
-  static readonly AppealGetAppealPath = '/api/appeal/{id}';
+  static readonly AppealGetAppealPath = '/api/Appeal/{id}';
 
   /**
    * Retrieve an appeal.

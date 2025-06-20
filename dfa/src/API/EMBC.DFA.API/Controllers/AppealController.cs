@@ -5,13 +5,15 @@ using System.Security.Claims;
 using AutoMapper;
 using EMBC.Database.Contract;
 using EMBC.Database.Resources;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EMBC.DFA.API.Controllers
 {
-    [Route("api/appeal")]
+    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AppealController : ControllerBase
     {
         private readonly IMapper mapper;
@@ -32,7 +34,6 @@ namespace EMBC.DFA.API.Controllers
         /// <returns>appeal id</returns>
         [HttpPost("create")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult CreateAppeal([FromBody] AppealModel appeal)
         {
@@ -53,7 +54,7 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetAppeal(Guid id)
         {
-            var appeal = repository.GetById(id);
+            var appeal = repository.FirstOrDefault(e => e.Id == id);
             if (appeal == null) return NotFound();
             var model = mapper.Map<AppealModel>(appeal);
             return Ok(model);

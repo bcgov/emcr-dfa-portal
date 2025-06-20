@@ -4,9 +4,13 @@ public class AppealMapper : Profile
 {
     public AppealMapper()
     {
+        CreateMap<string, Guid>().ConvertUsing(src =>
+            string.IsNullOrEmpty(src) ? Guid.NewGuid() : Guid.Parse(src)
+        );
+
         CreateMap<DFA_Appeal, Appeal>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.DFA_AppealId ?? Guid.Empty))
-            .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => src.StateCode.HasValue ? (StateCode)(int)src.StateCode.Value : StateCode.Active))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.DFA_AppealId))
+            .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => (StateCode)(int)src.StateCode))
             .ForMember(dest => dest.CaseId, opt => opt.MapFrom(src => src.DFA_CaseId != null ? src.DFA_CaseId.Id.ToString() : null))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.DFA_AppealStatus.HasValue ? src.DFA_AppealStatus.Value.ToString() : null))
             .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.DFA_Reason))

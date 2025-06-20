@@ -33,4 +33,4 @@ export function appealGetAppeal(http: HttpClient, rootUrl: string, params: Appea
   );
 }
 
-appealGetAppeal.PATH = '/api/appeal/{id}';
+appealGetAppeal.PATH = '/api/Appeal/{id}';
