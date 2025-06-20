@@ -145,29 +145,20 @@ export class DfaAppealComponent implements OnInit {
       this.submitAppeal();
     } else {
       this.setFormData(component);
-      let appeal = this.dfaAppealDataService.createAppealDTO();
-      this.dfaAppealService.upsertAppeal(appeal).subscribe(x => {
-        // determine if step is complete
-        switch (component) {
-          case 'appeal-reason':
-            if (this.form.valid) stepper.selected.completed = true;
-            else stepper.selected.completed = false;
-            break;
-          case 'sign-and-submit':
-            if (this.form.valid) stepper.selected.completed = true;
-            else stepper.selected.completed = false;
-            break;
-          default:
-            break;
-        }
-        this.form$.unsubscribe();
-        stepper.next();
-        this.form.markAllAsTouched();
-      },
-      error => {
-        console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
-      })
+      switch (component) {
+        case 'appeal-reason':
+          if (this.form.valid) stepper.selected.completed = true;
+          else stepper.selected.completed = false;
+          break;
+        case 'sign-and-submit':
+          if (this.form.valid) stepper.selected.completed = true;
+          else stepper.selected.completed = false;
+          break;
+        default:
+          break;
+      }
+      stepper.next();
+      this.form.markAllAsTouched();
     }
   }
 
@@ -269,7 +260,7 @@ export class DfaAppealComponent implements OnInit {
     this.setFormData('sign-and-submit');
     
     let appeal = this.dfaAppealDataService.createAppealDTO();
-    this.dfaAppealService.upsertAppeal(appeal).subscribe({
+    this.dfaAppealService.insertAppeal(appeal).subscribe({
       next: () => {
         this.isLoading = false;
         this.cd.detectChanges();
