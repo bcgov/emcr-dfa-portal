@@ -18,15 +18,33 @@ export class AppealReason {
  **/
 export class AppealReasonForm {
   reason = new UntypedFormControl('', Validators.required);
+  reviewedEvaluatorReport = new UntypedFormControl('', Validators.required);
   
   constructor(
     appealReason: AppealReason, 
-    customValidator: CustomValidationService
+    customValidator: CustomValidationService,
+    appealType: AppealType
   ) {
     if (appealReason.reason){
       this.reason.setValue(appealReason.reason);
     }
+    if (appealType === AppealType.Amount) {
+      this.reviewedEvaluatorReport = new UntypedFormControl('', Validators.required);
+      if ((appealReason as any).reviewedEvaluatorReport) {
+        this.reviewedEvaluatorReport.setValue((appealReason as any).reviewedEvaluatorReport);
+      }
+    } else {
+      this.reviewedEvaluatorReport = new UntypedFormControl('');
+    }
   }
+
+  get valid(): boolean {
+    return this.reason.valid &&
+      (this.reviewedEvaluatorReport.validator
+        ? this.reviewedEvaluatorReport.valid
+        : true);
+  }
+
 }
 
 export class SignAndSubmit {

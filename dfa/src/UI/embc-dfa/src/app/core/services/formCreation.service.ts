@@ -54,6 +54,7 @@ import {
   Restriction,
   RestrictionForm
 } from '../model/profile.model';
+import { DFAAppealDataService } from 'src/app/feature-components/dfa-appeal/dfa-appeal-data.service';
 import { CustomValidationService } from './customValidation.service';
 
 @Injectable({ providedIn: 'root' })
@@ -319,7 +320,7 @@ export class FormCreationService {
   appealReasonForm: BehaviorSubject<UntypedFormGroup | undefined> =
     new BehaviorSubject(
       this.formBuilder.group(
-        new AppealReasonForm(new AppealReason(), this.customValidator)
+        new AppealReasonForm(new AppealReason(), this.customValidator, this.dfaAppealDataService.appealType)
       )
     );
 
@@ -347,6 +348,7 @@ export class FormCreationService {
 
   constructor(
     private formBuilder: UntypedFormBuilder,
+    private dfaAppealDataService: DFAAppealDataService,
     private customValidator: CustomValidationService
   ) {
     this.insuranceOptionChanged = new EventEmitter<any>();
@@ -714,7 +716,7 @@ export class FormCreationService {
   clearAppealReasonData(): void {
     this.appealReasonForm.next(
       this.formBuilder.group(
-        new AppealReasonForm(new AppealReason(), this.customValidator)
+        new AppealReasonForm(new AppealReason(), this.customValidator, this.dfaAppealDataService.appealType)
       )
     );
   }
