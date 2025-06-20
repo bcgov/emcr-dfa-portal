@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AppealReason, DfaAppeal, SignAndSubmit } from '../../core/model/dfa-appeals-main.model';
+import {
+  AppealReason,
+  AppealStatus,
+  AppealType,
+  DfaAppeal,
+  SignAndSubmit
+} from '../../core/model/dfa-appeals-main.model';
 import { CacheService } from '../../core/services/cache.service';
 import { DfaApplicationMain } from 'src/app/core/api/models';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -13,10 +19,9 @@ export class DFAAppealDataService {
   private _caseDetails: any;
   private _fullApplication: BehaviorSubject<DfaApplicationMain> = new BehaviorSubject<DfaApplicationMain>(null);
   private _fullApplication$: Observable<DfaApplicationMain> = this._fullApplication.asObservable();
+  private _appealType: AppealType;
 
-  constructor(
-    private cacheService: CacheService
-  ) {}
+  constructor(private cacheService: CacheService) {}
 
   public setDFAAppeal(dfaAppeal: DfaAppeal): void {
     this._dfaAppeal = dfaAppeal;
@@ -33,6 +38,18 @@ export class DFAAppealDataService {
 
   public setAppealReason(appealReason: AppealReason): void {
     this._appealReason = appealReason;
+  }
+
+  public get appealType(): AppealType {
+    return this._appealType;
+  }
+  
+  public set appealType(value: AppealType) {
+    this._appealType = value;
+  }
+  
+  public setAppealType(appealType: AppealType): void {
+    this._appealType = appealType;
   }
 
   public get signAndSubmit(): SignAndSubmit {
@@ -74,13 +91,11 @@ export class DFAAppealDataService {
   public createAppealDTO(): DfaAppeal {
     return {
       id: this._applicationId,
-      caseId: this._dfaAppeal?.caseId ?? '',
-      status: this._dfaAppeal?.status ?? '',
-      appealReason: this._appealReason,
-      signAndSubmit: this._signAndSubmit
+      caseId: this._caseDetails?.caseId ?? '',
+      type: this._appealType,
+      status: AppealStatus.InProgress,
+      reason: this._appealReason?.reason ?? '',
+      ...(this._signAndSubmit ? { signAndSubmit: this._signAndSubmit } : {}) // only include if present
     };
   }
 }
-
-
-

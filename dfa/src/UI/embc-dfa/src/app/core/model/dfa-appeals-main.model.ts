@@ -72,13 +72,31 @@ export class AppealSignAndSubmitForm {
   }
 }
 
+export enum AppealType {
+  Amount = 222710000,
+  Eligibility = 222710001,
+  Other = 222710002
+}
+
+export enum AppealStatus {
+  InEApprovals = 'In eApprovals',
+  InProgress = 'In Progress',
+  InProgressWithLegal = 'In Progress - with legal',
+  InProgressWithSME = 'In Progress - with SME',
+  InProgressWithAppealsOfficer = 'In Progress - with Appeals Officer',
+  InProgressWithEvaluator = 'In Progress - with Evaluator',
+  Received = 'Received',
+  PendingDecision = 'Pending Decision'
+}
+
 /**
  * DFA Appeals Main
  **/
 export interface DfaAppeal {
-  id: string;
+  id?: string;
   caseId: string;
-  appealReason: AppealReason;
-  signAndSubmit: SignAndSubmit;
-  status: string;
+  type: AppealType;
+  status: AppealStatus;
+  reason: string;
+  signAndSubmit?: SignAndSubmit;
 }

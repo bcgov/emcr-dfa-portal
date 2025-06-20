@@ -11,21 +11,25 @@ import { RequestBuilder } from '../../request-builder';
 import { AppealModel } from '../../models/appeal-model';
 
 export interface AppealCreateAppeal$Params {
-      body: AppealModel
+  
+    /**
+     * The appeal information
+     */
+    body: AppealModel
 }
 
-export function appealCreateAppeal(http: HttpClient, rootUrl: string, params: AppealCreateAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+export function appealCreateAppeal(http: HttpClient, rootUrl: string, params: AppealCreateAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
   const rb = new RequestBuilder(rootUrl, appealCreateAppeal.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'blob', accept: 'application/octet-stream', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Blob>;
+      return r as StrictHttpResponse<string>;
     })
   );
 }

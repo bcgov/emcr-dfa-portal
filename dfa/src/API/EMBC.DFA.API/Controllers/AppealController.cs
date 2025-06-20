@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using AutoMapper;
@@ -30,7 +31,7 @@ namespace EMBC.DFA.API.Controllers
         /// <param name="appeal">The appeal information</param>
         /// <returns>appeal id</returns>
         [HttpPost("create")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult CreateAppeal([FromBody] AppealModel appeal)
@@ -62,10 +63,15 @@ namespace EMBC.DFA.API.Controllers
     public class AppealModel
     {
         public string? Id { get; set; }
+        [Required]
         public string CaseId { get; set; }
-        public string Reason { get; set; }
-        public SignAndSubmitModel? SignAndSubmit { get; set; }
+        [Required]
         public string Status { get; set; }
+        [Required]
+        public string Reason { get; set; }
+        [Required]
+        public int Type { get; set; }
+        public SignAndSubmitModel? SignAndSubmit { get; set; }
     }
 
     public class SignAndSubmitModel

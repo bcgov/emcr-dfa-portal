@@ -5,7 +5,6 @@
 export type { Address } from './models/address';
 export type { AddressDataConflict } from './models/address-data-conflict';
 export type { AppealModel } from './models/appeal-model';
-export type { AppealReasonModel } from './models/appeal-reason-model';
 export { ApplicantOption } from './models/applicant-option';
 export type { AppTypeInsurance } from './models/app-type-insurance';
 export type { AreaCommunity } from './models/area-community';
