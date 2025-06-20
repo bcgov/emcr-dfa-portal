@@ -2,7 +2,6 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {
-  AppealReason,
   AppealReasonForm,
   SignAndSubmit as AppealSignAndSubmit,
   AppealSignAndSubmitForm
@@ -320,7 +319,7 @@ export class FormCreationService {
   appealReasonForm: BehaviorSubject<UntypedFormGroup | undefined> =
     new BehaviorSubject(
       this.formBuilder.group(
-        new AppealReasonForm(new AppealReason(), this.customValidator, this.dfaAppealDataService.appealType)
+        new AppealReasonForm(this.dfaAppealDataService.appealReason, this.customValidator, this.dfaAppealDataService.appealType)
       )
     );
 
@@ -716,7 +715,7 @@ export class FormCreationService {
   clearAppealReasonData(): void {
     this.appealReasonForm.next(
       this.formBuilder.group(
-        new AppealReasonForm(new AppealReason(), this.customValidator, this.dfaAppealDataService.appealType)
+        new AppealReasonForm(this.dfaAppealDataService.appealReason, this.customValidator, this.dfaAppealDataService.appealType)
       )
     );
   }

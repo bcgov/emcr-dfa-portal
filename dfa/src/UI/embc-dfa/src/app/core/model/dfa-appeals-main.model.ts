@@ -2,16 +2,6 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
 import { SignatureBlock } from 'src/app/core/api/models';
 import { CustomValidationService } from '../services/customValidation.service';
 
-/**
- * Appeal Reason (data class)
- **/
-export class AppealReason {
-  reason?: null | string;
-
-  constructor() {
-    this.reason = null;
-  }
-}
 
 /**
  * Appeal Reason Form (form class)
@@ -21,18 +11,15 @@ export class AppealReasonForm {
   reviewedEvaluatorReport = new UntypedFormControl('', Validators.required);
   
   constructor(
-    appealReason: AppealReason, 
+    appealReason: string,
     customValidator: CustomValidationService,
     appealType: AppealType
   ) {
-    if (appealReason.reason){
-      this.reason.setValue(appealReason.reason);
+    if (appealReason){
+      this.reason.setValue(appealReason || '');
     }
     if (appealType === AppealType.Amount) {
       this.reviewedEvaluatorReport = new UntypedFormControl('', Validators.required);
-      if ((appealReason as any).reviewedEvaluatorReport) {
-        this.reviewedEvaluatorReport.setValue((appealReason as any).reviewedEvaluatorReport);
-      }
     } else {
       this.reviewedEvaluatorReport = new UntypedFormControl('');
     }

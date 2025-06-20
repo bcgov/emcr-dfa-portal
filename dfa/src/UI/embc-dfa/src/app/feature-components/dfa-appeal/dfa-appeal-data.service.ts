@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {
-  AppealReason,
   AppealStatus,
   AppealType,
   DfaAppeal,
@@ -12,7 +11,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class DFAAppealDataService {
-  private _appealReason: AppealReason;
+  private _appealReason: string;
   private _signAndSubmit: SignAndSubmit;
   private _dfaAppeal: DfaAppeal;
   private _applicationId: string;
@@ -28,15 +27,15 @@ export class DFAAppealDataService {
     this.cacheService.set('dfa-appeal', dfaAppeal);
   }
 
-  public get appealReason(): AppealReason {
+  public get appealReason(): string {
     return this._appealReason;
   }
 
-  public set appealReason(appealReason: AppealReason) {
+  public set appealReason(appealReason: string) {
     this._appealReason = appealReason;
   }
 
-  public setAppealReason(appealReason: AppealReason): void {
+  public setAppealReason(appealReason: string): void {
     this._appealReason = appealReason;
   }
 
@@ -93,8 +92,8 @@ export class DFAAppealDataService {
       id: this._applicationId,
       caseId: this._caseDetails?.caseId ?? '',
       type: this._appealType,
-      status: AppealStatus.InProgress,
-      reason: this._appealReason?.reason ?? '',
+      status: AppealStatus.Received,
+      reason: this._appealReason ?? '',
       ...(this._signAndSubmit ? { signAndSubmit: this._signAndSubmit } : {}) // only include if present
     };
   }

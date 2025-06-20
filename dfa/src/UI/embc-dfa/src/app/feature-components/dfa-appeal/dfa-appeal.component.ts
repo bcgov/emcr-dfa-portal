@@ -112,10 +112,7 @@ export class DfaAppealComponent implements OnInit {
     switch (component) {
       case 'appeal-reason':
         if (this.appealReasonForm) {
-          this.dfaAppealDataService.appealReason = {
-            ...this.dfaAppealDataService.appealReason,
-            ...this.appealReasonForm.value
-          };
+          this.dfaAppealDataService.appealReason = this.appealReasonForm.value.reason;
         }
         break;
       case 'sign-and-submit':
