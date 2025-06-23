@@ -297,7 +297,6 @@ export class DfaDashProjectComponent implements OnInit {
     }
 
     this.lstFilteredProjects = this.lstProjects;
-    //this.lstFilteredProjects = this.lstFilteredProjects.map(x=> x)
   }
 
   ApplyFilter(type: number, searchText: string): void {

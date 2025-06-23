@@ -366,14 +366,13 @@ export class DfaDashClaimComponent implements OnInit {
 
   canAppealClaims(applItem: ClaimExtended): boolean {
     // Check if the claim is eligible for appeal based on its status and decision
-    var x=  applItem.claimDecision 
+    return applItem.claimDecision 
       && (
           applItem.claimDecision.toLowerCase() === this.DecisionEnum.ApprovedWithExclusions.toLowerCase() 
           || applItem.claimDecision.toLowerCase() === this.DecisionEnum.Ineligible.toLowerCase()
         )
       && (applItem.isAdjustmentClaim !== true && applItem.claimType !== this.ClaimTypeEnum.AdvancedPayment)
       && this.remainingDays(applItem) > 0; 
-      return true;
   }
 
   remainingDays(claim: ClaimExtended): number {
