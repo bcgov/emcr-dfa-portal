@@ -2,31 +2,36 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
 import { SignatureBlock } from 'src/app/core/api/models';
 import { CustomValidationService } from '../services/customValidation.service';
 
-/**
- * Appeal Reason (data class)
- **/
-export class AppealReason {
-  reason?: null | string;
-
-  constructor() {
-    this.reason = null;
-  }
-}
 
 /**
  * Appeal Reason Form (form class)
  **/
 export class AppealReasonForm {
   reason = new UntypedFormControl('', Validators.required);
+  reviewedEvaluatorReport = new UntypedFormControl('', Validators.required);
   
   constructor(
-    appealReason: AppealReason, 
-    customValidator: CustomValidationService
+    appealReason: string,
+    customValidator: CustomValidationService,
+    appealType: AppealType
   ) {
-    if (appealReason.reason){
-      this.reason.setValue(appealReason.reason);
+    if (appealReason){
+      this.reason.setValue(appealReason || '');
+    }
+    if (appealType === AppealType.Amount) {
+      this.reviewedEvaluatorReport = new UntypedFormControl('', Validators.required);
+    } else {
+      this.reviewedEvaluatorReport = new UntypedFormControl('');
     }
   }
+
+  get valid(): boolean {
+    return this.reason.valid &&
+      (this.reviewedEvaluatorReport.validator
+        ? this.reviewedEvaluatorReport.valid
+        : true);
+  }
+
 }
 
 export class SignAndSubmit {
@@ -72,13 +77,31 @@ export class AppealSignAndSubmitForm {
   }
 }
 
+export enum AppealType {
+  Amount = 222710000,
+  Eligibility = 222710001,
+  Other = 222710002
+}
+
+export enum AppealStatus {
+  InEApprovals = 'In eApprovals',
+  InProgress = 'In Progress',
+  InProgressWithLegal = 'In Progress - with legal',
+  InProgressWithSME = 'In Progress - with SME',
+  InProgressWithAppealsOfficer = 'In Progress - with Appeals Officer',
+  InProgressWithEvaluator = 'In Progress - with Evaluator',
+  Received = 'Received',
+  PendingDecision = 'Pending Decision'
+}
+
 /**
  * DFA Appeals Main
  **/
 export interface DfaAppeal {
-  id: string;
+  id?: string;
   caseId: string;
-  appealReason: AppealReason;
-  signAndSubmit: SignAndSubmit;
-  status: string;
+  type: AppealType;
+  status: AppealStatus;
+  reason: string;
+  signAndSubmit?: SignAndSubmit;
 }

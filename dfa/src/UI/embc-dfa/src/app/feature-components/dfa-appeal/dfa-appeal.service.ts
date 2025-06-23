@@ -17,20 +17,10 @@ export class DfaAppealService {
 
   
   /**
-   * Creates or updates an appeal using AppealService
+   * Creates an appeal using AppealService
    */
-  public upsertAppeal(appeal: any): Observable<any> {
-    if (appeal && appeal.id) {
-      // Update existing appeal
-      return this.appealService.appealUpdateAppeal({ id: appeal.id, body: appeal }).pipe(
-        catchError(error => of({ id: appeal.id || 'mock-appeal-id', ...appeal }))
-      );
-    } else {
-      // Create new appeal
-      return this.appealService.appealCreateAppeal({ body: appeal }).pipe(
-        catchError(error => of({ id: 'mock-appeal-id', ...appeal }))
-      );
-    }
+  public insertAppeal(appeal: any): Observable<any> {
+      return this.appealService.appealCreateAppeal({ body: appeal })
   }
 
 }

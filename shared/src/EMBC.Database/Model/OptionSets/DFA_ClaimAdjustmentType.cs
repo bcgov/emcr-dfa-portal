@@ -12,20 +12,17 @@ namespace EMBC.Database.Model
 {
 	
 	
-	/// <summary>
-	/// Pay Group of the Supplier Site in CAS system.
-	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum DFA_PayGroup
+	public enum DFA_ClaimAdjustmentType
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("GEN CHQ", 0, "#0000ff")]
-		GenChq = 222710000,
+		[OptionSetMetadataAttribute("Appeal Adjustment", 0, "#0000ff")]
+		AppealAdjustment = 222710000,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("GEN EFT", 1, "#0000ff")]
-		GenEft = 222710001,
+		[OptionSetMetadataAttribute("Cancelled Payment Adjustment", 1, "#0000ff")]
+		CancelledPaymentAdjustment = 222710001,
 	}
 }
 #pragma warning restore CS1591

@@ -13,6 +13,7 @@ import { ComponentCreationService } from '../../core/services/componentCreation.
 import { FormCreationService } from '../../core/services/formCreation.service';
 import { DFAAppealDataService } from './dfa-appeal-data.service';
 import { DfaAppealService } from './dfa-appeal.service';
+import { AppealType } from 'src/app/core/model/dfa-appeals-main.model';
 
 @Component({
   selector: 'app-dfa-appeal',
@@ -61,7 +62,24 @@ export class DfaAppealComponent implements OnInit {
       this.appealType = params['type'];
       this.caseId = params['caseId'];
 
+      // Map string to enum
+      let appealTypeEnum: AppealType;
+      switch (this.appealType) {
+        case 'amount':
+          appealTypeEnum = AppealType.Amount;
+          break;
+        case 'eligibility':
+          appealTypeEnum = AppealType.Eligibility;
+          break;
+        case 'other':
+          appealTypeEnum = AppealType.Other;
+          break;
+        default:
+          appealTypeEnum = AppealType.Other;
+      }
+
       this.caseDetails = this.dfaAppealDataService.getCaseDetails();
+      this.dfaAppealDataService.appealType = appealTypeEnum;
 
       // Fetch full application details using ApplicationService
       this.fullApplication$=this.applicationService.applicationGetApplicationMain({ applicationId: this.caseId })
@@ -94,10 +112,7 @@ export class DfaAppealComponent implements OnInit {
     switch (component) {
       case 'appeal-reason':
         if (this.appealReasonForm) {
-          this.dfaAppealDataService.appealReason = {
-            ...this.dfaAppealDataService.appealReason,
-            ...this.appealReasonForm.value
-          };
+          this.dfaAppealDataService.appealReason = this.appealReasonForm.value.reason;
         }
         break;
       case 'sign-and-submit':
@@ -130,29 +145,20 @@ export class DfaAppealComponent implements OnInit {
       this.submitAppeal();
     } else {
       this.setFormData(component);
-      let appeal = this.dfaAppealDataService.createAppealDTO();
-      this.dfaAppealService.upsertAppeal(appeal).subscribe(x => {
-        // determine if step is complete
-        switch (component) {
-          case 'appeal-reason':
-            if (this.form.valid) stepper.selected.completed = true;
-            else stepper.selected.completed = false;
-            break;
-          case 'sign-and-submit':
-            if (this.form.valid) stepper.selected.completed = true;
-            else stepper.selected.completed = false;
-            break;
-          default:
-            break;
-        }
-        this.form$.unsubscribe();
-        stepper.next();
-        this.form.markAllAsTouched();
-      },
-      error => {
-        console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
-      })
+      switch (component) {
+        case 'appeal-reason':
+          if (this.form.valid) stepper.selected.completed = true;
+          else stepper.selected.completed = false;
+          break;
+        case 'sign-and-submit':
+          if (this.form.valid) stepper.selected.completed = true;
+          else stepper.selected.completed = false;
+          break;
+        default:
+          break;
+      }
+      stepper.next();
+      this.form.markAllAsTouched();
     }
   }
 
@@ -254,9 +260,7 @@ export class DfaAppealComponent implements OnInit {
     this.setFormData('sign-and-submit');
     
     let appeal = this.dfaAppealDataService.createAppealDTO();
-    appeal.status = 'Submitted';
-    
-    this.dfaAppealService.upsertAppeal(appeal).subscribe({
+    this.dfaAppealService.insertAppeal(appeal).subscribe({
       next: () => {
         this.isLoading = false;
         this.cd.detectChanges();

@@ -97,6 +97,7 @@
   "emitFieldsClasses": true,
   "emitVirtualAttributes": true,
   "entityNamesFilter": [
+    "dfa_appeal",
     "dfa_clientcode",
     "dfa_projectclaim",
     "emcr_expenseproject",

@@ -8,28 +8,29 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { AppealModel } from '../../models/appeal-model';
 
-export interface AppealUpdateAppeal$Params {
+export interface AppealGetAppeal$Params {
+
+/**
+ * The appeal id
+ */
   id: string;
-      body: AppealModel
 }
 
-export function appealUpdateAppeal(http: HttpClient, rootUrl: string, params: AppealUpdateAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
-  const rb = new RequestBuilder(rootUrl, appealUpdateAppeal.PATH, 'put');
+export function appealGetAppeal(http: HttpClient, rootUrl: string, params: AppealGetAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, appealGetAppeal.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
-    rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'blob', accept: 'application/octet-stream', context })
+    rb.build({ responseType: 'text', accept: '*/*', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Blob>;
+      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
     })
   );
 }
 
-appealUpdateAppeal.PATH = '/api/appeal/{id}';
+appealGetAppeal.PATH = '/api/Appeal/{id}';

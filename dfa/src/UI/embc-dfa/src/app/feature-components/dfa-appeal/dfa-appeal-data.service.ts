@@ -1,38 +1,54 @@
 import { Injectable } from '@angular/core';
-import { AppealReason, DfaAppeal, SignAndSubmit } from '../../core/model/dfa-appeals-main.model';
+import {
+  AppealStatus,
+  AppealType,
+  DfaAppeal,
+  SignAndSubmit
+} from '../../core/model/dfa-appeals-main.model';
 import { CacheService } from '../../core/services/cache.service';
 import { DfaApplicationMain } from 'src/app/core/api/models';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class DFAAppealDataService {
-  private _appealReason: AppealReason;
+  private _appealReason: string;
   private _signAndSubmit: SignAndSubmit;
   private _dfaAppeal: DfaAppeal;
   private _applicationId: string;
   private _caseDetails: any;
   private _fullApplication: BehaviorSubject<DfaApplicationMain> = new BehaviorSubject<DfaApplicationMain>(null);
   private _fullApplication$: Observable<DfaApplicationMain> = this._fullApplication.asObservable();
+  private _appealType: AppealType;
 
-  constructor(
-    private cacheService: CacheService
-  ) {}
+  constructor(private cacheService: CacheService) {}
 
   public setDFAAppeal(dfaAppeal: DfaAppeal): void {
     this._dfaAppeal = dfaAppeal;
     this.cacheService.set('dfa-appeal', dfaAppeal);
   }
 
-  public get appealReason(): AppealReason {
+  public get appealReason(): string {
     return this._appealReason;
   }
 
-  public set appealReason(appealReason: AppealReason) {
+  public set appealReason(appealReason: string) {
     this._appealReason = appealReason;
   }
 
-  public setAppealReason(appealReason: AppealReason): void {
+  public setAppealReason(appealReason: string): void {
     this._appealReason = appealReason;
+  }
+
+  public get appealType(): AppealType {
+    return this._appealType;
+  }
+  
+  public set appealType(value: AppealType) {
+    this._appealType = value;
+  }
+  
+  public setAppealType(appealType: AppealType): void {
+    this._appealType = appealType;
   }
 
   public get signAndSubmit(): SignAndSubmit {
@@ -74,13 +90,11 @@ export class DFAAppealDataService {
   public createAppealDTO(): DfaAppeal {
     return {
       id: this._applicationId,
-      caseId: this._dfaAppeal?.caseId ?? '',
-      status: this._dfaAppeal?.status ?? '',
-      appealReason: this._appealReason,
-      signAndSubmit: this._signAndSubmit
+      caseId: this._caseDetails?.caseId ?? '',
+      type: this._appealType,
+      status: AppealStatus.Received,
+      reason: this._appealReason ?? ''
+      // ...(this._signAndSubmit ? { signAndSubmit: this._signAndSubmit } : {}) // only include if present
     };
   }
 }
-
-
-
