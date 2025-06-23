@@ -5,6 +5,7 @@
 import { ClaimStatusBar } from '../models/claim-status-bar';
 export interface CurrentClaim {
   advancedDrawdownAmount?: string;
+  appealStatusBar?: Array<ClaimStatusBar>;
   applicationId?: string;
   approvedClaimTotal?: string;
   approvedReimbursePercent?: string;

@@ -182,6 +182,7 @@ namespace EMBC.DFA.API.Controllers
         public string Status { get; set; }
         public string Stage { get; set; }
         public List<ClaimStatusBar> StatusBar { get; set; }
+        public List<ClaimStatusBar> AppealStatusBar { get; set; }
         public string StatusLastUpdated { get; set; }
         public bool IsErrorInStatus { get; set; }
         public bool IsHidden { get; set; } = true;
