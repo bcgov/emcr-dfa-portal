@@ -49,6 +49,7 @@ export { FileCategoryClaim } from './models/file-category-claim';
 export type { FileUpload } from './models/file-upload';
 export type { FileUploadClaim } from './models/file-upload-claim';
 export type { FullTimeOccupant } from './models/full-time-occupant';
+export type { HasActiveEventResponse } from './models/has-active-event-response';
 export { InsuranceOption } from './models/insurance-option';
 export type { InviteRequest } from './models/invite-request';
 export type { InviteToken } from './models/invite-token';

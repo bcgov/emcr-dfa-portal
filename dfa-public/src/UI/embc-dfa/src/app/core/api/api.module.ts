@@ -16,6 +16,7 @@ import { ConfigurationService } from './services/configuration.service';
 import { ContactService } from './services/contact.service';
 import { DamagedRoomService } from './services/damaged-room.service';
 import { EligibilityService } from './services/eligibility.service';
+import { EventService } from './services/event.service';
 import { FullTimeOccupantService } from './services/full-time-occupant.service';
 import { InvoiceService } from './services/invoice.service';
 import { OtherContactService } from './services/other-contact.service';
@@ -42,6 +43,7 @@ import { SecondaryApplicantService } from './services/secondary-applicant.servic
     ContactService,
     DamagedRoomService,
     EligibilityService,
+    EventService,
     FullTimeOccupantService,
     InvoiceService,
     OtherContactService,
