@@ -80,11 +80,24 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
     }
   }
 
+  private isCanvasBlank(canvas: HTMLCanvasElement): boolean {
+    const context = canvas.getContext('2d');
+    const pixelBuffer = new Uint32Array(
+      context.getImageData(0, 0, canvas.width, canvas.height).data.buffer
+    );
+    return !pixelBuffer.some(color => color !== 0);
+  }
+
   // store in signature block to emit
   updateCanvas() {
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
-    this.signatureBlock.signature = canvasEl.toDataURL();
-    this.signatureFormGroup.get('signature')?.setValue(this.signatureBlock.signature);
+    if (this.isCanvasBlank(canvasEl)) {
+      this.signatureBlock.signature = null;
+      this.signatureFormGroup.get('signature')?.setValue(null);
+    } else {
+      this.signatureBlock.signature = canvasEl.toDataURL();
+      this.signatureFormGroup.get('signature')?.setValue(this.signatureBlock.signature);
+    }
     this.updateSignatureBlock();
   }
 
