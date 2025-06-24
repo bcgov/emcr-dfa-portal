@@ -3,7 +3,7 @@
 # trion/ng-cli-karma:19.2.14 
 #             node version 22.14.0
 #             npm version 10.9.2
-FROM trion/ng-cli-karma:19.2.14 AS node-builder
+FROM trion/ng-cli-karma:19.2.13 AS node-builder
 WORKDIR /src
 COPY ./embc-dfa/package*.json ./
 RUN npm install --ignore-scripts --force
