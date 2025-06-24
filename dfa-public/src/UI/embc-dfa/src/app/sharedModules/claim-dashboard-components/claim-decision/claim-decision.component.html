@@ -217,9 +217,11 @@
         <!-- <div *ngIf="documentSummaryDataSourceFiltered.data.length === 0" class="no-data-message">
             <span>No Invoices Found</span>
         </div> -->
+
+
     </div>
 
-    <div class="invoice-status-container">
+    <div class="invoice-status-container" style="display: flex; align-items: center;">
         <div>
             <span class="material-symbols-outlined circleicon1">
                 check_circle
@@ -238,5 +240,19 @@
             </span>
             Denied
         </div>
+
+        <div style="margin-left: auto;">
+            <button id="open-appeal-decision"
+                class="button-p nextNsave"
+                style="width: 220px; vertical-align: middle;"
+                mat-stroked-button
+                type="button"
+                (click)="openAppealDecision()"
+                >
+            Appeal Decision
+            <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
+            </button>
+        </div>
     </div>
+    
     </div>

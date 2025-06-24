@@ -11,6 +11,7 @@ import { DFAClaimMainDataService } from 'src/app/feature-components/dfa-claim-ma
 import InvoiceComponent from '../../forms/dfa-claim-main-forms/invoice/invoice.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { InvoiceDecision } from 'src/app/models/invoice-decision.enum';
+import { AppealDecisionDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-claim-begin-appeal-dialog/dfa-confirm-claim-begin-appeal-dialog.component';
 
 @Component({
   selector: 'app-claim-decision',
@@ -32,6 +33,8 @@ export class ClaimDecisionComponent implements OnInit {
   
   InvoiceDecisionEnum = InvoiceDecision;
 
+  claimId: string | null = null;
+
   constructor(
     private claimService: ClaimService,
     private route: ActivatedRoute,
@@ -42,25 +45,46 @@ export class ClaimDecisionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    var claimId = this.route.snapshot.paramMap.get('id');
-    console.log('Claim ID from route:', claimId);
-    if (claimId) {
-      this.getRecoveryClaim(claimId);
+    this.claimId = this.route.snapshot.paramMap.get('id');
+    console.log('Claim ID from route:', this.claimId);
+    if (this.claimId) {
+      this.getRecoveryClaim(this.claimId);
     }
 
     // Get Recovery Claim Invoices
-    if( claimId) {
-      this.getRecoveryInvoices(claimId);
+    if( this.claimId) {
+      this.getRecoveryInvoices(this.claimId);
     }
 
   }
 
+  openAppealDecision(): void {
+    console.log('Opening appeal decision dialog...');
+    const dialogRef = this.dialog.open(AppealDecisionDialogComponent, {
+      width: '500px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.beginAppealProcess();
+      }
+    });
+  }
+
+  beginAppealProcess(): void {
+    console.log('Begin Appeal Process: 🚧 Under construction...');
+    if (this.claimId) {
+      this.router.navigate(['/claim', this.claimId, 'appeal']);
+    }
+  }
 
   getRecoveryClaim(claimId: string) {
     if (claimId) {
       this.claimService.claimGetClaimMain({ claimId: claimId }).subscribe({
         next: (dfaClaimMain) => {
           this.recoveryClaim = dfaClaimMain;
+          
           //this.dfaClaimMainMapping.mapDFAClaimMain(dfaClaimMain);
           console.log('Recovery Claim:', this.recoveryClaim);
         },
@@ -104,6 +128,8 @@ export class ClaimDecisionComponent implements OnInit {
           this.documentSummaryDataSource.data = lstInvoices;
           this.documentSummaryDataSourceFiltered.data = this.documentSummaryDataSource.data;
           this.invoicesCount = this.documentSummaryDataSource.data.length;
+
+          
 
           // this.formCreationService.recoveryClaimForm.value
           //   .get('invoices')
