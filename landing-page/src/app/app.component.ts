@@ -49,25 +49,26 @@ export class AppComponent implements OnInit {
         this.outageEnd = new Date(environment.outageEnd).getTime();
       }
 
-      this.httpClient.get(environment.apiEndpoint + "Event/hasactiveevent").subscribe(response => {
-        console.log("Response", response);
-        if (response) {
-          this.privateButtonDisabled = !response.hasActivePrivateEvent;
-          this.publicButtonDisabled = !response.hasActivePublicEvent;
+      this.httpClient.get(environment.apiEndpoint as string).subscribe((response: any) => {
+        let hasActiveEventResponse = response as HasActiveEventResponse;
+        console.info("Has Active Event Response", hasActiveEventResponse);
+        if (hasActiveEventResponse) {
+           this.privateButtonDisabled = !hasActiveEventResponse.hasActivePrivateEvent;
+           this.publicButtonDisabled = !hasActiveEventResponse.hasActivePublicEvent;
         }
       })
     });
   }
   
   naviagteToPublicDFA(){
-      const publicUrl = this.environment?.dfaPublicUrl;
-      if (publicUrl) {
-        window.open(publicUrl, '_blank');
-      } else {
-        console.error('Public portal URL is not defined');
-      }
+    const publicUrl = this.environment?.dfaPublicUrl;
+    if (publicUrl) {
+      window.open(publicUrl, '_blank');
+    } else {
+      console.error('Public portal URL is not defined');
     }
-  
+  }
+
   naviagteToPrivateDFA(){
     const privateUrl = this.environment?.dfaPrivateUrl;
     if (privateUrl) {
@@ -78,3 +79,8 @@ export class AppComponent implements OnInit {
   }
 }
 
+class HasActiveEventResponse
+{
+  hasActivePrivateEvent: boolean = false;
+  hasActivePublicEvent: boolean = false;
+}

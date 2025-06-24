@@ -6,7 +6,7 @@
   "startDisplayOutageBanner": "2025-03-28T05:00:00-08:00",    
   "outageStart" : "2025-03-25T05:00:00-08:00",
   "outageEnd" : "2025-03-29T05:00:00-08:00",
-  "apiEndpoint": "http://localhost:5020/api/",
+  "apiEndpoint": "http://localhost:5020/api/Event/hasactiveevent",
   "dfaPublicUrl": "https://publicsector-dev.dfa.gov.bc.ca/registration-method",
   "dfaPrivateUrl": "https://portal.dev.dfa.gov.bc.ca/registration-method",
   "disablePublicUrl": false,

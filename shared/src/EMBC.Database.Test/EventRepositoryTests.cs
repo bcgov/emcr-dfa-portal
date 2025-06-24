@@ -87,6 +87,6 @@
             NotNullEventType = true
         };
         var events = repository.Query(query);
-        Assert.Equal(2, events.Count());
+        Assert.Empty(events);
     }
 }

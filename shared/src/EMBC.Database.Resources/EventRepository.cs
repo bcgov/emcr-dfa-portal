@@ -26,7 +26,7 @@ public static class EventRepositoryExtensions
     {
         return results
             .WhereIf(query.StateCode != null, x => x.StateCode == (DFA_Event_StateCode?)query.StateCode)
-            .WhereIf(query.BeforeNintyDeadline != null, x => (x.DFA_90DayDeadlineOverwriteDate != null && x.DFA_90DayDeadlineOverwriteDate <= query.BeforeNintyDeadline) || (x.DFA_90DayDeadlineOverwriteDate == null && x.DFA_90DayDeadlineNew != null && x.DFA_90DayDeadlineNew <= query.BeforeNintyDeadline))
+            .WhereIf(query.BeforeNintyDeadline != null, x => (x.DFA_90DayDeadlineOverwriteDate != null && x.DFA_90DayDeadlineOverwriteDate >= query.BeforeNintyDeadline) || (x.DFA_90DayDeadlineOverwriteDate == null && x.DFA_90DayDeadlineNew != null && x.DFA_90DayDeadlineNew >= query.BeforeNintyDeadline))
             .WhereIf(query.NotNullEventType, x => x.DFA_EventType != null);
     }
 }
