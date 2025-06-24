@@ -30,11 +30,12 @@ public class EventController : ControllerBase
         var query = new EventQuery
         {
             StateCode = StateCode.Active,
-            BeforeNinetyDayDeadlineOverride = DateTime.UtcNow,
             BeforeNintyDeadline = DateTime.UtcNow,
             NotNullEventType = true
         };
-        var events = _eventRepository.Query(query).ToList();
+        var events = _eventRepository
+            .Query(query)
+            .ToList();
         if (events == null || !events.Any())
         {
             return NoContent();

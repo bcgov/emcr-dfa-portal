@@ -51,12 +51,15 @@ export class AppComponent implements OnInit {
 
       this.httpClient.get(environment.apiEndpoint + "Event/hasactiveevent").subscribe(response => {
         console.log("Response", response);
+        if (response) {
+          this.privateButtonDisabled = !response.hasActivePrivateEvent;
+          this.publicButtonDisabled = !response.hasActivePublicEvent;
+        }
       })
     });
   }
   
   naviagteToPublicDFA(){
-
       const publicUrl = this.environment?.dfaPublicUrl;
       if (publicUrl) {
         window.open(publicUrl, '_blank');
@@ -65,7 +68,6 @@ export class AppComponent implements OnInit {
       }
     }
   
-
   naviagteToPrivateDFA(){
     const privateUrl = this.environment?.dfaPrivateUrl;
     if (privateUrl) {

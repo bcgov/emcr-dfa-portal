@@ -4,7 +4,6 @@ public record EventQuery
 {
     public StateCode? StateCode { get; set; }
     public DateTime? BeforeNintyDeadline { get; set; }
-    public DateTime? BeforeNinetyDayDeadlineOverride { get; set; }
     public bool NotNullEventType { get; set; }
 }
 

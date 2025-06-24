@@ -1,5 +1,4 @@
-﻿
-public class EventTests(IEventRepository repository, IMapper mapper)
+﻿public class EventTests(IEventRepository repository, IMapper mapper)
 {
     // WARNING these are not valid unit tests and depend on data in Dynamics not changing, use for local testing purposes only
 
@@ -10,7 +9,6 @@ public class EventTests(IEventRepository repository, IMapper mapper)
         {
             StateCode = StateCode.Active,
             BeforeNintyDeadline = new DateTime(2023, 1, 1),
-            BeforeNinetyDayDeadlineOverride = new DateTime(2023, 1, 1),
             NotNullEventType = true
         };
         var events = repository.Query(query);
