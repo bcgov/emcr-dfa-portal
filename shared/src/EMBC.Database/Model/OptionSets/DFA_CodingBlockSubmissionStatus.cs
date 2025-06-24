@@ -17,6 +17,10 @@ namespace EMBC.Database.Model
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Cancelled", 6, "#0000ff")]
+		Cancelled = 222710006,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Draft", 2, "#0000ff")]
 		Draft = 222710000,
 		

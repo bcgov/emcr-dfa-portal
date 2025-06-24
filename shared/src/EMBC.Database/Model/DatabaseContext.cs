@@ -51,6 +51,17 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_Event"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.DFA_Event> DFA_EventSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.DFA_Event>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_ProjectClaim"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<EMBC.Database.Model.DFA_ProjectClaim> DFA_ProjectClaimSet

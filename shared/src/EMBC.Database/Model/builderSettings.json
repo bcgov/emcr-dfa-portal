@@ -52,6 +52,7 @@
       "EmailSend",
       "EmailSender",
       "EMCR",
+      "EventScope",
       "FeatureSet",
       "FedEx",
       "ForAn",
@@ -99,6 +100,7 @@
   "entityNamesFilter": [
     "dfa_appeal",
     "dfa_clientcode",
+    "dfa_event",
     "dfa_projectclaim",
     "emcr_expenseproject",
     "emcr_responsibilitycentre",

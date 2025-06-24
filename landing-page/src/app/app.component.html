@@ -31,9 +31,6 @@
     </div>
   </div>
 
-
- 
-
   <div class="application">
     <div class="container">
       <div style="text-align: center;">
@@ -115,7 +112,7 @@
                   Register to apply to Private DFA
                 </button>
               } @else { 
-                <button class="applyButton" (click)="naviagteToPrivateDFA()">
+                <button class="applyButton" (click)="naviagteToPrivateDFA()" [disabled]="privateButtonDisabled">
                   Register to apply to Private DFA
                 </button>
               }
@@ -186,7 +183,7 @@
                   Register to apply to Public DFA
                 </button>
               } @else { 
-                <button class="applyButton" (click)="naviagteToPublicDFA()">
+                <button class="applyButton" (click)="naviagteToPublicDFA()" [disabled]="publicButtonDisabled">
                   Register to apply to Public DFA
                 </button>
               }

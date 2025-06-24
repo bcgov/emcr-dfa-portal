@@ -7,6 +7,7 @@ import { OutageBannerComponent } from './components/outage-banner/outage-banner.
 import { EnvironmentBannerService, EnvironmentInformation } from './services/environment.service';
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 import { FormControl } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -30,11 +31,12 @@ export class AppComponent implements OnInit {
   public currentDate = Date.now();
   startDisplayOutageBanner?: number;
   outageEnd?: number;
-
+  privateButtonDisabled: boolean = true;
+  publicButtonDisabled: boolean = true;
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   position = new FormControl(this.positionOptions[0]);
   
-  constructor(private environmentBannerService: EnvironmentBannerService) { }
+  constructor(private environmentBannerService: EnvironmentBannerService, private httpClient: HttpClient) { }
 
   ngOnInit(): void {
     this.environmentBannerService.getEnvironment().subscribe(environment => {
@@ -45,15 +47,13 @@ export class AppComponent implements OnInit {
       
       if(environment.outageEnd){
         this.outageEnd = new Date(environment.outageEnd).getTime();
-
       }
 
-      });
-    }
-
-  // public privatePortal = this.environment?.dfaPrivateUrl;
-  // public publicPortal = this.environment?.dfaPublicUrl;
-
+      this.httpClient.get(environment.apiEndpoint + "Event/hasactiveevent").subscribe(response => {
+        console.log("Response", response);
+      })
+    });
+  }
   
   naviagteToPublicDFA(){
 

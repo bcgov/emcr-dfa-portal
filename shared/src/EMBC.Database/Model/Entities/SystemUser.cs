@@ -433,6 +433,10 @@ namespace EMBC.Database.Model
 			public const string Lk_DFA_ClientCode_CreatedOnBehalfBy = "Lk_DFA_ClientCode_CreatedOnBehalfBy";
 			public const string Lk_DFA_ClientCode_ModifiedBy = "Lk_DFA_ClientCode_ModifiedBy";
 			public const string Lk_DFA_ClientCode_ModifiedOnBehalfBy = "Lk_DFA_ClientCode_ModifiedOnBehalfBy";
+			public const string Lk_DFA_Event_CreatedBy = "Lk_DFA_Event_CreatedBy";
+			public const string Lk_DFA_Event_CreatedOnBehalfBy = "Lk_DFA_Event_CreatedOnBehalfBy";
+			public const string Lk_DFA_Event_ModifiedBy = "Lk_DFA_Event_ModifiedBy";
+			public const string Lk_DFA_Event_ModifiedOnBehalfBy = "Lk_DFA_Event_ModifiedOnBehalfBy";
 			public const string Lk_DFA_ProjectClaim_CreatedBy = "Lk_DFA_ProjectClaim_CreatedBy";
 			public const string Lk_DFA_ProjectClaim_CreatedOnBehalfBy = "Lk_DFA_ProjectClaim_CreatedOnBehalfBy";
 			public const string Lk_DFA_ProjectClaim_ModifiedBy = "Lk_DFA_ProjectClaim_ModifiedBy";
@@ -519,6 +523,7 @@ namespace EMBC.Database.Model
 			public const string TraversedPath = "traversedpath";
 			public const string User_DFA_Appeal = "User_DFA_Appeal";
 			public const string User_DFA_ClientCode = "User_DFA_ClientCode";
+			public const string User_DFA_Event = "User_DFA_Event";
 			public const string User_DFA_ProjectClaim = "User_DFA_ProjectClaim";
 			public const string ReferencingUser_Parent_User = "user_parent_user";
 			public const string UserLicenseType = "userlicensetype";
@@ -3634,6 +3639,78 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
+		/// 1:N lk_dfa_event_createdby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_event_createdby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_Event> Lk_DFA_Event_CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_Event>("lk_dfa_event_createdby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_Event>("lk_dfa_event_createdby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_event_createdonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_event_createdonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_Event> Lk_DFA_Event_CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_Event>("lk_dfa_event_createdonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_Event>("lk_dfa_event_createdonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_event_modifiedby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_event_modifiedby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_Event> Lk_DFA_Event_ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_Event>("lk_dfa_event_modifiedby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_Event>("lk_dfa_event_modifiedby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_event_modifiedonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_event_modifiedonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_Event> Lk_DFA_Event_ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_Event>("lk_dfa_event_modifiedonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_Event>("lk_dfa_event_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N lk_dfa_projectclaim_createdby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_projectclaim_createdby")]
@@ -4098,6 +4175,24 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetRelatedEntities<EMBC.Database.Model.DFA_ClientCode>("user_dfa_clientcode", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N user_dfa_event
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_dfa_event")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_Event> User_DFA_Event
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_Event>("user_dfa_event", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_Event>("user_dfa_event", null, value);
 			}
 		}
 		
