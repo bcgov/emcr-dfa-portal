@@ -50,6 +50,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
 
 @Component({
   selector: 'app-dfa-invoice-dashboard',
+  standalone: false,
   templateUrl: './dfa-invoice-dashboard.component.html',
   styleUrls: ['./dfa-invoice-dashboard.component.scss'],
   providers: [{ provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults }]

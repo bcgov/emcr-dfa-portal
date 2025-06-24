@@ -6,6 +6,7 @@ import { LoginService } from 'src/app/core/services/login.service';
 
 @Component({
   selector: 'app-confirm-prescreening-dialog',
+  standalone: false,
   templateUrl: './dfa-confirm-prescreening-dialog.component.html',
   styleUrls: ['./dfa-confirm-prescreening-dialog.component.scss']
 })

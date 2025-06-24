@@ -50,6 +50,7 @@ export class CustomErrorMailMatcher implements ErrorStateMatcher {
 
 @Component({
   selector: 'app-contact-info',
+  standalone: false,
   templateUrl: './contact-info.component.html',
   styleUrls: ['./contact-info.component.scss']
 })

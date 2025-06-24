@@ -8,6 +8,7 @@ import { ProfileDataService } from 'src/app/feature-components/profile/profile-d
 
 @Component({
   selector: 'app-dfa-events',
+  standalone: false,
   templateUrl: './dfa-events.component.html',
   styleUrls: ['./dfa-events.component.scss']
 })

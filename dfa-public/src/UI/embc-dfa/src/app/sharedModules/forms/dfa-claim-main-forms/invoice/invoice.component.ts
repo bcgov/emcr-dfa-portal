@@ -50,6 +50,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
 
 @Component({
   selector: 'app-invoice',
+  standalone: false,
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.scss'],
   providers: [{ provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults }]

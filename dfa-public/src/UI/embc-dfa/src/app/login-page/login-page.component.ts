@@ -8,6 +8,7 @@ import { ContactService } from 'src/app/core/api/services';
 
 @Component({
   selector: 'app-login-page',
+  standalone: false,
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })

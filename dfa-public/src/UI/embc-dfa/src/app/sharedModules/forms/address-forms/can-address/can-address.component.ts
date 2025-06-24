@@ -12,6 +12,7 @@ import { AreaCommunity } from '../../../../core/api/models';
 
 @Component({
   selector: 'app-can-address',
+  standalone: false,
   templateUrl: './can-address.component.html',
   styleUrls: ['./can-address.component.scss']
 })

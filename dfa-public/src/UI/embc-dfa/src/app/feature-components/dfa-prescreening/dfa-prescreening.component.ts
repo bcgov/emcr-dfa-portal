@@ -22,6 +22,7 @@ import { DFAConfirmDashboardNavigationDialogComponent } from '../../core/compone
 
 @Component({
   selector: 'app-dfa-prescreening',
+  standalone: false,
   templateUrl: './dfa-prescreening.component.html',
   styleUrls: ['./dfa-prescreening.component.scss']
 })

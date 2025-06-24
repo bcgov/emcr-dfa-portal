@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-confirm-submit-dialog',
+  standalone: false,
   templateUrl: './dfa-confirm-submit-dialog.component.html',
   styleUrls: ['./dfa-confirm-submit-dialog.component.scss']
 })

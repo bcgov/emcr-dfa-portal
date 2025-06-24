@@ -26,8 +26,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22.x"
-          cache: "npm" # handles caching, no need to have seperate actions/cache@v4, caches what npm install downloads.
-          cache-dependency-path: dfa/src/UI/embc-dfa/package-lock.json
 
       - name: Install Dependencies
         run: |

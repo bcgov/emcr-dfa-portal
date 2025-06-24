@@ -5,6 +5,7 @@ import * as constant from 'src/app/core/services/globalConstants';
 
 @Component({
   selector: 'app-file-upload',
+  standalone: false,
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
 })

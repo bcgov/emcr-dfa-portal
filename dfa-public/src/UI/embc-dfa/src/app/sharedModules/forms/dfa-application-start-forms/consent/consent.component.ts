@@ -16,6 +16,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-consent',
+  standalone: false,
   templateUrl: './consent.component.html',
   styleUrls: ['./consent.component.scss']
 })

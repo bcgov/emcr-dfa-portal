@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-secondary-applicant-warning-dialog',
+  standalone: false,
   templateUrl: './secondary-applicant-warning-dialog.component.html',
   styleUrls: ['./secondary-applicant-warning-dialog.component.scss']
 })

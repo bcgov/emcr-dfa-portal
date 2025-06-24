@@ -38,6 +38,7 @@ import { AddressChangeComponent } from 'src/app/core/components/dialog-component
 
 @Component({
   selector: 'app-damaged-property-address',
+  standalone: false,
   templateUrl: './damaged-property-address.component.html',
   styleUrls: ['./damaged-property-address.component.scss']
 })

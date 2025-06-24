@@ -42,6 +42,7 @@ import { DFAApplicationMainMappingService } from '../dfa-application-main/dfa-ap
 
 @Component({
   selector: 'app-review',
+  standalone: false,
   templateUrl: './review.component.html',
   styleUrls: ['./review.component.scss']
 })

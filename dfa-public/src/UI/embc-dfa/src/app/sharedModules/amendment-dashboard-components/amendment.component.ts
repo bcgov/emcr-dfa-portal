@@ -14,6 +14,7 @@ import { DFAAmendmentMainDataService } from 'src/app/feature-components/dfa-amen
 
 @Component({
   selector: 'app-dfadashboard-amendment',
+  standalone: false,
   templateUrl: './amendment.component.html',
   styleUrls: ['./amendment.component.scss']
 })

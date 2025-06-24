@@ -31,6 +31,7 @@ import { SecondaryApplicantWarningDialogComponent } from '../../../../core/compo
 
 @Component({
   selector: 'app-occupants',
+  standalone: false,
   templateUrl: './occupants.component.html',
   styleUrls: ['./occupants.component.scss']
 })

@@ -1,0 +1,20 @@
+
+<h2 mat-dialog-title>Confirm Appeal</h2>
+
+<mat-dialog-content>
+  <p>
+    If you believe that the DFA program incorrectly determined the eligibility for this claim, you may appeal the determination within 60 days of the date on the notice being appealed.
+  </p>
+  <p>
+    Submitting an appeal does not guarantee that the DFA determination will be overturned. Appeal determinations may overturn or uphold the DFA determination being appealed and may result in no change to additional funding being provided, or reduction in the amount of funding previously determined.
+  </p>
+  <p style="font-size: 1.1rem; font-weight: bold;">
+    Appeals must be created and submitted in the same session.<br/>
+    Drafts will not be saved.
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cancel Appeal Process</button>
+  <button mat-raised-button color="primary" (click)="beginAppealProcess()">Begin Appeal Process</button>
+</mat-dialog-actions>

@@ -4,6 +4,7 @@ import { DialogContent } from 'src/app/core/model/dialog-content.model';
 
 @Component({
   selector: 'app-warning-dialog',
+  standalone: false,
   templateUrl: './file-upload-warning-dialog.component.html',
   styleUrls: ['./file-upload-warning-dialog.component.scss']
 })

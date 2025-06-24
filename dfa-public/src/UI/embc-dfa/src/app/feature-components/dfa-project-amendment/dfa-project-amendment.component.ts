@@ -50,6 +50,7 @@ import { Decision } from 'src/app/models/decision.enum';
 
 @Component({
   selector: 'app-dfa-project-amendment',
+  standalone: false,
   templateUrl: './dfa-project-amendment.component.html',
   styleUrls: ['./dfa-project-amendment.component.scss']
 })

@@ -30,6 +30,7 @@ import RecoveryPlanComponent from '../../sharedModules/forms/dfa-project-main-fo
 
 @Component({
   selector: 'app-dfa-project-main',
+  standalone: false,
   templateUrl: './dfa-project-main.component.html',
   styleUrls: ['./dfa-project-main.component.scss']
 })

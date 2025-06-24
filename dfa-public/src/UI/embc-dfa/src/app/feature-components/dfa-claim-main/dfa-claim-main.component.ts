@@ -32,6 +32,7 @@ import { Invoice } from '../../core/model/dfa-invoice.model';
 
 @Component({
   selector: 'app-dfa-claim-main',
+  standalone: false,
   templateUrl: './dfa-claim-main.component.html',
   styleUrls: ['./dfa-claim-main.component.scss']
 })

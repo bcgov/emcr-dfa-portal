@@ -60,6 +60,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
 
 @Component({
   selector: 'app-recovery-plan',
+  standalone: false,
   templateUrl: './recovery-plan.component.html',
   styleUrls: ['./recovery-plan.component.scss'],
   providers: [{ provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults }]

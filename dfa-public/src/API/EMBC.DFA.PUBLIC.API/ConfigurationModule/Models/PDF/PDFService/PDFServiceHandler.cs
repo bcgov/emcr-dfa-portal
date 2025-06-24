@@ -3,48 +3,52 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
-using EMBC.DFA.API.Services;
-using EMBC.Utilities.Configuration;
-using Microsoft.Extensions.Configuration;
+using EMBC.DFA.PUBLIC.API.Services;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace EMBC.DFA.API.ConfigurationModule.Models.PDF.PDFService
 {
+    public class PdfServiceConfigs
+    {
+        public string GeneratePDFFile { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+        public string TokenUrl { get; set; }
+    }
+
     public class PDFServiceHandler
     {
         private PdfServiceConfigs options;
+        private readonly HttpClient _httpClient;
 
-        public PDFServiceHandler(IOptions<PdfServiceConfigs> options)
+        public PDFServiceHandler(HttpClient httpClient, IOptions<PdfServiceConfigs> options, BearerTokenProvider bearerTokenProvider)
         {
             this.options = options.Value;
+
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient = httpClient;
         }
-        public async Task<byte[]> GetFileDataAsync(PdfReuest pdfReuest)
+
+        public async Task<byte[]> GetFileDataAsync(PdfReuest pdfRequest)
         {
             byte[] fileBytes = null;
             var url = options.GeneratePDFFile;
-            using (HttpClient client = new HttpClient())
+
+            try
             {
-                try
-                {
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    var content = new StringContent(JsonConvert.SerializeObject(pdfReuest), Encoding.UTF8, "application/json");
-                    // Send the POST request
-                    HttpResponseMessage response = await client.PostAsync(options.GeneratePDFFile, content);
-                    // Ensure the request was successful
-                    response.EnsureSuccessStatusCode();
-                    // Read the content as a byte array
-                    fileBytes = await response.Content.ReadAsByteArrayAsync();
-                    // Save the file to the specified location
-                    //await File.WriteAllBytesAsync(downloadPath, fileBytes);
-                    Console.WriteLine("File downloaded successfully.");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"An error occurred: {ex.Message}");
-                }
+                var content = new StringContent(JsonConvert.SerializeObject(pdfRequest), Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(options.GeneratePDFFile, content);
+                response.EnsureSuccessStatusCode();
+                fileBytes = await response.Content.ReadAsByteArrayAsync();
+                //await File.WriteAllBytesAsync(downloadPath, fileBytes);
+                Console.WriteLine("File downloaded successfully.");
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            
             return fileBytes;
         }
     }

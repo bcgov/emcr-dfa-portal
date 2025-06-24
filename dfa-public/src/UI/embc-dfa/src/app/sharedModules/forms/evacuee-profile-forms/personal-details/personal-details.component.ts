@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-personal-details',
+  standalone: false,
   templateUrl: './personal-details.component.html',
   styleUrls: ['./personal-details.component.scss']
 })

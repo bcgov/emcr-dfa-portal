@@ -37,6 +37,7 @@ import { LoginService } from 'src/app/core/services/login.service';
 
 @Component({
   selector: 'prescreening',
+  standalone: false,
   templateUrl: './prescreening.component.html',
   styleUrls: ['./prescreening.component.scss']
 })

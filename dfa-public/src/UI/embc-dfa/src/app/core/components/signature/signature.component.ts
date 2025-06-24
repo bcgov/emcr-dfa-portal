@@ -5,6 +5,7 @@ import { SignatureBlock } from 'src/app/core/api/models';
 
 @Component({
   selector: 'app-signature',
+  standalone: false,
   templateUrl: './signature.component.html',
   styleUrls: ['./signature.component.scss']
 })

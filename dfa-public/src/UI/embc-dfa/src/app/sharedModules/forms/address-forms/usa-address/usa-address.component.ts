@@ -9,6 +9,7 @@ import {
 
 @Component({
   selector: 'app-usa-address',
+  standalone: false,
   templateUrl: './usa-address.component.html',
   styleUrls: ['./usa-address.component.scss']
 })

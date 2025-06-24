@@ -3,6 +3,7 @@ import { UntypedFormGroup, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-other-address',
+  standalone: false,
   templateUrl: './other-address.component.html',
   styleUrls: ['./other-address.component.scss']
 })

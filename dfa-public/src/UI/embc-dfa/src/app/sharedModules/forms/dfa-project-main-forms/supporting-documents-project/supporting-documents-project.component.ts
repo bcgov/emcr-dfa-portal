@@ -38,6 +38,7 @@ import { DFAProjectMainMappingService } from '../../../../feature-components/dfa
 
 @Component({
   selector: 'app-supporting-documents-project',
+  standalone: false,
   templateUrl: './supporting-documents-project.component.html',
   styleUrls: ['./supporting-documents-project.component.scss']
 })

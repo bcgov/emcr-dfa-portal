@@ -12,6 +12,7 @@ import { DFAProjectMainDataService } from '../../../feature-components/dfa-proje
 
 @Component({
   selector: 'app-dfadashboard-invoice',
+  standalone: false,
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.scss']
 })

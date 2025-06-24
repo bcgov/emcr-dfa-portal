@@ -32,6 +32,7 @@ import { Invoice } from '../../core/model/dfa-invoice.model';
 
 @Component({
   selector: 'app-dfa-amendment-main',
+  standalone: false,
   templateUrl: './dfa-amendment-main.component.html',
   styleUrls: ['./dfa-amendment-main.component.scss']
 })

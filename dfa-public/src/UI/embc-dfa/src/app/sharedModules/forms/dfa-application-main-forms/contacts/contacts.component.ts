@@ -61,6 +61,7 @@ import { BceidUserData } from 'src/app/core/api/models/bceid-user-data';
 
 @Component({
   selector: 'app-contacts',
+  standalone: false,
   templateUrl: './contacts.component.html',
   styleUrl: './contacts.component.scss'
 })

@@ -10,6 +10,7 @@ import { CurrentApplication } from 'src/app/core/api/models';
 
 @Component({
   selector: 'app-dfadashboard-application',
+  standalone: false,
   templateUrl: './dfa-application.component.html',
   styleUrls: ['./dfa-application.component.scss']
 })

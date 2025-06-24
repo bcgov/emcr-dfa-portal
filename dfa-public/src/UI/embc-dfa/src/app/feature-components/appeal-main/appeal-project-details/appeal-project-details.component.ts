@@ -10,6 +10,7 @@ import { CurrentApplication, CurrentProjectAppeal, RecoveryPlan } from 'src/app/
  */
 @Component({
   selector: 'app-appeal-project-details',
+  standalone: false,
   templateUrl: './appeal-project-details.component.html',
   styleUrl: './appeal-project-details.component.scss'
 })

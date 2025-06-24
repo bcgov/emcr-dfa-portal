@@ -36,6 +36,7 @@ import {
 
 @Component({
   selector: 'app-address',
+  standalone: false,
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss']
 })

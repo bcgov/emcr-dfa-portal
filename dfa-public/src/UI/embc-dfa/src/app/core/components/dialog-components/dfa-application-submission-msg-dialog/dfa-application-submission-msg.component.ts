@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dfa-application-submission-msg-dialog',
+  standalone: false,
   templateUrl: './dfa-application-submission-msg.component.html',
   styleUrls: ['./dfa-application-submission-msg.component.scss']
 })

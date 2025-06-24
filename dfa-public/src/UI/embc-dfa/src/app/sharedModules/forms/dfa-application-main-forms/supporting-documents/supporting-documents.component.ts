@@ -36,6 +36,7 @@ import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog
 
 @Component({
   selector: 'app-supporting-documents',
+  standalone: false,
   templateUrl: './supporting-documents.component.html',
   styleUrls: ['./supporting-documents.component.scss']
 })

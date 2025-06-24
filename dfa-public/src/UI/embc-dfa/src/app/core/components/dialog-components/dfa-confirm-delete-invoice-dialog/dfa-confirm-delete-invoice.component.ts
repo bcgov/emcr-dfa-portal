@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dfa-confirm-delete-invoice-dialog',
+  standalone: false,
   templateUrl: './dfa-confirm-delete-invoice.component.html',
   styleUrls: ['./dfa-confirm-delete-invoice.component.scss']
 })

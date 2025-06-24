@@ -14,6 +14,7 @@ import { Invoice } from '../../core/model/dfa-invoice.model';
 
 @Component({
   selector: 'app-review-amendment',
+  standalone: false,
   templateUrl: './review-amendment.component.html',
   styleUrls: ['./review-amendment.component.scss']
 })

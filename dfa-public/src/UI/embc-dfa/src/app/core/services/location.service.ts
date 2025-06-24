@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { forkJoin, lastValueFrom } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { forkJoin, lastValueFrom, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { CommunityType, CommunityCode, Code, Address, AreaCommunity } from '../api/models';
 import { ConfigurationService } from '../api/services';
 import { RegAddress } from '../model/address';
@@ -89,11 +89,25 @@ export class LocationService {
   }
 
   get supportCategory(): Code[] {
-    return this.supportCategoryVal.length > 0
-      ? this.supportCategoryVal
-      : JSON.parse(this.cacheService.get('supportCategory'))
-      ? JSON.parse(this.cacheService.get('supportCategory'))
-      : this.getCategoryList();
+    // If supportCategoryVal is populated, return it
+    if (this.supportCategoryVal.length > 0) {
+      return this.supportCategoryVal;
+    }
+  
+    // If cached data is available, return it after parsing
+    const cachedCategory = this.cacheService.get('supportCategory');
+    if (cachedCategory) {
+      return JSON.parse(cachedCategory);
+    }
+  
+    // Fetch data asynchronously if no data is available
+    this.getCategoryList().subscribe((categories) => {
+      this.supportCategoryVal = categories;  // Assign fetched data
+      this.cacheService.set('supportCategory', JSON.stringify(categories));
+    });
+  
+    // Return empty array while the data is being fetched
+    return [];
   }
 
   set supportCategory(supportCategoryVal: Code[]) {
@@ -106,12 +120,26 @@ export class LocationService {
     this.cacheService.set('supportSubCategory', supportSubCategoryVal);
   }
 
-  get supportSubCategory() {
-    return this.supportSubCategoryVal.length > 0
-      ? this.supportSubCategoryVal
-      : JSON.parse(this.cacheService.get('supportSubCategory'))
-      ? JSON.parse(this.cacheService.get('supportSubCategory'))
-      : this.getSubCategoryList();
+  get supportSubCategory(): Code[] {
+    // If the supportSubCategoryVal is populated, return it
+    if (this.supportSubCategoryVal.length > 0) {
+      return this.supportSubCategoryVal;
+    }
+
+    // If cached data is available, return it after parsing
+    const cachedSubCategory = this.cacheService.get('supportSubCategory');
+    if (cachedSubCategory) {
+      return JSON.parse(cachedSubCategory);
+    }
+
+    // If no cached data, fetch data asynchronously
+    this.getSubCategoryList().subscribe((subCategories) => {
+      this.supportSubCategoryVal = subCategories;  // Assign fetched data
+      this.cacheService.set('supportSubCategory', JSON.stringify(subCategories));
+    });
+
+    // Return empty array while the data is being fetched
+    return [];
   }
 
   public loadSupportCodes() {
@@ -299,33 +327,23 @@ export class LocationService {
     return this.countriesList || [];
   }
 
-  private getCategoryList(): void {
-    this.configService
-      .configurationGetCodes({ forEnumType: 'SupportCategory' })
-      .subscribe({
-        next: (categories: Code[]) => {
-          this.supportCategory = categories.filter(
-            (category) => category.description
-          );
-        },
-        error: (error) => {
-          document.location.href = 'https://dfa.gov.bc.ca/error.html';
-        }
-      });
+  private getCategoryList(): Observable<Code[]> {
+    return this.configService.configurationGetCodes({ forEnumType: 'SupportCategory' }).pipe(
+      map((categories: Code[]) => categories.filter((category) => category.description)),
+      catchError((error) => {
+        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        return of([]);  // Return an empty array on error
+      })
+    );
   }
 
-  private getSubCategoryList(): void {
-    this.configService
-      .configurationGetCodes({ forEnumType: 'SupportSubCategory' })
-      .subscribe({
-        next: (subCategories: Code[]) => {
-          this.supportSubCategory = subCategories.filter(
-            (subCategory) => subCategory.description
-          );
-        },
-        error: (error) => {
-          document.location.href = 'https://dfa.gov.bc.ca/error.html';
-        }
-      });
+  private getSubCategoryList(): Observable<Code[]> {
+    return this.configService.configurationGetCodes({ forEnumType: 'SupportSubCategory' }).pipe(
+      map((subCategories: Code[]) => subCategories.filter((subCategory) => subCategory.description)),
+      catchError((error) => {
+        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        return of([]);  // Return an empty array on error
+      })
+    );
   }
 }

@@ -4,7 +4,7 @@ import { RegAddress } from '../model/address';
 import { Community, LocationService } from '../services/location.service';
 import * as _ from 'lodash';
 
-@Pipe({ name: 'maskEvacuatedaddress' })
+@Pipe({ name: 'maskEvacuatedaddress', standalone: false })
 export class MaskEvacuatedAddressPipe implements PipeTransform {
   constructor(
     private locationService: LocationService,

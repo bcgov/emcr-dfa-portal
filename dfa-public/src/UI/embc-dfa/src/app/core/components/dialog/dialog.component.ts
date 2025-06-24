@@ -12,6 +12,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog',
+  standalone: false,
   templateUrl: './dialog.component.html',
   styleUrls: ['./dialog.component.scss'],
   encapsulation: ViewEncapsulation.None

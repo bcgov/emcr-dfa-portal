@@ -40,6 +40,7 @@ import { DFAClaimMainDataService } from '../../../../feature-components/dfa-clai
 
 @Component({
   selector: 'app-supporting-documents-claim',
+  standalone: false,
   templateUrl: './supporting-documents-claim.component.html',
   styleUrls: ['./supporting-documents-claim.component.scss']
 })

@@ -129,6 +129,15 @@ namespace EMBC.DFA.API.Controllers
             dfaClaimMain.Id = claimId;
             dfaClaimMain.Claim = dfa_claim;
 
+            dfa_claim.approvedReimbursement = FixDecimalPlaces(dfa_claim.approvedReimbursement);
+            dfa_claim.lessFirst1000 = FixDecimalPlaces(dfa_claim.lessFirst1000);
+            dfa_claim.approvedClaimTotal = FixDecimalPlaces(dfa_claim.approvedClaimTotal);
+            dfa_claim.eligiblePayable = FixDecimalPlaces(dfa_claim.eligiblePayable);
+            dfa_claim.paidClaimAmount = FixDecimalPlaces(dfa_claim.paidClaimAmount);
+            dfa_claim.claimTotal = FixDecimalPlaces(dfa_claim.claimTotal);
+               
+            
+
             return Ok(dfaClaimMain);
         }
 

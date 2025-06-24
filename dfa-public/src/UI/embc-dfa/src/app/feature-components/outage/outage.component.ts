@@ -5,6 +5,7 @@ import { OutageService } from './outage.service';
 
 @Component({
   selector: 'app-outage',
+  standalone: false,
   templateUrl: './outage.component.html',
   styleUrls: ['./outage.component.scss']
 })

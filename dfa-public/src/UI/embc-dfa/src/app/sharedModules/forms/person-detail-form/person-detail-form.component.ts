@@ -6,6 +6,7 @@ import * as globalConst from '../../../core/services/globalConstants';
 
 @Component({
   selector: 'app-person-detail-form',
+  standalone: false,
   templateUrl: './person-detail-form.component.html',
   styleUrls: ['./person-detail-form.component.scss']
 })

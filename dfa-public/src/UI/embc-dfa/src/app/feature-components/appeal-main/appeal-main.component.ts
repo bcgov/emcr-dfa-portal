@@ -17,6 +17,7 @@ import { AppealDocument } from 'src/app/feature-components/appeal-main/appeal-do
  */
 @Component({
   selector: 'app-appeal-main',
+  standalone: false,
   templateUrl: './appeal-main.component.html',
   styleUrl: './appeal-main.component.scss'
 })

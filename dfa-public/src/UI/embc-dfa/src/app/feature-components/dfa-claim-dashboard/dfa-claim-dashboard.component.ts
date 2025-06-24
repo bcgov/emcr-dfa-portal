@@ -38,6 +38,7 @@ import { DFAClaimMainService } from '../dfa-claim-main/dfa-claim-main.service';
 
 @Component({
   selector: 'app-dfa-claim-dashboard',
+  standalone: false,
   templateUrl: './dfa-claim-dashboard.component.html',
   styleUrls: ['./dfa-claim-dashboard.component.scss']
 })

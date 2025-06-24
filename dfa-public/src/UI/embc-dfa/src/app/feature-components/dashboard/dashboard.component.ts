@@ -19,6 +19,7 @@ import { BCeIdBusiness } from 'src/app/core/api/models/b-ce-id-business';
 
 @Component({
   selector: 'app-dfa-dashboard',
+  standalone: false,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

@@ -24,6 +24,7 @@ import { DFAConfirmAmendmentCreateDialogComponent } from '../../core/components/
 
 @Component({
   selector: 'app-dfa-amendment-dashboard',
+  standalone: false,
   templateUrl: './dfa-amendment-dashboard.component.html',
   styleUrls: ['./dfa-amendment-dashboard.component.scss']
 })

@@ -44,6 +44,7 @@ export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
 
 @Component({
   selector: 'app-recovery-claim',
+  standalone: false,
   templateUrl: './recovery-claim.component.html',
   styleUrls: ['./recovery-claim.component.scss'],
   providers: [{ provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults }]

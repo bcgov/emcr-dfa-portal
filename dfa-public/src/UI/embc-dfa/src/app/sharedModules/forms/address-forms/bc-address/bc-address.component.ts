@@ -29,6 +29,7 @@ const SCRIPT_PATH = 'http://ws1.postescanada-canadapost.ca/js/addresscomplete-2.
 
 @Component({
   selector: 'app-bc-address',
+  standalone: false,
   templateUrl: './bc-address.component.html',
   styleUrls: ['./bc-address.component.scss']
 })

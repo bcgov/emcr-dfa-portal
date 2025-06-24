@@ -31,6 +31,7 @@ interface AppealStatusItem {
 
 @Component({
   selector: 'app-dfadashboard-project',
+  standalone: false,
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss']
 })

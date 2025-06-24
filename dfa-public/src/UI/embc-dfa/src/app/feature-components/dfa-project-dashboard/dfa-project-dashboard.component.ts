@@ -36,6 +36,7 @@ import { DFAProjectMainService } from '../dfa-project-main/dfa-project-main.serv
 
 @Component({
   selector: 'app-dfa-project-dashboard',
+  standalone: false,
   templateUrl: './dfa-project-dashboard.component.html',
   styleUrls: ['./dfa-project-dashboard.component.scss']
 })

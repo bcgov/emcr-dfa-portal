@@ -40,6 +40,7 @@ import * as globalConst from '../../../../core/services/globalConstants';
 
 @Component({
   selector: 'app-application-details',
+  standalone: false,
   templateUrl: './application-details.component.html',
   styleUrls: ['./application-details.component.scss']
 })

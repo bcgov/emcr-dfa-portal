@@ -39,6 +39,7 @@ import { DFAProjectMainDataService } from 'src/app/feature-components/dfa-projec
 
 @Component({
   selector: 'amendment',
+  standalone: false,
   templateUrl: './amendment.component.html',
   styleUrls: ['./amendment.component.scss']
 })

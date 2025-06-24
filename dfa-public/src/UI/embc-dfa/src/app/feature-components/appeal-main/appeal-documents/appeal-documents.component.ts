@@ -27,6 +27,7 @@ export type AppealDocument = {
  */
 @Component({
   selector: 'app-appeal-documents',
+  standalone: false,
   templateUrl: './appeal-documents.component.html',
   styleUrl: './appeal-documents.component.scss',
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }]

@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dfa-general-info-dialog',
+  standalone: false,
   templateUrl: './dfa-general-info-dialog.component.html',
   styleUrls: ['./dfa-general-info-dialog.component.scss']
 })

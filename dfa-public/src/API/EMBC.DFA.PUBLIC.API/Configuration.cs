@@ -28,7 +28,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
@@ -38,6 +37,7 @@ using NSwag.Generation.Processors.Security;
 using Xrm.Tools.WebAPI;
 using Xrm.Tools.WebAPI.Requests;
 using ITokenProvider = EMBC.DFA.API.Services.ITokenProvider;
+using EMBC.DFA.PUBLIC.API.Services;
 
 namespace EMBC.DFA.API
 {
@@ -281,17 +281,19 @@ namespace EMBC.DFA.API
             services.AddTransient<IProfileInviteService, ProfileInviteService>();
             services.AddTransient<IConfigurationHandler, Handler>();
             services.AddTransient<IDynamicsGateway, DynamicsGateway>();
-            services.AddTransient<PDFServiceHandler, PDFServiceHandler>();
 
-            
+            services.Configure<PdfServiceConfigs>(configuration.GetSection("pdfService"));
+            services.AddTransient<TokenDelegatingHandler>();
+            services.AddHttpClient<PDFServiceHandler>()
+                .AddHttpMessageHandler<TokenDelegatingHandler>();
+            services.AddTransient<BearerTokenProvider>();
 
-                // 2024-07-02 EMCRI-363 waynezen: added
+            // 2024-07-02 EMCRI-363 waynezen: added
             services.AddTransient<IUserService, UserService>();
 
             services.Configure<ADFSTokenProviderOptions>(configuration.GetSection("Dynamics:ADFS"));
-            services.Configure<PdfServiceConfigs>(configuration.GetSection("pdfService"));
-
             services.AddADFSTokenProvider();
+
             services.AddHttpClient("captcha");
             services.AddScoped(sp =>
             {

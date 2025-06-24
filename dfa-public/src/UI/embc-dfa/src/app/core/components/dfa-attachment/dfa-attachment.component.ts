@@ -15,6 +15,7 @@ import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-dfa-attachment',
+  standalone: false,
   templateUrl: './dfa-attachment.component.html',
   styleUrls: ['./dfa-attachment.component.scss']
 })

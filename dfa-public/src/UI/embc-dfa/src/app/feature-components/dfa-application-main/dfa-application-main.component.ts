@@ -31,6 +31,7 @@ import { LoginService } from '../../core/services/login.service';
 
 @Component({
   selector: 'app-dfa-application-main',
+  standalone: false,
   templateUrl: './dfa-application-main.component.html',
   styleUrls: ['./dfa-application-main.component.scss']
 })

@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-confirm-amendment-create-dialog',
+  standalone: false,
   templateUrl: './dfa-confirm-amendment-create-dialog.component.html',
   styleUrls: ['./dfa-confirm-amendment-create-dialog.component.scss']
 })
