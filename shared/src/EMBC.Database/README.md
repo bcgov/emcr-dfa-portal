@@ -1,7 +1,7 @@
 ## Generate Entities
 
 ### Version
-As of June 12, 2025; this is the latest version. 
+As of June 24, 2025; this is the latest version. 
 For more examples:
 - [CAS Adapter](https://github.com/bcgov/cas-adapter) -> Example using repository directly, latest code and Database\README.md 
 - [Victim Services VSD](https://github.com/bcgov/pssg-cscp-vsd)	-> Example using command pattern, latest command code in folder "Manager"
@@ -69,10 +69,20 @@ NOTE in theory, you could add your authentication profile to PAC using your conn
 
 If you encounter a user authentication error and the authentication hasn't changed and your VPN is connected, try restarting the XrmToolbox application. I find this happens often but restarting always fixes the issue.
 
+
 ## Dataverse Cheatsheet
 
 .AddLink - Adds a link between two entity instances that already exist in database
 .AddRelatedObject - Adds a new related entity to an existing entity
+
+
+## Unit Testing
+
+There is a relatively straight-forward way to unit test. It cannot be used with test runners until it is refactored to work without editing generating code.
+To unit test DFA_Event, add the keyword "virtual" to DatabaseContext.DFA_Event property. Now you can run the unit tests in "EventRepositoryTests.cs" without the VPN connected
+(except for the first test, read the comments). You can apply this same method to other entities as needed.
+NOTE because this dirty method requires editing the generated code, you will lose your changes when you regenerate the entities.
+
 
 ### References
 [Dataverse LINQ Queries](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/build-queries-with-linq-net-language-integrated-query)
