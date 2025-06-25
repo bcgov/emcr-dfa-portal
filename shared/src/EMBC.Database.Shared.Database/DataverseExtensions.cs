@@ -107,6 +107,42 @@ public static class DataverseExtensions
         return await Task.FromResult(commitFileBlocksUploadResponse.FileId.ToString());
     }
 
+    /// <summary>
+    /// Uploads a file as an annotation (note) attached to a Dataverse entity.
+    /// </summary>
+    /// <param name="service">The organization service instance</param>
+    /// <param name="entityLogicalName">The logical name of the entity to attach the note to</param>
+    /// <param name="entityId">The ID of the entity to attach the note to</param>
+    /// <param name="fileName">The file name</param>
+    /// <param name="mimeType">The MIME type</param>
+    /// <param name="base64Content">The base64-encoded file content</param>
+    /// <param name="subject">The subject of the note</param>
+    /// <param name="noteText">The note text</param>
+    public static async Task UploadFileAsAnnotationAsync(
+        this IOrganizationServiceAsync service,
+        string entityLogicalName,
+        Guid entityId,
+        string fileName,
+        string mimeType,
+        string base64Content,
+        string subject = "",
+        string noteText = "")
+    {
+        var base64Data = base64Content.Contains(",")
+            ? base64Content.Substring(base64Content.IndexOf(',') + 1)
+            : base64Content;
+
+        var annotation = new Entity("annotation");
+        annotation["subject"] = subject ?? "File Attachment";
+        annotation["filename"] = fileName;
+        annotation["mimetype"] = mimeType;
+        annotation["documentbody"] = base64Data;
+        annotation["notetext"] = noteText ?? "";
+        annotation["objectid"] = new EntityReference(entityLogicalName, entityId);
+
+        await service.CreateAsync(annotation);
+    }
+
     private static RetrieveAttributeResponse GetAttribute([NotNull] this OrganizationServiceContext context, [NotNull] Entity entity, string? fileFieldName)
     {
         return (RetrieveAttributeResponse)context.Execute(new RetrieveAttributeRequest

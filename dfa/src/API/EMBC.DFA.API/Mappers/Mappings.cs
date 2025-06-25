@@ -552,12 +552,11 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(dest => dest.CaseId, opt => opt.MapFrom(src => src.CaseId))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.Reason))
+                .ForMember(dest => dest.AppealType, opt => opt.MapFrom(src => src.Type.ToString()))
                 .ForMember(dest => dest.SignAndSubmit, opt => opt.MapFrom(src => src.SignAndSubmit));
 
             // Fully qualify the destination type for SignAndSubmit and DigitalSignature:
             CreateMap<SignAndSubmitModel, EMBC.Database.Contract.SignAndSubmit>()
-                .ForMember(dest => dest.NinetyDayDeadline, opt => opt.MapFrom(src =>
-                    string.IsNullOrEmpty(src.NinetyDayDeadline) ? (DateTime?)null : DateTime.Parse(src.NinetyDayDeadline)))
                 .ForMember(dest => dest.ApplicantSignature, opt => opt.MapFrom(src => src.ApplicantSignature))
                 .ForMember(dest => dest.SecondaryApplicantSignature, opt => opt.MapFrom(src => src.SecondaryApplicantSignature));
 

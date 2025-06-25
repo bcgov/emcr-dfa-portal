@@ -7,7 +7,7 @@ export interface AppealModel {
   caseId: string;
   id?: string | null;
   reason: string;
-  signAndSubmit?: SignAndSubmitModel | null;
+  signAndSubmit?: SignAndSubmitModel;
   status: string;
   type: number;
 }

@@ -93,8 +93,8 @@ export class DFAAppealDataService {
       caseId: this._caseDetails?.caseId ?? '',
       type: this._appealType,
       status: AppealStatus.Received,
-      reason: this._appealReason ?? ''
-      // ...(this._signAndSubmit ? { signAndSubmit: this._signAndSubmit } : {}) // only include if present
+      reason: this._appealReason ?? '',
+      ...(this._signAndSubmit ? { signAndSubmit: this._signAndSubmit } : {})
     };
   }
 }
