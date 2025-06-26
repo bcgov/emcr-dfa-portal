@@ -27,6 +27,12 @@ jobs:
         with:
           node-version: "22.x"
 
+      - name: Install and build shared-ui
+        run: |
+          cd shared-workspace
+          npm install
+          npx ng build shared-ui
+
       - name: Install Dependencies
         run: |
           cd dfa/src/UI/embc-dfa
