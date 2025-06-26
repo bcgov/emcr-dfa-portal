@@ -31,8 +31,8 @@ export class AppComponent implements OnInit {
   public currentDate = Date.now();
   startDisplayOutageBanner?: number;
   outageEnd?: number;
-  privateButtonDisabled: boolean = true;
-  publicButtonDisabled: boolean = true;
+  privateButtonDisabled: boolean = false;   // TODO when releasing D4P-96, initial value should be true
+  publicButtonDisabled: boolean = false;    // TODO when releasing D4P-96, initial value should be true
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   position = new FormControl(this.positionOptions[0]);
   
@@ -49,14 +49,15 @@ export class AppComponent implements OnInit {
         this.outageEnd = new Date(environment.outageEnd).getTime();
       }
 
-      this.httpClient.get(environment.apiEndpoint as string).subscribe((response: any) => {
-        let hasActiveEventResponse = response as HasActiveEventResponse;
-        console.info("Has Active Event Response", hasActiveEventResponse);
-        if (hasActiveEventResponse) {
-           this.privateButtonDisabled = !hasActiveEventResponse.hasActivePrivateEvent;
-           this.publicButtonDisabled = !hasActiveEventResponse.hasActivePublicEvent;
-        }
-      })
+      // TODO uncomment when D4P-96 is released
+      // this.httpClient.get(environment.apiEndpoint as string).subscribe((response: any) => {
+      //   let hasActiveEventResponse = response as HasActiveEventResponse;
+      //   console.info("Has Active Event Response", hasActiveEventResponse);
+      //   if (hasActiveEventResponse) {
+      //      this.privateButtonDisabled = !hasActiveEventResponse.hasActivePrivateEvent;
+      //      this.publicButtonDisabled = !hasActiveEventResponse.hasActivePublicEvent;
+      //   }
+      // });
     });
   }
   
