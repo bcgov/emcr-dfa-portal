@@ -95,7 +95,8 @@ namespace EMBC.DFA.API.Controllers
                 FeatureFlags = new FeatureFlagConfiguration
                 {
                     UseAppeals = !string.IsNullOrEmpty(configuration["FEATURE_USE_APPEALS"]),
-                    UseAutoNotifications = !string.IsNullOrEmpty(configuration["FEATURE_USE_AUTO_NOTIFICATIONS"])
+                    UseAutoNotifications = !string.IsNullOrEmpty(configuration["FEATURE_USE_AUTO_NOTIFICATIONS"]),
+                    UseDocumentViewing = !string.IsNullOrEmpty(configuration["FEATURE_USE_DOCUMENT_VIEWING"])
                 }
             };
 
@@ -265,6 +266,7 @@ namespace EMBC.DFA.API.Controllers
     {
         public bool UseAppeals { get; set; }
         public bool UseAutoNotifications { get; set; }
+        public bool UseDocumentViewing { get; set; }
     }
     public class AreaCommunity
     {
