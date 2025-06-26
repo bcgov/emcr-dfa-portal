@@ -5,9 +5,21 @@
 #             npm version 10.9.2
 FROM trion/ng-cli-karma:19.2.6 AS node-builder
 WORKDIR /src
+
+# Copy and install shared library dependencies, then build it
+COPY ./shared-workspace/package*.json ./shared-workspace/
+WORKDIR /src/shared-workspace
+RUN npm install
+COPY ./shared-workspace/ ./
+RUN npx ng build shared-ui
+
+# Copy app package.json and install dependencies (shared-ui now exists)
+WORKDIR /src/embc-dfa
 COPY ./embc-dfa/package*.json ./
 RUN npm install --ignore-scripts
-COPY ./embc-dfa/ .
+
+# Copy app source
+COPY ./embc-dfa/ ./
 
 FROM node-builder as ng-builder
 #RUN npm run test -- --no-watch --no-progress
