@@ -15,11 +15,11 @@ RUN npx ng build shared-ui
 
 # Copy app package.json and install dependencies (shared-ui now exists)
 WORKDIR /src/embc-dfa
-COPY ./embc-dfa/package*.json ./
+COPY ./dfa/src/UI/embc-dfa/package*.json ./
 RUN npm install --ignore-scripts
 
 # Copy app source
-COPY ./embc-dfa/ ./
+COPY ./dfa/src/UI/embc-dfa/ ./
 
 FROM node-builder as ng-builder
 #RUN npm run test -- --no-watch --no-progress
