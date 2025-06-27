@@ -648,10 +648,14 @@ namespace EMBC.DFA.API.Controllers
         public string? stage { get; set; }
         public string? status { get; set; }
         public string? claimDecision { get; set; }
+        public string dateFileClosed { get; set; }
         /* D4P-112 */
         public string? advancedDrawdownAmount { get; set; }
-
         public string? decisionDate { get; set; }
+        public string? claimType { get; set; }
+        public bool? isAdjustmentClaim { get; set; }
+        public bool? lateAppealAllowed { get; set; }
+
     }
 
     public class Invoice

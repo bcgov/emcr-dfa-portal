@@ -15,7 +15,8 @@
         </div>
     </div>
 
-    <mat-horizontal-stepper [selectedIndex]="selectedStepIndex" class="stepper-style" labelPosition="bottom" [linear]="false">
+    <mat-horizontal-stepper [selectedIndex]="selectedStepIndex" class="stepper-style" labelPosition="bottom"
+        [linear]="false">
         <mat-step [editable]="false" [completed]="true">
             <ng-template matStepLabel>Claim Submission</ng-template>
         </mat-step>
@@ -25,7 +26,7 @@
         <mat-step [editable]="false" [completed]="true">
             <ng-template matStepLabel>Upload Documents</ng-template>
         </mat-step>
-        <mat-step >
+        <mat-step>
             <ng-template matStepLabel>Decision</ng-template>
         </mat-step>
 
@@ -264,9 +265,20 @@
             Denied
         </div>
 
-        <div style="margin-left: auto;">
-            <button id="open-appeal-decision" class="button-p nextNsave" style="width: 220px; vertical-align: middle;"
-                mat-stroked-button type="button" (click)="openAppealDecision()">
+    </div>
+
+
+    <div>
+        <div *ngIf="canAppealClaims(recoveryClaim)" class="appealClaims">
+            <div style="padding: 12px;">
+                <i>Amount Approval decisions can be appealed for 60 days ({{remainingDays(recoveryClaim)}} days
+                    remaining).</i>
+            </div>
+            <button id="open-appeal-decision" class="button-p" style="width: 220px;" mat-stroked-button
+                type="button" (click)="openAppealDecision()"
+                [disabled]="remainingDays(recoveryClaim) >= 61 && !recoveryClaim?.claim?.lateAppealAllowed"
+                [matTooltip]="(remainingDays(recoveryClaim) >= 61 && !recoveryClaim?.claim?.lateAppealAllowed) ? 'The 60 day deadline has passed and the claim amount cannot be appealed.' : ''"
+                matTooltipPosition="above">
                 Appeal Decision
                 <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
             </button>

@@ -705,8 +705,12 @@ namespace EMBC.DFA.API.Mappers
                     : null))
                 .ForMember(d => d.advancedDrawdownAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_advanceddrawdownamount) ? "0" : s.dfa_advanceddrawdownamount))
                 .ForMember(d => d.claimDecision, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_decisioncopy) ? GetEnumDescription((ClaimDecisions)Convert.ToInt32(s.dfa_decisioncopy)) : null))
-                .ForMember(d => d.decisionDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_decisiondate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_decisiondate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)));
-                
+                .ForMember(d => d.decisionDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_decisiondate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_decisiondate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(d => d.claimType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimtype) ? GetEnumDescription((ClaimTypeOptionSet)Convert.ToInt32(s.dfa_claimtype)) : null))
+                .ForMember(d => d.isAdjustmentClaim, opts => opts.MapFrom(s => s.dfa_isadjustmentclaim))
+                .ForMember(d => d.lateAppealAllowed, opts => opts.MapFrom(s => s.dfa_lateappealallowed))
+                .ForMember(d => d.dateFileClosed, opts => opts.MapFrom(s => s.dfa_bpfclosedate));
+
 
             CreateMap<dfa_appapplication, CurrentApplication>()
                 .ForMember(d => d.DateOfDamage, opts => opts.MapFrom(s => s.dfa_dateofdamage))
@@ -954,8 +958,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.projectTypeOther,opts => opts.MapFrom(s => s.dfa_projecttypeother))
                 /* D4P-112 */
                 .ForMember(d => d.advancedPaymentsBalance, opts => opts.MapFrom(s => s.dfa_advancedpaymentbalance.HasValue ? decimal.Round(decimal.Parse(s.dfa_advancedpaymentbalance.Value.ToString("F")), 2) : (decimal?)null))
-                .ForMember(d => d.advancedPaymentsMade, opts => opts.MapFrom(s => s.dfa_totaladvancedpaymentamount.HasValue ? decimal.Round(decimal.Parse(s.dfa_totaladvancedpaymentamount.Value.ToString("F")), 2) : (decimal?)null))
-                ;
+                .ForMember(d => d.advancedPaymentsMade, opts => opts.MapFrom(s => s.dfa_totaladvancedpaymentamount.HasValue ? decimal.Round(decimal.Parse(s.dfa_totaladvancedpaymentamount.Value.ToString("F")), 2) : (decimal?)null));
             // 2024-07-16 EMCRI-440 waynezen
 
             CreateMap<BceidUserData, BCeID.BCeIDBusiness>()

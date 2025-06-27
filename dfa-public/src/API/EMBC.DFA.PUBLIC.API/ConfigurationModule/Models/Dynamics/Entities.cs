@@ -343,9 +343,13 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_claimbpfstages { get; set; }
         public string? dfa_claimbpfsubstages { get; set; }
         public string? dfa_decisioncopy { get; set; }
+        public string? dfa_bpfclosedate { get; set; }
         /* D4P-112 */
         public string? dfa_advanceddrawdownamount { get; set; }
         public string? dfa_decisiondate { get; set; }
+        public string? dfa_claimtype { get; set; }
+        public bool? dfa_isadjustmentclaim { get; set; }
+        public bool ? dfa_lateappealallowed { get; set; }
     }
 
     public class dfa_appapplicationmain_retrieve

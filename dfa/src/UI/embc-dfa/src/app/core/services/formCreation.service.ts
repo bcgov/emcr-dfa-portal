@@ -345,6 +345,19 @@ export class FormCreationService {
   AppealSignAndSubmitForm$: Observable<UntypedFormGroup | undefined> =
     this.AppealSignAndSubmitForm.asObservable();
 
+
+  viewingDocumentsForm: BehaviorSubject<UntypedFormGroup | undefined> =
+    new BehaviorSubject(
+      this.formBuilder.group(
+       new SupportingDocumentsForm(
+         new SupportingDocuments(),
+       )
+     )
+   );
+
+  viewingDocumentsForm$: Observable<UntypedFormGroup | undefined> =
+    this.viewingDocumentsForm.asObservable();
+
   constructor(
     private formBuilder: UntypedFormBuilder,
     private dfaAppealDataService: DFAAppealDataService,

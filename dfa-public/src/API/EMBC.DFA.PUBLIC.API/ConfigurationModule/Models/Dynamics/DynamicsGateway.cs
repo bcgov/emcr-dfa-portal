@@ -1469,7 +1469,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         "dfa_totaleligiblegst", "dfa_totaloftotaleligible", "dfa_totalapproved", "dfa_lessfirst1000",
                         "dfa_costsharing", "dfa_eligiblepayable", "dfa_totalpaid", "dfa_claimpaiddate",
                         "dfa_claimtotal", "dfa_paidclaimamount", "dfa_onetimedeductionamount", "dfa_claimbpfstages", "dfa_claimbpfsubstages", "dfa_decisioncopy",
-                        "dfa_advanceddrawdownamount", "dfa_decisiondate"
+                        "dfa_advanceddrawdownamount", "dfa_decisiondate",  "dfa_claimtype", "dfa_isadjustmentclaim", "dfa_lateappealallowed", "dfa_bpfclosedate"
                     },
                     Filter = $"dfa_projectclaimid eq {claimId}"
                 });
@@ -1499,6 +1499,11 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_onetimedeductionamount = objApp.dfa_onetimedeductionamount,
                                    dfa_advanceddrawdownamount = objApp.dfa_advanceddrawdownamount,
                                    dfa_decisiondate = objApp.dfa_decisiondate,
+                                   dfa_claimtype = objApp.dfa_claimtype,
+                                   dfa_isadjustmentclaim = objApp.dfa_isadjustmentclaim,
+                                   dfa_bpfclosedate = objApp.dfa_bpfclosedate,
+                                   dfa_lateappealallowed = objApp.dfa_lateappealallowed,
+                                   
                                }).AsEnumerable().OrderByDescending(m => m.createdon);
 
                 return lstApps.FirstOrDefault();

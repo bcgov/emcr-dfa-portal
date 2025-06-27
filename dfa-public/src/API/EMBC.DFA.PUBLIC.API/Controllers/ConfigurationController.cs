@@ -98,7 +98,8 @@ namespace EMBC.DFA.API.Controllers
                     UseAppeals = !string.IsNullOrEmpty(configuration["FEATURE_USE_APPEALS"]),
                     UseAmendments = !string.IsNullOrEmpty(configuration["FEATURE_USE_AMENDMENTS"]),
                     UseAdvancedPayments = !string.IsNullOrEmpty(configuration["FEATURE_USE_ADVANCED_PAYMENTS"]),
-                    UseAutoNotifications = !string.IsNullOrEmpty(configuration["FEATURE_USE_AUTO_NOTIFICATIONS"])
+                    UseAutoNotifications = !string.IsNullOrEmpty(configuration["FEATURE_USE_AUTO_NOTIFICATIONS"]),
+                    UseDocumentViewing = !string.IsNullOrEmpty(configuration["FEATURE_USE_DOCUMENT_VIEWING"]),
                 }
 
             };
@@ -260,6 +261,7 @@ namespace EMBC.DFA.API.Controllers
         public bool UseAmendments { get; set; }
         public bool UseAdvancedPayments { get; set; }
         public bool UseAutoNotifications { get; set; }
+        public bool UseDocumentViewing { get; set; }
     }
 
     public class AreaCommunity

@@ -36,6 +36,15 @@ jobs:
             exit 1
           fi
 
+      - name: Install Dependencies for shared-workspace
+        run: |
+          cd shared-workspace
+          npm install --ignore-scripts
+          if [ $? -ne 0 ]; then
+            echo "::error::Failed to install npm packages in shared-workspace"
+            exit 1
+          fi
+
       - name: Build
         run: |
           cd dfa/src/UI/embc-dfa

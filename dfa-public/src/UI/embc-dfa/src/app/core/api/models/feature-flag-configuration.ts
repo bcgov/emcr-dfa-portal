@@ -7,4 +7,5 @@ export interface FeatureFlagConfiguration {
   useAmendments?: boolean;
   useAppeals?: boolean;
   useAutoNotifications?: boolean;
+  useDocumentViewing?: boolean;
 }
