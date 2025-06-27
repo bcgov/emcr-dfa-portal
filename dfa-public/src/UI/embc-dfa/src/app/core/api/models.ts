@@ -33,6 +33,7 @@ export type { CurrentInvoice } from './models/current-invoice';
 export type { CurrentProject } from './models/current-project';
 export type { CurrentProjectAmendment } from './models/current-project-amendment';
 export type { CurrentProjectAppeal } from './models/current-project-appeal';
+export type { CurrentProjectClaimAppeal } from './models/current-project-claim-appeal';
 export type { DamagedRoom } from './models/damaged-room';
 export type { DateOfBirthDataConflict } from './models/date-of-birth-data-conflict';
 export type { DfaApplicationMain } from './models/dfa-application-main';

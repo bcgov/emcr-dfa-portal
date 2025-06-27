@@ -174,34 +174,33 @@ export class DfaDashClaimComponent implements OnInit {
                 }
               }
 
+              
+            if(objApp.status?.toLowerCase() == 'decision made' && objStatItem.status.toLowerCase() == objApp.status.toLowerCase()){
+              if(objApp.claimAppeals?.find(a=> a.appealStatus?.toLowerCase() != 'closed' && a.appealDecision?.toLowerCase() != 'withdrawn')){
+                objStatItem.stage = 'Appealed';
+              }
+            }
+
             });
 
 
             if (!Array.isArray(objApp.appealStatusBar)) {
               objApp.appealStatusBar = JSON.parse(JSON.stringify(this.appealItems));
             }
-
+            objApp.claimAppeals.forEach(appealObj => {
             objApp.appealStatusBar.forEach((objStatItem) => {
               const statusMatch =
-                objApp.status &&
-                objStatItem.status?.toLowerCase() === objApp.status.toLowerCase();
+                appealObj.appealStatus &&
+                objStatItem.status?.toLowerCase() === appealObj.appealStatus.toLowerCase();
 
               if (statusMatch) {
                 objStatItem.currentStep = true;
                 isFound = true;
                 this.matchStatusFound = true;
 
-                if (objApp.stage) {
-                  objStatItem.stage = objApp.stage;
-                  this.dFAProjectMainDataService.setStage(objApp.stage);
-                }
-
-                if (objApp.claimDecision) {
-                  this.dFAProjectMainDataService.setProjectDecision(objApp.claimDecision);
-                 }
 
                 // Determine statusColor based on logic
-                if (['Ineligible', 'Withdrawn'].includes(objApp.stage || '')) {
+                if (['Ineligible', 'Withdrawn'].includes(appealObj.appealDecision|| '')) {
                   objApp.statusColor = '#E25E63';
                 } else if (
                   objApp.status?.toLowerCase().includes('decision made') &&
@@ -226,7 +225,8 @@ export class DfaDashClaimComponent implements OnInit {
                   objStatItem.isCompleted = true;
                 }
               }
-            });
+            })
+          });
             lstDataModified.push(objApp);
           })
 

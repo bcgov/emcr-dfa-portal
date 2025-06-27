@@ -525,7 +525,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.contentType))
                 .ForMember(d => d.DocumentContent, opts => opts.MapFrom(s => s.fileData))
                 ;
-            
+
             CreateMap<FileUploadClaim, S3SubmissionEntity>()
                 .ForMember(d => d.RegardingEntityID, opts => opts.MapFrom(s => s.claimId))
                 .ForMember(d => d.OriginCode, opts => opts.MapFrom(s => ORIGIN_CODE_PORTAL))
@@ -683,7 +683,12 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.AdvancedDrawdownAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_advanceddrawdownamount) ? "(pending information)" : "CA$ " + Convert.ToDecimal(s.dfa_advanceddrawdownamount).ToString(CurrencyFormat)))
                 .ForMember(d => d.DecisionDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_decisiondate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_decisiondate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.ClaimType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimtype) ? GetEnumDescription((ClaimTypeOptionSet)Convert.ToInt32(s.dfa_claimtype)) : null))
-                .ForMember(d => d.IsAdjustmentClaim, opts => opts.MapFrom(s => s.dfa_isadjustmentclaim));
+                .ForMember(d => d.IsAdjustmentClaim, opts => opts.MapFrom(s => s.dfa_isadjustmentclaim))
+                .ForMember(d => d.ClaimAppeals, opts => opts.MapFrom(s => s.dfa_claimappeal));
+
+            CreateMap<dfa_claimappeal, CurrentProjectClaimAppeal>()
+                .ForMember(d => d.AppealStatus, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.statuscode) ? GetEnumDescription((ClaimAppealStatusOptionSet)Convert.ToInt32(s.statuscode)) : null))
+                .ForMember(d => d.AppealDecision, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_appealdecision) ? GetEnumDescription((ClaimAppealDecisionOptionSet)Convert.ToInt32(s.dfa_appealdecision)) : null));
 
             CreateMap<dfa_claim_retrieve, RecoveryClaim>()
                 .ForMember(d => d.claimNumber, opts => opts.MapFrom(s => s.dfa_name))
@@ -706,7 +711,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.advancedDrawdownAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_advanceddrawdownamount) ? "0" : s.dfa_advanceddrawdownamount))
                 .ForMember(d => d.claimDecision, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_decisioncopy) ? GetEnumDescription((ClaimDecisions)Convert.ToInt32(s.dfa_decisioncopy)) : null))
                 .ForMember(d => d.decisionDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_decisiondate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_decisiondate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)));
-                
+
 
             CreateMap<dfa_appapplication, CurrentApplication>()
                 .ForMember(d => d.DateOfDamage, opts => opts.MapFrom(s => s.dfa_dateofdamage))
@@ -867,7 +872,7 @@ namespace EMBC.DFA.API.Mappers
                                                 : (int?)null)))))
                             : (int?)null))
                 .ForMember(d => d.dfa_projecttypeother,opts => opts.MapFrom(s => s.Project.projectTypeOther));
-                
+
             CreateMap<DFAClaimMain, dfa_claim_params>()
                 .ForMember(d => d.dfa_finalclaim, opts => opts.MapFrom(s => s.Claim != null ? s.Claim.isThisFinalClaim : (bool?)null))
                 .ForMember(d => d.dfa_projectclaimid, opts => opts.MapFrom(s => s.Id))

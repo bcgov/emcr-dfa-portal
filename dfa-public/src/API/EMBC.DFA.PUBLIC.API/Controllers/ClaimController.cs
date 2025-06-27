@@ -203,6 +203,14 @@ namespace EMBC.DFA.API.Controllers
         public string DecisionDate { get; set; }
         public string? ClaimType { get; set; }
         public bool? IsAdjustmentClaim { get; set; }
+        public IEnumerable<CurrentProjectClaimAppeal> ClaimAppeals { get; set; }
+    }
+
+    public class CurrentProjectClaimAppeal
+    {
+        public string Id { get; set; }
+        public string AppealDecision { get; set; }
+        public string AppealStatus { get; set; }
     }
 
     public class ClaimStatusBar
