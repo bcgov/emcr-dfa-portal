@@ -656,11 +656,11 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.ProjectType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projecttype) ? GetEnumDescription((ProjectTypes)Convert.ToInt32(s.dfa_projecttype)) : null))
                 .ForMember(d => d.ProjectTypeOther, opts => opts.MapFrom(s => s.dfa_projecttypeother))
                 .ForMember(d => d.ProjectApprovedDate, opts => opts.MapFrom(s => s.dfa_projectapproveddate))
-                .ForMember(d => d.Appeals, opts => opts.MapFrom(s => s.dfa_appeal));
+                .ForMember(d => d.Appeals, opts => opts.MapFrom(s => s.dfa_projectappeal))
+                .ForMember(d => d.IsSubmitted, opts => opts.MapFrom(s => s.dfa_projectappeal.Any(x => x.dfa_dateappealreceived != null)));
 
-            CreateMap<dfa_appeal, CurrentProjectAppeal>()
-                .ForMember(d => d.AppealStatus, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_appealstatus) ? GetEnumDescription((AppealStatusOptionSet)Convert.ToInt32(s.dfa_appealstatus)) : null))
-                .ForMember(d => d.AppealType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_appealtype) ? GetEnumDescription((AppealTypeOptionSet)Convert.ToInt32(s.dfa_appealtype)) : null));
+            CreateMap<dfa_projectappeal, CurrentProjectAppeal>()
+                .ForMember(d => d.SubmissionDate, opts => opts.MapFrom(s => s.dfa_dateappealreceived));
 
             CreateMap<dfa_projectclaim, CurrentClaim>()
                 .ForMember(d => d.ClaimNumber, opts => opts.MapFrom(s => s.dfa_name))

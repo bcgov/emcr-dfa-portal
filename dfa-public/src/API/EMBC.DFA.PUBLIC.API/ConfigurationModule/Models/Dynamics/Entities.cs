@@ -1062,14 +1062,12 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_projecttype { get; set; }
         public string? dfa_projecttypeother { get; set; }
         public DateTime? dfa_projectapproveddate { get; set; }
-        public IEnumerable<dfa_appeal>? dfa_appeal { get; set; }
+        public IEnumerable<dfa_projectappeal>? dfa_projectappeal { get; set; }
     }
 
-    public class dfa_appeal
+    public class dfa_projectappeal
     {
-        public string dfa_appealstatus { get; set; }
-        // Amount, Eligibility, Other
-        public string dfa_appealtype { get; set; }
+        public DateTime? dfa_dateappealreceived { get; set; }
     }
 
     public class dfa_projectamendment
