@@ -14,7 +14,7 @@ COPY shared-workspace/ ./
 RUN npx ng build shared-ui
 
 # Copy app package.json and install dependencies (shared-ui now exists)
-WORKDIR /src/embc-dfa
+WORKDIR /src/dfa/src/UI/embc-dfa
 COPY dfa/src/UI/embc-dfa/package*.json ./
 RUN npm install --ignore-scripts
 
@@ -39,7 +39,7 @@ ENV API_URL=http://host.containers.internal:5020
 RUN chmod +rw /config/caddy
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
 COPY dfa/src/UI/Caddyfile /etc/caddy/Caddyfile
-COPY --from=ng-builder src/dist/embc-dfa /site
+COPY --from=ng-builder src/dfa/src/UI/embc-dfa/dist/embc-dfa /site
 
 # Use if you need to run the container in your local dev setup
 RUN mkdir -p /site/env && echo '{ \
