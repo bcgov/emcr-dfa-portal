@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKER_CONTEXT_DIRECTORY: .
+  DOCKER_CONTEXT_DIRECTORY: /dfa/src/UI
   IMAGE_NAME: dfa-portal-ui
   IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
 
