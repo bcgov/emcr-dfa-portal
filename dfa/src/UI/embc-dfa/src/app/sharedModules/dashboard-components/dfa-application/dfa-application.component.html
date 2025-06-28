@@ -170,11 +170,11 @@
       </div>
     }
 
-    @if (!applItem.appeals || applItem.appeals.length === 0) {
+    <!-- @if (!applItem.appeals || applItem.appeals.length === 0) { -->
       <!-- Add Appeals section -->
       <div [featureEnabled]="'useAppeals'">
-        @if (applItem.dateFileClosed && remainingDays(applItem) > 0) {
-        @if(applItem.caseEligibility === this.CaseElibilityEnum.Ineligible) {
+        <!-- @if (applItem.dateFileClosed && remainingDays(applItem) > 0) { -->
+        <!-- @if(applItem.caseEligibility === this.CaseElibilityEnum.Ineligible) { -->
         <div class="appeals">
           <span>
             You have <b>{{remainingDays(applItem)}}</b> days to register an eligible appeal on this application
@@ -183,8 +183,8 @@
             (click)="viewAppeals(applItem, 'eligibility')">Appeal
             Eligibility Decision</button>
         </div>
-        }
-        @if(applItem.caseEligibility === this.CaseElibilityEnum.Eligible) {
+        <!-- } -->
+        <!-- @if(applItem.caseEligibility === this.CaseElibilityEnum.Eligible) { -->
         <div class="appeals">
           <span>
             You have <b>{{remainingDays(applItem)}}</b> days to register an amount appeal on this application
@@ -192,11 +192,11 @@
           <button class="col-md-2 application-button whitebutton" type="button" (click)="viewAppeals(applItem, 'amount')">
             Appeal Payment Amount</button>
         </div>
-        }
-        }
+        <!-- } -->
+        <!-- } -->
       </div>
     
-    }
+    <!-- } -->
     
 
     </mat-card>

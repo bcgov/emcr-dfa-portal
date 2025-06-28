@@ -323,7 +323,7 @@ export class DfaApplicationComponent implements OnInit {
   }
 
   viewAppeals(applItem: ApplicationExtended, type: string): void {
-    const caseId = applItem.applicationId;
+    const caseId = applItem.caseId;
     if (!caseId || !type) {
       return;
     }

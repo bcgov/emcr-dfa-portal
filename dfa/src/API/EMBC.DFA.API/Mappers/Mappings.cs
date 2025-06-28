@@ -461,6 +461,7 @@ namespace EMBC.DFA.API.Mappers
                 " - " + GetEnumDescription((SmallBusinessOptionSet)Convert.ToInt32(s.dfa_smallbusinesstype)) :
                 (s.dfa_farmtype != null ? " - " + GetEnumDescription((FarmOptionSet)Convert.ToInt32(s.dfa_farmtype)) : string.Empty)))
                 .ForMember(d => d.PrimaryApplicantSignedDate, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_primaryapplicantsigneddate) ? null : s.dfa_primaryapplicantsigneddate))
+                .ForMember(d => d.CaseId, opts => opts.MapFrom(s => s.dfa_caseid))
                 .ForMember(d => d.CaseNumber, opts => opts.MapFrom(s => s.dfa_casenumber))
                 .ForMember(d => d.LegalName, opts => opts.MapFrom(s => s.dfa_accountlegalname))
                 .ForMember(d => d.DateFileClosed, opts => opts.MapFrom(s => s.dfa_datefileclosed))

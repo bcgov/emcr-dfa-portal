@@ -581,6 +581,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string _dfa_eventid_value { get; set; }
         public string _dfa_casecreatedid_value { get; set; }
         public string dfa_event { get; set; }
+        public string dfa_caseid { get; set; }
         public string dfa_casenumber { get; set; }
         public string dfa_primaryapplicantsigneddate { get; set; }
         public string dfa_datefileclosed { get; set; }
