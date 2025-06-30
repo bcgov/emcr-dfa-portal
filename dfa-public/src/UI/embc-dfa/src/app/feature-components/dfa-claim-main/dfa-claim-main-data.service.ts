@@ -4,6 +4,7 @@ import { ApplicationService, AttachmentService } from 'src/app/core/api/services
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DfaClaimMain, FileUploadClaim, RecoveryClaim } from '../../core/model/dfa-claim-main.model';
 import { DfaInvoiceMain, Invoice } from '../../core/model/dfa-invoice.model';
+import { InvoiceExtended } from 'src/app/sharedModules/claim-dashboard-components/claim-decision/claim-decision.component';
 
 @Injectable({ providedIn: 'root' })
 export class DFAClaimMainDataService {
@@ -25,6 +26,7 @@ export class DFAClaimMainDataService {
   private _stage: string;
   private _claimDecision: string;
   private _requiredDocuments = [];
+  private _dfaClaimInvoices: InvoiceExtended[] = [];
   public changeViewOrEdit: EventEmitter<string> = new EventEmitter<string>();
   public changeDisableFileUpload: EventEmitter<string> = new EventEmitter<string>();
   public stepSelected: EventEmitter<string> = new EventEmitter<string>();
@@ -228,4 +230,20 @@ export class DFAClaimMainDataService {
       invoice: this._invoice
     };
   }
+
+  public setClaimInvoices(dfaClaimInvoices: InvoiceExtended[]): void {
+    this._dfaClaimInvoices = dfaClaimInvoices;
+    this.cacheService.set('dfa-claim-invoices', JSON.stringify(dfaClaimInvoices));
+  }
+
+  public getClaimInvoices(): InvoiceExtended[] {
+    if (this._dfaClaimInvoices === null || this._dfaClaimInvoices === undefined) {
+      const cached = this.cacheService.get('dfa-claim-invoices');
+      if (cached) {
+        this._dfaClaimInvoices = JSON.parse(cached) as InvoiceExtended[];
+      }
+    }
+    return this._dfaClaimInvoices;
+  }
+  
 }

@@ -68,12 +68,10 @@ export class ClaimDecisionComponent implements OnInit {
   }
 
   openAppealDecision(): void {
-    console.log('Opening appeal decision dialog...');
     const dialogRef = this.dialog.open(AppealDecisionDialogComponent, {
       height: '600px',
       width: '600px',
-      disableClose: true,
-      data: { claimId: this.claimId }
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -84,7 +82,6 @@ export class ClaimDecisionComponent implements OnInit {
   }
 
   beginAppealProcess(): void {
-    console.log('Begin Appeal Process: 🚧 Under construction...');
     if (this.claimId) {
       this.router.navigate(['/claim', this.claimId, 'appeal']);
     }
@@ -95,6 +92,8 @@ export class ClaimDecisionComponent implements OnInit {
       this.claimService.claimGetClaimMain({ claimId: claimId }).subscribe({
         next: (dfaClaimMain) => {
           this.recoveryClaim = dfaClaimMain;
+
+          this.dfaClaimMainDataService.setDFAClaimMain(dfaClaimMain);
           
           //this.dfaClaimMainMapping.mapDFAClaimMain(dfaClaimMain);
           console.log('Recovery Claim:', this.recoveryClaim);
@@ -151,6 +150,8 @@ export class ClaimDecisionComponent implements OnInit {
           //   this.dfaClaimMainDataService.recoveryClaim.invoices = this.documentSummaryDataSource.data;
           //   this.SummaryClaimCalc();
           // }
+
+          this.dfaClaimMainDataService.setClaimInvoices(lstInvoices);
         },
         error: (_error) => { }
       });
@@ -175,12 +176,11 @@ export class ClaimDecisionComponent implements OnInit {
             content: objInvoice,
             invoiceId: this.dfaClaimMainDataService.getInvoiceId(),
             claimDecision: this.dfaClaimMainDataService.getClaimDecision(),
-            header: 'View',
+            header: 'View'
           },
           maxHeight: '90vh',
           width: '1200px',
-          disableClose: true,
-          
+          disableClose: true
         })
         .afterClosed()
         .subscribe((_result) => {});
@@ -217,5 +217,6 @@ export class ClaimDecisionComponent implements OnInit {
 
 export interface InvoiceExtended extends Invoice {
   invoiceId?: string;
+  appealReason?: string;
 }
 

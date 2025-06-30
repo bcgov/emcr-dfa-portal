@@ -1,0 +1,156 @@
+.nextNsave {
+  height: 40px !important;
+  vertical-align: middle;
+  font-weight: bold;
+  margin: 5px;
+  border-radius: 5px !important;
+  width: 200px;
+  min-width: 150px;
+}
+
+.claim-details {
+  display: flex;
+  line-height: 32px;
+}
+
+table {
+  width: 99.99%;
+  box-shadow: none;
+  margin-top: 32px;
+  border-bottom: 2px solid #38598a;
+}
+
+tr.mat-mdc-header-row {
+  background: #38598a 0% 0% no-repeat !important;
+}
+
+th.mat-mdc-header-cell {
+  color: white;
+}
+
+.mat-table {
+  overflow: auto;
+  width: 100%;
+  max-height: 500px;
+}
+
+.example-element-row {
+  height: 51px !important;
+  border: 1px solid;
+  border-color: rgb(204, 204, 204);
+}
+
+.appeal-actions{
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#open-appeal-decision:disabled {
+  background-color: #f0f0f0 !important;
+  color: #888 !important;
+  border-color: #ccc !important;
+}
+
+.invoice-row.no-border .mat-mdc-cell {
+  border-bottom: none !important;
+  border-bottom-width: 0 !important;
+}
+
+.setViewIcon {
+  color: #3f51b5;
+  cursor: pointer;
+}
+
+.dark-blue-text {
+  color: #3f51b5;
+  font-weight: 500;
+}
+
+::ng-deep .mat-mdc-table .mat-mdc-row,
+::ng-deep .mat-mdc-table .mat-mdc-header-row {
+  height: 32px !important; /* or whatever you want */
+}
+
+::ng-deep .mat-mdc-cell,
+::ng-deep .mat-mdc-header-cell {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  font-size: 13px; /* optional: reduce font size */
+}
+
+::ng-deep .selected-row {
+  background-color: #f0f8ff !important;
+}
+
+.appeal-reason-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-top: 4px;
+  align-items: center;
+}
+
+.no-data-message {
+  margin-top: 2rem;
+  text-align: center;
+  color: #666;
+}
+
+.no-data-message span {
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.add-docs-btn {
+  display: inline-flex;
+  align-items: center;
+  color: #169bd5;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #169bd5;
+  transition: background-color 0.2s;
+  &:hover {
+    background-color: rgba(22, 155, 213, 0.1);
+  }
+  .plus-icon {
+    font-size: 18px;
+    margin-right: 8px;
+  }
+}
+
+.info-section {
+  margin-top: 20px;
+}
+
+.info-block {
+  margin-bottom: 16px;
+}
+
+.info-header {
+  font-weight: bold;
+  color: #169bd5;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.disabled-row .mat-mdc-cell {
+  color: #666666;
+}
+
+.disabled-row .mat-mdc-cell:not(:last-child) {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.disabled-row .mat-mdc-cell:last-child {
+  pointer-events: auto;
+  opacity: 1;
+  cursor: pointer;
+}
