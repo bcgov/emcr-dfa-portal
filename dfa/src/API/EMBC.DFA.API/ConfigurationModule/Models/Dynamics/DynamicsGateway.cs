@@ -843,15 +843,15 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                 {
                     Select = new[]
                     {
-                            "dfa_eventid", "dfa_id", "statuscode", "dfa_90daydeadlinenew", "dfa_eventtype"
-                        }
+                        "dfa_eventid", "dfa_id", "statuscode", "dfa_90daydeadlinenew", "dfa_eventtype"
+                    }
                 });
 
                 if (lstEvents.List.Where(m => m.statuscode == "1").Count() > 0)
                 {
                     var lstActiveEvents = lstEvents.List.Where(m => m.statuscode == "1"
-                                            && (m.dfa_eventtype == Convert.ToInt32(EventType.Private).ToString()
-                                                || m.dfa_eventtype == Convert.ToInt32(EventType.PrivatePublic).ToString())).ToList();
+                        && (m.dfa_eventtype == Convert.ToInt32(EventType.Private).ToString()
+                            || m.dfa_eventtype == Convert.ToInt32(EventType.PrivatePublic).ToString())).ToList();
 
                     var deadline90days = lstActiveEvents.Where(m => m.dfa_90daydeadlinenew != null && Convert.ToDateTime(m.dfa_90daydeadlinenew) >= DateTime.Now).Count();
                     if (deadline90days > 0)
@@ -902,8 +902,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                 {
                     Select = new[]
                     {
-                            "dfa_eventid", "dfa_id", "statuscode", "dfa_startdate", "dfa_enddate", "dfa_90daydeadlinenew", "dfa_eventname", "dfa_eventtype"
-                        }
+                        "dfa_eventid", "dfa_id", "statuscode", "dfa_startdate", "dfa_enddate", "dfa_90daydeadlinenew", "dfa_eventname", "dfa_eventtype"
+                    }
                 });
 
                 var nowDate = DateTime.Now;
