@@ -31,11 +31,14 @@
     <EntitiesWhitelist>dfa_appeal|
 dfa_clientcode|
 dfa_event|
+dfa_projectappeal|
 dfa_projectclaim|
+dfa_projecteligibilityappeal|
 emcr_expenseproject|
 emcr_responsibilitycentre|
 emcr_serviceline|
 emcr_stob|
+processstage|
 systemuser</EntitiesWhitelist>
     <EntityAttributeSpecifiedNames />
     <EntityClassNameOverrides />

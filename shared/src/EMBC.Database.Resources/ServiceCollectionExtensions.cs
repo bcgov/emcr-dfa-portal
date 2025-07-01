@@ -9,6 +9,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IRecoveryClaimRepository, RecoveryClaimRepository>();
         services.AddTransient<IAppealRepository, AppealRepository>();
         services.AddTransient<IEventRepository, EventRepository>();
+        services.AddTransient<IProjectAppealRepository, ProjectAppealRepository>();
         return services;
     }
 

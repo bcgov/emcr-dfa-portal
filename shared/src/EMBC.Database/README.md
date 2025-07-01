@@ -32,6 +32,16 @@ You can also use Tool Library to update the existing plugins.
 - EMBC.Database.Shared.Database: Common database code for all dataverse solutions e.g. generic repository, common mappers, extensions
 
 
+### Connect to Database
+You can use the Wizard or Connection String options to add a new connection
+To use Wizard connection setup, select "Connection Wizard" option, 
+- paste the Dynamics odata base url e.g. https://jsb-fams.dev.jag.gov.bc.ca, uncheck "Use your current credentials", and click "Next"
+- "Are you connecting to an Internet Facing Deployment organization" select Yes and click "Next"
+- Enter your IDIR username and Password and click "Next". NOTE you may need to enter domain "IDIR" if you are using a service account, check "Save password ..."
+To use "Connection String", select "Connection String", and then add the following connection string replacing the placeholders with your IDIR login:
+`authtype=AD;url=https://cscp-vs.dev.jag.gov.bc.ca;domain=https://ststest.gov.bc.ca/adfs/oauth2/token;username=<idir_username>@gov.bc.ca;password=<password>`
+
+
 ### Setup new database project for a new solution
 1. Add a new class library project to your .NET solution e.g. "Database"
 2. See below on how to create a new connection
@@ -50,13 +60,11 @@ You can also use Tool Library to update the existing plugins.
 
 
 ### How to generate entities
-1. Open XrmToolbox, add connection, select connection string, and then add the following connection string replacing the placeholders with your IDIR login:
-`authtype=AD;url=https://cscp-vs.dev.jag.gov.bc.ca;domain=https://ststest.gov.bc.ca/adfs/oauth2/token;username=<idir_username>@gov.bc.ca;password=<password>`
-   Connection Wizard also works, leave domain and realm url blank and enter your credentials. The url will be something like https://embc-dfa.dev.jag.gov.bc.ca/ 
-2. Open DLaB.EarlyBoundGeneratorV2.DefaultSettings.xml and then click "Generate" button.
+Open DLaB.EarlyBoundGeneratorV2.DefaultSettings.xml and then click "Generate" button.
 This will generate the entities, messages, optionsets in their corresponding folders and DatabaseContext.
 
 NOTE in theory, you could add your authentication profile to PAC using your connection string and then use the command lines found in the generated code. If you do try this, please update this ReadMe.md with your findings.
+
 
 ### Limitations
 - Method-based query syntax is limited to joining one table AFAIK
@@ -74,6 +82,15 @@ If you encounter a user authentication error and the authentication hasn't chang
 
 .AddLink - Adds a link between two entity instances that already exist in database
 .AddRelatedObject - Adds a new related entity to an existing entity
+
+Try to use the [BaseRepository](https://github.com/bcgov/emcr-dfa-portal/blob/support-develop/shared/src/EMBC.Database.Shared.Database/BaseRepository.cs) as much as possible. Add a repository `<Entity>Repository` that inherits BaseRepository and use the base methods e.g. `repository.FirstOrDefault(predicates)`.
+To insert an entity with no attached children entities, use `repository.Insert(dto)`. For an example, see [VSD Insert](https://github.com/bcgov/pssg-cscp-vsd/blob/development/Tests/Integration/Database/ContractRepositoryTests.cs)
+To insert an entity with one or more attached children, write an override `<Entity>Repository.Insert` method. For an example, see [VSD Insert with Children](https://github.com/bcgov/pssg-cscp-vsd/blob/development/Resources/Invoice/InvoiceRepository.cs)
+To find an the first entity or return NULL if the entity was not found, use `repository.FirstOrDefault(predicates)`.
+For other generic reusable LINQ queries like `Single`, add a method to BaseRepository
+To query an entity with no joins, use `repository.Where(predicates)`. For an example, see [EMCR DFA Where Test](https://github.com/bcgov/emcr-dfa-portal/blob/support-develop/shared/src/EMBC.Database.Test/RecoveryClaimRepositoryTests.cs)
+To query an entity with a single join, use `repository.Query(queryCommand)` by inheriting IQueryRepository. See [EMCR DFA Query](https://github.com/bcgov/emcr-dfa-portal/blob/support-develop/shared/src/EMBC.Database.Resources/RecoveryClaimRepository.cs)
+To query an entity with multiple joins, see [EMCR DFA GetPending](https://github.com/bcgov/emcr-dfa-portal/blob/support-develop/shared/src/EMBC.Database.Resources/RecoveryClaimRepository.cs)
 
 
 ## Unit Testing
