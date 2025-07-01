@@ -1215,15 +1215,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         project.hasAmendments = false;
                     }
 
-                    var lstProjectAppeal = await api.GetList<dfa_projectappeal>("dfa_projectappeals", new CRMGetListOptions
-                    {
-                        Select = new[]
-                        {
-                            "dfa_dateappealreceived"
-                        },
-                        Filter = $"_dfa_projectid_value eq {project.dfa_projectid}"
-                    });
-                    project.dfa_projectappeal = lstProjectAppeal.List;
+                    // TODO uncomment and test project appeal timeline
+                    //project.dfa_projectappeal = repository.Query(project.dfa_projectid);
                 }
 
                 var lstApps = (
