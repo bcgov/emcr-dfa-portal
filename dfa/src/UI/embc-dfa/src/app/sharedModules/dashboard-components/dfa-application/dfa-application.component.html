@@ -94,6 +94,14 @@
           Add Other Contacts
         </button>
 
+        <div [featureEnabled]="'useDocumentViewing'">
+          <button class="col-md-2 application-button whitebutton" type="button"
+          *ngIf="applItem.primaryApplicantSignedDate && applItem.currentApplication === true && applItem.caseId !== null"
+          (click)="viewDocuments(applItem)">
+            Documents
+          </button>
+        </div>
+
       </div>
 
       <div [ngClass]="applItem.hasAppealStages ? 'appeal-stages' : ''" class="bfpTimeline"

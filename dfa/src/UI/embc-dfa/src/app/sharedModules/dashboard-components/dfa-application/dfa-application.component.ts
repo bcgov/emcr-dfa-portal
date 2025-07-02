@@ -36,12 +36,12 @@ interface AppealStatusItem {
 })
 export class DfaApplicationComponent implements OnInit {
   CaseElibilityEnum = CaseEligibility;
-  
+
   addNewItem(value: number) {
     this.appSessionService.currentApplicationsCount.emit(value);
   }
 
-  
+
 
   items = [
     { label: "Draft Application", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
@@ -125,7 +125,7 @@ export class DfaApplicationComponent implements OnInit {
                 appealStatus: 'In Progress',
                 appealType: 'DFA Appeal',
               },
-              { 
+              {
                 appealStatus: 'Closed',
                 appealType: 'DFA Appeal',
               }
@@ -144,7 +144,7 @@ export class DfaApplicationComponent implements OnInit {
               if (objApp.status != null && (
                     objStatItem.label.toLowerCase() == objApp.status.toLowerCase() || (
                       objStatItem.label.toLowerCase() === 'draft application' &&
-                      objApp.status.toLowerCase() === 'closed: inactive' 
+                      objApp.status.toLowerCase() === 'closed: inactive'
                     )
                   )) {
                 objStatItem.currentStep = true;
@@ -186,7 +186,7 @@ export class DfaApplicationComponent implements OnInit {
                 isFound = true;
                 this.matchStatusFound = true;
 
-                
+
                 // Determine statusColor based on logic
                 // if (['Ineligible', 'Withdrawn'].includes(objApp.stage || '')) {
                 //   objApp.statusColor = '#E25E63';
@@ -235,21 +235,21 @@ export class DfaApplicationComponent implements OnInit {
   mapData(lstApp: Object): void {
 
     this.lstApplications = JSON.parse(JSON.stringify(lstApp));
-        
+
     this.lstApplications.forEach(x => {
       //EMCRI-298: Make it past application after appeal stage closing
       if (x.dateAppealClosed &&
         (new Date(x.dateAppealClosed).getTime() <= this.sixtyOneDaysAgo)) {
         x.currentApplication = false;
       }
-      else if (( x.status.toLowerCase() === "dfa decision made" || 
-            x.status.toLowerCase() === "closed: inactive" || 
+      else if (( x.status.toLowerCase() === "dfa decision made" ||
+            x.status.toLowerCase() === "closed: inactive" ||
             x.status.toLowerCase() === "closed: withdrawn") &&
-          (x.dateFileClosed && 
-            (new Date(x.dateFileClosed).getTime() <= this.sixtyOneDaysAgo))) 
-      {        
+          (x.dateFileClosed &&
+            (new Date(x.dateFileClosed).getTime() <= this.sixtyOneDaysAgo)))
+      {
         x.currentApplication = false;
-      } 
+      }
       /* EMBCDFA-1327: Incomplete application with expired event */
       else if (x.status.toLowerCase() === "closed: inactive" &&
                   x.dateFileClosed == null &&
@@ -305,8 +305,8 @@ export class DfaApplicationComponent implements OnInit {
   }
 
   canAppeal(application: CurrentApplication): boolean {
-    return application.status && (application.status.toLowerCase() === "dfa decision made" || 
-    application.status.toLowerCase() === "closed: inactive" || 
+    return application.status && (application.status.toLowerCase() === "dfa decision made" ||
+    application.status.toLowerCase() === "closed: inactive" ||
     application.status.toLowerCase() === "closed: withdrawn")
       && this.remainingDays(application) > 0;
   }
@@ -316,7 +316,7 @@ export class DfaApplicationComponent implements OnInit {
     const today = new Date();
     const appealPeriod = 60; // 60 days appeal period
     dateFileClosed.setDate(dateFileClosed.getDate() + appealPeriod);
-    
+
     const diffTime = dateFileClosed.getTime() - today.getTime();
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
@@ -343,9 +343,14 @@ export class DfaApplicationComponent implements OnInit {
           .afterClosed()
           .subscribe((result) => {
             //if (result === 'confirm') {
-    
+
             //}
           });
+  }
+
+  viewDocuments(applItem: any) {
+    // Navigate to the document viewing page with the case ID
+    this.router.navigate(['/case', applItem.caseId, 'documents']);
   }
 
   viewAppealAfterSubmission(applItem: ApplicationExtended, type: string): void {
@@ -356,7 +361,7 @@ export class DfaApplicationComponent implements OnInit {
     }
 
     this.dfaAppealDataService.setCaseDetails({...applItem, caseId, type });
-    
+
     this.router.navigate([`/dfa-appeal/${type}/${caseId}`]);
   }
 
