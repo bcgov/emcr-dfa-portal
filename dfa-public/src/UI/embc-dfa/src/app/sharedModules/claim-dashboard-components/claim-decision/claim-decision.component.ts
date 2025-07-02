@@ -12,15 +12,23 @@ import InvoiceComponent from '../../forms/dfa-claim-main-forms/invoice/invoice.c
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { InvoiceDecision } from 'src/app/models/invoice-decision.enum';
 import { AppealDecisionDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-claim-begin-appeal-dialog/dfa-confirm-claim-begin-appeal-dialog.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { Decision } from 'src/app/models/decision.enum';
+import { ClaimType } from 'src/app/models/claim-type.enum';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+
 
 @Component({
   selector: 'app-claim-decision',
   standalone: true,
-  imports: [CoreModule, MatCardModule, MatTableModule, CommonModule,MatDialogModule],
+  imports: [CoreModule, MatCardModule, MatTableModule, CommonModule,MatDialogModule, MatStepperModule, MatTooltipModule],
   templateUrl: './claim-decision.component.html',
   styleUrl: './claim-decision.component.scss',
 })
 export class ClaimDecisionComponent implements OnInit {
+  DecisionEnum = Decision;
+  ClaimTypeEnum = ClaimType;
   
   recoveryClaim?: DfaClaimMain;
   recoveryClaimFormAbstract: [];
@@ -34,6 +42,7 @@ export class ClaimDecisionComponent implements OnInit {
   InvoiceDecisionEnum = InvoiceDecision;
 
   claimId: string | null = null;
+  selectedStepIndex: number = 3;
 
   constructor(
     private claimService: ClaimService,
@@ -59,9 +68,9 @@ export class ClaimDecisionComponent implements OnInit {
   }
 
   openAppealDecision(): void {
-    console.log('Opening appeal decision dialog...');
     const dialogRef = this.dialog.open(AppealDecisionDialogComponent, {
-      width: '500px',
+      height: '600px',
+      width: '600px',
       disableClose: true
     });
 
@@ -73,7 +82,6 @@ export class ClaimDecisionComponent implements OnInit {
   }
 
   beginAppealProcess(): void {
-    console.log('Begin Appeal Process: 🚧 Under construction...');
     if (this.claimId) {
       this.router.navigate(['/claim', this.claimId, 'appeal']);
     }
@@ -84,6 +92,8 @@ export class ClaimDecisionComponent implements OnInit {
       this.claimService.claimGetClaimMain({ claimId: claimId }).subscribe({
         next: (dfaClaimMain) => {
           this.recoveryClaim = dfaClaimMain;
+
+          this.dfaClaimMainDataService.setDFAClaimMain(dfaClaimMain);
           
           //this.dfaClaimMainMapping.mapDFAClaimMain(dfaClaimMain);
           console.log('Recovery Claim:', this.recoveryClaim);
@@ -140,6 +150,8 @@ export class ClaimDecisionComponent implements OnInit {
           //   this.dfaClaimMainDataService.recoveryClaim.invoices = this.documentSummaryDataSource.data;
           //   this.SummaryClaimCalc();
           // }
+
+          this.dfaClaimMainDataService.setClaimInvoices(lstInvoices);
         },
         error: (_error) => { }
       });
@@ -179,10 +191,32 @@ export class ClaimDecisionComponent implements OnInit {
     this.router.navigate(['/dfa-project/' + projId + '/claims']);
   }
 
+  canAppealClaims(applItem: DfaClaimMain): boolean {
+    // Check if the claim is eligible for appeal based on its status and decision
+    return applItem?.claim.claimDecision 
+      && (
+          applItem?.claim.claimDecision.toLowerCase() === this.DecisionEnum.ApprovedWithExclusions.toLowerCase() 
+          || applItem?.claim.claimDecision.toLowerCase() === this.DecisionEnum.Ineligible.toLowerCase()
+        )
+      && (applItem?.claim.isAdjustmentClaim !== true && applItem?.claim.claimType !== this.ClaimTypeEnum.AdvancedPayment)
+      && this.remainingDays(applItem) > 0; 
+  }
+
+  remainingDays(appItem: DfaClaimMain): number {
+    const oneDay = 24 * 60 * 60 * 1000;       // milliseconds in a day
+    let endDateStr = appItem?.claim.claimDecision?.toLowerCase() === this.DecisionEnum.ApprovedWithExclusions.toLowerCase() || appItem?.claim.claimDecision?.toLowerCase() === this.DecisionEnum.Ineligible.toLowerCase()
+      ? appItem?.claim.decisionDate
+      : appItem?.claim.dateFileClosed;
+    endDateStr = appItem?.claim.decisionDate;
+    let endDate = new Date(endDateStr);
+    endDate.setDate(endDate.getDate() + 60);  // add 60 days
+    return Math.round((endDate.getTime() - new Date().getTime()) / oneDay);
+  }
 
 }
 
 export interface InvoiceExtended extends Invoice {
   invoiceId?: string;
+  appealReason?: string;
 }
 

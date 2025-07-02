@@ -16,11 +16,15 @@ export interface RecoveryClaim {
   claimReceivedDate?: string | null;
   claimStatus?: ClaimStageOptionSet | null;
   claimTotal?: string | null;
+  claimType?: string | null;
+  dateFileClosed?: string | null;
   decisionDate?: string | null;
   eligiblePayable?: string | null;
   invoices?: Array<Invoice> | null;
+  isAdjustmentClaim?: boolean | null;
   isFirstClaimApproved?: boolean | null;
   isThisFinalClaim?: boolean | null;
+  lateAppealAllowed?: boolean | null;
   lessFirst1000?: string | null;
   paidClaimAmount?: string | null;
   paidClaimDate?: string | null;

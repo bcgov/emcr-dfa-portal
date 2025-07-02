@@ -56,6 +56,10 @@ public abstract class BaseRepository<TEntity, TDto>
         return entity.Id;
     }
 
+    // NOTE only use field names for the properties argument
+    // otherwise the expression parser will throw an exception e.g. x => x.SomeProperty, x => x.OtherProperty
+    // var dto = new Dto { SomeProperty = 1, OtherProperty = "2" };
+    // repository.Update(dto, x => x.SomeProperty, x => x.OtherProperty);
     public virtual bool Update(TDto dto, params Expression<Func<TDto, object>>[] properties)
     {
         var entity = _databaseContext

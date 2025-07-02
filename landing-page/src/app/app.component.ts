@@ -7,6 +7,7 @@ import { OutageBannerComponent } from './components/outage-banner/outage-banner.
 import { EnvironmentBannerService, EnvironmentInformation } from './services/environment.service';
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 import { FormControl } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -30,11 +31,12 @@ export class AppComponent implements OnInit {
   public currentDate = Date.now();
   startDisplayOutageBanner?: number;
   outageEnd?: number;
-
+  privateButtonDisabled: boolean = false;   // TODO when releasing D4P-96, initial value should be true
+  publicButtonDisabled: boolean = false;    // TODO when releasing D4P-96, initial value should be true
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   position = new FormControl(this.positionOptions[0]);
   
-  constructor(private environmentBannerService: EnvironmentBannerService) { }
+  constructor(private environmentBannerService: EnvironmentBannerService, private httpClient: HttpClient) { }
 
   ngOnInit(): void {
     this.environmentBannerService.getEnvironment().subscribe(environment => {
@@ -45,26 +47,28 @@ export class AppComponent implements OnInit {
       
       if(environment.outageEnd){
         this.outageEnd = new Date(environment.outageEnd).getTime();
-
       }
 
-      });
-    }
-
-  // public privatePortal = this.environment?.dfaPrivateUrl;
-  // public publicPortal = this.environment?.dfaPublicUrl;
-
+      // TODO uncomment when D4P-96 is released
+      // this.httpClient.get(environment.apiEndpoint as string).subscribe((response: any) => {
+      //   let hasActiveEventResponse = response as HasActiveEventResponse;
+      //   console.info("Has Active Event Response", hasActiveEventResponse);
+      //   if (hasActiveEventResponse) {
+      //      this.privateButtonDisabled = !hasActiveEventResponse.hasActivePrivateEvent;
+      //      this.publicButtonDisabled = !hasActiveEventResponse.hasActivePublicEvent;
+      //   }
+      // });
+    });
+  }
   
   naviagteToPublicDFA(){
-
-      const publicUrl = this.environment?.dfaPublicUrl;
-      if (publicUrl) {
-        window.open(publicUrl, '_blank');
-      } else {
-        console.error('Public portal URL is not defined');
-      }
+    const publicUrl = this.environment?.dfaPublicUrl;
+    if (publicUrl) {
+      window.open(publicUrl, '_blank');
+    } else {
+      console.error('Public portal URL is not defined');
     }
-  
+  }
 
   naviagteToPrivateDFA(){
     const privateUrl = this.environment?.dfaPrivateUrl;
@@ -76,3 +80,8 @@ export class AppComponent implements OnInit {
   }
 }
 
+class HasActiveEventResponse
+{
+  hasActivePrivateEvent: boolean = false;
+  hasActivePublicEvent: boolean = false;
+}

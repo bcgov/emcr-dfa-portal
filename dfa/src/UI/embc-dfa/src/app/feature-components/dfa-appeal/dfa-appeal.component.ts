@@ -82,7 +82,7 @@ export class DfaAppealComponent implements OnInit {
       this.dfaAppealDataService.appealType = appealTypeEnum;
 
       // Fetch full application details using ApplicationService
-      this.fullApplication$=this.applicationService.applicationGetApplicationMain({ applicationId: this.caseId })
+      this.fullApplication$=this.applicationService.applicationGetApplicationMain({ applicationId: this.caseDetails?.applicationId })
         .subscribe(app => {
           this.fullApplication = app;
           this.dfaAppealDataService.setFullApplication(app);

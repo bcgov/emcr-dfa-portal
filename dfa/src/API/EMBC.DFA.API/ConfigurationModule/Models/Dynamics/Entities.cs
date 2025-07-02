@@ -581,6 +581,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string _dfa_eventid_value { get; set; }
         public string _dfa_casecreatedid_value { get; set; }
         public string dfa_event { get; set; }
+        public string dfa_caseid { get; set; }
         public string dfa_casenumber { get; set; }
         public string dfa_primaryapplicantsigneddate { get; set; }
         public string dfa_datefileclosed { get; set; }
@@ -596,9 +597,12 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
 
     public class dfa_appeal
     {
+        public string dfa_appealid { get; set; }
         public string dfa_appealstatus { get; set; }
         // Amount, Eligibility, Other
         public string dfa_appealtype { get; set; }
+        public string DFA_Reason { get; set; }
+        public string _dfa_caseid_value { get; set; } // case id
     }
 
     public enum AppealStatusOptionSet

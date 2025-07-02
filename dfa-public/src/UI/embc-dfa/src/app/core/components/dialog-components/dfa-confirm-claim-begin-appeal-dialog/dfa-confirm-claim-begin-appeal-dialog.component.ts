@@ -1,5 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { Component } from '@angular/core';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { DialogContent } from 'src/app/core/model/dialog-content.model';
 
 @Component({
@@ -13,11 +13,8 @@ export class AppealDecisionDialogComponent  {
   public content: DialogContent;
 
   constructor(
-    public dialogRef: MatDialogRef<AppealDecisionDialogComponent >,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    this.content = this.data.content;
-  }
+    public dialogRef: MatDialogRef<AppealDecisionDialogComponent >
+  ) {}
 
   cancel() {
     this.dialogRef.close(true);

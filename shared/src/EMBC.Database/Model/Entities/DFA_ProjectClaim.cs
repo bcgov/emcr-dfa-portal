@@ -514,6 +514,7 @@ namespace EMBC.Database.Model
 			public const string OwningTeam = "owningteam";
 			public const string OwningUser = "owninguser";
 			public const string ProcessId = "processid";
+			public const string ProcessStage_DFA_ProjectClaim = "processstage_dfa_projectclaim";
 			public const string ReferencedDFA_DFA_ProjectClaim_DFA_ProjectClaim_LinkedClaim = "ReferencedDFA_DFA_ProjectClaim_DFA_ProjectClaim_LinkedClaim";
 			public const string StageId = "stageid";
 			public const string StateCode = "statecode";
@@ -5609,6 +5610,25 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_projectclaim_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 processstage_dfa_projectclaim
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("processstage_dfa_projectclaim")]
+		public EMBC.Database.Model.ProcessStage ProcessStage_DFA_ProjectClaim
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<EMBC.Database.Model.ProcessStage>("processstage_dfa_projectclaim", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<EMBC.Database.Model.ProcessStage>("processstage_dfa_projectclaim", null, value);
 			}
 		}
 		

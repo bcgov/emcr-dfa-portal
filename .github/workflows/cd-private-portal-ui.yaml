@@ -8,11 +8,12 @@ on:
     paths:
       - "dfa/src/UI/**"
       - ".github/workflows/cd-private-portal-ui.yaml"
-  
+
   workflow_dispatch:
 
 env:
-  DOCKER_CONTEXT_DIRECTORY: ./dfa/src/UI
+  DOCKER_CONTEXT_DIRECTORY: .
+  DOCKERFILE_PATH: dfa/src/UI/Dockerfile
   IMAGE_NAME: dfa-portal-ui
   IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
 
@@ -33,7 +34,7 @@ jobs:
           registry: ${{ env.IMAGE_REGISTRY }}
           username: ${{ secrets.OCP4_USERNAME }}
           password: ${{ secrets.OCP4_PASSWORD }}
-      
+
       - name: Pull image
         run: docker pull ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:latest || true
 
@@ -44,13 +45,14 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_prefix: ${{ env.IMAGE_NAME }}=v
           fetch_all_tags: true
-      
+
       - name: Create version environment variable
         run: echo "VERSION=$(echo '${{ steps.tag_version.outputs.new_tag }}' | awk -F-v '{print $NF}')" >> $GITHUB_ENV
 
       - name: Build and push dfa-portal-ui
         uses: docker/build-push-action@v6
         with:
+          file: ${{ env.DOCKERFILE_PATH }}
           build-args: |
             VERSION=${{ env.VERSION }}
           cache-from: |

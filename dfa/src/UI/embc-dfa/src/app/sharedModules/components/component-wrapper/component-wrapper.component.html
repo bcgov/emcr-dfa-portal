@@ -1,6 +1,11 @@
-<ng-container>
-  <ng-template
-    [ngComponentOutlet]="loadedComponent"
-    [ngComponentOutletInjector]="serviceInjector"
-  ></ng-template>
+<ng-container *ngIf="loadedComponent">
+  <ng-container *ngIf="serviceInjector; else noInjector">
+    <ng-container
+      [ngComponentOutlet]="loadedComponent"
+      [ngComponentOutletInjector]="serviceInjector">
+    </ng-container>
+  </ng-container>
+  <ng-template #noInjector>
+    <ng-container [ngComponentOutlet]="loadedComponent"></ng-container>
+  </ng-template>
 </ng-container>

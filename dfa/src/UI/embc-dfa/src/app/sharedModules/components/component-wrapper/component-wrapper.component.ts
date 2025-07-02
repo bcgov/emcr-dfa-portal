@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Injector } from '@angular/core';
 import { from } from 'rxjs';
 import { UntypedFormBuilder, FormGroup } from '@angular/forms';
 import { FormCreationService } from '../../../core/services/formCreation.service';
+import { DocumentViewingComponent } from 'shared-ui';
 
 @Component({
   selector: 'app-component-wrapper',
@@ -15,6 +16,10 @@ export class ComponentWrapperComponent implements OnInit {
   loadedComponent: any;
   serviceInjector: Injector;
 
+  private sharedComponentMap = {
+    'document-viewing': DocumentViewingComponent,
+  }
+
   constructor(
     private injector: Injector,
     private formBuilder: UntypedFormBuilder,
@@ -26,25 +31,30 @@ export class ComponentWrapperComponent implements OnInit {
    * the view
    */
   ngOnInit(): void {
-    if (!this.loadedComponent) {
-      this.serviceInjector = Injector.create({
-        providers: [
-          {
-            provide: 'formBuilder',
-            useValue: this.formBuilder
-          },
-          {
-            provide: 'formCreationService',
-            useValue: this.formCreationService
-          }
-        ],
-        parent: this.injector
+    if (this.sharedComponentMap[this.componentName]){
+      this.loadedComponent = this.sharedComponentMap[this.componentName];
+    } else {
+      if (!this.loadedComponent) {
+        this.serviceInjector = Injector.create({
+          providers: [
+            {
+              provide: 'formBuilder',
+              useValue: this.formBuilder
+            },
+            {
+              provide: 'formCreationService',
+              useValue: this.formCreationService
+            }
+          ],
+          parent: this.injector
+        });
+      }
+      from(this.loadComponent()).subscribe((module) => {
+        this.loadedComponent = module.default;
       });
     }
-    from(this.loadComponent()).subscribe((module) => {
-      this.loadedComponent = module.default;
-    });
   }
+
 
   /**
    * Imports the component

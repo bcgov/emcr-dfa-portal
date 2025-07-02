@@ -14,6 +14,27 @@
             </button>
         </div>
     </div>
+
+    <mat-horizontal-stepper [selectedIndex]="selectedStepIndex" class="stepper-style" labelPosition="bottom"
+        [linear]="false">
+        <mat-step [editable]="false" [completed]="true">
+            <ng-template matStepLabel>Claim Submission</ng-template>
+        </mat-step>
+        <mat-step [editable]="false" [completed]="true">
+            <ng-template matStepLabel>Add Invoices</ng-template>
+        </mat-step>
+        <mat-step [editable]="false" [completed]="true">
+            <ng-template matStepLabel>Upload Documents</ng-template>
+        </mat-step>
+        <mat-step>
+            <ng-template matStepLabel>Decision</ng-template>
+        </mat-step>
+
+        <ng-template matStepperIcon="edit" let-index="index">
+            {{ index + 1 }}
+        </ng-template>
+    </mat-horizontal-stepper>
+
     <div>
         <mat-card>
             <mat-card-content>
@@ -45,13 +66,13 @@
                         <span><b>Approved Claim Total - </b></span>
                     </div>
                     <div class="col-md-2">
-                        <span>CA$ {{recoveryClaim?.claim.approvedClaimTotal  | number: '1.2-2'}}</span>
+                        <span>CA$ {{recoveryClaim?.claim.approvedClaimTotal | number: '1.2-2'}}</span>
                     </div>
                     <div class="col-md-2">
                         <span><b>Eligible Payable - </b></span>
                     </div>
                     <div class="col-md-2">
-                        <span>CA$ {{recoveryClaim?.claim.eligiblePayable  | number: '1.2-2'}}</span>
+                        <span>CA$ {{recoveryClaim?.claim.eligiblePayable | number: '1.2-2'}}</span>
                     </div>
                 </div>
                 <div class="claim-details">
@@ -67,13 +88,13 @@
                         <span><b>Less First $1,000 - </b></span>
                     </div>
                     <div class="col-md-2">
-                        <span>CA$ {{recoveryClaim?.claim.lessFirst1000  | number: '1.2-2'}}</span>
+                        <span>CA$ {{recoveryClaim?.claim.lessFirst1000 | number: '1.2-2'}}</span>
                     </div>
                     <div class="col-md-2">
                         <span><b>Paid Claim Amount - </b></span>
                     </div>
                     <div class="col-md-2">
-                        <span>CA$ {{recoveryClaim?.claim.paidClaimAmount  | number: '1.2-2'}}</span>
+                        <span>CA$ {{recoveryClaim?.claim.paidClaimAmount | number: '1.2-2'}}</span>
                     </div>
                 </div>
                 <div class="claim-details">
@@ -82,7 +103,7 @@
                         <span><b> Claim Total - </b></span>
                     </div>
                     <div class="col-md-2">
-                        <span>CA$ {{recoveryClaim?.claim.claimTotal  | number: '1.2-2'}}</span>
+                        <span>CA$ {{recoveryClaim?.claim.claimTotal | number: '1.2-2'}}</span>
                     </div>
                     <div class="col-md-2">
                         <span><b>Approved Reimbursement % - </b></span>
@@ -110,21 +131,24 @@
             <!-- Check Circle Icon Column -->
             <ng-container matColumnDef="checkCircle">
                 <th mat-header-cell *matHeaderCellDef style="width: 5%">
-                    
+
                 </th>
                 <td mat-cell *matCellDef="let element">
                     <span *ngIf="element.emcrDecision === ''" class="material-symbols-outlined">
                         circle
-                      </span>
-                      <span *ngIf="element.emcrDecision === InvoiceDecisionEnum?.ApprovedTotal" class="material-symbols-outlined circleicon1">
+                    </span>
+                    <span *ngIf="element.emcrDecision === InvoiceDecisionEnum?.ApprovedTotal"
+                        class="material-symbols-outlined circleicon1">
                         check_circle
-                      </span>
-                      <span *ngIf="element.emcrDecision === InvoiceDecisionEnum?.ApprovedPartial" class="material-symbols-outlined circleicon2">
+                    </span>
+                    <span *ngIf="element.emcrDecision === InvoiceDecisionEnum?.ApprovedPartial"
+                        class="material-symbols-outlined circleicon2">
                         check_circle
-                      </span>
-                      <span *ngIf="element.emcrDecision === InvoiceDecisionEnum?.Denied" class="material-symbols-outlined circleicon3">
+                    </span>
+                    <span *ngIf="element.emcrDecision === InvoiceDecisionEnum?.Denied"
+                        class="material-symbols-outlined circleicon3">
                         cancel
-                      </span>
+                    </span>
                 </td>
             </ng-container>
 
@@ -241,18 +265,24 @@
             Denied
         </div>
 
-        <div style="margin-left: auto;">
-            <button id="open-appeal-decision"
-                class="button-p nextNsave"
-                style="width: 220px; vertical-align: middle;"
-                mat-stroked-button
-                type="button"
-                (click)="openAppealDecision()"
-                >
-            Appeal Decision
-            <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
+    </div>
+
+
+    <div>
+        <div *ngIf="canAppealClaims(recoveryClaim)" class="appealClaims">
+            <div style="padding: 12px;">
+                <i>Amount Approval decisions can be appealed for 60 days ({{remainingDays(recoveryClaim)}} days
+                    remaining).</i>
+            </div>
+            <button id="open-appeal-decision" class="button-p" style="width: 220px;" mat-stroked-button
+                type="button" (click)="openAppealDecision()"
+                [disabled]="remainingDays(recoveryClaim) >= 61 && !recoveryClaim?.claim?.lateAppealAllowed"
+                [matTooltip]="(remainingDays(recoveryClaim) >= 61 && !recoveryClaim?.claim?.lateAppealAllowed) ? 'The 60 day deadline has passed and the claim amount cannot be appealed.' : ''"
+                matTooltipPosition="above">
+                Appeal Decision
+                <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
             </button>
         </div>
     </div>
-    
-    </div>
+
+</div>

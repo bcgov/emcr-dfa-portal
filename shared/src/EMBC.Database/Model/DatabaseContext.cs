@@ -51,6 +51,28 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_Event"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.DFA_Event> DFA_EventSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.DFA_Event>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_ProjectAppeal"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.DFA_ProjectAppeal> DFA_ProjectAppealSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.DFA_ProjectAppeal>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_ProjectClaim"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<EMBC.Database.Model.DFA_ProjectClaim> DFA_ProjectClaimSet
@@ -58,6 +80,17 @@ namespace EMBC.Database.Model
 			get
 			{
 				return this.CreateQuery<EMBC.Database.Model.DFA_ProjectClaim>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_ProjectEligibilityAppeal"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.DFA_ProjectEligibilityAppeal> DFA_ProjectEligibilityAppealSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.DFA_ProjectEligibilityAppeal>();
 			}
 		}
 		
@@ -102,6 +135,17 @@ namespace EMBC.Database.Model
 			get
 			{
 				return this.CreateQuery<EMBC.Database.Model.EMCR_Stob>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.ProcessStage"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.ProcessStage> ProcessStageSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.ProcessStage>();
 			}
 		}
 		

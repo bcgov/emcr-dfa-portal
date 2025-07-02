@@ -1188,11 +1188,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                 {
                     Select = new[]
                     {
-                        "dfa_projectnumber", "dfa_projectname",
-                        "dfa_sitelocation",
-                        "dfa_estimatedcompletiondateofproject",
-                        "dfa_approvedcost", "dfa_18monthdeadline", "statuscode",
-                        "dfa_projectid", "createdon", "dfa_projectbusinessprocessstages",
+                        "dfa_projectnumber", "dfa_projectname", "dfa_sitelocation", "dfa_estimatedcompletiondateofproject",
+                        "dfa_approvedcost", "dfa_18monthdeadline", "statuscode", "dfa_projectid", "createdon", "dfa_projectbusinessprocessstages",
                         "dfa_projectbusinessprocesssubstages", "dfa_bpfclosedate", "dfa_projectdecision", "dfa_projectapproveddate"
                     },
                     Filter = $"_dfa_applicationid_value eq {applicationId}"
@@ -1218,16 +1215,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         project.hasAmendments = false;
                     }
 
-                    var lstAppeal = await api.GetList<dfa_appeal>("dfa_appeals", new CRMGetListOptions
-                    {
-                        Select = new[]
-                        {
-                            "dfa_appealstatus",
-                            "dfa_appealtype"
-                        },
-                        Filter = $"_dfa_projectid_value eq {project.dfa_projectid}"
-                    });
-                    project.dfa_appeal = lstAppeal.List;
+                    // TODO uncomment and test project appeal timeline
+                    //project.dfa_projectappeal = repository.Query(project.dfa_projectid);
                 }
 
                 var lstApps = (
@@ -1250,7 +1239,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         dfa_projectdecision = objApp.dfa_projectdecision,
                         dfa_bpfclosedate = !string.IsNullOrEmpty(objApp.dfa_bpfclosedate) ? DateTime.Parse(objApp.dfa_bpfclosedate).ToLocalTime().ToString() : objApp.dfa_bpfclosedate,
                         dfa_projectapproveddate = objApp.dfa_projectapproveddate,
-                        dfa_appeal = objApp.dfa_appeal
+                        dfa_projectappeal = objApp.dfa_projectappeal
                     })
                         .AsEnumerable()
                         .OrderByDescending(m => m.createdon);
@@ -1487,7 +1476,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         "dfa_totaleligiblegst", "dfa_totaloftotaleligible", "dfa_totalapproved", "dfa_lessfirst1000",
                         "dfa_costsharing", "dfa_eligiblepayable", "dfa_totalpaid", "dfa_claimpaiddate",
                         "dfa_claimtotal", "dfa_paidclaimamount", "dfa_onetimedeductionamount", "dfa_claimbpfstages", "dfa_claimbpfsubstages", "dfa_decisioncopy",
-                        "dfa_advanceddrawdownamount", "dfa_decisiondate"
+                        "dfa_advanceddrawdownamount", "dfa_decisiondate",  "dfa_claimtype", "dfa_isadjustmentclaim", "dfa_lateappealallowed", "dfa_bpfclosedate"
                     },
                     Filter = $"dfa_projectclaimid eq {claimId}"
                 });
@@ -1517,6 +1506,11 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_onetimedeductionamount = objApp.dfa_onetimedeductionamount,
                                    dfa_advanceddrawdownamount = objApp.dfa_advanceddrawdownamount,
                                    dfa_decisiondate = objApp.dfa_decisiondate,
+                                   dfa_claimtype = objApp.dfa_claimtype,
+                                   dfa_isadjustmentclaim = objApp.dfa_isadjustmentclaim,
+                                   dfa_bpfclosedate = objApp.dfa_bpfclosedate,
+                                   dfa_lateappealallowed = objApp.dfa_lateappealallowed,
+                                   
                                }).AsEnumerable().OrderByDescending(m => m.createdon);
 
                 return lstApps.FirstOrDefault();

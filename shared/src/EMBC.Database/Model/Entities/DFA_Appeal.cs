@@ -179,6 +179,8 @@ namespace EMBC.Database.Model
 			public const string DFA_ClaimSummaryCompletedName = "dfa_claimsummarycompletedname";
 			public const string DFA_ComplianceCheckCompleted = "dfa_compliancecheckcompleted";
 			public const string DFA_ComplianceCheckCompletedName = "dfa_compliancecheckcompletedname";
+			public const string DFA_CreatedOnPortal = "dfa_createdonportal";
+			public const string DFA_CreatedOnPortalName = "dfa_createdonportalname";
 			public const string DFA_DateAppealDecisionMade = "dfa_dateappealdecisionmade";
 			public const string DFA_DateAppealLetterSent = "dfa_dateappeallettersent";
 			public const string DFA_DateAssignedToEvaluator = "dfa_dateassignedtoevaluator";
@@ -283,6 +285,7 @@ namespace EMBC.Database.Model
 			public const string OwningTeam = "owningteam";
 			public const string OwningUser = "owninguser";
 			public const string ProcessId = "processid";
+			public const string ProcessStage_DFA_Appeal = "processstage_dfa_appeal";
 			public const string ReferencedDFA_DFA_Appeal_DFA_Appeal_RelatedAppeal = "ReferencedDFA_DFA_Appeal_DFA_Appeal_RelatedAppeal";
 			public const string StageId = "stageid";
 			public const string StateCode = "statecode";
@@ -2344,6 +2347,38 @@ namespace EMBC.Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_createdonportal")]
+		public System.Nullable<bool> DFA_CreatedOnPortal
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("dfa_createdonportal");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_createdonportal", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_createdonportalname")]
+		public string DFA_CreatedOnPortalName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_createdonportal"))
+				{
+					return this.FormattedValues["dfa_createdonportal"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_dateappealdecisionmade")]
 		public System.Nullable<System.DateTime> DFA_DateAppealDecisionMade
 		{
@@ -4187,6 +4222,25 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_appeal_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 processstage_dfa_appeal
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("stageid")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("processstage_dfa_appeal")]
+		public EMBC.Database.Model.ProcessStage ProcessStage_DFA_Appeal
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<EMBC.Database.Model.ProcessStage>("processstage_dfa_appeal", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<EMBC.Database.Model.ProcessStage>("processstage_dfa_appeal", null, value);
 			}
 		}
 		

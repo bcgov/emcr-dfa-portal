@@ -461,6 +461,7 @@ namespace EMBC.DFA.API.Mappers
                 " - " + GetEnumDescription((SmallBusinessOptionSet)Convert.ToInt32(s.dfa_smallbusinesstype)) :
                 (s.dfa_farmtype != null ? " - " + GetEnumDescription((FarmOptionSet)Convert.ToInt32(s.dfa_farmtype)) : string.Empty)))
                 .ForMember(d => d.PrimaryApplicantSignedDate, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_primaryapplicantsigneddate) ? null : s.dfa_primaryapplicantsigneddate))
+                .ForMember(d => d.CaseId, opts => opts.MapFrom(s => s.dfa_caseid))
                 .ForMember(d => d.CaseNumber, opts => opts.MapFrom(s => s.dfa_casenumber))
                 .ForMember(d => d.LegalName, opts => opts.MapFrom(s => s.dfa_accountlegalname))
                 .ForMember(d => d.DateFileClosed, opts => opts.MapFrom(s => s.dfa_datefileclosed))
@@ -474,8 +475,11 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.CaseEligibility, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_eligibilitystatus) ? GetEnumDescription((CaseEligibilityOptionSet)Convert.ToInt32(s.dfa_eligibilitystatus)) : null));
 
             CreateMap<dfa_appeal, CurrentCaseAppeal>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.dfa_appealid))
                 .ForMember(d => d.AppealStatus, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_appealstatus) ? GetEnumDescription((AppealStatusOptionSet)Convert.ToInt32(s.dfa_appealstatus)) : null))
-                .ForMember(d => d.AppealType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_appealtype) ? GetEnumDescription((AppealTypeOptionSet)Convert.ToInt32(s.dfa_appealtype)) : null));
+                .ForMember(d => d.AppealType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_appealtype) ? GetEnumDescription((AppealTypeOptionSet)Convert.ToInt32(s.dfa_appealtype)) : null))
+                .ForMember(d => d.Reason, opt => opt.MapFrom(src => src.DFA_Reason))
+                .ForMember(d => d.CaseId, opt => opt.MapFrom(src => src._dfa_caseid_value));
 
             CreateMap<Controllers.Profile, ESS.Shared.Contracts.Events.RegistrantProfile>()
                 .ForMember(d => d.Id, opts => opts.Ignore())
@@ -552,12 +556,11 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(dest => dest.CaseId, opt => opt.MapFrom(src => src.CaseId))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.Reason))
+                .ForMember(dest => dest.AppealType, opt => opt.MapFrom(src => src.Type.ToString()))
                 .ForMember(dest => dest.SignAndSubmit, opt => opt.MapFrom(src => src.SignAndSubmit));
 
             // Fully qualify the destination type for SignAndSubmit and DigitalSignature:
             CreateMap<SignAndSubmitModel, EMBC.Database.Contract.SignAndSubmit>()
-                .ForMember(dest => dest.NinetyDayDeadline, opt => opt.MapFrom(src =>
-                    string.IsNullOrEmpty(src.NinetyDayDeadline) ? (DateTime?)null : DateTime.Parse(src.NinetyDayDeadline)))
                 .ForMember(dest => dest.ApplicantSignature, opt => opt.MapFrom(src => src.ApplicantSignature))
                 .ForMember(dest => dest.SecondaryApplicantSignature, opt => opt.MapFrom(src => src.SecondaryApplicantSignature));
 

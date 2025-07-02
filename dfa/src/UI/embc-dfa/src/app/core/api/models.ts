@@ -22,6 +22,7 @@ export type { CurrentCaseAppeal } from './models/current-case-appeal';
 export type { DamagedPropertyAddress } from './models/damaged-property-address';
 export type { DamagedRoom } from './models/damaged-room';
 export type { DateOfBirthDataConflict } from './models/date-of-birth-data-conflict';
+export { DfaAppealType } from './models/dfa-appeal-type';
 export type { DfaApplicationMain } from './models/dfa-application-main';
 export type { DfaApplicationStart } from './models/dfa-application-start';
 export type { DisasterEvent } from './models/disaster-event';

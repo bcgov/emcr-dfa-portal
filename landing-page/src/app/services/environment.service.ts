@@ -3,29 +3,25 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 export interface EnvironmentInformation {
-    envName?: null | string;
-    bannerTitle?: null | string;
-    bannerSubTitle?: null | string;
-    bannerColor?: null | string;
-    startDisplayOutageBanner?: null| string;
-    outageStart?: null| string;
-    outageEnd?: null| string;
-    dfaPublicUrl?: null| string;
-    dfaPrivateUrl?: null| string;
-    disablePublicUrl?: null| string;
-    disablePrivateUrl?: null| string;
-    newApplicationNotAccepted?: null| string;
+  envName?: null | string;
+  bannerTitle?: null | string;
+  bannerSubTitle?: null | string;
+  bannerColor?: null | string;
+  startDisplayOutageBanner?: null| string;
+  outageStart?: null| string;
+  outageEnd?: null| string;
+  apiEndpoint?: null | string;
+  dfaPublicUrl?: null| string;
+  dfaPrivateUrl?: null| string;
+  disablePublicUrl?: null| string;
+  disablePrivateUrl?: null| string;
+  newApplicationNotAccepted?: null| string;
+}
 
-  }
-
-@Injectable({
-    providedIn: 'root'
-  })
-
+@Injectable({ providedIn: 'root'})
 export class EnvironmentBannerService{
 
     public configurationGetEnvironmentInfoPath = 'env/info.json';
-
 
     constructor(
         private http: HttpClient
@@ -33,12 +29,9 @@ export class EnvironmentBannerService{
         
     }
 
-
     public getEnvironment(): Observable<EnvironmentInformation> {
 
         const envUrl = this.configurationGetEnvironmentInfoPath;
         return this.http.get(envUrl);
       }
-
-    
 }

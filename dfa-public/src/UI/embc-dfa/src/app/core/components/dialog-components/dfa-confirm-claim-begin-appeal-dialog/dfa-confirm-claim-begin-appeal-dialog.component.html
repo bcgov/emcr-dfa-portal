@@ -1,7 +1,9 @@
 
-<h2 mat-dialog-title>Confirm Appeal</h2>
+<div class="dialog">
+ <h2 class="dialog-title">Appeal Confirmation</h2>
+</div>
 
-<mat-dialog-content>
+<mat-dialog-content style="text-align: center;">
   <p>
     If you believe that the DFA program incorrectly determined the eligibility for this claim, you may appeal the determination within 60 days of the date on the notice being appealed.
   </p>
@@ -14,7 +16,18 @@
   </p>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button (click)="dialogRef.close()">Cancel Appeal Process</button>
-  <button mat-raised-button color="primary" (click)="beginAppealProcess()">Begin Appeal Process</button>
+<mat-dialog-actions>
+  <div class="button-container">
+
+      <button class="button-s button-width" mat-button (click)="dialogRef.close()">
+        Cancel Appeal Process
+      </button>
+
+      <!-- Add Navigation to appeals decision page -->
+      <button class="button-p button-width" mat-button (click)="beginAppealProcess()">
+        Begin Appeal Process
+      </button>
+
+  </div>
+
 </mat-dialog-actions>

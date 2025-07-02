@@ -72,3 +72,19 @@ table {
   gap: 24px;
   padding: 24px;
   }
+
+  ::ng-deep .mat-horizontal-stepper-header{
+    pointer-events: none !important;
+  }
+
+  .appealClaims{
+    display: flex; 
+    justify-content: flex-end; 
+    padding-bottom: 24px;
+  }
+
+  .button-p:disabled {
+    background-color: #EFEFEF !important;
+    color: #3a3a3a !important;
+    pointer-events: auto;
+  }

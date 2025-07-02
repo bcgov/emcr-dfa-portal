@@ -4,6 +4,37 @@ ng-container::-webkit-scrollbar {
   height: 0;
 }
 
+
+.dialog{
+  padding: 12px;
+}
+
+.dialog-title{
+  border-bottom: 1px solid;
+  padding: 12px;
+  color: #234075;  
+}
+
+.button-container{
+  display: flex;
+  gap:130px
+}
+
+.button-s {
+  border: 1px solid #003366 !important;
+  color: #036 !important;
+  background-color: #fff !important;
+  font-weight: 500 !important;
+}
+
+.button-p {
+  background: #234075 !important;
+  color: #fff !important;
+  float: right;
+}
+
 .button-width {
-  width: 150px;
+  width: 200px;
+  margin: 10px;
+  
 }

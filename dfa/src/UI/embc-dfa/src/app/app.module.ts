@@ -24,6 +24,7 @@ import { ScriptService } from "./core/services/scriptServices";
 import { MAT_AUTOCOMPLETE_SCROLL_STRATEGY } from '@angular/material/autocomplete';
 import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { SharedUiModule } from 'shared-ui';
 
 @NgModule({
     declarations: [AppComponent, OutageBannerComponent, OutageDialogComponent],
@@ -51,7 +52,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         LayoutModule,
         ButtonsModule,
         MatIconModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        SharedUiModule,
     ],
     providers: [
         {

@@ -5,6 +5,5 @@
 import { SignatureBlockModel } from '../models/signature-block-model';
 export interface SignAndSubmitModel {
   applicantSignature?: SignatureBlockModel;
-  ninetyDayDeadline?: string;
   secondaryApplicantSignature?: SignatureBlockModel;
 }
