@@ -370,6 +370,8 @@ namespace EMBC.Database.Model
 			public const string ProcessId = "processid";
 			public const string ProcessIdName = "processidname";
 			public const string ProcessStage_DFA_Appeal = "ProcessStage_DFA_Appeal";
+			public const string ProcessStage_DFA_Project = "ProcessStage_DFA_Project";
+			public const string ProcessStage_DFA_ProjectAmendment = "ProcessStage_DFA_ProjectAmendment";
 			public const string ProcessStage_DFA_ProjectAppeal = "ProcessStage_DFA_ProjectAppeal";
 			public const string ProcessStage_DFA_ProjectClaim = "ProcessStage_DFA_ProjectClaim";
 			public const string ProcessStage_SystemUsers = "ProcessStage_SystemUsers";
@@ -810,6 +812,42 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetRelatedEntities<EMBC.Database.Model.DFA_Appeal>("processstage_dfa_appeal", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N processstage_dfa_project
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("processstage_dfa_project")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_Project> ProcessStage_DFA_Project
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_Project>("processstage_dfa_project", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_Project>("processstage_dfa_project", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N processstage_dfa_projectamendment
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("processstage_dfa_projectamendment")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_ProjectAmendment> ProcessStage_DFA_ProjectAmendment
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_ProjectAmendment>("processstage_dfa_projectamendment", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_ProjectAmendment>("processstage_dfa_projectamendment", null, value);
 			}
 		}
 		

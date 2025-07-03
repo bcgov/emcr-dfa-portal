@@ -125,20 +125,6 @@ namespace EMBC.DFA.API.Controllers
         }
 
         /// <summary>
-        /// get dfa project amendments
-        /// </summary>
-        /// <param name="projectId">The project Id.</param>
-        /// <returns>list of project amendments</returns>
-        [HttpGet("dfaprojectamendments")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<CurrentProjectAmendment>>> GetDFAProjectAmendments(string projectId)
-        {
-            var lstProjectAmendments = await handler.HandleProjectAmendmentList(projectId);
-
-            return Ok(lstProjectAmendments);
-        }
-        
-        /// <summary>
         /// Get the applicant subtype records
         /// </summary>
         /// <returns>applicant subtype records</returns>
@@ -205,34 +191,6 @@ namespace EMBC.DFA.API.Controllers
             return null;
         }
         
-    }
-
-    public class CurrentProjectAmendment
-    {
-        public string ProjectId { get; set; }
-        public string AmendmentNumber { get; set; }
-        public string AmendmentReceivedDate { get; set; }
-        public string AmendmentReason { get; set; }
-        public string AmendmentApprovedDate { get; set; }
-        public string EMCRDecisionComments { get; set; }
-        public string RequestforProjectDeadlineExtention { get; set; }
-        public string AmendedProjectDeadlineDate { get; set; }
-        public string DeadlineExtensionApproved { get; set; }
-        public string Amended18MonthDeadline { get; set; }
-        public string RequestforAdditionalProjectCost { get; set; }
-        public string EstimatedAdditionalProjectCost { get; set; }
-        public string AdditionalProjectCostDecision { get; set; }
-        public string ApprovedAdditionalProjectCost { get; set; }
-        public string AmendmentId { get; set; }
-        public string Status { get; set; }
-        public string Stage { get; set; }
-        public List<ProjectStatusBar> StatusBar { get; set; }
-        public string StatusLastUpdated { get; set; }
-        public bool IsErrorInStatus { get; set; }
-        public bool IsHidden { get; set; } = true;
-        public string StatusColor { get; set; }
-
-        public string AmendmentDecision { get; set; }
     }
 
     public class CurrentProject

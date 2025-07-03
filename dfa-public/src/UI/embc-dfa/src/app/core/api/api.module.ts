@@ -21,6 +21,7 @@ import { FullTimeOccupantService } from './services/full-time-occupant.service';
 import { InvoiceService } from './services/invoice.service';
 import { OtherContactService } from './services/other-contact.service';
 import { ProfileService } from './services/profile.service';
+import { ProjectAmendmentService } from './services/project-amendment.service';
 import { ProjectAppealService } from './services/project-appeal.service';
 import { ProjectService } from './services/project.service';
 import { SecondaryApplicantService } from './services/secondary-applicant.service';
@@ -48,6 +49,7 @@ import { SecondaryApplicantService } from './services/secondary-applicant.servic
     InvoiceService,
     OtherContactService,
     ProfileService,
+    ProjectAmendmentService,
     ProjectAppealService,
     ProjectService,
     SecondaryApplicantService,

@@ -11,6 +11,7 @@ import { CurrentApplication, CurrentProjectAmendment, CurrentProject } from 'src
 import { DFAProjectMainDataService } from '../../feature-components/dfa-project-main/dfa-project-main-data.service';
 import { Decision } from 'src/app/models/decision.enum';
 import { DFAAmendmentMainDataService } from 'src/app/feature-components/dfa-amendment-main/dfa-amendment-main-data.service';
+import { ProjectAmendmentService } from 'src/app/core/api/services';
 
 @Component({
   selector: 'app-dfadashboard-amendment',
@@ -64,6 +65,7 @@ export class DfaDashAmendmentComponent implements OnInit {
     private profileDataService: ProfileDataService,
     private appService: Service,
     private projService: ProjectService,
+    private projectAmendmentService: ProjectAmendmentService,
     private appSessionService: AppSessionService,
     private router: Router,
     private dfaApplicationMainDataService: DFAApplicationMainDataService,
@@ -85,7 +87,7 @@ export class DfaDashAmendmentComponent implements OnInit {
       this.dFAProjectMainDataService.setProjectId(projectId);
     }
 
-    this.projService.projectGetDfaProjectAmendments({ projectId: projectId }).subscribe({
+    this.projectAmendmentService.projectAmendmentGetDfaProjectAmendments({ projectId: projectId }).subscribe({
       next: (lstData) => {
         if (lstData != null) {
           var lstDataModified = [];
@@ -256,11 +258,11 @@ export class DfaDashAmendmentComponent implements OnInit {
     /* EMCRI-478: Set the Amendment Decision so it's available to the Amendment Details page. */
     this.dfaAmendmentMainDataService.setAmendmentDecision(applItem.amendmentDecision);
 
-    if (applItem.openAmendment === true) {
-      this.dfaAmendmentMainDataService.setViewOrEdit('view');
-    } else if (applItem.openAmendment === false) {
+    //if (applItem.openAmendment === true) {
+    //  this.dfaAmendmentMainDataService.setViewOrEdit('view');
+    //} else if (applItem.openAmendment === false) {
       this.dfaAmendmentMainDataService.setViewOrEdit('viewOnly');
-    }
+    //}
 
     this.router.navigate(['/dfa-amendment-main/' + applItem.amendmentId]);
   }

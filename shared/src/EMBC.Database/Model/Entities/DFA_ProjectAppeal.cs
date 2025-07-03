@@ -130,6 +130,7 @@ namespace EMBC.Database.Model
 			public const string DFA_CheckAppealDecisionLetterName = "dfa_checkappealdecisionlettername";
 			public const string DFA_DateAppealReceived = "dfa_dateappealreceived";
 			public const string DFA_DateAssigned = "dfa_dateassigned";
+			public const string DFA_DFA_Project_DFA_ProjectAppeal_ProjectId = "dfa_dfa_project_dfa_projectappeal_ProjectId";
 			public const string DFA_EligibleProjectsCope = "dfa_eligibleprojectscope";
 			public const string DFA_EligibleProjectsCopeName = "dfa_eligibleprojectscopename";
 			public const string DFA_GenerateAppealDecisionLetter = "dfa_generateappealdecisionletter";
@@ -2162,6 +2163,25 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetRelatedEntities<EMBC.Database.Model.DFA_ProjectEligibilityAppeal>("bpf_dfa_projectappeal_dfa_projecteligibilityappeal", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 dfa_dfa_project_dfa_projectappeal_ProjectId
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_projectid")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_dfa_project_dfa_projectappeal_ProjectId")]
+		public EMBC.Database.Model.DFA_Project DFA_DFA_Project_DFA_ProjectAppeal_ProjectId
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<EMBC.Database.Model.DFA_Project>("dfa_dfa_project_dfa_projectappeal_ProjectId", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<EMBC.Database.Model.DFA_Project>("dfa_dfa_project_dfa_projectappeal_ProjectId", null, value);
 			}
 		}
 		

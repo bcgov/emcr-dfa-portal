@@ -21,7 +21,7 @@ import { ApplicationDetailsForm, DamagedPropertyAddressForm, DamagedPropertyAddr
 import { CustomValidationService } from './customValidation.service';
 import { FileUpload, FileUploadsForm, RecoveryPlan, RecoveryPlanForm } from '../model/dfa-project-main.model';
 import { FileUploadClaim, FileUploadsClaimForm, RecoveryClaim, RecoveryClaimForm } from '../model/dfa-claim-main.model';
-import { ProjectAmendment, ProjectAmendmentForm } from '../model/dfa-amendment-main.model'
+import { FileUploadAmendment, FileUploadsAmendmentForm, ProjectAmendment, ProjectAmendmentForm } from '../model/dfa-amendment-main.model'
 import { Invoice, InvoiceForm } from '../model/dfa-invoice.model';
 
 @Injectable({ providedIn: 'root' })
@@ -262,6 +262,20 @@ export class FormCreationService {
 
   fileUploadsClaimForm$: Observable<UntypedFormGroup | undefined> =
     this.fileUploadsClaimForm.asObservable();
+
+  fileUploadsAmendmentForm: BehaviorSubject<UntypedFormGroup | undefined> =
+    new BehaviorSubject(
+      this.formBuilder.group(
+        new FileUploadsAmendmentForm(
+          new Array<FileUploadAmendment>(),
+          this.customValidator,
+          this.formBuilder
+        )
+      )
+    );
+
+  fileUploadsAmendmentForm$: Observable<UntypedFormGroup | undefined> =
+    this.fileUploadsAmendmentForm.asObservable();
 
   damagedRoomsForm: BehaviorSubject<UntypedFormGroup | undefined> =
     new BehaviorSubject(
@@ -710,6 +724,26 @@ export class FormCreationService {
       this.formBuilder.group(
         new FileUploadsClaimForm(
           new Array<FileUploadClaim>(),
+          this.customValidator,
+          this.formBuilder
+        )
+      )
+    );
+  }
+
+  getAmendmentFileUploadsForm(): Observable<UntypedFormGroup> {
+    return this.fileUploadsAmendmentForm$;
+  }
+
+  setAmendmentFileUploadsForm(fileUploadsAmendmentForm: UntypedFormGroup): void {
+    this.fileUploadsAmendmentForm.next(fileUploadsAmendmentForm);
+  }
+
+  clearAmendmentFileUploadsData(): void {
+    this.fileUploadsAmendmentForm.next(
+      this.formBuilder.group(
+        new FileUploadsAmendmentForm(
+          new Array<FileUploadAmendment>(),
           this.customValidator,
           this.formBuilder
         )

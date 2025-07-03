@@ -6,7 +6,7 @@ import {
 } from '@angular/forms';
 import { Community, Country, StateProvince } from './address';
 import { CustomValidationService } from '../services/customValidation.service';
-import { SignatureBlock, SecondaryApplicantTypeOption, FileCategory, RoomType, RequiredDocumentType, ProjectStageOptionSet, FileCategoryClaim, RequiredDocumentTypeClaim, ClaimStageOptionSet } from 'src/app/core/api/models';
+import { SignatureBlock, SecondaryApplicantTypeOption, FileCategory, RoomType, RequiredDocumentType, ProjectStageOptionSet, FileCategoryClaim, RequiredDocumentTypeClaim, ClaimStageOptionSet, RequiredDocumentTypeAmendment, FileCategoryAmendment } from 'src/app/core/api/models';
 import { Invoice } from './dfa-invoice.model';
 
 export class ProjectAmendment {
@@ -20,10 +20,11 @@ export class ProjectAmendment {
   deadlineExtensionApproved?: null | string;
   amended18MonthDeadline?: null | string;
   requestforAdditionalProjectCost ?: null | string;
-  estimatedAdditionalProjectCost ?: null | string;
+  estimatedAdditionalProjectCost ?: null | number;
   additionalProjectCostDecision ?: null | string;
-  approvedAdditionalProjectCost ?: null | string;
+  approvedAdditionalProjectCost ?: null | number;
   amendmentId?: null | string;
+  amendmentDecision?: null | string;
 
   constructor(
     amendmentNumber?: null | string,
@@ -40,6 +41,7 @@ export class ProjectAmendment {
     additionalProjectCostDecision?: null | string,
     approvedAdditionalProjectCost?: null | string,
     amendmentId?: null | string,
+    amendmentDecision?: null | string,
   ) { }
 }
 
@@ -58,6 +60,7 @@ export class ProjectAmendmentForm {
   additionalProjectCostDecision = new UntypedFormControl();
   approvedAdditionalProjectCost = new UntypedFormControl();
   amendmentId = new UntypedFormControl();
+  amendmentDecision = new UntypedFormControl();
 
   constructor(
     projectAmendment: ProjectAmendment,
@@ -117,14 +120,204 @@ export class ProjectAmendmentForm {
     if (projectAmendment.amendmentId) {
       this.amendmentId.setValue(projectAmendment.amendmentId);
     }
+
+    if (projectAmendment.amendmentDecision){
+      this.amendmentDecision.setValue(projectAmendment.amendmentDecision);
+    }
+  }
+}
+
+export class FileUploadAmendment {
+  projectId?: string;
+  contentType?: string;
+  deleteFlag?: boolean;
+  fileData?: string;
+  fileDescription?: string;
+  fileName?: string;
+  fileSize?: number;
+  fileType?: FileCategoryAmendment;
+  fileTypeText?: string;
+  requiredDocumentType?: RequiredDocumentTypeAmendment;
+  id?: null | string;
+  modifiedBy?: string;
+  uploadedDate?: string;
+  applicantType?: string;
+}
+
+export class FileUploadsAmendmentForm {
+  projectId = new UntypedFormControl();
+  applicantType = new UntypedFormControl();
+  deleteFlag = new UntypedFormControl();
+  id = new UntypedFormControl();
+  fileName = new UntypedFormControl();
+  fileDescription = new UntypedFormControl();
+  fileType = new UntypedFormControl();
+  fileTypeText = new UntypedFormControl();
+  requiredDocumentType = new UntypedFormControl();
+  uploadedDate = new UntypedFormControl();
+  modifiedBy = new UntypedFormControl();
+  fileData = new UntypedFormControl();
+  contentType = new UntypedFormControl();
+  fileSize = new UntypedFormControl();
+  supportingFilesFileUpload: UntypedFormGroup;
+  fileUploads = new UntypedFormControl([]);
+  addNewFileUploadIndicator = new UntypedFormControl(false);
+
+  constructor(
+    fileUploads: Array<FileUploadAmendment>,
+    customValidator: CustomValidationService,
+    builder: UntypedFormBuilder
+  ) {
+    this.supportingFilesFileUpload = builder.group({
+      deleteFlag: [
+        false,
+        [
+          customValidator
+            .conditionalValidation(
+              () => this.addNewFileUploadIndicator.value,
+              Validators.required
+            )
+            .bind(customValidator)
+        ]
+      ],
+      projectId: [
+        '',
+        [
+          customValidator
+            .conditionalValidation(
+              () => this.addNewFileUploadIndicator.value,
+              Validators.required
+            )
+            .bind(customValidator)
+        ]
+      ],
+      id: [
+        '',
+      ],
+      fileName: [
+        '',
+        [
+          customValidator
+            .conditionalValidation(
+              () => this.addNewFileUploadIndicator.value,
+              Validators.required
+            )
+            .bind(customValidator)
+        ]
+      ],
+      fileDescription: [
+        '',
+        [
+          customValidator
+            .conditionalValidation(
+              () => this.addNewFileUploadIndicator.value,
+              Validators.required
+            )
+            .bind(customValidator),
+          customValidator
+            .maxLengthValidator(100)
+            .bind(customValidator)
+        ]
+      ],
+      fileType: [
+        '',
+        [
+          customValidator
+            .conditionalValidation(
+              () => this.addNewFileUploadIndicator.value,
+              Validators.required
+            )
+            .bind(customValidator)
+        ]
+      ],
+      fileTypeText: [
+        ''
+      ],
+      requiredDocumentType: [
+        ''
+      ],
+      uploadedDate: [
+        '',
+        [
+          customValidator
+            .conditionalValidation(
+              () => this.addNewFileUploadIndicator.value,
+              Validators.required
+            )
+            .bind(customValidator)
+        ]
+      ],
+      modifiedBy: [
+        '',
+        [
+          customValidator
+            .conditionalValidation(
+              () => this.addNewFileUploadIndicator.value,
+              Validators.required
+            )
+            .bind(customValidator)
+        ]
+      ],
+      fileData: [
+        '',
+        [
+          customValidator
+            .conditionalValidation(
+              () => this.addNewFileUploadIndicator.value,
+              Validators.required
+            )
+            .bind(customValidator)
+        ]
+      ],
+      contentType: [
+        '',
+        [
+          customValidator
+            .conditionalValidation(
+              () => this.addNewFileUploadIndicator.value,
+              Validators.required
+            )
+            .bind(customValidator)
+        ]
+      ],
+      fileSize: [
+        '',
+        [
+          customValidator
+            .conditionalValidation(
+              () => this.addNewFileUploadIndicator.value,
+              Validators.required
+            )
+            .bind(customValidator)
+        ]
+      ]
+    });
+  }
+}
+
+export class SupportingDocuments {
+  //hasCopyOfARentalAgreementOrLease?: boolean;
+
+  constructor() {}
+}
+
+export class SupportingDocumentsForm {
+  //hasCopyOfARentalAgreementOrLease = new UntypedFormControl();
+
+  constructor(supportingDocuments: SupportingDocuments) {
+    //if (supportingDocuments.hasCopyOfARentalAgreementOrLease != null) {
+    //  this.hasCopyOfARentalAgreementOrLease.setValue(supportingDocuments.hasCopyOfARentalAgreementOrLease);
+    //}
+    //this.hasCopyOfARentalAgreementOrLease.setValidators(null);
   }
 }
 
 /**
- * DFA Amendment Main
+ * DFA Project Amendment Main
  **/
-export interface DfaAmendmentMain {
-  id?: string;
-  projectId?: string;
-  amendment?: ProjectAmendment;
-}
+
+export interface DfaProjectAmendmentMain {
+  id?: string | null;
+  projectAmendment?: ProjectAmendment | null;
+  projectId?: string | null;
+} 

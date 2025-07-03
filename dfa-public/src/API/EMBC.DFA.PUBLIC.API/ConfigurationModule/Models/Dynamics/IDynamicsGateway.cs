@@ -50,6 +50,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<IEnumerable<dfa_effectedregioncommunities>> GetEffectedRegionCommunitiesList();
         Task<IEnumerable<dfa_areacommunitieses>> GetCommunitiesAsync();
         Task<string> UpsertProject(dfa_project_params project);
+        Task<string> UpsertProjectAmendment(dfa_projectamendment amendment);
         Task<dfa_projectmain_retrieve> GetProjectMainById(Guid projectId);
         Task<dfa_project> GetProjectDetailsAsync(string projectId);
         Task<IEnumerable<dfa_project>> GetProjectListAsync(string applicationId);

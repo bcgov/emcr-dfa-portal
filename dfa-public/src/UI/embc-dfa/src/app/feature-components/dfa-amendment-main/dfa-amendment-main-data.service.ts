@@ -3,13 +3,14 @@ import { CacheService } from 'src/app/core/services/cache.service';
 import { ApplicationService, AttachmentService } from 'src/app/core/api/services';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DfaProjectMain, FileUpload } from '../../core/model/dfa-project-main.model';
-import { DfaAmendmentMain, ProjectAmendment } from 'src/app/core/model/dfa-amendment-main.model';
+import { ProjectAmendment } from 'src/app/core/model/dfa-amendment-main.model';
+import { CurrentProjectAmendment, DfaProjectAmendmentMain } from 'src/app/core/api/models';
 
 @Injectable({ providedIn: 'root' })
 export class DFAAmendmentMainDataService {
   private _projectAmendment: ProjectAmendment;
   private _fileUploads = [];
-  private _dfaAmendmentMain: DfaAmendmentMain;
+  private _dfaAmendmentMain: DfaProjectAmendmentMain;
   private _dfaProjectMain: DfaProjectMain;
   private _isSubmitted: boolean = false;
   private _applicationId: string;
@@ -73,7 +74,7 @@ export class DFAAmendmentMainDataService {
     this._isSubmitted = value;
   }
 
-  public setDFAAmendmentMain(dfaAmendmentMain: DfaAmendmentMain): void {
+  public setDFAAmendmentMain(dfaAmendmentMain: DfaProjectAmendmentMain): void {
     this._dfaAmendmentMain = dfaAmendmentMain;
     this.cacheService.set('dfa-amendment-main', dfaAmendmentMain);
   }
@@ -194,11 +195,11 @@ export class DFAAmendmentMainDataService {
     return this._amendmentDecision;
   }
 
-   public createDFAAmendmentMainDTO(): DfaAmendmentMain {
+   public createDFAAmendmentMainDTO(): DfaProjectAmendmentMain {
     return {
       id: this._amendmentId,
       projectId: this._projectId,
-      amendment: this._projectAmendment
+      projectAmendment: this._projectAmendment
     };
   }
 }

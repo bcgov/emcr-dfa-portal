@@ -101,6 +101,8 @@
     "dfa_appeal",
     "dfa_clientcode",
     "dfa_event",
+    "dfa_project",
+    "dfa_projectamendment",
     "dfa_projectappeal",
     "dfa_projectclaim",
     "dfa_projecteligibilityappeal",

@@ -17,7 +17,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as globalConst from '../../core/services/globalConstants';
 import { FormCreationService } from '../../core/services/formCreation.service';
 import { ApplicantOption, CurrentApplication, CurrentProjectAmendment, FarmOption, ProjectStageOptionSet, ProjectStatusBar, SmallBusinessOption } from 'src/app/core/api/models';
-import { ApplicationService, AttachmentService } from 'src/app/core/api/services';
+import { ApplicationService, AttachmentService, ProjectAmendmentService } from 'src/app/core/api/services';
 import { MatDialog } from '@angular/material/dialog';
 import { DashTabModel } from '../dashboard/dashboard.component';
 import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
@@ -110,6 +110,7 @@ export class DFAProjectAmendmentComponent
     private dfaProjectMainDataService: DFAProjectMainDataService,
     private applicationService: ApplicationService,
     private projectService: ProjectService,
+    private projectAmendmentService: ProjectAmendmentService,
     private dfaProjectMainService: DFAProjectMainService,
     private dfaProjectMainMapping: DFAProjectMainMappingService,
   ) {
@@ -241,7 +242,7 @@ export class DFAProjectAmendmentComponent
 
   getAmendmentDetails(projectId: string) {
     if (projectId) {
-      this.projectService.projectGetDfaProjectAmendments({ projectId: projectId }).subscribe({
+      this.projectAmendmentService.projectAmendmentGetDfaProjectAmendments({ projectId: projectId }).subscribe({
         next: (dfaAmendment) => {
           if (dfaAmendment) {
             var amendmentId = this.projectAmendmentForm.controls.amendmentId.value;

@@ -989,7 +989,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         "dfa_requireddocumenttype", "_dfa_project_value", "bcgov_mimetype", "bcgov_size", "bcgov_fileextension", "dfa_description",
                         "bcgov_fileclassification", "dfa_category", "_dfa_appapplication_value", "_modifiedby_value"
                     },
-                    Filter = $"_dfa_project_value eq {projectIdString} and dfa_documenttype eq {amendmentCategoryString} and statecode eq 0 and bcgov_origincode eq 931490000"
+                    Filter = $"_dfa_project_value eq {projectIdString} and dfa_category eq '{amendmentCategoryString}' and statecode eq 0 and bcgov_origincode eq 931490000"
                 });
 
                 return list.List;
@@ -1152,6 +1152,24 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             }
 
             return string.Empty;
+        }
+
+        public async Task<string> UpsertProjectAmendment(dfa_projectamendment amendment)
+        {
+            try
+            {
+                var result = await api.Create("dfa_projectamendment", amendment);
+
+/*                var jsonVal = JsonConvert.SerializeObject(amendment);
+                var result = await api.ExecuteAction("dfa_DFAPortalCreateProject", amendment);*/
+
+                return result.ToString();
+
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Failed to update/delete project {ex.Message}", ex);
+            }
         }
 
         public async Task<dfa_projectmain_retrieve> GetProjectMainById(Guid projectId)

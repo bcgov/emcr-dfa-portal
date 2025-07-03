@@ -10,18 +10,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { FileUploadAmendment } from '../../models/file-upload-amendment';
 
-export interface AttachmentGetAmendmentAttachments$Params {
-
-/**
- * The project Id.
- */
-  projectId?: string;
+export interface AttachmentUpsertDeleteProjectAmendmentAttachment$Params {
+  
+    /**
+     * The attachment information
+     */
+    body: FileUploadAmendment
 }
 
-export function attachmentGetAmendmentAttachments(http: HttpClient, rootUrl: string, params?: AttachmentGetAmendmentAttachments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FileUploadAmendment>>> {
-  const rb = new RequestBuilder(rootUrl, attachmentGetAmendmentAttachments.PATH, 'get');
+export function attachmentUpsertDeleteProjectAmendmentAttachment(http: HttpClient, rootUrl: string, params: AttachmentUpsertDeleteProjectAmendmentAttachment$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+  const rb = new RequestBuilder(rootUrl, attachmentUpsertDeleteProjectAmendmentAttachment.PATH, 'post');
   if (params) {
-    rb.query('projectId', params.projectId, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -29,9 +29,9 @@ export function attachmentGetAmendmentAttachments(http: HttpClient, rootUrl: str
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<FileUploadAmendment>>;
+      return r as StrictHttpResponse<string>;
     })
   );
 }
 
-attachmentGetAmendmentAttachments.PATH = '/api/attachments/byProjectId';
+attachmentUpsertDeleteProjectAmendmentAttachment.PATH = '/api/attachments/amendmentdocument';

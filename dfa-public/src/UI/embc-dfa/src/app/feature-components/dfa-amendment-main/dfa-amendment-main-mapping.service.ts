@@ -3,9 +3,10 @@ import { FormGroup, UntypedFormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { DfaApplicationMain, FullTimeOccupant, SecondaryApplicant, OtherContact, DamagedRoom, CleanUpLogItem } from 'src/app/core/model/dfa-application-main.model';
 import { FormCreationService } from '../../core/services/formCreation.service';
-import { DfaAmendmentMain, ProjectAmendmentForm } from '../../core/model/dfa-amendment-main.model';
+import { ProjectAmendmentForm } from '../../core/model/dfa-amendment-main.model';
 import { DFAAmendmentMainDataService } from './dfa-amendment-main-data.service';
 import { DfaInvoiceMain } from '../../core/model/dfa-invoice.model';
+import { CurrentProjectAmendment } from 'src/app/core/api/models';
 
 @Injectable({ providedIn: 'root' })
 export class DFAAmendmentMainMappingService {
@@ -14,42 +15,43 @@ export class DFAAmendmentMainMappingService {
     private dfaAmendmentMainDataService: DFAAmendmentMainDataService,
   ) { }
 
-  mapDFAAmendmentMain(dfaAmendmentMain: DfaAmendmentMain): void {
-    this.dfaAmendmentMainDataService.setDFAAmendmentMain(dfaAmendmentMain);
-    this.setExistingDFAAmendmentMain(dfaAmendmentMain);
+  mapDFAAmendmentMain(dfaAmendment: CurrentProjectAmendment): void {
+    this.dfaAmendmentMainDataService.setDFAAmendmentMain(dfaAmendment);
+    this.setExistingDFAAmendmentMain(dfaAmendment);
   }
 
-  setExistingDFAAmendmentMain(dfaAmendmentMain: DfaAmendmentMain): void {
-    this.setAmendmentDetails(dfaAmendmentMain);
+  setExistingDFAAmendmentMain(dfaAmendment: CurrentProjectAmendment): void {
+    this.setAmendmentDetails(dfaAmendment);
   }
 
-  private setAmendmentDetails(dfaAmendmentMain: DfaAmendmentMain): void {
+  private setAmendmentDetails(dfaAmendment: CurrentProjectAmendment): void {
     let formGroup: FormGroup<ProjectAmendmentForm>;
     this.formCreationService
       .getProjectAmendmentForm()
       .pipe(first())
       .subscribe((amendment: FormGroup<ProjectAmendmentForm>) => {
         amendment.setValue({
-          additionalProjectCostDecision: dfaAmendmentMain.amendment.additionalProjectCostDecision,
-          amended18MonthDeadline: dfaAmendmentMain.amendment.amended18MonthDeadline,
-          amendedProjectDeadlineDate: dfaAmendmentMain.amendment.amendedProjectDeadlineDate,
-          amendmentApprovedDate: dfaAmendmentMain.amendment.amendmentApprovedDate,
-          amendmentId: dfaAmendmentMain.amendment.amendmentId,
-          amendmentNumber: dfaAmendmentMain.amendment.amendmentNumber,
-          amendmentReason : dfaAmendmentMain.amendment.amendmentReason,
-          amendmentReceivedDate: dfaAmendmentMain.amendment.amendmentReceivedDate,
-          approvedAdditionalProjectCost: dfaAmendmentMain.amendment.approvedAdditionalProjectCost,
-          deadlineExtensionApproved: dfaAmendmentMain.amendment.deadlineExtensionApproved,
-          emcrDecisionComments: dfaAmendmentMain.amendment.emcrDecisionComments,
-          estimatedAdditionalProjectCost: dfaAmendmentMain.amendment.estimatedAdditionalProjectCost,
-          requestforAdditionalProjectCost: dfaAmendmentMain.amendment.requestforAdditionalProjectCost,
-          requestforProjectDeadlineExtention: dfaAmendmentMain.amendment.requestforProjectDeadlineExtention
+          additionalProjectCostDecision: dfaAmendment.additionalProjectCostDecision,
+          amended18MonthDeadline: dfaAmendment.amended18MonthDeadline,
+          amendedProjectDeadlineDate: dfaAmendment.amendedProjectDeadlineDate,
+          amendmentApprovedDate: dfaAmendment.amendmentApprovedDate,
+          amendmentId: dfaAmendment.amendmentId,
+          amendmentNumber: dfaAmendment.amendmentNumber,
+          amendmentReason : dfaAmendment.amendmentReason,
+          amendmentReceivedDate: dfaAmendment.amendmentReceivedDate,
+          approvedAdditionalProjectCost: dfaAmendment.approvedAdditionalProjectCost,
+          deadlineExtensionApproved: dfaAmendment.deadlineExtensionApproved,
+          emcrDecisionComments: dfaAmendment.emcrDecisionComments,
+          estimatedAdditionalProjectCost: dfaAmendment.estimatedAdditionalProjectCost,
+          requestforAdditionalProjectCost: dfaAmendment.requestforAdditionalProjectCost,
+          requestforProjectDeadlineExtention: dfaAmendment.requestforProjectDeadlineExtention,
+          amendmentDecision: dfaAmendment.amendmentDecision,
           //isFirstAmendmentApproved: dfaAmendmentMain.amendment.isFirstAmendmentApproved === true ? 'true' : (dfaAmendmentMain.amendment.isFirstAmendmentApproved === false ? 'false' : null),
         });
         formGroup = amendment;
       });
       
-    this.dfaAmendmentMainDataService.amendment = dfaAmendmentMain.amendment;
+    this.dfaAmendmentMainDataService.amendment = dfaAmendment;
   }
 
 }

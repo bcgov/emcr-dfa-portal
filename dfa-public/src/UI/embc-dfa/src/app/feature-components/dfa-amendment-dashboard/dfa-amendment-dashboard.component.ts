@@ -9,7 +9,7 @@ import * as globalConst from '../../core/services/globalConstants';
 import { FormCreationService } from '../../core/services/formCreation.service';
 //import { DFAProjectService } from './dfa-project.service';
 import { CurrentApplication, ProjectStageOptionSet } from 'src/app/core/api/models';
-import { ApplicationService} from 'src/app/core/api/services';
+import { ApplicationService, ProjectAmendmentService} from 'src/app/core/api/services';
 import { MatDialog } from '@angular/material/dialog';
 import { DashTabModel } from '../dashboard/dashboard.component';
 import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
@@ -69,7 +69,8 @@ export class DFAAmendmentComponent
     private dfaAmendmentMainDataService: DFAAmendmentMainDataService,
     private dfaAmendmentMainService: DFAAmendmentMainService,
     private appSessionService: AppSessionService,
-    private projService: ProjectService,
+    private projectService: ProjectService,
+    private projectAmendmentService :ProjectAmendmentService,
     private applicationService: ApplicationService,
   ) {
     
@@ -95,7 +96,7 @@ export class DFAAmendmentComponent
       this.tabs[1].count = n ? n.toString() : "0";
     });
 
-    this.projService.projectGetDfaProjectAmendments({ projectId: this.projId }).subscribe({
+    this.projectAmendmentService.projectAmendmentGetDfaProjectAmendments({ projectId: this.projId }).subscribe({
       next: (lstData) => {
         if (lstData != null) {
           this.countAppData(lstData);
@@ -124,8 +125,8 @@ export class DFAAmendmentComponent
       }
     ];
 
-    if(this.openAmendmentsCount < 1 &&
-      this.projectStatus == ProjectStageOptionSet.DecisionMade)
+    if(this.openAmendmentsCount < 1) // &&
+      //this.projectStatus == ProjectStageOptionSet.DecisionMade)
     {
       this.showCreateButton = true;
     }
@@ -162,10 +163,12 @@ export class DFAAmendmentComponent
           this.dfaProjectMainDataService.setApplicationId(this.appId);
           this.dfaProjectMainDataService.setAmendmentId(null);
           this.dfaAmendmentMainDataService.amendment = null;
+          this.dfaAmendmentMainDataService.setProjectId(this.projId);
           this.formCreationService.clearProjectAmendmentData();
+
           let objAmendmentDTO = this.dfaAmendmentMainDataService.createDFAAmendmentMainDTO();
-          
-          this.dfaAmendmentMainService.upsertAmendment(objAmendmentDTO).subscribe(id => {
+
+          this.dfaAmendmentMainService.upsertProjectAmendment(objAmendmentDTO).subscribe(id => {
             if (id) {
               this.dfaProjectMainDataService.setViewOrEdit('addamendment');
 
@@ -176,7 +179,7 @@ export class DFAAmendmentComponent
             error => {
               console.error(error);
               //document.location.href = 'https://dfa.gov.bc.ca/error.html';
-            });
+            }); 
         }
       });
   }
@@ -187,10 +190,9 @@ export class DFAAmendmentComponent
     this.openAmendmentsCount = 0; this.closedAmendmentsCount = 0;
     lstProjects.forEach(x => {
       if (
-        (x.status.toLowerCase() === "decision made"
-          || x.status.toLowerCase() === "closed" || x.status.toLowerCase() === "closed: withdrawn")
-        &&
-        (x.dateFileClosed && (this.OneDayAgo >= new Date(x.dateFileClosed).getTime()))
+        ( x.status.toLowerCase() === "decision made" || 
+          x.status.toLowerCase() === "closed" || 
+          x.status.toLowerCase() === "closed: withdrawn")
       ) {
         this.closedAmendmentsCount++;
       } else this.openAmendmentsCount++;
@@ -237,7 +239,7 @@ export class DFAAmendmentComponent
 
   getProjectDetails(projectId: string) {
     if (projectId) {
-      this.projService.projectGetProjectMain({ projectId: projectId }).subscribe({
+      this.projectService.projectGetProjectMain({ projectId: projectId }).subscribe({
         next: (dfaProject) => {
           if (dfaProject) {
             var project = dfaProject.project;
@@ -256,7 +258,7 @@ export class DFAAmendmentComponent
             //let months = this.diffMonths(dfaProject.deadline18Month);
             this.projName = project.projectName;
             this.projNumber = project.projectNumber;
-            this.deadline18Months = project.project18MonthDeadline != 'Date Not Set' ? project.project18MonthDeadline : "Date Not Set";
+            this.deadline18Months = project.project18MonthDeadline != 'Date Not Set' ? project.project18MonthDeadline : null;
             this.deadline18MonthsText = project.project18MonthDeadline != 'Date Not Set' ? "(" + months + " month(s) " + days + " day(s) remaining)" : "";
             this.siteLocation = project.siteLocation;
             this.projectType = project.projectType;

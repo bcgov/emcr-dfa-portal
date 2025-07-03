@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
+using EMBC.Database.Contract;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using Org.BouncyCastle.Asn1.Mozilla;
 
@@ -258,6 +259,16 @@ namespace EMBC.DFA.API.Controllers
     /// File Category Options
     /// </summary>
     [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum FileCategoryAmendment
+    {
+        [EnumMember(Value = "Amendment")]
+        Amendment
+    }
+
+    /// <summary>
+    /// File Category Options
+    /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum RequiredDocumentType
     {
         [EnumMember(Value = "Pre Event Condition")]
@@ -282,6 +293,15 @@ namespace EMBC.DFA.API.Controllers
         [EnumMember(Value = "Proof of Payment")]
         ProofofPayment,
     }
+
+    
+
+    /// <summary>
+    /// File Category Options
+    /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum RequiredDocumentTypeAmendment
+    {}
 
     /// <summary>
     /// Room Types
@@ -678,5 +698,12 @@ namespace EMBC.DFA.API.Controllers
         public string? EMCRApprovedAmount { get; set; }
         public string? DecisionDate { get; set; }
         public string? EMCRDecisionComments { get; set; }
+    }
+
+    public class DfaProjectAmendmentMain
+    {
+        public Guid? Id { get; set; }
+        public string? ProjectId { get; set; }
+        public ProjectAmendment? ProjectAmendment { get; set; }
     }
 }

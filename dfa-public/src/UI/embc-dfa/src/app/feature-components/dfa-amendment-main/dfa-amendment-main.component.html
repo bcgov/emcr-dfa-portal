@@ -24,143 +24,22 @@
     </div>
   </div>
 
-  <mat-horizontal-stepper
-                          [selectedIndex]="selectedStepIndex"
-    class="stepper-style"
-    labelPosition="bottom"
-    (animationDone)="currentStep(dfaAmendmentMainStepper?.selectedIndex, dfaAmendmentMainStepper)"
-    (selectionChange)="stepChanged($event, dfaAmendmentMainStepper)"
-    #dfaAmendmentMainStepper
-    [linear]="false"
-  >
-    <mat-step *ngFor="let step of steps" [stepControl]="form" >
-      <ng-template matStepLabel>{{ step.stepName }}</ng-template>
-      <app-component-wrapper
-        [componentName]="step.component"
-        [folderPath]="dfaAmendmentMainFolderPath"
-      ></app-component-wrapper>
-      <br />
-      <div class="row justify-content-between resp-style">
-          <!--<div class="col-md-6"></div>-->
-        <div class="col-md-6" *ngIf="vieworedit === 'addclaim' || vieworedit === 'updateclaim'">
-          <button
-            class="button-s projectbutton"
-            [hidden]="step.component === 'recovery-claim'"
-            mat-button
-            type="button"
-            (click)="goBack(dfaAmendmentMainStepper, step.lastStep)"
-          >
-            {{ step.backButtonLabel }}
-          </button>
-          <button
-            class="button-s projectbutton"
-            mat-button
-            type="button"
-            (click)="saveAsDraft()"
-          >
-            Save Amendment as Draft
-          </button>
-          <!--<button
-            class="button-s projectbutton"
-            [hidden]="step.component !== 'recovery-plan'"
-            mat-button
-            type="button"
-            (click)="goBack(dfaProjectMainStepper, step.lastStep)"
-          >
-            Clear Answers
-          </button>-->
-          <!--<button
-            class="button-s projectbutton"
-            mat-button
-            type="button"
-          >
-            Discard this Project
-          </button>-->
-        </div>
-        <div class="col-md-6">
-          <button *ngIf="vieworedit === 'addclaim' || vieworedit === 'updateclaim'"
-            class="button-p nextNsave"
-            mat-stroked-button
-            type="button"
-            (click)="goForward(dfaAmendmentMainStepper, step.isLast, step.component)"
-          >
-            {{ step.nextButtonLabel }}
-          </button>
-          
-          
-        </div>
-        <br/>
-        <!--<label>** You do not have to complete the entire application at once, you can udpate it from the dashboard as needed.  However, before you
-        submit the final signed version, all fields marked with a <b><span style="color:red;">*</span></b> must be completed.</label>-->
-      </div>
-    </mat-step>
-
-    <mat-step *ngIf="vieworedit == 'addclaim' || vieworedit === 'updateclaim'">
-      <ng-template matStepLabel>Review</ng-template>
-      <app-review-claim
-        [type]="type"
-        [showHeading]="true"
-        [parentPageName]="parentPageName"
-        [currentFlow]="currentFlow"
-        [allowEdit]="true"
-        (stepToNavigate)="navigateToStep($event)"
+  <app-component-wrapper
+    [componentName]="'amendment'"
+    [folderPath]="dfaAmendmentMainFolderPath"
+  ></app-component-wrapper>
+  <br />
+  <div class="row justify-content-between resp-style">
+    <div class="col-md-6" *ngif="vieworedit != 'viewOnly'">
+      <button 
+        class="button-p save-button"
+        mat-stroked-button
+        type="button"
+        (click)="submitFile()"
       >
-      </app-review-claim>
-      <br />
-
-      <div class="row justify-content-between resp-style">
-        <div class="col-md-6" style="padding-left: 28px;">
-          <button
-            class="button-s projectbutton"
-            mat-button
-            type="button"
-            (click)="dfaAmendmentMainStepper.previous()"
-          >
-            Go Back<!--<span *ngIf="vieworedit === 'addproject' || vieworedit === 'updateproject'"> & Edit</span>-->
-          </button>
-
-          <button
-            class="button-s projectbutton"
-            mat-button
-            type="button"
-            (click)="saveAsDraft()"
-          >
-            Save Amendment as Draft
-          </button>
-          <!--<button
-            class="button-s projectbutton"
-            mat-button
-            type="button"
-          >
-            Discard this Project
-          </button>-->
-        </div>
-        <!--<div class="col-md-6" *ngIf="!isSubmitted
-           && (formCreationService.propertyDamageForm$ | async)?.valid
-           && ((formCreationService.otherContactsForm$ | async)?.value?.otherContacts?.length > 0)
-           ">-->
-        <!--        && (formCreationService.supportingDocumentsForm$ | async)?.valid-->
-                <!--&& requiredDocumentsSupplied()"-->
-
-        <div class="col-md-6">
-        <button *ngIf="(formCreationService.recoveryAmendmentForm$ | async)?.valid
-                && invoiceSummaryDataSource?.data?.length > 0
-                && (formCreationService.supportingDocumentsForm$ | async)?.valid
-                && requiredDocumentsSupplied()
-                "
-          class="button-p nextNsave"
-          mat-stroked-button
-          type="button"
-          (click)="submitFile()"
-        >
-          Submit
-        </button>
-      </div>
-      </div>
-    </mat-step>
-
-    <ng-template matStepperIcon="edit" let-index="index">
-      {{ index + 1 }}
-    </ng-template>
-  </mat-horizontal-stepper>
+        Submit
+      </button>
+    </div>
+  </div>
+  <br/><br/>
 </div>

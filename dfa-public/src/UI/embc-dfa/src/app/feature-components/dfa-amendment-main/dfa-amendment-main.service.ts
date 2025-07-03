@@ -1,18 +1,18 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ProjectService } from 'src/app/core/api/services';
-import { DfaAmendmentMain } from '../../core/model/dfa-amendment-main.model';
+import { ProjectAmendmentService, ProjectService } from 'src/app/core/api/services';
 import { DfaInvoiceMain } from '../../core/model/dfa-invoice.model';
+import { CurrentProjectAmendment, DfaProjectAmendmentMain } from 'src/app/core/api/models';
 
 @Injectable({ providedIn: 'root' })
 export class DFAAmendmentMainService {
 
   constructor(
-    private projectService: ProjectService
+    private projectAmendmentService: ProjectAmendmentService
   ) {}
 
-  public upsertAmendment(updatedAmendment: DfaAmendmentMain): Observable<string> {
-    return this.projectService.projectUpsertProject({ body: updatedAmendment });
+  public upsertProjectAmendment(updatedProjectAmendment: DfaProjectAmendmentMain): Observable<string> {
+    return this.projectAmendmentService.projectAmendmentUpsertProjectAmendment({ body: updatedProjectAmendment });
   }
 
 }

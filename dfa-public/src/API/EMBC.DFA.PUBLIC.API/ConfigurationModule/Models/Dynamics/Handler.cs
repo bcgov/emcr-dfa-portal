@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Cronos;
+using EMBC.Database.Contract;
 using EMBC.DFA.API.ConfigurationModule.Models.AuthModels;
 using EMBC.DFA.API.ConfigurationModule.Models.PDF;
 using EMBC.DFA.API.Controllers;
@@ -17,6 +18,7 @@ using Xrm.Tools.WebAPI;
 using Xrm.Tools.WebAPI.Requests;
 using static Pipelines.Sockets.Unofficial.SocketConnection;
 using Profile = EMBC.DFA.API.Controllers.Profile;
+using RecoveryClaim = EMBC.DFA.API.Controllers.RecoveryClaim;
 
 namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
 {
@@ -30,6 +32,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> HandleSignature(dfa_signature objSignature);
         Task<string> HandleApplicationUpdate(dfa_appapplicationmain_params objApplication, temp_dfa_appapplicationmain_params temp_params);
         Task<string> HandleProjectCreateUpdate(dfa_project_params objProject);
+        Task<string> HandleProjectAmendmentCreateUpdate(dfa_projectamendment objAmendment);
         Task<dfa_appapplicationstart_retrieve> GetApplicationStartAsync(Guid applicationId);
         Task<dfa_appapplicationmain_retrieve> GetApplicationMainAsync(Guid applicationId);
         Task<string> HandleDamagedItemsAsync(dfa_appdamageditems_params objDamagedItems);
@@ -370,6 +373,12 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public async Task<string> HandleProjectCreateUpdate(dfa_project_params objProject)
         {
             var result = await listsGateway.UpsertProject(objProject);
+            return result;
+        }
+
+        public async Task<string> HandleProjectAmendmentCreateUpdate(dfa_projectamendment objAmendment)
+        {
+            var result = await listsGateway.UpsertProjectAmendment(objAmendment);
             return result;
         }
 

@@ -25,11 +25,14 @@ import { attachmentGetProjectAttachments } from '../fn/attachment/attachment-get
 import { AttachmentGetProjectAttachments$Params } from '../fn/attachment/attachment-get-project-attachments';
 import { attachmentUpsertDeleteClaimAttachment } from '../fn/attachment/attachment-upsert-delete-claim-attachment';
 import { AttachmentUpsertDeleteClaimAttachment$Params } from '../fn/attachment/attachment-upsert-delete-claim-attachment';
+import { attachmentUpsertDeleteProjectAmendmentAttachment } from '../fn/attachment/attachment-upsert-delete-project-amendment-attachment';
+import { AttachmentUpsertDeleteProjectAmendmentAttachment$Params } from '../fn/attachment/attachment-upsert-delete-project-amendment-attachment';
 import { attachmentUpsertDeleteProjectAttachment } from '../fn/attachment/attachment-upsert-delete-project-attachment';
 import { AttachmentUpsertDeleteProjectAttachment$Params } from '../fn/attachment/attachment-upsert-delete-project-attachment';
 import { attachmentUpsertProjectAppealAttachment } from '../fn/attachment/attachment-upsert-project-appeal-attachment';
 import { AttachmentUpsertProjectAppealAttachment$Params } from '../fn/attachment/attachment-upsert-project-appeal-attachment';
 import { FileUpload } from '../models/file-upload';
+import { FileUploadAmendment } from '../models/file-upload-amendment';
 import { FileUploadClaim } from '../models/file-upload-claim';
 
 @Injectable({ providedIn: 'root' })
@@ -100,6 +103,39 @@ export class AttachmentService extends BaseService {
    */
   attachmentUpsertDeleteProjectAttachment(params: AttachmentUpsertDeleteProjectAttachment$Params, context?: HttpContext): Observable<string> {
     return this.attachmentUpsertDeleteProjectAttachment$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
+    );
+  }
+
+  /** Path part for operation `attachmentUpsertDeleteProjectAmendmentAttachment()` */
+  static readonly AttachmentUpsertDeleteProjectAmendmentAttachmentPath = '/api/attachments/amendmentdocument';
+
+  /**
+   * Create / update / delete a file attachment.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `attachmentUpsertDeleteProjectAmendmentAttachment()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  attachmentUpsertDeleteProjectAmendmentAttachment$Response(params: AttachmentUpsertDeleteProjectAmendmentAttachment$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return attachmentUpsertDeleteProjectAmendmentAttachment(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create / update / delete a file attachment.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `attachmentUpsertDeleteProjectAmendmentAttachment$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  attachmentUpsertDeleteProjectAmendmentAttachment(params: AttachmentUpsertDeleteProjectAmendmentAttachment$Params, context?: HttpContext): Observable<string> {
+    return this.attachmentUpsertDeleteProjectAmendmentAttachment$Response(params, context).pipe(
       map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
@@ -249,7 +285,7 @@ export class AttachmentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  attachmentGetAmendmentAttachments$Response(params?: AttachmentGetAmendmentAttachments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FileUpload>>> {
+  attachmentGetAmendmentAttachments$Response(params?: AttachmentGetAmendmentAttachments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FileUploadAmendment>>> {
     return attachmentGetAmendmentAttachments(this.http, this.rootUrl, params, context);
   }
 
@@ -263,9 +299,9 @@ export class AttachmentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  attachmentGetAmendmentAttachments(params?: AttachmentGetAmendmentAttachments$Params, context?: HttpContext): Observable<Array<FileUpload>> {
+  attachmentGetAmendmentAttachments(params?: AttachmentGetAmendmentAttachments$Params, context?: HttpContext): Observable<Array<FileUploadAmendment>> {
     return this.attachmentGetAmendmentAttachments$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<FileUpload>>): Array<FileUpload> => r.body)
+      map((r: StrictHttpResponse<Array<FileUploadAmendment>>): Array<FileUploadAmendment> => r.body)
     );
   }
 
