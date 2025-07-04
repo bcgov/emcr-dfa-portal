@@ -5,4 +5,5 @@ export interface DialogContent {
   confirmButton?: null | string;
   cancelButton?: null | string;
   exitLink?: null | string;
+  showCloseIcon?: boolean;
 }

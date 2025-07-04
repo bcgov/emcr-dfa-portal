@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import {
@@ -14,6 +15,7 @@ import { FormCreationService } from '../../core/services/formCreation.service';
 import { DFAAppealDataService } from './dfa-appeal-data.service';
 import { DfaAppealService } from './dfa-appeal.service';
 import { AppealType } from 'src/app/core/model/dfa-appeals-main.model';
+import { CancelConfirmationDialogComponent } from 'src/app/core/components/dialog-components/dfa-cancel-confirmation-dialog/dfa-cancel-confirmation-dialog.component';
 
 @Component({
   selector: 'app-dfa-appeal',
@@ -53,7 +55,8 @@ export class DfaAppealComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private dfaAppealDataService: DFAAppealDataService,
     private dfaAppealService: DfaAppealService,
-    private applicationService: ApplicationService
+    private applicationService: ApplicationService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -130,10 +133,48 @@ export class DfaAppealComponent implements OnInit {
    */
   goBack(stepper: MatStepper, lastStep: number): void {
     if (lastStep === -2) {
-      this.returnToDashboard();
+      this.showCancelAppealDialog();
     } else {
       stepper.selectedIndex = lastStep;
     }
+  }
+
+  /**
+   * Shows the cancel appeal confirmation dialog
+   */
+  showCancelAppealDialog(): void {
+    const dialogRef = this.dialog.open(CancelConfirmationDialogComponent, {
+      data: {
+        title: 'Cancel Appeal',
+        subtitle: 'Are you sure you want to cancel your appeal?',
+        text: "Appeals must be created and submitted in the same session.\nDrafts are not saved - any changes you've made will be lost.",
+        cancelButton: 'No, go back',
+        confirmButton: 'Yes, cancel appeal',
+        showCloseIcon: true
+      },
+      width: '500px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.cancelAppeal();
+      }
+    });
+  }
+
+  /**
+   * Cancels the appeal and navigates back to dashboard
+   */
+  private cancelAppeal(): void {
+    // Clear any form data
+    this.dfaAppealDataService.appealReason = null;
+    this.dfaAppealDataService.signAndSubmit = null;
+    this.formCreationService.clearAppealReasonData();
+    this.formCreationService.clearAppealSignAndSubmitData();
+
+    // Navigate back to dashboard
+    this.returnToDashboard();
   }
 
   /**
@@ -227,7 +268,7 @@ export class DfaAppealComponent implements OnInit {
     if (this.form$) {
       this.form$.unsubscribe();
     }
-    
+
     switch (index) {
       case 0:
         this.form$ = this.formCreationService
@@ -258,7 +299,7 @@ export class DfaAppealComponent implements OnInit {
   submitAppeal(): void {
     this.isLoading = true;
     this.setFormData('sign-and-submit');
-    
+
     let appeal = this.dfaAppealDataService.createAppealDTO();
     this.dfaAppealService.insertAppeal(appeal).subscribe({
       next: () => {
