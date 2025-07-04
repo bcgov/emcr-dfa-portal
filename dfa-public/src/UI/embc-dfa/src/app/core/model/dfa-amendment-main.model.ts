@@ -10,7 +10,7 @@ import { SignatureBlock, SecondaryApplicantTypeOption, FileCategory, RoomType, R
 import { Invoice } from './dfa-invoice.model';
 
 export class ProjectAmendment {
-  amendmentNumber?: null | string;
+  amendmentNumber?: null | number;
   amendmentReceivedDate?: null | string;
   amendmentReason?: null | string;
   amendmentApprovedDate?: null | string;
@@ -27,7 +27,7 @@ export class ProjectAmendment {
   amendmentDecision?: null | string;
 
   constructor(
-    amendmentNumber?: null | string,
+    amendmentNumber?: null | number,
     amendmentReceivedDate?: null | string,
     amendmentReason?: null | string,
     amendmentApprovedDate?: null | string,
@@ -37,9 +37,9 @@ export class ProjectAmendment {
     deadlineExtensionApproved?: null | string,
     amended18MonthDeadline?: null | string,
     requestforAdditionalProjectCost?: null | string,
-    estimatedAdditionalProjectCost?: null | string,
+    estimatedAdditionalProjectCost?: null | number,
     additionalProjectCostDecision?: null | string,
-    approvedAdditionalProjectCost?: null | string,
+    approvedAdditionalProjectCost?: null | number,
     amendmentId?: null | string,
     amendmentDecision?: null | string,
   ) { }

@@ -568,6 +568,19 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.DocumentContent, opts => opts.MapFrom(s => s.fileData))
                 ;
 
+            CreateMap<FileUploadAmendment, S3SubmissionEntity>()
+                .ForMember(d => d.RegardingEntityID, opts => opts.MapFrom(s => s.projectId))
+                .ForMember(d => d.OriginCode, opts => opts.MapFrom(s => ORIGIN_CODE_PORTAL))
+                .ForMember(d => d.Metadata_1, opts => opts.MapFrom(s => s.fileTypeText))
+                .ForMember(d => d.Metadata_2, opts => opts.MapFrom(s => s.requiredDocumentType))
+                .ForMember(d => d.Metadata_3, opts => opts.MapFrom(s => s.fileDescription))
+                .ForMember(d => d.DocumentSize, opts => opts.MapFrom(s => s.fileSize))
+                .ForMember(d => d.ReceivedDate, opts => opts.MapFrom(s => s.uploadedDate))
+                .ForMember(d => d.DocumentFileName, opts => opts.MapFrom(s => s.fileName))
+                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.contentType))
+                .ForMember(d => d.DocumentContent, opts => opts.MapFrom(s => s.fileData))
+                ;
+
             CreateMap<FileUpload, AttachmentEntity>()
                 .ForMember(d => d.filename, opts => opts.MapFrom(s => s.fileName))
                 .ForMember(d => d.activitysubject, opts => opts.MapFrom(s => "dfa_project"))

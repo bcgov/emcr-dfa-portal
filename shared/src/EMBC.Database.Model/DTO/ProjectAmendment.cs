@@ -21,7 +21,7 @@ namespace EMBC.Database.Contract
         public string? AmendmentApprovedDate { get; set; }
         public string? AmendmentDecision { get; set; }
         public string? AmendmentId { get; set; }
-        public string? AmendmentNumber { get; set; }
+        public int? AmendmentNumber { get; set; }
         public string? AmendmentReason { get; set; }
         public string? AmendmentReceivedDate { get; set; }
         public decimal? ApprovedAdditionalProjectCost { get; set; }

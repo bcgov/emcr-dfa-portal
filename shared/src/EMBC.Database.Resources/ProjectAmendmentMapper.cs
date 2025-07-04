@@ -45,7 +45,7 @@ namespace EMBC.Database.Resources
                 .ForMember(d => d.DFA_AmendmentApprovedDate, opts => opts.MapFrom(s => s.AmendmentApprovedDate))
                 .ForMember(d => d.DFA_AmendedProjectDeadlineDate, opts => opts.MapFrom(s => s.AmendedProjectDeadlineDate))
                 .ForMember(d => d.DFA_Amended18MonthDeadline, opts => opts.MapFrom(s => s.Amended18MonthDeadline))
-                .ForMember(d => d.DFA_AmendmentNumber, opts => opts.MapFrom(s => s.AmendmentNumber))
+                .ForMember(d => d.DFA_AmendmentNumber, opts => opts.MapFrom(s => Convert.ToInt32(s.AmendmentNumber)))
                 .ForMember(d => d.DFA_AmendmentReason, opts => opts.MapFrom(s => s.AmendmentReason))
                 .ForMember(d => d.DFA_EMCRApprovalComments, opts => opts.MapFrom(s => s.EmcrDecisionComments))
                 .ForMember(d => d.DFA_ProjectAmendmentId, opts => opts.MapFrom(s => s.AmendmentId))

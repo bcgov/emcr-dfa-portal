@@ -164,15 +164,17 @@ export class DFAAmendmentComponent
           this.dfaProjectMainDataService.setAmendmentId(null);
           this.dfaAmendmentMainDataService.amendment = null;
           this.dfaAmendmentMainDataService.setProjectId(this.projId);
+          this.dfaAmendmentMainDataService.setAmendmentId(null);
           this.formCreationService.clearProjectAmendmentData();
 
           let objAmendmentDTO = this.dfaAmendmentMainDataService.createDFAAmendmentMainDTO();
 
           this.dfaAmendmentMainService.upsertProjectAmendment(objAmendmentDTO).subscribe(id => {
             if (id) {
-              this.dfaProjectMainDataService.setViewOrEdit('addamendment');
+              this.dfaAmendmentMainDataService.setViewOrEdit('addamendment');
 
               this.dfaProjectMainDataService.setAmendmentId(id);
+              this.dfaAmendmentMainDataService.setAmendmentId(id);
               this.router.navigate(['/dfa-amendment-main/' + id]);
             }
           },

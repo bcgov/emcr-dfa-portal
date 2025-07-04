@@ -10,7 +10,7 @@ export interface CurrentProjectAmendment {
   amendmentApprovedDate?: string | null;
   amendmentDecision?: string | null;
   amendmentId?: string | null;
-  amendmentNumber?: string | null;
+  amendmentNumber?: number | null;
   amendmentReason?: string | null;
   amendmentReceivedDate?: string | null;
   approvedAdditionalProjectCost?: number | null;

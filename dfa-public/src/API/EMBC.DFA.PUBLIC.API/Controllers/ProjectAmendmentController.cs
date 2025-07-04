@@ -84,6 +84,7 @@ namespace EMBC.DFA.API.Controllers
             }
             if (projectAmendment.ProjectAmendment != null)
             {
+                // Update existing amendment
                 if (projectAmendment.Id != null)
                 {
                     projectAmendment.ProjectAmendment.AmendmentId = projectAmendment.Id.ToString();
@@ -92,7 +93,10 @@ namespace EMBC.DFA.API.Controllers
             }
             else
             {
+                // Create new amendment
                 projectAmendment.ProjectAmendment = new ProjectAmendment();
+                projectAmendment.ProjectAmendment.AmendmentNumber = projectAmendmentRepository.GetNextAmendmentNumber(projectAmendment.ProjectId);
+                projectAmendment.ProjectAmendment.ProjectId = projectAmendment.ProjectId;
             }
             var result = projectAmendmentRepository.Upsert(projectAmendment.ProjectAmendment);
 
@@ -108,7 +112,7 @@ namespace EMBC.DFA.API.Controllers
         public string? AmendmentApprovedDate { get; set; }
         public string? AmendmentDecision { get; set; }
         public string? AmendmentId { get; set; }
-        public string? AmendmentNumber { get; set; }
+        public int? AmendmentNumber { get; set; }
         public string? AmendmentReason { get; set; }
         public string? AmendmentReceivedDate { get; set; }
         public decimal? ApprovedAdditionalProjectCost { get; set; }

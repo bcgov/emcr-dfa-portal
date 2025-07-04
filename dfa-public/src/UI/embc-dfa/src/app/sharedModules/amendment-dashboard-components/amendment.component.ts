@@ -245,7 +245,7 @@ export class DfaDashAmendmentComponent implements OnInit {
     }
 
     if (this.searchTextInput != null) {
-      lstAmendmentsFiltering = lstAmendmentsFiltering.filter(m => m.amendmentNumber.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1);
+      lstAmendmentsFiltering = lstAmendmentsFiltering.filter(m => m.amendmentNumber.toString().indexOf(this.searchTextInput.toLowerCase()) > -1);
     }
 
     this.lstFilteredAmendments = lstAmendmentsFiltering;

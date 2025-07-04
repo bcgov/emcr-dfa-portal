@@ -2,7 +2,9 @@
 namespace EMBC.Database.Resources
 {
     public interface IProjectAmendmentRepository : IQueryRepository<ProjectAmendmentQuery, ProjectAmendment>, IBaseRepository<ProjectAmendment>
-    {}
+    {
+        public int GetNextAmendmentNumber(string projectId);
+    }
 
     public class ProjectAmendmentRepository : BaseRepository<DFA_ProjectAmendment, ProjectAmendment>, IProjectAmendmentRepository
     {
@@ -23,13 +25,23 @@ namespace EMBC.Database.Resources
             return entity.Id;
         }
 
+        public int GetNextAmendmentNumber(string projectId)
+        {
+            int maxNumber = 0;
+            var result = _databaseContext.DFA_ProjectAmendmentSet.Where(x => x.DFA_Project.Id == new Guid(projectId)).OrderBy(x => x.DFA_AmendmentNumber).ToList().LastOrDefault();
+
+            if (result != null)
+            {
+                maxNumber = result.DFA_AmendmentNumber != null ? (int)result.DFA_AmendmentNumber : 0;
+            }
+            maxNumber++;
+
+            return (int)maxNumber;
+        }
+
         public IEnumerable<ProjectAmendment> Query(ProjectAmendmentQuery query)
         {
-            var queryResults = _databaseContext.DFA_ProjectAmendmentSet
-/*                .WhereIf(query.ProgramId != null, c => c.Vsd_ProgramId.Id == query.ProgramId)
-                .WhereIf(query.Origin != null, c => c.Vsd_Origin == (Vsd_Invoice_Vsd_Origin?)query.Origin)
-                .WhereIf(query.InvoiceDate != null, c => c.Vsd_InvoicedAte == query.InvoiceDate)*/
-                .ToList();
+            var queryResults = _databaseContext.DFA_ProjectAmendmentSet.ToList();
 
             return _mapper.Map<IEnumerable<ProjectAmendment>>(queryResults);  
         }

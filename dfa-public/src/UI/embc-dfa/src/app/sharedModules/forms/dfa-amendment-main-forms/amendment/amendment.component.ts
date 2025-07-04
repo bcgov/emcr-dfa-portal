@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { mapTo, Subscription } from 'rxjs';
 import { CustomValidationService } from 'src/app/core/services/customValidation.service';
 import { ApplicantOption, InsuranceOption, Profile, CurrentProjectAmendment, ProjectStatusBar, CurrentApplication } from 'src/app/core/api/models';
 import { DFAEligibilityDialogComponent } from 'src/app/core/components/dialog-components/dfa-eligibility-dialog/dfa-eligibility-dialog.component';
@@ -93,7 +93,7 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
 
   showSupportingFileForm: boolean = false;
   supportingFilesDataSource = new MatTableDataSource();
-  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate'] //, 'icons'
+  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate', 'icons']
   amendmentDocumentSummaryDataSource = new MatTableDataSource();
   isDisabled: string = 'false';
   isformUploaddisabled: string = 'false';
@@ -149,12 +149,26 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
     this.vieworedit = dfaAmendmentMainDataService.getViewOrEdit();
 
     this.fileUploadForm$ = this.formCreationService
-      .getClaimFileUploadsForm()
+      .getAmendmentFileUploadsForm()
       .subscribe((fileUploads) => {
         this.fileUploadForm = fileUploads;
       });
 
     //this.fileUploadForm.addValidators([this.validateFormRequiredDocumentTypes]);
+
+    // subscribe to changes for document summary
+    const _documentSummaryFormArray = this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads');
+    _documentSummaryFormArray.valueChanges
+      .pipe(
+        mapTo(_documentSummaryFormArray.getRawValue())
+    ).subscribe(
+      _data =>  {
+        this.amendmentDocumentSummaryDataSource.data = _documentSummaryFormArray.getRawValue()?.filter(x => x.deleteFlag == false)
+    });
+
+    if (this.dfaAmendmentMainDataService.getViewOrEdit() == 'viewOnly') {
+      //this.fileUploadForm.disable();
+    }
   }
 
   public get profile(): Profile {
@@ -167,9 +181,35 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
   setViewOrEditControls() {
     if (!this.amendmentForm) return;
     if (this.isReadOnly) {
-      //      this.amendmentForm.controls.estimatedCompletionDate.disable();
+      this.amendmentForm.controls.amendmentNumber.disable();
+      this.amendmentForm.controls.amendmentReceivedDate.disable();
+      this.amendmentForm.controls.amendmentReason.disable();
+      this.amendmentForm.controls.amendmentApprovedDate.disable();
+      this.amendmentForm.controls.emcrDecisionComments.disable();
+      this.amendmentForm.controls.requestforProjectDeadlineExtention.disable();
+      this.amendmentForm.controls.amendedProjectDeadlineDate.disable();
+      this.amendmentForm.controls.deadlineExtensionApproved.disable();
+      this.amendmentForm.controls.amended18MonthDeadline.disable();
+      this.amendmentForm.controls.requestforAdditionalProjectCost.disable();
+      this.amendmentForm.controls.estimatedAdditionalProjectCost.disable();
+      this.amendmentForm.controls.additionalProjectCostDecision.disable();
+      this.amendmentForm.controls.approvedAdditionalProjectCost.disable();
+      this.amendmentForm.controls.amendmentDecision.disable();
     } else {
-      //      this.amendmentForm.controls.estimatedCompletionDate.enable();
+      this.amendmentForm.controls.amendmentNumber.enable();
+      this.amendmentForm.controls.amendmentReceivedDate.enable();
+      this.amendmentForm.controls.amendmentReason.enable();
+      this.amendmentForm.controls.amendmentApprovedDate.enable();
+      this.amendmentForm.controls.emcrDecisionComments.enable();
+      this.amendmentForm.controls.requestforProjectDeadlineExtention.enable();
+      this.amendmentForm.controls.amendedProjectDeadlineDate.enable();
+      this.amendmentForm.controls.deadlineExtensionApproved.enable();
+      this.amendmentForm.controls.amended18MonthDeadline.enable();
+      this.amendmentForm.controls.requestforAdditionalProjectCost.enable();
+      this.amendmentForm.controls.estimatedAdditionalProjectCost.enable();
+      this.amendmentForm.controls.additionalProjectCostDecision.enable();
+      this.amendmentForm.controls.approvedAdditionalProjectCost.enable();
+      this.amendmentForm.controls.amendmentDecision.enable();
     }
   }
 
@@ -191,7 +231,6 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
     this.dfaProjectMainDataService.setApplicationId(this.appId);
 
     if(this.amendmentForm.value.amendmentId == null){
-      this.amendmentForm.controls.amendmentNumber.setValue("1");
       this.amendmentForm.controls.amendmentReceivedDate.setValue(new Date());
     }
   }
@@ -285,7 +324,6 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
               this.dfaAmendmentMainMapping.mapDFAAmendmentMain(amendment);
               this.stage = amendment.stage;
               this.status = amendment.status;
-              this.disableFormfields();
             }
           }
         },
@@ -369,7 +407,7 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error(error);
           this.isLoading = false;
-          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          //document.location.href = 'https://dfa.gov.bc.ca/error.html';
         }
       });
     } else {

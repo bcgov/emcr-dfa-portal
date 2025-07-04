@@ -229,7 +229,7 @@
             <ng-container> <!-- *ngIf="vieworedit !== 'viewOnly'"> <!-- Supporting Documents -->
               <div class="row">
                 <div class="col-md-8">
-                  <app-dfa-attachment isClaim=false isdisabled="isdisabled" requiredDocumentType="null"
+                  <app-dfa-attachment isAmendment=true isdisabled="isdisabled" requiredDocumentType="null"
                     title="Other Supporting Documents (Optional)"
                     description="If applicable, you may include additional documents related to your amendment."
                     [allowedFileTypes]="allowedFileTypes"
@@ -297,8 +297,7 @@
               </ng-container>
 
               <!-- Delete Icon Column -->
-              <ng-container matColumnDef="icons" style="width:25%"
-                *ngIf="vieworedit == 'addclaim' || vieworedit == 'updateclaim'">
+              <ng-container matColumnDef="icons" style="width:25%">
                 <th mat-header-cell *matHeaderCellDef>
                   &nbsp;
                 </th>

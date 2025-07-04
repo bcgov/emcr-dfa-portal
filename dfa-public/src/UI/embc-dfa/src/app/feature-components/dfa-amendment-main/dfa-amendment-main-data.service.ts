@@ -15,7 +15,7 @@ export class DFAAmendmentMainDataService {
   private _isSubmitted: boolean = false;
   private _applicationId: string;
   private _projectId: string;
-  private _amendmentId: string;
+  private _amendmentId: string = null;
   private _invoiceId: string = null;
   private _eligibleGST: boolean;
   private _vieworedit: string;
