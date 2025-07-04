@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable, Subscription, map, mapTo, startWith } from 'rxjs';
 import { NavigationExtras, Router } from '@angular/router';
-import { FormCreationService } from '../../core/services/formCreation.service';
+import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import {
   CaptchaResponse,
   CaptchaResponseType

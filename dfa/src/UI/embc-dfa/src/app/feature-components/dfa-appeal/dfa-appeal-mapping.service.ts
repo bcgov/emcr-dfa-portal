@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { DfaAppeal } from 'src/app/core/model/dfa-appeals-main.model';
-import { FormCreationService } from '../../core/services/formCreation.service';
+import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { DFAAppealDataService } from './dfa-appeal-data.service';
 
 @Injectable({ providedIn: 'root' })

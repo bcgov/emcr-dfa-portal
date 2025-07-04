@@ -34,8 +34,9 @@ export default class SignAndSubmitComponent implements OnInit, OnDestroy {
   isSecondaryApplicant: boolean = false;
   isReadOnly: boolean = false;
   secondaryApplicants: SecondaryApplicant[] = [];
-  initialApplicantSignature: SignatureBlock = {dateSigned: null, signedName: null, signature: null};
+  initialApplicantSignature: SignatureBlock = {dateSigned: null, signedName: '', signature: null};
   initialSecondaryApplicantSignature: SignatureBlock = {dateSigned: null, signedName: null, signature: null};
+  formReady: boolean = false;
 
   constructor(
     @Inject('formBuilder') formBuilder: UntypedFormBuilder,
@@ -62,13 +63,25 @@ export default class SignAndSubmitComponent implements OnInit, OnDestroy {
       .getSignAndSubmitForm()
       .subscribe((signAndSubmit) => {
         this.signAndSubmitForm = signAndSubmit;
-        if (this.signAndSubmitForm.get('applicantSignature').get('signature').value) this.dfaApplicationMainDataService.isSubmitted = true;
-        this.initialApplicantSignature.dateSigned = this.signAndSubmitForm?.get('applicantSignature')?.get('dateSigned').value;
-        this.initialApplicantSignature.signedName = this.signAndSubmitForm?.get('applicantSignature')?.get('signedName').value;
-        this.initialApplicantSignature.signature = this.signAndSubmitForm?.get('applicantSignature')?.get('signature').value;
+
+        const applicantSigGroup = signAndSubmit.get('applicantSignature');
+
+        if (applicantSigGroup.get('signature')?.value) {
+          this.dfaApplicationMainDataService.isSubmitted = true;
+        }
+
+        this.initialApplicantSignature = {
+          dateSigned: applicantSigGroup?.get('dateSigned')?.value,
+          signedName: applicantSigGroup?.get('signedName')?.value,
+          signature: applicantSigGroup?.get('signature')?.value
+        };
+        
         this.initialSecondaryApplicantSignature.dateSigned = this.signAndSubmitForm?.get('secondaryApplicantSignature')?.get('dateSigned').value;
         this.initialSecondaryApplicantSignature.signedName = this.signAndSubmitForm?.get('secondaryApplicantSignature')?.get('signedName').value;
         this.initialSecondaryApplicantSignature.signature = this.signAndSubmitForm?.get('secondaryApplicantSignature')?.get('signature').value;
+
+        // Form is now fully ready
+        this.formReady = true;
     });
 
     this.signAndSubmitForm
@@ -158,4 +171,4 @@ export default class SignAndSubmitComponent implements OnInit, OnDestroy {
   ],
   declarations: [SignAndSubmitComponent]
 })
-class SignAndSubmitModule {}
+export class SignAndSubmitModule {}

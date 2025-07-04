@@ -3,7 +3,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { DfaApplicationStart } from 'src/app/core/api/models';
 import { DFAApplicationStartDataService } from './dfa-application-start-data.service';
-import { FormCreationService } from '../../core/services/formCreation.service';
+import { FormCreationService } from 'src/app/core/services/formCreation.service';
 
 @Injectable({ providedIn: 'root' })
 export class DFAApplicationStartMappingService {

@@ -12,7 +12,7 @@ import { ComponentCreationService } from '../../core/services/componentCreation.
 import { ComponentMetaDataModel } from '../../core/model/componentMetaData.model';
 import { MatStepper } from '@angular/material/stepper';
 import { Subscription } from 'rxjs';
-import { FormCreationService } from '../../core/services/formCreation.service';
+import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { AlertService } from 'src/app/core/services/alert.service';
 import { ProfileDataService } from './profile-data.service';
 import { ProfileService } from './profile.service';

@@ -3,7 +3,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { Profile, ProfileDataConflict } from '../../core/api/models';
 import { ProfileDataService } from './profile-data.service';
-import { FormCreationService } from '../../core/services/formCreation.service';
+import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { ConflictManagementService } from '../../sharedModules/components/conflict-management/conflict-management.service';
 import { LocationService } from 'src/app/core/services/location.service';
 

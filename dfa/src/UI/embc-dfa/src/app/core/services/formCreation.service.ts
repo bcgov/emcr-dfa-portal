@@ -748,4 +748,25 @@ export class FormCreationService {
       )
     );
   }
+
+  patchSignAndSubmitFormData(data: any): void {
+    const form = this.signAndSubmitForm.getValue();
+    if (!form) return;
+
+    form.patchValue({
+      applicantSignature: {
+        signedName: data?.applicantSignature?.signedName || '',
+        dateSigned: data?.applicantSignature?.dateSigned || '',
+        signature: data?.applicantSignature?.signature || null
+      },
+      secondaryApplicantSignature: {
+        signedName: data?.secondaryApplicantSignature?.signedName || '',
+        dateSigned: data?.secondaryApplicantSignature?.dateSigned || '',
+        signature: data?.secondaryApplicantSignature?.signature || null
+      }
+    });
+
+    // Emit the updated form
+    this.signAndSubmitForm.next(form);
+  }
 }

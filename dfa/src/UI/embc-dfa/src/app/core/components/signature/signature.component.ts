@@ -50,35 +50,49 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges(event: SimpleChanges): void {
-    // Set initial dateSigned using the form group
-    if (event["initialDateSigned"]?.currentValue) {
-      // Try to parse as Date, fallback to today if invalid
-      const parsedDate = new Date(event["initialDateSigned"].currentValue);
-      this.signatureFormGroup.get('dateSigned')?.setValue(isNaN(parsedDate.getTime()) ? new Date() : parsedDate);
-    } else {
-      this.signatureFormGroup.get('dateSigned')?.setValue(new Date());
+    if (!this.signatureFormGroup) return;
+
+    const signedNameCtrl = this.signatureFormGroup.get('signedName');
+    const dateSignedCtrl = this.signatureFormGroup.get('dateSigned');
+    const signatureCtrl = this.signatureFormGroup.get('signature');
+
+    // Disable controls if isReadOnly is true
+    if (this.isReadOnly) {
+      signedNameCtrl?.disable({ emitEvent: false });
+      dateSignedCtrl?.disable({ emitEvent: false });
+      signatureCtrl?.disable({ emitEvent: false });
     }
 
-    // Set initial signedName using the form group
-    const initialSignedName = event["initialSignedName"]?.currentValue;
-    if (initialSignedName && !this.signatureFormGroup.get('signedName')?.value) {
-      this.signatureFormGroup.get('signedName')?.setValue(initialSignedName);
+    // Set initial values if provided and not already set
+    if (this.initialSignedName && !signedNameCtrl?.value) {
+      signedNameCtrl?.setValue(this.initialSignedName, { emitEvent: false });
     }
 
-    // Draw signature
-    const initialSignature = event["initialSignature"]?.currentValue;
-    if (initialSignature && !this.signatureBlock.signature) {
-      this.signatureBlock.signature = initialSignature;
-      this.signatureFormGroup.get('signature')?.setValue(initialSignature);
+    if (this.initialDateSigned && !dateSignedCtrl?.value) {
+      const parsedDate = new Date(this.initialDateSigned);
+      dateSignedCtrl?.setValue(
+        isNaN(parsedDate.getTime()) ? new Date() : parsedDate,
+        { emitEvent: false }
+      );
+    } else if (!dateSignedCtrl?.value) {
+      dateSignedCtrl?.setValue(new Date(), { emitEvent: false });
+    }
+
+    if (this.initialSignature && !signatureCtrl?.value) {
+      signatureCtrl?.setValue(this.initialSignature, { emitEvent: false });
+      this.signatureBlock.signature = this.initialSignature;
+
+      // Draw signature
       const canvasEl: HTMLCanvasElement = this.canvas?.nativeElement;
-      var ctxt = canvasEl?.getContext("2d");
-      var background = new Image();
-        background.src = this.signatureBlock?.signature;
-        background.onload = function() {
-          ctxt?.drawImage(background, 0, 0, canvasEl?.width, canvasEl?.height);
-        };
+      const ctxt = canvasEl?.getContext("2d");
+      const background = new Image();
+      background.src = this.initialSignature;
+      background.onload = () => {
+        ctxt?.drawImage(background, 0, 0, canvasEl?.width, canvasEl?.height);
+      };
     }
   }
+
 
   private isCanvasBlank(canvas: HTMLCanvasElement): boolean {
     const context = canvas.getContext('2d');

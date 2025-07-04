@@ -3,7 +3,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { DfaPrescreening } from 'src/app/core/model/dfa-prescreening.model';
 import { DFAPrescreeningDataService } from './dfa-prescreening-data.service';
-import { FormCreationService } from '../../core/services/formCreation.service';
+import { FormCreationService } from 'src/app/core/services/formCreation.service';
 
 @Injectable({ providedIn: 'root' })
 export class DFAAPrescreeningMappingService {

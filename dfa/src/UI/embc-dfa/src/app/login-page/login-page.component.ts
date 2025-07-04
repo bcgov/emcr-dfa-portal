@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormCreationService } from '../core/services/formCreation.service';
+import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { LoginService } from '../core/services/login.service';
 
 @Component({
