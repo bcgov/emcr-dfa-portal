@@ -84,12 +84,38 @@ export class DfaAppealComponent implements OnInit {
       this.caseDetails = this.dfaAppealDataService.getCaseDetails();
       this.dfaAppealDataService.appealType = appealTypeEnum;
 
-      // Fetch full application details using ApplicationService
-      this.fullApplication$=this.applicationService.applicationGetApplicationMain({ applicationId: this.caseDetails?.applicationId })
-        .subscribe(app => {
-          this.fullApplication = app;
-          this.dfaAppealDataService.setFullApplication(app);
+      // If no case details found, redirect to dashboard
+      if (!this.caseDetails) {
+        console.warn('No case details found, redirecting to dashboard');
+        this.returnToDashboard();
+        return;
+      }
+
+      // Validate case ID matches route parameter
+      if (this.caseDetails.caseId !== this.caseId) {
+        console.warn('Case ID mismatch, redirecting to dashboard');
+        this.returnToDashboard();
+        return;
+      }
+
+      // Try to get full application from storage first
+      this.fullApplication = this.dfaAppealDataService.getFullApplication();
+
+      if (!this.fullApplication && this.caseDetails?.applicationId) {
+        // Fetch full application details if not in storage
+        this.fullApplication$ = this.applicationService.applicationGetApplicationMain({
+          applicationId: this.caseDetails.applicationId
+        }).subscribe({
+          next: (app) => {
+            this.fullApplication = app;
+            this.dfaAppealDataService.setFullApplication(app);
+          },
+          error: (error) => {
+            console.error('Failed to fetch application details:', error);
+            this.returnToDashboard();
+          }
         });
+      }
 
       // Clear old data and forms
       this.dfaAppealDataService.appealReason = null;
@@ -103,7 +129,9 @@ export class DfaAppealComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.fullApplication$.unsubscribe();
+    if (this.fullApplication$) {
+      this.fullApplication$.unsubscribe();
+    }
   }
 
   /**
@@ -172,6 +200,9 @@ export class DfaAppealComponent implements OnInit {
     this.dfaAppealDataService.signAndSubmit = null;
     this.formCreationService.clearAppealReasonData();
     this.formCreationService.clearAppealSignAndSubmitData();
+
+    // Clear persistent storage
+    this.dfaAppealDataService.clearAppealData();
 
     // Navigate back to dashboard
     this.returnToDashboard();
@@ -305,6 +336,8 @@ export class DfaAppealComponent implements OnInit {
       next: () => {
         this.isLoading = false;
         this.cd.detectChanges();
+        // Clear storage after successful submission
+        this.dfaAppealDataService.clearAppealData();
         this.returnToDashboard();
       },
       error: (error) => {

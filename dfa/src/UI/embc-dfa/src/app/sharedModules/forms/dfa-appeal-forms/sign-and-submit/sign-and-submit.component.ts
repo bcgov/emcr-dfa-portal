@@ -28,12 +28,7 @@ export default class SignAndSubmitComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.caseDetails = this.appealDataService.getCaseDetails();
-    this.fullApplication$ = this.appealDataService.getFullApplication()
-      .pipe(filter(app => !!app))
-      .subscribe(app => {
-        console.log('full application', app);
-        this.fullApplication = app;
-      });
+    this.fullApplication = this.appealDataService.getFullApplication();
 
     this.cdr.detectChanges();
 

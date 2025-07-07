@@ -19,6 +19,8 @@ export class DFAAppealDataService {
   private _fullApplication: BehaviorSubject<DfaApplicationMain> = new BehaviorSubject<DfaApplicationMain>(null);
   private _fullApplication$: Observable<DfaApplicationMain> = this._fullApplication.asObservable();
   private _appealType: AppealType;
+  private readonly CASE_DETAILS_KEY = 'dfa-appeal-case-details';
+  private readonly FULL_APPLICATION_KEY = 'dfa-appeal-full-application';
 
   constructor(private cacheService: CacheService) {}
 
@@ -42,11 +44,11 @@ export class DFAAppealDataService {
   public get appealType(): AppealType {
     return this._appealType;
   }
-  
+
   public set appealType(value: AppealType) {
     this._appealType = value;
   }
-  
+
   public setAppealType(appealType: AppealType): void {
     this._appealType = appealType;
   }
@@ -72,19 +74,26 @@ export class DFAAppealDataService {
   }
 
   public setCaseDetails(caseDetails: any): void {
-    this._caseDetails = caseDetails;
+    sessionStorage.setItem(this.CASE_DETAILS_KEY, JSON.stringify(caseDetails));
   }
 
   public getCaseDetails(): any {
-    return this._caseDetails;
+    const stored = sessionStorage.getItem(this.CASE_DETAILS_KEY);
+    return stored ? JSON.parse(stored) : null;
   }
 
-  setFullApplication(app: any) {
-    this._fullApplication.next(app);
+  public setFullApplication(app: DfaApplicationMain): void {
+    sessionStorage.setItem(this.FULL_APPLICATION_KEY, JSON.stringify(app));
   }
 
-  getFullApplication() {
-    return this._fullApplication$;
+  public getFullApplication(): DfaApplicationMain | null {
+    const stored = sessionStorage.getItem(this.FULL_APPLICATION_KEY);
+    return stored ? JSON.parse(stored) : null;
+  }
+
+  public clearAppealData(): void {
+    sessionStorage.removeItem(this.CASE_DETAILS_KEY);
+    sessionStorage.removeItem(this.FULL_APPLICATION_KEY);
   }
 
   public createAppealDTO(): DfaAppeal {
