@@ -32,7 +32,7 @@
           <input matInput
             type="text"
             formControlName="signedName"
-            [readonly]="isReadOnly"
+            [readonly]="isReadOnly === true"
             (change)="updateSignatureBlock()"
             placeholder="Print Name*"
             maxlength="100"
@@ -53,9 +53,10 @@
           <mat-label>Date<span style="color:red" *ngIf="isRequired === true" >*</span></mat-label>
           <input matInput
             [matDatepicker]="datePicker"
-            [readonly]="isReadOnly"
+            [readonly]="isReadOnly === true"
             formControlName="dateSigned"
             (dateChange)="updateSignatureBlock()"
+            [disabled]="isReadOnly === true"
             style="width:100%">
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="datePicker" [disabled]="isReadOnly === true"></mat-datepicker-toggle>

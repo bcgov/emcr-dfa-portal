@@ -19,7 +19,16 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
   @Input() whoseSignature: string;
   @Input() initialSignedName: string;
   @Input() initialDateSigned: string;
-  @Input() isReadOnly: boolean;
+
+  @Input()
+  set isReadOnly(value: boolean | string) {
+    this._isReadOnly = value === true || value === 'true';
+  }
+  get isReadOnly(): boolean {
+    return this._isReadOnly;
+  }
+  private _isReadOnly: boolean = false;
+
   @Input() initialSignature: string;
   @Input() signatureFormGroup: FormGroup;
   @Output() public signature: EventEmitter<SignatureBlock> = new EventEmitter<SignatureBlock>();
@@ -61,6 +70,10 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
       signedNameCtrl?.disable({ emitEvent: false });
       dateSignedCtrl?.disable({ emitEvent: false });
       signatureCtrl?.disable({ emitEvent: false });
+    } else {
+      signedNameCtrl?.enable({ emitEvent: false });
+      dateSignedCtrl?.enable({ emitEvent: false });
+      signatureCtrl?.enable({ emitEvent: false });
     }
 
     // Set initial values if provided and not already set
