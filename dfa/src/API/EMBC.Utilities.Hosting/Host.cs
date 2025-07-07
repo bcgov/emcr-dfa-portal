@@ -127,7 +127,7 @@ namespace EMBC.Utilities.Hosting
         {
             var logger = hostReporter;
             logger.LogInformation("Starting service configuration of {appName}", appName);
-
+            services.AddS3Storage(configuration);
             var redisConnectionString = configuration.GetValue("REDIS_CONNECTIONSTRING", string.Empty);
             if (!string.IsNullOrEmpty(redisConnectionString))
             {

@@ -504,9 +504,11 @@ export class DfaApplicationComponent implements OnInit {
 
   viewAppeals(applItem: ApplicationExtended, type: string): void {
     const caseId = applItem.caseId;
+
     if (!caseId || !type) {
       return;
     }
+
     this.dialog
       .open(AppealConfirmationDialogComponent, {
         data: {
@@ -540,7 +542,7 @@ export class DfaApplicationComponent implements OnInit {
   }
 
   viewAppealAfterSubmission(applItem: ApplicationExtended, type: string): void {
-    const caseId = applItem.applicationId;
+    const caseId = applItem.caseId;
 
     if (!caseId || !type) {
       return;

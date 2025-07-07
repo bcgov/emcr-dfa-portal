@@ -15,14 +15,10 @@ import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { OutageBannerComponent } from './sharedModules/outage-components/outage-banner/outage-banner.component';
 import { OutageDialogComponent } from './sharedModules/outage-components/outage-dialog/outage-dialog.component';
 import { LayoutModule } from "@progress/kendo-angular-layout";
-//import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
-//import { LabelModule } from "@progress/kendo-angular-label";
 import { ButtonsModule } from "@progress/kendo-angular-buttons";
 import { ICON_SETTINGS } from "@progress/kendo-angular-icons";
 import { MatIconModule } from '@angular/material/icon';
 import { ScriptService } from "./core/services/scriptServices";
-import { MAT_AUTOCOMPLETE_SCROLL_STRATEGY } from '@angular/material/autocomplete';
-import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SharedUiModule } from 'shared-ui';
 

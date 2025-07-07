@@ -98,6 +98,7 @@
   "emitFieldsClasses": true,
   "emitVirtualAttributes": true,
   "entityNamesFilter": [
+    "bcgov_documenturl",
     "dfa_appeal",
     "dfa_clientcode",
     "dfa_event",

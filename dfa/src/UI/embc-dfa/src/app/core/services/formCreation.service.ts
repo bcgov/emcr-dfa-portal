@@ -4,7 +4,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import {
   AppealReasonForm,
   SignAndSubmit as AppealSignAndSubmit,
-  AppealSignAndSubmitForm
+  AppealSignAndSubmitForm,
+  AppealSupportingDocumentForm,
+  AppealSupportingDocumentsForm
 } from '../model/dfa-appeals-main.model';
 import {
   CleanUpLog,
@@ -55,6 +57,7 @@ import {
 } from '../model/profile.model';
 import { DFAAppealDataService } from 'src/app/feature-components/dfa-appeal/dfa-appeal-data.service';
 import { CustomValidationService } from './customValidation.service';
+import { AppealFileUpload } from 'src/app/core/api/models';
 
 @Injectable({ providedIn: 'root' })
 export class FormCreationService {
@@ -325,6 +328,20 @@ export class FormCreationService {
 
   appealReasonForm$: Observable<UntypedFormGroup | undefined> =
     this.appealReasonForm.asObservable();
+
+  appealSupportingDocumentForm: BehaviorSubject<AppealSupportingDocumentForm> = new BehaviorSubject(
+    new AppealSupportingDocumentForm()
+  );
+
+  appealSupportingDocumentForm$: Observable<AppealSupportingDocumentForm> =
+    this.appealSupportingDocumentForm.asObservable();
+
+  appealSupportingDocumentsForm: BehaviorSubject<AppealSupportingDocumentsForm> = new BehaviorSubject(
+    new AppealSupportingDocumentsForm(this.dfaAppealDataService.appealSupportingDocuments)
+  );
+
+  appealSupportingDocumentsForm$: Observable<AppealSupportingDocumentsForm> =
+    this.appealSupportingDocumentsForm.asObservable();
 
   AppealSignAndSubmitForm: BehaviorSubject<UntypedFormGroup | undefined> =
     new BehaviorSubject(
@@ -728,9 +745,57 @@ export class FormCreationService {
   clearAppealReasonData(): void {
     this.appealReasonForm.next(
       this.formBuilder.group(
-        new AppealReasonForm(this.dfaAppealDataService.appealReason, this.customValidator, this.dfaAppealDataService.appealType)
+        new AppealReasonForm('', this.customValidator, this.dfaAppealDataService.appealType)
       )
     );
+  }
+
+  /**
+   * Retrieves the appeal supporting document form as an observable.
+   *
+   * @return {*}  {Observable<AppealSupportingDocumentForm>}
+   * @memberof FormCreationService
+   */
+  getAppealSupportingDocumentForm(): Observable<AppealSupportingDocumentForm> {
+    return this.appealSupportingDocumentForm$;
+  }
+
+  /**
+   * Sets the appeal supporting document form.
+   *
+   * @param {AppealSupportingDocumentForm} appealSupportingDocumentForm
+   * @memberof FormCreationService
+   */
+  setAppealSupportingDocumentForm(appealSupportingDocumentForm: AppealSupportingDocumentForm): void {
+    this.appealSupportingDocumentForm.next(appealSupportingDocumentForm);
+  }
+
+  /**
+   * Clears the appeal supporting document data by resetting the form to a new instance of AppealSupportingDocumentForm.
+   *
+   * @memberof FormCreationService
+   */
+  clearAppealSupportingDocumentData(): void {
+    this.appealSupportingDocumentForm.next(new AppealSupportingDocumentForm());
+  }
+
+  /**
+   * Retrieves the appeal supporting documents form as an observable.
+   *
+   * @return {*}  {Observable<AppealSupportingDocumentsForm>}
+   * @memberof FormCreationService
+   */
+  getAppealSupportingDocumentsForm(): Observable<AppealSupportingDocumentsForm> {
+    return this.appealSupportingDocumentsForm$;
+  }
+
+  /**
+   * Clears the appeal supporting documents data by resetting the form to a new instance of AppealSupportingDocumentsForm.
+   *
+   * @memberof FormCreationService
+   */
+  clearAppealSupportingDocumentsData(): void {
+    this.appealSupportingDocumentsForm.next(new AppealSupportingDocumentsForm(new Array<AppealFileUpload>()));
   }
 
   getAppealSignAndSubmitForm(): Observable<UntypedFormGroup> {

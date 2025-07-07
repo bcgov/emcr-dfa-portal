@@ -26,6 +26,7 @@ export class DfaAttachmentComponent implements OnInit, OnDestroy {
   @Input() fileType: string;
   @Input() excludeFileTypes: string[];
   @Input() fileUpload: UntypedFormGroup;
+  @Input() isDisabled: boolean = false;
   @Output() showSideNote = new EventEmitter<any>();
   @Output() saveFileUpload = new EventEmitter<FileUpload>();
   @Output() cancelFileUpload = new EventEmitter<any>();
@@ -89,7 +90,7 @@ export class DfaAttachmentComponent implements OnInit, OnDestroy {
   saveAttachment(): void {
     if (this.fileUpload.status === 'VALID') {
       this.saveFileUpload.emit(this.fileUpload.value);
-      
+
       this.showFileUpload = false;
       this.initFileUploadForm();
     } else {

@@ -89,7 +89,7 @@ export class ComponentCreationService {
       loadWrapperButton: false,
       lastStep: -2,
       stepName: 'Application Details'
-    },   
+    },
     {
       component: 'damaged-property-address',
       nextButtonLabel: 'Next - Cause of Damage',
@@ -174,12 +174,21 @@ export class ComponentCreationService {
   dfaAppealComponents: Array<any> = [
     {
       component: 'appeal-reason',
-      nextButtonLabel: 'Next – Sign & Submit',
+      nextButtonLabel: 'Next – Upload Documents',
       backButtonLabel: 'Cancel Appeal',
       isLast: false,
       loadWrapperButton: false,
-      lastStep: -2,
+      lastStep: -1,
       stepName: 'Appeal Reason'
+    },
+    {
+      component: 'supporting-documents',
+      nextButtonLabel: 'Next – Sign & Submit',
+      backButtonLabel: 'Go Back & Edit',
+      isLast: false,
+      loadWrapperButton: false,
+      lastStep: 0,
+      stepName: 'Appeal Documents'
     },
     {
       component: 'sign-and-submit',
@@ -187,7 +196,7 @@ export class ComponentCreationService {
       backButtonLabel: 'Go Back & Edit',
       isLast: true,
       loadWrapperButton: false,
-      lastStep: 0,
+      lastStep: 1,
       stepName: 'Sign & Submit'
     }
   ];

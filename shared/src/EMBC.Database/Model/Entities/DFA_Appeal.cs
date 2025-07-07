@@ -190,6 +190,7 @@ namespace EMBC.Database.Model
 			public const string DFA_DateReceived = "dfa_datereceived";
 			public const string DFA_DecisionLetTeRiNeApprovals = "dfa_decisionletterineapprovals";
 			public const string DFA_DecisionLetTeRiNeApprovalsName = "dfa_decisionletterineapprovalsname";
+			public const string DFA_DFA_Appeal_BcGoV_DocumentUrl_AppealId = "DFA_DFA_Appeal_BcGoV_DocumentUrl_AppealId";
 			public const string ReferencingDFA_DFA_Appeal_DFA_Appeal_RelatedAppeal = "dfa_dfa_appeal_dfa_appeal_RelatedAppeal";
 			public const string DFA_DFACaseBusinessProcess = "dfa_dfacasebusinessprocess";
 			public const string DFA_DFACaseBusinessProcessName = "dfa_dfacasebusinessprocessname";
@@ -4460,6 +4461,24 @@ namespace EMBC.Database.Model
 			get
 			{
 				return this.GetAttributeValue<System.Nullable<long>>("versionnumber");
+			}
+		}
+		
+		/// <summary>
+		/// 1:N dfa_dfa_appeal_bcgov_documenturl_AppealId
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_dfa_appeal_bcgov_documenturl_AppealId")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.BcGoV_DocumentUrl> DFA_DFA_Appeal_BcGoV_DocumentUrl_AppealId
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("dfa_dfa_appeal_bcgov_documenturl_AppealId", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("dfa_dfa_appeal_bcgov_documenturl_AppealId", null, value);
 			}
 		}
 		

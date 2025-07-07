@@ -425,6 +425,10 @@ namespace EMBC.Database.Model
 			public const string IsSyncWithDirectory = "issyncwithdirectory";
 			public const string JobTitle = "jobtitle";
 			public const string LastName = "lastname";
+			public const string Lk_BcGoV_DocumentUrl_CreatedBy = "Lk_BcGoV_DocumentUrl_CreatedBy";
+			public const string Lk_BcGoV_DocumentUrl_CreatedOnBehalfBy = "Lk_BcGoV_DocumentUrl_CreatedOnBehalfBy";
+			public const string Lk_BcGoV_DocumentUrl_ModifiedBy = "Lk_BcGoV_DocumentUrl_ModifiedBy";
+			public const string Lk_BcGoV_DocumentUrl_ModifiedOnBehalfBy = "Lk_BcGoV_DocumentUrl_ModifiedOnBehalfBy";
 			public const string Lk_DFA_Appeal_CreatedBy = "Lk_DFA_Appeal_CreatedBy";
 			public const string Lk_DFA_Appeal_CreatedOnBehalfBy = "Lk_DFA_Appeal_CreatedOnBehalfBy";
 			public const string Lk_DFA_Appeal_ModifiedBy = "Lk_DFA_Appeal_ModifiedBy";
@@ -538,6 +542,7 @@ namespace EMBC.Database.Model
 			public const string TransactionCurrencyId = "transactioncurrencyid";
 			public const string TransactionCurrencyIdName = "transactioncurrencyidname";
 			public const string TraversedPath = "traversedpath";
+			public const string User_BcGoV_DocumentUrl = "User_BcGoV_DocumentUrl";
 			public const string User_DFA_Appeal = "User_DFA_Appeal";
 			public const string User_DFA_ClientCode = "User_DFA_ClientCode";
 			public const string User_DFA_Event = "User_DFA_Event";
@@ -3515,6 +3520,78 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
+		/// 1:N lk_bcgov_documenturl_createdby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_bcgov_documenturl_createdby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.BcGoV_DocumentUrl> Lk_BcGoV_DocumentUrl_CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("lk_bcgov_documenturl_createdby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("lk_bcgov_documenturl_createdby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_bcgov_documenturl_createdonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_bcgov_documenturl_createdonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.BcGoV_DocumentUrl> Lk_BcGoV_DocumentUrl_CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("lk_bcgov_documenturl_createdonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("lk_bcgov_documenturl_createdonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_bcgov_documenturl_modifiedby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_bcgov_documenturl_modifiedby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.BcGoV_DocumentUrl> Lk_BcGoV_DocumentUrl_ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("lk_bcgov_documenturl_modifiedby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("lk_bcgov_documenturl_modifiedby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_bcgov_documenturl_modifiedonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_bcgov_documenturl_modifiedonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.BcGoV_DocumentUrl> Lk_BcGoV_DocumentUrl_ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("lk_bcgov_documenturl_modifiedonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("lk_bcgov_documenturl_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N lk_dfa_appeal_createdby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_appeal_createdby")]
@@ -4447,6 +4524,24 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetRelatedEntities<EMBC.Database.Model.SystemUser>("lk_systemuserbase_modifiedby", Microsoft.Xrm.Sdk.EntityRole.Referenced, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N user_bcgov_documenturl
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_bcgov_documenturl")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.BcGoV_DocumentUrl> User_BcGoV_DocumentUrl
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("user_bcgov_documenturl", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("user_bcgov_documenturl", null, value);
 			}
 		}
 		

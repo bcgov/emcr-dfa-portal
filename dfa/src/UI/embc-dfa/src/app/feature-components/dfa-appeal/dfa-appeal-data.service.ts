@@ -1,17 +1,13 @@
 import { Injectable } from '@angular/core';
-import {
-  AppealStatus,
-  AppealType,
-  DfaAppeal,
-  SignAndSubmit
-} from '../../core/model/dfa-appeals-main.model';
-import { CacheService } from '../../core/services/cache.service';
-import { DfaApplicationMain } from 'src/app/core/api/models';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { AppealFileUpload, DfaApplicationMain } from 'src/app/core/api/models';
+import { AppealStatus, AppealType, DfaAppeal, SignAndSubmit } from '../../core/model/dfa-appeals-main.model';
+import { CacheService } from '../../core/services/cache.service';
 
 @Injectable({ providedIn: 'root' })
 export class DFAAppealDataService {
   private _appealReason: string;
+  private _appealSupportingDocuments: AppealFileUpload[] = [];
   private _signAndSubmit: SignAndSubmit;
   private _dfaAppeal: DfaAppeal;
   private _applicationId: string;
@@ -24,9 +20,12 @@ export class DFAAppealDataService {
 
   constructor(private cacheService: CacheService) {}
 
-  public setDFAAppeal(dfaAppeal: DfaAppeal): void {
+  public get dfaAppeal(): DfaAppeal {
+    return this._dfaAppeal;
+  }
+
+  public set dfaAppeal(dfaAppeal: DfaAppeal) {
     this._dfaAppeal = dfaAppeal;
-    this.cacheService.set('dfa-appeal', dfaAppeal);
   }
 
   public get appealReason(): string {
@@ -39,6 +38,18 @@ export class DFAAppealDataService {
 
   public setAppealReason(appealReason: string): void {
     this._appealReason = appealReason;
+  }
+
+  public get appealSupportingDocuments(): AppealFileUpload[] {
+    return this._appealSupportingDocuments;
+  }
+
+  public set appealSupportingDocuments(supportingDocuments: AppealFileUpload[]) {
+    this._appealSupportingDocuments = supportingDocuments;
+  }
+
+  public setAppealSupportingDocuments(supportingDocuments: AppealFileUpload[]): void {
+    this._appealSupportingDocuments = supportingDocuments;
   }
 
   public get appealType(): AppealType {
@@ -98,7 +109,7 @@ export class DFAAppealDataService {
 
   public createAppealDTO(): DfaAppeal {
     return {
-      id: this._applicationId,
+      applicationId: this._applicationId,
       caseId: this._caseDetails?.caseId ?? '',
       type: this._appealType,
       status: AppealStatus.Received,

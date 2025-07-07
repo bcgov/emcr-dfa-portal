@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./file-upload.component.scss']
 })
 export class FileUploadComponent {
-  @Output() attachedFile = new EventEmitter<any>();
+  @Output() attachedFile = new EventEmitter<File>();
   @Input() noOfAttachments: number;
   @Input() allowedFileTypes: string[];
   @Input() allowedFileExtensionsList: string;
@@ -28,7 +28,7 @@ export class FileUploadComponent {
    *
    * @param event : File drop event
    */
-  onFileDropped(event: any) {
+  onFileDropped(event: File[]) {
     if (this.attachSizeError) {
       this.attachSizeError = !this.attachSizeError;
     }

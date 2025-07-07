@@ -322,6 +322,7 @@ namespace EMBC.Database.Model
 			public const string DFA_DecisionDate = "dfa_decisiondate";
 			public const string DFA_DecisionName = "dfa_decisionname";
 			public const string DFA_DFA_ClientCode_DFA_ProjectClaim_ClientCodeId = "dfa_dfa_clientcode_dfa_projectclaim_ClientCodeId";
+			public const string DFA_DFA_ProjectClaim_BcGoV_DocumentUrl_RecoveryClaim = "DFA_DFA_ProjectClaim_BcGoV_DocumentUrl_RecoveryClaim";
 			public const string DFA_DFA_ProjectClaim_DFA_Project_FirstClaim = "DFA_DFA_ProjectClaim_DFA_Project_FirstClaim";
 			public const string ReferencingDFA_DFA_ProjectClaim_DFA_ProjectClaim_LinkedClaim = "dfa_dfa_projectclaim_dfa_projectclaim_LinkedClaim";
 			public const string DFA_EAName = "dfa_eaname";
@@ -5376,6 +5377,24 @@ namespace EMBC.Database.Model
 			get
 			{
 				return this.GetAttributeValue<System.Nullable<long>>("versionnumber");
+			}
+		}
+		
+		/// <summary>
+		/// 1:N dfa_dfa_projectclaim_bcgov_documenturl_RecoveryClaim
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_dfa_projectclaim_bcgov_documenturl_RecoveryClaim")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.BcGoV_DocumentUrl> DFA_DFA_ProjectClaim_BcGoV_DocumentUrl_RecoveryClaim
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("dfa_dfa_projectclaim_bcgov_documenturl_RecoveryClaim", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("dfa_dfa_projectclaim_bcgov_documenturl_RecoveryClaim", null, value);
 			}
 		}
 		

@@ -31,6 +31,7 @@ namespace EMBC.Utilities.S3
             {
                 UploadFileCommand c => await UploadStorageItem(c, ct),
                 UploadFileStreamCommand c => await UploadStorageItemStream(c, ct),
+                DeleteFileCommand c => await DeleteStorageItem(c, ct),
                 UpdateTagsCommand c => await UpdateTags(c, ct),
                 _ => throw new NotSupportedException($"{cmd.GetType().Name} is not supported")
             };
@@ -157,6 +158,28 @@ namespace EMBC.Utilities.S3
                     Tags = GetTags(tagResponse.Tagging).AsEnumerable()
                 }
             };
+        }
+
+        private async Task<string> DeleteStorageItem(DeleteFileCommand cmd, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(cmd.Key))
+            {
+                return string.Empty;
+            }
+
+            var folder = string.IsNullOrEmpty(cmd.Folder) ? string.Empty : $"{cmd.Folder}/";
+            var key = $"{folder}{cmd.Key}";
+
+            var request = new DeleteObjectRequest
+            {
+                BucketName = bucketName,
+                Key = key
+            };
+
+            var response = await amazonS3Client.DeleteObjectAsync(request, cancellationToken);
+            response.EnsureNoContent();
+
+            return cmd.Key;
         }
 
         private async Task<string> UpdateTags(UpdateTagsCommand cmd, CancellationToken cancellationToken)

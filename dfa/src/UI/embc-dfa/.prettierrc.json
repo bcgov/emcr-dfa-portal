@@ -1,5 +1,17 @@
 {
-    "singleQuote": true,
-    "trailingComma": "none",
-    "endOfLine": "auto"
-  }
+  "printWidth": 120,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "bracketSpacing": true,
+  "bracketSameLine": true,
+  "requirePragma": false,
+  "insertPragma": false,
+  "proseWrap": "never",
+  "endOfLine": "lf",
+  "arrowParens": "always",
+  "htmlWhitespaceSensitivity": "css",
+  "plugins": ["prettier-plugin-organize-imports"]
+}

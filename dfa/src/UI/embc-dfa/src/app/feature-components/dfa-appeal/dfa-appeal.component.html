@@ -44,13 +44,7 @@
               class="button-p"
               mat-button
               type="button"
-              [disabled]="
-                step.nextButtonLabel === 'Submit Appeal'
-                  ? (!appealReasonForm?.valid || !signAndSubmitForm?.valid)
-                  : (step.stepName === 'Appeal Reason'
-                      ? !appealReasonForm?.valid
-                      : !form?.valid)
-              "
+              [disabled]="!canGoForward(step.component)"
               (click)="goForward(dfaAppealStepper, step.isLast, step.component)"
             >
               {{ step.nextButtonLabel }}

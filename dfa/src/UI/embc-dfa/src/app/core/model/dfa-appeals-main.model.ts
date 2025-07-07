@@ -1,5 +1,5 @@
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { SignatureBlock } from 'src/app/core/api/models';
+import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { AppealFileUpload, FileCategory, SignatureBlock } from 'src/app/core/api/models';
 import { CustomValidationService } from '../services/customValidation.service';
 
 
@@ -9,7 +9,7 @@ import { CustomValidationService } from '../services/customValidation.service';
 export class AppealReasonForm {
   reason = new UntypedFormControl('', Validators.required);
   reviewedEvaluatorReport = new UntypedFormControl('', Validators.required);
-  
+
   constructor(
     appealReason: string,
     customValidator: CustomValidationService,
@@ -33,6 +33,82 @@ export class AppealReasonForm {
   }
 
 }
+
+/**
+ * A form group for a single appeal supporting document.
+ *
+ * @export
+ * @class AppealSupportingDocumentForm
+ * @extends {(FormGroup<{
+ *   id: FormControl<string | null>;
+ *   appealId: FormControl<string | null>;
+ *   fileData: FormControl<string | null>;
+ *   fileName: FormControl<string | null>;
+ *   category: FormControl<FileCategory | null>;
+ *   description: FormControl<string | null>;
+ *   uploadedDate: FormControl<string | null>;
+ *   size: FormControl<number | null>;
+ *   mimeType: FormControl<string | null>;
+ *   deleteFlag: FormControl<boolean | null>;
+ * }>)}
+ */
+export class AppealSupportingDocumentForm extends FormGroup<{
+  id: FormControl<string | null>;
+  appealId: FormControl<string | null>;
+  fileData: FormControl<string | null>;
+  fileName: FormControl<string | null>;
+  category: FormControl<FileCategory | null>;
+  description: FormControl<string | null>;
+  uploadedDate: FormControl<string | null>;
+  size: FormControl<number | null>;
+  mimeType: FormControl<string | null>;
+  deleteFlag: FormControl<boolean | null>;
+}> {
+  constructor(appealSupportingDocument?: AppealFileUpload) {
+    super({
+      id: new FormControl(appealSupportingDocument?.id || null),
+      appealId: new FormControl(appealSupportingDocument?.appealId || null),
+      fileData: new FormControl(appealSupportingDocument?.fileData || null),
+      fileName: new FormControl(appealSupportingDocument?.fileName || null),
+      description: new FormControl(appealSupportingDocument?.description || null),
+      category: new FormControl(appealSupportingDocument?.category || null),
+      uploadedDate: new FormControl(appealSupportingDocument?.uploadedDate || null),
+      size: new FormControl(appealSupportingDocument?.size || null),
+      mimeType: new FormControl(appealSupportingDocument?.mimeType || null),
+      deleteFlag: new FormControl(appealSupportingDocument?.deleteFlag || null),
+    });
+  }
+}
+
+/**
+ * A form for an array of appeal supporting documents.
+ *
+ * @export
+ * @class AppealSupportingDocumentsForm
+ * @extends {FormGroup<{
+ *   files: FormArray<AppealSupportingDocumentForm>;
+ * }>}
+ */
+export class AppealSupportingDocumentsForm extends FormGroup<{
+  files: FormArray<AppealSupportingDocumentForm>;
+}> {
+  constructor(appealSupportingDocuments?: AppealFileUpload[]) {
+    super({
+      files: new FormArray<AppealSupportingDocumentForm>(
+        (appealSupportingDocuments ?? []).map((file) => new AppealSupportingDocumentForm(file))
+      )
+    });
+  }
+}
+// export class AppealSupportingDocumentsForm {
+//   files: AppealFileUpload[] = [];
+
+//   constructor(appealSupportingDocuments?: AppealFileUpload[]) {
+//     this.files = appealSupportingDocuments ?? []
+//   }
+// }
+
+
 
 export class SignAndSubmit {
   applicantSignature?: null | SignatureBlock;
@@ -99,6 +175,7 @@ export enum AppealStatus {
  **/
 export interface DfaAppeal {
   id?: string;
+  applicationId?: string;
   caseId: string;
   type: AppealType;
   status: AppealStatus;

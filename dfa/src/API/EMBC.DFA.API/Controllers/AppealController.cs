@@ -120,9 +120,9 @@ namespace EMBC.DFA.API.Controllers
 
     public class AppealModel
     {
-        public string? Id { get; set; }
+        public Guid? ApplicationId { get; set; }
         [Required]
-        public string CaseId { get; set; }
+        public Guid CaseId { get; set; }
         [Required]
         public string Status { get; set; }
         [Required]
