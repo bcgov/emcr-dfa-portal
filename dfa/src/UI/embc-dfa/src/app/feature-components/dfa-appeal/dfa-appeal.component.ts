@@ -1,11 +1,13 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { concatMap, from, Subscription } from 'rxjs';
 import { DfaApplicationMain, SecondaryApplicant } from 'src/app/core/api/models';
 import { AppealAttachmentService, ApplicationService } from 'src/app/core/api/services';
+import { CancelConfirmationDialogComponent } from 'src/app/core/components/dialog-components/dfa-cancel-confirmation-dialog/dfa-cancel-confirmation-dialog.component';
 import { AppealType } from 'src/app/core/model/dfa-appeals-main.model';
 import { ComponentMetaDataModel } from '../../core/model/componentMetaData.model';
 import { ComponentCreationService } from '../../core/services/componentCreation.service';
@@ -54,7 +56,8 @@ export class DfaAppealComponent implements OnInit {
     private dfaAppealService: DfaAppealService,
     private applicationService: ApplicationService,
     private appealAttachmentService: AppealAttachmentService,
-    private _snackBar: MatSnackBar
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -181,7 +184,7 @@ export class DfaAppealComponent implements OnInit {
    */
   goBack(stepper: MatStepper, lastStep: number): void {
     if (lastStep === -1) {
-      this.returnToDashboard();
+      this.showCancelAppealDialog();
       return;
     }
 
@@ -407,7 +410,7 @@ export class DfaAppealComponent implements OnInit {
 
               console.error('Failed to upload documents:', error);
 
-              this._snackBar.open(
+              this.snackBar.open(
                 'Failed to upload one or more documents. Please try again. If the error persists, please contact support.',
                 'Close',
                 {
@@ -424,7 +427,7 @@ export class DfaAppealComponent implements OnInit {
 
         console.error('Failed to create appeal:', error);
 
-        this._snackBar.open(
+        this.snackBar.open(
           'Failed to create the appeal. Please try again. If the error persists, please contact support.',
           'Close',
           {
@@ -434,6 +437,51 @@ export class DfaAppealComponent implements OnInit {
         );
       }
     });
+  }
+
+  /**
+   * Shows the cancel appeal confirmation dialog
+   *
+   */
+  showCancelAppealDialog(): void {
+    const dialogRef = this.dialog.open(CancelConfirmationDialogComponent, {
+      data: {
+        title: 'Cancel Appeal',
+        subtitle: 'Are you sure you want to cancel your appeal?',
+        text: "Appeals must be created and submitted in the same session.\nDrafts are not saved - any changes you've made will be lost.",
+        cancelButton: 'No, go back',
+        confirmButton: 'Yes, cancel appeal',
+        showCloseIcon: true
+      },
+      width: '500px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.cancelAppeal();
+      }
+    });
+  }
+
+  /**
+   * Cancels the appeal and navigates back to dashboard
+   *
+   */
+  cancelAppeal(): void {
+    // Clear any form data
+    this.dfaAppealDataService.appealReason = null;
+    this.dfaAppealDataService.signAndSubmit = null;
+    this.dfaAppealDataService.appealSupportingDocuments = [];
+    this.formCreationService.clearAppealReasonData();
+    this.formCreationService.clearAppealSupportingDocumentsData();
+    this.formCreationService.clearAppealSignAndSubmitData();
+
+    // Clear persistent storage
+    this.dfaAppealDataService.clearAppealData();
+
+    // Navigate back to dashboard
+    this.returnToDashboard();
   }
 
   /**

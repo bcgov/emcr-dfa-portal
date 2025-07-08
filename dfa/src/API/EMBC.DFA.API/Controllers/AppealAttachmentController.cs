@@ -64,11 +64,6 @@ namespace EMBC.DFA.API.Controllers
         {
             logger.LogInformation("AppealAttachmentController - UpsertAttachment");
 
-            if (appealFileUpload.Size >= MAXFILESIZE)
-            {
-                return BadRequest($"File size exceeds {MAXFILESIZE / 1_048_576.0:F2}MB limit");
-            }
-
             if (appealFileUpload.AppealId == Guid.Empty)
             {
                 return BadRequest("AppealId is required.");
