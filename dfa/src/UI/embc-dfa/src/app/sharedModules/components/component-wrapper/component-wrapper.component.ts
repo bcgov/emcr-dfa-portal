@@ -14,7 +14,6 @@ import { ReviewComponent } from 'src/app/feature-components/review/review.compon
 export class ComponentWrapperComponent implements OnInit, OnChanges {
   @Input() componentName: string;
   @Input() folderPath: string;
-  @Input() key: string; 
   loadedComponent: any;
   serviceInjector: Injector;
 
@@ -34,8 +33,28 @@ export class ComponentWrapperComponent implements OnInit, OnChanges {
    * the view
    */
   ngOnInit(): void {
-    this.setupServiceInjector();
-    this.loadAndRenderComponent();
+    if (this.sharedComponentMap[this.componentName]){
+      this.loadedComponent = this.sharedComponentMap[this.componentName];
+    } else {
+      if (!this.loadedComponent) {
+        this.serviceInjector = Injector.create({
+          providers: [
+            {
+              provide: 'formBuilder',
+              useValue: this.formBuilder
+            },
+            {
+              provide: 'formCreationService',
+              useValue: this.formCreationService
+            }
+          ],
+          parent: this.injector
+        });
+      }
+      from(this.loadComponent()).subscribe((module) => {
+        this.loadedComponent = module.default;
+      });
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {

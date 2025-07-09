@@ -55,104 +55,41 @@
     (selectionChange)="stepChanged($event, dfaApplicationMainStepper)"
     #dfaApplicationMainStepper
     [linear]="false"
-    [selectedIndex]="currentStepIndex"
   >
-    <mat-step *ngFor="let step of steps; let i = index" [stepControl]="form">
+    <mat-step *ngFor="let step of steps" [stepControl]="form">
       <ng-template matStepLabel>{{ step.stepName }}</ng-template>
-
-      <!-- Show review component if it's the review step -->
-      <app-review
-        *ngIf="step.component === 'review'"
-        [type]="type"
-        [showHeading]="true"
-        [parentPageName]="parentPageName"
-        [currentFlow]="currentFlow"
-        [allowEdit]="true"
-        (stepToNavigate)="navigateToStep($event)"
-      >
-      </app-review>
-
-      <!-- Show dynamic wrapper for all non-review steps -->
-      <ng-container *ngIf="dfaApplicationMainStepper?.selectedIndex === i">
-        <app-component-wrapper
-          [componentName]="step.component"
-          [folderPath]="dfaApplicationMainFolderPath"
-          [key]="step.component + '-' + currentStepIndex"
-        ></app-component-wrapper>
-      </ng-container>
-
+      <app-component-wrapper
+        [componentName]="step.component"
+        [folderPath]="dfaApplicationMainFolderPath"
+      ></app-component-wrapper>
       <br />
       <div class="row justify-content-between resp-style">
-        <!-- Go Back button -->
-        <div class="col-md-6">
+        <div class="col-md-6" *ngIf="vieworedit === 'add' || vieworedit === 'update'">
           <button
             class="button-s"
+            [hidden]="step.component === 'damaged-property-address'"
             mat-button
             type="button"
-            (click)="dfaApplicationMainStepper.previous()"
-            *ngIf="step.component !== 'application-details' && isSubmitted === false"
+            (click)="goBack(dfaApplicationMainStepper, step.lastStep)"
           >
-            Go Back<span *ngIf="vieworedit === 'add' || vieworedit === 'update'"> & Edit</span>
-          </button>
-          <button
-            class="button-s"
-            mat-button
-            type="button"
-            (click)="returnToDashboard()"
-            *ngIf="isSubmitted === true && step.component === 'sign-and-submit'"
-          >
-            Return to Dashboard
+            {{ step.backButtonLabel }}
           </button>
         </div>
-
-        <!-- Next or Submit -->
         <div class="col-md-6" *ngIf="vieworedit === 'add' || vieworedit === 'update'">
-          <!-- Submit button (only on sign-and-submit step and all validations passed) -->
           <button
-            class="button-p save-button"
+            *ngIf="
+              currentFlow === 'verified-registration' &&
+                step.component === 'supporting-documents';
+            "
+            class="button-p"
             mat-stroked-button
             type="button"
-            *ngIf="
-              step.component === 'sign-and-submit' &&
-              !isSubmitted &&
-              isSignaturesValid &&
-              (formCreationService.damagedPropertyAddressForm$ | async)?.valid &&
-              (formCreationService.propertyDamageForm$ | async)?.valid &&
-              (formCreationService.cleanUpLogForm$ | async)?.valid &&
-              (formCreationService.supportingDocumentsForm$ | async)?.valid &&
-              (formCreationService.otherContactsForm$ | async)?.valid &&
-              (formCreationService.fullTimeOccupantsForm$ | async)?.valid &&
-              requiredDocumentsSupplied()
-            "
-            (click)="submitFile()"
+            (click)="goForward(dfaApplicationMainStepper, step.isLast, step.component)"
           >
-            Submit
+            Next - Review Submission
           </button>
-
-          <!-- Validation error on submit -->
-          <span
-            style="color:red"
-            *ngIf="
-              step.component === 'sign-and-submit' &&
-              !isSubmitted &&
-              (
-                !isSignaturesValid ||
-                !(formCreationService.damagedPropertyAddressForm$ | async)?.valid ||
-                !(formCreationService.propertyDamageForm$ | async)?.valid ||
-                !(formCreationService.cleanUpLogForm$ | async)?.valid ||
-                !(formCreationService.supportingDocumentsForm$ | async)?.valid ||
-                !(formCreationService.otherContactsForm$ | async)?.valid ||
-                !(formCreationService.fullTimeOccupantsForm$ | async)?.valid ||
-                !requiredDocumentsSupplied()
-              )
-            "
-          >
-            Enter all required information and sign before submitting.
-          </span>
-
-          <!-- Generic Next button -->
           <button
-            *ngIf="step.component !== 'sign-and-submit' && step.nextButtonLabel"
+            *ngIf="!(currentFlow === 'verified-registration' && (step.component === 'review' || step.component === 'supporting-documents'))"
             class="button-p"
             mat-stroked-button
             type="button"
@@ -161,10 +98,112 @@
             {{ step.nextButtonLabel }}
           </button>
         </div>
+        <br/>
+        <label>** You do not have to complete the entire application at once, you can udpate it from the dashboard as needed.  However, before you
+        submit the final signed version, all fields marked with a <b><span style="color:red;">*</span></b> must be completed.</label>
       </div>
     </mat-step>
+    <mat-step *ngIf="currentFlow === 'verified-registration' && (vieworedit === 'add' || vieworedit === 'update')">
+      <ng-template matStepLabel>Review</ng-template>
+      <app-review
+        [type]="type"
+        [showHeading]="true"
+        [parentPageName]="parentPageName"
+        [currentFlow]="currentFlow"
+        [allowEdit]="true"
+        (stepToNavigate)="navigateToStep($event)"
+      >
+      </app-review>
+      <br />
 
-    <!-- Restore step index labels -->
+      <div class="row justify-content-between resp-style">
+        <div class="col-md-6">
+          <button
+            class="button-s"
+            mat-button
+            type="button"
+            (click)="dfaApplicationMainStepper.previous()"
+          >
+            Go Back<span *ngIf="vieworedit === 'add' || vieworedit === 'update'"> & Edit</span>
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button
+            class="button-p"
+            mat-stroked-button
+            type="button"
+            (click)="goForward(dfaApplicationMainStepper, false, 'review')"
+          >
+            Next - Sign & Submit
+            <app-loader
+              [strokeWidth]="3"
+              [diameter]="25"
+              [showLoader]="showLoader"
+            ></app-loader>
+          </button>
+        </div>
+      </div>
+    </mat-step>
+    <mat-step *ngIf="currentFlow === 'verified-registration'">
+      <ng-template matStepLabel>Sign & Submit</ng-template>
+      <app-component-wrapper
+        componentName="sign-and-submit"
+        [folderPath]="dfaApplicationMainFolderPath"
+      ></app-component-wrapper>
+      <br />
+      <div class="row justify-content-between resp-style">
+        <div class="col-md-6">
+          <button *ngIf="isSubmitted === false"
+            class="button-s"
+            mat-button
+            type="button"
+            (click)="dfaApplicationMainStepper.previous()"
+          >
+            Go Back<span *ngIf="vieworedit === 'add' || vieworedit === 'update'"> & Edit</span>
+          </button>
+          <button *ngIf="isSubmitted === true"
+            class="button-s"
+            mat-button
+            type="button"
+            (click)="returnToDashboard()"
+          >
+            Return to Dashboard
+          </button>
+        </div>
+        <div class="col-md-6" *ngIf="!isSubmitted && isSignaturesValid
+             && (formCreationService.damagedPropertyAddressForm$ | async)?.valid
+             && (formCreationService.propertyDamageForm$ | async)?.valid
+             && (formCreationService.cleanUpLogForm$ | async)?.valid
+             && (formCreationService.supportingDocumentsForm$ | async)?.valid
+             && (formCreationService.otherContactsForm$ | async)?.valid
+             && (formCreationService.fullTimeOccupantsForm$ | async)?.valid
+             && (vieworedit === 'add' || vieworedit === 'update')
+             && requiredDocumentsSupplied()
+             ">
+          <button
+            class="button-p save-button"
+            mat-stroked-button
+            type="button"
+            (click)="submitFile()"
+          >
+            Submit
+          </button>
+        </div>
+        <div class="col-md-6" *ngIf="!isSubmitted
+            && (!isSignaturesValid
+                || !(formCreationService.damagedPropertyAddressForm$ | async)?.valid
+                || !(formCreationService.propertyDamageForm$ | async)?.valid
+                || !(formCreationService.cleanUpLogForm$ | async)?.valid
+                || !(formCreationService.supportingDocumentsForm$ | async)?.valid
+                || !(formCreationService.otherContactsForm$ | async)?.valid
+                || !(formCreationService.fullTimeOccupantsForm$ | async)?.valid
+                || !requiredDocumentsSupplied()
+                 )
+            && (vieworedit === 'add' || vieworedit === 'update')">
+          <span style="color:red">Enter all required information and sign before submitting.</span>
+        </div>
+      </div>
+    </mat-step>
     <ng-template matStepperIcon="edit" let-index="index">
       {{ index + 1 }}
     </ng-template>

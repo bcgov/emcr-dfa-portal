@@ -14,7 +14,7 @@ import * as globalConst from '../../core/services/globalConstants';
 import { ComponentMetaDataModel } from '../../core/model/componentMetaData.model';
 import { MatStepper } from '@angular/material/stepper';
 import { Subscription, distinctUntilChanged, mapTo } from 'rxjs';
-import { FormCreationService } from 'src/app/core/services/formCreation.service';
+import { FormCreationService } from '../../core/services/formCreation.service';
 import { AlertService } from 'src/app/core/services/alert.service';
 import { DFAApplicationMainDataService } from './dfa-application-main-data.service';
 import { DFAApplicationMainService } from './dfa-application-main.service';
@@ -109,7 +109,7 @@ export class DFAApplicationMainComponent
   supportingDocumentsForm$: Subscription;
   supportingDocumentsForm: UntypedFormGroup;
   supportingDocumentsValid: boolean = false;
-  currentStepIndex: number = 0;
+
 
   constructor(
     private router: Router,
@@ -170,6 +170,7 @@ export class DFAApplicationMainComponent
   }
 
   ngOnInit(): void {
+
     this.currentFlow = this.route.snapshot.data.flow ? this.route.snapshot.data.flow : 'verified-registration';
     let applicationId = this.route.snapshot.paramMap.get('id');
 
@@ -216,44 +217,11 @@ export class DFAApplicationMainComponent
         this.appTypeInsuranceForm.controls.smallBusinessOption.setValue(application.appTypeInsurance.smallBusinessOption);
         this.appTypeInsuranceForm.controls.farmOption.setValue(application.appTypeInsurance.farmOption);
         this.formCreationService.setAppTypeInsuranceForm(this.appTypeInsuranceForm);
-        this.formCreationService.patchSignAndSubmitFormData(application.appTypeInsurance);
       }
     });
 
-    this.vieworedit = this.dfaApplicationMainDataService.getViewOrEdit();
     this.steps = this.componentService.createDFAApplicationMainSteps();
-
-    if ((this.vieworedit === 'add' || this.vieworedit === 'update') && this.currentFlow === 'verified-registration') {
-      // Add Review step before Sign & Submit only in edit mode & verified-registration flow
-      this.steps.push({
-        component: 'review',
-        stepName: 'Review',
-        nextButtonLabel: 'Next - Sign & Submit',
-        backButtonLabel: 'Go Back & Edit',
-        isLast: false,
-        lastStep: this.steps.length - 1,
-        loadWrapperButton: false,
-      });
-    }
-
-    // Sign & Submit always last
-    this.steps.push({
-      component: 'sign-and-submit',
-      stepName: 'Sign & Submit',
-      nextButtonLabel: '',
-      backButtonLabel: this.vieworedit === 'view' ? 'Back to Dashboard' : 'Go Back & Edit',
-      isLast: true,
-      lastStep: this.steps.length - 1,
-      loadWrapperButton: false,
-    });
-
-    // Set step index to "Sign & Submit" when in view mode
-    if (this.vieworedit === 'view') {
-      const signIndex = this.steps.findIndex(step => step.component === 'sign-and-submit');
-      this.currentStepIndex = signIndex !== -1 ? signIndex : 0;
-    }
-
-
+    this.vieworedit = this.dfaApplicationMainDataService.getViewOrEdit();
     this.editstep = this.dfaApplicationMainDataService.getEditStep();
 
     /* DEVOPS-268: Listen for changes to validation status */
@@ -347,38 +315,7 @@ export class DFAApplicationMainComponent
   }
 
   ngAfterViewChecked(): void {
-    this.cd.detectChanges();         
-  }
-
-  private viewModeInitialized = false;
-
-  private setupStepperBehavior() {
-    if (this.viewModeInitialized) return; // prevent re-entry
-    this.viewModeInitialized = true;
-
-    const sigField = this.signAndSubmitForm.get('applicantSignature');
-    if (!sigField) return;
-
-    const dateSigned = sigField.get('dateSigned')?.value;
-
-    if (this.vieworedit === 'view' || this.vieworedit === 'edit' || this.vieworedit === 'viewOnly') {
-      this.dfaApplicationMainDataService.setViewOrEdit(this.vieworedit);
-      if (this.vieworedit === 'edit') {
-        this.dfaApplicationMainStepper.selectedIndex = Number(this.editstep);
-      } else {
-        this.dfaApplicationMainStepper.selectedIndex = this.steps.length - 1; // Go to Sign step
-      }
-    } else if (this.vieworedit !== 'add' && this.vieworedit !== 'update') {
-      if (dateSigned) {
-        this.vieworedit = "view";
-        this.dfaApplicationMainDataService.setViewOrEdit("view");
-        this.dfaApplicationMainDataService.isSubmitted = true;
-        this.dfaApplicationMainStepper.selectedIndex = this.steps.length - 1; // Jump to Sign step
-      } else {
-        this.vieworedit = "update";
-        this.dfaApplicationMainDataService.setViewOrEdit("update");
-      }
-    }
+    this.cd.detectChanges();
   }
 
   ngAfterViewInit(): void {
@@ -386,24 +323,52 @@ export class DFAApplicationMainComponent
       .getSignAndSubmitForm()
       .subscribe((signAndSubmit)=> {
         this.signAndSubmitForm = signAndSubmit;
-        this.setupStepperBehavior();
     });
 
     this.signAndSubmitForm
-    .get('ninetyDayDeadline')
-    .valueChanges.pipe(distinctUntilChanged())
-    .subscribe((value) => {
-      if (value) {
-        this.ninetyDayDeadline = value;
-        let date = new Date(value);
-        let currentDate = new Date();
-        const eventDate = new Date(date.toDateString());
-        const currentDateOnly = new Date(currentDate.toDateString());
-        const dateDifferenceInMs = eventDate.getTime() - currentDateOnly.getTime();
-        const differenceInDays = Math.floor(dateDifferenceInMs / (1000 * 60 * 60 * 24));
-        this.daysToApply = differenceInDays + 1;
-      }
-    });
+      .get('applicantSignature')
+      .valueChanges.pipe(distinctUntilChanged())
+      .subscribe((value) => {
+        if (this.vieworedit === 'view' || this.vieworedit === 'edit' || this.vieworedit === 'viewOnly') {
+          this.dfaApplicationMainDataService.setViewOrEdit(this.vieworedit);
+          for (var i = 0; i <= 7; i++) {
+            this.dfaApplicationMainStepper.selected.completed = true;
+            this.dfaApplicationMainStepper.next();
+          }
+          if (this.vieworedit === 'edit') this.dfaApplicationMainStepper.selectedIndex = Number(this.editstep);
+        } else if (this.vieworedit !== 'add' && this.vieworedit !== 'update') {
+          this.dfaApplicationMainStepper.selectedIndex = 0;
+          if (this.signAndSubmitForm.get('applicantSignature')?.get('dateSigned')?.value) {
+            this.vieworedit = "view";
+            this.dfaApplicationMainDataService.setViewOrEdit("view");
+            this.dfaApplicationMainDataService.isSubmitted = true;
+            for (var i = 0; i <= 7; i++) {
+              this.dfaApplicationMainStepper.selected.completed = true;
+              this.dfaApplicationMainStepper.next();
+            }
+          }
+          else {
+            this.vieworedit = "update";
+            this.dfaApplicationMainDataService.setViewOrEdit("update");
+          }
+        }
+      });
+
+    this.signAndSubmitForm
+      .get('ninetyDayDeadline')
+      .valueChanges.pipe(distinctUntilChanged())
+      .subscribe((value) => {
+        if (value) {
+          this.ninetyDayDeadline = value;
+          let date = new Date(value);
+          let currentDate = new Date();
+          const eventDate = new Date(date.toDateString());
+          const currentDateOnly = new Date(currentDate.toDateString());
+          const dateDifferenceInMs = eventDate.getTime() - currentDateOnly.getTime();
+          const differenceInDays = Math.floor(dateDifferenceInMs / (1000 * 60 * 60 * 24));
+          this.daysToApply = differenceInDays + 1;
+        }
+      })
   }
 
   validateForms(){
@@ -465,11 +430,7 @@ export class DFAApplicationMainComponent
    * @param stepper stepper instance
    */
   stepChanged(event: any, stepper: MatStepper): void {
-    if (this.currentStepIndex === event.selectedIndex) {
-      return; // already on this step, do nothing
-    }
-
-    this.currentStepIndex = event.selectedIndex;
+    stepper.selected.interacted = false;
 
     this.validateForms();
     this.setCompletedSteps();
@@ -599,7 +560,7 @@ export class DFAApplicationMainComponent
 
   isOtherContactValid(): boolean {
     const onlyOtherContact = this.otherContactsForm.get('contactDetails.onlyOtherContact')?.value ?? false;
-    return this.otherContactsForm.valid || onlyOtherContact;   
+    return this.otherContactsForm.valid || onlyOtherContact;
   }
 
   isOccupantValid(): boolean {
@@ -607,7 +568,7 @@ export class DFAApplicationMainComponent
     if (this.fullTimeOccupantsForm.valid || onlyOccupantInHome){
       return true;
     }
-    return false;    
+    return false;
   }
 
   /**
@@ -703,7 +664,7 @@ export class DFAApplicationMainComponent
           .subscribe((applicationDetails) => {
           this.form = applicationDetails;
           });
-        break; 
+        break;
 
       case 1:
         this.form$ = this.formCreationService
@@ -778,7 +739,7 @@ export class DFAApplicationMainComponent
       .afterClosed()
       .subscribe((result) => {
         console.log(result);
-        if (result === 'confirm') 
+        if (result === 'confirm')
         {
           this.setFormData('sign-and-submit');
           let application = this.dfaApplicationMainDataService.createDFAApplicationMainDTO();
@@ -788,7 +749,7 @@ export class DFAApplicationMainComponent
             this.dfaApplicationMainDataService.isSubmitted = true;
             this.dfaApplicationMainDataService.setViewOrEdit('view');
             this.vieworedit = 'view';
-           
+
           },
           error => {
             console.error(error);

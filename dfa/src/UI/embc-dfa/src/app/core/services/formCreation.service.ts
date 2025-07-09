@@ -698,6 +698,41 @@ export class FormCreationService {
     );
   }
 
+  patchSignAndSubmitFormData(data: any): void {
+    const form = this.signAndSubmitForm.getValue();
+    if (!form) return;
+
+    // Don't patch if form is already populated to avoid overwriting user data
+    const currentApplicantSig = form.get('applicantSignature')?.value;
+    const currentSecondaryApplicantSig = form.get('secondaryApplicantSignature')?.value;
+
+    const patchData: any = {};
+
+    // Only patch applicant signature if it's empty or incomplete
+    if (!currentApplicantSig?.signature || !currentApplicantSig?.signedName) {
+      patchData.applicantSignature = {
+        signedName: data?.applicantSignature?.signedName || currentApplicantSig?.signedName || '',
+        dateSigned: data?.applicantSignature?.dateSigned || currentApplicantSig?.dateSigned || new Date(),
+        signature: data?.applicantSignature?.signature || currentApplicantSig?.signature || null
+      };
+    }
+
+    // Only patch secondary applicant signature if it's empty or incomplete
+    if (!currentSecondaryApplicantSig?.signature || !currentSecondaryApplicantSig?.signedName) {
+      patchData.secondaryApplicantSignature = {
+        signedName: data?.secondaryApplicantSignature?.signedName || currentSecondaryApplicantSig?.signedName || '',
+        dateSigned: data?.secondaryApplicantSignature?.dateSigned || currentSecondaryApplicantSig?.dateSigned || '',
+        signature: data?.secondaryApplicantSignature?.signature || currentSecondaryApplicantSig?.signature || null
+      };
+    }
+
+    // Only patch if there's something to patch
+    if (Object.keys(patchData).length > 0) {
+      form.patchValue(patchData);
+      this.signAndSubmitForm.next(form);
+    }
+  }
+
   getApplicationDetailsForm(): Observable<UntypedFormGroup> {
     return this.applicationDetailsForm$;
   }
@@ -747,26 +782,5 @@ export class FormCreationService {
         new AppealSignAndSubmitForm(new AppealSignAndSubmit(), this.formBuilder)
       )
     );
-  }
-
-  patchSignAndSubmitFormData(data: any): void {
-    const form = this.signAndSubmitForm.getValue();
-    if (!form) return;
-
-    form.patchValue({
-      applicantSignature: {
-        signedName: data?.applicantSignature?.signedName || '',
-        dateSigned: data?.applicantSignature?.dateSigned || '',
-        signature: data?.applicantSignature?.signature || null
-      },
-      secondaryApplicantSignature: {
-        signedName: data?.secondaryApplicantSignature?.signedName || '',
-        dateSigned: data?.secondaryApplicantSignature?.dateSigned || '',
-        signature: data?.secondaryApplicantSignature?.signature || null
-      }
-    });
-
-    // Emit the updated form
-    this.signAndSubmitForm.next(form);
   }
 }
