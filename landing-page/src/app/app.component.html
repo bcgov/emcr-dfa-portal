@@ -112,7 +112,7 @@
                   Register to apply to Private DFA
                 </button>
               } @else { 
-                <button class="applyButton" (click)="naviagteToPrivateDFA()" [disabled]="privateButtonDisabled">
+                <button class="applyButton" (click)="naviagteToPrivateDFA()" [disabled]="privateButtonDisabled" [title]="privateButtonDisabled ? 'New applications are not currently being accepted' : ''">
                   Register to apply to Private DFA
                 </button>
               }
@@ -183,7 +183,7 @@
                   Register to apply to Public DFA
                 </button>
               } @else { 
-                <button class="applyButton" (click)="naviagteToPublicDFA()" [disabled]="publicButtonDisabled">
+                <button class="applyButton" (click)="naviagteToPublicDFA()" [disabled]="publicButtonDisabled" [title]="publicButtonDisabled ? 'New applications are not currently being accepted' : ''">
                   Register to apply to Public DFA
                 </button>
               }
