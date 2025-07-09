@@ -4,27 +4,28 @@
 
 import { ProjectStatusBar } from '../models/project-status-bar';
 export interface CurrentProjectAmendment {
-  additionalProjectCostDecision?: string;
-  amended18MonthDeadline?: string;
-  amendedProjectDeadlineDate?: string;
-  amendmentApprovedDate?: string;
-  amendmentDecision?: string;
-  amendmentId?: string;
-  amendmentNumber?: string;
-  amendmentReason?: string;
-  amendmentReceivedDate?: string;
-  approvedAdditionalProjectCost?: string;
-  deadlineExtensionApproved?: string;
-  emcrDecisionComments?: string;
-  estimatedAdditionalProjectCost?: string;
+  additionalProjectCostDecision?: string | null;
+  amended18MonthDeadline?: string | null;
+  amendedProjectDeadlineDate?: string | null;
+  amendmentApprovedDate?: string | null;
+  amendmentDecision?: string | null;
+  amendmentId?: string | null;
+  amendmentNumber?: number | null;
+  amendmentReason?: string | null;
+  amendmentReceivedDate?: string | null;
+  approvedAdditionalProjectCost?: number | null;
+  createdDate?: string | null;
+  deadlineExtensionApproved?: string | null;
+  emcrDecisionComments?: string | null;
+  estimatedAdditionalProjectCost?: number | null;
   isErrorInStatus?: boolean;
   isHidden?: boolean;
-  projectId?: string;
-  requestforAdditionalProjectCost?: string;
-  requestforProjectDeadlineExtention?: string;
-  stage?: string;
-  status?: string;
+  projectId?: string | null;
+  requestforAdditionalProjectCost?: string | null;
+  requestforProjectDeadlineExtention?: string | null;
+  stage?: string | null;
+  status?: string | null;
   statusBar?: Array<ProjectStatusBar>;
-  statusColor?: string;
-  statusLastUpdated?: string;
+  statusColor?: string | null;
+  statusLastUpdated?: string | null;
 }

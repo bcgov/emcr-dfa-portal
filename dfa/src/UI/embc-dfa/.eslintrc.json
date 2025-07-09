@@ -1,21 +1,18 @@
 {
-     "root": true,
-     "ignorePatterns": ["projects/**/*"],
-     "overrides": [
-       {
-         "files": ["*.ts"],
-         "extends": [
-           "plugin:@angular-eslint/recommended"
-         ],
-         "parserOptions": {
-           "project": ["./tsconfig.json"],
-           "createDefaultProgram": true
-         }
-       },
-       {
-         "files": ["*.html"],
-         "extends": ["plugin:@angular-eslint/template/recommended"],
-         "parser": "@angular-eslint/template-parser"
-       }
-     ]
-   }
+  "root": true,
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": ["plugin:@angular-eslint/recommended"],
+      "parserOptions": {
+        "project": ["./tsconfig.json"],
+        "createDefaultProgram": true
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
+      "parser": "@angular-eslint/template-parser"
+    }
+  ]
+}

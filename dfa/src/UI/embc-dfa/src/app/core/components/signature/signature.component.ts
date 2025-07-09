@@ -52,31 +52,43 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
   ngOnChanges(event: SimpleChanges): void {
     // Set initial dateSigned using the form group
     if (event["initialDateSigned"]?.currentValue) {
-      // Try to parse as Date, fallback to today if invalid
       const parsedDate = new Date(event["initialDateSigned"].currentValue);
-      this.signatureFormGroup.get('dateSigned')?.setValue(isNaN(parsedDate.getTime()) ? new Date() : parsedDate);
-    } else {
+      const dateValue = isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
+
+      // Only set if not already set or if different
+      const currentDateValue = this.signatureFormGroup.get('dateSigned')?.value;
+      if (!currentDateValue || new Date(currentDateValue).getTime() !== dateValue.getTime()) {
+        this.signatureFormGroup.get('dateSigned')?.setValue(dateValue);
+      }
+    } else if (!this.signatureFormGroup.get('dateSigned')?.value) {
       this.signatureFormGroup.get('dateSigned')?.setValue(new Date());
     }
 
     // Set initial signedName using the form group
     const initialSignedName = event["initialSignedName"]?.currentValue;
-    if (initialSignedName && !this.signatureFormGroup.get('signedName')?.value) {
+    if (initialSignedName && initialSignedName !== this.signatureFormGroup.get('signedName')?.value) {
       this.signatureFormGroup.get('signedName')?.setValue(initialSignedName);
     }
 
     // Draw signature
     const initialSignature = event["initialSignature"]?.currentValue;
-    if (initialSignature && !this.signatureBlock.signature) {
+    if (initialSignature && initialSignature !== this.signatureBlock.signature) {
       this.signatureBlock.signature = initialSignature;
       this.signatureFormGroup.get('signature')?.setValue(initialSignature);
-      const canvasEl: HTMLCanvasElement = this.canvas?.nativeElement;
-      var ctxt = canvasEl?.getContext("2d");
-      var background = new Image();
-        background.src = this.signatureBlock?.signature;
-        background.onload = function() {
-          ctxt?.drawImage(background, 0, 0, canvasEl?.width, canvasEl?.height);
-        };
+
+      // Draw on canvas
+      setTimeout(() => { // Ensure canvas is ready
+        const canvasEl: HTMLCanvasElement = this.canvas?.nativeElement;
+        if (canvasEl) {
+          const ctxt = canvasEl.getContext("2d");
+          const background = new Image();
+          background.src = this.signatureBlock.signature;
+          background.onload = function() {
+            ctxt?.clearRect(0, 0, canvasEl.width, canvasEl.height);
+            ctxt?.drawImage(background, 0, 0, canvasEl.width, canvasEl.height);
+          };
+        }
+      }, 100);
     }
   }
 

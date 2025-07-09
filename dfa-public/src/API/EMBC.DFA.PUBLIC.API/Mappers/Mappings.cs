@@ -4,12 +4,15 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using EMBC.Database.Contract;
 using EMBC.DFA.API.ConfigurationModule.Models.AuthModels;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.ConfigurationModule.Models.PDF;
 using EMBC.DFA.API.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using BCeID = EMBC.Gov.BCeID;
+using RecoveryClaim = EMBC.DFA.API.Controllers.RecoveryClaim;
+using SignAndSubmit = EMBC.DFA.API.Controllers.SignAndSubmit;
 
 namespace EMBC.DFA.API.Mappers
 {
@@ -462,6 +465,32 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.createdon, opts => opts.MapFrom(s => s.uploadedDate))
                 .ForMember(d => d._modifiedby_value, opts => opts.MapFrom(s => s.modifiedBy))
                 .ForMember(d => d.bcgov_mimetype, opts => opts.MapFrom(s => s.contentType));
+            
+            CreateMap<bcgov_documenturl, FileUploadAmendment>()
+                .ForMember(d => d.projectId, opts => opts.MapFrom(s => s._dfa_project_value))
+                .ForMember(d => d.id, opts => opts.MapFrom(s => s.bcgov_documenturlid))
+                .ForMember(d => d.fileName, opts => opts.MapFrom(s => s.bcgov_filename))
+                .ForMember(d => d.fileType, opts => opts.MapFrom(s => ConvertStringToFileCategory(s.dfa_category)))
+                .ForMember(d => d.fileTypeText, opts => opts.MapFrom(s => s.dfa_category))
+                .ForMember(d => d.requiredDocumentType, opts => opts.MapFrom(s => ConvertStringToRequiredDocumentType(s.dfa_requireddocumenttype)))
+                .ForMember(d => d.fileDescription, opts => opts.MapFrom(s => s.dfa_description))
+                .ForMember(d => d.fileSize, opts => opts.MapFrom(s => s.bcgov_size))
+                .ForMember(d => d.uploadedDate, opts => opts.MapFrom(s => s.createdon))
+                .ForMember(d => d.modifiedBy, opts => opts.MapFrom(s => s._modifiedby_value))
+                .ForMember(d => d.contentType, opts => opts.MapFrom(s => s.bcgov_mimetype))
+                .ForMember(d => d.deleteFlag, opts => opts.MapFrom(s => false));
+
+            CreateMap<FileUploadAmendment, bcgov_documenturl>()
+                .ForMember(d => d._dfa_project_value, opts => opts.MapFrom(s => s.projectId))
+                .ForMember(d => d.bcgov_documenturlid, opts => opts.MapFrom(s => s.id))
+                .ForMember(d => d.bcgov_filename, opts => opts.MapFrom(s => s.fileName))
+                .ForMember(d => d.dfa_category, opts => opts.MapFrom(s => s.fileType))
+                .ForMember(d => d.dfa_requireddocumenttype, opts => opts.MapFrom(s => s.requiredDocumentType))
+                .ForMember(d => d.dfa_description, opts => opts.MapFrom(s => s.fileDescription))
+                .ForMember(d => d.bcgov_size, opts => opts.MapFrom(s => s.fileSize))
+                .ForMember(d => d.createdon, opts => opts.MapFrom(s => s.uploadedDate))
+                .ForMember(d => d._modifiedby_value, opts => opts.MapFrom(s => s.modifiedBy))
+                .ForMember(d => d.bcgov_mimetype, opts => opts.MapFrom(s => s.contentType));
 
             CreateMap<dfa_projectclaimdocumentlocation, FileUploadClaim>()
                 .ForMember(d => d.claimId, opts => opts.MapFrom(s => s._dfa_projectclaimid_value))
@@ -525,9 +554,22 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.contentType))
                 .ForMember(d => d.DocumentContent, opts => opts.MapFrom(s => s.fileData))
                 ;
-            
+
             CreateMap<FileUploadClaim, S3SubmissionEntity>()
                 .ForMember(d => d.RegardingEntityID, opts => opts.MapFrom(s => s.claimId))
+                .ForMember(d => d.OriginCode, opts => opts.MapFrom(s => ORIGIN_CODE_PORTAL))
+                .ForMember(d => d.Metadata_1, opts => opts.MapFrom(s => s.fileTypeText))
+                .ForMember(d => d.Metadata_2, opts => opts.MapFrom(s => s.requiredDocumentType))
+                .ForMember(d => d.Metadata_3, opts => opts.MapFrom(s => s.fileDescription))
+                .ForMember(d => d.DocumentSize, opts => opts.MapFrom(s => s.fileSize))
+                .ForMember(d => d.ReceivedDate, opts => opts.MapFrom(s => s.uploadedDate))
+                .ForMember(d => d.DocumentFileName, opts => opts.MapFrom(s => s.fileName))
+                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.contentType))
+                .ForMember(d => d.DocumentContent, opts => opts.MapFrom(s => s.fileData))
+                ;
+
+            CreateMap<FileUploadAmendment, S3SubmissionEntity>()
+                .ForMember(d => d.RegardingEntityID, opts => opts.MapFrom(s => s.projectId))
                 .ForMember(d => d.OriginCode, opts => opts.MapFrom(s => ORIGIN_CODE_PORTAL))
                 .ForMember(d => d.Metadata_1, opts => opts.MapFrom(s => s.fileTypeText))
                 .ForMember(d => d.Metadata_2, opts => opts.MapFrom(s => s.requiredDocumentType))
@@ -615,6 +657,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.fileType, opts => opts.MapFrom(s => s.fileType));
 
             CreateMap<dfa_projectamendment, CurrentProjectAmendment>()
+                .ForMember(d => d.CreatedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.createdon).Year < 2020 ? string.Empty : Convert.ToDateTime(s.createdon).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.AmendmentReceivedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_amendmentreceiveddate).Year < 2020 ? string.Empty : Convert.ToDateTime(s.dfa_amendmentreceiveddate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.AmendmentApprovedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_amendmentapproveddate).Year < 2020 ? string.Empty : Convert.ToDateTime(s.dfa_amendmentapproveddate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.AmendedProjectDeadlineDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_amendedprojectdeadlinedate).Year < 2020 ? string.Empty : Convert.ToDateTime(s.dfa_amendedprojectdeadlinedate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
@@ -622,7 +665,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.AmendmentNumber, opts => opts.MapFrom(s => s.dfa_amendmentnumber))
                 .ForMember(d => d.ProjectId, opts => opts.MapFrom(s => s._dfa_project_value))
                 .ForMember(d => d.AmendmentReason, opts => opts.MapFrom(s => s.dfa_amendmentreason))
-                .ForMember(d => d.EMCRDecisionComments, opts => opts.MapFrom(s => s.dfa_emcrapprovalcomments))
+                .ForMember(d => d.EmcrDecisionComments, opts => opts.MapFrom(s => s.dfa_emcrapprovalcomments))
                 .ForMember(d => d.AmendmentId, opts => opts.MapFrom(s => s.dfa_projectamendmentid))
                 .ForMember(d => d.EstimatedAdditionalProjectCost, opts => opts.MapFrom(s => s.dfa_estimatedadditionalprojectcost))
                 .ForMember(d => d.ApprovedAdditionalProjectCost, opts => opts.MapFrom(s => s.dfa_approvedadditionalprojectcost))
@@ -633,6 +676,25 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.Stage, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_amendmentsubstages) ? GetEnumDescription((ProjectAmendmentSubStages)Convert.ToInt32(s.dfa_amendmentsubstages)) : null))
                 .ForMember(d => d.AdditionalProjectCostDecision, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_additionalprojectcostdecision) ? GetEnumDescription((ProjectAmendmentAdditionalProjectCostDecision)Convert.ToInt32(s.dfa_additionalprojectcostdecision)) : null))
                 .ForMember(d => d.AmendmentDecision, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_amendmentdecision) ? GetEnumDescription((ProjectAmendmentDecsions)Convert.ToInt32(s.dfa_amendmentdecision)) : null));
+
+            CreateMap<ProjectAmendment, dfa_projectamendment>()
+                .ForMember(d => d.createdon, opts => opts.MapFrom(s => s.CreatedDate))
+                .ForMember(d => d.dfa_amendmentreceiveddate, opts => opts.MapFrom(s => s.AmendmentReceivedDate))
+                .ForMember(d => d.dfa_amendmentapproveddate, opts => opts.MapFrom(s => s.AmendmentApprovedDate))
+                .ForMember(d => d.dfa_amendedprojectdeadlinedate, opts => opts.MapFrom(s => s.AmendedProjectDeadlineDate))
+                .ForMember(d => d.dfa_amended18monthdeadline, opts => opts.MapFrom(s => s.Amended18MonthDeadline))
+                .ForMember(d => d.dfa_amendmentnumber, opts => opts.MapFrom(s => s.AmendmentNumber))
+                .ForMember(d => d.dfa_amendmentreason, opts => opts.MapFrom(s => s.AmendmentReason))
+                .ForMember(d => d.dfa_emcrapprovalcomments, opts => opts.MapFrom(s => s.EmcrDecisionComments))
+                .ForMember(d => d.dfa_projectamendmentid, opts => opts.MapFrom(s => s.AmendmentId))
+                .ForMember(d => d.dfa_estimatedadditionalprojectcost, opts => opts.MapFrom(s => s.EstimatedAdditionalProjectCost))
+                .ForMember(d => d.dfa_approvedadditionalprojectcost, opts => opts.MapFrom(s => s.ApprovedAdditionalProjectCost))
+                .ForMember(d => d.dfa_requestforprojectdeadlineextension, opts => opts.MapFrom(s => s.RequestforProjectDeadlineExtention))
+                .ForMember(d => d.dfa_deadlineextensionapproved, opts => opts.MapFrom(s => s.DeadlineExtensionApproved))
+                .ForMember(d => d.dfa_requestforadditionalprojectcost, opts => opts.MapFrom(s => s.RequestforAdditionalProjectCost))
+                .ForMember(d => d.dfa_additionalprojectcostdecision, opts => opts.MapFrom(s => s.AdditionalProjectCostDecision))
+                .ForMember(d => d.dfa_amendmentdecision, opts => opts.MapFrom(s => s.AmendmentDecision))
+                ;
 
             CreateMap<dfa_project, CurrentProject>()
                 .ForMember(d => d.Deadline18Month, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_18monthdeadline).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_18monthdeadline).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
@@ -683,7 +745,12 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.AdvancedDrawdownAmount, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_advanceddrawdownamount) ? "(pending information)" : "CA$ " + Convert.ToDecimal(s.dfa_advanceddrawdownamount).ToString(CurrencyFormat)))
                 .ForMember(d => d.DecisionDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_decisiondate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_decisiondate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.ClaimType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimtype) ? GetEnumDescription((ClaimTypeOptionSet)Convert.ToInt32(s.dfa_claimtype)) : null))
-                .ForMember(d => d.IsAdjustmentClaim, opts => opts.MapFrom(s => s.dfa_isadjustmentclaim));
+                .ForMember(d => d.IsAdjustmentClaim, opts => opts.MapFrom(s => s.dfa_isadjustmentclaim))
+                .ForMember(d => d.ClaimAppeals, opts => opts.MapFrom(s => s.dfa_claimappeal));
+
+            CreateMap<dfa_claimappeal, CurrentProjectClaimAppeal>()
+                .ForMember(d => d.AppealStatus, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.statuscode) ? GetEnumDescription((ClaimAppealStatusOptionSet)Convert.ToInt32(s.statuscode)) : null))
+                .ForMember(d => d.AppealDecision, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_appealdecision) ? GetEnumDescription((ClaimAppealDecisionOptionSet)Convert.ToInt32(s.dfa_appealdecision)) : null));
 
             CreateMap<dfa_claim_retrieve, RecoveryClaim>()
                 .ForMember(d => d.claimNumber, opts => opts.MapFrom(s => s.dfa_name))
@@ -710,7 +777,6 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.isAdjustmentClaim, opts => opts.MapFrom(s => s.dfa_isadjustmentclaim))
                 .ForMember(d => d.lateAppealAllowed, opts => opts.MapFrom(s => s.dfa_lateappealallowed))
                 .ForMember(d => d.dateFileClosed, opts => opts.MapFrom(s => s.dfa_bpfclosedate));
-
 
             CreateMap<dfa_appapplication, CurrentApplication>()
                 .ForMember(d => d.DateOfDamage, opts => opts.MapFrom(s => s.dfa_dateofdamage))
@@ -871,7 +937,7 @@ namespace EMBC.DFA.API.Mappers
                                                 : (int?)null)))))
                             : (int?)null))
                 .ForMember(d => d.dfa_projecttypeother,opts => opts.MapFrom(s => s.Project.projectTypeOther));
-                
+
             CreateMap<DFAClaimMain, dfa_claim_params>()
                 .ForMember(d => d.dfa_finalclaim, opts => opts.MapFrom(s => s.Claim != null ? s.Claim.isThisFinalClaim : (bool?)null))
                 .ForMember(d => d.dfa_projectclaimid, opts => opts.MapFrom(s => s.Id))

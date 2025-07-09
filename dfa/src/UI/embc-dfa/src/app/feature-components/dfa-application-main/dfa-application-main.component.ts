@@ -315,7 +315,7 @@ export class DFAApplicationMainComponent
   }
 
   ngAfterViewChecked(): void {
-    this.cd.detectChanges();         
+    this.cd.detectChanges();
   }
 
   ngAfterViewInit(): void {
@@ -560,7 +560,7 @@ export class DFAApplicationMainComponent
 
   isOtherContactValid(): boolean {
     const onlyOtherContact = this.otherContactsForm.get('contactDetails.onlyOtherContact')?.value ?? false;
-    return this.otherContactsForm.valid || onlyOtherContact;   
+    return this.otherContactsForm.valid || onlyOtherContact;
   }
 
   isOccupantValid(): boolean {
@@ -568,7 +568,7 @@ export class DFAApplicationMainComponent
     if (this.fullTimeOccupantsForm.valid || onlyOccupantInHome){
       return true;
     }
-    return false;    
+    return false;
   }
 
   /**
@@ -664,7 +664,7 @@ export class DFAApplicationMainComponent
           .subscribe((applicationDetails) => {
           this.form = applicationDetails;
           });
-        break; 
+        break;
 
       case 1:
         this.form$ = this.formCreationService
@@ -739,7 +739,7 @@ export class DFAApplicationMainComponent
       .afterClosed()
       .subscribe((result) => {
         console.log(result);
-        if (result === 'confirm') 
+        if (result === 'confirm')
         {
           this.setFormData('sign-and-submit');
           let application = this.dfaApplicationMainDataService.createDFAApplicationMainDTO();
@@ -749,7 +749,7 @@ export class DFAApplicationMainComponent
             this.dfaApplicationMainDataService.isSubmitted = true;
             this.dfaApplicationMainDataService.setViewOrEdit('view');
             this.vieworedit = 'view';
-           
+
           },
           error => {
             console.error(error);

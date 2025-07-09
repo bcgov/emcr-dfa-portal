@@ -36,6 +36,8 @@ namespace EMBC.Utilities.S3
         public FileTag? FileTag { get; set; }
     }
 
+    public class DeleteFileCommand : StorageCommand { }
+
     public class UpdateTagsCommand : StorageCommand
     {
         public FileTag? FileTag { get; set; }

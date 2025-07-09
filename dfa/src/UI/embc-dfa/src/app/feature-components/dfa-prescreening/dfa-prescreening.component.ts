@@ -9,7 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as globalConst from '../../core/services/globalConstants';
 import { MatStepper } from '@angular/material/stepper';
 import { Subscription } from 'rxjs';
-import { FormCreationService } from '../../core/services/formCreation.service';
+import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { DFAPrescreeningDataService } from './dfa-prescreening-data.service';
 import { ApplicantOption } from 'src/app/core/api/models';
 import { MatDialog } from '@angular/material/dialog';

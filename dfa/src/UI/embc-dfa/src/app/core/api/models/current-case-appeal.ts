@@ -5,4 +5,7 @@
 export interface CurrentCaseAppeal {
   appealStatus?: string;
   appealType?: string;
+  caseId?: string;
+  id?: string;
+  reason?: string;
 }

@@ -9,6 +9,7 @@ import { DFAApplicationMainDataService } from '../../../feature-components/dfa-a
 import { DFAClaimMainDataService } from '../../../feature-components/dfa-claim-main/dfa-claim-main-data.service';
 import { DFAProjectMainDataService } from '../../../feature-components/dfa-project-main/dfa-project-main-data.service';
 import { forEachChild } from 'typescript';
+import { DFAAmendmentMainDataService } from 'src/app/feature-components/dfa-amendment-main/dfa-amendment-main-data.service';
 
 @Component({
   selector: 'app-header',
@@ -25,10 +26,12 @@ export class HeaderComponent implements OnInit {
   appId = null;
   projId = null;
   claimId = null;
+  amendmentId = null;
 
   appviewedit = null;
   projviewedit = null;
   claimviewedit = null;
+  amendmentviewedit = null;
 
   menuHeader: any = [];
   appitems = [
@@ -86,16 +89,26 @@ export class HeaderComponent implements OnInit {
       excluded: false,
       islink: true
     },
-        {
-      label: 'Amendment Dashboard',
-      link: 'dfa-project-main/prjid/project-amendments',
+    {
+      label: 'Claim Dashboard',
+      link: 'dfa-project/prjid/claims',
       icon: 'pan_tool',
-      path: '/project-amendments',
-      level: 4,
-      excluded: false,
+      path: '/claims',
+      level: 5,
+      excluded: true,
+      islink: true
+    },    
+    {
+      label: 'Amendment Dashboard',
+      link: 'dfa-project/prjid/dfa-project-amendments',
+      icon: 'pan_tool',
+      path: '/dfa-project-amendments',
+      level: 5,
+      excluded: true,
       islink: true
     },
     {
+      // Old Amendment View Page 
       label: 'View Amendment',
       link: 'dfa-project-amendment/prjid',
       icon: 'pan_tool',
@@ -105,12 +118,12 @@ export class HeaderComponent implements OnInit {
       islink: true
     },
     {
-      label: 'Claim Dashboard',
-      link: 'dfa-project/prjid/claims',
+      label: 'View Amendment',
+      link: 'dfa-amendment-main/amndid',
       icon: 'pan_tool',
-      path: '/claims',
-      level: 5,
-      excluded: false,
+      path: '/dfa-amendment-main/',
+      level: 6,
+      excluded: true,
       islink: true
     },
     {
@@ -152,6 +165,7 @@ export class HeaderComponent implements OnInit {
     private dfaApplicationMainDataService: DFAApplicationMainDataService,
     private dfaProjectMainDataService: DFAProjectMainDataService,
     private dfaClaimMainDataService: DFAClaimMainDataService,
+    private dfaAmendmentMainDataService: DFAAmendmentMainDataService,
     private route: ActivatedRoute
   ) {
     router.events.subscribe(event => {
@@ -199,6 +213,7 @@ export class HeaderComponent implements OnInit {
     this.appId = this.dfaApplicationMainDataService.getApplicationId();
     this.projId = this.dfaProjectMainDataService.getProjectId();
     this.claimId = this.dfaClaimMainDataService.getClaimId();
+    this.amendmentId = this.dfaAmendmentMainDataService.getAmendmentId();
 
     this.dfaApplicationMainDataService.changeAppId.subscribe((appId) => {
       this.appId = appId;
@@ -212,6 +227,10 @@ export class HeaderComponent implements OnInit {
       this.claimId = claimId;
     });
 
+    this.dfaAmendmentMainDataService.changeAmendmentId.subscribe((amendmentId) => {
+      this.amendmentId = amendmentId;
+    })
+
     this.dfaApplicationMainDataService.changeViewOrEdit.subscribe((appviewedit) => {
       this.appviewedit = appviewedit == 'add' || appviewedit == 'edit' || appviewedit == 'update' ? true : false;
     });
@@ -223,6 +242,10 @@ export class HeaderComponent implements OnInit {
     this.dfaClaimMainDataService.changeViewOrEdit.subscribe((claimviewedit) => {
       this.claimviewedit = claimviewedit == 'add' || claimviewedit == 'edit' || claimviewedit == 'update' ? true : false;
     });
+
+    this.dfaAmendmentMainDataService.changeViewOrEdit.subscribe((amendmentviewedit) => {
+      this.amendmentviewedit = amendmentviewedit == 'addamendment' || amendmentviewedit == 'add' || amendmentviewedit == 'edit' || amendmentviewedit == 'update' ? true : false;
+    })
     
     // console.debug('[DFA] header.component about to call middle-tier API.');
 
@@ -301,6 +324,10 @@ export class HeaderComponent implements OnInit {
 
       if (menuItem.link.indexOf('clid') > -1) {
         path = menuItem.link.replace("clid", this.claimId);
+      }
+
+      if (menuItem.link.indexOf('amndid') > -1) {
+        path = menuItem.link.replace("amndid", this.amendmentId);
       }
     }
 

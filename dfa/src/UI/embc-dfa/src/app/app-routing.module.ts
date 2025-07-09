@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/services/auth.guard';
+import { DocumentViewingComponent } from 'shared-ui';
 
 const routes: Routes = [
   {
@@ -58,6 +59,11 @@ const routes: Routes = [
       import(
         './feature-components/dashboard/dashboard.module'
       ).then((m) => m.DashboardModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'case/:caseId/documents',
+    component: DocumentViewingComponent,
     canActivate: [AuthGuard]
   },
   {

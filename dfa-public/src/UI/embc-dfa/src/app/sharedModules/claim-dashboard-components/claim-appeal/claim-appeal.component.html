@@ -1,4 +1,322 @@
-<div>
-  <h1>🚧 Appeal Process Under Construction</h1>
-  <p>This feature is currently being developed. Please check back later.</p>
+<div class="container container-frame">
+  <div class="row heading-container">
+    <div class="col-8">
+      <span class="page-heading">Claim Details - Appeal</span>
+    </div>
+
+    <div class="col-4">
+      <button
+        #backtodash
+        id="backtodash"
+        class="button-p nextNsave col-4"
+        style="vertical-align: middle; width: 220px; margin-top: 15px"
+        (click)="BackToDashboard()"
+        mat-stroked-button
+        type="button">
+        Back to Claim Dashboard
+        <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
+      </button>
+    </div>
+  </div>
+
+  <mat-horizontal-stepper [selectedIndex]="selectedStepIndex" class="stepper-style" labelPosition="bottom" [linear]="false">
+    <mat-step [editable]="false" [completed]="true">
+        <ng-template matStepLabel>Claim Submission</ng-template>
+    </mat-step>
+    <mat-step [editable]="false" [completed]="true">
+        <ng-template matStepLabel>Add Invoices</ng-template>
+    </mat-step>
+    <mat-step [editable]="false" [completed]="true">
+        <ng-template matStepLabel>Upload Documents</ng-template>
+    </mat-step>
+    <mat-step [editable]="false" [completed]="true">
+        <ng-template matStepLabel>Decision</ng-template>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Appeal</ng-template>
+    </mat-step>
+
+    <ng-template matStepperIcon="edit" let-index="index">
+        {{ index + 1 }}
+    </ng-template>
+  </mat-horizontal-stepper>
+
+  <div>
+    <mat-card>
+      <mat-card-content>
+        <div style="border-bottom: 1px solid lightgrey; padding-bottom: 15px; display: flex">
+          <div class="col-md-4">
+            <span><b>Claim Number - </b></span>
+            <span>{{ claimMain?.claim.claimNumber }}</span>
+          </div>
+          <div class="col-md-3">
+            <span><b>Submitted Date - </b></span>
+            <span>{{ claimMain?.claim.claimReceivedDate }}</span>
+          </div>
+          <div class="col-md-2">
+            <span><b>Claim Status - </b></span>
+            <span> {{ claimMain?.claim.stage }}</span>
+          </div>
+        </div>
+
+        <div class="claim-details">
+          <div class="col-md-2">
+            <span><b>First Claim - </b></span>
+          </div>
+          <div class="col-md-2">
+            <span>{{ getYesNoNotSet(claimMain?.claim.isFirstClaimApproved) }}</span>
+          </div>
+          <div class="col-md-2">
+            <span><b>Approved Claim Total - </b></span>
+          </div>
+          <div class="col-md-2">
+            <span>{{ claimMain?.claim.approvedClaimTotal | fixedCurrency:'CA$' }}</span>
+          </div>
+          <div class="col-md-2">
+            <span><b>Eligible Payable - </b></span>
+          </div>
+          <div class="col-md-2">
+            <span>{{ claimMain?.claim.eligiblePayable | fixedCurrency:'CA$' }}</span>
+          </div>
+        </div>
+        <div class="claim-details">
+          <div class="col-md-2">
+            <span><b>Final Claim - </b></span>
+          </div>
+          <div class="col-md-2">
+            <span>{{ getYesNoNotSet(claimMain?.claim.isThisFinalClaim) }}</span>
+          </div>
+          <div class="col-md-2">
+            <span><b>Less First $1,000 - </b></span>
+          </div>
+          <div class="col-md-2">
+            <span>{{ claimMain?.claim.lessFirst1000 | fixedCurrency:'CA$' }}</span>
+          </div>
+          <div class="col-md-2">
+            <span><b>Paid Claim Amount - </b></span>
+          </div>
+          <div class="col-md-2">
+            <span>{{ claimMain?.claim.paidClaimAmount | fixedCurrency:'CA$' }}</span>
+          </div>
+        </div>
+        <div class="claim-details">
+          <div class="col-md-2">
+            <span><b> Claim Total - </b></span>
+          </div>
+          <div class="col-md-2">
+            <span>{{ claimMain?.claim.approvedClaimTotal | fixedCurrency:'CA$' }}</span>
+          </div>
+          <div class="col-md-2">
+            <span><b>Approved Reimbursement % - </b></span>
+          </div>
+          <div class="col-md-2">
+            <span>{{ claimMain?.claim.approvedReimbursement }}</span>
+          </div>
+          <div class="col-md-2">
+            <span><b>Paid Claim Date - </b></span>
+          </div>
+          <div class="col-md-2">
+            <span>{{ claimMain?.claim.paidClaimDate | date: 'MM/dd/yyyy' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div>
+    <table
+      mat-table
+      [dataSource]="documentSummaryDataSource"
+      *ngIf="documentSummaryDataSource.data.length > 0"
+      style="width: 100%">
+
+      <ng-container matColumnDef="appealCheckbox">
+        <th mat-header-cell *matHeaderCellDef style="width: 5%">
+          <b>Appeal</b>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <ng-container *ngIf="row.data.emcrDecision !== 'Approved Total'">
+            <mat-checkbox color="primary"
+              (click)="$event.stopPropagation()"
+              (change)="onAppealCheckboxChange(row.data)"
+              [checked]="selection.isSelected(row.data)">
+            </mat-checkbox>
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="invoiceNumber">
+        <th mat-header-cell *matHeaderCellDef style="width: 15%">
+          <b>Invoice No.</b>
+        </th>
+        <td *matCellDef="let row" mat-cell class="dark-blue-text">
+          {{ row.data.invoiceNumber }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="vendorName">
+        <th mat-header-cell *matHeaderCellDef style="width: 20%">
+          <b>Vendor Name</b>
+        </th>
+        <td *matCellDef="let row" mat-cell class="dark-blue-text">
+          {{ row.data.vendorName }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="invoiceDate">
+        <th mat-header-cell *matHeaderCellDef style="width: 10%">
+          <b>Invoice Date</b>
+        </th>
+        <td *matCellDef="let row" mat-cell class="dark-blue-text">
+          {{ row.data.invoiceDate | date: 'MM/dd/yyyy' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="invoiceAmount">
+        <th mat-header-cell *matHeaderCellDef style="width: 15%">
+          <b>Invoice Amt.</b>
+        </th>
+        <td *matCellDef="let row" mat-cell class="dark-blue-text">{{ row.data.actualInvoiceTotal | fixedCurrency  }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="approvedAmount">
+        <th mat-header-cell *matHeaderCellDef style="width: 15%">
+          <b>Approved Amt.</b>
+        </th>
+        <td *matCellDef="let row" mat-cell class="dark-blue-text">
+          <div>{{ row.data.emcrApprovedAmount | fixedCurrency }}</div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="paidAmount">
+        <th mat-header-cell *matHeaderCellDef style="width: 15%">
+          <b>Paid Amt.</b>
+        </th>
+        <td *matCellDef="let row" mat-cell class="dark-blue-text">{{ row.data.paidAmount | fixedCurrency  }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="appealAdjustment">
+        <th mat-header-cell *matHeaderCellDef style="width: 20%">
+          <b>Appeal Adjustment</b>
+        </th>
+        <td *matCellDef="let row" mat-cell class="dark-blue-text">
+          <ng-container *ngIf="row.data.appealAdjustment; else noValue">
+            {{ row.data.appealAdjustment | fixedCurrency }}
+          </ng-container>
+          <ng-template #noValue>--- </ng-template>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="viewInvoice">
+        <th mat-header-cell *matHeaderCellDef style="width: 5%">
+          <b>View</b>
+        </th>
+        <td *matCellDef="let row; let i = index" mat-cell>
+          <span (click)="viewInvoiceRow(row.data, i)" class="material-symbols-outlined setViewIcon">
+            visibility
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="appealReasonCheckboxPlaceholder">
+        <td mat-cell *matCellDef="let row"></td>
+      </ng-container>
+
+      <ng-container matColumnDef="appealReason">
+        <td mat-cell *matCellDef="let row" [attr.colspan]="documentSummaryColumnsToDisplay.length - 1">
+          <div style="position: relative;">
+            <textarea
+              #reason="ngModel"
+              matInput
+              placeholder="Please enter appeal reason"
+              [(ngModel)]="row.data.appealReason"
+              [disabled]="!selection.isSelected(row.data)"
+              required
+              (input)="row.data.reasonLength = $event.target.value.length"
+              maxlength="1000"
+              rows="1"
+              style="width: 100%;"></textarea>
+              <div class="appeal-reason-meta">
+                <div
+                  [style.visibility]="selection.isSelected(row.data) &&
+                    (!row.data.appealReason?.trim() && reasonTouchedMap[row.data.invoiceId])
+                      ? 'visible'
+                      : 'hidden'"
+                  style="color: red;">
+                  Appeal reason is required.
+                </div>
+                <div style="color: gray;">
+                  {{ reason.value?.length || 0 }}/1000
+                </div>
+              </div>
+            </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="documentSummaryColumnsToDisplay"></tr>
+
+      <tr
+        mat-row
+        *matRowDef="let row; let i = index; columns: documentSummaryColumnsToDisplay; when: isInvoiceRow"
+        [ngClass]="getRowClass(row, i)">
+      </tr>
+
+      <tr
+        mat-row
+        *matRowDef="let row; columns: appealReasonColumnsToDisplay; when: isAppealReasonRow"
+        [ngClass]="{
+          'appeal-reason-row': true,
+          'selected-row': selection.isSelected(row.data)
+        }">
+      </tr>
+    </table>
+
+    <div *ngIf="documentSummaryDataSource.data.length === 0" class="no-data-message">
+      <span>
+        📄 No invoices available to appeal
+      </span>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="info-block">
+      <div class="info-header">Appeal Invoice Selection and Reasoning</div>
+      <div class="info-text">Select invoices to appeal above, and provide specific reasoning for each.</div>
+    </div>
+    <div class="info-block">
+      <div class="info-header">Appeal Support</div>
+      <div class="info-text">Evidence or supporting documentation should be included wherever possible (e.g. technical reports, code and standards evidence, bylaws, photos, assessments, pictures, usage logs, timesheets, etc.).</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="col-md-12">
+      <div class="add-docs-btn" (click)="addSupportingDocuments()">
+        <span class="plus-icon">+</span> Add Supporting Documents
+        (Optional)
+      </div>
+    </div>
+  </div>
+
+  <div class="appeal-actions">
+    <button
+      id="cancel-appeal"
+      class="button-s nextNsave"
+      mat-button
+      type="button"
+      (click)="cancelAppeal()">
+      Cancel Appeal
+    </button>
+
+    <button
+      id="open-appeal-decision"
+      class="button-p nextNsave"
+      mat-stroked-button
+      type="button"
+      [disabled]="!isAppealFormValid()"
+      (click)="submitAppeal()">
+      Submit Appeal
+      <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
+    </button>
+  </div>
 </div>

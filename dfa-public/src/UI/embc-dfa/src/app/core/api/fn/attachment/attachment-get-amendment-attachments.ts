@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { FileUpload } from '../../models/file-upload';
+import { FileUploadAmendment } from '../../models/file-upload-amendment';
 
 export interface AttachmentGetAmendmentAttachments$Params {
 
@@ -18,7 +18,7 @@ export interface AttachmentGetAmendmentAttachments$Params {
   projectId?: string;
 }
 
-export function attachmentGetAmendmentAttachments(http: HttpClient, rootUrl: string, params?: AttachmentGetAmendmentAttachments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FileUpload>>> {
+export function attachmentGetAmendmentAttachments(http: HttpClient, rootUrl: string, params?: AttachmentGetAmendmentAttachments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FileUploadAmendment>>> {
   const rb = new RequestBuilder(rootUrl, attachmentGetAmendmentAttachments.PATH, 'get');
   if (params) {
     rb.query('projectId', params.projectId, {});
@@ -29,7 +29,7 @@ export function attachmentGetAmendmentAttachments(http: HttpClient, rootUrl: str
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<FileUpload>>;
+      return r as StrictHttpResponse<Array<FileUploadAmendment>>;
     })
   );
 }

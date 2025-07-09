@@ -1,41 +1,53 @@
-import { Component, OnInit, NgModule, Inject, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy, Injector, NgModule } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
   AbstractControl,
-  Validators,
-  ValidatorFn,
+  ReactiveFormsModule,
 } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { CommonModule, KeyValue } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { ReactiveFormsModule } from '@angular/forms';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subscription, Observable } from 'rxjs';
-import { DirectivesModule } from '../../../../core/directives/directives.module';
+import { mapTo, Subscription } from 'rxjs';
 import { CustomValidationService } from 'src/app/core/services/customValidation.service';
-import { distinctUntilChanged, map } from 'rxjs/operators';
-import { Address, ApplicantOption, InsuranceOption, DisasterEvent, Profile } from 'src/app/core/api/models';
+import { ApplicantOption, InsuranceOption, Profile, CurrentProjectAmendment, ProjectStatusBar, CurrentApplication } from 'src/app/core/api/models';
 import { DFAEligibilityDialogComponent } from 'src/app/core/components/dialog-components/dfa-eligibility-dialog/dfa-eligibility-dialog.component';
-import * as globalConst from '../../../../core/services/globalConstants';
 import { MatDialog } from '@angular/material/dialog';
-import { MatRadioModule } from '@angular/material/radio';
-import { CoreModule } from 'src/app/core/core.module';
 import { DialogContent } from 'src/app/core/model/dialog-content.model';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatInputModule } from '@angular/material/input';
-import { ApplicationService, EligibilityService, ProfileService, ProjectService } from 'src/app/core/api/services';
-import { AddressFormsModule } from '../../address-forms/address-forms.module';
-import { MatTableModule } from '@angular/material/table';
-import { MatSelectModule } from '@angular/material/select';
-import { AuthModule, AuthOptions, LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
+import { ApplicationService, AttachmentService, EligibilityService, ProfileService, ProjectAmendmentService, ProjectService } from 'src/app/core/api/services';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { LoginService } from 'src/app/core/services/login.service';
 import { DFAProjectAmendmentDataService } from 'src/app/feature-components/dfa-project-amendment/dfa-project-amendment-data.service';
 import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
 import { DFAProjectMainDataService } from 'src/app/feature-components/dfa-project-main/dfa-project-main-data.service';
+import { Decision } from 'src/app/models/decision.enum';
+import { DFAGeneralInfoDialogComponent } from 'src/app/core/components/dialog-components/dfa-general-info-dialog/dfa-general-info-dialog.component';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { CoreModule } from 'src/app/core/core.module';
+import { DirectivesModule } from 'src/app/core/directives/directives.module';
+import { CustomPipeModule } from 'src/app/core/pipe/customPipe.module';
+import { ReviewProjectModule } from 'src/app/feature-components/review-project/review-project.module';
+import { ComponentWrapperModule } from 'src/app/sharedModules/components/component-wrapper/component-wrapper.module';
+import { AddressFormsModule } from '../../address-forms/address-forms.module';
+import moment from 'moment';
+import { DFAAmendmentMainDataService } from 'src/app/feature-components/dfa-amendment-main/dfa-amendment-main-data.service';
+import { DFAAmendmentMainMappingService } from 'src/app/feature-components/dfa-amendment-main/dfa-amendment-main-mapping.service';
+import { FileUploadAmendment } from 'src/app/core/model/dfa-amendment-main.model';
+import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog-components/file-upload-warning-dialog/file-upload-warning-dialog.component';
+import { DFAFileDeleteDialogComponent } from 'src/app/core/components/dialog-components/dfa-file-delete-dialog/dfa-file-delete.component';
 
 @Component({
   selector: 'amendment',
@@ -45,17 +57,60 @@ import { DFAProjectMainDataService } from 'src/app/feature-components/dfa-projec
 })
 export default class AmendmentComponent implements OnInit, OnDestroy {
   amendmentForm: UntypedFormGroup;
-  notInsured: boolean = false;
-  formBuilder: UntypedFormBuilder;
   amendmentForm$: Subscription;
+  fileUploadForm: UntypedFormGroup;
+  fileUploadForm$: Subscription;
+  formBuilder: UntypedFormBuilder;
   formCreationService: FormCreationService;
   radioApplicantOptions = ApplicantOption;
   radioInsuranceOptions = InsuranceOption;
   showOtherDocuments: boolean = false;
   private _profile: Profile;
-  todayDate = new Date().toISOString();
+  vieworedit: string = "";
+  isReadOnly: boolean = false;
   isValidAddressAndDate: boolean = false;
   public isLoggedIn: boolean = false;
+  isLoading = false;
+
+  applicationNumber = '';
+  appId = null;
+  projectId = null;
+  caseNumber = '';
+  causeOfDamage = '';
+  dateOfDamageFrom = '';
+  dateOfDamageTo = '';
+  OneDayAgo: number = 0;
+  injector: Injector;
+  serviceInjector: Injector;
+  projectAmendment: CurrentProjectAmendment;
+  statusBar?: null | Array<ProjectStatusBar>;
+  isErrorInStatus?: null | boolean;
+  projectName = '';
+  DecisionEnum = Decision;
+
+  originalApprovedProjectCost: string;
+  deadline18Months: string;
+
+  showSupportingFileForm: boolean = false;
+  supportingFilesDataSource = new MatTableDataSource();
+  documentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate', 'icons']
+  amendmentDocumentSummaryDataSource = new MatTableDataSource();
+  isDisabled: string = 'false';
+  isformUploaddisabled: string = 'false';
+  allowedFileTypes = [
+    'application/pdf',
+    'image/jpg',
+    'image/jpeg',
+    'image/png',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  ];
+  stage: string;
+  status: string;
 
   constructor(
     @Inject('formBuilder') formBuilder: UntypedFormBuilder,
@@ -64,9 +119,13 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     public dfaApplicationMainDataService: DFAApplicationMainDataService,
     public dfaProjectMainDataService: DFAProjectMainDataService,
+    public dfaAmendmentMainDataService: DFAAmendmentMainDataService,
     private applicationService: ApplicationService,
     private projectService: ProjectService,
+    private projectAmendmentService: ProjectAmendmentService,
     private router: Router,
+    private dfaAmendmentMainMapping: DFAAmendmentMainMappingService,
+    private attachmentsService: AttachmentService,
     private profileService: ProfileService,
     private eligibilityService: EligibilityService,
     private amendmentDataService: DFAProjectAmendmentDataService,
@@ -75,6 +134,41 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
   ) {
     this.formBuilder = formBuilder;
     this.formCreationService = formCreationService;
+
+    this.isReadOnly = (dfaAmendmentMainDataService.getViewOrEdit() === 'view'
+      || dfaAmendmentMainDataService.getViewOrEdit() === 'edit'
+      || dfaAmendmentMainDataService.getViewOrEdit() === 'viewOnly');
+    this.setViewOrEditControls();
+
+    this.dfaAmendmentMainDataService.changeViewOrEdit.subscribe((vieworedit) => {
+      this.isReadOnly = (vieworedit === 'view'
+        || vieworedit === 'edit'
+        || vieworedit === 'viewOnly');
+      this.setViewOrEditControls();
+    })
+    this.vieworedit = dfaAmendmentMainDataService.getViewOrEdit();
+
+    this.fileUploadForm$ = this.formCreationService
+      .getAmendmentFileUploadsForm()
+      .subscribe((fileUploads) => {
+        this.fileUploadForm = fileUploads;
+      });
+
+    //this.fileUploadForm.addValidators([this.validateFormRequiredDocumentTypes]);
+
+    // subscribe to changes for document summary
+    const _documentSummaryFormArray = this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads');
+    _documentSummaryFormArray.valueChanges
+      .pipe(
+        mapTo(_documentSummaryFormArray.getRawValue())
+    ).subscribe(
+      _data =>  {
+        this.amendmentDocumentSummaryDataSource.data = _documentSummaryFormArray.getRawValue()?.filter(x => x.deleteFlag == false)
+    });
+
+    if (this.dfaAmendmentMainDataService.getViewOrEdit() == 'viewOnly') {
+      //this.fileUploadForm.disable();
+    }
   }
 
   public get profile(): Profile {
@@ -84,31 +178,176 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
     this._profile = value;
   }
 
+  setViewOrEditControls() {
+    if (!this.amendmentForm) return;
+    if (this.isReadOnly) {
+      this.amendmentForm.controls.amendmentNumber.disable();
+      this.amendmentForm.controls.amendmentReceivedDate.disable();
+      this.amendmentForm.controls.amendmentReason.disable();
+      this.amendmentForm.controls.amendmentApprovedDate.disable();
+      this.amendmentForm.controls.emcrDecisionComments.disable();
+      this.amendmentForm.controls.requestforProjectDeadlineExtention.disable();
+      this.amendmentForm.controls.amendedProjectDeadlineDate.disable();
+      this.amendmentForm.controls.deadlineExtensionApproved.disable();
+      this.amendmentForm.controls.amended18MonthDeadline.disable();
+      this.amendmentForm.controls.requestforAdditionalProjectCost.disable();
+      this.amendmentForm.controls.estimatedAdditionalProjectCost.disable();
+      this.amendmentForm.controls.additionalProjectCostDecision.disable();
+      this.amendmentForm.controls.approvedAdditionalProjectCost.disable();
+      this.amendmentForm.controls.amendmentDecision.disable();
+    } else {
+      this.amendmentForm.controls.amendmentNumber.enable();
+      this.amendmentForm.controls.amendmentReceivedDate.enable();
+      this.amendmentForm.controls.amendmentReason.enable();
+      this.amendmentForm.controls.amendmentApprovedDate.enable();
+      this.amendmentForm.controls.emcrDecisionComments.enable();
+      this.amendmentForm.controls.requestforProjectDeadlineExtention.enable();
+      this.amendmentForm.controls.amendedProjectDeadlineDate.enable();
+      this.amendmentForm.controls.deadlineExtensionApproved.enable();
+      this.amendmentForm.controls.amended18MonthDeadline.enable();
+      this.amendmentForm.controls.requestforAdditionalProjectCost.enable();
+      this.amendmentForm.controls.estimatedAdditionalProjectCost.enable();
+      this.amendmentForm.controls.additionalProjectCostDecision.enable();
+      this.amendmentForm.controls.approvedAdditionalProjectCost.enable();
+      this.amendmentForm.controls.amendmentDecision.enable();
+    }
+  }
+
   ngOnInit(): void {
     this.amendmentForm$ = this.formCreationService
       .getProjectAmendmentForm()
       .subscribe((amendment) => {
         this.amendmentForm = amendment;
+        this.setViewOrEditControls();
       });
 
-/*     this.amendmentForm
-      .get('applicantOption')
-      .valueChanges.pipe(distinctUntilChanged())
-      .subscribe((value) => {
-        if (value === '') {
-          this.amendmentForm.get('applicantOption').reset();
-        }
-        this.formCreationService.applicantOptionChanged.emit();
-        this.amendmentForm.updateValueAndValidity();
-        }); */
+    this.appId = this.dfaProjectMainDataService.getApplicationId(); //this.route.snapshot.paramMap.get('id');
+    this.projectId = this.dfaProjectMainDataService.getProjectId();
+    this.applicationNumber = 'Application';
+    this.getApplicationDetails(this.appId);
+    this.getRecoveryPlan(this.projectId);
+    this.getAmendmentDetails(this.projectId);
 
+    this.dfaProjectMainDataService.setApplicationId(this.appId);
+
+    if(this.amendmentForm.value.amendmentId == null){
+      this.amendmentForm.controls.amendmentReceivedDate.setValue(new Date());
+    }
   }
 
+  disableFormfields(): void {
+    this.amendmentForm.controls.amendmentNumber.disable();
+    this.amendmentForm.controls.amendmentReceivedDate.disable();
+    this.amendmentForm.controls.amendmentReason.disable();
+    this.amendmentForm.controls.amendmentApprovedDate.disable();
+    this.amendmentForm.controls.emcrDecisionComments.disable();
+    this.amendmentForm.controls.requestforProjectDeadlineExtention.disable();
+    this.amendmentForm.controls.amendedProjectDeadlineDate.disable();
+    this.amendmentForm.controls.deadlineExtensionApproved.disable();
+    this.amendmentForm.controls.amended18MonthDeadline.disable();
+    this.amendmentForm.controls.requestforAdditionalProjectCost.disable();
+    this.amendmentForm.controls.estimatedAdditionalProjectCost.disable();
+    this.amendmentForm.controls.additionalProjectCostDecision.disable();
+    this.amendmentForm.controls.approvedAdditionalProjectCost.disable();
+    this.amendmentForm.controls.amendmentDecision.disable();
+  }
 
+  getApplicationDetails(applicationId: string) {
+    if (applicationId) {
+      this.applicationService.applicationGetApplicationDetailsForProject({ applicationId: applicationId }).subscribe({
+        next: (dfaApplicationMain) => {
+          if (dfaApplicationMain) {
+            this.dateOfDamageFrom = dfaApplicationMain.dateOfDamage;
+            this.dateOfDamageTo = dfaApplicationMain.dateOfDamageTo;
+            this.caseNumber = dfaApplicationMain.caseNumber ? dfaApplicationMain.caseNumber : "Not Generated";
+          }
 
+        },
+        error: (error) => {
+          console.error(error);
+          //document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        }
+      });
+    }
+  }
 
+  ConfirmAndGoBack(textContent): string {
 
+    var resultContent = '';
 
+    const content = { text: textContent, cancelButton: 'Close', title: 'Project Amendment' };
+
+    this.dialog
+      .open(DFAGeneralInfoDialogComponent, {
+        data: {
+          content: content
+        },
+        height: '280px',
+        width: '530px',
+        disableClose: true
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        this.router.navigate(['dfa-application/' + this.appId + '/projects']);
+      });
+
+    return resultContent;
+  }
+
+  getRecoveryPlan(projectId: string) {
+    if (projectId) {
+      this.projectService.projectGetProjectMain({ projectId: projectId }).subscribe({
+        next: (dfaProjectMain) => {
+          if (dfaProjectMain && dfaProjectMain.project) {
+            var project = dfaProjectMain.project;
+
+            this.projectName = 'Project - ' + project.projectName + ' (Amended)';
+            this.originalApprovedProjectCost = project.approvedCost != null ? project.approvedCost.toString() : "0.00";
+            this.deadline18Months = project.project18MonthDeadline != 'Date Not Set' ? project.project18MonthDeadline : null;
+          }
+        },
+        error: (error) => {
+          //console.error(error);
+          //document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        }
+      });
+    }
+  }
+
+  getAmendmentDetails(projectId: string) {
+    if (projectId) {
+      this.projectAmendmentService.projectAmendmentGetDfaProjectAmendments({ projectId: projectId }).subscribe({
+        next: (dfaAmendment) => {
+          if (dfaAmendment) {
+            var amendment = dfaAmendment[0]; //use the first amendment
+            if (amendment){
+              this.dfaAmendmentMainMapping.mapDFAAmendmentMain(amendment);
+              this.stage = amendment.stage;
+              this.status = amendment.status;
+            }
+          }
+        },
+        error: (error) => {
+          console.error(error);
+          let noAmendment = 'Error in loading details!<br/>Click \'Close\' button to go back to Project Dashboard';
+          this.ConfirmAndGoBack(noAmendment);
+          //document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        }
+      });
+    }
+  }
+
+  ViewApplication(appId: string): void {
+    this.dfaApplicationMainDataService.setApplicationId(appId);
+    this.dfaApplicationMainDataService.setViewOrEdit('view');
+
+    this.router.navigate(['/dfa-application-main/' + appId]);
+  }
+
+  getItems(lst) {
+    if (!lst) return false;
+    return lst.filter((item) => item.status !== '');
+  }
 
   dontContinueAmendment(content: DialogContent, controlName: string) {
     this.dialog
@@ -123,7 +362,7 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
       .subscribe((result) => {
         if (result === 'cancel') {
           this.cancelAmendment();
-          }
+        }
         else if (result === 'confirm') {
           this.amendmentForm.get(controlName).setValue("true");
         }
@@ -134,6 +373,103 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
   cancelAmendment(): void {
     // TODO: Add application cancellation
     this.router.navigate(['/dfa-dashboard']);
+  }
+
+  saveSupportingFiles(fileUpload: FileUploadAmendment): void {
+    // dont allow same filename twice
+    let fileUploads = this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value;
+    if (fileUploads?.find(x => x.fileName === fileUpload.fileName && x.deleteFlag !== true)) {
+      this.warningDialog("A file with the name " + fileUpload.fileName + " has already been uploaded.");
+      this.formCreationService.fileUploadsAmendmentForm.value.get('supportingFilesFileUpload').reset();
+      return;
+    }
+
+    if (this.fileUploadForm.get('supportingFilesFileUpload').status === 'VALID') {
+      this.isLoading = true;
+      fileUpload.fileData = fileUpload?.fileData?.substring(fileUpload?.fileData?.indexOf(',') + 1) // to allow upload as byte array
+      //let project = this.dfaProjectMainDataService.createDFAProjectMainDTO();
+      //this.dfaProjectMainMapping.mapDFAProjectMain(project);
+      fileUpload.projectId = this.projectId;
+      fileUpload.requiredDocumentType = null;
+      this.isLoading = true;
+
+      this.attachmentsService.attachmentUpsertDeleteProjectAmendmentAttachment({ body: fileUpload }).subscribe({
+        next: (fileUploadId) => {
+          fileUpload.id = fileUploadId;
+          if (fileUploads) fileUploads.push(fileUpload);
+          else fileUploads = [fileUpload];
+          this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').setValue(fileUploads);
+          this.showSupportingFileForm = !this.showSupportingFileForm;
+          // Reset Form fields
+          this.formCreationService.fileUploadsAmendmentForm.value.get('supportingFilesFileUpload').reset();
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error(error);
+          this.isLoading = false;
+          //document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        }
+      });
+    } else {
+      this.fileUploadForm.get('supportingFilesFileUpload').markAllAsTouched();
+    }
+  }
+
+  cancelSupportingFiles(): void {
+    this.showSupportingFileForm = !this.showSupportingFileForm;
+    this.fileUploadForm.get('addNewFileUploadIndicator').setValue(false);
+  }
+
+  confirmDeleteDocumentSummaryRow(element): void {
+    this.dialog
+      .open(DFAFileDeleteDialogComponent, {
+        data: {
+          content: "Are you sure you want to delete the supporting document:<br/>" + element.fileName + "?"
+        },
+        width: '350px',
+        disableClose: true
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result === 'confirm') {
+          this.deleteDocumentSummaryRow(element);
+        }
+      });
+  }
+
+  warningDialog(message: string) {
+    this.dialog
+      .open(FileUploadWarningDialogComponent, {
+        data: {
+          content: message
+        },
+        width: '350px',
+        disableClose: true
+      });
+  }
+
+  deleteDocumentSummaryRow(element): void {
+    element.deleteFlag = true;
+    element.amendmentId = this.dfaAmendmentMainDataService.getAmendmentId();
+    let fileUploads = this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value;
+    let index = fileUploads?.indexOf(element);
+    element.fileData = element?.fileData?.substring(element?.fileData?.indexOf(',') + 1) // to allow upload as byte array
+
+    this.attachmentsService.attachmentUpsertDeleteClaimAttachment({ body: element }).subscribe({
+      next: (result) => {
+        fileUploads[index] = element;
+        this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').setValue(fileUploads);
+        if (this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value.length === 0) {
+          this.fileUploadForm
+            .get('addNewFileUploadIndicator')
+            .setValue(false);
+        }
+      },
+      error: (error) => {
+        console.error(error);
+        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+      }
+    });
   }
 
 
@@ -155,22 +491,32 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
 }
 
 @NgModule({
+  declarations: [AmendmentComponent],
   imports: [
     CommonModule,
     CoreModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatRadioModule,
-    MatButtonModule,
+    AddressFormsModule,
     ReactiveFormsModule,
-    DirectivesModule,
+    MatStepperModule,
+    MatSelectModule,
+    ComponentWrapperModule,
+    ReviewProjectModule,
+    MatTooltipModule,
+    MatTabsModule,
+    MatCardModule,
     MatNativeDateModule,
     MatDatepickerModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatButtonModule,
     MatInputModule,
-    AddressFormsModule,
+    DirectivesModule,
     MatTableModule,
-    MatSelectModule,
+    CustomPipeModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
   ],
-  declarations: [AmendmentComponent]
+  exports: [AmendmentComponent]
 })
-class AmendmentModule {}
+export class AmendmentModule { }

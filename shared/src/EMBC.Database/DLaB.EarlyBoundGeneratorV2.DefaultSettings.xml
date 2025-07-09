@@ -28,9 +28,12 @@
     <CreateOneFilePerOptionSet>true</CreateOneFilePerOptionSet>
     <DeleteFilesFromOutputFolders>false</DeleteFilesFromOutputFolders>
     <EntitiesToSkip />
-    <EntitiesWhitelist>dfa_appeal|
+    <EntitiesWhitelist>bcgov_documenturl|
+dfa_appeal|
 dfa_clientcode|
 dfa_event|
+dfa_project|
+dfa_projectamendment|
 dfa_projectappeal|
 dfa_projectclaim|
 dfa_projecteligibilityappeal|

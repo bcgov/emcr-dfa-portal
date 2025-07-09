@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { filter, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { DfaApplicationMain } from 'src/app/core/api/models';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { DFAAppealDataService } from 'src/app/feature-components/dfa-appeal/dfa-appeal-data.service';
@@ -23,25 +23,17 @@ export default class SignAndSubmitComponent implements OnInit, OnDestroy {
     @Inject('formCreationService') private formCreationService: FormCreationService,
     private appealDataService: DFAAppealDataService,
     private cdr: ChangeDetectorRef
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.caseDetails = this.appealDataService.getCaseDetails();
-    this.fullApplication$ = this.appealDataService.getFullApplication()
-      .pipe(filter(app => !!app))
-      .subscribe(app => {
-        console.log('full application', app);
-        this.fullApplication = app;
-      });
+    this.fullApplication = this.appealDataService.getFullApplication();
 
     this.cdr.detectChanges();
 
-    this.signAndSubmitForm$ = this.formCreationService
-      .getAppealSignAndSubmitForm()
-      .subscribe((signAndSubmit) => {
-        this.signAndSubmitForm = signAndSubmit;
-      });
+    this.signAndSubmitForm$ = this.formCreationService.getAppealSignAndSubmitForm().subscribe((signAndSubmit) => {
+      this.signAndSubmitForm = signAndSubmit;
+    });
   }
 
   ngOnDestroy(): void {

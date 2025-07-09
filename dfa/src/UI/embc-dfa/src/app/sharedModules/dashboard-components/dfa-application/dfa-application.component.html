@@ -94,9 +94,18 @@
           Add Other Contacts
         </button>
 
+        <div [featureEnabled]="'useDocumentViewing'">
+          <button class="col-md-2 application-button whitebutton" type="button"
+          *ngIf="applItem.primaryApplicantSignedDate && applItem.currentApplication === true && applItem.caseId !== null"
+          (click)="viewDocuments(applItem)">
+            Documents
+          </button>
+        </div>
+
       </div>
 
-      <div [ngClass]="applItem.hasAppealStages ? 'appeal-stages' : ''" class="bfpTimeline" style="border-bottom: 1px solid lightgrey;">
+      <div [ngClass]="applItem.hasAppealStages ? 'appeal-stages' : ''" class="bfpTimeline"
+        style="border-bottom: 1px solid lightgrey;">
         <div class="col-md-3" style="margin-top: 20px;">
           <span><b>Application Status</b></span><br />
           <span *ngIf="applItem.isErrorInStatus === true" style="color: red;">Error in displaying status<br /></span>
@@ -135,12 +144,13 @@
         </div>
       </div>
 
-      
-    @if(canAppeal(applItem) && applItem.appeals.length > 0 ) {
+
+      @if(canAppeal(applItem) && applItem.appeals.length > 0 ) {
       <div [ngClass]="applItem.hasAppealStages ? 'appeal-stages' : ''" class="bfpTimeline">
         <div class="col-md-3" style="margin-top: 20px;">
           <span><b>Eligibility Appeal Status</b></span><br />
-          <span *ngIf="applItem.isErrorInAppealStatus === true" style="color: red;">Error in displaying status<br /></span>
+          <span *ngIf="applItem.isErrorInAppealStatus === true" style="color: red;">Error in displaying
+            status<br /></span>
         </div>
         <div *ngFor="let item of applItem.appealStatusBar; let i=index" id="item{{i}}" class="stepsDesc col-md-1">
           <span class="stepText">{{item.label}}</span>
@@ -150,8 +160,8 @@
           [ngClass]="i === 0 ? 'nocircle col-md-1' : 'circle col-md-1'">
           <span *ngIf="item.isCompleted === true && applItem.isErrorInAppealStatus === false" class="material-icons"
             style="color: rgb(21 178 89);">
-            check_circle  </span>
-            <span *ngIf="item.isCompleted === false && item.currentStep === true && applItem.isErrorInStatus === false"
+            check_circle </span>
+          <span *ngIf="item.isCompleted === false && item.currentStep === true && applItem.isErrorInStatus === false"
             class="material-symbols-outlined" style="color: darkblue">
             circle
           </span>
@@ -164,13 +174,13 @@
           circle
         </span>
         <div>
-        <button class="col-md-2 application-button whitebutton" type="button"
-        (click)="viewAppealAfterSubmission(applItem, 'eligibility')">View Appeal</button>
+          <button class="col-md-2 application-button whitebutton" type="button"
+            (click)="viewAppealAfterSubmission(applItem, 'eligibility')">View Appeal</button>
         </div>
       </div>
-    }
+      }
 
-    @if (!applItem.appeals || applItem.appeals.length === 0) {
+      @if (!applItem.appeals || applItem.appeals.length === 0) {
       <!-- Add Appeals section -->
       <div [featureEnabled]="'useAppeals'">
         @if (applItem.dateFileClosed && remainingDays(applItem) > 0) {
@@ -189,15 +199,16 @@
           <span>
             You have <b>{{remainingDays(applItem)}}</b> days to register an amount appeal on this application
           </span>
-          <button class="col-md-2 application-button whitebutton" type="button" (click)="viewAppeals(applItem, 'amount')">
+          <button class="col-md-2 application-button whitebutton" type="button"
+            (click)="viewAppeals(applItem, 'amount')">
             Appeal Payment Amount</button>
         </div>
         }
         }
       </div>
-    
-    }
-    
+
+      }
+
 
     </mat-card>
   </div>

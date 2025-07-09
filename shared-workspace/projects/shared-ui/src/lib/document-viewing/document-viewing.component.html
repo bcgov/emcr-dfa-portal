@@ -1,1 +1,121 @@
-<div>Shared component</div>
+<div class="container container-frame">
+  <!-- Top Section with Case/Project info and Back button -->
+  <div class="row top-section">
+    <div class="col-6">
+      <div class="case-project-info">
+        <div *ngIf="caseNumber">Case - {{caseNumber}}</div>
+        <div *ngIf="projectNumber">Project - <span class="project-select">{{projectNumber}}</span></div>
+      </div>
+    </div>
+    <div class="col-6 text-right">
+      <button
+        class="button-p save-button"
+        style="height:40px !important; vertical-align: middle; width:220px;"
+        (click)="backToDashboard()"
+        mat-stroked-button
+        type="button">
+        Back to Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- Horizontal line separator -->
+  <hr style="border: 2px solid;"/>
+
+  <!-- Centered Title -->
+  <div class="row title-section">
+    <div class="col-12 text-center">
+      <h2 class="page-title">Published Documents</h2>
+    </div>
+  </div>
+
+  <!-- Filters and Search Section -->
+  <div class="filter-controls">
+    <select
+      id="categorySelect"
+      class="filter-dropdown"
+      [(ngModel)]="selectedCategory"
+      (change)="onCategoryChange()">
+      <option value="">Filter by Category</option>
+      <option *ngFor="let category of categories" [value]="category">
+        {{category}}
+      </option>
+    </select>
+
+    <select
+      id="sortSelect"
+      class="filter-dropdown"
+      [(ngModel)]="sortBy"
+      (change)="onSortChange()">
+      <option value="">Sort by</option>
+      <option *ngFor="let option of sortOptions" [value]="option">
+        {{option}}
+      </option>
+    </select>
+
+    <input
+      id="searchInput"
+      type="text"
+      class="search-input"
+      [(ngModel)]="searchTerm"
+      (input)="onSearchChange()"
+      placeholder="Search">
+  </div>
+
+  <!-- Documents Table - Angular Material -->
+    <table mat-table [dataSource]="dataSource" *ngIf="dataSource.data.length > 0" style="width:100%">
+      <ng-container matColumnDef="category" style="width:25%">
+        <th mat-header-cell *matHeaderCellDef>
+          <b>Category</b>
+        </th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.category }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fileName" style="width:25%">
+        <th mat-header-cell *matHeaderCellDef>
+          <b>File Name</b>
+        </th>
+        <td *matCellDef="let element" mat-cell>
+          <button
+            class="file-link-button"
+            (click)="downloadDocument(element)"
+            type="button">
+            {{ element.fileName }}
+          </button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="description" style="width:25%">
+        <th mat-header-cell *matHeaderCellDef>
+          <b>Description</b>
+        </th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.description }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date" style="width:25%">
+        <th mat-header-cell *matHeaderCellDef>
+          <b>Date</b>
+        </th>
+        <td *matCellDef="let element" mat-cell>
+          {{ element.date }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let element; columns: displayedColumns"
+        class="document-row"
+        [style.height]="'auto'">
+      </tr>
+    </table>
+
+    <!-- No Documents Message -->
+    <div *ngIf="dataSource.data.length === 0" class="no-documents">
+      <p>No published documents found.</p>
+    </div>
+</div>

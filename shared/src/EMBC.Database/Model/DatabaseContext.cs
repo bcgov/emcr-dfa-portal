@@ -29,6 +29,17 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.BcGoV_DocumentUrl"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.BcGoV_DocumentUrl> BcGoV_DocumentUrlSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.BcGoV_DocumentUrl>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_Appeal"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<EMBC.Database.Model.DFA_Appeal> DFA_AppealSet
@@ -58,6 +69,28 @@ namespace EMBC.Database.Model
 			get
 			{
 				return this.CreateQuery<EMBC.Database.Model.DFA_Event>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_Project"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.DFA_Project> DFA_ProjectSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.DFA_Project>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_ProjectAmendment"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.DFA_ProjectAmendment> DFA_ProjectAmendmentSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.DFA_ProjectAmendment>();
 			}
 		}
 		

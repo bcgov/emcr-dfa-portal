@@ -27,15 +27,6 @@ jobs:
         with:
           node-version: "22.x"
 
-      - name: Install Dependencies
-        run: |
-          cd dfa/src/UI/embc-dfa
-          npm install --ignore-scripts
-          if [ $? -ne 0 ]; then
-            echo "::error::Failed to install npm packages"
-            exit 1
-          fi
-
       - name: Install Dependencies for shared-workspace
         run: |
           cd shared-workspace
@@ -45,7 +36,25 @@ jobs:
             exit 1
           fi
 
-      - name: Build
+      - name: Build shared-ui library
+        run: |
+          cd shared-workspace
+          npx ng build shared-ui
+          if [ $? -ne 0 ]; then
+            echo "::error::Build shared-ui failed"
+            exit 1
+          fi
+
+      - name: Install Dependencies for embc-dfa
+        run: |
+          cd dfa/src/UI/embc-dfa
+          npm install --ignore-scripts
+          if [ $? -ne 0 ]; then
+            echo "::error::Failed to install npm packages"
+            exit 1
+          fi
+
+      - name: Build embc-dfa
         run: |
           cd dfa/src/UI/embc-dfa
           npm run build -- --configuration production

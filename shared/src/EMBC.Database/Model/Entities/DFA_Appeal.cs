@@ -121,6 +121,8 @@ namespace EMBC.Database.Model
 			public const string DFA_AA_Cc_WaitingForApplicantInformationName = "dfa_aa_cc_waitingforapplicantinformationname";
 			public const string DFA_AA_Cc_WaitingOnInsuranceInformation = "dfa_aa_cc_waitingoninsuranceinformation";
 			public const string DFA_AA_Cc_WaitingOnInsuranceInformationName = "dfa_aa_cc_waitingoninsuranceinformationname";
+			public const string DFA_AA_RAr_PaymentLetterComplianceCheck = "dfa_aa_rar_paymentlettercompliancecheck";
+			public const string DFA_AA_RAr_PaymentLetterComplianceCheckName = "dfa_aa_rar_paymentlettercompliancecheckname";
 			public const string DFA_AA_RR_WaitingOnOtherInfo = "dfa_aa_rr_waitingonotherinfo";
 			public const string DFA_AA_RR_WaitingOnOtherInfoName = "dfa_aa_rr_waitingonotherinfoname";
 			public const string DFA_AA_Submitted_WaitingOnInsuranceInfo = "dfa_aa_submitted_waitingoninsuranceinfo";
@@ -188,6 +190,7 @@ namespace EMBC.Database.Model
 			public const string DFA_DateReceived = "dfa_datereceived";
 			public const string DFA_DecisionLetTeRiNeApprovals = "dfa_decisionletterineapprovals";
 			public const string DFA_DecisionLetTeRiNeApprovalsName = "dfa_decisionletterineapprovalsname";
+			public const string DFA_DFA_Appeal_BcGoV_DocumentUrl_AppealId = "DFA_DFA_Appeal_BcGoV_DocumentUrl_AppealId";
 			public const string ReferencingDFA_DFA_Appeal_DFA_Appeal_RelatedAppeal = "dfa_dfa_appeal_dfa_appeal_RelatedAppeal";
 			public const string DFA_DFACaseBusinessProcess = "dfa_dfacasebusinessprocess";
 			public const string DFA_DFACaseBusinessProcessName = "dfa_dfacasebusinessprocessname";
@@ -201,26 +204,38 @@ namespace EMBC.Database.Model
 			public const string DFA_ELiGAppeal_AppealReportUploadEdtOrAFtName = "dfa_eligappeal_appealreportuploadedtoraftname";
 			public const string DFA_ELiGAppeal_AppealSubmitted_TimelineNote = "dfa_eligappeal_appealsubmitted_timelinenote";
 			public const string DFA_ELiGAppeal_AppealSubmitted_TimelineNoteName = "dfa_eligappeal_appealsubmitted_timelinenotename";
+			public const string DFA_ELiGAppeal_ApplicationFordFA = "dfa_eligappeal_applicationfordfa";
+			public const string DFA_ELiGAppeal_ApplicationFordFAName = "dfa_eligappeal_applicationfordfaname";
 			public const string DFA_ELiGAppeal_Assigned = "dfa_eligappeal_assigned";
 			public const string DFA_ELiGAppeal_AssignedName = "dfa_eligappeal_assignedname";
 			public const string DFA_ELiGAppeal_AssignedToAdjudicator = "dfa_eligappeal_assignedtoadjudicator";
 			public const string DFA_ELiGAppeal_AssignedToAdjudicatorName = "dfa_eligappeal_assignedtoadjudicatorname";
 			public const string DFA_ELiGAppeal_AssignedToEvaluator = "dfa_eligappeal_assignedtoevaluator";
 			public const string DFA_ELiGAppeal_AssignedToEvaluatorName = "dfa_eligappeal_assignedtoevaluatorname";
+			public const string DFA_ELiGAppeal_ClaimSummarySheetProvided = "dfa_eligappeal_claimsummarysheetprovided";
+			public const string DFA_ELiGAppeal_ClaimSummarySheetProvidedName = "dfa_eligappeal_claimsummarysheetprovidedname";
+			public const string DFA_ELiGAppeal_ContentCalculationsSheet = "dfa_eligappeal_contentcalculationssheet";
+			public const string DFA_ELiGAppeal_ContentCalculationsSheetName = "dfa_eligappeal_contentcalculationssheetname";
 			public const string DFA_ELiGAppeal_DecisionLetterSentToAppellant = "dfa_eligappeal_decisionlettersenttoappellant";
 			public const string DFA_ELiGAppeal_DecisionLetterSentToAppellantName = "dfa_eligappeal_decisionlettersenttoappellantname";
 			public const string DFA_ELiGAppeal_DecisionLetterUploadEdtOrAFt = "dfa_eligappeal_decisionletteruploadedtoraft";
 			public const string DFA_ELiGAppeal_DecisionLetterUploadEdtOrAFtName = "dfa_eligappeal_decisionletteruploadedtoraftname";
+			public const string DFA_ELiGAppeal_DiagramProvided = "dfa_eligappeal_diagramprovided";
+			public const string DFA_ELiGAppeal_DiagramProvidedName = "dfa_eligappeal_diagramprovidedname";
 			public const string DFA_ELiGAppeal_EligibilityComplianceCompleted = "dfa_eligappeal_eligibilitycompliancecompleted";
 			public const string DFA_ELiGAppeal_EligibilityComplianceCompletedName = "dfa_eligappeal_eligibilitycompliancecompletedname";
 			public const string DFA_ELiGAppeal_ELiGiDec_TimelineNoteAdded = "dfa_eligappeal_eligidec_timelinenoteadded";
 			public const string DFA_ELiGAppeal_ELiGiDec_TimelineNoteAddedName = "dfa_eligappeal_eligidec_timelinenoteaddedname";
+			public const string DFA_ELiGAppeal_EvaluatorsNotesProvided = "dfa_eligappeal_evaluatorsnotesprovided";
+			public const string DFA_ELiGAppeal_EvaluatorsNotesProvidedName = "dfa_eligappeal_evaluatorsnotesprovidedname";
 			public const string DFA_ELiGAppeal_INeApprovals = "dfa_eligappeal_ineapprovals";
 			public const string DFA_ELiGAppeal_INeApprovalsName = "dfa_eligappeal_ineapprovalsname";
 			public const string DFA_ELiGAppeal_InProgress_WaitingOnApplicant = "dfa_eligappeal_inprogress_waitingonapplicant";
 			public const string DFA_ELiGAppeal_InProgress_WaitingOnApplicantName = "dfa_eligappeal_inprogress_waitingonapplicantname";
 			public const string DFA_ELiGAppeal_InProgress_WaitingOnInsurance = "dfa_eligappeal_inprogress_waitingoninsurance";
 			public const string DFA_ELiGAppeal_InProgress_WaitingOnInsuranceName = "dfa_eligappeal_inprogress_waitingoninsurancename";
+			public const string DFA_ELiGAppeal_Others = "dfa_eligappeal_others";
+			public const string DFA_ELiGAppeal_OthersName = "dfa_eligappeal_othersname";
 			public const string DFA_ELiGAppeal_PaymentLetterIssued = "dfa_eligappeal_paymentletterissued";
 			public const string DFA_ELiGAppeal_PaymentLetterIssuedName = "dfa_eligappeal_paymentletterissuedname";
 			public const string DFA_ELiGAppeal_Received = "dfa_eligappeal_received";
@@ -245,13 +260,20 @@ namespace EMBC.Database.Model
 			public const string DFA_ELiGAppeal_WaitingOnAppLiCanTinForRRName = "dfa_eligappeal_waitingonapplicantinforrrname";
 			public const string DFA_ELiGAppeal_WaitingOnOtherInformation = "dfa_eligappeal_waitingonotherinformation";
 			public const string DFA_ELiGAppeal_WaitingOnOtherInformationName = "dfa_eligappeal_waitingonotherinformationname";
+			public const string DFA_ELiGapPeReceiptsOrInvoicesPaidByApplicant = "dfa_eligappereceiptsorinvoicespaidbyapplicant";
+			public const string DFA_ELiGapPeReceiptsOrInvoicesPaidByApplicantName = "dfa_eligappereceiptsorinvoicespaidbyapplicantname";
+			public const string DFA_ELiGapPeScopeAndCalculationsSheetProvided = "dfa_eligappescopeandcalculationssheetprovided";
+			public const string DFA_ELiGapPeScopeAndCalculationsSheetProvidedName = "dfa_eligappescopeandcalculationssheetprovidedname";
 			public const string DFA_InformationRequestDueDate = "dfa_informationrequestduedate";
 			public const string DFA_Name = "dfa_name";
 			public const string DFA_PaymentLetterReady = "dfa_paymentletterready";
 			public const string DFA_PaymentLetterReadyName = "dfa_paymentletterreadyname";
+			public const string DFA_Photos = "dfa_photos";
+			public const string DFA_PhotosName = "dfa_photosname";
 			public const string DFA_ProgramPolicyComments = "dfa_programpolicycomments";
 			public const string DFA_ProgramPolicyUpdateRequired = "dfa_programpolicyupdaterequired";
 			public const string DFA_ProgramPolicyUpdateRequiredName = "dfa_programpolicyupdaterequiredname";
+			public const string DFA_Project_DFA_Appeal = "dfa_project_dfa_appeal";
 			public const string DFA_ProjectId = "dfa_projectid";
 			public const string DFA_ProjectIdName = "dfa_projectidname";
 			public const string DFA_QRComplete = "dfa_qrcomplete";
@@ -1402,6 +1424,38 @@ namespace EMBC.Database.Model
 				if (this.FormattedValues.Contains("dfa_aa_cc_waitingoninsuranceinformation"))
 				{
 					return this.FormattedValues["dfa_aa_cc_waitingoninsuranceinformation"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_aa_rar_paymentlettercompliancecheck")]
+		public System.Nullable<bool> DFA_AA_RAr_PaymentLetterComplianceCheck
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("dfa_aa_rar_paymentlettercompliancecheck");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_aa_rar_paymentlettercompliancecheck", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_aa_rar_paymentlettercompliancecheckname")]
+		public string DFA_AA_RAr_PaymentLetterComplianceCheckName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_aa_rar_paymentlettercompliancecheck"))
+				{
+					return this.FormattedValues["dfa_aa_rar_paymentlettercompliancecheck"];
 				}
 				else
 				{
@@ -2678,6 +2732,38 @@ namespace EMBC.Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_applicationfordfa")]
+		public System.Nullable<bool> DFA_ELiGAppeal_ApplicationFordFA
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("dfa_eligappeal_applicationfordfa");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_eligappeal_applicationfordfa", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_applicationfordfaname")]
+		public string DFA_ELiGAppeal_ApplicationFordFAName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_eligappeal_applicationfordfa"))
+				{
+					return this.FormattedValues["dfa_eligappeal_applicationfordfa"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_assigned")]
 		public System.Nullable<bool> DFA_ELiGAppeal_Assigned
 		{
@@ -2774,6 +2860,70 @@ namespace EMBC.Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_claimsummarysheetprovided")]
+		public System.Nullable<bool> DFA_ELiGAppeal_ClaimSummarySheetProvided
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("dfa_eligappeal_claimsummarysheetprovided");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_eligappeal_claimsummarysheetprovided", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_claimsummarysheetprovidedname")]
+		public string DFA_ELiGAppeal_ClaimSummarySheetProvidedName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_eligappeal_claimsummarysheetprovided"))
+				{
+					return this.FormattedValues["dfa_eligappeal_claimsummarysheetprovided"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_contentcalculationssheet")]
+		public System.Nullable<bool> DFA_ELiGAppeal_ContentCalculationsSheet
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("dfa_eligappeal_contentcalculationssheet");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_eligappeal_contentcalculationssheet", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_contentcalculationssheetname")]
+		public string DFA_ELiGAppeal_ContentCalculationsSheetName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_eligappeal_contentcalculationssheet"))
+				{
+					return this.FormattedValues["dfa_eligappeal_contentcalculationssheet"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_decisionlettersenttoappellant")]
 		public System.Nullable<bool> DFA_ELiGAppeal_DecisionLetterSentToAppellant
 		{
@@ -2838,6 +2988,38 @@ namespace EMBC.Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_diagramprovided")]
+		public System.Nullable<bool> DFA_ELiGAppeal_DiagramProvided
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("dfa_eligappeal_diagramprovided");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_eligappeal_diagramprovided", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_diagramprovidedname")]
+		public string DFA_ELiGAppeal_DiagramProvidedName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_eligappeal_diagramprovided"))
+				{
+					return this.FormattedValues["dfa_eligappeal_diagramprovided"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_eligibilitycompliancecompleted")]
 		public System.Nullable<bool> DFA_ELiGAppeal_EligibilityComplianceCompleted
 		{
@@ -2894,6 +3076,38 @@ namespace EMBC.Database.Model
 				if (this.FormattedValues.Contains("dfa_eligappeal_eligidec_timelinenoteadded"))
 				{
 					return this.FormattedValues["dfa_eligappeal_eligidec_timelinenoteadded"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_evaluatorsnotesprovided")]
+		public System.Nullable<bool> DFA_ELiGAppeal_EvaluatorsNotesProvided
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("dfa_eligappeal_evaluatorsnotesprovided");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_eligappeal_evaluatorsnotesprovided", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_evaluatorsnotesprovidedname")]
+		public string DFA_ELiGAppeal_EvaluatorsNotesProvidedName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_eligappeal_evaluatorsnotesprovided"))
+				{
+					return this.FormattedValues["dfa_eligappeal_evaluatorsnotesprovided"];
 				}
 				else
 				{
@@ -2990,6 +3204,38 @@ namespace EMBC.Database.Model
 				if (this.FormattedValues.Contains("dfa_eligappeal_inprogress_waitingoninsurance"))
 				{
 					return this.FormattedValues["dfa_eligappeal_inprogress_waitingoninsurance"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_others")]
+		public System.Nullable<bool> DFA_ELiGAppeal_Others
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("dfa_eligappeal_others");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_eligappeal_others", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappeal_othersname")]
+		public string DFA_ELiGAppeal_OthersName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_eligappeal_others"))
+				{
+					return this.FormattedValues["dfa_eligappeal_others"];
 				}
 				else
 				{
@@ -3382,6 +3628,70 @@ namespace EMBC.Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappereceiptsorinvoicespaidbyapplicant")]
+		public System.Nullable<bool> DFA_ELiGapPeReceiptsOrInvoicesPaidByApplicant
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("dfa_eligappereceiptsorinvoicespaidbyapplicant");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_eligappereceiptsorinvoicespaidbyapplicant", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappereceiptsorinvoicespaidbyapplicantname")]
+		public string DFA_ELiGapPeReceiptsOrInvoicesPaidByApplicantName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_eligappereceiptsorinvoicespaidbyapplicant"))
+				{
+					return this.FormattedValues["dfa_eligappereceiptsorinvoicespaidbyapplicant"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappescopeandcalculationssheetprovided")]
+		public System.Nullable<bool> DFA_ELiGapPeScopeAndCalculationsSheetProvided
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("dfa_eligappescopeandcalculationssheetprovided");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_eligappescopeandcalculationssheetprovided", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligappescopeandcalculationssheetprovidedname")]
+		public string DFA_ELiGapPeScopeAndCalculationsSheetProvidedName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_eligappescopeandcalculationssheetprovided"))
+				{
+					return this.FormattedValues["dfa_eligappescopeandcalculationssheetprovided"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_informationrequestduedate")]
 		public System.Nullable<System.DateTime> DFA_InformationRequestDueDate
 		{
@@ -3439,6 +3749,38 @@ namespace EMBC.Database.Model
 				if (this.FormattedValues.Contains("dfa_paymentletterready"))
 				{
 					return this.FormattedValues["dfa_paymentletterready"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_photos")]
+		public System.Nullable<bool> DFA_Photos
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("dfa_photos");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_photos", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_photosname")]
+		public string DFA_PhotosName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_photos"))
+				{
+					return this.FormattedValues["dfa_photos"];
 				}
 				else
 				{
@@ -4123,6 +4465,24 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
+		/// 1:N dfa_dfa_appeal_bcgov_documenturl_AppealId
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_dfa_appeal_bcgov_documenturl_AppealId")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.BcGoV_DocumentUrl> DFA_DFA_Appeal_BcGoV_DocumentUrl_AppealId
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("dfa_dfa_appeal_bcgov_documenturl_AppealId", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("dfa_dfa_appeal_bcgov_documenturl_AppealId", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N dfa_dfa_appeal_dfa_appeal_RelatedAppeal
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_dfa_appeal_dfa_appeal_RelatedAppeal", Microsoft.Xrm.Sdk.EntityRole.Referenced)]
@@ -4156,6 +4516,25 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetRelatedEntity<EMBC.Database.Model.DFA_Appeal>("dfa_dfa_appeal_dfa_appeal_RelatedAppeal", Microsoft.Xrm.Sdk.EntityRole.Referencing, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 dfa_project_dfa_appeal
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_projectid")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_project_dfa_appeal")]
+		public EMBC.Database.Model.DFA_Project DFA_Project_DFA_Appeal
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<EMBC.Database.Model.DFA_Project>("dfa_project_dfa_appeal", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<EMBC.Database.Model.DFA_Project>("dfa_project_dfa_appeal", null, value);
 			}
 		}
 		

@@ -10,7 +10,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "gen-api": "ng-openapi-gen -i https://portal.dev.dfa.gov.bc.ca/api/openapi/v1/openapi.json -o ./src/app/core/api --ignoreUnusedModels false --endOfLineStyle lf",
-    "gen-api-local": "ng-openapi-gen -i http://localhost:5020/api/openapi/v1/openapi.json -o ./src/app/core/api --ignoreUnusedModels false --endOfLineStyle lf"
+    "gen-api-local": "ng-openapi-gen -i http://localhost:5020/api/openapi/v1/openapi.json -o ./src/app/core/api --ignoreUnusedModels false --endOfLineStyle lf",
+    "format": "prettier --loglevel=warn --check \"./src/**/*.{js,jsx,ts,tsx,html,css,scss}\"",
+    "format-fix": "prettier --loglevel=warn --write \"./src/**/*.{js,jsx,ts,tsx,json,html,css,scss}\""
   },
   "private": true,
   "dependencies": {
@@ -79,7 +81,8 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-openapi-gen": "^0.53.0",
-    "prettier": "^2.6.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-organize-imports": "^3.2.4",
     "ts-node": "~10.9.2",
     "typescript": "5.8.3",
     "webpack-dev-server": "^5.2.1"

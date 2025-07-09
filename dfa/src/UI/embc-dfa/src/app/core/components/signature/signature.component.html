@@ -1,4 +1,3 @@
-<!-- Signature block -->
 <div style="width:90%">
   <div [formGroup]="signatureFormGroup">
     <div class="row pl-3 pr-0">
@@ -8,11 +7,15 @@
           Signature
           <span style="color:red" *ngIf="isRequired === true" >*</span>
           <span *ngIf="isRequired !== true">&nbsp;(optional)</span>&nbsp;
-          <mat-icon style="vertical-align:text-bottom;" (click)="clearCanvas()">refresh</mat-icon>
+          <mat-icon
+            style="vertical-align:text-bottom;"
+            (click)="clearCanvas()"
+            [style.display]="isReadOnly ? 'none' : 'inline'"
+          >refresh</mat-icon>
         </mat-label>
         <canvas
           id="canvas"
-          [ngStyle]="{'pointer-events': isReadOnly === true ? 'none' : ''}"
+          [ngStyle]="{'pointer-events': isReadOnly === true ? 'none' : '', 'opacity': isReadOnly ? '0.7' : '1'}"
           ref="canvas"
           #canvas
           (touchstart)="preventDefault($event)"
@@ -39,11 +42,8 @@
             [disabled]="isReadOnly === true"
           />
           <mat-error
-                  *ngIf="
-                    signatureBlock.signedName?.length > 100
-                  "
-                  >Maximum length is 100 characters</mat-error
-                >
+            *ngIf="signatureFormGroup.get('signedName')?.hasError('maxlength')"
+          >Maximum length is 100 characters</mat-error>
         </mat-form-field>
       </div>
     </div>

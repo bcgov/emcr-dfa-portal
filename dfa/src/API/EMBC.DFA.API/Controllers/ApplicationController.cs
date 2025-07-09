@@ -264,6 +264,7 @@ namespace EMBC.DFA.API.Controllers
         public string ApplicationSubType { get; set; }
         public string LegalName { get; set; }
         public string DamagedAddress { get; set; }
+        public string CaseId { get; set; }
         public string CaseNumber { get; set; }
         public string DateOfDamage { get; set; }
         public string PrimaryApplicantSignedDate { get; set; }
@@ -281,8 +282,11 @@ namespace EMBC.DFA.API.Controllers
 
     public class CurrentCaseAppeal
     {
+        public Guid Id { get; set; }
         public string AppealStatus { get; set; }
         public string AppealType { get; set; }
+        public string Reason { get; set; }
+        public Guid CaseId { get; set; }
     }
 
     public class StatusBar

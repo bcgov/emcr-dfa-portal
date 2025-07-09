@@ -12,10 +12,7 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { CurrentProject } from '../models/current-project';
-import { CurrentProjectAmendment } from '../models/current-project-amendment';
 import { DfaProjectMain } from '../models/dfa-project-main';
-import { projectGetDfaProjectAmendments } from '../fn/project/project-get-dfa-project-amendments';
-import { ProjectGetDfaProjectAmendments$Params } from '../fn/project/project-get-dfa-project-amendments';
 import { projectGetDfaProjects } from '../fn/project/project-get-dfa-projects';
 import { ProjectGetDfaProjects$Params } from '../fn/project/project-get-dfa-projects';
 import { projectGetProjectDetailsForClaim } from '../fn/project/project-get-project-details-for-claim';
@@ -163,39 +160,6 @@ export class ProjectService extends BaseService {
   projectGetProjectDetailsForClaim(params?: ProjectGetProjectDetailsForClaim$Params, context?: HttpContext): Observable<CurrentProject> {
     return this.projectGetProjectDetailsForClaim$Response(params, context).pipe(
       map((r: StrictHttpResponse<CurrentProject>): CurrentProject => r.body)
-    );
-  }
-
-  /** Path part for operation `projectGetDfaProjectAmendments()` */
-  static readonly ProjectGetDfaProjectAmendmentsPath = '/api/projects/dfaprojectamendments';
-
-  /**
-   * get dfa project amendments.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `projectGetDfaProjectAmendments()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  projectGetDfaProjectAmendments$Response(params?: ProjectGetDfaProjectAmendments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CurrentProjectAmendment>>> {
-    return projectGetDfaProjectAmendments(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * get dfa project amendments.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `projectGetDfaProjectAmendments$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  projectGetDfaProjectAmendments(params?: ProjectGetDfaProjectAmendments$Params, context?: HttpContext): Observable<Array<CurrentProjectAmendment>> {
-    return this.projectGetDfaProjectAmendments$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<CurrentProjectAmendment>>): Array<CurrentProjectAmendment> => r.body)
     );
   }
 

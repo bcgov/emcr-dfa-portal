@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { DashboardComponent } from './dashboard.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FormCreationService } from '../../../core/services/formCreation.service';
+import { FormCreationService } from 'src/app/core/services/formCreation.service';
 
 describe('ViewAuthProfileComponent', () => {
   let component: DashboardComponent;

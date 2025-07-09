@@ -194,6 +194,97 @@ namespace EMBC.DFA.API.Controllers
         /// </summary>
         /// <param name="fileUpload">The attachment information</param>
         /// <returns>file upload id</returns>
+        [HttpPost("amendmentdocument")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [RequestSizeLimit(MAXFILESIZE)]
+        public async Task<ActionResult<string>> UpsertDeleteProjectAmendmentAttachment(FileUploadAmendment fileUpload)
+        {
+            if (fileUpload.fileData == null && fileUpload.deleteFlag == false) return BadRequest("FileUpload data cannot be empty.");
+            if (fileUpload.id == null && fileUpload.deleteFlag == true) return BadRequest("FileUpload id cannot be empty on delete");
+
+            var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
+
+            if (useS3)
+            {
+                if (fileUpload.deleteFlag == true)
+                {
+                    var metadataDeleteParams = new MetadataDeleteParams();
+                    if (fileUpload.id != null)
+                    {
+                        metadataDeleteParams.DocumentMetadataId = fileUpload.id.ToString();
+                    }
+                    var result = await handler.HandleDeleteFileMetadataAsync(metadataDeleteParams);
+                    return Ok(result);
+                }
+                else
+                {
+                    logger.LogInformation("Upload S3 attachments dfa_project");
+                    if (fileUpload.fileSize >= MAXFILESIZE)
+                    {
+                        throw new Exception($"File size exceeds {MAXFILESIZE / 1_048_576.0:F2}MB limit");
+                    }
+
+                    var submissionEntity = mapper.Map<S3SubmissionEntity>(fileUpload);
+                    /* Switch based on the regarding entity type where the doc is uploaded to
+                        case : incident 
+                        application : dfa_appapplication
+                        project : dfa_project
+                        recoveryClaim : dfa_projectclaim"  */
+                    submissionEntity.RegardingEntitySchemaName = "dfa_project";
+
+                    /* switch based on entity type to which the document is being uploaded
+                        case : bcgov_caseid
+                        application : dfa_appapplication
+                        project : dfa_project
+                        recoveryClaim : dfa_recoveryclaim */
+                    submissionEntity.RegardingEntityLookUpFieldName = "dfa_project";
+
+                    try
+                    {
+                        var result = await handler.HandleS3FileUploadAsync(submissionEntity);
+                        return Ok(result);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "Failed to upload file to S3.");
+                        return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while uploading file.");
+                    }
+                }
+            }
+            else
+            {
+                if (fileUpload.deleteFlag == true)
+                {
+                    var app_params = new dfa_DFAActionDeleteDocuments_parms();
+                    var proj_params = new dfa_DeleteDocument_params();
+                    if (fileUpload.id != null)
+                    {
+                        Console.WriteLine("testing doc delete");
+                        proj_params.DocLocationID = (Guid)fileUpload.id;
+                        proj_params.DocLocationType = "Project";
+                    }
+                    var result = await handler.DeleteFileUploadAsync(app_params, proj_params);
+                    return Ok(result);
+                }
+                else
+                {
+                    var mappedFileUpload = mapper.Map<AttachmentEntity>(fileUpload);
+                    var submissionEntity = mapper.Map<SubmissionEntity>(fileUpload);
+                    submissionEntity.documentCollection = Enumerable.Empty<AttachmentEntity>();
+                    submissionEntity.documentCollection = submissionEntity.documentCollection.Append<AttachmentEntity>(mappedFileUpload);
+                    var result = await handler.HandleFileUploadAsync(submissionEntity);
+                    return Ok(result);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Create / update / delete a file attachment
+        /// </summary>
+        /// <param name="fileUpload">The attachment information</param>
+        /// <returns>file upload id</returns>
         [HttpPost("claimdocument")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -509,7 +600,7 @@ namespace EMBC.DFA.API.Controllers
         [HttpGet("byProjectId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<FileUpload>>> GetAmendmentAttachments(
+        public async Task<ActionResult<IEnumerable<FileUploadAmendment>>> GetAmendmentAttachments(
             [FromQuery]
             [Required]
             Guid projectId)
@@ -518,14 +609,14 @@ namespace EMBC.DFA.API.Controllers
 
             if (useS3)
             {
-                IEnumerable<bcgov_documenturl> bcgovDocumentUrls = await handler.GetS3ProjectDocumentListAsync(projectId);
-                IEnumerable<FileUpload> fileUploads = new FileUpload[] { };
+                IEnumerable<bcgov_documenturl> bcgovDocumentUrls = await handler.GetS3AmendmentDocumentListAsync(projectId);
+                IEnumerable<FileUploadAmendment> fileUploads = new FileUploadAmendment[] { };
                 if (bcgovDocumentUrls != null)
                 {
                     foreach (bcgov_documenturl bcgovDocumentUrl in bcgovDocumentUrls)
                     {
-                        FileUpload fileUpload = mapper.Map<FileUpload>(bcgovDocumentUrl);
-                        fileUploads = fileUploads.Append<FileUpload>(fileUpload);
+                        FileUploadAmendment fileUpload = mapper.Map<FileUploadAmendment>(bcgovDocumentUrl);
+                        fileUploads = fileUploads.Append<FileUploadAmendment>(fileUpload);
                     }
                     return Ok(fileUploads);
                 }
@@ -536,14 +627,14 @@ namespace EMBC.DFA.API.Controllers
             }
             else
             {
-                IEnumerable<dfa_projectdocumentlocation> dfa_projectdocumentlocations = await handler.GetProjectFileUploadsAsync(projectId);
-                IEnumerable<FileUpload> fileUploads = new FileUpload[] { };
+                IEnumerable<dfa_projectdocumentlocation> dfa_projectdocumentlocations = await handler.GetAmendmentFileUploadsAsync(projectId);
+                IEnumerable<FileUploadAmendment> fileUploads = new FileUploadAmendment[] { };
                 if (dfa_projectdocumentlocations != null)
                 {
                     foreach (dfa_projectdocumentlocation dfa_projectdocumentlocation in dfa_projectdocumentlocations)
                     {
-                        FileUpload fileUpload = mapper.Map<FileUpload>(dfa_projectdocumentlocation);
-                        fileUploads = fileUploads.Append<FileUpload>(fileUpload);
+                        FileUploadAmendment fileUpload = mapper.Map<FileUploadAmendment>(dfa_projectdocumentlocation);
+                        fileUploads = fileUploads.Append<FileUploadAmendment>(fileUpload);
                     }
                     return Ok(fileUploads);
                 }
@@ -720,6 +811,24 @@ namespace EMBC.DFA.API.Controllers
         public int? fileSize { get; set; }
         public bool deleteFlag { get; set; }
     }
+
+    public class FileUploadAmendment
+    {
+        public Guid? projectId { get; set; }
+        public Guid? id { get; set; }
+        public string? fileName { get; set; }
+        public string? fileDescription { get; set; }
+        public FileCategoryAmendment? fileType { get; set; }
+        public string? fileTypeText { get; set; }
+        public RequiredDocumentTypeAmendment? requiredDocumentType { get; set; }
+        public string? uploadedDate { get; set; }
+        public string? modifiedBy { get; set; }
+        public byte[]? fileData { get; set; }
+        public string? contentType { get; set; }
+        public int? fileSize { get; set; }
+        public bool deleteFlag { get; set; }
+    }
+
     public class ApplicationReviewPDFUpload
     {
         public Guid? dfa_appapplicationid { get; set; }

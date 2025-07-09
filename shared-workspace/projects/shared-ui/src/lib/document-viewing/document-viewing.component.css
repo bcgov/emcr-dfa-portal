@@ -1,22 +1,319 @@
-.doc-table {
+.container-frame {
+  padding: 20px;
+  min-height: 100vh;
+  background-color: white;
+  border-color: red;
+  border-width: 10px;
+}
+
+.top-section {
+  margin-bottom: 40px;
+  padding: 0;
+}
+
+.case-project-info {
+  font-size: 20px;
+  color: #333;
+  font-weight: 600;
+}
+
+.project-select {
+  color: #ff8c00;
+}
+
+.separator-line {
+  border: none;
+  border-top: 1px solid #ddd !important;
+  height: 0;
+  margin: 15px 0 25px 0;
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 8px;
+  display: block;
+  clear: both;
 }
 
-.doc-table th, .doc-table td {
-  border-bottom: 1px solid #ccc;
-  padding: 8px;
-  text-align: left;
+.title-section {
+  margin: 5px 0 30px 0;
+  padding: 0 0 10px 0;
 }
 
-.doc-table th {
-  font-weight: 700;
-  font-size: 15px;
-  color: black;
-  background: #f5f5f5;
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
 }
 
-.doc-table tr:hover {
-  background: #f0f8ff;
+.filter-controls {
+  margin: 0 0 30px 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.filter-dropdown, .search-input {
+  height: 40px;
+  border: 1px solid #1e3a8a;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: white;
+  margin-bottom: 0;
+}
+
+.filter-dropdown {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+  padding-right: 35px;
+  width: 350px;
+}
+
+.filter-dropdown:nth-child(2) {
+  margin-left: 300px;
+  width: 250px;
+}
+
+.search-input {
+  width: 250px;
+  min-width: 350px;
+  flex: none;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+.no-documents {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-style: italic;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Material Design Table Styles */
+.mat-mdc-header-cell {
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  color: black !important;
+  height: 51px !important;
+  padding: 12px 8px !important;
+  border-bottom: 1px solid #ccc !important;
+}
+
+.mat-mdc-cell {
+  padding: 12px 8px !important;
+  font-size: 14px !important;
+  color: #333 !important;
+  height: 51px !important;
+  border-bottom: 1px solid #ccc !important;
+}
+
+.example-element-row {
+  height: 51px !important;
+  border: 1px solid rgb(204, 204, 204) !important;
+}
+
+table {
+  width: 99.99% !important;
+  box-shadow: none !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+.mat-mdc-table {
+  overflow: auto !important;
+  width: 100% !important;
+  max-height: 500px !important;
+  background: white !important;
+}
+
+.mat-table {
+  width: 99.99% !important;
+  border: none !important;
+  background: white !important;
+  box-shadow: none !important;
+}
+
+.mat-mdc-row:hover,
+.example-element-row:hover {
+  background-color: #f5f5f5 !important;
+}
+
+.mat-mdc-header-cell:first-child,
+.mat-mdc-cell:first-child {
+  padding-left: 12px !important;
+}
+
+.mat-mdc-header-cell:last-child,
+.mat-mdc-cell:last-child {
+  padding-right: 12px !important;
+}
+
+.file-link-button {
+  background: none !important;
+  border: none !important;
+  color: #007bff !important;
+  text-decoration: underline !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  text-align: left !important;
+  font-family: inherit !important;
+}
+
+.file-link-button:hover {
+  color: #169bd5 !important;
+  text-decoration: none !important;
+}
+
+/* Column width controls */
+.mat-column-category {
+  flex: 0 0 20% !important;
+  width: 20% !important;
+}
+
+.mat-column-fileName {
+  flex: 0 0 30% !important;
+  width: 30% !important;
+}
+
+.mat-column-description {
+  flex: 0 0 30% !important;
+  width: 30% !important;
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  overflow-wrap: break-word;
+}
+
+.mat-column-date {
+  flex: 0 0 20% !important;
+  width: 20% !important;
+  min-width: 120px !important; /* Ensure minimum width for date */
+}
+
+/* Ensure table doesn't overflow */
+.mat-mdc-table {
+  overflow: auto !important;
+  width: 100% !important;
+  max-height: 500px !important;
+  background: white !important;
+  table-layout: fixed !important;
+}
+
+/* Mobile responsive table columns */
+@media (max-width: 768px) {
+  /* Filter controls - stack vertically on mobile */
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .filter-dropdown,
+  .search-input {
+    width: 100% !important;
+    min-width: auto !important;
+    margin-left: 0 !important;
+  }
+
+  .filter-dropdown:nth-child(2) {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Make the top section stack vertically on mobile */
+  .top-section .col-6 {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .text-right {
+    text-align: center;
+  }
+
+  /* Table columns - reduce File Name and Description, give more space to Date */
+  .mat-column-category {
+    flex: 0 0 20% !important;
+    width: 20% !important;
+  }
+
+  .mat-column-fileName {
+    flex: 0 0 30% !important;
+    width: 30% !important;
+  }
+
+  .mat-column-description {
+    flex: 0 0 25% !important;
+    width: 25% !important;
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    overflow-wrap: break-word;
+  }
+
+  .mat-column-date {
+    flex: 0 0 25% !important;
+    width: 25% !important;
+    min-width: 90px !important; /* Ensure date has enough space */
+  }
+
+  /* Reduce font size and padding for mobile */
+  .mat-mdc-header-cell,
+  .mat-mdc-cell {
+    padding: 8px 4px !important;
+    font-size: 12px !important;
+  }
+
+  /* Make file names wrap better */
+  .file-link-button {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    word-break: break-word !important;
+  }
+
+  /* Reduce table height on mobile */
+  .mat-mdc-table {
+    font-size: 12px !important;
+  }
+}
+
+/* For very small mobile devices */
+@media (max-width: 480px) {
+  .mat-column-category {
+    flex: 0 0 18% !important;
+    width: 18% !important;
+  }
+
+  .mat-column-fileName {
+    flex: 0 0 32% !important;
+    width: 32% !important;
+  }
+
+  .mat-column-description {
+    flex: 0 0 22% !important;
+    width: 22% !important;
+  }
+
+  .mat-column-date {
+    flex: 0 0 28% !important;
+    width: 28% !important;
+    min-width: 85px !important;
+  }
+
+  .mat-mdc-header-cell,
+  .mat-mdc-cell {
+    padding: 6px 2px !important;
+    font-size: 11px !important;
+  }
 }

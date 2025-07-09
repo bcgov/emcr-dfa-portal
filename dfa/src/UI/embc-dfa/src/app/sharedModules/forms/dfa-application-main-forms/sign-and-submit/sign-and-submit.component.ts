@@ -1,3 +1,4 @@
+//sign-and-submit.component.ts:
 import { Component, OnInit, NgModule, Inject, OnDestroy, OnChanges } from '@angular/core';
 import {
   UntypedFormBuilder,
@@ -158,4 +159,4 @@ export default class SignAndSubmitComponent implements OnInit, OnDestroy {
   ],
   declarations: [SignAndSubmitComponent]
 })
-class SignAndSubmitModule {}
+export class SignAndSubmitModule {}

@@ -989,7 +989,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         "dfa_requireddocumenttype", "_dfa_project_value", "bcgov_mimetype", "bcgov_size", "bcgov_fileextension", "dfa_description",
                         "bcgov_fileclassification", "dfa_category", "_dfa_appapplication_value", "_modifiedby_value"
                     },
-                    Filter = $"_dfa_project_value eq {projectIdString} and dfa_documenttype eq {amendmentCategoryString} and statecode eq 0 and bcgov_origincode eq 931490000"
+                    Filter = $"_dfa_project_value eq {projectIdString} and dfa_category eq '{amendmentCategoryString}' and statecode eq 0 and bcgov_origincode eq 931490000"
                 });
 
                 return list.List;
@@ -1152,6 +1152,24 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             }
 
             return string.Empty;
+        }
+
+        public async Task<string> UpsertProjectAmendment(dfa_projectamendment amendment)
+        {
+            try
+            {
+                var result = await api.Create("dfa_projectamendment", amendment);
+
+/*                var jsonVal = JsonConvert.SerializeObject(amendment);
+                var result = await api.ExecuteAction("dfa_DFAPortalCreateProject", amendment);*/
+
+                return result.ToString();
+
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Failed to update/delete project {ex.Message}", ex);
+            }
         }
 
         public async Task<dfa_projectmain_retrieve> GetProjectMainById(Guid projectId)
@@ -1383,35 +1401,49 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
 
                 //where objAppEvent != null && (objAppEvent.dfa_eventtype == Convert.ToInt32(EventType.Public).ToString()
                 //                 || objAppEvent.dfa_eventtype == Convert.ToInt32(EventType.PrivatePublic).ToString())
+                foreach (dfa_projectclaim claim in list.List)
+                {
+                    var lstAppeal = await api.GetList<dfa_claimappeal>("dfa_claimappeals", new CRMGetListOptions
+                    {
+                        Select = new[]
+                        {
+                            "statuscode",
+                            "dfa_appealdecision"
+                       },
+                        Filter = $"_dfa_originclaim_value eq {claim.dfa_projectclaimid}"
+                    });
+                    claim.dfa_claimappeal = lstAppeal.List;
+                }
                 var lstClaims = (from objClaim in list.List
-                               select new dfa_projectclaim
-                               {
-                                   dfa_name = objClaim.dfa_name,
-                                   dfa_claimreceiveddate = objClaim.dfa_claimreceiveddate,
-                                   dfa_isfirstclaim = objClaim.dfa_isfirstclaim,
-                                   dfa_finalclaim = objClaim.dfa_finalclaim,
-                                   dfa_totaloftotaleligible = objClaim.dfa_totaloftotaleligible,
-                                   dfa_totalapproved = objClaim.dfa_totalapproved,
-                                   dfa_lessfirst1000 = objClaim.dfa_lessfirst1000,
-                                   dfa_totalpaid = objClaim.dfa_totalpaid,
-                                   dfa_claimpaiddate = objClaim.dfa_claimpaiddate,
-                                   dfa_projectclaimid = objClaim.dfa_projectclaimid,
-                                   dfa_claimbpfstages = objClaim.dfa_claimbpfstages,
-                                   dfa_claimbpfsubstages = objClaim.dfa_claimbpfsubstages,
-                                   dfa_claimtotal = objClaim.dfa_claimtotal,
-                                   createdon = objClaim.createdon,
-                                   dfa_costsharing = objClaim.dfa_costsharing,
-                                   dfa_eligiblepayable = objClaim.dfa_eligiblepayable,
-                                   dfa_bpfclosedate = !string.IsNullOrEmpty(objClaim.dfa_bpfclosedate) ? DateTime.Parse(objClaim.dfa_bpfclosedate).ToLocalTime().ToString() : objClaim.dfa_bpfclosedate,
-                                   dfa_onetimedeductionamount = objClaim.dfa_onetimedeductionamount,
-                                   dfa_paidclaimamount = objClaim.dfa_paidclaimamount,
-                                   dfa_decisioncopy = objClaim.dfa_decisioncopy,
-                                   dfa_advanceddrawdownamount = objClaim.dfa_advanceddrawdownamount,
-                                   dfa_decisiondate = objClaim.dfa_decisiondate,
-                                   dfa_claimtype = objClaim.dfa_claimtype,
-                                   dfa_isadjustmentclaim = objClaim.dfa_isadjustmentclaim,
-                            
-                               }).AsEnumerable().OrderByDescending(m => m.createdon);
+                                 select new dfa_projectclaim
+                                 {
+                                     dfa_name = objClaim.dfa_name,
+                                     dfa_claimreceiveddate = objClaim.dfa_claimreceiveddate,
+                                     dfa_isfirstclaim = objClaim.dfa_isfirstclaim,
+                                     dfa_finalclaim = objClaim.dfa_finalclaim,
+                                     dfa_totaloftotaleligible = objClaim.dfa_totaloftotaleligible,
+                                     dfa_totalapproved = objClaim.dfa_totalapproved,
+                                     dfa_lessfirst1000 = objClaim.dfa_lessfirst1000,
+                                     dfa_totalpaid = objClaim.dfa_totalpaid,
+                                     dfa_claimpaiddate = objClaim.dfa_claimpaiddate,
+                                     dfa_projectclaimid = objClaim.dfa_projectclaimid,
+                                     dfa_claimbpfstages = objClaim.dfa_claimbpfstages,
+                                     dfa_claimbpfsubstages = objClaim.dfa_claimbpfsubstages,
+                                     dfa_claimtotal = objClaim.dfa_claimtotal,
+                                     createdon = objClaim.createdon,
+                                     dfa_costsharing = objClaim.dfa_costsharing,
+                                     dfa_eligiblepayable = objClaim.dfa_eligiblepayable,
+                                     dfa_bpfclosedate = !string.IsNullOrEmpty(objClaim.dfa_bpfclosedate) ? DateTime.Parse(objClaim.dfa_bpfclosedate).ToLocalTime().ToString() : objClaim.dfa_bpfclosedate,
+                                     dfa_onetimedeductionamount = objClaim.dfa_onetimedeductionamount,
+                                     dfa_paidclaimamount = objClaim.dfa_paidclaimamount,
+                                     dfa_decisioncopy = objClaim.dfa_decisioncopy,
+                                     dfa_advanceddrawdownamount = objClaim.dfa_advanceddrawdownamount,
+                                     dfa_decisiondate = objClaim.dfa_decisiondate,
+                                     dfa_claimtype = objClaim.dfa_claimtype,
+                                     dfa_isadjustmentclaim = objClaim.dfa_isadjustmentclaim,
+                                     dfa_claimappeal = objClaim.dfa_claimappeal
+
+                                 }).AsEnumerable().OrderByDescending(m => m.createdon);
 
                 return lstClaims;
             }

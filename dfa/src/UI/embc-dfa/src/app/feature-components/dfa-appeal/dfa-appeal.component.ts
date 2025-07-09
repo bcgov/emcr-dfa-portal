@@ -1,19 +1,19 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import {
-  DfaApplicationMain,
-  SecondaryApplicant
-} from 'src/app/core/api/models';
-import { ApplicationService } from 'src/app/core/api/services';
+import { concatMap, from, Subscription } from 'rxjs';
+import { DfaApplicationMain, SecondaryApplicant } from 'src/app/core/api/models';
+import { AppealAttachmentService, ApplicationService } from 'src/app/core/api/services';
+import { CancelConfirmationDialogComponent } from 'src/app/core/components/dialog-components/dfa-cancel-confirmation-dialog/dfa-cancel-confirmation-dialog.component';
+import { AppealType } from 'src/app/core/model/dfa-appeals-main.model';
 import { ComponentMetaDataModel } from '../../core/model/componentMetaData.model';
 import { ComponentCreationService } from '../../core/services/componentCreation.service';
 import { FormCreationService } from '../../core/services/formCreation.service';
 import { DFAAppealDataService } from './dfa-appeal-data.service';
 import { DfaAppealService } from './dfa-appeal.service';
-import { AppealType } from 'src/app/core/model/dfa-appeals-main.model';
 
 @Component({
   selector: 'app-dfa-appeal',
@@ -38,12 +38,13 @@ export class DfaAppealComponent implements OnInit {
   appealType: string;
   appealReasonForm$: Subscription;
   appealReasonForm: FormGroup;
+  appealSupportingDocumentsForm: FormGroup;
   signAndSubmitForm: FormGroup;
   appealReasonValid: boolean = false;
   signAndSubmitValid: boolean = false;
   caseDetails: any;
   fullApplication: DfaApplicationMain | undefined;
-  fullApplication$: Subscription;
+  fullApplication$: Subscription | undefined;
 
   constructor(
     private router: Router,
@@ -53,7 +54,10 @@ export class DfaAppealComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private dfaAppealDataService: DFAAppealDataService,
     private dfaAppealService: DfaAppealService,
-    private applicationService: ApplicationService
+    private applicationService: ApplicationService,
+    private appealAttachmentService: AppealAttachmentService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -81,18 +85,51 @@ export class DfaAppealComponent implements OnInit {
       this.caseDetails = this.dfaAppealDataService.getCaseDetails();
       this.dfaAppealDataService.appealType = appealTypeEnum;
 
-      // Fetch full application details using ApplicationService
-      this.fullApplication$=this.applicationService.applicationGetApplicationMain({ applicationId: this.caseId })
-        .subscribe(app => {
-          this.fullApplication = app;
-          this.dfaAppealDataService.setFullApplication(app);
-        });
+      // If no case details found, redirect to dashboard
+      if (!this.caseDetails) {
+        console.warn('No case details found, redirecting to dashboard');
+        this.returnToDashboard();
+        return;
+      }
+
+      // Validate case ID matches route parameter
+      if (this.caseDetails.caseId !== this.caseId) {
+        console.warn('Case ID mismatch, redirecting to dashboard');
+        this.returnToDashboard();
+        return;
+      }
+
+      // Try to get full application from storage first
+      this.fullApplication = this.dfaAppealDataService.getFullApplication();
+
+      if (!this.fullApplication && this.caseDetails?.applicationId) {
+        // Fetch full application details if not in storage
+        this.fullApplication$ = this.applicationService
+          .applicationGetApplicationMain({
+            applicationId: this.caseDetails.applicationId
+          })
+          .subscribe({
+            next: (app) => {
+              this.fullApplication = app;
+              this.dfaAppealDataService.setFullApplication(app);
+            },
+            error: (error) => {
+              console.error('Failed to fetch application details:', error);
+              this.returnToDashboard();
+            }
+          });
+      }
 
       // Clear old data and forms
       this.dfaAppealDataService.appealReason = null;
       this.dfaAppealDataService.signAndSubmit = null;
+      this.dfaAppealDataService.appealSupportingDocuments = [];
       this.formCreationService.clearAppealReasonData();
+      this.formCreationService.clearAppealSupportingDocumentsData();
       this.formCreationService.clearAppealSignAndSubmitData();
+
+      // Clear persistent storage
+      this.dfaAppealDataService.clearAppealData();
 
       // Create steps based on appeal type
       this.steps = this.componentService.createDFAAppealSteps(this.appealType);
@@ -100,19 +137,32 @@ export class DfaAppealComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.fullApplication$.unsubscribe();
+    this.fullApplication$?.unsubscribe();
   }
 
   /**
    * Loads case details from the service
+   *
+   * TODO: Fetch case details using the application Id, rather than relying on the upstream pages to load it.
+   * Otherwise, on page refresh, the case details will not be available, and will cause issues.
    */
-  loadCaseDetails(): void {};
+  loadCaseDetails(): void {}
 
+  /**
+   * Sets form data based on the component name (ie: the name of the step).
+   *
+   * @param {string} component
+   */
   setFormData(component: string): void {
     switch (component) {
       case 'appeal-reason':
         if (this.appealReasonForm) {
           this.dfaAppealDataService.appealReason = this.appealReasonForm.value.reason;
+        }
+        break;
+      case 'supporting-documents':
+        if (this.appealSupportingDocumentsForm) {
+          this.dfaAppealDataService.setAppealSupportingDocuments(this.appealSupportingDocumentsForm.get('files').value);
         }
         break;
       case 'sign-and-submit':
@@ -127,49 +177,105 @@ export class DfaAppealComponent implements OnInit {
 
   /**
    * Go back to previous step or dashboard
+   *
+   * @param {MatStepper} stepper
+   * @param {number} lastStep
+   * @return {*}  {void}
    */
   goBack(stepper: MatStepper, lastStep: number): void {
-    if (lastStep === -2) {
-      this.returnToDashboard();
-    } else {
-      stepper.selectedIndex = lastStep;
+    if (lastStep === -1) {
+      this.showCancelAppealDialog();
+      return;
     }
+
+    stepper.selectedIndex = lastStep;
   }
 
   /**
    * Custom next stepper function
+   *
+   * @param {MatStepper} stepper
+   * @param {boolean} isLast
+   * @param {string} component
+   * @return {*}  {void}
    */
   goForward(stepper: MatStepper, isLast: boolean, component: string): void {
+    this.setFormData(component);
+
     if (isLast && component === 'sign-and-submit') {
       this.dfaAppealStepper.selected.completed = true;
       this.submitAppeal();
-    } else {
-      this.setFormData(component);
-      switch (component) {
-        case 'appeal-reason':
-          if (this.form.valid) stepper.selected.completed = true;
-          else stepper.selected.completed = false;
-          break;
-        case 'sign-and-submit':
-          if (this.form.valid) stepper.selected.completed = true;
-          else stepper.selected.completed = false;
-          break;
-        default:
-          break;
-      }
-      stepper.next();
-      this.form.markAllAsTouched();
+      return;
     }
+
+    switch (component) {
+      case 'appeal-reason':
+        if (this.form.valid) {
+          stepper.selected.completed = true;
+        } else {
+          stepper.selected.completed = false;
+        }
+        break;
+      case 'supporting-documents':
+        stepper.selected.completed = true;
+        break;
+      case 'sign-and-submit':
+        if (this.form.valid) {
+          stepper.selected.completed = true;
+        } else {
+          stepper.selected.completed = false;
+        }
+        break;
+      default:
+        break;
+    }
+
+    stepper.next();
+    this.form.markAllAsTouched();
+  }
+
+  /**
+   * Checks if the user can go forward in the stepper.
+   *
+   * @param {string} component
+   * @return {*}  {boolean}
+   */
+  canGoForward(component: string): boolean {
+    if (component === 'appeal-reason') {
+      return this.appealReasonForm?.valid;
+    }
+
+    if (component === 'supporting-documents') {
+      return this.appealSupportingDocumentsForm?.valid;
+    }
+
+    if (component === 'sign-and-submit') {
+      return this.appealReasonForm?.valid && this.form?.valid;
+    }
+
+    return true;
   }
 
   /**
    * Validates all forms
+   *
    */
   validateForms(): void {
     this.formCreationService.getAppealReasonForm().subscribe((form) => {
       if (form) {
         form.updateValueAndValidity();
         this.appealReasonValid = form.valid;
+        this.dfaAppealStepper.steps.get(0).completed = form.valid;
+        this.setFormData('appeal-reason');
+        this.cd.detectChanges();
+      }
+    });
+
+    this.formCreationService.getAppealSupportingDocumentsForm().subscribe((form) => {
+      if (form) {
+        form.updateValueAndValidity();
+        this.dfaAppealStepper.steps.get(1).completed = form.valid;
+        this.setFormData('supporting-documents');
         this.cd.detectChanges();
       }
     });
@@ -178,11 +284,18 @@ export class DfaAppealComponent implements OnInit {
       if (form) {
         form.updateValueAndValidity();
         this.signAndSubmitValid = form.valid;
+        this.dfaAppealStepper.steps.get(2).completed = form.valid;
+        this.setFormData('sign-and-submit');
         this.cd.detectChanges();
       }
     });
   }
 
+  /**
+   * Navigates to a specific step in the stepper.
+   *
+   * @param {number} stepIndex
+   */
   navigateToStep(stepIndex: number) {
     this.dfaAppealStepper.selectedIndex = stepIndex;
   }
@@ -190,7 +303,7 @@ export class DfaAppealComponent implements OnInit {
   /**
    * Loads form for every step based on index
    *
-   * @param index step index
+   * @param {number} index step index
    */
   currentStep(index: number): void {
     this.loadStepForm(index);
@@ -200,83 +313,180 @@ export class DfaAppealComponent implements OnInit {
   /**
    * Triggered on the step change animation event
    *
-   * @param event animation event
-   * @param stepper stepper instance
+   * @param {*} event animation event
+   * @param {MatStepper} stepper stepper instance
    */
   stepChanged(event: any, stepper: MatStepper): void {
     stepper.selected.interacted = false;
 
     this.validateForms();
-    this.setCompletedSteps();
-  }
-
-  /**
-   * Sets completed steps in the stepper
-   */
-  setCompletedSteps(): void {
-    if (this.dfaAppealStepper) {
-      this.dfaAppealStepper.steps.get(0).completed =
-        this.appealReasonValid;
-    }
   }
 
   /**
    * Loads appropriate forms based on the current step
+   *
+   * @param {number} index
    */
   loadStepForm(index: number): void {
     if (this.form$) {
       this.form$.unsubscribe();
     }
-    
+
     switch (index) {
       case 0:
-        this.form$ = this.formCreationService
-          .getAppealReasonForm()
-          .subscribe((appealReasonForm) => {
-            if (appealReasonForm) {
-              this.form = appealReasonForm;
-              this.appealReasonForm = appealReasonForm;
-            }
-          });
+        this.form$ = this.formCreationService.getAppealReasonForm().subscribe((appealReasonForm) => {
+          if (appealReasonForm) {
+            this.form = appealReasonForm;
+            this.appealReasonForm = appealReasonForm;
+          }
+        });
         break;
       case 1:
         this.form$ = this.formCreationService
-          .getAppealSignAndSubmitForm()
-          .subscribe((signAndSubmitForm) => {
-            if (signAndSubmitForm) {
-              this.form = signAndSubmitForm;
-              this.signAndSubmitForm = signAndSubmitForm;
+          .getAppealSupportingDocumentsForm()
+          .subscribe((appealSupportingDocumentsForm) => {
+            if (appealSupportingDocumentsForm) {
+              this.form = appealSupportingDocumentsForm;
+              this.appealSupportingDocumentsForm = appealSupportingDocumentsForm;
             }
           });
+        break;
+      case 2:
+        this.form$ = this.formCreationService.getAppealSignAndSubmitForm().subscribe((signAndSubmitForm) => {
+          if (signAndSubmitForm) {
+            this.form = signAndSubmitForm;
+            this.signAndSubmitForm = signAndSubmitForm;
+          }
+        });
         break;
     }
   }
 
   /**
-   * Submits the appeal
+   * Submits the appeal and uploads/deletes supporting documents.
+   *
    */
   submitAppeal(): void {
     this.isLoading = true;
-    this.setFormData('sign-and-submit');
-    
-    let appeal = this.dfaAppealDataService.createAppealDTO();
+    const appeal = this.dfaAppealDataService.createAppealDTO();
+
     this.dfaAppealService.insertAppeal(appeal).subscribe({
-      next: () => {
-        this.isLoading = false;
-        this.cd.detectChanges();
-        this.returnToDashboard();
+      next: (appealId) => {
+        const supportingDocuments = this.dfaAppealDataService.appealSupportingDocuments || [];
+
+        // Attach appealId to each document
+        const supportingDocumentsToUpload = supportingDocuments.map((doc) => ({
+          ...doc,
+          appealId: appealId
+        }));
+
+        // Upload documents one at a time
+        from(supportingDocumentsToUpload)
+          .pipe(
+            concatMap((supportingDocument) => {
+              if (supportingDocument.deleteFlag) {
+                // Delete the existing attachment if deleteFlag is true
+                return this.appealAttachmentService.appealAttachmentDeleteAttachment({
+                  documentUrlId: supportingDocument.id
+                });
+              }
+
+              return this.appealAttachmentService.appealAttachmentUpsertAttachment({ body: supportingDocument });
+            })
+          )
+          .subscribe({
+            complete: () => {
+              this.isLoading = false;
+              this.cd.detectChanges();
+
+              // Clear storage after successful submission
+              this.dfaAppealDataService.clearAppealData();
+
+              this.returnToDashboard();
+            },
+            error: (error) => {
+              this.isLoading = false;
+              this.cd.detectChanges();
+
+              console.error('Failed to upload documents:', error);
+
+              this.snackBar.open(
+                'Failed to upload one or more documents. Please try again. If the error persists, please contact support.',
+                'Close',
+                {
+                  horizontalPosition: 'center',
+                  verticalPosition: 'top'
+                }
+              );
+            }
+          });
       },
       error: (error) => {
         this.isLoading = false;
         this.cd.detectChanges();
-        console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+
+        console.error('Failed to create appeal:', error);
+
+        this.snackBar.open(
+          'Failed to create the appeal. Please try again. If the error persists, please contact support.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          }
+        );
       }
     });
   }
 
   /**
-   * Navigates back to dashboard
+   * Shows the cancel appeal confirmation dialog
+   *
+   */
+  showCancelAppealDialog(): void {
+    const dialogRef = this.dialog.open(CancelConfirmationDialogComponent, {
+      data: {
+        title: 'Cancel Appeal',
+        subtitle: 'Are you sure you want to cancel your appeal?',
+        text: "Appeals must be created and submitted in the same session.\nDrafts are not saved - any changes you've made will be lost.",
+        cancelButton: 'No, go back',
+        confirmButton: 'Yes, cancel appeal',
+        showCloseIcon: true
+      },
+      width: '500px',
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.cancelAppeal();
+      }
+    });
+  }
+
+  /**
+   * Cancels the appeal and navigates back to dashboard
+   *
+   */
+  cancelAppeal(): void {
+    // Clear any form data
+    this.dfaAppealDataService.appealReason = null;
+    this.dfaAppealDataService.signAndSubmit = null;
+    this.dfaAppealDataService.appealSupportingDocuments = [];
+    this.formCreationService.clearAppealReasonData();
+    this.formCreationService.clearAppealSupportingDocumentsData();
+    this.formCreationService.clearAppealSignAndSubmitData();
+
+    // Clear persistent storage
+    this.dfaAppealDataService.clearAppealData();
+
+    // Navigate back to dashboard
+    this.returnToDashboard();
+  }
+
+  /**
+   * Navigates back to the dashboard page.
+   *
    */
   returnToDashboard(): void {
     this.router.navigate(['/verified-registration/dashboard']);

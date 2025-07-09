@@ -6,6 +6,7 @@ using System.Text;
 using System.Xml.Linq;
 
 using EMBC.Database.Contract;
+using EMBC.Database.Model;
 using EMBC.DFA.API;
 using EMBC.DFA.API.ConfigurationModule.Models;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
@@ -454,6 +455,50 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.DocumentContent, opts => opts.MapFrom(s => s.fileData))
                 ;
 
+            CreateMap<AppealFileMetadataUpload, DocumentUrl>()
+                .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
+                .ForMember(d => d.AppealId, opts => opts.MapFrom(s => s.AppealId))
+                .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.FileName))
+                .ForMember(d => d.Url, opts => opts.MapFrom(s => s.Url))
+                .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Description))
+                .ForMember(d => d.Category, opts => opts.MapFrom(s => s.Category.ToString()))
+                .ForMember(d => d.Size, opts => opts.MapFrom(s => s.Size))
+                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
+                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
+
+            CreateMap<DocumentUrl, AppealFileMetadataUpload>()
+                .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
+                .ForMember(d => d.AppealId, opts => opts.MapFrom(s => s.AppealId))
+                .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.FileName))
+                .ForMember(d => d.Url, opts => opts.MapFrom(s => s.Url))
+                .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Description))
+                .ForMember(d => d.Category, opts => opts.MapFrom(s => ConvertStringToFileCategory(s.Category)))
+                .ForMember(d => d.Size, opts => opts.MapFrom(s => s.Size))
+                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
+                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
+
+            CreateMap<AppealFileMetadataUpload, BcGoV_DocumentUrl>()
+                .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
+                .ForMember(d => d.DFA_AppealId, opts => opts.MapFrom(s => s.AppealId))
+                .ForMember(d => d.BcGoV_Filename, opts => opts.MapFrom(s => s.FileName))
+                .ForMember(d => d.BcGoV_Url, opts => opts.MapFrom(s => s.Url))
+                .ForMember(d => d.DFA_Description, opts => opts.MapFrom(s => s.Description))
+                .ForMember(d => d.DFA_Category, opts => opts.MapFrom(s => s.Category.ToString()))
+                .ForMember(d => d.BcGoV_Size, opts => opts.MapFrom(s => s.Size))
+                .ForMember(d => d.BcGoV_MimeType, opts => opts.MapFrom(s => s.MimeType))
+                .ForMember(d => d.DFA_DateUploaded, opts => opts.MapFrom(s => s.UploadedDate));
+
+            CreateMap<BcGoV_DocumentUrl, AppealFileMetadataUpload>()
+                .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
+                .ForMember(d => d.AppealId, opts => opts.MapFrom(s => s.DFA_AppealId))
+                .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.BcGoV_Filename))
+                .ForMember(d => d.Description, opts => opts.MapFrom(s => s.DFA_Description))
+                .ForMember(d => d.Url, opts => opts.MapFrom(s => s.BcGoV_Url))
+                .ForMember(d => d.Category, opts => opts.MapFrom(s => ConvertStringToFileCategory(s.DFA_Category)))
+                .ForMember(d => d.Size, opts => opts.MapFrom(s => s.BcGoV_Size))
+                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.BcGoV_MimeType))
+                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.DFA_DateUploaded));
+
             CreateMap<dfa_appapplication, CurrentApplication>()
                 .ForMember(d => d.DateOfDamage, opts => opts.MapFrom(s => s.dfa_dateofdamage))
                 .ForMember(d => d.ApplicationType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_applicanttype) ? GetEnumDescription((ApplicantTypeOptionSet)Convert.ToInt32(s.dfa_applicanttype)) : null))
@@ -461,6 +506,7 @@ namespace EMBC.DFA.API.Mappers
                 " - " + GetEnumDescription((SmallBusinessOptionSet)Convert.ToInt32(s.dfa_smallbusinesstype)) :
                 (s.dfa_farmtype != null ? " - " + GetEnumDescription((FarmOptionSet)Convert.ToInt32(s.dfa_farmtype)) : string.Empty)))
                 .ForMember(d => d.PrimaryApplicantSignedDate, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_primaryapplicantsigneddate) ? null : s.dfa_primaryapplicantsigneddate))
+                .ForMember(d => d.CaseId, opts => opts.MapFrom(s => s.dfa_caseid))
                 .ForMember(d => d.CaseNumber, opts => opts.MapFrom(s => s.dfa_casenumber))
                 .ForMember(d => d.LegalName, opts => opts.MapFrom(s => s.dfa_accountlegalname))
                 .ForMember(d => d.DateFileClosed, opts => opts.MapFrom(s => s.dfa_datefileclosed))
@@ -474,8 +520,11 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.CaseEligibility, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_eligibilitystatus) ? GetEnumDescription((CaseEligibilityOptionSet)Convert.ToInt32(s.dfa_eligibilitystatus)) : null));
 
             CreateMap<dfa_appeal, CurrentCaseAppeal>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.dfa_appealid))
                 .ForMember(d => d.AppealStatus, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_appealstatus) ? GetEnumDescription((AppealStatusOptionSet)Convert.ToInt32(s.dfa_appealstatus)) : null))
-                .ForMember(d => d.AppealType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_appealtype) ? GetEnumDescription((AppealTypeOptionSet)Convert.ToInt32(s.dfa_appealtype)) : null));
+                .ForMember(d => d.AppealType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_appealtype) ? GetEnumDescription((AppealTypeOptionSet)Convert.ToInt32(s.dfa_appealtype)) : null))
+                .ForMember(d => d.Reason, opt => opt.MapFrom(src => src.DFA_Reason))
+                .ForMember(d => d.CaseId, opt => opt.MapFrom(src => src._dfa_caseid_value));
 
             CreateMap<Controllers.Profile, ESS.Shared.Contracts.Events.RegistrantProfile>()
                 .ForMember(d => d.Id, opts => opts.Ignore())
@@ -548,7 +597,7 @@ namespace EMBC.DFA.API.Mappers
 
             //Mapping from AppealModel (API Model) to Appeal (DTO API Layer)
             CreateMap<AppealModel, Appeal>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ApplicationId))
                 .ForMember(dest => dest.CaseId, opt => opt.MapFrom(src => src.CaseId))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.Reason))

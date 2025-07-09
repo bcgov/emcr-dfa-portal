@@ -14,13 +14,22 @@ import { MockEnvironmentBannerService } from './unit-tests/mockEnvironmentBanner
 import { ConfigService } from './core/services/config.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-@Component({ selector: 'app-header', template: '' })
+@Component({
+    selector: 'app-header', template: '',
+    standalone: false
+})
 class HeaderStubComponent {}
 
-@Component({ selector: 'app-footer', template: '' })
+@Component({
+    selector: 'app-footer', template: '',
+    standalone: false
+})
 class FooterStubComponent {}
 
-@Component({ selector: 'app-environment-banner', template: '' })
+@Component({
+    selector: 'app-environment-banner', template: '',
+    standalone: false
+})
 class EnvironmentBannerStubComponent {}
 
 describe('AppComponent', () => {

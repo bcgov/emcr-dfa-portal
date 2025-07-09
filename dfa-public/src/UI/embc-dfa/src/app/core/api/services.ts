@@ -17,6 +17,7 @@ export { FullTimeOccupantService } from './services/full-time-occupant.service';
 export { InvoiceService } from './services/invoice.service';
 export { OtherContactService } from './services/other-contact.service';
 export { ProfileService } from './services/profile.service';
+export { ProjectAmendmentService } from './services/project-amendment.service';
 export { ProjectAppealService } from './services/project-appeal.service';
 export { ProjectService } from './services/project.service';
 export { SecondaryApplicantService } from './services/secondary-applicant.service';

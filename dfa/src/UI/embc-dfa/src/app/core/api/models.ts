@@ -4,6 +4,8 @@
 
 export type { Address } from './models/address';
 export type { AddressDataConflict } from './models/address-data-conflict';
+export type { AppealFileMetadataUpload } from './models/appeal-file-metadata-upload';
+export type { AppealFileUpload } from './models/appeal-file-upload';
 export type { AppealModel } from './models/appeal-model';
 export { ApplicantOption } from './models/applicant-option';
 export type { AppTypeInsurance } from './models/app-type-insurance';

@@ -1,18 +1,22 @@
-<mat-card appearance="outlined" class="card-align" style="border:none;" [class.mat-elevation-z0]="true">
+<mat-card appearance="outlined" class="card-align" style="border: none" [class.mat-elevation-z0]="true">
   <mat-card-content>
-
     <form *ngIf="signAndSubmitForm" [formGroup]="signAndSubmitForm">
       <ng-container>
         <app-case-details [caseDetails]="caseDetails"></app-case-details>
-        <br/>
+        <br />
         <p class="sub-heading">Declaration</p>
         <div class="row">
           <div class="col-md-12">
-            I/We do solemnly declare that the foregoing representative statements are to the best of my/our knowledge, information and belief, true in every particular detail, and I/we make this solemn declaration conscientiously, believing it to be true and knowing that it is of the same force and effect as if made under oath and by virtue of the <i>Canada Evidence Act</i>.
-            <br/><br/>
-            I/We understand that by signing this application I/we are confirming that any funds recovered through civil litigation or other sources that are attributable to eligible expenses, up to a maximum amount of what I/we have receive under DFA for those expenses, must be repaid to the Province.
+            I/We do solemnly declare that the foregoing representative statements are to the best of my/our knowledge,
+            information and belief, true in every particular detail, and I/we make this solemn declaration
+            conscientiously, believing it to be true and knowing that it is of the same force and effect as if made
+            under oath and by virtue of the <i>Canada Evidence Act</i>. <br /><br />
+            I/We understand that by signing this application I/we are confirming that any funds recovered through civil
+            litigation or other sources that are attributable to eligible expenses, up to a maximum amount of what I/we
+            have receive under DFA for those expenses, must be repaid to the Province.
           </div>
-        </div><br/><br/>
+        </div>
+        <br /><br />
         <div class="row">
           <div class="col-md-6 bottomspace">
             <app-signature
@@ -22,7 +26,9 @@
               whoseSignature="Applicant">
             </app-signature>
           </div>
-          <div class="col-md-6 bottomspace" *ngIf="fullApplication?.signAndSubmit?.secondaryApplicantSignature?.signedName">
+          <div
+            class="col-md-6 bottomspace"
+            *ngIf="fullApplication?.signAndSubmit?.secondaryApplicantSignature?.signedName">
             <app-signature
               [signatureFormGroup]="signAndSubmitForm.get('secondaryApplicantSignature')"
               [isReadOnly]="isReadOnly"
@@ -30,7 +36,6 @@
               whoseSignature="Secondary Applicant"></app-signature>
           </div>
         </div>
-
       </ng-container>
     </form>
   </mat-card-content>

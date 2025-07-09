@@ -1,0 +1,133 @@
+<div [formGroup]="fileUploadForm" *ngIf="fileUploadForm">
+  <div class="row justify-content-start mb-4">
+    <button
+      class="family-button"
+      mat-button
+      type="button"
+      (click)="showFileUpload()"
+      style="width: 250px"
+      *ngIf="isReadOnly === false">
+      + Add Supporting Document
+    </button>
+  </div>
+
+  <mat-card appearance="outlined" style="padding: 12px" *ngIf="isShowFileUpload">
+    <div class="row">
+      <div class="col-md-6">
+        <app-file-upload
+          [noOfAttachments]="noOfAttachments"
+          (attachedFile)="setFileFormControl($event)"
+          [allowedFileTypes]="allowedFileTypes"
+          [allowedFileExtensionsList]="allowedFileExtensionsList">
+        </app-file-upload>
+      </div>
+
+      <div class="col-md-6">
+        <br /><br />
+        <div [hidden]="!fileUploadForm.get('fileName').value">
+          <label class="sub-heading" style="font-size: 15px">File name<span style="color: red">*</span></label>
+          <br />
+          {{ fileUploadForm.get('fileName').value }}
+          <br /><br />
+        </div>
+        <label class="sub-heading" style="font-size: 15px" [hidden]="!fileUploadForm.get('fileName').value"
+          >You may update the file description to something more descriptive:</label
+        >
+        <mat-form-field appearance="outline" [hidden]="!fileUploadForm.get('fileName').value">
+          <mat-label>File description</mat-label>
+          <input formControlName="description" matInput placeholder="File description" required maxlength="100" />
+          <mat-hint>Maximum length is 100 characters</mat-hint>
+          <mat-error
+            *ngIf="
+              fileUploadForm.get('description').invalid &&
+              fileUploadForm.get('description').hasError('required') &&
+              fileUploadForm.get('description').touched
+            "
+            >File description is required</mat-error
+          >
+          <mat-error
+            *ngIf="
+              fileUploadForm.get('description').invalid &&
+              fileUploadForm.get('description').hasError('maxLength') &&
+              fileUploadForm.get('description').touched
+            ">
+            Maximum length is 100 characters</mat-error
+          >
+        </mat-form-field>
+      </div>
+    </div>
+
+    <br /><br />
+    <div class="row">
+      <div class="col-md-6">
+        <button class="button-s details-button" mat-button type="button" (click)="cancelAttachment()">Cancel</button>
+      </div>
+      <div class="col-md-6" *ngIf="fileUploadForm.valid">
+        <button class="family-button details-button save-button" mat-button type="button" (click)="saveAttachment()">
+          Save
+        </button>
+      </div>
+    </div>
+  </mat-card>
+
+  <div class="row">
+    <div class="col-md-12">
+      <table
+        mat-table
+        [dataSource]="savedDocumentsUploadsTableData"
+        *ngIf="savedDocumentsUploadsTableData?.data?.length > 0">
+        <!-- File Name Column -->
+        <ng-container matColumnDef="fileName" style="width: 40%">
+          <th mat-header-cell *matHeaderCellDef>
+            <b>File Name</b>
+          </th>
+          <td *matCellDef="let elementFile" mat-cell>
+            {{ elementFile.fileName }}
+          </td>
+        </ng-container>
+
+        <!-- File Description Column -->
+        <ng-container matColumnDef="description" style="width: 40%">
+          <th mat-header-cell *matHeaderCellDef>
+            <b>File Description</b>
+          </th>
+          <td *matCellDef="let elementFile" mat-cell>
+            {{ elementFile.description }}
+          </td>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="uploadedDate" style="width: 40%">
+          <th mat-header-cell *matHeaderCellDef>
+            <b>Date</b>
+          </th>
+          <td *matCellDef="let elementFile" mat-cell>
+            {{ elementFile.uploadedDate | date: 'yyyy/MM/dd' }}
+          </td>
+        </ng-container>
+
+        <!-- Delete Icon Column -->
+        <ng-container matColumnDef="deleteIcon" style="width: 20%">
+          <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+          <td *matCellDef="let elementFile" mat-cell>
+            <button
+              class="delete-image"
+              mat-icon-button
+              aria-label="Remove"
+              (click)="removeAttachment(elementFile)"
+              *ngIf="isReadOnly === false">
+              <img src="/assets/images/delete.svg" height="35" width="35" />
+              <img src="/assets/images/delete_onhover.svg" height="35" width="35" />
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="savedDocumentsTableHeaders"></tr>
+        <tr mat-row *matRowDef="let elementFile; columns: savedDocumentsTableHeaders" class="example-element-row"></tr>
+      </table>
+      <div *ngIf="savedDocumentsUploadsTableData?.data?.length === 0">
+        <br />No supporting documents were added.<br />
+      </div>
+    </div>
+  </div>
+</div>

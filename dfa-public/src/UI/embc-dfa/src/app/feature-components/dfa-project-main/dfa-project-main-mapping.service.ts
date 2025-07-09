@@ -6,12 +6,14 @@ import { DFAProjectMainDataService } from './dfa-project-main-data.service';
 import { FormCreationService } from '../../core/services/formCreation.service';
 import { DfaProjectMain } from '../../core/model/dfa-project-main.model';
 import { ProjectAmendment } from 'src/app/core/model/dfa-amendment-main.model';
+import { DFAAmendmentMainDataService } from '../dfa-amendment-main/dfa-amendment-main-data.service';
 
 @Injectable({ providedIn: 'root' })
 export class DFAProjectMainMappingService {
   constructor(
     private formCreationService: FormCreationService,
     private dfaProjectMainDataService: DFAProjectMainDataService,
+    private dfaAmendmentMainDataService : DFAAmendmentMainDataService
   ) {}
 
   mapDFAProjectMain(dfaProjectMain: DfaProjectMain): void {
@@ -66,7 +68,7 @@ export class DFAProjectMainMappingService {
         });
         formGroup = projectAmendment;
       });
-    //this.dfaProjectMainDataService.recoveryPlan = dfaProjectAmendment;
+    this.dfaAmendmentMainDataService.amendment = dfaAmendment;
   }
 
 }

@@ -11,7 +11,6 @@
   border-left: 20px solid rgb(98, 163, 112);
 }
 .application-button {
-  float: left !important;
   background-color: #234075;
   color: #ffffff;
   height: 36px;
@@ -21,6 +20,9 @@
   max-width: 200px;
   margin-left: 2%;
   font-weight: 600;
+  flex: 0 0 auto; // Don't grow/shrink, use natural width
+  margin: 0; // Remove left margin since we're using gap
+  min-width: 150px;
 }
 
 .whitebutton {
@@ -76,7 +78,7 @@
 }
 
 .bfpTimeline{
-  padding-bottom:20px; 
+  padding-bottom:20px;
   height: 210px;
   width: 100%;
   min-width: 725px;
@@ -103,15 +105,19 @@
 }
 
 .eventName{
-  border-bottom: 1px solid lightgrey; 
-  padding-bottom: 20px; 
+  border-bottom: 1px solid lightgrey;
+  padding-bottom: 20px;
   display: flex;
 }
 
 .applicationStatus{
-  padding-top: 35px; 
-  border-bottom: 1px solid lightgrey; 
+  padding-top: 35px;
+  border-bottom: 1px solid lightgrey;
   padding-bottom:60px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-start;
 }
 
 .appeals{

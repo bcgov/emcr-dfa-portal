@@ -10,7 +10,7 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CurrentProjectAmendment } from '../../models/current-project-amendment';
 
-export interface ProjectGetDfaProjectAmendments$Params {
+export interface ProjectAmendmentGetDfaProjectAmendments$Params {
 
 /**
  * The project Id.
@@ -18,8 +18,8 @@ export interface ProjectGetDfaProjectAmendments$Params {
   projectId?: string;
 }
 
-export function projectGetDfaProjectAmendments(http: HttpClient, rootUrl: string, params?: ProjectGetDfaProjectAmendments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CurrentProjectAmendment>>> {
-  const rb = new RequestBuilder(rootUrl, projectGetDfaProjectAmendments.PATH, 'get');
+export function projectAmendmentGetDfaProjectAmendments(http: HttpClient, rootUrl: string, params?: ProjectAmendmentGetDfaProjectAmendments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CurrentProjectAmendment>>> {
+  const rb = new RequestBuilder(rootUrl, projectAmendmentGetDfaProjectAmendments.PATH, 'get');
   if (params) {
     rb.query('projectId', params.projectId, {});
   }
@@ -34,4 +34,4 @@ export function projectGetDfaProjectAmendments(http: HttpClient, rootUrl: string
   );
 }
 
-projectGetDfaProjectAmendments.PATH = '/api/projects/dfaprojectamendments';
+projectAmendmentGetDfaProjectAmendments.PATH = '/api/projectamendments/projectamendments';

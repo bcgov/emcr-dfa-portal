@@ -1,11 +1,323 @@
-<mat-card class="card-align" style="border:none;" [class.mat-elevation-z0]="true">
-  <mat-card-content>
+<div class="container container-frame">
+  <form [formGroup]="amendmentForm">
+    <div class="container">
+      <div class="heading-container">
+        <div class="row">
+          <div class="col-md-6 headerText">
+            <span class="page-heading">
+              {{ projectName }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div class="col-12 content-container appDetailHeader">
+        <div class="row">
+          <div class="col-md-6"><b>Approved Project Cost - </b>${{originalApprovedProjectCost | number : '1.2-2' }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6"><b>18 Month Deadline - </b>{{ deadline18Months | date : 'MM/dd/yyyy' }}</div>
+        </div>
+      </div>
+      <br />
+      <div>
 
-    <form [formGroup]="amendmentForm">
+        <mat-card class="card-align recoveryPlan" style="border:none;" [class.mat-elevation-z0]="true">
+          <mat-card-content>
+            <div class="container" style="padding-bottom: 100px; padding-top: 30px;">
+              <app-alert></app-alert>
 
-      <ng-container>
+              <div class="row">
+                <div class="col-md-3">
+                  <p style="font-size: 15px; margin-bottom: 10px !important">
+                    Amendment Number
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field appearance="outline" class="mat-form-round">
+                    <input formControlName="amendmentNumber" matInput />
+                  </mat-form-field>
+                </div>
+              </div>
 
-      </ng-container>
-    </form>
-  </mat-card-content>
-</mat-card>
+              <div class="row">
+                <div class="col-md-3">
+                  <p style="font-size: 15px; margin-bottom: 10px !important">
+                    Amendment Reason<span style="color:red">*</span>
+                  </p>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" class="mat-form-round text-area-width">
+                    <textarea matInput formControlName="amendmentReason" style="resize:none" cdkTextareaAutosize
+                      #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-3">
+                  <p style="font-size: 15px">
+                    Amendment Submitted Date
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <mat-form-field appearance="outline" class="mat-form-round">
+                    <input matInput formControlName="amendmentReceivedDate">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="amendmentReceivedDatePicker"
+                      disabled></mat-datepicker-toggle>
+                    <mat-datepicker #amendmentReceivedDatePicker disabled></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div *ngIf="status == 'Decision Made' || status == 'Closed'">
+                <div class="row">
+                  <div class="col-md-3">
+                    <p style="font-size: 15px; margin-bottom: 10px !important">
+                      DFA Decision
+                    </p>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field appearance="outline" class="mat-form-round">
+                      <input formControlName="amendmentDecision" matInput />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <p style="font-size: 15px">
+                      Decision Date
+                    </p>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field appearance="outline">
+                      <input matInput formControlName="amendmentApprovedDate">
+                      <mat-hint>MM/DD/YYYY</mat-hint>
+                      <mat-datepicker-toggle matSuffix [for]="amendmentApprovedDatePicker"
+                        disabled></mat-datepicker-toggle>
+                      <mat-datepicker #amendmentApprovedDatePicker disabled></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <br />
+
+                <div class="row">
+                  <div class="col-md-3">
+                    <p style="font-size: 15px; margin-bottom: 10px !important">
+                      Decision Comment
+                    </p>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline" class="mat-form-round text-area-width">
+                      <textarea matInput formControlName="emcrDecisionComments" style="resize:none" cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="3" cdkAutosizeMaxRows="5"></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <br />
+
+              <div class="row">
+                <div class="col-md-12 bottomspace">
+                  <p class="sub-heading" style="font-size: 15px">
+                    Is This a Request to Amend the Project Deadline?<span style="color:red">*</span>
+                  </p>
+                  <mat-radio-group formControlName="requestforProjectDeadlineExtention"
+                    class="primary-radio-group horizontal-radio-group" required aria-label="Select an option">
+                    <mat-radio-button value="Yes">Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button
+                      value="No">No</mat-radio-button>
+                  </mat-radio-group>
+                  <div *ngIf="amendmentForm.get('requestforProjectDeadlineExtention').value == 'No'">
+                    <br /><br />
+                  </div>
+                  <div class="row radio-extra-label"
+                    *ngIf="amendmentForm.get('requestforProjectDeadlineExtention').value == 'Yes'">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <p style="font-size: 15px">
+                          Requested Project Deadline Date<span style="color:red">*</span>
+                        </p>
+                        <mat-form-field appearance="outline">
+                          <input matInput formControlName="amendedProjectDeadlineDate">
+                          <mat-hint>MM/DD/YYYY</mat-hint>
+                          <mat-datepicker-toggle matSuffix [for]="amendedProjectDeadlineDatePicker"
+                            disabled></mat-datepicker-toggle>
+                          <mat-datepicker #amendedProjectDeadlineDatePicker disabled></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row" 
+                      *ngIf="status == 'Decision Made' || status == 'Closed'">
+                      <div class="col-md-3">
+                        <p style="font-size: 15px">
+                          Approved Project Deadline Date
+                        </p>
+                        <mat-form-field appearance="outline">
+                          <input matInput formControlName="amended18MonthDeadline">
+                          <mat-hint>MM/DD/YYYY</mat-hint>
+                          <mat-datepicker-toggle matSuffix [for]="amended18MonthDeadlineDatePicker"
+                            disabled></mat-datepicker-toggle>
+                          <mat-datepicker #amended18MonthDeadlineDatePicker disabled></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <br />
+              <div class="row">
+                <div class="col-md-12 bottomspace">
+                  <p class="sub-heading" style="font-size: 15px">
+                    Is This a Request to Amend the Project Cost?<span style="color:red">*</span>
+                  </p>
+                  <mat-radio-group formControlName="requestforAdditionalProjectCost"
+                    class="primary-radio-group horizontal-radio-group" required aria-label="Select an option">
+                    <mat-radio-button value="Yes">Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button
+                      value="No">No</mat-radio-button>
+                  </mat-radio-group>
+                  <div *ngIf="amendmentForm.get('requestforAdditionalProjectCost').value == 'No'">
+                    <br /><br />
+                  </div>
+                  <div class="row radio-extra-label"
+                    *ngIf="amendmentForm.get('requestforAdditionalProjectCost').value == 'Yes'">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <p style="font-size: 15px">
+                          Requested Additional Project Cost<span style="color:red">*</span>
+                        </p>
+
+                        <mat-form-field appearance="outline" class="mat-form-round">
+                          <div class="searchDiv">
+                            <input matInput formControlName="estimatedAdditionalProjectCost" mask="separator.2"
+                                thousandSeparator="," decimalMarker="." maxlength="100" type="text">
+                            <span class="currencyText">CA$</span>
+                          </div>
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row" 
+                      *ngIf="status == 'Decision Made' || status == 'Closed'">
+                      <div class="col-md-3 costCurrency">
+                        <p style="font-size: 15px">
+                          Approved Additional Project Cost
+                        </p>
+                        <mat-form-field appearance="outline" class="mat-form-round">
+
+                          <div class="searchDiv">
+                            <input #currencyBoxapprovedAdditionalProjectCost
+                              id="currencyBoxapprovedAdditionalProjectCost"
+                              formControlName="approvedAdditionalProjectCost" matInput mask="separator.2"
+                              thousandSeparator="," decimalMarker="." maxlength="100" />
+                            <span class="currencyText">CA$</span>
+                          </div>
+
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <ng-container> <!-- *ngIf="vieworedit !== 'viewOnly'"> <!-- Supporting Documents -->
+              <div class="row">
+                <div class="col-md-8">
+                  <app-dfa-attachment isAmendment=true isdisabled="isdisabled" requiredDocumentType="null"
+                    title="Other Supporting Documents (Optional)"
+                    description="If applicable, you may include additional documents related to your amendment."
+                    [allowedFileTypes]="allowedFileTypes"
+                    allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
+                    excludeFileTypes="['Identification', 'Unknown']" (saveFileUpload)="saveSupportingFiles($event)"
+                    (cancelFileUpload)="cancelSupportingFiles()"
+                    [fileUpload]="formCreationService.fileUploadsAmendmentForm.value.get('supportingFilesFileUpload')"></app-dfa-attachment>
+                  <app-loader class="spinner" [showLoader]="isLoading" strokeWidth="10" diameter="50">
+                  </app-loader>
+                </div>
+              </div>
+            </ng-container>
+
+            <div *ngIf="amendmentDocumentSummaryDataSource.data.length == 0">
+              <br />
+              <br />
+              <br />
+            </div>
+
+            <div *ngIf="amendmentDocumentSummaryDataSource.data.length > 0">
+              <br />
+              <p class="sub-heading" style="font-size: 15px">Document Summary</p>
+            </div>
+
+            <table mat-table [dataSource]="amendmentDocumentSummaryDataSource"
+              *ngIf="amendmentDocumentSummaryDataSource.data.length > 0" style="width:100%">
+              <!-- File Name Column -->
+              <ng-container matColumnDef="fileName" style="width:25%">
+                <th mat-header-cell *matHeaderCellDef>
+                  <b>File Name</b>
+                </th>
+                <td *matCellDef="let element" mat-cell>
+                  {{ element.fileName }}
+                </td>
+              </ng-container>
+
+              <!-- Description Column -->
+              <ng-container matColumnDef="fileDescription" style="width:25%">
+                <th mat-header-cell *matHeaderCellDef>
+                  <b>File Description</b>
+                </th>
+                <td *matCellDef="let element" mat-cell>
+                  {{ element.fileDescription}}
+                </td>
+              </ng-container>
+
+              <!-- Category Column -->
+              <ng-container matColumnDef="fileTypeText" style="width:25%">
+                <th mat-header-cell *matHeaderCellDef>
+                  <b>Category</b>
+                </th>
+                <td *matCellDef="let element" mat-cell>
+                  {{ element.fileTypeText }}
+                </td>
+              </ng-container>
+
+              <!-- UploadedDate Column -->
+              <ng-container matColumnDef="uploadedDate" style="width:25%">
+                <th mat-header-cell *matHeaderCellDef>
+                  <b>Date Uploaded</b>
+                </th>
+                <td *matCellDef="let element" mat-cell>
+                  {{ element.uploadedDate | date:"dd-MMM-yyyy" }}
+                </td>
+              </ng-container>
+
+              <!-- Delete Icon Column -->
+              <ng-container matColumnDef="icons" style="width:25%">
+                <th mat-header-cell *matHeaderCellDef>
+                  &nbsp;
+                </th>
+                <td *matCellDef="let element; let index = index" mat-cell>
+                  <button class="delete-image" mat-icon-button aria-label="Remove"
+                    (click)="confirmDeleteDocumentSummaryRow(element)">
+                    <img src="/assets/images/delete.svg" height="35" width="35" />
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="documentSummaryColumnsToDisplay"></tr>
+              <tr mat-row *matRowDef="let element; columns: documentSummaryColumnsToDisplay" class="example-element-row"
+                [style.height]="'auto'"></tr>
+
+            </table>
+
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </form>
+</div>

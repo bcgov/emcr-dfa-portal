@@ -1,5 +1,5 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormCreationService } from '../../services/formCreation.service';
+import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { LoginService } from '../../services/login.service';
 import { CacheService } from '../../services/cache.service';
 

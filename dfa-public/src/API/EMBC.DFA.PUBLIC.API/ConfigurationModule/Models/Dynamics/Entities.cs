@@ -1011,15 +1011,10 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_decisioncopy { get; set; }
         /* D4P-112 */
         public string? dfa_advanceddrawdownamount { get; set; }
-
         public string? dfa_decisiondate { get; set; }
-
         public string? dfa_claimtype {  get; set; }
-
         public bool? dfa_isadjustmentclaim { get; set; }
-
-
-
+        public IEnumerable<dfa_claimappeal>? dfa_claimappeal { get; set; }
     }
 
     public class dfa_recoveryinvoice
@@ -1073,7 +1068,11 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
     {
         public DateTime? dfa_dateappealreceived { get; set; }
     }
-
+    public class dfa_claimappeal
+    {
+        public string statuscode { get; set; }
+        public string dfa_appealdecision { get; set; }
+    }
     public class dfa_projectamendment
     {
         public string? _dfa_project_value { get; set; }
@@ -1150,6 +1149,30 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
 
         [Description("Other")]
         Other = 222710002
+    }
+
+    public enum ClaimAppealStatusOptionSet
+    {
+        [Description("Submitted")]
+        Submitted = 1,
+
+        [Description("In Progress")]
+        InProgress = 222710000,
+
+        [Description("Closed")]
+        Closed = 2
+    }
+
+    public enum ClaimAppealDecisionOptionSet
+    {
+        [Description("Upheld")]
+        Upheld = 222710000,
+
+        [Description("Overturned")]
+        Overturned = 222710001,
+
+        [Description("Withdrawn")]
+        Withdrawn = 222710002
     }
 
     public enum EventType

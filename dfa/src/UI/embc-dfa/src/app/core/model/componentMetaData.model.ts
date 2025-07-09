@@ -1,7 +1,5 @@
-import { Observable } from 'rxjs';
-
 export class ComponentMetaDataModel {
-  component: Observable<any>;
+  component: string;
   nextButtonLabel: string;
   backButtonLabel: string;
   isLast: boolean;
