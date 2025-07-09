@@ -8,7 +8,7 @@
         var query = new EventQuery
         {
             StateCode = StateCode.Active,
-            BeforeNintyDeadline = new DateTime(2023, 1, 1),
+            BeforeNinetyDeadline = new DateTime(2023, 1, 1),
             NotNullEventType = true
         };
         var events = repository.Query(query);
@@ -46,7 +46,7 @@
         var query = new EventQuery
         {
             StateCode = StateCode.Active,
-            BeforeNintyDeadline = new DateTime(2023, 1, 2),
+            BeforeNinetyDeadline = new DateTime(2023, 1, 2),
             NotNullEventType = true
         };
         var events = repository.Query(query);
@@ -83,7 +83,7 @@
         var query = new EventQuery
         {
             StateCode = StateCode.Active,
-            BeforeNintyDeadline = new DateTime(2023, 1, 3),
+            BeforeNinetyDeadline = new DateTime(2023, 1, 3),
             NotNullEventType = true
         };
         var events = repository.Query(query);

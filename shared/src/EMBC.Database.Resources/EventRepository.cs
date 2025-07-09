@@ -12,11 +12,11 @@ public class EventRepository : BaseRepository<DFA_Event, Event>, IEventRepositor
     }
 
     public IEnumerable<Event> Query(EventQuery query)
-    {      
+    {
         var queryResults = _databaseContext.DFA_EventSet
             .Where(query)
             .ToList();
-        return Map(queryResults);      
+        return Map(queryResults);
     }
 }
 
@@ -26,7 +26,7 @@ public static class EventRepositoryExtensions
     {
         return results
             .WhereIf(query.StateCode != null, x => x.StateCode == (DFA_Event_StateCode?)query.StateCode)
-            .WhereIf(query.BeforeNintyDeadline != null, x => (x.DFA_90DayDeadlineOverwriteDate != null && x.DFA_90DayDeadlineOverwriteDate >= query.BeforeNintyDeadline) || (x.DFA_90DayDeadlineOverwriteDate == null && x.DFA_90DayDeadlineNew != null && x.DFA_90DayDeadlineNew >= query.BeforeNintyDeadline))
+            .WhereIf(query.BeforeNinetyDeadline != null, x => (x.DFA_90DayDeadlineOverwriteDate != null && x.DFA_90DayDeadlineOverwriteDate >= query.BeforeNinetyDeadline) || (x.DFA_90DayDeadlineOverwriteDate == null && x.DFA_90DayDeadlineNew != null && x.DFA_90DayDeadlineNew >= query.BeforeNinetyDeadline))
             .WhereIf(query.NotNullEventType, x => x.DFA_EventType != null);
     }
 }
