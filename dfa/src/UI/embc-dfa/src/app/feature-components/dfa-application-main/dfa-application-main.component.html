@@ -56,7 +56,11 @@
     #dfaApplicationMainStepper
     [linear]="false"
   >
-    <mat-step *ngFor="let step of steps" [stepControl]="form">
+    <mat-step
+      *ngFor="let step of steps; let i = index"
+      [stepControl]="getStepControl(i)"
+      [completed]="getStepCompleted(i)"
+    >
       <ng-template matStepLabel>{{ step.stepName }}</ng-template>
       <app-component-wrapper
         [componentName]="step.component"

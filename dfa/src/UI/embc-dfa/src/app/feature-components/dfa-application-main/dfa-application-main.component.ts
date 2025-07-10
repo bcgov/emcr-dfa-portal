@@ -433,7 +433,12 @@ export class DFAApplicationMainComponent
     stepper.selected.interacted = false;
 
     this.validateForms();
-    this.setCompletedSteps();
+    setTimeout(() => {
+      stepper.steps.forEach((step, index) => {
+        step.completed = this.getStepCompleted(index);
+      });
+      this.cd.detectChanges();
+    }, 100);
   }
 
   /**
@@ -516,14 +521,30 @@ export class DFAApplicationMainComponent
     }
   }
 
-  setCompletedSteps(){
-    this.dfaApplicationMainStepper.steps.get(0).completed = this.applicationDetailsValid;
-    this.dfaApplicationMainStepper.steps.get(1).completed = this.damagedPropertyAddressValid;
-    this.dfaApplicationMainStepper.steps.get(2).completed = this.propertyDamageValid;
-    this.dfaApplicationMainStepper.steps.get(3).completed = this.areOccupantsValid();
-    this.dfaApplicationMainStepper.steps.get(4).completed = this.cleanUpLogValid;
-    this.dfaApplicationMainStepper.steps.get(5).completed = this.cleanUpLogItemsValid;
-    this.dfaApplicationMainStepper.steps.get(6).completed = this.requiredDocumentsSupplied();
+  getStepControl(stepIndex: number): UntypedFormGroup | null {
+    switch (stepIndex) {
+      case 0: return this.applicationDetailsForm;
+      case 1: return this.damagedPropertyAddressForm;
+      case 2: return this.propertyDamageForm;
+      case 3: return null; // Occupants step has multiple forms
+      case 4: return this.cleanUpLogForm;
+      case 5: return this.cleanUpLogItemsForm;
+      case 6: return this.supportingDocumentsForm;
+      default: return null;
+    }
+  }
+
+  getStepCompleted(stepIndex: number): boolean {
+    switch (stepIndex) {
+      case 0: return this.applicationDetailsValid;
+      case 1: return this.damagedPropertyAddressValid;
+      case 2: return this.propertyDamageValid;
+      case 3: return this.areOccupantsValid(); // Use your existing logic
+      case 4: return this.cleanUpLogValid;
+      case 5: return this.cleanUpLogItemsValid;
+      case 6: return this.requiredDocumentsSupplied();
+      default: return false;
+    }
   }
 
   requiredDocumentsSupplied(): boolean {
@@ -552,23 +573,42 @@ export class DFAApplicationMainComponent
   }
 
   areOccupantsValid(): boolean {
-    if (this.isOtherContactValid() && this.isOccupantValid()){
-      return true;
-    }
-    return false;
+    const fullTimeValid = this.isOccupantValid();
+    const otherContactValid = this.isOtherContactValid();
+
+    const result = fullTimeValid && otherContactValid;
+
+    return result;
   }
 
   isOtherContactValid(): boolean {
     const onlyOtherContact = this.otherContactsForm.get('contactDetails.onlyOtherContact')?.value ?? false;
+
+    // For disabled forms, check the raw data instead of form validity
+    if (this.otherContactsForm.disabled) {
+      const formData = this.otherContactsForm.getRawValue();
+      const hasContactData = formData.otherContacts && formData.otherContacts.length > 0;
+      const isOnlyOtherContactChecked = formData.contactDetails?.onlyOtherContact === true;
+
+      return hasContactData || isOnlyOtherContactChecked;
+    }
     return this.otherContactsForm.valid || onlyOtherContact;
   }
 
   isOccupantValid(): boolean {
-    let onlyOccupantInHome = this.fullTimeOccupantsForm.get('onlyOccupantInHome').value;
-    if (this.fullTimeOccupantsForm.valid || onlyOccupantInHome){
-      return true;
+    const onlyOccupantInHome = this.fullTimeOccupantsForm.get('fullTimeOccupant.onlyOccupantInHome')?.value ?? false;
+    const isFormValid = this.fullTimeOccupantsForm.valid;
+    const isFormDisabled = this.fullTimeOccupantsForm.disabled;
+
+    // If form is disabled (view-only mode), check the actual data
+    if (isFormDisabled) {
+      // Get occupants directly from form data
+      const formData = this.fullTimeOccupantsForm.getRawValue();
+      const hasOccupants = formData?.fullTimeOccupants?.length > 0;
+      const result = hasOccupants || onlyOccupantInHome;
+      return result;
     }
-    return false;
+    return isFormValid || onlyOccupantInHome;
   }
 
   /**
@@ -682,6 +722,8 @@ export class DFAApplicationMainComponent
         break;
       case 3:
         this.form$ = null;
+        this.form = null;
+        break;
       case 4:
         this.form$ = this.formCreationService
           .getCleanUpLogForm()
@@ -691,6 +733,8 @@ export class DFAApplicationMainComponent
         break;
       case 5:
         this.form$ = null;
+        this.form = null;
+        break;
       case 6:
         this.form$ = this.formCreationService
           .getSupportingDocumentsForm()

@@ -483,7 +483,9 @@
                 We recommend that you provide the name of one other contact person in case the DFA can't reach you. The Ministry of Emergency Management (EMCR) can't and won't speak with the contact about your application, but will ask the person to have you contact us.
                 <br />
                 If you don't have an alternate contact, please indicate here:&nbsp;
-                <mat-checkbox formControlName="onlyOtherContact">
+                <mat-checkbox
+                  formControlName="onlyOtherContact"
+                  [disabled]="disableOnlyOtherContact || isViewOnlyMode()">
                   I don't have an Other Contact
                 </mat-checkbox>
               </p>
