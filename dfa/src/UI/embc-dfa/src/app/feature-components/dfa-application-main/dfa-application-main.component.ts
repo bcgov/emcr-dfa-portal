@@ -1,29 +1,28 @@
 import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
   OnInit,
-  ViewChild,
-  AfterViewInit,
-  AfterViewChecked,
-  ChangeDetectorRef,
-  ViewEncapsulation
+  ViewChild
 } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ComponentCreationService } from '../../core/services/componentCreation.service';
-import * as globalConst from '../../core/services/globalConstants';
-import { ComponentMetaDataModel } from '../../core/model/componentMetaData.model';
+import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, distinctUntilChanged, mapTo } from 'rxjs';
-import { FormCreationService } from '../../core/services/formCreation.service';
-import { AlertService } from 'src/app/core/services/alert.service';
-import { DFAApplicationMainDataService } from './dfa-application-main-data.service';
-import { DFAApplicationMainService } from './dfa-application-main.service';
 import { ApplicantOption, FarmOption, InsuranceOption, SmallBusinessOption } from 'src/app/core/api/models';
 import { ApplicationService, AttachmentService } from 'src/app/core/api/services';
-import { MatDialog } from '@angular/material/dialog';
+import { AddressChangeComponent } from 'src/app/core/components/dialog-components/address-change-dialog/address-change-dialog.component';
 import { DFAConfirmSubmitDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-submit-dialog/dfa-confirm-submit-dialog.component';
 import { SecondaryApplicant } from 'src/app/core/model/dfa-application-main.model';
-import { AddressChangeComponent } from 'src/app/core/components/dialog-components/address-change-dialog/address-change-dialog.component';
+import { AlertService } from 'src/app/core/services/alert.service';
+import { ComponentMetaDataModel } from '../../core/model/componentMetaData.model';
+import { ComponentCreationService } from '../../core/services/componentCreation.service';
+import { FormCreationService } from '../../core/services/formCreation.service';
+import * as globalConst from '../../core/services/globalConstants';
+import { DFAApplicationMainDataService } from './dfa-application-main-data.service';
+import { DFAApplicationMainService } from './dfa-application-main.service';
 
 
 @Component({
@@ -331,23 +330,34 @@ export class DFAApplicationMainComponent
       .subscribe((value) => {
         if (this.vieworedit === 'view' || this.vieworedit === 'edit' || this.vieworedit === 'viewOnly') {
           this.dfaApplicationMainDataService.setViewOrEdit(this.vieworedit);
-          for (var i = 0; i <= 7; i++) {
-            this.dfaApplicationMainStepper.selected.completed = true;
-            this.dfaApplicationMainStepper.next();
-          }
-          if (this.vieworedit === 'edit') this.dfaApplicationMainStepper.selectedIndex = Number(this.editstep);
+
+          // Mark all steps as completed without auto-advancing
+          setTimeout(() => {
+            this.dfaApplicationMainStepper.steps.forEach((step, index) => {
+              step.completed = true;
+            });
+
+            // Only set the target step index for edit mode
+            if (this.vieworedit === 'edit') {
+              this.dfaApplicationMainStepper.selectedIndex = Number(this.editstep);
+            }
+          }, 100);
+
         } else if (this.vieworedit !== 'add' && this.vieworedit !== 'update') {
           this.dfaApplicationMainStepper.selectedIndex = 0;
           if (this.signAndSubmitForm.get('applicantSignature')?.get('dateSigned')?.value) {
             this.vieworedit = "view";
             this.dfaApplicationMainDataService.setViewOrEdit("view");
             this.dfaApplicationMainDataService.isSubmitted = true;
-            for (var i = 0; i <= 7; i++) {
-              this.dfaApplicationMainStepper.selected.completed = true;
-              this.dfaApplicationMainStepper.next();
-            }
-          }
-          else {
+
+            // Mark all steps as completed without auto-advancing
+            setTimeout(() => {
+              this.dfaApplicationMainStepper.steps.forEach((step, index) => {
+                step.completed = true;
+              });
+            }, 100);
+
+          } else {
             this.vieworedit = "update";
             this.dfaApplicationMainDataService.setViewOrEdit("update");
           }
@@ -449,6 +459,9 @@ export class DFAApplicationMainComponent
    */
   goBack(stepper: MatStepper, lastStep): void {
     this.validateForms();
+    if (this.form$) {
+      this.form$.unsubscribe();
+    }
     if (lastStep === 0) {
       stepper.previous();
     } else if (lastStep === -1) {
@@ -510,7 +523,9 @@ export class DFAApplicationMainComponent
           default:
             break;
         }
-        this.form$.unsubscribe();
+        if (this.form$){
+          this.form$.unsubscribe();
+        }
         stepper.next();
         this.form.markAllAsTouched();
       },
