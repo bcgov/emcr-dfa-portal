@@ -51,17 +51,15 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(event: SimpleChanges): void {
     // Set initial dateSigned using the form group
-    if (event["initialDateSigned"]?.currentValue) {
-      const parsedDate = new Date(event["initialDateSigned"].currentValue);
-      const dateValue = isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
+    if (event["initialDateSigned"]) {
+      const newDateValue = event["initialDateSigned"].currentValue;
+      if (newDateValue && newDateValue !== undefined && newDateValue !== null) {
+        const parsedDate = new Date(newDateValue);
+        const dateValue = isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
 
-      // Only set if not already set or if different
-      const currentDateValue = this.signatureFormGroup.get('dateSigned')?.value;
-      if (!currentDateValue || new Date(currentDateValue).getTime() !== dateValue.getTime()) {
+        // Always update when we get a valid initial value
         this.signatureFormGroup.get('dateSigned')?.setValue(dateValue);
       }
-    } else if (!this.signatureFormGroup.get('dateSigned')?.value) {
-      this.signatureFormGroup.get('dateSigned')?.setValue(new Date());
     }
 
     // Set initial signedName using the form group
