@@ -99,6 +99,8 @@
     </div>
     </div>-->
     <mat-card class="mat-elevation-z4 content" [ngStyle]="{'border-left': '20px solid ' + applItem.statusColor}" >
+
+      <!-- project item top row with project number, project name, and top buttons -->
       <div style="border-bottom: 1px solid lightgrey; padding-bottom: 15px; display: flex;">
         <div class="col-md-4">
           <span><b>Project Number - </b></span>
@@ -164,6 +166,7 @@
           </span>
         </div>
       </div>
+
       <div style="padding-top: 16px; display: flex;" [hidden]="applItem.isHidden">
           <div class="col-md-2">
             <span><b>Site Location - </b></span>
@@ -178,8 +181,8 @@
             <span>{{applItem?.projectDecision == DecisionEnum.Approved || applItem?.projectDecision == DecisionEnum.ApprovedWithExclusions ? applItem.estimatedCompletionDate : "" }}</span>
           </div>
       </div>
-      <div style="border-bottom: 1px solid lightgrey; padding-bottom: 16px; display: flex;" [hidden]="applItem.isHidden">
 
+      <div style="border-bottom: 1px solid lightgrey; padding-bottom: 16px; display: flex;" [hidden]="applItem.isHidden">
         <div class="col-md-2">
           <span><b>EMCR Approved Amount -</b></span>
         </div>
@@ -194,6 +197,7 @@
         </div>
       </div>
 
+      <!-- project timeline -->
       <div style="display: flex; margin:30px 30px;">
         <div class="col-md-12">
           <span *ngIf="applItem.isErrorInStatus == true" style="color: red;">Error in displaying status<br /><br /></span>
@@ -202,7 +206,6 @@
               <td colspan="3" *ngFor="let item of getItems(applItem.statusBar); let i=index" id="item{{i}}" [ngClass]="'headerlabelStyle'">
                 <span *ngIf="item.status != ''" class="stepText">{{item.status}}</span>
               </td>
-
             </tr>
             <tr>
               <td *ngFor="let item of applItem.statusBar; let i=index" id="item{{i}}" [ngClass]="item.status != '' ? 'labelStyle' : 'labelEmptyWidth'">
@@ -235,7 +238,7 @@
         </div>
       </div>
 
-      <div [featureEnabled]="'useAppeals'" *ngIf="applItem.appealStatusBar" style="margin-top: 30px; border-top: 1px solid lightgrey; padding-top: 30px;">
+      <div [featureEnabled]="'useAppeals'" *ngIf="applItem.statusBar" style="margin-top: 30px; border-top: 1px solid lightgrey; padding-top: 30px;">
         <div style="display: flex; margin:30px 30px;">
           <div class="col-md-12">
             <table cellpadding="0" cellspacing="0">
@@ -246,9 +249,12 @@
               </tr>
               <tr>
                 <td *ngFor="let item of applItem.appealStatusBar; let i=index" id="item{{i}}" [ngClass]="item.status != '' ? 'labelStyle' : 'labelEmptyWidth'">
-                  <div *ngIf="item.status != ''" [ngClass]="item.currentStep == false || item.status == 'Closed' ? 'alignStatus' : 'alignStatus'">
-                    <span *ngIf="item.isCompleted == false && item.currentStep == true && item.stage != ''" class="material-symbols-outlined" style="color: #FDCB52">
-                      circle
+                  <div *ngIf="item.status != ''" [ngClass]="item.currentStep == false || item.status == 'Closed' ? 'alignStatus': (item.stage == '' ? 'alignStatus' : 'currentStatus')">
+                    <span *ngIf="item.isCompleted == true && applItem.isErrorInStatus == false" class="material-icons" [ngStyle]="{'color': 'rgb(21 178 89)'}">
+                      check_circle
+                    </span>
+                    <span *ngIf="item.isCompleted == false && item.currentStep == true && applItem.isErrorInStatus == false && item.stage != ''">
+                      {{item.stage}}
                     </span>
                     <span *ngIf="item.isCompleted == false && item.currentStep == false" class="material-symbols-outlined" style="color: #FDCB52">
                       circle

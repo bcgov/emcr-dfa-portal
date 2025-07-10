@@ -66,21 +66,22 @@ export class DfaDashProjectComponent implements OnInit {
 
   ];
 
+  // project appeal timeline items
   appealItems = [
     // { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     // { status: "Draft", stage: "", statusColor: "#639DD4", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     // { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "Submitted", stage: "", statusColor: "#FDCB52", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "Under Review", stage: "", statusColor: "#FDCB52", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "Approval Pending", stage: "", statusColor: "#FDCB52", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "Decision Made", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: true, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "Submitted", stage: "", statusColor: "#FDCB52", isCompleted: true, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: true, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: true, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "Under Review", stage: "", statusColor: "#FDCB52", isCompleted: true, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: true, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: true, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "Approval Pending", stage: "", statusColor: "#FDCB52", isCompleted: true, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: true, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: true, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "Decision Made", stage: "Approved with Exclusions", statusColor: "#62A370", isCompleted: false, currentStep: true, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "Closed", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: true, isErrorInStatus: false },
@@ -350,7 +351,6 @@ export class DfaDashProjectComponent implements OnInit {
     }
 
     this.lstFilteredProjects = lstProjectsFilterting;
-
   }
 
   ViewClaims(applItem: ProjectExtended): void {
