@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AutoMapper;
+using EMBC.Database.Resources;
+using EMBC.Database.Shared.Contract;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.Services;
+using EMBC.DFA.PUBLIC.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,21 +28,22 @@ namespace EMBC.DFA.API.Controllers
         private readonly IHostEnvironment env;
         private readonly IMapper mapper;
         private readonly IConfigurationHandler handler;
+        private readonly ProjectAppealService projectAppealService;
+        private readonly IProjectAppealRepository projectAppealRepository;
         // 2024-08-11 EMCRI-595 waynezen; BCeID Authentication
         private readonly IUserService userService;
         private readonly IConfiguration configuration;
 
         public ProjectController(
-            IHostEnvironment env,
-            IMapper mapper,
-            IConfigurationHandler handler,
-            IUserService userService,
-            IConfiguration configuration)
+            IHostEnvironment env, IMapper mapper, IConfigurationHandler handler, ProjectAppealService projectAppealService, IProjectAppealRepository projectAppealRepository,
+            IUserService userService, IConfiguration configuration)
         {
             this.env = env;
             this.mapper = mapper;
             this.handler = handler;
-            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            this.projectAppealService = projectAppealService.ThrowIfNull();
+            this.projectAppealRepository = projectAppealRepository.ThrowIfNull();
+            this.userService = userService.ThrowIfNull();
             this.configuration = configuration;
         }
 
@@ -59,7 +59,39 @@ namespace EMBC.DFA.API.Controllers
         public async Task<ActionResult<List<CurrentProject>>> GetDFAProjects(string applicationId)
         {
             var lstProjects = await handler.HandleProjectList(applicationId);
-
+            lstProjects.ForEach(project => 
+            {
+                // load project appeals including process stages(timeline)
+                var query = new Database.Contract.ProjectAppealQuery();
+                query.ProjectId = Guid.Parse(project.ProjectId);
+                var workflow = projectAppealRepository
+                    .GetWorkflow(query);
+                if (workflow?.ProjectAppeals?.Any() ?? false)
+                {
+                    var currentProjectAppeal = workflow.ProjectAppeals.Last();
+                    project.ProjectAppealStage = currentProjectAppeal.ProjectAppealEligibility.ActiveStage.Name;
+                    project.ProjectAppealStatus = projectAppealService.MapStageNote(currentProjectAppeal);
+                    // NOTE currently, to be consistent, the stages are hard-coded
+                    // if you want dynamic stages/steps for the timeline, uncomment and finish the below code
+                    // I would strongly recommend refactoring all of the timelines before moving towards dynamic stages
+                    // currently, the data is not normalized, the UI and business logic are not separated, and various other issues
+                    //project.StatusBar = currentEligibility.Stages
+                    //    .Select(s =>
+                    //    {
+                    //        var currentStage = workflow.Stages.Any(w => w.Id == s.Id);
+                    //        return new ProjectStatusBar()
+                    //        {
+                    //            CurrentStep = currentStage,
+                    //            IsCompleted = s.Id == currentEligibility.Id,
+                    //            IsFinalStep = s == currentEligibility.Stages.Last(),
+                    //            Stage = currentStage ? project.Stage : string.Empty,
+                    //            Status = s.Name,
+                    //            //StatusColor
+                    //        };
+                    //    })
+                    //    .ToList();
+                }
+            });
             return Ok(lstProjects);
         }
 
@@ -106,6 +138,7 @@ namespace EMBC.DFA.API.Controllers
             {
                 dfaProjectMain.Project.estimateCostIncludingTax = null;
             }
+
             return Ok(dfaProjectMain);
         }
 
@@ -218,15 +251,17 @@ namespace EMBC.DFA.API.Controllers
         public string ProjectType { get; set; }
         public string ProjectTypeOther { get; set; }
         public string ProjectApprovedDate { get; set; }
-        public IEnumerable<CurrentProjectAppeal> Appeals { get; set; }
+        //public IEnumerable<CurrentProjectAppeal> Appeals { get; set; }
+        public string ProjectAppealStatus { get; set; }
+        public string ProjectAppealStage { get; set; }
         public bool IsSubmitted { get; set; }
     }
 
-    public class CurrentProjectAppeal
-    {
-        public string id { get; set; }
-        public DateTime? SubmissionDate { get; set; }
-    }
+    //public class CurrentProjectAppeal
+    //{
+    //    public string id { get; set; }
+    //    public DateTime? SubmissionDate { get; set; }
+    //}
 
     public class ProjectType
     {

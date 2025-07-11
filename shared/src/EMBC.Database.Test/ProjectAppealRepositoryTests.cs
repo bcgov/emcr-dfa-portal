@@ -4,7 +4,15 @@
     public void Query()
     {
         var query = new ProjectAppealQuery();
-        query.Id = new Guid("<guid>");
-        var results = repository.Query(query);
+        query.ProjectId = new Guid("<guid>");
+        var results = repository.GetWorkflow(query);
+    }
+
+    [Fact]
+    public void Enum_AsDescription()
+    {
+        var status = ProjectAppealStatusCode.Closed;
+        var description = status.GetDescription();
+        Assert.Equal("Closed", description);
     }
 }

@@ -281,6 +281,7 @@ namespace EMBC.DFA.API
             services.AddTransient<IProfileInviteService, ProfileInviteService>();
             services.AddTransient<IConfigurationHandler, Handler>();
             services.AddTransient<IDynamicsGateway, DynamicsGateway>();
+            services.AddTransient<ProjectAppealService>();
 
             services.Configure<PdfServiceConfigs>(configuration.GetSection("pdfService"));
             services.AddTransient<TokenDelegatingHandler>();
