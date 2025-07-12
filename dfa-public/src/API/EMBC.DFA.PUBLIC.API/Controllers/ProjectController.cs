@@ -69,8 +69,9 @@ namespace EMBC.DFA.API.Controllers
                 if (workflow?.ProjectAppeals?.Any() ?? false)
                 {
                     var currentProjectAppeal = workflow.ProjectAppeals.Last();
-                    project.ProjectAppealStage = currentProjectAppeal.ProjectAppealEligibility.ActiveStage.Name;
-                    project.ProjectAppealStatus = projectAppealService.MapStageNote(currentProjectAppeal);
+                    project.ActiveStage = new CurrentProjectAppeal();
+                    project.ActiveStage.Stage = currentProjectAppeal.ProjectAppealEligibility.ActiveStage.Name;
+                    project.ActiveStage.Status = projectAppealService.MapStageNote(currentProjectAppeal);
                     // NOTE currently, to be consistent, the stages are hard-coded
                     // if you want dynamic stages/steps for the timeline, uncomment and finish the below code
                     // I would strongly recommend refactoring all of the timelines before moving towards dynamic stages
@@ -251,17 +252,17 @@ namespace EMBC.DFA.API.Controllers
         public string ProjectType { get; set; }
         public string ProjectTypeOther { get; set; }
         public string ProjectApprovedDate { get; set; }
-        //public IEnumerable<CurrentProjectAppeal> Appeals { get; set; }
-        public string ProjectAppealStatus { get; set; }
-        public string ProjectAppealStage { get; set; }
+        public CurrentProjectAppeal ActiveStage { get; set; }
         public bool IsSubmitted { get; set; }
     }
 
-    //public class CurrentProjectAppeal
-    //{
-    //    public string id { get; set; }
-    //    public DateTime? SubmissionDate { get; set; }
-    //}
+    public class CurrentProjectAppeal
+    {
+        public string id { get; set; }
+        public DateTime? SubmissionDate { get; set; }
+        public string Status { get; set; }
+        public string Stage { get; set; }
+    }
 
     public class ProjectType
     {

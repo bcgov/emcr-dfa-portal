@@ -78,7 +78,7 @@ export class DfaDashProjectComponent implements OnInit {
     { status: "Under Review", stage: "", statusColor: "#FDCB52", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "Approval Pending", stage: "", statusColor: "#FDCB52", isCompleted: true, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "Approval Pending", stage: "", statusColor: "#FDCB52", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "Decision Made", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
@@ -200,21 +200,21 @@ export class DfaDashProjectComponent implements OnInit {
                 isFound = true;
                 this.matchStatusFound = true;
 
-                if (objApp.stage) {
-                  objStatItem.stage = objApp.stage;
-                  this.dFAProjectMainDataService.setStage(objApp.stage);
+                if (objApp.activeStage.status) {
+                  objStatItem.stage = objApp.activeStage.status;
+                  //this.dFAProjectMainDataService.setStage(objApp.stage);
                 }
 
                 if (objApp.projectDecision) {
-                  this.dFAProjectMainDataService.setProjectDecision(objApp.projectDecision);
+                  //this.dFAProjectMainDataService.setProjectDecision(objApp.projectDecision);
                 }
 
                 // Determine statusColor based on logic
-                if (['Ineligible', 'Withdrawn'].includes(objApp.stage || '')) {
+                if (['Ineligible', 'Withdrawn'].includes(objApp.activeStage.stage || '')) {
                   objApp.statusColor = '#E25E63';
                 } else if (
-                  objApp.status?.toLowerCase().includes('decision made') &&
-                  objApp.stage?.toLowerCase().includes('progress')
+                  objApp.activeStage.status?.toLowerCase().includes('decision made') &&
+                  objApp.activeStage.stage?.toLowerCase().includes('progress')
                 ) {
                   objApp.statusColor = '#FDCB52';
                 } else {
