@@ -2,6 +2,7 @@
 
 public interface IProjectAppealRepository : IBaseRepository<ProjectAppeal> 
 {
+    // Workflow is synonymous with Dynamics BPF and UI timeline
     ProjectAppealWorkflow GetWorkflow(ProjectAppealQuery query);
 }
 

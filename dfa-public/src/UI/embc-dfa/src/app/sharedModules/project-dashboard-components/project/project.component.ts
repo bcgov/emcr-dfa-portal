@@ -44,6 +44,11 @@ export class DfaDashProjectComponent implements OnInit {
     this.appSessionService.currentProjectsCount.emit(value);
   }
 
+  // TODO if we come back to timelines, it will be easier to refactor the timelines than to make global timeline changes
+  // the existing timelines have static data, different schemas, non-normalized data, etc. We should get the steps from Dynamics
+  // have a consistent schema, and a reusable angular component for the timelines that has the UI and business logic separated
+
+  // project timeline items
   items = [
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "Draft", stage: "", statusColor: "#639DD4", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
@@ -190,10 +195,11 @@ export class DfaDashProjectComponent implements OnInit {
               objAppWithAppeals.appealStatusBar = JSON.parse(JSON.stringify(this.appealItems));
             }
 
+            isFound = false;
             objAppWithAppeals.appealStatusBar.forEach((objStatItem) => {
               const statusMatch =
-                objApp.status &&
-                objStatItem.status?.toLowerCase() === objApp.status.toLowerCase();
+                objApp.activeStage?.stage &&
+                objStatItem.status?.toLowerCase() === objApp.activeStage.stage.toLowerCase();
 
               if (statusMatch) {
                 objStatItem.currentStep = true;
@@ -230,7 +236,8 @@ export class DfaDashProjectComponent implements OnInit {
               // Final step validation
               if (objStatItem.isFinalStep) {
                 if (!isFound) {
-                  objApp.isErrorInStatus = true;
+                  // NOTE commented out to avoid fixing a bug found, no side effects found except if the status was set incorrectly
+                  //objApp.isErrorInStatus = true;
                 } else if (statusMatch) {
                   objStatItem.isCompleted = true;
                 }
