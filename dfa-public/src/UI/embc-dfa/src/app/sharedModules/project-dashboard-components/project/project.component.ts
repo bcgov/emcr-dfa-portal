@@ -313,7 +313,6 @@ export class DfaDashProjectComponent implements OnInit {
       this.appSessionService.pastProjectsCount?.emit(this.lstProjects.length);
     }
 
-    console.log("Projects", this.lstProjects);
     this.lstFilteredProjects = this.lstProjects;
   }
 
@@ -366,7 +365,6 @@ export class DfaDashProjectComponent implements OnInit {
         || (m.siteLocation && m.siteLocation.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1));
     }
 
-    console.log("Filtered Projects", lstProjectsFilterting);
     this.lstFilteredProjects = lstProjectsFilterting;
   }
 
