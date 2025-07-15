@@ -24,7 +24,11 @@ public class ProjectAppealService
             case "Submitted":
                 return PortalNote.Received;
             case "Under Review":
-                if (projectAppeal.AdditionalInfoRequested.ToBool())
+                if (projectAppeal.WaitingOnLegal.ToBool() || projectAppeal.RequiresDecisionNote.ToBool() || projectAppeal.CaseMaterialsReviewed.ToBool())
+                {
+                    return PortalNote.InProgress;
+                }
+                else if (projectAppeal.AdditionalInfoRequested.ToBool())
                 {
                     return PortalNote.WaitingForInformation;
                 }
@@ -33,7 +37,14 @@ public class ProjectAppealService
                     return PortalNote.InProgress;
                 }
             case "Appeals Adjudicator Review":
-                if (projectAppeal.AarAdditionalInfoRequest.ToBool())
+                if (projectAppeal.AarWaitingOnLegal.ToBool() || projectAppeal.AarRequiresDecisionNote.ToBool() || projectAppeal.TimelineNoteAdded.ToBool()
+                    || projectAppeal.AarCheckLgOrIgbAppealDecisionLetter.ToBool() || projectAppeal.GenerateAppealDecisionLetter.ToBool() 
+                    || projectAppeal.IcrpSpeadSheetComplete.ToBool() || projectAppeal.StampAllDocuments.ToBool() || projectAppeal.PreExistingCondition.ToBool()
+                    || projectAppeal.BackUpDocuments.ToBool() || projectAppeal.EligibleProjectScope.ToBool())
+                {
+                    return PortalNote.InProgress;
+                }
+                else if (projectAppeal.AarAdditionalInfoRequest.ToBool())
                 {
                     return PortalNote.WaitingForInformation;
                 }
@@ -42,7 +53,13 @@ public class ProjectAppealService
                     return PortalNote.InProgress;
                 }
             case "Appeals Compliance Check":
-                if (projectAppeal.AccAdditionaInfoRequested.ToBool())
+                if (projectAppeal.AccTimelineNoteAdded.ToBool() || projectAppeal.AccCheckLgOrIgbAppealDecisionLetter.ToBool() || projectAppeal.AccIcrpSpreadsheetComplete.ToBool()
+                    || projectAppeal.AccStampAllDocuments.ToBool() || projectAppeal.AccPreExistingCondition.ToBool() || projectAppeal.AccPreExistingCondition.ToBool()
+                    || projectAppeal.AccBackupDocuments.ToBool() || projectAppeal.AccEligibleProjectScope.ToBool())
+                {
+                    return PortalNote.InProgress;
+                }
+                else if (projectAppeal.AccAdditionaInfoRequested.ToBool())
                 {
                     return PortalNote.WaitingForInformation;
                 }
@@ -51,7 +68,11 @@ public class ProjectAppealService
                     return PortalNote.InProgress;
                 }
             case "Approval Pending":
-                if (projectAppeal.ApAdditionalInfoRequest.ToBool())
+                if (projectAppeal.ApWaitingOnLegal.ToBool() || projectAppeal.ApRequiresDecisionNote.ToBool())
+                {
+                    return PortalNote.InProgress;
+                } 
+                else if (projectAppeal.ApAdditionalInfoRequest.ToBool())
                 {
                     return PortalNote.WaitingForInformation;
                 }
@@ -62,7 +83,7 @@ public class ProjectAppealService
             case "Appeal Decision Made":
                 if (projectAppeal.AppealDecisionCommentsAdded.ToBool() || projectAppeal.AppealDecision != null)
                 {
-                    return projectAppeal.AppealDecision;
+                    return projectAppeal.AppealDecision.ThrowIfNullOrEmpty();
                 }
                 return PortalNote.InProgress;
             case "DFA Project Update":

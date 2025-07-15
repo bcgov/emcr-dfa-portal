@@ -32,6 +32,7 @@ public class ProjectAppealMapper : Profile
             .ForMember(dest => dest.AarWaitingOnLegal, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_AAr_WaitingOnLegal))
             .ForMember(dest => dest.AccAdditionaInfoRequested, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_ACc_AdditionalInfoRequested))
             .ForMember(dest => dest.AccBackupDocuments, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_ACc_BackupDocuments))
+            .ForMember(dest => dest.AccIcrpSpreadsheetComplete, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_ACc_IcRPSpreadsheetCompleteAndCorrect))
             .ForMember(dest => dest.AccCheckLgOrIgbAppealDecisionLetter, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_ACc_CheckLGiGbAppealDecisionLetter))
             .ForMember(dest => dest.AccEligibleProjectScope, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_AcC_EligibleProjectsCope))
             .ForMember(dest => dest.AccPreExistingCondition, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_ACc_PreexistingCondition))

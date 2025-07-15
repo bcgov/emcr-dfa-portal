@@ -53,6 +53,7 @@ public record ProjectAppeal : IDto
 
     public bool? AccAdditionaInfoRequested { get; set; } // Dynamics Optional
     public bool? AccBackupDocuments { get; set; } // Dynamics Optional
+    public bool? AccIcrpSpreadsheetComplete { get; set; } // Dynamics Optional
     public bool? AccCheckLgOrIgbAppealDecisionLetter { get; set; } // Dynamics Optional
     public bool? AccEligibleProjectScope { get; set; } // Dynamics Optional
     public bool? AccPreExistingCondition { get; set; } // Dynamics Optional

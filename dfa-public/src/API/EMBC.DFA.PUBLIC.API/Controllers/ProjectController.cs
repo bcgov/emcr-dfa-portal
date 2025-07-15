@@ -59,6 +59,7 @@ namespace EMBC.DFA.API.Controllers
         public async Task<ActionResult<List<CurrentProject>>> GetDFAProjects(string applicationId)
         {
             var lstProjects = await handler.HandleProjectList(applicationId);
+            // TODO consolidate the above query with the below N queries to have only one query
             lstProjects.ForEach(project => 
             {
                 // load project appeals including process stages(timeline)

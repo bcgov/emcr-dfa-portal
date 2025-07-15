@@ -20,10 +20,34 @@ public static class ArgumentExtensions
         return str;
     }
 
-    public static async Task ThrowIfNotSuccessful(this Task<HttpStatusCode> statusCode)
+    public static Guid ThrowIfNullOrEmpty(this Guid id, string message = null)
     {
-        if (await statusCode != HttpStatusCode.OK)
+        if (id == null || id == Guid.Empty)
+        {
+            throw new ArgumentNullException(message ?? $"Argument was null or empty.");
+        }
+        return id;
+    }
+
+    public static Guid? ThrowIfNullOrEmpty(this Guid? id, string message = null)
+    {
+        if (id == null || id == Guid.Empty)
+        {
+            throw new ArgumentNullException(message ?? $"Argument was null or empty.");
+        }
+        return id;
+    }
+
+    public static async Task<HttpStatusCode> ThrowIfNotSuccessful(this Task<HttpStatusCode> statusCodeTask)
+    {
+        return ThrowIfNotSuccessful(await statusCodeTask);
+    }
+
+    public static HttpStatusCode ThrowIfNotSuccessful(this HttpStatusCode statusCode)
+    {
+        if ((int)statusCode >= 200 && (int)statusCode < 300)
             throw new HttpRequestException($"Request failed with status code: {statusCode}");
+        return statusCode;
     }
 
     public static string ThrowIfNotMinLength(this string str, int length)
