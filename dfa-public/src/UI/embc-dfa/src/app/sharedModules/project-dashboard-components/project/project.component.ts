@@ -92,6 +92,9 @@ export class DfaDashProjectComponent implements OnInit {
     { status: "Approval Pending", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "Appeal Decision Made", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "DFA Project Update", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
@@ -146,9 +149,18 @@ export class DfaDashProjectComponent implements OnInit {
             let isFound = false;
             const jsonVal = JSON.stringify(this.items);
             objApp.isErrorInStatus = false;
+            // if (objApp.appeals && objApp.appeals.length > 0) {
+            //   objApp.appeals.forEach(appeal => {
+            //     if (appeal.submissionDate)
+            //       objApp.isSubmitted = true;
+            //   });
+            // }
             objApp.statusBar = JSON.parse(jsonVal);
             objApp.statusBar.forEach(objStatItem => {
+              //console.log('objApp.status', objApp.status);
+              //console.log('objStatItem.status', objStatItem.status);
               if (objApp.status != null && objStatItem.status.toLowerCase() == objApp.status.toLowerCase()) {
+                //console.log('Match found for status:', objStatItem.status);
                 objStatItem.currentStep = true;
                 isFound = true;
                 this.matchStatusFound = true;
@@ -195,7 +207,7 @@ export class DfaDashProjectComponent implements OnInit {
             // This code needs to be updated once the Dynamics API sends the appealStatusBar in the response
             // #############################################################################################
             const objAppWithAppeals = objApp as CurrentProjectWithAppeals;
-
+            //console.log('objAppWithAppeals', objAppWithAppeals);
             // Initialize appealStatusBar if it's missing
             if (!Array.isArray(objAppWithAppeals.appealStatusBar)) {
               objAppWithAppeals.appealStatusBar = JSON.parse(JSON.stringify(this.appealItems));
@@ -203,11 +215,18 @@ export class DfaDashProjectComponent implements OnInit {
 
             isFound = false;
             objAppWithAppeals.appealStatusBar.forEach((objStatItem) => {
+              //console.log('\nobjApp.activeStage?.status', objApp.activeStage?.status);
+              //console.log('objStatItem', objStatItem);
+              //console.log('objApp.activeStage?.status.toLowerCase()', objApp.activeStage?.status?.toLowerCase());
               const statusMatch =
                 objApp.activeStage?.stage &&
                 objStatItem.status?.toLowerCase() === objApp.activeStage.stage.toLowerCase();
 
+              //console.log('objApp.status', objApp.status);
+              //console.log('objStatItem.status', objStatItem.status);
+
               if (statusMatch) {
+                //console.log('Match found for appeal status:', objStatItem.status);
                 objStatItem.currentStep = true;
                 isFound = true;
                 this.matchStatusFound = true;
@@ -311,6 +330,7 @@ export class DfaDashProjectComponent implements OnInit {
       this.appSessionService.pastProjectsCount?.emit(this.lstProjects.length);
     }
 
+    console.log("Projects", this.lstProjects);
     this.lstFilteredProjects = this.lstProjects;
   }
 
@@ -363,6 +383,7 @@ export class DfaDashProjectComponent implements OnInit {
         || (m.siteLocation && m.siteLocation.toLowerCase().indexOf(this.searchTextInput.toLowerCase()) > -1));
     }
 
+    console.log("Filtered Projects", lstProjectsFilterting);
     this.lstFilteredProjects = lstProjectsFilterting;
   }
 

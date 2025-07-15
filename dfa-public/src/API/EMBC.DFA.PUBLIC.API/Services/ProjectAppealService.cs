@@ -15,6 +15,8 @@ public class ProjectAppealService
         public const string WaitingForInformation = "Waiting for Information";
     }
 
+    // business logic based from the following document
+    // https://bcgov.sharepoint.com/:x:/r/teams/05381-DFAPhase4/Shared%20Documents/DFA%20Phase%204/03%20-%20Appeals/BPF%20Master%20Cross%20Reference%20(2025-05-29)%20-%20Detailed%20BPF%20Stages%20and%20Steps%20Mapping%20Matrix.xlsx?d=w2e0afa352acf4e308c1b710478d389c1&csf=1&web=1&e=lPJIxw&nav=MTVfe0ZENzkxODk1LTNDOUEtNDM3OS1COTUxLTI2QjFGN0RDNzk0OX0
     public string MapStageNote(ProjectAppeal projectAppeal)
     {
         var stageName = projectAppeal.ProjectAppealEligibility.ActiveStage.Name;
