@@ -63,6 +63,7 @@ public abstract class BaseRepository<TEntity, TDto>
     public virtual bool Update(TDto dto, params Expression<Func<TDto, object>>[] properties)
     {
         (dto?.Id).ThrowIfNullOrEmpty("Id cannot be empty or missing.");
+        properties.ThrowIfNull("Properties cannot be null.");
 
         var entity = _databaseContext
             .CreateQuery<TEntity>()
