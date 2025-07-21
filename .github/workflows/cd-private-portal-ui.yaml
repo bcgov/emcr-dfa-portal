@@ -11,6 +11,9 @@ on:
 
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   DOCKER_CONTEXT_DIRECTORY: .
   DOCKERFILE_PATH: dfa/src/UI/Dockerfile

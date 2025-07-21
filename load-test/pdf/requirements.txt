@@ -5,14 +5,14 @@ charset-normalizer==3.4.1
 click==8.1.8
 ConfigArgParse==1.7
 Flask==3.1.0
-Flask-Cors==5.0.0
+Flask-Cors>=6.0.0
 Flask-Login==0.6.3
 gevent==24.11.1
 geventhttpclient==2.3.3
 greenlet==3.1.1
 idna==3.10
 itsdangerous==2.2.0
-Jinja2==3.1.5
+Jinja2>=3.1.6
 locust==2.32.10
 MarkupSafe==3.0.2
 msgpack==1.1.0

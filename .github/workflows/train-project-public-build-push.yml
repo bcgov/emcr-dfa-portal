@@ -2,6 +2,9 @@
 
 name: train-project-public-build-push.yml
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:

@@ -2,6 +2,9 @@
 
 name: test-project-private-build-push.yml
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:

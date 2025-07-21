@@ -2,6 +2,9 @@
 #CD pipeline for dfa api
 name: cd-dfae-project-api
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:

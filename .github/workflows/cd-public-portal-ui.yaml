@@ -1,5 +1,8 @@
 name: Build Public Portal UI
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
