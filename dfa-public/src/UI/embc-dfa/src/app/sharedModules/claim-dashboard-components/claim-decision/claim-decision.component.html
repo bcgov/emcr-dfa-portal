@@ -88,7 +88,9 @@
                         <span><b>Less First $1,000 - </b></span>
                     </div>
                     <div class="col-md-2">
-                        <span>CA$ {{recoveryClaim?.claim.lessFirst1000 | number: '1.2-2'}}</span>
+                        <span>
+                            {{ isAdvPayClaim ? 'N/A' : ('CA$ ' + (recoveryClaim?.claim.lessFirst1000 | number: '1.2-2')) }}
+                        </span>
                     </div>
                     <div class="col-md-2">
                         <span><b>Paid Claim Amount - </b></span>
@@ -106,16 +108,26 @@
                         <span>CA$ {{recoveryClaim?.claim.claimTotal | number: '1.2-2'}}</span>
                     </div>
                     <div class="col-md-2">
-                        <span><b>Approved Reimbursement % - </b></span>
+                    <span><b>Approved Reimbursement % - </b></span>
                     </div>
                     <div class="col-md-2">
-                        <span>{{recoveryClaim?.claim.approvedReimbursement}}</span>
+                    <span>
+                        {{ isAdvPayClaim ? 'N/A' : recoveryClaim?.claim.approvedReimbursement }}
+                    </span>
                     </div>
                     <div class="col-md-2">
                         <span><b>Paid Claim Date - </b></span>
                     </div>
                     <div class="col-md-2">
                         <span>{{recoveryClaim?.claim.paidClaimDate}}</span>
+                    </div>
+                </div>
+                <div class="claim-details">
+                    <div class="col-md-2">
+                        <span><b> Advanced Drawdown Amount - </b></span>
+                    </div>
+                    <div class="col-md-2">
+                        <span>CA$ {{recoveryClaim?.claim.advancedDrawdownAmount | number: '1.2-2'}}</span>
                     </div>
                 </div>
             </mat-card-content>

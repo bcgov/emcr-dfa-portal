@@ -1,4 +1,4 @@
-import { Component, OnInit, NgModule, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, NgModule, Inject, OnDestroy, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -31,12 +31,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { DFAFileDeleteDialogComponent } from 'src/app/core/components/dialog-components/dfa-file-delete-dialog/dfa-file-delete.component';
 import { DFACleanuplogDeleteDialogComponent } from 'src/app/core/components/dialog-components/dfa-cleanuplog-delete-dialog/dfa-cleanuplog-delete.component';
 import { IMaskModule } from 'angular-imask';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AppLoaderComponent } from 'src/app/core/components/app-loader/app-loader.component';
 
 @Component({
   selector: 'app-clean-up-log',
   standalone: false,
   templateUrl: './clean-up-log.component.html',
   styleUrls: ['./clean-up-log.component.scss']
+  
 })
 export default class CleanUpLogComponent implements OnInit, OnDestroy {
   cleanUpLogForm: UntypedFormGroup;
@@ -79,7 +82,8 @@ export default class CleanUpLogComponent implements OnInit, OnDestroy {
     public dfaApplicationMainDataService: DFAApplicationMainDataService,
     private cleanUpLogsService: CleanUpLogItemService,
     private attachmentsService: AttachmentService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public _snackBar: MatSnackBar,
   ) {
     this.formBuilder = formBuilder;
     this.formCreationService = formCreationService;
@@ -251,10 +255,11 @@ export default class CleanUpLogComponent implements OnInit, OnDestroy {
     }
   }
 
-  saveNewCleanupLogFile(fileUpload: FileUpload): void {
+  saveNewCleanupLogFile(fileUpload: FileUpload,fileUploadFormGroup : string ): void {
     // dont allow same filename twice
     let fileUploads = this.formCreationService.fileUploadsForm.value.get('fileUploads').value;
     if (fileUploads?.find(x => x.fileName === fileUpload.fileName && x.deleteFlag !== true)) {
+      this.formCreationService.fileUploadsForm.value.get(fileUploadFormGroup).reset();
       this.warningDialog("A file with the name " + fileUpload.fileName + " has already been uploaded.");
       return;
     }
@@ -270,14 +275,27 @@ export default class CleanUpLogComponent implements OnInit, OnDestroy {
           if (fileUploads) fileUploads.push(fileUpload);
           else fileUploads = [ fileUpload ];
           this.formCreationService.fileUploadsForm.value.get('fileUploads').setValue(fileUploads);
+          this.formCreationService.fileUploadsForm.value.get(fileUploadFormGroup).reset();
           this.cleanUpLogForm.get('haveInvoicesOrReceiptsForCleanupOrRepairs').setValue('true');
           this.showCleanUpWorkFileForm = !this.showCleanUpWorkFileForm;
           this.isLoading = false;
+          this._snackBar.open('The document was successfully uploaded', 'Close', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          });
         },
         error: (error) => {
           console.error(error);
           this.isLoading = false;
-          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          //document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          this._snackBar.open(
+            'Unable to upload the file. Please retry the upload process.',
+            'Close',
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+            }
+        );
         }
       });
     } else {
@@ -394,6 +412,6 @@ export default class CleanUpLogComponent implements OnInit, OnDestroy {
     DirectivesModule,
     MatDatepickerModule
   ],
-  declarations: [CleanUpLogComponent]
+  declarations: [CleanUpLogComponent],
 })
 class CleanUpLogModule {}

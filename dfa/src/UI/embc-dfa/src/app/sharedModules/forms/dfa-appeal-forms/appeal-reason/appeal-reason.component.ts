@@ -33,6 +33,7 @@ export default class AppealReasonComponent implements OnInit, OnDestroy {
     this.appealReasonForm$ = this.formCreationService.getAppealReasonForm().subscribe((form) => {
       if (form) {
         this.appealReasonForm = form;
+        
       }
     });
   }

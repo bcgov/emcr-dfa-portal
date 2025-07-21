@@ -300,6 +300,7 @@
               isReadOnly="false"
               [isRequired]="notInsured"
               whoseSignature="Applicant"
+              [initialDateSigned]="initialApplicantSignature.dateSigned"
               [signatureFormGroup]="appTypeInsuranceForm.get('applicantSignature')"></app-signature>
           </div>
           <div class="col-md-6 bottomspace">
@@ -308,6 +309,7 @@
               isReadOnly="false"
               [isRequired]="false"
               whoseSignature="Secondary Applicant"
+              [initialDateSigned]="initialSecondaryApplicantSignature.dateSigned"
               [signatureFormGroup]="appTypeInsuranceForm.get('secondaryApplicantSignature')"></app-signature>
           </div>
         </div>

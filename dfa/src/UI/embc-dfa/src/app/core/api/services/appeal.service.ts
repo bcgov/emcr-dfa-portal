@@ -15,6 +15,7 @@ import { appealCreateAppeal } from '../fn/appeal/appeal-create-appeal';
 import { AppealCreateAppeal$Params } from '../fn/appeal/appeal-create-appeal';
 import { appealGetAppeal } from '../fn/appeal/appeal-get-appeal';
 import { AppealGetAppeal$Params } from '../fn/appeal/appeal-get-appeal';
+import { AppealModel } from '../models/appeal-model';
 
 @Injectable({ providedIn: 'root' })
 export class AppealService extends BaseService {
@@ -68,7 +69,7 @@ export class AppealService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  appealGetAppeal$Response(params: AppealGetAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  appealGetAppeal$Response(params: AppealGetAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<AppealModel>> {
     return appealGetAppeal(this.http, this.rootUrl, params, context);
   }
 
@@ -82,9 +83,9 @@ export class AppealService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  appealGetAppeal(params: AppealGetAppeal$Params, context?: HttpContext): Observable<void> {
+  appealGetAppeal(params: AppealGetAppeal$Params, context?: HttpContext): Observable<AppealModel> {
     return this.appealGetAppeal$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<AppealModel>): AppealModel => r.body)
     );
   }
 

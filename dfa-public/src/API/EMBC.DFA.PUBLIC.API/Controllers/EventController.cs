@@ -30,7 +30,7 @@ public class EventController : ControllerBase
         var query = new EventQuery
         {
             StateCode = StateCode.Active,
-            BeforeNintyDeadline = DateTime.UtcNow,
+            BeforeNinetyDeadline = DateTime.UtcNow,
             NotNullEventType = true
         };
         var events = _eventRepository

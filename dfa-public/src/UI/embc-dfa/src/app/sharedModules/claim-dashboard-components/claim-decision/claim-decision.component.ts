@@ -29,7 +29,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class ClaimDecisionComponent implements OnInit {
   DecisionEnum = Decision;
   ClaimTypeEnum = ClaimType;
-  
+
   recoveryClaim?: DfaClaimMain;
   recoveryClaimFormAbstract: [];
 
@@ -38,7 +38,7 @@ export class ClaimDecisionComponent implements OnInit {
   documentSummaryDataSourceFiltered = new MatTableDataSource<InvoiceExtended>();
   invoicesCount: number = 0;
   formCreationService: FormCreationService;
-  
+
   InvoiceDecisionEnum = InvoiceDecision;
 
   claimId: string | null = null;
@@ -94,7 +94,7 @@ export class ClaimDecisionComponent implements OnInit {
           this.recoveryClaim = dfaClaimMain;
 
           this.dfaClaimMainDataService.setDFAClaimMain(dfaClaimMain);
-          
+
           //this.dfaClaimMainMapping.mapDFAClaimMain(dfaClaimMain);
           console.log('Recovery Claim:', this.recoveryClaim);
         },
@@ -139,7 +139,7 @@ export class ClaimDecisionComponent implements OnInit {
           this.documentSummaryDataSourceFiltered.data = this.documentSummaryDataSource.data;
           this.invoicesCount = this.documentSummaryDataSource.data.length;
 
-          
+
 
           // this.formCreationService.recoveryClaimForm.value
           //   .get('invoices')
@@ -169,7 +169,7 @@ export class ClaimDecisionComponent implements OnInit {
       } else {
         this.dfaClaimMainDataService.setInvoiceId(null);
       }
-  
+
       this.dialog
         .open(InvoiceComponent, {
           data: {
@@ -193,13 +193,13 @@ export class ClaimDecisionComponent implements OnInit {
 
   canAppealClaims(applItem: DfaClaimMain): boolean {
     // Check if the claim is eligible for appeal based on its status and decision
-    return applItem?.claim.claimDecision 
+    return applItem?.claim.claimDecision
       && (
-          applItem?.claim.claimDecision.toLowerCase() === this.DecisionEnum.ApprovedWithExclusions.toLowerCase() 
+          applItem?.claim.claimDecision.toLowerCase() === this.DecisionEnum.ApprovedWithExclusions.toLowerCase()
           || applItem?.claim.claimDecision.toLowerCase() === this.DecisionEnum.Ineligible.toLowerCase()
         )
       && (applItem?.claim.isAdjustmentClaim !== true && applItem?.claim.claimType !== this.ClaimTypeEnum.AdvancedPayment)
-      && this.remainingDays(applItem) > 0; 
+      && this.remainingDays(applItem) > 0;
   }
 
   remainingDays(appItem: DfaClaimMain): number {
@@ -211,6 +211,10 @@ export class ClaimDecisionComponent implements OnInit {
     let endDate = new Date(endDateStr);
     endDate.setDate(endDate.getDate() + 60);  // add 60 days
     return Math.round((endDate.getTime() - new Date().getTime()) / oneDay);
+  }
+
+  get isAdvPayClaim(): boolean {
+    return this.recoveryClaim?.claim?.claimNumber?.startsWith('ADVPAY');
   }
 
 }

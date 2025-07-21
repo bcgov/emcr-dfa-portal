@@ -5,7 +5,7 @@
 import { CurrentProjectAppeal } from '../models/current-project-appeal';
 import { ProjectStatusBar } from '../models/project-status-bar';
 export interface CurrentProject {
-  appeals?: Array<CurrentProjectAppeal>;
+  activeStage?: CurrentProjectAppeal;
   applicationId?: string;
   createdDate?: string;
   dateFileClosed?: string;
@@ -16,7 +16,6 @@ export interface CurrentProject {
   isClaimSubmission?: boolean;
   isErrorInStatus?: boolean;
   isHidden?: boolean;
-  isSubmitted?: boolean;
   projectApprovedDate?: string;
   projectDecision?: string;
   projectId?: string;

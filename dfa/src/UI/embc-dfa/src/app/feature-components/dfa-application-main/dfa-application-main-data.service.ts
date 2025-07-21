@@ -247,7 +247,6 @@ export class DFAApplicationMainDataService {
     return this.applicationService.applicationGetApplicationMain({ applicationId }).pipe(
       tap((application: DfaApplicationMain) => {
         this.setDFAApplicationMain(application);
-        this.setDfaApplicationStart(application); // emits to BehaviorSubject
       }),
       map(app => app) // keep the original response
     );

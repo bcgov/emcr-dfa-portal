@@ -357,6 +357,8 @@ namespace EMBC.Database.Model
 			public const string Connector = "connector";
 			public const string IsTrigger = "istrigger";
 			public const string IsTriggerName = "istriggername";
+			public const string Lk_DFA_CaseEligibilityAppeal_ActiveStageId = "Lk_DFA_CaseEligibilityAppeal_ActiveStageId";
+			public const string Lk_DFA_CasePaidAmountAppeal_ActiveStageId = "Lk_DFA_CasePaidAmountAppeal_ActiveStageId";
 			public const string Lk_DFA_ProjectEligibilityAppeal_ActiveStageId = "Lk_DFA_ProjectEligibilityAppeal_ActiveStageId";
 			public const string OperationId = "operationid";
 			public const string OperationKind = "operationkind";
@@ -776,6 +778,42 @@ namespace EMBC.Database.Model
 			get
 			{
 				return this.GetAttributeValue<System.Nullable<long>>("versionnumber");
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_caseeligibilityappeal_activestageid
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_caseeligibilityappeal_activestageid")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_CaseEligibilityAppeal> Lk_DFA_CaseEligibilityAppeal_ActiveStageId
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_CaseEligibilityAppeal>("lk_dfa_caseeligibilityappeal_activestageid", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_CaseEligibilityAppeal>("lk_dfa_caseeligibilityappeal_activestageid", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_casepaidamountappeal_activestageid
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_casepaidamountappeal_activestageid")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_CasePaidAmountAppeal> Lk_DFA_CasePaidAmountAppeal_ActiveStageId
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_CasePaidAmountAppeal>("lk_dfa_casepaidamountappeal_activestageid", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_CasePaidAmountAppeal>("lk_dfa_casepaidamountappeal_activestageid", null, value);
 			}
 		}
 		

@@ -16,6 +16,7 @@ export interface CurrentClaim {
   claimNumber?: string;
   claimTotal?: string;
   claimType?: string | null;
+  codingBlockSubmissionStatus?: string;
   createdDate?: string;
   dateFileClosed?: string;
   decisionDate?: string;

@@ -1,6 +1,9 @@
 # GitHub Actions pipeline for DFA PDF microservice
 name: Build PDF Service
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:

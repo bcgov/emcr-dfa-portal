@@ -1,4 +1,6 @@
 name: ZAP Scan
+permissions:
+  contents: read
 on:
   push:
     branches:

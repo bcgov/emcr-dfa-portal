@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using AutoMapper;
+using EMBC.Database.Resources;
+using EMBC.Database.Shared.Contract;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.Services;
+using EMBC.DFA.PUBLIC.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,21 +28,22 @@ namespace EMBC.DFA.API.Controllers
         private readonly IHostEnvironment env;
         private readonly IMapper mapper;
         private readonly IConfigurationHandler handler;
+        private readonly ProjectAppealService projectAppealService;
+        private readonly IProjectAppealRepository projectAppealRepository;
         // 2024-08-11 EMCRI-595 waynezen; BCeID Authentication
         private readonly IUserService userService;
         private readonly IConfiguration configuration;
 
         public ProjectController(
-            IHostEnvironment env,
-            IMapper mapper,
-            IConfigurationHandler handler,
-            IUserService userService,
-            IConfiguration configuration)
+            IHostEnvironment env, IMapper mapper, IConfigurationHandler handler, ProjectAppealService projectAppealService, IProjectAppealRepository projectAppealRepository,
+            IUserService userService, IConfiguration configuration)
         {
             this.env = env;
             this.mapper = mapper;
             this.handler = handler;
-            this.userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            this.projectAppealService = projectAppealService.ThrowIfNull();
+            this.projectAppealRepository = projectAppealRepository.ThrowIfNull();
+            this.userService = userService.ThrowIfNull();
             this.configuration = configuration;
         }
 

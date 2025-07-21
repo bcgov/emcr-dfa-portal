@@ -146,38 +146,42 @@
 
 
       @if(canAppeal(applItem) && applItem.appeals.length > 0 ) {
-      <div [ngClass]="applItem.hasAppealStages ? 'appeal-stages' : ''" class="bfpTimeline">
-        <div class="col-md-3" style="margin-top: 20px;">
-          <span><b>Eligibility Appeal Status</b></span><br />
-          <span *ngIf="applItem.isErrorInAppealStatus === true" style="color: red;">Error in displaying
-            status<br /></span>
+        <div class="appealsTimeline">
+          <div [ngClass]="applItem.hasAppealStages ? 'appeal-stages' : ''" class="bfpTimeline">
+            <div class="col-md-3" style="margin-top: 20px;">
+              <span><b>Eligibility Appeal Status</b></span><br />
+              <span *ngIf="applItem.isErrorInAppealStatus === true" style="color: red;">Error in displaying
+                status<br /></span>
+            </div>
+            <div *ngFor="let item of applItem.appealStatusBar; let i=index" id="item{{i}}" class="stepsDesc col-md-1">
+              <span class="stepText">{{item.label}}</span>
+            </div>
+            <br style="clear: both;" />
+            <div *ngFor="let item of applItem.appealStatusBar; let i=index" id="item{{i}}"
+              [ngClass]="i === 0 ? 'nocircle col-md-1' : 'circle col-md-1'">
+              <span *ngIf="item.isCompleted === true" class="material-icons"
+                style="color: rgb(21 178 89);">
+                check_circle </span>
+              <span *ngIf="item.isCompleted === false && item.currentStep === true"
+                class="material-symbols-outlined" style="color: darkblue">
+                circle
+              </span>
+              <span *ngIf="item.isCompleted === false && item.currentStep === false"
+                class="material-symbols-outlined" style="color: lightgrey">
+                circle
+              </span>
+            </div>
+            <span *ngIf="applItem.isErrorInStatus === true" class="material-symbols-outlined" style="color: lightgrey">
+              circle
+            </span>
+           
+          </div>
+          <div>
+            <button class="col-md-2 application-button whitebutton" type="button"
+              (click)="viewAppealAfterSubmission(applItem, 'eligibility')">View Appeal</button>
+          </div>
         </div>
-        <div *ngFor="let item of applItem.appealStatusBar; let i=index" id="item{{i}}" class="stepsDesc col-md-1">
-          <span class="stepText">{{item.label}}</span>
-        </div>
-        <br style="clear: both;" />
-        <div *ngFor="let item of applItem.appealStatusBar; let i=index" id="item{{i}}"
-          [ngClass]="i === 0 ? 'nocircle col-md-1' : 'circle col-md-1'">
-          <span *ngIf="item.isCompleted === true && applItem.isErrorInAppealStatus === false" class="material-icons"
-            style="color: rgb(21 178 89);">
-            check_circle </span>
-          <span *ngIf="item.isCompleted === false && item.currentStep === true && applItem.isErrorInStatus === false"
-            class="material-symbols-outlined" style="color: darkblue">
-            circle
-          </span>
-          <span *ngIf="item.isCompleted === false && item.currentStep === false && applItem.isErrorInStatus === false"
-            class="material-symbols-outlined" style="color: lightgrey">
-            circle
-          </span>
-        </div>
-        <span *ngIf="applItem.isErrorInStatus === true" class="material-symbols-outlined" style="color: lightgrey">
-          circle
-        </span>
-        <div>
-          <button class="col-md-2 application-button whitebutton" type="button"
-            (click)="viewAppealAfterSubmission(applItem, 'eligibility')">View Appeal</button>
-        </div>
-      </div>
+     
       }
 
       @if (!applItem.appeals || applItem.appeals.length === 0) {

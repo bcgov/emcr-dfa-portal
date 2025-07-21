@@ -1,29 +1,28 @@
 import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
   OnInit,
-  ViewChild,
-  AfterViewInit,
-  AfterViewChecked,
-  ChangeDetectorRef,
-  ViewEncapsulation
+  ViewChild
 } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ComponentCreationService } from '../../core/services/componentCreation.service';
-import * as globalConst from '../../core/services/globalConstants';
-import { ComponentMetaDataModel } from '../../core/model/componentMetaData.model';
+import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, distinctUntilChanged, mapTo } from 'rxjs';
-import { FormCreationService } from '../../core/services/formCreation.service';
-import { AlertService } from 'src/app/core/services/alert.service';
-import { DFAApplicationMainDataService } from './dfa-application-main-data.service';
-import { DFAApplicationMainService } from './dfa-application-main.service';
 import { ApplicantOption, FarmOption, InsuranceOption, SmallBusinessOption } from 'src/app/core/api/models';
 import { ApplicationService, AttachmentService } from 'src/app/core/api/services';
-import { MatDialog } from '@angular/material/dialog';
+import { AddressChangeComponent } from 'src/app/core/components/dialog-components/address-change-dialog/address-change-dialog.component';
 import { DFAConfirmSubmitDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-submit-dialog/dfa-confirm-submit-dialog.component';
 import { SecondaryApplicant } from 'src/app/core/model/dfa-application-main.model';
-import { AddressChangeComponent } from 'src/app/core/components/dialog-components/address-change-dialog/address-change-dialog.component';
+import { AlertService } from 'src/app/core/services/alert.service';
+import { ComponentMetaDataModel } from '../../core/model/componentMetaData.model';
+import { ComponentCreationService } from '../../core/services/componentCreation.service';
+import { FormCreationService } from '../../core/services/formCreation.service';
+import * as globalConst from '../../core/services/globalConstants';
+import { DFAApplicationMainDataService } from './dfa-application-main-data.service';
+import { DFAApplicationMainService } from './dfa-application-main.service';
 
 
 @Component({
@@ -327,27 +326,42 @@ export class DFAApplicationMainComponent
 
     this.signAndSubmitForm
       .get('applicantSignature')
-      .valueChanges.pipe(distinctUntilChanged())
-      .subscribe((value) => {
+      .valueChanges.pipe(
+        distinctUntilChanged(
+          (prev, curr) => prev.dateSigned?.toISOString?.() === curr.dateSigned?.toISOString?.() && prev.signedName === curr.signedName
+        )
+      ).subscribe((value) => {
         if (this.vieworedit === 'view' || this.vieworedit === 'edit' || this.vieworedit === 'viewOnly') {
           this.dfaApplicationMainDataService.setViewOrEdit(this.vieworedit);
-          for (var i = 0; i <= 7; i++) {
-            this.dfaApplicationMainStepper.selected.completed = true;
-            this.dfaApplicationMainStepper.next();
-          }
-          if (this.vieworedit === 'edit') this.dfaApplicationMainStepper.selectedIndex = Number(this.editstep);
+
+          // Mark all steps as completed without auto-advancing
+          setTimeout(() => {
+            this.dfaApplicationMainStepper.steps.forEach((step, index) => {
+              step.completed = true;
+            });
+
+            // Only set the target step index for edit mode
+            if (this.vieworedit === 'edit') {
+              console.log("Edit Step:", this.editstep);
+              this.dfaApplicationMainStepper.selectedIndex = Number(this.editstep);
+            }
+          }, 100);
+
         } else if (this.vieworedit !== 'add' && this.vieworedit !== 'update') {
           this.dfaApplicationMainStepper.selectedIndex = 0;
           if (this.signAndSubmitForm.get('applicantSignature')?.get('dateSigned')?.value) {
             this.vieworedit = "view";
             this.dfaApplicationMainDataService.setViewOrEdit("view");
             this.dfaApplicationMainDataService.isSubmitted = true;
-            for (var i = 0; i <= 7; i++) {
-              this.dfaApplicationMainStepper.selected.completed = true;
-              this.dfaApplicationMainStepper.next();
-            }
-          }
-          else {
+
+            // Mark all steps as completed without auto-advancing
+            setTimeout(() => {
+              this.dfaApplicationMainStepper.steps.forEach((step, index) => {
+                step.completed = true;
+              });
+            }, 100);
+
+          } else {
             this.vieworedit = "update";
             this.dfaApplicationMainDataService.setViewOrEdit("update");
           }
@@ -430,10 +444,16 @@ export class DFAApplicationMainComponent
    * @param stepper stepper instance
    */
   stepChanged(event: any, stepper: MatStepper): void {
-    stepper.selected.interacted = false;
+    console.trace("stepChanged", this.dfaApplicationMainStepper.selectedIndex);
+    //  stepper.selected.interacted = false;
 
     this.validateForms();
-    this.setCompletedSteps();
+    setTimeout(() => {
+      stepper.steps.forEach((step, index) => {
+        step.completed = this.getStepCompleted(index);
+      });
+      this.cd.detectChanges();
+    }, 100);
   }
 
   /**
@@ -444,6 +464,9 @@ export class DFAApplicationMainComponent
    */
   goBack(stepper: MatStepper, lastStep): void {
     this.validateForms();
+    if (this.form$) {
+      this.form$.unsubscribe();
+    }
     if (lastStep === 0) {
       stepper.previous();
     } else if (lastStep === -1) {
@@ -505,9 +528,11 @@ export class DFAApplicationMainComponent
           default:
             break;
         }
-        this.form$.unsubscribe();
+        if (this.form$){
+          this.form$.unsubscribe();
+        }
         stepper.next();
-        this.form.markAllAsTouched();
+        if (this.form) this.form.markAllAsTouched();
       },
       error => {
         console.error(error);
@@ -516,14 +541,30 @@ export class DFAApplicationMainComponent
     }
   }
 
-  setCompletedSteps(){
-    this.dfaApplicationMainStepper.steps.get(0).completed = this.applicationDetailsValid;
-    this.dfaApplicationMainStepper.steps.get(1).completed = this.damagedPropertyAddressValid;
-    this.dfaApplicationMainStepper.steps.get(2).completed = this.propertyDamageValid;
-    this.dfaApplicationMainStepper.steps.get(3).completed = this.areOccupantsValid();
-    this.dfaApplicationMainStepper.steps.get(4).completed = this.cleanUpLogValid;
-    this.dfaApplicationMainStepper.steps.get(5).completed = this.cleanUpLogItemsValid;
-    this.dfaApplicationMainStepper.steps.get(6).completed = this.requiredDocumentsSupplied();
+  getStepControl(stepIndex: number): UntypedFormGroup | null {
+    switch (stepIndex) {
+      case 0: return this.applicationDetailsForm;
+      case 1: return this.damagedPropertyAddressForm;
+      case 2: return this.propertyDamageForm;
+      case 3: return null; // Occupants step has multiple forms
+      case 4: return this.cleanUpLogForm;
+      case 5: return this.cleanUpLogItemsForm;
+      case 6: return this.supportingDocumentsForm;
+      default: return null;
+    }
+  }
+
+  getStepCompleted(stepIndex: number): boolean {
+    switch (stepIndex) {
+      case 0: return this.applicationDetailsValid;
+      case 1: return this.damagedPropertyAddressValid;
+      case 2: return this.propertyDamageValid;
+      case 3: return this.areOccupantsValid(); // Use your existing logic
+      case 4: return this.cleanUpLogValid;
+      case 5: return this.cleanUpLogItemsValid;
+      case 6: return this.requiredDocumentsSupplied();
+      default: return false;
+    }
   }
 
   requiredDocumentsSupplied(): boolean {
@@ -552,23 +593,42 @@ export class DFAApplicationMainComponent
   }
 
   areOccupantsValid(): boolean {
-    if (this.isOtherContactValid() && this.isOccupantValid()){
-      return true;
-    }
-    return false;
+    const fullTimeValid = this.isOccupantValid();
+    const otherContactValid = this.isOtherContactValid();
+
+    const result = fullTimeValid && otherContactValid;
+
+    return result;
   }
 
   isOtherContactValid(): boolean {
     const onlyOtherContact = this.otherContactsForm.get('contactDetails.onlyOtherContact')?.value ?? false;
+
+    // For disabled forms, check the raw data instead of form validity
+    if (this.otherContactsForm.disabled) {
+      const formData = this.otherContactsForm.getRawValue();
+      const hasContactData = formData.otherContacts && formData.otherContacts.length > 0;
+      const isOnlyOtherContactChecked = formData.contactDetails?.onlyOtherContact === true;
+
+      return hasContactData || isOnlyOtherContactChecked;
+    }
     return this.otherContactsForm.valid || onlyOtherContact;
   }
 
   isOccupantValid(): boolean {
-    let onlyOccupantInHome = this.fullTimeOccupantsForm.get('onlyOccupantInHome').value;
-    if (this.fullTimeOccupantsForm.valid || onlyOccupantInHome){
-      return true;
+    const onlyOccupantInHome = this.fullTimeOccupantsForm.get('fullTimeOccupant.onlyOccupantInHome')?.value ?? false;
+    const isFormValid = this.fullTimeOccupantsForm.valid;
+    const isFormDisabled = this.fullTimeOccupantsForm.disabled;
+
+    // If form is disabled (view-only mode), check the actual data
+    if (isFormDisabled) {
+      // Get occupants directly from form data
+      const formData = this.fullTimeOccupantsForm.getRawValue();
+      const hasOccupants = formData?.fullTimeOccupants?.length > 0;
+      const result = hasOccupants || onlyOccupantInHome;
+      return result;
     }
-    return false;
+    return isFormValid || onlyOccupantInHome;
   }
 
   /**
@@ -682,6 +742,8 @@ export class DFAApplicationMainComponent
         break;
       case 3:
         this.form$ = null;
+        this.form = null;
+        break;
       case 4:
         this.form$ = this.formCreationService
           .getCleanUpLogForm()
@@ -691,6 +753,8 @@ export class DFAApplicationMainComponent
         break;
       case 5:
         this.form$ = null;
+        this.form = null;
+        break;
       case 6:
         this.form$ = this.formCreationService
           .getSupportingDocumentsForm()

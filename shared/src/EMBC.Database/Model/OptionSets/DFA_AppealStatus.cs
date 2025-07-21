@@ -17,55 +17,59 @@ namespace EMBC.Database.Model
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("In eApprovals", 0, "#0000ff")]
+		[OptionSetMetadataAttribute("Completed", 0, "#0000ff")]
+		Completed = 222710005,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("In eApprovals", 1, "#0000ff")]
 		InEapprovals = 222710006,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("In Progress", 1, "#0000ff")]
+		[OptionSetMetadataAttribute("In Progress", 2, "#0000ff")]
 		InProgress = 222710007,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("In Progress – 21-day letter issued", 4, "#0000ff")]
+		[OptionSetMetadataAttribute("In Progress – 21-day letter issued", 5, "#0000ff")]
 		InProgress21DayLetterIssued = 222710010,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("In Progress – with Appeals Officer", 5, "#0000ff")]
+		[OptionSetMetadataAttribute("In Progress – with Appeals Officer", 6, "#0000ff")]
 		InProgressWithAppealsOfficer = 222710011,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("In Progress – with Evaluator", 6, "#0000ff")]
+		[OptionSetMetadataAttribute("In Progress – with Evaluator", 7, "#0000ff")]
 		InProgressWithEvaluator = 222710012,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("In Progress – with legal", 2, "#0000ff")]
+		[OptionSetMetadataAttribute("In Progress – with legal", 3, "#0000ff")]
 		InProgressWithLegal = 222710008,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("In Progress – with SME", 3, "#0000ff")]
+		[OptionSetMetadataAttribute("In Progress – with SME", 4, "#0000ff")]
 		InProgressWithSme = 222710009,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Other", 12, "#0000ff")]
+		[OptionSetMetadataAttribute("Other", 13, "#0000ff")]
 		Other = 222710004,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Overturned", 10, "#0000ff")]
+		[OptionSetMetadataAttribute("Overturned", 11, "#0000ff")]
 		Overturned = 222710002,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Pending Decision", 8, "#0000ff")]
+		[OptionSetMetadataAttribute("Pending Decision", 9, "#0000ff")]
 		PendingDecision = 222710000,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Received", 7, "#0000ff")]
+		[OptionSetMetadataAttribute("Received", 8, "#0000ff")]
 		Received = 222710013,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Upheld", 9, "#0000ff")]
+		[OptionSetMetadataAttribute("Upheld", 10, "#0000ff")]
 		Upheld = 222710001,
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Withdrawn", 11, "#0000ff")]
+		[OptionSetMetadataAttribute("Withdrawn", 12, "#0000ff")]
 		Withdrawn = 222710003,
 	}
 }

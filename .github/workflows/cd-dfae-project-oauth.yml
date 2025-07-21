@@ -1,5 +1,8 @@
 name: cd-dfae-project-oauth
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:

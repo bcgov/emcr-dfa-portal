@@ -54,6 +54,8 @@ namespace EMBC.Database.Model
 		/// </summary>
 		public partial class Fields
 		{
+			public const string Bpf_DFA_Appeal_DFA_CaseEligibilityAppeal = "Bpf_DFA_Appeal_DFA_CaseEligibilityAppeal";
+			public const string Bpf_DFA_Appeal_DFA_CasePaidAmountAppeal = "Bpf_DFA_Appeal_DFA_CasePaidAmountAppeal";
 			public const string CreatedBy = "createdby";
 			public const string CreatedByName = "createdbyname";
 			public const string CreatedByYomiName = "createdbyyominame";
@@ -4461,6 +4463,42 @@ namespace EMBC.Database.Model
 			get
 			{
 				return this.GetAttributeValue<System.Nullable<long>>("versionnumber");
+			}
+		}
+		
+		/// <summary>
+		/// 1:N bpf_dfa_appeal_dfa_caseeligibilityappeal
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("bpf_dfa_appeal_dfa_caseeligibilityappeal")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_CaseEligibilityAppeal> Bpf_DFA_Appeal_DFA_CaseEligibilityAppeal
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_CaseEligibilityAppeal>("bpf_dfa_appeal_dfa_caseeligibilityappeal", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_CaseEligibilityAppeal>("bpf_dfa_appeal_dfa_caseeligibilityappeal", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N bpf_dfa_appeal_dfa_casepaidamountappeal
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("bpf_dfa_appeal_dfa_casepaidamountappeal")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_CasePaidAmountAppeal> Bpf_DFA_Appeal_DFA_CasePaidAmountAppeal
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_CasePaidAmountAppeal>("bpf_dfa_appeal_dfa_casepaidamountappeal", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_CasePaidAmountAppeal>("bpf_dfa_appeal_dfa_casepaidamountappeal", null, value);
 			}
 		}
 		

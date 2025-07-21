@@ -100,6 +100,8 @@
   "entityNamesFilter": [
     "bcgov_documenturl",
     "dfa_appeal",
+    "dfa_caseeligibilityappeal",
+    "dfa_casepaidamountappeal",
     "dfa_clientcode",
     "dfa_event",
     "dfa_project",

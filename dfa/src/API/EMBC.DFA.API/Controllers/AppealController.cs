@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -109,7 +109,7 @@ namespace EMBC.DFA.API.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetAppeal(Guid id)
+        public ActionResult<AppealModel> GetAppeal(Guid id)
         {
             var appeal = repository.FirstOrDefault(e => e.Id == id);
             if (appeal == null) return NotFound();

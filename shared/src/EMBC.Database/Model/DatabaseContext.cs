@@ -51,6 +51,28 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_CaseEligibilityAppeal"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.DFA_CaseEligibilityAppeal> DFA_CaseEligibilityAppealSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.DFA_CaseEligibilityAppeal>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_CasePaidAmountAppeal"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.DFA_CasePaidAmountAppeal> DFA_CasePaidAmountAppealSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.DFA_CasePaidAmountAppeal>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_ClientCode"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<EMBC.Database.Model.DFA_ClientCode> DFA_ClientCodeSet

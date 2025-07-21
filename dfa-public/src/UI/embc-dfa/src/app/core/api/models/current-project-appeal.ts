@@ -4,5 +4,7 @@
 
 export interface CurrentProjectAppeal {
   id?: string;
+  stage?: string;
+  status?: string;
   submissionDate?: string | null;
 }

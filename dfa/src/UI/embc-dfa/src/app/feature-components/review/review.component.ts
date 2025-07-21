@@ -136,8 +136,6 @@ export class ReviewComponent implements OnInit {
     // subscribe to changes in other contacts
     const form = this.formCreationService.otherContactsForm.value;
     const otherContactsArray = form?.get('otherContacts') as FormArray;
-
-    if (otherContactsArray) {
       otherContactsArray.valueChanges
         .pipe(
           startWith(otherContactsArray.value), // emit initial value immediately
@@ -146,9 +144,6 @@ export class ReviewComponent implements OnInit {
         .subscribe(data => {
           this.otherContactsDataSource.data = data;
         });
-    }
-  
-  
 
     // subscribe to changes in clean up logs
     const _cleanUpWorkFormArray = this.formCreationService.cleanUpLogItemsForm.value.get('cleanuplogs');

@@ -39,7 +39,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'dfa-appeal/:type/:caseId',
+    path: 'dfa-appeal/:type/:caseId/:appealId',
     loadChildren: () =>
       import(
         './feature-components/dfa-appeal/dfa-appeal.module'

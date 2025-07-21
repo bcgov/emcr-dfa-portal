@@ -36,7 +36,7 @@ export class AppealConfirmationDialogComponent {
     }
     this.dfaAppealDataService.setCaseDetails(this.content);
     this.dialogRef.close();
-    this.router.navigate([`/dfa-appeal/${type}/${caseId}`]);
+    this.router.navigate([`/dfa-appeal/${type}/${caseId}/new`]);
   }
 
   cancel() {

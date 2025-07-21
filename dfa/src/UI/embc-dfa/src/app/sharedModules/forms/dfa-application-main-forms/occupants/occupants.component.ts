@@ -1,31 +1,31 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {
+  AbstractControl,
+  ReactiveFormsModule,
   UntypedFormBuilder,
   UntypedFormGroup,
-  AbstractControl,
   Validators,
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormCreationService } from 'src/app/core/services/formCreation.service';
-import { BehaviorSubject, Subject, Subscription, take, takeUntil } from 'rxjs';
-import { DirectivesModule } from '../../../../core/directives/directives.module';
-import { CustomValidationService } from 'src/app/core/services/customValidation.service';
-import { MatTableModule } from '@angular/material/table';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { CustomPipeModule } from 'src/app/core/pipe/customPipe.module';
-import { ApplicantOption, SecondaryApplicantTypeOption } from 'src/app/core/api/models';
-import { MatSelectModule } from '@angular/material/select';
-import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
-import { ApplicationService, FullTimeOccupantService, OtherContactService, SecondaryApplicantService } from 'src/app/core/api/services';
 import { MatDialog } from '@angular/material/dialog';
-import { SecondaryApplicantWarningDialogComponent } from '../../../../core/components/dialog-components/secondary-applicant-warning-dialog/secondary-applicant-warning-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
 import { IMaskModule } from 'angular-imask';
+import { BehaviorSubject, Subject, Subscription, take, takeUntil } from 'rxjs';
+import { ApplicantOption, SecondaryApplicantTypeOption } from 'src/app/core/api/models';
+import { ApplicationService, FullTimeOccupantService, OtherContactService, SecondaryApplicantService } from 'src/app/core/api/services';
+import { CustomPipeModule } from 'src/app/core/pipe/customPipe.module';
+import { CustomValidationService } from 'src/app/core/services/customValidation.service';
+import { FormCreationService } from 'src/app/core/services/formCreation.service';
+import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
+import { SecondaryApplicantWarningDialogComponent } from '../../../../core/components/dialog-components/secondary-applicant-warning-dialog/secondary-applicant-warning-dialog.component';
+import { DirectivesModule } from '../../../../core/directives/directives.module';
 
 @Component({
   selector: 'app-occupants',
@@ -110,8 +110,8 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
     this.dfaApplicationMainDataService.changeViewOrEdit
       .pipe(takeUntil(this.destroy$))
       .subscribe((vieworedit) => {
-      this.vieworedit = vieworedit;
-    });
+        this.vieworedit = vieworedit;
+      });
   }
 
   private destroy$ = new Subject<void>();
@@ -121,20 +121,19 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
     // Call the API manually and wait for it to finish
     this.dfaApplicationMainDataService
-    .loadApplicationById(this.dfaApplicationMainDataService.getApplicationId())
-    .pipe(take(1))
-    .subscribe({
-      next: () => {
-        this.initFullTimeOccupantsForm();
-        this.initOtherContactsForm();
-        this.initSecondaryApplicantsForm();
-        this.applyViewModePermissions();
-      },
-      error: (err) => {
-        console.error('Error loading application', err);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
-      }
-    });
+      .loadApplicationById(this.dfaApplicationMainDataService.getApplicationId())
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.initFullTimeOccupantsForm();
+          this.initOtherContactsForm();
+          this.initSecondaryApplicantsForm();
+        },
+        error: (err) => {
+          console.error('Error loading application', err);
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        }
+      });
   }
 
   private newApplicationRemoveCache(): void {
@@ -158,23 +157,22 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
               const option = application.appTypeInsurance.applicantOption;
               const keys = Object.keys(this.ApplicantOptions);
               const values = Object.values(this.ApplicantOptions);
-    
               this.isResidentialTenant = (option == keys[values.indexOf(this.ApplicantOptions.ResidentialTenant)]);
               this.isHomeowner = (option == keys[values.indexOf(this.ApplicantOptions.Homeowner)]);
               this.isSmallBusinessOwner = (option == keys[values.indexOf(this.ApplicantOptions.SmallBusinessOwner)]);
               this.isFarmOwner = (option == keys[values.indexOf(this.ApplicantOptions.FarmOwner)]);
               this.isCharitableOrganization = (option == keys[values.indexOf(this.ApplicantOptions.CharitableOrganization)]);
-    
+
               if (this.isHomeowner || this.isResidentialTenant) {
                 this.fullTimeOccupantsForm.get('fullTimeOccupants').setValidators([Validators.required]);
               } else {
                 this.fullTimeOccupantsForm.get('fullTimeOccupants').setValidators(null);
               }
-    
+
               this.fullTimeOccupantsForm.get('fullTimeOccupants').updateValueAndValidity();
               this.onlyOccupantInHome = this.dfaApplicationMainDataService.getIsOnlyOccupantInHome();
               this.hideOccupantButton = this.onlyOccupantInHome;
-            
+
               if (this.isHomeowner || this.isResidentialTenant) {
                 const onlyOccupantCtrl = this.fullTimeOccupantsForm.get('onlyOccupantInHome');
                 if (onlyOccupantCtrl && onlyOccupantCtrl.enabled) {
@@ -183,7 +181,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
                 }
               }
             }
-        });
+          });
         this.fullTimeOccupantsForm.get('onlyOccupantInHome')
           .valueChanges
           .pipe(takeUntil(this.destroy$))
@@ -195,22 +193,20 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
         this.getFullTimeOccupantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
       });
-    
-    
   }
 
   private initSecondaryApplicantsForm() {
     this.secondaryApplicantsForm$ = this.formCreationService.getSecondaryApplicantsForm()
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(form => {
-      this.secondaryApplicantsForm = form;
-      this.secondaryApplicantsForm
-        .get('addNewSecondaryApplicantIndicator')
-        .valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateSecondaryApplicantOnVisibility());
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(form => {
+        this.secondaryApplicantsForm = form;
+        this.secondaryApplicantsForm
+          .get('addNewSecondaryApplicantIndicator')
+          .valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.updateSecondaryApplicantOnVisibility());
         this.getSecondaryApplicantsForApplication(this.dfaApplicationMainDataService.getApplicationId());
-    });
+      });
   }
-  
+
   private initOtherContactsForm() {
     this.otherContactsForm$ = this.formCreationService.getOtherContactsForm()
       .pipe(takeUntil(this.destroy$))
@@ -233,7 +229,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
             onlyOtherContactCtrl.setValue(onlyOtherContactValue, { emitEvent: false });
           }
         }
-        
+
         // Sync component property and apply validators based on checkbox state
         this.onlyOtherContact = onlyOtherContactValue;
         this.hideOtherContactButton = onlyOtherContactValue;
@@ -247,8 +243,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
             this.hideOtherContactButton = value;
             this.updateOnlyOtherContact(value);
           });
-  
-        // Also handle visibility logic when this other control changes
+
         this.otherContactsForm.get('addNewOtherContactIndicator')?.valueChanges
           .pipe(takeUntil(this.destroy$))
           .subscribe(() => {
@@ -257,19 +252,28 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
         // Load any saved contacts from the service
         this.getOtherContactsForApplication(this.dfaApplicationMainDataService.getApplicationId());
-    }); 
+
+        setTimeout(() => {
+          const mode = this.vieworedit || this.dfaApplicationMainDataService.getViewOrEdit();
+          if (['view', 'edit', 'viewOnly'].includes(mode)) {
+            this.otherContactsForm.disable(); // Disable ALL controls including the checkbox
+            // Set the component property to ensure template binding works
+            this.disableOnlyOtherContact = true;
+          }
+        }, 1000);
+      });
   }
-  
+
   private applyViewModePermissions() {
     const mode = this.vieworedit || this.dfaApplicationMainDataService.getViewOrEdit();
-  
+
     if (['view', 'edit', 'viewOnly'].includes(mode)) {
       this.secondaryApplicantsForm?.disable();
       this.fullTimeOccupantsForm?.disable();
       this.disableOnlyOccupant = true;
       this.disableOnlyOtherContact = true;
     }
-  
+
     if (mode === 'viewOnly') {
       this.secondaryApplicantsForm?.disable();
     }
@@ -286,7 +290,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
       applicationId = this.dfaApplicationMainDataService.getApplicationId();
     }
 
-    this.secondaryApplicantsService.secondaryApplicantGetSecondaryApplicants({applicationId: applicationId}).subscribe({
+    this.secondaryApplicantsService.secondaryApplicantGetSecondaryApplicants({ applicationId: applicationId }).subscribe({
       next: (secondaryApplicants) => {
         this.secondaryApplicantsData = secondaryApplicants;
         this.secondaryApplicantsDataSource.next(this.secondaryApplicantsData);
@@ -304,12 +308,12 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
       applicationId = this.dfaApplicationMainDataService.getApplicationId();
     }
 
-    this.otherContactsService.otherContactGetOtherContacts({applicationId: applicationId})
+    this.otherContactsService.otherContactGetOtherContacts({ applicationId: applicationId })
       .subscribe({
         next: (otherContacts) => {
           this.otherContactsData = otherContacts;
           this.otherContactsDataSource.next(this.otherContactsData);
-          
+
           // Ensure the control exists before setting the value
           const otherContactsCtrl = this.otherContactsForm.get('otherContacts');
           if (otherContactsCtrl) {
@@ -332,7 +336,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
           console.error(error);
           document.location.href = 'https://dfa.gov.bc.ca/error.html';
         }
-    });
+      });
   }
 
   getFullTimeOccupantsForApplication(applicationId: string) {
@@ -340,7 +344,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
       applicationId = this.dfaApplicationMainDataService.getApplicationId();
     }
 
-    this.fullTimeOccupantsService.fullTimeOccupantGetFullTimeOccupants({applicationId: applicationId})
+    this.fullTimeOccupantsService.fullTimeOccupantGetFullTimeOccupants({ applicationId: applicationId })
       .subscribe({
         next: (fullTimeOccupants) => {
           this.fullTimeOccupantsData = fullTimeOccupants;
@@ -352,7 +356,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
           console.error(error);
           document.location.href = 'https://dfa.gov.bc.ca/error.html';
         }
-    });
+      });
   }
 
   addFullTimeOccupant(): void {
@@ -366,21 +370,21 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
   saveFullTimeOccupants(): void {
     if (this.fullTimeOccupantsForm.get('fullTimeOccupant').status === 'VALID') {
-      this.fullTimeOccupantsService.fullTimeOccupantUpsertDeleteFullTimeOccupant({body: this.fullTimeOccupantsForm.get('fullTimeOccupant').getRawValue()})
+      this.fullTimeOccupantsService.fullTimeOccupantUpsertDeleteFullTimeOccupant({ body: this.fullTimeOccupantsForm.get('fullTimeOccupant').getRawValue() })
         .subscribe({
-        next: (fullTimeOccupantId) => {
-        this.fullTimeOccupantsForm.get('fullTimeOccupant').get('id').setValue(fullTimeOccupantId);
-        this.fullTimeOccupantsData.push(this.fullTimeOccupantsForm.get('fullTimeOccupant').value);
-        this.fullTimeOccupantsDataSource.next(this.fullTimeOccupantsData);
-        this.fullTimeOccupantsForm.get('fullTimeOccupants').setValue(this.fullTimeOccupantsData);
-        this.showFullTimeOccupantForm = !this.showFullTimeOccupantForm;
-        this.disableOnlyOccupant = this.fullTimeOccupantsDataSource.getValue().length > 0
-      },
-      error: (error) => {
-        console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
-      }
-    });
+          next: (fullTimeOccupantId) => {
+            this.fullTimeOccupantsForm.get('fullTimeOccupant').get('id').setValue(fullTimeOccupantId);
+            this.fullTimeOccupantsData.push(this.fullTimeOccupantsForm.get('fullTimeOccupant').value);
+            this.fullTimeOccupantsDataSource.next(this.fullTimeOccupantsData);
+            this.fullTimeOccupantsForm.get('fullTimeOccupants').setValue(this.fullTimeOccupantsData);
+            this.showFullTimeOccupantForm = !this.showFullTimeOccupantForm;
+            this.disableOnlyOccupant = this.fullTimeOccupantsDataSource.getValue().length > 0
+          },
+          error: (error) => {
+            console.error(error);
+            document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          }
+        });
     } else {
       this.fullTimeOccupantsForm.get('fullTimeOccupant').markAllAsTouched();
     }
@@ -394,7 +398,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
   deleteFullTimeOccupantRow(index: number): void {
     this.fullTimeOccupantsData[index].deleteFlag = true;
-    this.fullTimeOccupantsService.fullTimeOccupantUpsertDeleteFullTimeOccupant({body: this.fullTimeOccupantsData[index]}).subscribe({
+    this.fullTimeOccupantsService.fullTimeOccupantUpsertDeleteFullTimeOccupant({ body: this.fullTimeOccupantsData[index] }).subscribe({
       next: () => {
         this.fullTimeOccupantsData.splice(index, 1);
         this.fullTimeOccupantsDataSource.next(this.fullTimeOccupantsData);
@@ -443,7 +447,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
     if (onlyOtherContactCtrl && onlyOtherContactCtrl.disabled) {
       onlyOtherContactCtrl.enable({ emitEvent: false });
     }
-  
+
     const afterSave = () => {
       this.showOtherContactForm = false;
       this.updateOnlyOtherContactState();
@@ -453,7 +457,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
         onlyOtherContactCtrl.setValue(false, { emitEvent: false });
       }
     };
-  
+
     const rawContactData = contactDetails.getRawValue();
 
     // Ensure onlyOtherContact is explicitly set
@@ -461,7 +465,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
       ...rawContactData,
       onlyOtherContact: onlyOtherContactCtrl?.value ?? false
     };
-  
+
     if (this.otherContactsEditIndex !== undefined && this.otherContactsRowEdit) {
       // Update/Edit existing
       this.otherContactsService.otherContactUpsertDeleteOtherContact({ body: contactData }).subscribe({
@@ -470,10 +474,10 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
           this.otherContactsData[this.otherContactsEditIndex!] = { ...contactDetails.value };
           this.otherContactsRowEdit = false;
           this.otherContactsEditIndex = undefined;
-  
+
           this.otherContactsDataSource.next(this.otherContactsData);
           this.otherContactsForm.get('otherContacts')?.setValue(this.otherContactsData);
-  
+
           this.otherContactsEditFlag = false;
           afterSave();
         },
@@ -491,31 +495,31 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
         onlyOtherContactCtrl.setValue(false, { emitEvent: false });
         this.dfaApplicationMainDataService.setIsOnlyOtherContact(false);
       }
-      
+
       const contactData = contactDetails.getRawValue();
 
       this.otherContactsService.otherContactUpsertDeleteOtherContact({ body: contactData })
         .subscribe({
           next: (otherContactId) => {
             contactDetails.get('id')?.setValue(otherContactId);
-    
+
             // Push a deep copy to avoid shared reference issues
             const newContact = { ...contactDetails.value };
             this.otherContactsData.push(newContact);
-    
+
             this.otherContactsDataSource.next(this.otherContactsData);
             this.otherContactsForm.get('otherContacts')?.setValue(this.otherContactsData);
-    
+
             afterSave();
           },
           error: (error) => {
             console.error(error);
             document.location.href = 'https://dfa.gov.bc.ca/error.html';
           }
-      });
+        });
     }
   }
-  
+
   private updateOnlyOtherContactState(): void {
     this.disableOnlyOtherContact = this.shouldDisableOnlyOtherContact();
     const ctrl = this.otherContactsForm.get('contactDetails.onlyOtherContact');
@@ -536,7 +540,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
     const shouldDisable = this.shouldDisableOnlyOtherContact();
     const onlyOtherContactCtrl = this.otherContactsForm.get('contactDetails.onlyOtherContact');
-  
+
     if (onlyOtherContactCtrl) {
       shouldDisable
         ? onlyOtherContactCtrl.disable({ emitEvent: false })
@@ -545,7 +549,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
       // Update shared state after cancel
       this.dfaApplicationMainDataService.setIsOnlyOtherContact(onlyOtherContactCtrl.value);
     }
-  
+
     this.disableOnlyOtherContact = shouldDisable;
   }
 
@@ -561,7 +565,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
   deleteOtherContactRow(index: number): void {
     this.otherContactsData[index].deleteFlag = true;
-    this.otherContactsService.otherContactUpsertDeleteOtherContact({body: this.otherContactsData[index]})
+    this.otherContactsService.otherContactUpsertDeleteOtherContact({ body: this.otherContactsData[index] })
       .subscribe({
         next: () => {
           this.otherContactsData.splice(index, 1);
@@ -592,7 +596,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
           console.error(error);
           document.location.href = 'https://dfa.gov.bc.ca/error.html';
         }
-    });
+      });
   }
 
   addSecondaryApplicant(): void {
@@ -608,7 +612,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
         .afterClosed()
         .pipe(takeUntil(this.destroy$))
         .subscribe(() => {
-          
+
         });
     }
     else {
@@ -622,7 +626,7 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
   saveSecondaryApplicants(): void {
     if (this.secondaryApplicantsForm.get('secondaryApplicant').status === 'VALID') {
-      this.secondaryApplicantsService.secondaryApplicantUpsertDeleteSecondaryApplicant({body: this.secondaryApplicantsForm.get('secondaryApplicant').getRawValue()}).subscribe({
+      this.secondaryApplicantsService.secondaryApplicantUpsertDeleteSecondaryApplicant({ body: this.secondaryApplicantsForm.get('secondaryApplicant').getRawValue() }).subscribe({
         next: (secondaryApplicantId) => {
           this.secondaryApplicantsForm.get('secondaryApplicant').get('id').setValue(secondaryApplicantId);
           this.secondaryApplicantsData.push(this.secondaryApplicantsForm.get('secondaryApplicant').value);
@@ -647,16 +651,16 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
 
   deleteSecondaryApplicantRow(index: number): void {
     this.secondaryApplicantsData[index].deleteFlag = true;
-    this.secondaryApplicantsService.secondaryApplicantUpsertDeleteSecondaryApplicant({body: this.secondaryApplicantsData[index]}).subscribe({
+    this.secondaryApplicantsService.secondaryApplicantUpsertDeleteSecondaryApplicant({ body: this.secondaryApplicantsData[index] }).subscribe({
       next: () => {
-          this.secondaryApplicantsData.splice(index, 1);
-          this.secondaryApplicantsDataSource.next(this.secondaryApplicantsData);
-          this.secondaryApplicantsForm.get('secondaryApplicants').setValue(this.secondaryApplicantsData);
-          if (this.secondaryApplicantsData.length === 0) {
-            this.secondaryApplicantsForm
+        this.secondaryApplicantsData.splice(index, 1);
+        this.secondaryApplicantsDataSource.next(this.secondaryApplicantsData);
+        this.secondaryApplicantsForm.get('secondaryApplicants').setValue(this.secondaryApplicantsData);
+        if (this.secondaryApplicantsData.length === 0) {
+          this.secondaryApplicantsForm
             .get('addNewSecondaryApplicantIndicator')
             .setValue(false);
-          }
+        }
       },
       error: (error) => {
         console.error(error);
@@ -681,23 +685,28 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
       // otherContactsForm is not initialized when updateOnlyOtherContact() is called
       return;
     }
-  
+
     const otherContactsControl = this.otherContactsForm.get('otherContacts');
     const onlyOtherContactControl = this.otherContactsForm.get('contactDetails.onlyOtherContact');
     if (!otherContactsControl || !onlyOtherContactControl) {
       // otherContacts control is missing in the form
       return;
     }
-  
+
     if (value === true || this.hideOtherContactButton === true) {
       // No contact required if checkbox checked OR UI is hidden
       otherContactsControl.setValidators(null);
     } else {
       otherContactsControl.setValidators([Validators.required]);
     }
-  
+
     this.dfaApplicationMainDataService.setIsOnlyOtherContact(value);
     otherContactsControl.updateValueAndValidity();
+  }
+
+  isViewOnlyMode(): boolean {
+    const mode = this.vieworedit || this.dfaApplicationMainDataService.getViewOrEdit();
+    return ['view', 'edit', 'viewOnly'].includes(mode);
   }
 
   updateFullTimeOccupantOnVisibility(): void {
@@ -772,4 +781,4 @@ export default class OccupantsComponent implements OnInit, OnDestroy {
   }
 }
 
-class OccupantsModule {}
+class OccupantsModule { }

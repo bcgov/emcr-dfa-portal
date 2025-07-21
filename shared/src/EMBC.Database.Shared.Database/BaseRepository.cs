@@ -1,6 +1,6 @@
 ﻿namespace EMBC.Database.Shared.Database;
 
-public abstract class BaseRepository<TEntity, TDto> 
+public abstract class BaseRepository<TEntity, TDto>
     where TEntity : Entity
     where TDto : IDto
 {
@@ -26,7 +26,7 @@ public abstract class BaseRepository<TEntity, TDto>
     {
         var entity = MapExpression(predicates)
             .FirstOrDefault();
-        return Map(entity);
+        return Map(entity!);
     }
 
     public IEnumerable<TDto> Where(Expression<Func<TDto, bool>> predicates)
@@ -57,18 +57,17 @@ public abstract class BaseRepository<TEntity, TDto>
     }
 
     // NOTE only use field names for the properties argument
-    // otherwise the expression parser will throw an exception e.g. x => x.SomeProperty, x => x.OtherProperty
+    // otherwise the expression parser will throw an exception
     // var dto = new Dto { SomeProperty = 1, OtherProperty = "2" };
     // repository.Update(dto, x => x.SomeProperty, x => x.OtherProperty);
     public virtual bool Update(TDto dto, params Expression<Func<TDto, object>>[] properties)
     {
+        (dto?.Id).ThrowIfNullOrEmpty("Id cannot be empty or missing.");
+        properties.ThrowIfNull("Properties cannot be null.");
+
         var entity = _databaseContext
             .CreateQuery<TEntity>()
             .FirstOrDefault(x => x.Id == dto.Id);
-        if (dto?.Id == null || dto.Id == Guid.Empty)
-        {
-            throw new ArgumentException("Id is missing or empty.");
-        }
 
         // use this to get the mapped values of the properties
         var mappedEntity = Map(dto);
@@ -94,20 +93,16 @@ public abstract class BaseRepository<TEntity, TDto>
 
     public virtual bool Update(TDto dto)
     {
-        if (dto.Id == Guid.Empty)
-        {
-            throw new ArgumentException("Id cannot be empty");
-        }
+        (dto?.Id).ThrowIfNullOrEmpty("Id cannot be empty or missing.");
+
         var entity = Map(dto);
         return Update(entity);
     }
 
     public virtual bool Update(TEntity entity)
     {
-        if (entity.Id == Guid.Empty)
-        {
-            throw new ArgumentException("Id cannot be empty");
-        }
+        (entity?.Id).ThrowIfNullOrEmpty("Id cannot be empty or missing.");
+
         if (!_databaseContext.IsAttached(entity))
         {
             _databaseContext.Attach(entity);
@@ -115,11 +110,13 @@ public abstract class BaseRepository<TEntity, TDto>
         _databaseContext.UpdateObject(entity);
         return !_databaseContext
             .SaveChanges()
-            .HasError;     
+            .HasError;
     }
 
     public virtual bool TryDelete(Guid id)
     {
+        id.ThrowIfNull("Id cannot be empty.");
+
         var dto = Activator.CreateInstance<TDto>();
         dto.Id = id;
         return TryDelete(dto);
@@ -127,9 +124,11 @@ public abstract class BaseRepository<TEntity, TDto>
 
     public virtual bool TryDelete(TDto dto, bool isRecursive = false)
     {
+        (dto?.Id).ThrowIfNullOrEmpty("Id cannot be empty or missing.");
+
         try
         {
-            var entity = Map(dto);
+            var entity = Map(dto!);
             if (!_databaseContext.IsAttached(entity))
             {
                 _databaseContext.Attach(entity);
@@ -148,6 +147,8 @@ public abstract class BaseRepository<TEntity, TDto>
     // safe delete, use TryDelete for faster deletes
     public virtual bool Delete(Guid id)
     {
+        id.ThrowIfNull("Id cannot be empty.");
+
         var entity = _databaseContext
             .CreateQuery<TEntity>()
             .FirstOrDefault(x => x.Id == id);

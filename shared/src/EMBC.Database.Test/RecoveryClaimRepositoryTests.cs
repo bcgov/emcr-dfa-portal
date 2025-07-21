@@ -28,6 +28,7 @@
         Assert.NotNull(recoveryClaims);
     }
 
+    [Fact]
     public void Update_Dto_Success()
     {
         var recoveryClaim = new RecoveryClaim();

@@ -42,7 +42,7 @@
                   <td *matCellDef="let element; let index = index" mat-cell>
                     <button
                       class="edit-image"
-                      *ngIf="vieworedit !== 'viewOnly'"
+                      *ngIf="vieworedit === 'add' || vieworedit === 'update'"
                       mat-icon-button
                       aria-label="Edit"
                       (click)="editDamagedRoomRow(element, index)"
@@ -56,7 +56,7 @@
                     </button>&nbsp;
                     <button
                       class="delete-image"
-                      *ngIf="vieworedit !== 'viewOnly'"
+                      *ngIf="vieworedit === 'add' || vieworedit === 'update'"
                       mat-icon-button
                       aria-label="Remove"
                       (click)="deleteDamagedRoomRow(index)"
@@ -206,7 +206,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="DamagePhoto"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveDamagePhotos($event)"
+            (saveFileUpload)="saveDamagePhotos($event,'damagePhotoFileUpload')"
             (cencelFileUpload)="cancelDamagePhotos()"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('damagePhotoFileUpload')"
           ></app-dfa-attachment>
@@ -267,7 +267,7 @@
                   mat-icon-button
                   aria-label="Remove"
                   (click)="confirmDeleteDamagePhotoRow(element)"
-                  *ngIf="vieworedit !== 'viewOnly'"
+                  *ngIf="vieworedit === 'add' || vieworedit === 'update'"
                 >
                   <img src="/assets/images/delete.svg" height="35" width="35" />
                   <img src="/assets/images/delete_onhover.svg" height="35" width="35"/>

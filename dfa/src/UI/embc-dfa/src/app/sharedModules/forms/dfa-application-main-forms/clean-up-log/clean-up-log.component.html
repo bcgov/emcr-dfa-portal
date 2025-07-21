@@ -85,7 +85,7 @@
                   <td *matCellDef="let element; let index = index" mat-cell>
                     <button
                       class="delete-image"
-                      *ngIf="vieworedit !== 'viewOnly'"
+                      *ngIf="vieworedit === 'add' || vieworedit === 'update'"
                       mat-icon-button
                       aria-label="Remove"
                       (click)="confirmDeleteCleanuplogRow(index)"
@@ -282,7 +282,7 @@
           allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
           fileType="Cleanup"
           excludeFileTypes="[]"
-          (saveFileUpload)="saveNewCleanupLogFile($event)"
+          (saveFileUpload)="saveNewCleanupLogFile($event,'cleanupFileUpload')"
           (cencelFileUpload)="cancelNewCleanupLogFile()"
           [fileUpload]="formCreationService.fileUploadsForm.value.get('cleanupFileUpload')"
         ></app-dfa-attachment>
@@ -346,7 +346,7 @@
               mat-icon-button
               aria-label="Remove"
               (click)="confirmDeleteCleanupLogFileRow(elementFile)"
-              *ngIf="vieworedit !== 'viewOnly'"
+              *ngIf="vieworedit === 'add' || vieworedit === 'update'"
             >
               <img src="/assets/images/delete.svg" height="35" width="35" />
               <img

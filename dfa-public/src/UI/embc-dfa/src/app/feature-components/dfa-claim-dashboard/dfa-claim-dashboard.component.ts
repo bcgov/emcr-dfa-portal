@@ -105,17 +105,17 @@ export class DFAClaimComponent
       this.tabs[1].count = n ? n.toString() : "0";
     });
 
-    this.claimService.claimGetDfaClaims({ projectId: this.projId }).subscribe({
-      next: (lstData) => {
-        if (lstData != null) {
-          this.countAppData(lstData);
-          this.tabs[0].count = this.openClaimsCount.toString();
-          this.tabs[1].count = this.closedClaimsCount.toString();
-        }
-      },
-      error: (error) => {
-      }
-    });
+    // this.claimService.claimGetDfaClaims({ projectId: this.projId }).subscribe({
+    //   next: (lstData) => {
+    //     if (lstData != null) {
+    //       this.countAppData(lstData);
+    //       this.tabs[0].count = this.openClaimsCount.toString();
+    //       this.tabs[1].count = this.closedClaimsCount.toString();
+    //     }
+    //   },
+    //   error: (error) => {
+    //   }
+    // });
     
     this.tabs = [
       {

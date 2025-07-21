@@ -17,6 +17,23 @@ using WkHtmlToPdfDotNet.Contracts;
 
 namespace pdfservice.Controllers
 {
+    public static class LogSanitizer
+    {
+        // Removes CR, LF, and other control characters to prevent log forging
+        public static string Sanitize(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+            var builder = new StringBuilder(input.Length);
+            foreach (char c in input)
+            {
+                if (!char.IsControl(c) || c == '\t')
+                    builder.Append(c);
+                else
+                    builder.Append('_');
+            }
+            return builder.ToString();
+        }
+    }
     public class JSONResponse
     {
         public string type;
@@ -155,10 +172,16 @@ namespace pdfservice.Controllers
             }
             _logger.LogInformation($"PDF-Service GetPDF: received request");
 
-            //template = "dfa_application_demo";
+            // Validate template name to prevent path injection
+            if (!IsValidTemplateName(pdfReuest.Template))
+            {
+                return BadRequest("Invalid template name.");
+            }
             string filename = $"Templates/{pdfReuest.Template}.mustache";
 
-            _logger.LogInformation($"PDF-Service GetPDF: template filename is: {filename}");
+            // Sanitize filename before logging to prevent log forging
+            string safeFilename = LogSanitizer.Sanitize(filename);
+            _logger.LogInformation($"PDF-Service GetPDF: template filename is: {safeFilename}");
 
             if (System.IO.File.Exists(filename))
             {
@@ -349,6 +372,11 @@ namespace pdfservice.Controllers
         [Route("GetHash/{template}")]
         public IActionResult GetHash([FromBody] Dictionary<string, object> rawdata, string template)
         {
+            // Validate template name to prevent path injection
+            if (!IsValidTemplateName(template))
+            {
+                return BadRequest("Invalid template name.");
+            }
             // first do a mustache merge.
             var stubble = new StubbleBuilder().Build();
             string filename = $"Templates/{template}.mustache";
@@ -364,6 +392,21 @@ namespace pdfservice.Controllers
             }
 
             return new NotFoundResult();
+        }
+
+        // Helper for template name validation
+        private static readonly HashSet<string> AllowedTemplates = new HashSet<string>
+        {
+            "dfa_application_summary"
+            // Add other allowed template names here
+        };
+
+        private static bool IsValidTemplateName(string template)
+        {
+            // Only allow alphanumeric, underscore, and dash, and must be in allowed list
+            return !string.IsNullOrEmpty(template)
+                && template.All(c => char.IsLetterOrDigit(c) || c == '_' || c == '-')
+                && AllowedTemplates.Contains(template);
         }
 
     }

@@ -1,5 +1,8 @@
 name: Promote Private Portal to Production
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
 

@@ -19,6 +19,7 @@ export interface CurrentApplication {
   eventId?: string;
   hasAppealStages?: boolean;
   isErrorInStatus?: boolean;
+  isSubmitted?: boolean;
   legalName?: string;
   primaryApplicantSignedDate?: string;
   status?: string;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MatCard, MatCardModule} from '@angular/material/card';
+import { MatCard, MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { EnvironmentBannerComponent } from './components/environment-banner/environment-banner.component';
@@ -8,7 +8,6 @@ import { EnvironmentBannerService, EnvironmentInformation } from './services/env
 import { MatTooltipModule, TooltipPosition } from '@angular/material/tooltip';
 import { FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-
 
 @Component({
   selector: 'app-root',
@@ -49,15 +48,14 @@ export class AppComponent implements OnInit {
         this.outageEnd = new Date(environment.outageEnd).getTime();
       }
 
-      // TODO uncomment when D4P-96 is released
-      // this.httpClient.get(environment.apiEndpoint as string).subscribe((response: any) => {
-      //   let hasActiveEventResponse = response as HasActiveEventResponse;
-      //   console.info("Has Active Event Response", hasActiveEventResponse);
-      //   if (hasActiveEventResponse) {
-      //      this.privateButtonDisabled = !hasActiveEventResponse.hasActivePrivateEvent;
-      //      this.publicButtonDisabled = !hasActiveEventResponse.hasActivePublicEvent;
-      //   }
-      // });
+      this.httpClient.get(environment.apiEndpoint as string).subscribe((response: any) => {
+        let hasActiveEventResponse = response as HasActiveEventResponse;
+        console.info("Has Active Event Response", hasActiveEventResponse);
+        if (hasActiveEventResponse) {
+           this.privateButtonDisabled = !hasActiveEventResponse.hasActivePrivateEvent;
+           this.publicButtonDisabled = !hasActiveEventResponse.hasActivePublicEvent;
+        }
+      });
     });
   }
   

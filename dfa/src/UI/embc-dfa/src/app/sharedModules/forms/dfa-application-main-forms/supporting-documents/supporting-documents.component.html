@@ -50,7 +50,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="Insurance"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event, 'insuranceTemplateFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('insuranceTemplateFileUpload')"
             *ngIf="fileUploadForm.hasError('noInsuranceTemplate')"
           ></app-dfa-attachment>
@@ -80,7 +80,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="Insurance"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event, 'insuranceTemplateFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('insuranceTemplateFileUpload')"
             *ngIf="fileUploadForm.hasError('noInsuranceTemplate')"
           ></app-dfa-attachment>
@@ -112,7 +112,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="TenancyProof"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event, 'rentalAgreementFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('rentalAgreementFileUpload')"
 
           ></app-dfa-attachment>
@@ -152,7 +152,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="TenancyProof"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event, 'identificationFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('identificationFileUpload')"
           ></app-dfa-attachment>
           <app-loader
@@ -182,7 +182,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="Financial"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event, 'T1IncomeTaxReturnFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('T1IncomeTaxReturnFileUpload')"
           ></app-dfa-attachment>
           <app-loader
@@ -212,7 +212,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="Financial"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event,'T2IncomeTaxReturnFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('T2IncomeTaxReturnFileUpload')"
           ></app-dfa-attachment>
           <app-loader
@@ -242,7 +242,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="Financial"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event, 'proofOfOwnershipFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('proofOfOwnershipFileUpload')"
           ></app-dfa-attachment>
           <app-loader
@@ -272,7 +272,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="Financial"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event,'T776FileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('T776FileUpload')"
           ></app-dfa-attachment>
           <app-loader
@@ -302,7 +302,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="Financial"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event, 'financialStatementsFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('financialStatementsFileUpload')"
           ></app-dfa-attachment>
           <app-loader
@@ -332,7 +332,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="Financial"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event, 'directorsListingFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('directorsListingFileUpload')"
           ></app-dfa-attachment>
           <app-loader
@@ -362,7 +362,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="Financial"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event, 'registrationProofFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('registrationProofFileUpload')"
           ></app-dfa-attachment>
           <app-loader
@@ -392,7 +392,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="Financial"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event, 'structureAndPurposeFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('structureAndPurposeFileUpload')"
           ></app-dfa-attachment>
           <app-loader
@@ -422,7 +422,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="TenancyProof"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event,'tenancyAgreementFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('tenancyAgreementFileUpload')"
           ></app-dfa-attachment>
           <app-loader
@@ -452,7 +452,7 @@
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             fileType="TenancyProof"
             excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event)"
+            (saveFileUpload)="saveRequiredForm($event,'tenancyAgreementFileUpload')"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('tenancyAgreementFileUpload')"
           ></app-dfa-attachment>
           <app-loader
@@ -479,7 +479,7 @@
             [allowedFileTypes]="allowedFileTypes"
             allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
             excludeFileTypes="['Identification', 'Unknown']"
-            (saveFileUpload)="saveSupportingFiles($event)"
+            (saveFileUpload)="saveSupportingFiles($event, 'supportingFilesFileUpload')"
             (cancelFileUpload)="cancelSupportingFiles()"
             [fileUpload]="formCreationService.fileUploadsForm.value.get('supportingFilesFileUpload')"
             [showFileUpload]="showFileUpload.other"

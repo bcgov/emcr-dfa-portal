@@ -1,6 +1,9 @@
 #CD pipeline for dfa landing page into the support stream
 name: Build Landing Page
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:

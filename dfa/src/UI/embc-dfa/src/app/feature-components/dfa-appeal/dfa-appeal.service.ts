@@ -23,4 +23,14 @@ export class DfaAppealService {
       return this.appealService.appealCreateAppeal({ body: appeal })
   }
 
+  // Get appeal by ID
+  public getAppealById(appealId: string): Observable<any> {
+    return this.appealService.appealGetAppeal({ id: appealId }).pipe(
+      catchError(error => {
+        console.error('Error fetching appeal:', error);
+        return of(null); // Return null or handle error as needed
+      })
+    );
+  }
+
 }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using EMBC.Database.Contract;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Mozilla;
 using Org.BouncyCastle.Bcpg.OpenPgp;
@@ -602,7 +603,11 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         // Amount, Eligibility, Other
         public string dfa_appealtype { get; set; }
         public string DFA_Reason { get; set; }
-        public string _dfa_caseid_value { get; set; } // case id
+        public Guid _dfa_caseid_value { get; set; } // case id
+        public DateTime? dfa_dateappealdecisionmade { get; set; }
+
+        public CaseEligibilityAppeal? CaseEligibilityAppeal { get; set; }
+        public CasePaidAmountAppeal? CasePaidAmountAppeal { get; set; }
     }
 
     public enum AppealStatusOptionSet

@@ -29,6 +29,7 @@ import { AttachmentService, DamagedRoomService } from 'src/app/core/api/services
 import { MatDialog } from '@angular/material/dialog';
 import { DFAFileDeleteDialogComponent } from 'src/app/core/components/dialog-components/dfa-file-delete-dialog/dfa-file-delete.component';
 import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog-components/file-upload-warning-dialog/file-upload-warning-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-damaged-items-by-room',
@@ -81,7 +82,8 @@ export default class DamagedItemsByRoomComponent implements OnInit, OnDestroy {
     public dfaApplicationMainDataService: DFAApplicationMainDataService,
     private damagedRoomService: DamagedRoomService,
     private attachmentsService: AttachmentService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public _snackBar: MatSnackBar,
   ) {
     this.formBuilder = formBuilder;
     this.formCreationService = formCreationService;
@@ -300,10 +302,11 @@ export default class DamagedItemsByRoomComponent implements OnInit, OnDestroy {
     this.damagePhotosForm.get('damagePhotoFileUpload.applicationId').setValue(this.dfaApplicationMainDataService.getApplicationId());
   }
 
-  saveDamagePhotos(fileUpload: FileUpload): void {
+  saveDamagePhotos(fileUpload: FileUpload,fileUploadFormGroup : string): void {
     // dont allow same filename twice
     let fileUploads = this.formCreationService.fileUploadsForm.value.get('fileUploads').value;
     if (fileUploads?.find(x => x.fileName === fileUpload.fileName && x.deleteFlag !== true)) {
+      this.formCreationService.fileUploadsForm.value.get(fileUploadFormGroup).reset();
       this.warningDialog("A file with the name " + fileUpload.fileName + " has already been uploaded.");
       return;
     }
@@ -316,14 +319,27 @@ export default class DamagedItemsByRoomComponent implements OnInit, OnDestroy {
           if (fileUploads) fileUploads.push(fileUpload);
           else fileUploads = [ fileUpload ];
           this.formCreationService.fileUploadsForm.value.get('fileUploads').setValue(fileUploads);
+          this.formCreationService.fileUploadsForm.value.get(fileUploadFormGroup).reset();
           this.showDamagePhotoForm = !this.showDamagePhotoForm;
           this.damagePhotosForm.get('addNewFileUploadIndicator').setValue(false);
           this.isLoading = false;
+          this._snackBar.open('The document was successfully uploaded', 'Close', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          });
         },
         error: (error) => {
           console.error(error);
           this.isLoading = false;
-          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          //document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          this._snackBar.open(
+            'Unable to upload the file. Please retry the upload process.',
+            'Close',
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+            }
+        );
         }
       });
     } else {

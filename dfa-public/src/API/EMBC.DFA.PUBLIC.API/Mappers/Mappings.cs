@@ -717,12 +717,15 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.ProjectDecision, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projectdecision) ? GetEnumDescription((ProjectDecisions)Convert.ToInt32(s.dfa_projectdecision)) : null))
                 .ForMember(d => d.ProjectType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projecttype) ? GetEnumDescription((ProjectTypes)Convert.ToInt32(s.dfa_projecttype)) : null))
                 .ForMember(d => d.ProjectTypeOther, opts => opts.MapFrom(s => s.dfa_projecttypeother))
-                .ForMember(d => d.ProjectApprovedDate, opts => opts.MapFrom(s => s.dfa_projectapproveddate))
-                .ForMember(d => d.Appeals, opts => opts.MapFrom(s => s.dfa_projectappeal))
-                .ForMember(d => d.IsSubmitted, opts => opts.MapFrom(s => s.dfa_projectappeal.Any(x => x.dfa_dateappealreceived != null)));
+                .ForMember(d => d.ProjectApprovedDate, opts => opts.MapFrom(s => s.dfa_projectapproveddate));
+                //.ForMember(d => d.Appeals, opts => opts.MapFrom(s => s.dfa_projectappeal))
 
-            CreateMap<dfa_projectappeal, CurrentProjectAppeal>()
-                .ForMember(d => d.SubmissionDate, opts => opts.MapFrom(s => s.dfa_dateappealreceived));
+            //CreateMap<dfa_projectappeal, CurrentProjectAppeal>()
+            //    .ForMember(d => d.SubmissionDate, opts => opts.MapFrom(s => s.dfa_dateappealreceived));
+
+            //CreateMap<ProjectAppeal, dfa_projectappeal>()
+                //.ForMember(d => d.dfa_dateappealreceived, opts => opts.MapFrom(s => s.));
+                //.ForMember(d => d.X, opts => opts.MapFrom(s => s.))
 
             CreateMap<dfa_projectclaim, CurrentClaim>()
                 .ForMember(d => d.ClaimNumber, opts => opts.MapFrom(s => s.dfa_name))
@@ -746,6 +749,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.DecisionDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_decisiondate).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_decisiondate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.ClaimType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimtype) ? GetEnumDescription((ClaimTypeOptionSet)Convert.ToInt32(s.dfa_claimtype)) : null))
                 .ForMember(d => d.IsAdjustmentClaim, opts => opts.MapFrom(s => s.dfa_isadjustmentclaim))
+                .ForMember(d => d.CodingBlockSubmissionStatus, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_codingblocksubmissionstatus) ? GetEnumDescription((ClaimCodingBlockSubmissionStatusOptionSet)Convert.ToInt32(s.dfa_codingblocksubmissionstatus)) : null))
                 .ForMember(d => d.ClaimAppeals, opts => opts.MapFrom(s => s.dfa_claimappeal));
 
             CreateMap<dfa_claimappeal, CurrentProjectClaimAppeal>()
@@ -776,6 +780,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.claimType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_claimtype) ? GetEnumDescription((ClaimTypeOptionSet)Convert.ToInt32(s.dfa_claimtype)) : null))
                 .ForMember(d => d.isAdjustmentClaim, opts => opts.MapFrom(s => s.dfa_isadjustmentclaim))
                 .ForMember(d => d.lateAppealAllowed, opts => opts.MapFrom(s => s.dfa_lateappealallowed))
+                .ForMember(d => d.codingBlockSubmissionStatus, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_codingblocksubmissionstatus) ? GetEnumDescription((ClaimCodingBlockSubmissionStatusOptionSet)Convert.ToInt32(s.dfa_codingblocksubmissionstatus)) : null))
                 .ForMember(d => d.dateFileClosed, opts => opts.MapFrom(s => s.dfa_bpfclosedate));
 
             CreateMap<dfa_appapplication, CurrentApplication>()

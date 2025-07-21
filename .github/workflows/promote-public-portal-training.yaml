@@ -1,5 +1,8 @@
 name: Promote Public Portal to Training
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
 

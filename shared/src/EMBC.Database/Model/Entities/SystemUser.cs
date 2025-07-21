@@ -433,6 +433,14 @@ namespace EMBC.Database.Model
 			public const string Lk_DFA_Appeal_CreatedOnBehalfBy = "Lk_DFA_Appeal_CreatedOnBehalfBy";
 			public const string Lk_DFA_Appeal_ModifiedBy = "Lk_DFA_Appeal_ModifiedBy";
 			public const string Lk_DFA_Appeal_ModifiedOnBehalfBy = "Lk_DFA_Appeal_ModifiedOnBehalfBy";
+			public const string Lk_DFA_CaseEligibilityAppeal_CreatedBy = "Lk_DFA_CaseEligibilityAppeal_CreatedBy";
+			public const string Lk_DFA_CaseEligibilityAppeal_CreatedOnBehalfBy = "Lk_DFA_CaseEligibilityAppeal_CreatedOnBehalfBy";
+			public const string Lk_DFA_CaseEligibilityAppeal_ModifiedBy = "Lk_DFA_CaseEligibilityAppeal_ModifiedBy";
+			public const string Lk_DFA_CaseEligibilityAppeal_ModifiedOnBehalfBy = "Lk_DFA_CaseEligibilityAppeal_ModifiedOnBehalfBy";
+			public const string Lk_DFA_CasePaidAmountAppeal_CreatedBy = "Lk_DFA_CasePaidAmountAppeal_CreatedBy";
+			public const string Lk_DFA_CasePaidAmountAppeal_CreatedOnBehalfBy = "Lk_DFA_CasePaidAmountAppeal_CreatedOnBehalfBy";
+			public const string Lk_DFA_CasePaidAmountAppeal_ModifiedBy = "Lk_DFA_CasePaidAmountAppeal_ModifiedBy";
+			public const string Lk_DFA_CasePaidAmountAppeal_ModifiedOnBehalfBy = "Lk_DFA_CasePaidAmountAppeal_ModifiedOnBehalfBy";
 			public const string Lk_DFA_ClientCode_CreatedBy = "Lk_DFA_ClientCode_CreatedBy";
 			public const string Lk_DFA_ClientCode_CreatedOnBehalfBy = "Lk_DFA_ClientCode_CreatedOnBehalfBy";
 			public const string Lk_DFA_ClientCode_ModifiedBy = "Lk_DFA_ClientCode_ModifiedBy";
@@ -3660,6 +3668,150 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetRelatedEntities<EMBC.Database.Model.DFA_Appeal>("lk_dfa_appeal_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_caseeligibilityappeal_createdby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_caseeligibilityappeal_createdby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_CaseEligibilityAppeal> Lk_DFA_CaseEligibilityAppeal_CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_CaseEligibilityAppeal>("lk_dfa_caseeligibilityappeal_createdby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_CaseEligibilityAppeal>("lk_dfa_caseeligibilityappeal_createdby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_caseeligibilityappeal_createdonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_caseeligibilityappeal_createdonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_CaseEligibilityAppeal> Lk_DFA_CaseEligibilityAppeal_CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_CaseEligibilityAppeal>("lk_dfa_caseeligibilityappeal_createdonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_CaseEligibilityAppeal>("lk_dfa_caseeligibilityappeal_createdonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_caseeligibilityappeal_modifiedby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_caseeligibilityappeal_modifiedby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_CaseEligibilityAppeal> Lk_DFA_CaseEligibilityAppeal_ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_CaseEligibilityAppeal>("lk_dfa_caseeligibilityappeal_modifiedby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_CaseEligibilityAppeal>("lk_dfa_caseeligibilityappeal_modifiedby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_caseeligibilityappeal_modifiedonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_caseeligibilityappeal_modifiedonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_CaseEligibilityAppeal> Lk_DFA_CaseEligibilityAppeal_ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_CaseEligibilityAppeal>("lk_dfa_caseeligibilityappeal_modifiedonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_CaseEligibilityAppeal>("lk_dfa_caseeligibilityappeal_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_casepaidamountappeal_createdby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_casepaidamountappeal_createdby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_CasePaidAmountAppeal> Lk_DFA_CasePaidAmountAppeal_CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_CasePaidAmountAppeal>("lk_dfa_casepaidamountappeal_createdby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_CasePaidAmountAppeal>("lk_dfa_casepaidamountappeal_createdby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_casepaidamountappeal_createdonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_casepaidamountappeal_createdonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_CasePaidAmountAppeal> Lk_DFA_CasePaidAmountAppeal_CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_CasePaidAmountAppeal>("lk_dfa_casepaidamountappeal_createdonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_CasePaidAmountAppeal>("lk_dfa_casepaidamountappeal_createdonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_casepaidamountappeal_modifiedby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_casepaidamountappeal_modifiedby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_CasePaidAmountAppeal> Lk_DFA_CasePaidAmountAppeal_ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_CasePaidAmountAppeal>("lk_dfa_casepaidamountappeal_modifiedby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_CasePaidAmountAppeal>("lk_dfa_casepaidamountappeal_modifiedby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_casepaidamountappeal_modifiedonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_casepaidamountappeal_modifiedonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_CasePaidAmountAppeal> Lk_DFA_CasePaidAmountAppeal_ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_CasePaidAmountAppeal>("lk_dfa_casepaidamountappeal_modifiedonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_CasePaidAmountAppeal>("lk_dfa_casepaidamountappeal_modifiedonbehalfby", null, value);
 			}
 		}
 		

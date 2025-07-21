@@ -1143,12 +1143,13 @@
             ></tr>
           </table>
         </div>
-        <div class="row info-detail" *ngIf="(formCreationService.otherContactsForm$ | async)?.value?.onlyOtherContact === false &&
+
+        <div class="row info-detail" *ngIf="(formCreationService.otherContactsForm$ | async)?.value?.contactDetails?.onlyOtherContact !== true &&
              (formCreationService.otherContactsForm$ | async)?.value?.otherContacts?.length === 0">
           <span style="color:red">At least one other contact is required.</span>
         </div>
 
-        <div class="row info-detail" *ngIf="(formCreationService.otherContactsForm$ | async)?.value?.onlyOtherContact === true">
+        <div class="row info-detail" *ngIf="(formCreationService.otherContactsForm$ | async)?.value?.contactDetails?.onlyOtherContact === true">
         <b>Other Contacts</b>
         <span>I don't have an Other Contact</span>
         </div>

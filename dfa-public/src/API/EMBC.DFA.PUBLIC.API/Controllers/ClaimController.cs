@@ -204,6 +204,7 @@ namespace EMBC.DFA.API.Controllers
         public string? ClaimType { get; set; }
         public bool? IsAdjustmentClaim { get; set; }
         public IEnumerable<CurrentProjectClaimAppeal> ClaimAppeals { get; set; }
+        public string CodingBlockSubmissionStatus { get; set; }
     }
 
     public class CurrentProjectClaimAppeal

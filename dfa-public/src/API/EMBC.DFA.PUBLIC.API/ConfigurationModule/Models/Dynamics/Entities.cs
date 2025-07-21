@@ -349,7 +349,9 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_decisiondate { get; set; }
         public string? dfa_claimtype { get; set; }
         public bool? dfa_isadjustmentclaim { get; set; }
-        public bool ? dfa_lateappealallowed { get; set; }
+        public bool? dfa_lateappealallowed { get; set; }
+
+        public string? dfa_codingblocksubmissionstatus { get; set; }
     }
 
     public class dfa_appapplicationmain_retrieve
@@ -1015,6 +1017,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_claimtype {  get; set; }
         public bool? dfa_isadjustmentclaim { get; set; }
         public IEnumerable<dfa_claimappeal>? dfa_claimappeal { get; set; }
+        public string ? dfa_codingblocksubmissionstatus { get; set; }
     }
 
     public class dfa_recoveryinvoice
@@ -1506,6 +1509,32 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
 
         [Description("Advanced Payment")]
         AdvancedPayment = 222710001,
+    }
+
+    public enum ClaimCodingBlockSubmissionStatusOptionSet
+    {
+        [Description("Paid From Advance")]
+        PaidFromAdvance = 222710005,
+
+        [Description("Pending Submission")]
+        PendingSubmission = 222710002,
+
+        [Description("Draft")]
+        Draft = 222710000,
+
+        [Description("EA Review")]
+        EAReview = 222710001,
+
+        [Description("Submitted")]
+        Submitted = 222710003,
+
+        [Description("Failed")]
+        Failed = 222710004,
+
+        [Description("Cancelled")]
+        Cancelled = 222710006,
+
+
     }
 
     public class dfa_effectedregioncommunities

@@ -3,7 +3,7 @@
 public record EventQuery
 {
     public StateCode? StateCode { get; set; }
-    public DateTime? BeforeNintyDeadline { get; set; }
+    public DateTime? BeforeNinetyDeadline { get; set; }
     public bool NotNullEventType { get; set; }
 }
 

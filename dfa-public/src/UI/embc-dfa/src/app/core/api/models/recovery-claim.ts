@@ -17,6 +17,7 @@ export interface RecoveryClaim {
   claimStatus?: ClaimStageOptionSet | null;
   claimTotal?: string | null;
   claimType?: string | null;
+  codingBlockSubmissionStatus?: string | null;
   dateFileClosed?: string | null;
   decisionDate?: string | null;
   eligiblePayable?: string | null;

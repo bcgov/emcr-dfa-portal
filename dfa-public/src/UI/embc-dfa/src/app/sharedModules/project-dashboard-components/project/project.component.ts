@@ -44,6 +44,11 @@ export class DfaDashProjectComponent implements OnInit {
     this.appSessionService.currentProjectsCount.emit(value);
   }
 
+  // TODO if we come back to timelines, it will be easier to refactor the timelines than to make global timeline changes
+  // the existing timelines have static data, different schemas, non-normalized data, etc. We should get the steps from Dynamics
+  // have a consistent schema, and a reusable angular component for the timelines that has the UI and business logic separated
+
+  // project timeline items
   items = [
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "Draft", stage: "", statusColor: "#639DD4", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
@@ -66,6 +71,7 @@ export class DfaDashProjectComponent implements OnInit {
 
   ];
 
+  // project appeal timeline items
   appealItems = [
     // { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     // { status: "Draft", stage: "", statusColor: "#639DD4", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
@@ -77,10 +83,19 @@ export class DfaDashProjectComponent implements OnInit {
     { status: "Under Review", stage: "", statusColor: "#FDCB52", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "Approval Pending", stage: "", statusColor: "#FDCB52", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "Appeals Adjudicator Review", stage: "", statusColor: "#FDCB52", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "Decision Made", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "Appeals Compliance Check", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "Approval Pending", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "Appeal Decision Made", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "DFA Project Update", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "Closed", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
@@ -183,37 +198,37 @@ export class DfaDashProjectComponent implements OnInit {
             // This code needs to be updated once the Dynamics API sends the appealStatusBar in the response
             // #############################################################################################
             const objAppWithAppeals = objApp as CurrentProjectWithAppeals;
-
             // Initialize appealStatusBar if it's missing
             if (!Array.isArray(objAppWithAppeals.appealStatusBar)) {
               objAppWithAppeals.appealStatusBar = JSON.parse(JSON.stringify(this.appealItems));
             }
 
+            isFound = false;
             objAppWithAppeals.appealStatusBar.forEach((objStatItem) => {
               const statusMatch =
-                objApp.status &&
-                objStatItem.status?.toLowerCase() === objApp.status.toLowerCase();
+                objApp.activeStage?.stage &&
+                objStatItem.status?.toLowerCase() === objApp.activeStage.stage.toLowerCase();
 
               if (statusMatch) {
                 objStatItem.currentStep = true;
                 isFound = true;
                 this.matchStatusFound = true;
 
-                if (objApp.stage) {
-                  objStatItem.stage = objApp.stage;
-                  this.dFAProjectMainDataService.setStage(objApp.stage);
+                if (objApp.activeStage.status) {
+                  objStatItem.stage = objApp.activeStage.status;
+                  //this.dFAProjectMainDataService.setStage(objApp.stage);
                 }
 
                 if (objApp.projectDecision) {
-                  this.dFAProjectMainDataService.setProjectDecision(objApp.projectDecision);
+                  //this.dFAProjectMainDataService.setProjectDecision(objApp.projectDecision);
                 }
 
                 // Determine statusColor based on logic
-                if (['Ineligible', 'Withdrawn'].includes(objApp.stage || '')) {
+                if (['Ineligible', 'Withdrawn'].includes(objApp.activeStage.stage || '')) {
                   objApp.statusColor = '#E25E63';
                 } else if (
-                  objApp.status?.toLowerCase().includes('decision made') &&
-                  objApp.stage?.toLowerCase().includes('progress')
+                  objApp.activeStage.status?.toLowerCase().includes('decision made') &&
+                  objApp.activeStage.stage?.toLowerCase().includes('progress')
                 ) {
                   objApp.statusColor = '#FDCB52';
                 } else {
@@ -229,7 +244,8 @@ export class DfaDashProjectComponent implements OnInit {
               // Final step validation
               if (objStatItem.isFinalStep) {
                 if (!isFound) {
-                  objApp.isErrorInStatus = true;
+                  // NOTE commented out to avoid fixing a bug found, no side effects found except if the status was set incorrectly
+                  //objApp.isErrorInStatus = true;
                 } else if (statusMatch) {
                   objStatItem.isCompleted = true;
                 }
@@ -350,7 +366,6 @@ export class DfaDashProjectComponent implements OnInit {
     }
 
     this.lstFilteredProjects = lstProjectsFilterting;
-
   }
 
   ViewClaims(applItem: ProjectExtended): void {

@@ -1,15 +1,23 @@
-namespace EMBC.Database.Contract;
+﻿namespace EMBC.Database.Contract;
 
-public class Appeal : IDto
+public record AppealQuery
 {
-    public Guid Id { get; set; }
-    public StateCode StateCode { get; set; }
-    public required Guid CaseId { get; set; }
-    public required string Status { get; set; }
-    public required string Reason { get; set; }
-    public required string AppealType { get; set; }
-    public SignAndSubmit? SignAndSubmit { get; set; }
+    public Guid? CaseId { get; set; }
 }
+public class Appeal : IDto
+    {
+        public Guid Id { get; set; }
+        public StateCode StateCode { get; set; }
+        public required string CaseId { get; set; }
+        public required string Status { get; set; }
+        public required string Reason { get; set; }
+        public required string AppealType { get; set; }
+        public SignAndSubmit? SignAndSubmit { get; set; }
+       // public bool? CreatedOnPortal { get; set; }
+        // Related Entities
+         public CaseEligibilityAppeal? CaseEligibilityAppeal {get ; set;}
+         public CasePaidAmountAppeal? CasePaidAmountAppeal {get; set;}
+    }
 
 public class SignAndSubmit
 {

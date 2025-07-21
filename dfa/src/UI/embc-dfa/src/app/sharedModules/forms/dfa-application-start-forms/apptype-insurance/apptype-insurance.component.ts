@@ -43,6 +43,8 @@ export default class AppTypeInsuranceComponent implements OnInit, OnDestroy {
   radioSmallBusinessOptions = SmallBusinessOption;
   radioFarmOptions = FarmOption;
   showOtherDocuments: boolean = false;
+  initialApplicantSignature: SignatureBlock = { dateSigned: new Date().toISOString(), signedName: null, signature: null};
+  initialSecondaryApplicantSignature: SignatureBlock = {dateSigned: new Date().toISOString(), signedName: null, signature: null};
 
   constructor(
     @Inject('formBuilder') formBuilder: UntypedFormBuilder,
