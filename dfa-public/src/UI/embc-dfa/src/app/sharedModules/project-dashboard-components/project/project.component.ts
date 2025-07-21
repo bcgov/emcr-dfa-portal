@@ -210,7 +210,9 @@ export class DfaDashProjectComponent implements OnInit {
                 objStatItem.status?.toLowerCase() === objApp.activeStage.stage.toLowerCase();
 
               if (statusMatch) {
+                if (!objApp.activeStage?.completedOn) {
                 objStatItem.currentStep = true;
+                }
                 isFound = true;
                 this.matchStatusFound = true;
 
@@ -247,6 +249,7 @@ export class DfaDashProjectComponent implements OnInit {
                   // NOTE commented out to avoid fixing a bug found, no side effects found except if the status was set incorrectly
                   //objApp.isErrorInStatus = true;
                 } else if (statusMatch) {
+                } else if (statusMatch && objApp.activeStage?.completedOn) {
                   objStatItem.isCompleted = true;
                 }
               }
