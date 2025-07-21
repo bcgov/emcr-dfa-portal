@@ -16,6 +16,7 @@ public class ProjectAppealMapper : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => src.StateCode))
             .ForMember(dest => dest.ProjectAppealId, opt => opt.MapFrom(src => src.Bpf_DFA_ProjectAppealId.Id))
+            .ForMember(dest => dest.CompletedOn, opt => opt.MapFrom(src => src.CompletedOn))
             .AfterMap((src, dest) => dest.Stages = src.TraversedPath?.Split(",").Select(x => new Stage { Id = new Guid(x), Name = string.Empty }).ToArray());
 
         CreateMap<ProcessStage, Stage>()

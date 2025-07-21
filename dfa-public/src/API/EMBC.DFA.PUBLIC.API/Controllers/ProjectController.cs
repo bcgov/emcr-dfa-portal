@@ -59,7 +59,42 @@ namespace EMBC.DFA.API.Controllers
         public async Task<ActionResult<List<CurrentProject>>> GetDFAProjects(string applicationId)
         {
             var lstProjects = await handler.HandleProjectList(applicationId);
-
+            // TODO consolidate the above query with the below N queries to have only one query
+            lstProjects.ForEach(project => 
+            {
+                // load project appeals including process stages(timeline)
+                var query = new Database.Contract.ProjectAppealQuery();
+                query.ProjectId = Guid.Parse(project.ProjectId);
+                var workflow = projectAppealRepository
+                    .GetWorkflow(query);
+                if (workflow?.ProjectAppeals?.Any() ?? false)
+                {
+                    var currentProjectAppeal = workflow.ProjectAppeals.Last();
+                    project.ActiveStage = new CurrentProjectAppeal();
+                    project.ActiveStage.CompletedOn = currentProjectAppeal.ProjectAppealEligibility.CompletedOn;
+                    project.ActiveStage.Stage = currentProjectAppeal.ProjectAppealEligibility.ActiveStage.Name;
+                    project.ActiveStage.Status = projectAppealService.MapStageNote(currentProjectAppeal);
+                    // NOTE currently, to be consistent, the stages are hard-coded
+                    // if you want dynamic stages/steps for the timeline, uncomment and finish the below code
+                    // I would strongly recommend refactoring all of the timelines before moving towards dynamic stages
+                    // currently, the data is not normalized, the UI and business logic are not separated, and various other issues
+                    //project.StatusBar = currentEligibility.Stages
+                    //    .Select(s =>
+                    //    {
+                    //        var currentStage = workflow.Stages.Any(w => w.Id == s.Id);
+                    //        return new ProjectStatusBar()
+                    //        {
+                    //            CurrentStep = currentStage,
+                    //            IsCompleted = s.Id == currentEligibility.Id,
+                    //            IsFinalStep = s == currentEligibility.Stages.Last(),
+                    //            Stage = currentStage ? project.Stage : string.Empty,
+                    //            Status = s.Name,
+                    //            //StatusColor
+                    //        };
+                    //    })
+                    //    .ToList();
+                }
+            });
             return Ok(lstProjects);
         }
 
@@ -106,6 +141,7 @@ namespace EMBC.DFA.API.Controllers
             {
                 dfaProjectMain.Project.estimateCostIncludingTax = null;
             }
+
             return Ok(dfaProjectMain);
         }
 
@@ -218,14 +254,16 @@ namespace EMBC.DFA.API.Controllers
         public string ProjectType { get; set; }
         public string ProjectTypeOther { get; set; }
         public string ProjectApprovedDate { get; set; }
-        public IEnumerable<CurrentProjectAppeal> Appeals { get; set; }
-        public bool IsSubmitted { get; set; }
+        public CurrentProjectAppeal ActiveStage { get; set; }
     }
 
     public class CurrentProjectAppeal
     {
         public string id { get; set; }
         public DateTime? SubmissionDate { get; set; }
+        public DateTime? CompletedOn { get; set; }
+        public string Status { get; set; }
+        public string Stage { get; set; }
     }
 
     public class ProjectType

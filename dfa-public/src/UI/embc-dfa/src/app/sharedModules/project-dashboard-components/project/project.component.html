@@ -246,9 +246,12 @@
               </tr>
               <tr>
                 <td *ngFor="let item of applItem.appealStatusBar; let i=index" id="item{{i}}" [ngClass]="item.status != '' ? 'labelStyle' : 'labelEmptyWidth'">
-                  <div *ngIf="item.status != ''" [ngClass]="item.currentStep == false || item.status == 'Closed' ? 'alignStatus' : 'alignStatus'">
-                    <span *ngIf="item.isCompleted == false && item.currentStep == true && item.stage != ''" class="material-symbols-outlined" style="color: #FDCB52">
-                      circle
+                  <div *ngIf="item.status != ''" [ngClass]="item.currentStep == false ? 'alignStatus': (item.stage == '' ? 'alignStatus' : 'currentStatus')">
+                    <span *ngIf="item.isCompleted == true && applItem.isErrorInStatus == false" class="material-icons" [ngStyle]="{'color': 'rgb(21 178 89)'}">
+                      check_circle
+                    </span>
+                    <span *ngIf="item.isCompleted == false && item.currentStep == true && applItem.isErrorInStatus == false && item.stage != ''">
+                      {{item.stage}}
                     </span>
                     <span *ngIf="item.isCompleted == false && item.currentStep == false" class="material-symbols-outlined" style="color: #FDCB52">
                       circle
