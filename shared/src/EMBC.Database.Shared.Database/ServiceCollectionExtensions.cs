@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IOrganizationServiceAsync>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<ServiceClient>>();
-            var uri = new Uri(configuration["Dynamics:ADFS:ResourceName"]);
+            var uri = new Uri(configuration["Dynamics:ADFS:ApiEndpoint"]);
             var client = new ServiceClient(uri, TokenProviderAdfs, false, logger);
             if (!client.IsReady) throw new InvalidOperationException($"Failed to connect to Dataverse: {client.LastError}", client.LastException);
             return client;
