@@ -90,8 +90,8 @@ To find an the first entity or return NULL if the entity was not found, use `rep
 For other generic reusable LINQ queries like `Single`, add a method to BaseRepository
 To query an entity with no joins, use `repository.Where(predicates)`. For an example, see [EMCR DFA Where Test](https://github.com/bcgov/emcr-dfa-portal/blob/support-develop/shared/src/EMBC.Database.Test/RecoveryClaimRepositoryTests.cs)
 To query an entity with a single join, use `repository.Query(queryCommand)` by inheriting IQueryRepository. See [EMCR DFA Query](https://github.com/bcgov/emcr-dfa-portal/blob/support-develop/shared/src/EMBC.Database.Resources/RecoveryClaimRepository.cs)
+To query an entity with a single join and group, see `ProjectRepository.cs`
 To query an entity with multiple joins, see [EMCR DFA GetPending](https://github.com/bcgov/emcr-dfa-portal/blob/support-develop/shared/src/EMBC.Database.Resources/RecoveryClaimRepository.cs)
-
 
 ## Unit Testing
 

@@ -98,7 +98,7 @@ export class DfaDashProjectComponent implements OnInit {
     { status: "DFA Project Update", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
-    { status: "Closed", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
+    { status: "Closed", stage: "", statusColor: "#62A370", isCompleted: false, currentStep: false, isFinalStep: true, isErrorInStatus: false },
     { status: "", stage: "", statusColor: "", isCompleted: false, currentStep: false, isFinalStep: false, isErrorInStatus: false },
 
   ];
@@ -211,7 +211,7 @@ export class DfaDashProjectComponent implements OnInit {
 
               if (statusMatch) {
                 if (!objApp.activeStage?.completedOn) {
-                objStatItem.currentStep = true;
+                  objStatItem.currentStep = true;
                 }
                 isFound = true;
                 this.matchStatusFound = true;
@@ -248,7 +248,6 @@ export class DfaDashProjectComponent implements OnInit {
                 if (!isFound) {
                   // NOTE commented out to avoid fixing a bug found, no side effects found except if the status was set incorrectly
                   //objApp.isErrorInStatus = true;
-                } else if (statusMatch) {
                 } else if (statusMatch && objApp.activeStage?.completedOn) {
                   objStatItem.isCompleted = true;
                 }
@@ -258,7 +257,7 @@ export class DfaDashProjectComponent implements OnInit {
 
             lstDataModified.push(objApp);
           })
-
+          
           this.mapData(lstDataModified);
         }
             //this.mapData(lstData);
