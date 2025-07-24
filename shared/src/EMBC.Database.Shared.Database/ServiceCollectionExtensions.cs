@@ -12,7 +12,17 @@ public static class ServiceCollectionExtensions
         {
             var logger = sp.GetRequiredService<ILogger<ServiceClient>>();
             var uri = new Uri(configuration["Dynamics:ADFS:ApiEndpoint"]);
-            var client = new ServiceClient(uri, TokenProviderAdfs, false, logger);
+
+            var options = new ConnectionOptions()
+            {
+                ServiceUri = uri,
+                AccessTokenProviderFunctionAsync = TokenProviderAdfs,
+                SkipDiscovery = true,
+                Logger = logger
+            };
+ 
+            var client = new ServiceClient(options);
+                        
             if (!client.IsReady) throw new InvalidOperationException($"Failed to connect to Dataverse: {client.LastError}", client.LastException);
             return client;
         });
