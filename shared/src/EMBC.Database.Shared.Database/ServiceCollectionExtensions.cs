@@ -1,6 +1,4 @@
-﻿using Microsoft.PowerPlatform.Dataverse.Client.Model;
-
-namespace EMBC.Database;
+﻿namespace EMBC.Database;
 
 public static class ServiceCollectionExtensions
 {
