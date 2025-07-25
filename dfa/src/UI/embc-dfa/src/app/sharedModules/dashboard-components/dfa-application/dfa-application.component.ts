@@ -15,7 +15,8 @@ import { DocumentViewingDataService } from 'src/app/core/services/document-viewi
 // Temporary extension until the OpenAPI spec includes appealStatusBar
 // ####################################################################
 interface CurrentCaseWithAppeals extends CurrentApplication {
-  appealStatusBar?: AppealStatusItem[]; // Replace with actual type if available
+  appealEligibilityStatusBar?: AppealStatusItem[]; // Replace with actual type if available
+  appealAmountStatusBar?: AppealStatusItem[];
 }
 
 interface AppealStatusItem {
@@ -41,6 +42,7 @@ export class DfaApplicationComponent implements OnInit {
     this.appSessionService.currentApplicationsCount.emit(value);
   }
 
+  // application timeline items
   items = [
     {
       label: 'Draft Application',
@@ -107,16 +109,17 @@ export class DfaApplicationComponent implements OnInit {
     }
   ];
 
+  // eligibility appeal timeline items
   appealItems = [
     {
-      label: 'Draft Application',
+      label: 'Appeal Submitted',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
       isErrorInStatus: false
     },
     {
-      label: 'Submitted Application',
+      label: 'Appeal In Progress',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
@@ -194,7 +197,8 @@ export class DfaApplicationComponent implements OnInit {
     }
   ];
 
-  appealstages = [
+  // amount appeal timeline items
+  appealAmountItems = [
     {
       label: 'Appeal Submitted',
       isCompleted: false,
@@ -210,21 +214,14 @@ export class DfaApplicationComponent implements OnInit {
       isErrorInStatus: false
     },
     {
-      label: 'Appeal Eligibility Decision',
+      label: 'Reassessing Damage',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
       isErrorInStatus: false
     },
     {
-      label: 'Accessing Damage',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
-    },
-    {
-      label: 'Reviewing Damage Report',
+      label: 'Reviewing Appeal Report',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
@@ -234,7 +231,7 @@ export class DfaApplicationComponent implements OnInit {
       label: 'Appeal Closed',
       isCompleted: false,
       currentStep: false,
-      isFinalStep: false,
+      isFinalStep: true,
       isErrorInStatus: false
     }
   ];
@@ -250,7 +247,6 @@ export class DfaApplicationComponent implements OnInit {
   appealMatchStatusFound = false;
 
   constructor(
-    private profileDataService: ProfileDataService,
     private appService: Service,
     private appSessionService: AppSessionService,
     private router: Router,
@@ -321,18 +317,17 @@ export class DfaApplicationComponent implements OnInit {
               }
             });
 
-            // This code needs to be updated once the Dynamics API sends the appealStatusBar in the response
-            // #############################################################################################
+            // Eligibility appeal steps
             const objAppWithAppeals = objApp as CurrentCaseWithAppeals;
             //  @TODO: Remove this cast once the API response is updated to include appealStatusBar 
             objAppWithAppeals.hasAppealStages = true;
 
             // Initialize appealStatusBar if it's missing
-            if (!Array.isArray(objAppWithAppeals.appealStatusBar)) {
-              objAppWithAppeals.appealStatusBar = [...JSON.parse(JSON.stringify(this.appealstages))];
+            if (!Array.isArray(objAppWithAppeals.appealEligibilityStatusBar)) {
+              objAppWithAppeals.appealEligibilityStatusBar = [...JSON.parse(JSON.stringify(this.appealItems))];
             }
 
-            objAppWithAppeals.appealStatusBar.forEach((objStatItem) => {
+            objAppWithAppeals.appealEligibilityStatusBar.forEach((objStatItem) => {
               if (objAppWithAppeals.caseEligibility === 'Eligible') {
                 objStatItem.isCompleted = objAppWithAppeals.appeals.find(a => a.appealType === 'Eligibility')
 
@@ -344,6 +339,60 @@ export class DfaApplicationComponent implements OnInit {
               
             });
             
+            // appeal amount timeline steps
+            let appealAmount = objApp.appeals?.find(appeal => appeal.appealType === 'Amount');
+            // Initialize appealStatusBar if it's missing
+            if (!Array.isArray(objAppWithAppeals.appealAmountStatusBar)) {
+              objAppWithAppeals.appealAmountStatusBar = JSON.parse(JSON.stringify(this.appealAmountItems));
+            }
+
+            isFound = false;
+            objAppWithAppeals.appealAmountStatusBar.forEach((objStatItem) => {
+              const statusMatch =
+                appealAmount?.casePaidAmountAppeal?.activeStage?.name &&
+                objStatItem.label?.toLowerCase() === appealAmount.casePaidAmountAppeal.activeStage.name.toLowerCase();
+
+              if (statusMatch) {
+                // if (!appealAmount?.casePaidAmountAppeal?.activeStage?.completedOn) {
+                //   objStatItem.currentStep = true;
+                // }
+                isFound = true;
+                this.matchStatusFound = true;
+
+                if (appealAmount?.casePaidAmountAppeal?.activeStage?.name) {
+                  objStatItem.stage = appealAmount.casePaidAmountAppeal.activeStage.name;
+                }
+
+                // Determine statusColor based on logic
+                // if (['Ineligible', 'Withdrawn'].includes(objApp.activeStage.stage || '')) {
+                //   objApp.statusColor = '#E25E63';
+                // } else if (
+                //   objApp.activeStage.status?.toLowerCase().includes('decision made') &&
+                //   objApp.activeStage.stage?.toLowerCase().includes('progress')
+                // ) {
+                //   objApp.statusColor = '#FDCB52';
+                // } else {
+                //   objApp.statusColor = objStatItem.statusColor;
+                // }
+              }
+
+              // Fallback if status not matched
+              if (!isFound) {
+                objStatItem.isCompleted = true;
+              }
+
+              // Final step validation
+              if (objStatItem.isFinalStep) {
+                if (!isFound) {
+                  // NOTE commented out to avoid fixing a bug found, no side effects found except if the status was set incorrectly
+                  appealAmount.isErrorInStatus = true;
+                } 
+                // else if (statusMatch && appealAmount?.casePaidAmountAppeal?.activeStage?.completedOn) {
+                //   objStatItem.isCompleted = true;
+                // }
+              }
+            });
+
             lstDataModified.push(objApp);
           });
 
@@ -526,6 +575,14 @@ export class DfaApplicationComponent implements OnInit {
         applicationId: applItem.applicationId
       }
     });
+  }
+
+  hasAmountAppeal(applItem: CurrentApplication): boolean {
+    return this.canAppeal(applItem) && applItem.appeals.length > 0 && applItem.appeals.some(a => a.appealType == 'Amount');
+  }
+
+  getAmountTimelineItems(applItem: CurrentApplication): CurrentCaseWithAppeals[] {
+    return applItem.appeals.filter(item => item.appealType === 'Amount');
   }
 }
 

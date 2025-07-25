@@ -5,10 +5,13 @@ Current angular version of the UI project is 19.
 
 ## Development server
 
+To build the library:
+/emcr-dfa-portal/shared-workspace
+`npm run build`
+
 Run the following commands to run local:
 ```
-# forcing is not ideal, we should straighten out our mismatched dependencies
-npm install --force 
+npm install
 npm run startlocal
 ```
 

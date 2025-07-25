@@ -158,11 +158,11 @@
               <span *ngIf="applItem.isErrorInAppealStatus === true" style="color: red;">Error in displaying
                 status<br /></span>
             </div>
-            <div *ngFor="let item of applItem.appealStatusBar; let i=index" id="item{{i}}" class="stepsDesc col-md-1">
+            <div *ngFor="let item of applItem.appealEligibilityStatusBar; let i=index" id="item{{i}}" class="stepsDesc col-md-1">
               <span class="stepText">{{item.label}}</span>
             </div>
             <br style="clear: both;" />
-            <div *ngFor="let item of applItem.appealStatusBar; let i=index" id="item{{i}}"
+            <div *ngFor="let item of applItem.appealEligibilityStatusBar; let i=index" id="item{{i}}"
               [ngClass]="i === 0 ? 'nocircle col-md-1' : 'circle col-md-1'">
               <span *ngIf="item.isCompleted === true" class="material-icons"
                 style="color: rgb(21 178 89);">
@@ -179,20 +179,56 @@
             <span *ngIf="applItem.isErrorInStatus === true" class="material-symbols-outlined" style="color: lightgrey">
               circle
             </span>
-            
+           
           </div>
-          <div>
-            @if(applItem.caseEligibility === this.CaseElibilityEnum.Ineligible) {
+        </div>  
+      }
+
+      <!-- Case Amount Appeal Timeline -->
+      @if (hasAmountAppeal(applItem)) {
+        <div class="appealsTimeline">
+          <div [ngClass]="applItem.hasAppealStages ? 'appeal-stages' : ''" class="bfpTimeline">
+            <div class="col-md-3" style="margin-top: 20px;">
+              <span><b>Amount Appeal Status</b></span><br />
+              <span *ngIf="applItem.isErrorInAppealStatus === true" style="color: red;">Error in displaying
+                status<br /></span>
+            </div>
+            <div *ngFor="let item of applItem.appealAmountStatusBar; let i=index" id="item{{i}}" class="stepsDesc col-md-1">
+              <span class="stepText">{{item.label}}</span>
+            </div>
+            <br style="clear: both;" />
+            <div *ngFor="let item of applItem.appealAmountStatusBar; let i=index" id="item{{i}}"
+              [ngClass]="i === 0 ? 'nocircle col-md-1' : 'circle col-md-1'">
+              <span *ngIf="item.isCompleted === true" class="material-icons"
+                style="color: rgb(21 178 89);">
+                check_circle </span>
+              <span *ngIf="item.isCompleted === false && item.currentStep === true"
+                class="material-symbols-outlined" style="color: darkblue">
+                circle
+              </span>
+              <span *ngIf="item.isCompleted === false && item.currentStep === false"
+                class="material-symbols-outlined" style="color: lightgrey">
+                circle
+              </span>
+            </div>
+            <span *ngIf="applItem.isErrorInStatus === true" class="material-symbols-outlined" style="color: lightgrey">
+              circle
+            </span>
+           
+          </div>
+        </div>  
+      }
+      @if (canAppeal(applItem) && applItem.appeals.length > 0) {
+        <div>
+          @if(applItem.caseEligibility === this.CaseElibilityEnum.Ineligible) {
+          <button class="col-md-2 application-button whitebutton" type="button"
+            (click)="viewAppealAfterSubmission(applItem, 'Eligibility')">View Eligibility Appeal</button>
+          }
+          @if(applItem.caseEligibility === this.CaseElibilityEnum.Eligible) {
             <button class="col-md-2 application-button whitebutton" type="button"
-              (click)="viewAppealAfterSubmission(applItem, 'Eligibility')">View Eligibility Appeal</button>
-            }
-            @if(applItem.caseEligibility === this.CaseElibilityEnum.Eligible) {
-              <button class="col-md-2 application-button whitebutton" type="button"
-              (click)="viewAppealAfterSubmission(applItem, 'Amount')">View Amount Appeal</button>
-            }
-          </div>
+            (click)="viewAppealAfterSubmission(applItem, 'Amount')">View Amount Appeal</button>
+          }
         </div>
-     
       }
 
       @if (!applItem.appeals || applItem.appeals.length === 0) {
