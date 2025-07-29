@@ -144,17 +144,12 @@
         </div>
       </div>
 
-
-      @if(canAppeal(applItem) && applItem.appeals.length > 0 ) {
+      <!-- Case Eligibility Appeal Timeline -->
+      @if(canAppeal(applItem) && applItem.caseEligibilityAppeal ) {
         <div class="appealsTimeline">
           <div [ngClass]="applItem.hasAppealStages ? 'appeal-stages' : ''" class="bfpTimeline">
             <div class="col-md-3" style="margin-top: 20px;">
-              @if(applItem.caseEligibility === this.CaseElibilityEnum.Ineligible){
-                <span><b>Eligibility Appeal Status</b></span><br />
-              }
-              @if(applItem.caseEligibility === this.CaseElibilityEnum.Eligible) {
-                <span><b>Amount Appeal Status</b></span><br />
-              }
+              <span><b>Eligibility Appeal Status</b></span><br />
               <span *ngIf="applItem.isErrorInAppealStatus === true" style="color: red;">Error in displaying
                 status<br /></span>
             </div>
@@ -179,9 +174,8 @@
             <span *ngIf="applItem.isErrorInStatus === true" class="material-symbols-outlined" style="color: lightgrey">
               circle
             </span>
-           
           </div>
-        </div>  
+        </div>
       }
 
       <!-- Case Amount Appeal Timeline -->
@@ -214,17 +208,18 @@
             <span *ngIf="applItem.isErrorInStatus === true" class="material-symbols-outlined" style="color: lightgrey">
               circle
             </span>
-           
+
           </div>
-        </div>  
+        </div>
       }
-      @if (canAppeal(applItem) && applItem.appeals.length > 0) {
+
+      @if (canAppeal(applItem) && (applItem.caseEligibilityAppeal || applItem.caseAmountAppeal)) {
         <div>
-          @if(applItem.caseEligibility === this.CaseElibilityEnum.Ineligible) {
+          @if (applItem.caseEligibilityAppeal) {
           <button class="col-md-2 application-button whitebutton" type="button"
             (click)="viewAppealAfterSubmission(applItem, 'Eligibility')">View Eligibility Appeal</button>
           }
-          @if(applItem.caseEligibility === this.CaseElibilityEnum.Eligible) {
+          @if (applItem.caseAmountAppeal) {
             <button class="col-md-2 application-button whitebutton" type="button"
             (click)="viewAppealAfterSubmission(applItem, 'Amount')">View Amount Appeal</button>
           }

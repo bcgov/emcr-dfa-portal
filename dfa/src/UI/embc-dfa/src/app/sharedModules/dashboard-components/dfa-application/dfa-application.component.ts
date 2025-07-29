@@ -329,12 +329,12 @@ export class DfaApplicationComponent implements OnInit {
 
             objAppWithAppeals.appealEligibilityStatusBar.forEach((objStatItem) => {
               if (objAppWithAppeals.caseEligibility === 'Eligible') {
-                objStatItem.isCompleted = objAppWithAppeals.appeals.find(a => a.appealType === 'Eligibility')
+                //objStatItem.isCompleted = objAppWithAppeals.appeals.find(a => a.appealType === 'Eligibility')
 
                 // @TODO : Include the logic to check the amount appeal status
-                ?.caseEligibilityAppeal?.activeStage?.name?.toLowerCase() === objStatItem.label.toLowerCase() ? true : false;
-                console.log(objAppWithAppeals.caseNumber, objAppWithAppeals.appeals.find(a => a.appealType === 'Eligibility')
-                ?.caseEligibilityAppeal?.activeStage?.name?.toLowerCase(), objStatItem.label.toLowerCase(), objStatItem.isCompleted);
+                //?.caseEligibilityAppeal?.activeStage?.name?.toLowerCase() === objStatItem.label.toLowerCase() ? true : false;
+                //console.log(objAppWithAppeals.caseNumber, objAppWithAppeals.appeals.find(a => a.appealType === 'Eligibility')
+                //?.caseEligibilityAppeal?.activeStage?.name?.toLowerCase(), objStatItem.label.toLowerCase(), objStatItem.isCompleted);
               }
               
             });
@@ -349,18 +349,18 @@ export class DfaApplicationComponent implements OnInit {
             isFound = false;
             objAppWithAppeals.appealAmountStatusBar.forEach((objStatItem) => {
               const statusMatch =
-                appealAmount?.casePaidAmountAppeal?.activeStage?.name &&
-                objStatItem.label?.toLowerCase() === appealAmount.casePaidAmountAppeal.activeStage.name.toLowerCase();
+                objApp.caseAmountAppeal?.activeStage?.name &&
+                objStatItem.label?.toLowerCase() === objApp.caseAmountAppeal.activeStage.name.toLowerCase();
 
               if (statusMatch) {
-                // if (!appealAmount?.casePaidAmountAppeal?.activeStage?.completedOn) {
-                //   objStatItem.currentStep = true;
-                // }
+                //if (!appealAmount?.casePaidAmountAppeal?.activeStage?.completedOn) {
+                  objStatItem.currentStep = true;
+                //}
                 isFound = true;
                 this.matchStatusFound = true;
 
-                if (appealAmount?.casePaidAmountAppeal?.activeStage?.name) {
-                  objStatItem.stage = appealAmount.casePaidAmountAppeal.activeStage.name;
+                if (objApp.caseAmountAppeal?.activeStage?.name) {
+                  objStatItem.stage = objApp.caseAmountAppeal.activeStage.name;
                 }
 
                 // Determine statusColor based on logic
@@ -385,7 +385,7 @@ export class DfaApplicationComponent implements OnInit {
               if (objStatItem.isFinalStep) {
                 if (!isFound) {
                   // NOTE commented out to avoid fixing a bug found, no side effects found except if the status was set incorrectly
-                  appealAmount.isErrorInStatus = true;
+                  //objApp.caseAmountAppeal.isErrorInStatus = true;
                 } 
                 // else if (statusMatch && appealAmount?.casePaidAmountAppeal?.activeStage?.completedOn) {
                 //   objStatItem.isCompleted = true;
@@ -560,9 +560,12 @@ export class DfaApplicationComponent implements OnInit {
 
   viewAppealAfterSubmission(applItem: ApplicationExtended, type: string): void {
     const caseId = applItem.caseId;
-
-    const appeal = applItem.appeals?.find(a => a.appealType.toLowerCase() === type.toLowerCase());
-
+    let appeal;
+    if (type == 'Eligibility') {
+      appeal = applItem.caseEligibilityAppeal;
+    } else if (type == 'Amount') {
+      appeal = applItem.caseAmountAppeal;
+    }
     if (!appeal?.id || !caseId || !type) {
       console.error('Invalid appeal or case details:', { appeal, caseId, type });
       return;
@@ -578,11 +581,7 @@ export class DfaApplicationComponent implements OnInit {
   }
 
   hasAmountAppeal(applItem: CurrentApplication): boolean {
-    return this.canAppeal(applItem) && applItem.appeals.length > 0 && applItem.appeals.some(a => a.appealType == 'Amount');
-  }
-
-  getAmountTimelineItems(applItem: CurrentApplication): CurrentCaseWithAppeals[] {
-    return applItem.appeals.filter(item => item.appealType === 'Amount');
+    return this.canAppeal(applItem) && !!applItem.caseAmountAppeal;
   }
 }
 

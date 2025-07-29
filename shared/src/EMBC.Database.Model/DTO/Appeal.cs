@@ -4,6 +4,7 @@ public record AppealQuery
 {
     public Guid? CaseId { get; set; }
 }
+
 public class Appeal : IDto
     {
         public Guid Id { get; set; }

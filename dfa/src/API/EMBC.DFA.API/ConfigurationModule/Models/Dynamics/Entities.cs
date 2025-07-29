@@ -595,7 +595,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string dfa_accountlegalname { get; set; }
         public string dfa_appealcloseddate { get; set; }
         public string dfa_eligibilitystatus { get; set; }
-        public IEnumerable<dfa_appeal>? dfa_appeal { get; set; }
+        public CaseEligibilityAppeal? CaseEligibilityAppeal { get; set; }
+        public CasePaidAmountAppeal? CasePaidAmountAppeal { get; set; }
     }
 
     public class dfa_appeal

@@ -518,8 +518,8 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.Status, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_applicationstatusportal) ? string.Empty : s.dfa_applicationstatusportal))
                 .ForMember(d => d.StatusLastUpdated, opts => opts.MapFrom(s => "01/01/2023"))
                 .ForMember(d => d.ApplicationId, opts => opts.MapFrom(s => s.dfa_appapplicationid))
-                .ForMember(d => d.Appeals, opts => opts.MapFrom(s => s.dfa_appeal))
-                .ForMember(d => d.IsSubmitted, opts => opts.MapFrom(s => s.dfa_appeal.Any(x => x.dfa_dateappealdecisionmade != null)))
+                .ForMember(d => d.CaseEligibilityAppeal, opts => opts.MapFrom(s => s.CaseEligibilityAppeal))
+                .ForMember(d => d.CaseAmountAppeal, opts => opts.MapFrom(s => s.CasePaidAmountAppeal))
                 .ForMember(d => d.CaseEligibility, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_eligibilitystatus) ? GetEnumDescription((CaseEligibilityOptionSet)Convert.ToInt32(s.dfa_eligibilitystatus)) : null));
 
             CreateMap<dfa_appeal, CurrentCaseAppeal>()

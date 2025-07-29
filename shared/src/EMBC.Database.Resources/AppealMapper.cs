@@ -61,7 +61,6 @@ public class AppealMapper : Profile
             .ForMember(dest => dest.CaseEligibilityAppeal, opt => opt.MapFrom(src => src.caseEligibilityAppeal))
             .AfterMap((src, dest) => dest.CaseEligibilityAppeal.ActiveStage = new Stage() { Id = src.ProcessStage.Id, Name = src.ProcessStage.StageName });
 
-
         CreateMap<CasePaidAmountAppealComposite, Appeal>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.caseAppeal.Id))
             .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => (StateCode)(int)src.caseAppeal.StateCode))
@@ -71,7 +70,6 @@ public class AppealMapper : Profile
             .ForMember(dest => dest.AppealType, opt => opt.MapFrom(src => src.caseAppeal.DFA_AppealType))
             .ForMember(dest => dest.SignAndSubmit, opt => opt.Ignore())
             .ForMember(dest => dest.CasePaidAmountAppeal, opt => opt.MapFrom(src => src.casePaidAmountAppeal))
-            .AfterMap((src, dest) => dest.CaseEligibilityAppeal.ActiveStage = new Stage() { Id = src.ProcessStage.Id, Name = src.ProcessStage.StageName });
-
+            .AfterMap((src, dest) => dest.CasePaidAmountAppeal.ActiveStage = new Stage() { Id = src.ProcessStage.Id, Name = src.ProcessStage.StageName });
     }
 }
