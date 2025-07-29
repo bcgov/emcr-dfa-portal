@@ -133,6 +133,8 @@ namespace EMBC.Database.Model
 			public const string DFA_AA_SubmittedWaitingOnApplicantInfoName = "dfa_aa_submittedwaitingonapplicantinfoname";
 			public const string DFA_AA_SupplierNumberRequested = "dfa_aa_suppliernumberrequested";
 			public const string DFA_AA_SupplierNumberRequestedName = "dfa_aa_suppliernumberrequestedname";
+			public const string DFA_AA_WaitingOnApplicantInformation_RR = "dfa_aa_waitingonapplicantinformation_rr";
+			public const string DFA_AA_WaitingOnApplicantInformation_RRName = "dfa_aa_waitingonapplicantinformation_rrname";
 			public const string DFA_AMnTAppeal_AdjudicatorReviewCompleted = "dfa_amntappeal_adjudicatorreviewcompleted";
 			public const string DFA_AMnTAppeal_AdjudicatorReviewCompletedName = "dfa_amntappeal_adjudicatorreviewcompletedname";
 			public const string DFA_AMnTAppeal_AppealDecision = "dfa_amntappeal_appealdecision";
@@ -177,6 +179,9 @@ namespace EMBC.Database.Model
 			public const string DFA_AppealStatusName = "dfa_appealstatusname";
 			public const string DFA_AppealType = "dfa_appealtype";
 			public const string DFA_AppealTypeName = "dfa_appealtypename";
+			public const string DFA_ApplicantPrintName = "dfa_applicantprintname";
+			public const string DFA_ApplicantSignedDate = "dfa_applicantsigneddate";
+			public const string DFA_AssignmentComment = "dfa_assignmentcomment";
 			public const string DFA_CaseId = "dfa_caseid";
 			public const string DFA_CaseiDnaMe = "dfa_caseidname";
 			public const string DFA_ClaimSummaryCompleted = "dfa_claimsummarycompleted";
@@ -187,6 +192,7 @@ namespace EMBC.Database.Model
 			public const string DFA_CreatedOnPortalName = "dfa_createdonportalname";
 			public const string DFA_DateAppealDecisionMade = "dfa_dateappealdecisionmade";
 			public const string DFA_DateAppealLetterSent = "dfa_dateappeallettersent";
+			public const string DFA_DateAssigned = "dfa_dateassigned";
 			public const string DFA_DateAssignedToEvaluator = "dfa_dateassignedtoevaluator";
 			public const string DFA_DateEvaluatorReportReceived = "dfa_dateevaluatorreportreceived";
 			public const string DFA_DateReceived = "dfa_datereceived";
@@ -1594,6 +1600,38 @@ namespace EMBC.Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_aa_waitingonapplicantinformation_rr")]
+		public System.Nullable<bool> DFA_AA_WaitingOnApplicantInformation_RR
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<bool>>("dfa_aa_waitingonapplicantinformation_rr");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_aa_waitingonapplicantinformation_rr", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_aa_waitingonapplicantinformation_rrname")]
+		public string DFA_AA_WaitingOnApplicantInformation_RRName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_aa_waitingonapplicantinformation_rr"))
+				{
+					return this.FormattedValues["dfa_aa_waitingonapplicantinformation_rr"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_amntappeal_adjudicatorreviewcompleted")]
 		public System.Nullable<bool> DFA_AMnTAppeal_AdjudicatorReviewCompleted
 		{
@@ -2307,6 +2345,51 @@ namespace EMBC.Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_applicantprintname")]
+		public string DFA_ApplicantPrintName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("dfa_applicantprintname");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_applicantprintname", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_applicantsigneddate")]
+		public System.Nullable<System.DateTime> DFA_ApplicantSignedDate
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_applicantsigneddate");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_applicantsigneddate", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_assignmentcomment")]
+		public string DFA_AssignmentComment
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("dfa_assignmentcomment");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_assignmentcomment", value);
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_caseid")]
 		public Microsoft.Xrm.Sdk.EntityReference DFA_CaseId
 		{
@@ -2462,6 +2545,21 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetAttributeValue("dfa_dateappeallettersent", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_dateassigned")]
+		public System.Nullable<System.DateTime> DFA_DateAssigned
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_dateassigned");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_dateassigned", value);
 			}
 		}
 		
