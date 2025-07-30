@@ -7,6 +7,7 @@ public record CaseEligibilityAppeal : IDto
 
     public Guid? CaseAppealId { get; set; }       // Dynamics Optional
     public Stage[]? Stages { get; set; }            // Dynamics Optional
+    public DateTime? CompletedOn { get; set; }     // Dynamics Optional
 
     // Related Entities
     public Stage? ActiveStage { get; set; }         // Dynamics Optional

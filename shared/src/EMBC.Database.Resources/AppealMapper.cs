@@ -38,12 +38,14 @@ public class AppealMapper : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => (StateCode)(int)src.StateCode))
             .ForMember(dest => dest.CaseAppealId, opt => opt.MapFrom(src => src.Bpf_DFA_AppealId.Id))
+            .ForMember(dest => dest.CompletedOn, opt => opt.MapFrom(src => src.CompletedOn))
             .AfterMap((src, dest) => dest.Stages = src.TraversedPath?.Split(",").Select(x => new Stage { Id = new Guid(x), Name = string.Empty }).ToArray());
 
         CreateMap<DFA_CasePaidAmountAppeal, CasePaidAmountAppeal>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => (StateCode)(int)src.StateCode))
             .ForMember(dest => dest.CaseAppealId, opt => opt.MapFrom(src => src.Bpf_DFA_AppealId.Id))
+            .ForMember(dest => dest.CompletedOn, opt => opt.MapFrom(src => src.CompletedOn))
             .AfterMap((src, dest) => dest.Stages = src.TraversedPath?.Split(",").Select(x => new Stage { Id = new Guid(x), Name = string.Empty }).ToArray());
 
         CreateMap<ProcessStage, Stage>()
