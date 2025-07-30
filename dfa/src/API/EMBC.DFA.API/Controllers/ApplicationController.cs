@@ -301,6 +301,8 @@ namespace EMBC.DFA.API.Controllers
         public bool hasAppealStages { get; set; }
         public CaseEligibilityAppeal CaseEligibilityAppeal { get; set; }
         public CasePaidAmountAppeal CaseAmountAppeal { get; set; }
+        public string AmountAppealPortalNote { get; set; }
+        public string AmountAppealStatusPortal { get; set; }
         public string CaseEligibility { get; set; }
     }
 

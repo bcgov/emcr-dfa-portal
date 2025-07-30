@@ -8,20 +8,13 @@ public class AppealMapper : Profile
     {
         CreateMap<DFA_Appeal, Appeal>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.DFA_AppealId))
-            .ForMember(
-                dest => dest.StateCode,
-                opt => opt.MapFrom(src => src.StateCode.HasValue ? (StateCode)(int)src.StateCode.Value : default)
-            )
-            .ForMember(
-                dest => dest.CaseId,
-                opt => opt.MapFrom(src => src.DFA_CaseId != null ? src.DFA_CaseId.Id : Guid.Empty)
-            )
-            .ForMember(
-                dest => dest.Status,
-                opt => opt.MapFrom(src => src.DFA_AppealStatus.HasValue ? src.DFA_AppealStatus.Value.ToString() : null)
-            )
+            .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => src.StateCode.HasValue ? (StateCode)(int)src.StateCode.Value : default))
+            .ForMember(dest => dest.CaseId, opt => opt.MapFrom(src => src.DFA_CaseId != null ? src.DFA_CaseId.Id : Guid.Empty))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.DFA_AppealStatus.HasValue ? src.DFA_AppealStatus.Value.ToString() : null))
             .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.DFA_Reason))
             .ForMember(dest => dest.AppealType, opt => opt.MapFrom(src => src.DFA_AppealType))
+            .ForMember(dest => dest.AmountAppealPortalNote , opt => opt.MapFrom(src => src.DFA_AmountAppealPortalNote))
+            .ForMember(dest => dest.AmountAppealStatusPortal, opt => opt.MapFrom(src => src.DFA_AmountAppealStatusPortal))
             .ForMember(dest => dest.SignAndSubmit, opt => opt.Ignore());
 
         CreateMap<Appeal, DFA_Appeal>()

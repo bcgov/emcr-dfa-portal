@@ -520,7 +520,9 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.ApplicationId, opts => opts.MapFrom(s => s.dfa_appapplicationid))
                 .ForMember(d => d.CaseEligibilityAppeal, opts => opts.MapFrom(s => s.CaseEligibilityAppeal))
                 .ForMember(d => d.CaseAmountAppeal, opts => opts.MapFrom(s => s.CasePaidAmountAppeal))
-                .ForMember(d => d.CaseEligibility, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_eligibilitystatus) ? GetEnumDescription((CaseEligibilityOptionSet)Convert.ToInt32(s.dfa_eligibilitystatus)) : null));
+                .ForMember(d => d.CaseEligibility, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_eligibilitystatus) ? GetEnumDescription((CaseEligibilityOptionSet)Convert.ToInt32(s.dfa_eligibilitystatus)) : null))
+                .ForMember(d => d.AmountAppealPortalNote, opts => opts.MapFrom(s => s.AmountAppealPortalNote))
+                .ForMember(d => d.AmountAppealStatusPortal, opts => opts.MapFrom(s => s.AmountAppealStatusPortal));
 
             CreateMap<DFA_CaseEligibilityAppeal, CaseEligibilityAppeal>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

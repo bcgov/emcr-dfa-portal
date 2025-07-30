@@ -171,6 +171,8 @@ namespace EMBC.Database.Model
 			public const string DFA_AMnTAppeal_UploadPaymentLetterName = "dfa_amntappeal_uploadpaymentlettername";
 			public const string DFA_AmountAppeal_Received = "dfa_amountappeal_received";
 			public const string DFA_AmountAppeal_ReceivedName = "dfa_amountappeal_receivedname";
+			public const string DFA_AmountAppealPortalNote = "dfa_amountappealportalnote";
+			public const string DFA_AmountAppealStatusPortal = "dfa_amountappealstatusportal";
 			public const string DFA_AppealId = "dfa_appealid";
 			public const string Id = "dfa_appealid";
 			public const string DFA_AppealReportAdjudicatedAndReviewed = "dfa_appealreportadjudicatedandreviewed";
@@ -190,6 +192,7 @@ namespace EMBC.Database.Model
 			public const string DFA_ComplianceCheckCompletedName = "dfa_compliancecheckcompletedname";
 			public const string DFA_CreatedOnPortal = "dfa_createdonportal";
 			public const string DFA_CreatedOnPortalName = "dfa_createdonportalname";
+			public const string DFA_CurrentStageName = "dfa_currentstagename";
 			public const string DFA_DateAppealDecisionMade = "dfa_dateappealdecisionmade";
 			public const string DFA_DateAppealLetterSent = "dfa_dateappeallettersent";
 			public const string DFA_DateAssigned = "dfa_dateassigned";
@@ -272,6 +275,8 @@ namespace EMBC.Database.Model
 			public const string DFA_ELiGapPeReceiptsOrInvoicesPaidByApplicantName = "dfa_eligappereceiptsorinvoicespaidbyapplicantname";
 			public const string DFA_ELiGapPeScopeAndCalculationsSheetProvided = "dfa_eligappescopeandcalculationssheetprovided";
 			public const string DFA_ELiGapPeScopeAndCalculationsSheetProvidedName = "dfa_eligappescopeandcalculationssheetprovidedname";
+			public const string DFA_EligibilityAppealPortalNote = "dfa_eligibilityappealportalnote";
+			public const string DFA_EligibilityAppealStatusPortal = "dfa_eligibilityappealstatusportal";
 			public const string DFA_InformationRequestDueDate = "dfa_informationrequestduedate";
 			public const string DFA_Name = "dfa_name";
 			public const string DFA_PaymentLetterReady = "dfa_paymentletterready";
@@ -2208,6 +2213,36 @@ namespace EMBC.Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_amountappealportalnote")]
+		public string DFA_AmountAppealPortalNote
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("dfa_amountappealportalnote");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_amountappealportalnote", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_amountappealstatusportal")]
+		public string DFA_AmountAppealStatusPortal
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("dfa_amountappealstatusportal");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_amountappealstatusportal", value);
+			}
+		}
+		
 		/// <summary>
 		/// Unique identifier for entity instances
 		/// </summary>
@@ -2515,6 +2550,21 @@ namespace EMBC.Database.Model
 				{
 					return default(string);
 				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_currentstagename")]
+		public string DFA_CurrentStageName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("dfa_currentstagename");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_currentstagename", value);
 			}
 		}
 		
@@ -3789,6 +3839,36 @@ namespace EMBC.Database.Model
 				{
 					return default(string);
 				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligibilityappealportalnote")]
+		public string DFA_EligibilityAppealPortalNote
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("dfa_eligibilityappealportalnote");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_eligibilityappealportalnote", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eligibilityappealstatusportal")]
+		public string DFA_EligibilityAppealStatusPortal
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("dfa_eligibilityappealstatusportal");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_eligibilityappealstatusportal", value);
 			}
 		}
 		
