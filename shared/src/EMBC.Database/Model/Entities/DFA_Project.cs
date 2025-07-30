@@ -276,6 +276,7 @@ namespace EMBC.Database.Model
 			public const string DFA_DescriptionOfMaterialNeededToRepair = "dfa_descriptionofmaterialneededtorepair";
 			public const string DFA_DescriptionOfRepairWork = "dfa_descriptionofrepairwork";
 			public const string DFA_DescriptionOfTheCauseOfDamage = "dfa_descriptionofthecauseofdamage";
+			public const string DFA_DFA_Project_BcGoV_DocumentUrl_Project = "DFA_DFA_Project_BcGoV_DocumentUrl_Project";
 			public const string DFA_DFA_Project_DFA_ProjectAmendment_Project = "DFA_DFA_Project_DFA_ProjectAmendment_Project";
 			public const string DFA_DFA_Project_DFA_ProjectAppeal_ProjectId = "DFA_DFA_Project_DFA_ProjectAppeal_ProjectId";
 			public const string DFA_DFA_ProjectClaim_DFA_Project_FirstClaim = "dfa_dfa_projectclaim_dfa_project_FirstClaim";
@@ -4512,6 +4513,24 @@ namespace EMBC.Database.Model
 			get
 			{
 				return this.GetAttributeValue<System.Nullable<long>>("versionnumber");
+			}
+		}
+		
+		/// <summary>
+		/// 1:N dfa_dfa_project_bcgov_documenturl_Project
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_dfa_project_bcgov_documenturl_Project")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.BcGoV_DocumentUrl> DFA_DFA_Project_BcGoV_DocumentUrl_Project
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("dfa_dfa_project_bcgov_documenturl_Project", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("dfa_dfa_project_bcgov_documenturl_Project", null, value);
 			}
 		}
 		

@@ -22,11 +22,14 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
   @Input() isReadOnly: boolean;
   @Input() initialSignature: string;
   @Input() signatureFormGroup: FormGroup;
+  @Input() isEditView = true;
+
   @Output() public signature: EventEmitter<SignatureBlock> = new EventEmitter<SignatureBlock>();
 
   private canvasEl: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
   public signatureBlock: SignatureBlock;
+
 
   constructor() {
     this.signatureBlock = { signedName: null, dateSigned: null, signature: null};
@@ -72,7 +75,6 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
     if (initialSignedName && initialSignedName !== this.signatureFormGroup.get('signedName')?.value) {
       this.signatureFormGroup.get('signedName')?.setValue(initialSignedName);
     }
-
     // Draw signature
     const initialSignature = event["initialSignature"]?.currentValue;
     if (initialSignature && initialSignature !== this.signatureBlock.signature) {
@@ -85,13 +87,15 @@ export class SignatureComponent implements AfterViewInit, OnChanges {
         if (canvasEl) {
           const ctxt = canvasEl.getContext("2d");
           const background = new Image();
-          background.src = this.signatureBlock.signature;
+            background.src = this.signatureBlock.signature?.startsWith('data:image') 
+            ? this.signatureBlock.signature 
+            : `data:image/png;base64,${this.signatureBlock.signature}`;
           background.onload = function() {
             ctxt?.clearRect(0, 0, canvasEl.width, canvasEl.height);
             ctxt?.drawImage(background, 0, 0, canvasEl.width, canvasEl.height);
           };
         }
-      }, 100);
+      }, 1000);
     }
   }
 
