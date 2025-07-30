@@ -7,6 +7,7 @@ import { StateCode } from '../models/state-code';
 export interface CasePaidAmountAppeal {
   activeStage?: Stage | null;
   caseAppealId?: string | null;
+  completedOn?: string | null;
   id?: string;
   stages?: Array<Stage> | null;
   stateCode?: StateCode;

@@ -199,6 +199,7 @@ export class DfaApplicationComponent implements OnInit {
 
   // amount appeal timeline items
   appealAmountItems = [
+    { label: '' },
     {
       label: 'Appeal Submitted',
       isCompleted: false,
@@ -206,6 +207,8 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'Appeal In Progress',
       isCompleted: false,
@@ -213,6 +216,8 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'Reassessing Damage',
       isCompleted: false,
@@ -220,6 +225,8 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'Reviewing Appeal Report',
       isCompleted: false,
@@ -227,13 +234,16 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'Appeal Closed',
       isCompleted: false,
       currentStep: false,
       isFinalStep: true,
       isErrorInStatus: false
-    }
+    },
+    { label: '' }
   ];
 
   lstApplications: ApplicationExtended[] = [];
@@ -339,7 +349,6 @@ export class DfaApplicationComponent implements OnInit {
             });
             
             // appeal amount timeline steps
-            let appealAmount = objApp.appeals?.find(appeal => appeal.appealType === 'Amount');
             // Initialize appealStatusBar if it's missing
             if (!Array.isArray(objAppWithAppeals.appealAmountStatusBar)) {
               objAppWithAppeals.appealAmountStatusBar = JSON.parse(JSON.stringify(this.appealAmountItems));
@@ -405,6 +414,10 @@ export class DfaApplicationComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  getItems(lst) {
+    return lst.filter((item) => item.label !== '');
   }
 
   mapData(lstApp: Object): void {
