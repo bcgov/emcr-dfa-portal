@@ -599,19 +599,6 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public CasePaidAmountAppeal? CasePaidAmountAppeal { get; set; }
     }
 
-    public class dfa_appeal
-    {
-        public string dfa_appealid { get; set; }
-        public string dfa_appealstatus { get; set; }
-        // Amount, Eligibility, Other
-        public string dfa_appealtype { get; set; }
-        public string DFA_Reason { get; set; }
-        public Guid _dfa_caseid_value { get; set; } // case id
-        public DateTime? dfa_dateappealdecisionmade { get; set; }
-
-        public CaseEligibilityAppeal? CaseEligibilityAppeal { get; set; }
-        public CasePaidAmountAppeal? CasePaidAmountAppeal { get; set; }
-    }
 
     public class dfa_incident_retrieve
     {

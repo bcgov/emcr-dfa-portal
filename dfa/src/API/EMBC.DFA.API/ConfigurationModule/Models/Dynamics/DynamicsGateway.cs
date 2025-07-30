@@ -390,19 +390,15 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     var caseId = Guid.Parse(app._dfa_casecreatedid_value);
                     // Load List of Case Eligibility Appeals for the case
 
-                    //if (app.dfa_eligibilitystatus == "Ineligible")
-                    //{
-                    var appeals = repository.Query(new AppealQuery { CaseId = caseId });
-                    app.dfa_appeal = mapper.Map<IEnumerable<dfa_appeal>>(appeals); // Assign the list of mapped appeals to the application
+                    var caseEligibilityAppeal = repository
+                        .GetEligibilityWorkflow(new AppealQuery { CaseId = caseId })
+                        .FirstOrDefault();
+                    app.CaseEligibilityAppeal = caseEligibilityAppeal?.CaseEligibilityAppeal; // Assign the list of mapped appeals to the application
                                                                                    //}
-
-                    //#TODO WIP until the dynamics team decides on the  eligibility status fields
-                    // Load List of Paid Amount Appeals
-                    //if (app.dfa_eligibilitystatus == "Eligible")
-                    //{
-                    //    var amountAppeals = repository.QueryAmountPaidAppeal(new AppealQuery { CaseId = caseId });
-                    //    app.dfa_appeal = mapper.Map<IEnumerable<dfa_appeal>>(amountAppeals);
-                    //}
+                        var caseAmountAppeal = repository
+                            .GetAmountWorkflow(new AppealQuery { CaseId = caseId })
+                            .FirstOrDefault();
+                        app.CasePaidAmountAppeal = caseAmountAppeal?.CasePaidAmountAppeal;
                 }
 
                 var lstApps = (from objApp in list.List
@@ -432,7 +428,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_smallbusinesstype = objApp.dfa_smallbusinesstype,
                                    dfa_accountlegalname = objApp.dfa_accountlegalname,
                                    dfa_appealcloseddate = objApp.dfa_appealcloseddate,
-                                   dfa_appeal = objApp.dfa_appeal,
+                                   CaseEligibilityAppeal = objApp.CaseEligibilityAppeal,
+                                   CasePaidAmountAppeal = objApp.CasePaidAmountAppeal
                                }).AsEnumerable().OrderByDescending(m => DateTime.Parse(m.createdon));
                 return lstApps;
             }

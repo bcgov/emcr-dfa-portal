@@ -304,18 +304,6 @@ namespace EMBC.DFA.API.Controllers
         public string CaseEligibility { get; set; }
     }
 
-    public class CurrentCaseAppeal
-    {
-        public Guid Id { get; set; }
-        public string AppealStatus { get; set; }
-        public string AppealType { get; set; }
-        public string Reason { get; set; }
-        public Guid? CaseId { get; set; }
-        public DateTime? AppealReceivedDate { get; set; }
-        public CaseEligibilityAppeal? CaseEligibilityAppeal { get; set; }
-        public CasePaidAmountAppeal? CasePaidAmountAppeal { get; set; }
-    }
-
     public class StatusBar
     {
         public string Label { get; set; }

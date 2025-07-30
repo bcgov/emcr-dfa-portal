@@ -193,13 +193,16 @@
             <br style="clear: both;" />
             <div *ngFor="let item of applItem.appealAmountStatusBar; let i=index" id="item{{i}}"
               [ngClass]="i === 0 ? 'nocircle col-md-1' : 'circle col-md-1'">
+              <!-- completed -> show green check -->
               <span *ngIf="item.isCompleted === true" class="material-icons"
                 style="color: rgb(21 178 89);">
                 check_circle </span>
+              <!-- current step -> show blue circle -->
               <span *ngIf="item.isCompleted === false && item.currentStep === true"
                 class="material-symbols-outlined" style="color: darkblue">
                 circle
               </span>
+              <!-- not completed -> show circle -->
               <span *ngIf="item.isCompleted === false && item.currentStep === false"
                 class="material-symbols-outlined" style="color: lightgrey">
                 circle

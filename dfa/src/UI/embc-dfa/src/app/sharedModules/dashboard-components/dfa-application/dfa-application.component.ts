@@ -336,7 +336,6 @@ export class DfaApplicationComponent implements OnInit {
                 //console.log(objAppWithAppeals.caseNumber, objAppWithAppeals.appeals.find(a => a.appealType === 'Eligibility')
                 //?.caseEligibilityAppeal?.activeStage?.name?.toLowerCase(), objStatItem.label.toLowerCase(), objStatItem.isCompleted);
               }
-              
             });
             
             // appeal amount timeline steps
