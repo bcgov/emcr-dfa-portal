@@ -6,6 +6,8 @@ import { CaseEligibilityAppeal } from '../models/case-eligibility-appeal';
 import { CasePaidAmountAppeal } from '../models/case-paid-amount-appeal';
 import { StatusBar } from '../models/status-bar';
 export interface CurrentApplication {
+  amountAppealPortalNote?: string;
+  amountAppealStatusPortal?: string;
   applicationId?: string;
   applicationSubType?: string;
   applicationType?: string;

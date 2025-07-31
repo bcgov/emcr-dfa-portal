@@ -299,6 +299,7 @@ namespace EMBC.DFA.API.Controllers
         public string StatusLastUpdated { get; set; }
         public bool IsErrorInStatus { get; set; }
         public bool hasAppealStages { get; set; }
+        public string CaseEligibility { get; set; }
         public CaseEligibilityAppeal CaseEligibilityAppeal { get; set; }
         public CasePaidAmountAppeal CaseAmountAppeal { get; set; }
         public string AmountAppealPortalNote { get; set; }

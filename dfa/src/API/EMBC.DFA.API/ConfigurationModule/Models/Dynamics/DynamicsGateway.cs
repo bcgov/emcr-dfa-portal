@@ -398,6 +398,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         var caseAmountAppeal = repository
                             .GetAmountWorkflow(new AppealQuery { CaseId = caseId })
                             .FirstOrDefault();
+                    app.AmountAppealPortalNote = caseAmountAppeal.AmountAppealPortalNote;
+                    app.AmountAppealStatusPortal = caseAmountAppeal.AmountAppealStatusPortal;
                         app.CasePaidAmountAppeal = caseAmountAppeal?.CasePaidAmountAppeal;
                 }
 

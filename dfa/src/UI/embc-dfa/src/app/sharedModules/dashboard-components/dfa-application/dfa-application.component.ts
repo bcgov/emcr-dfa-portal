@@ -17,6 +17,8 @@ import { DocumentViewingDataService } from 'src/app/core/services/document-viewi
 interface CurrentCaseWithAppeals extends CurrentApplication {
   appealEligibilityStatusBar?: AppealStatusItem[]; // Replace with actual type if available
   appealAmountStatusBar?: AppealStatusItem[];
+  amountAppealPortalNote?: string;
+  amountAppealStatusPortal?: string;
 }
 
 interface AppealStatusItem {
@@ -44,6 +46,7 @@ export class DfaApplicationComponent implements OnInit {
 
   // application timeline items
   items = [
+    { label: '' },
     {
       label: 'Draft Application',
       isCompleted: false,
@@ -51,6 +54,8 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'Submitted Application',
       isCompleted: false,
@@ -58,6 +63,8 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'Reviewing Application',
       isCompleted: false,
@@ -65,6 +72,8 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'Creating Case File',
       isCompleted: false,
@@ -72,6 +81,8 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'Checking Criteria',
       isCompleted: false,
@@ -79,6 +90,8 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'Assessing Damage',
       isCompleted: false,
@@ -86,6 +99,8 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'Reviewing Damage Report',
       isCompleted: false,
@@ -93,6 +108,8 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'DFA Making Decision',
       isCompleted: false,
@@ -100,13 +117,16 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'DFA Decision Made',
       isCompleted: false,
       currentStep: false,
       isFinalStep: true,
       isErrorInStatus: false
-    }
+    },
+    { label: '' }
   ];
 
   // eligibility appeal timeline items
@@ -286,7 +306,7 @@ export class DfaApplicationComponent implements OnInit {
           //#TODO:Change this back to false once the status is resolved
             let isFound = true;
             var jsonVal = JSON.stringify(this.items);
-        
+
             if (
               objApp.status &&
               objApp.status.toLowerCase().indexOf('appeal') > -1
@@ -329,7 +349,7 @@ export class DfaApplicationComponent implements OnInit {
 
             // Eligibility appeal steps
             const objAppWithAppeals = objApp as CurrentCaseWithAppeals;
-            //  @TODO: Remove this cast once the API response is updated to include appealStatusBar 
+            //  @TODO: Remove this cast once the API response is updated to include appealStatusBar
             objAppWithAppeals.hasAppealStages = true;
 
             // Initialize appealStatusBar if it's missing
@@ -347,7 +367,7 @@ export class DfaApplicationComponent implements OnInit {
                 //?.caseEligibilityAppeal?.activeStage?.name?.toLowerCase(), objStatItem.label.toLowerCase(), objStatItem.isCompleted);
               }
             });
-            
+
             // appeal amount timeline steps
             // Initialize appealStatusBar if it's missing
             if (!Array.isArray(objAppWithAppeals.appealAmountStatusBar)) {
@@ -355,11 +375,14 @@ export class DfaApplicationComponent implements OnInit {
             }
 
             isFound = false;
+
+            if (!objApp.amountAppealPortalNote)
+              objApp.amountAppealPortalNote = "In Progress";
+
             objAppWithAppeals.appealAmountStatusBar.forEach((objStatItem) => {
               const statusMatch =
                 objApp.caseAmountAppeal?.activeStage?.name &&
                 objStatItem.label?.toLowerCase() === objApp.caseAmountAppeal.activeStage.name.toLowerCase();
-
               if (statusMatch) {
                 //if (!appealAmount?.casePaidAmountAppeal?.activeStage?.completedOn) {
                   objStatItem.currentStep = true;
@@ -394,7 +417,7 @@ export class DfaApplicationComponent implements OnInit {
                 if (!isFound) {
                   // NOTE commented out to avoid fixing a bug found, no side effects found except if the status was set incorrectly
                   //objApp.caseAmountAppeal.isErrorInStatus = true;
-                } 
+                }
                 // else if (statusMatch && appealAmount?.casePaidAmountAppeal?.activeStage?.completedOn) {
                 //   objStatItem.isCompleted = true;
                 // }
@@ -549,7 +572,7 @@ export class DfaApplicationComponent implements OnInit {
       .subscribe((appealId) => {
         if (!appealId) {
           return;
-        }   
+        }
         this.router.navigate([`/dfa-appeal/${appealId}/edit`], {
             queryParams: {
               applicationId: applItem.applicationId
@@ -584,7 +607,7 @@ export class DfaApplicationComponent implements OnInit {
     }
 
     this.dfaAppealDataService.setCaseDetails({...applItem, caseId, type });
-    
+
     this.router.navigate([`/dfa-appeal/${appeal.id}/view`], {
       queryParams: {
         applicationId: applItem.applicationId
