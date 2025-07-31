@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AppealFileUpload, DfaApplicationMain } from 'src/app/core/api/models';
+import { AppealFileUpload, AppealUpdateRequest, DfaApplicationMain } from 'src/app/core/api/models';
 import { AppealStatus, AppealType, DfaAppeal, SignAndSubmit } from '../../core/model/dfa-appeals-main.model';
 import { CacheService } from '../../core/services/cache.service';
 
@@ -118,15 +118,4 @@ export class DFAAppealDataService {
     };
   }
 
-  
-  public updateAppealDTO(id: string ,caseId: string): DfaAppeal {
-    return {
-      id,
-      caseId,
-      type: this._appealType,
-      status: AppealStatus.Received,
-      reason: this._appealReason ?? '',
-      ...(this._signAndSubmit ? { signAndSubmit: this._signAndSubmit } : {})
-    };
-  }
 }

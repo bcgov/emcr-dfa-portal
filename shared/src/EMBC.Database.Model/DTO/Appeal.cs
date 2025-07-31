@@ -13,14 +13,17 @@ public class Appeal : IDto
     public required string Status { get; set; }
     public required string Reason { get; set; }
     public required string AppealType { get; set; }
+    public string? DateSigned { get; set; }
+    public string? SignedName { get; set; }
+    public string? Signature { get; set; }
     public SignAndSubmit? SignAndSubmit { get; set; }
     public string? AmountAppealPortalNote { get; set; }
     public string? AmountAppealStatusPortal { get; set; }
     // public bool? CreatedOnPortal { get; set; }
 
     // Related Entities
-    public CaseEligibilityAppeal? CaseEligibilityAppeal {get ; set;}
-    public CasePaidAmountAppeal? CasePaidAmountAppeal {get; set;}
+    public CaseEligibilityAppeal? CaseEligibilityAppeal { get; set; }
+    public CasePaidAmountAppeal? CasePaidAmountAppeal { get; set; }
 }
 
 public class SignAndSubmit

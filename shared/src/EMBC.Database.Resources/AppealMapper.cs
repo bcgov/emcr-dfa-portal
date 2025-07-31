@@ -13,9 +13,13 @@ public class AppealMapper : Profile
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.DFA_AppealStatus.HasValue ? src.DFA_AppealStatus.Value.ToString() : null))
             .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.DFA_Reason))
             .ForMember(dest => dest.AppealType, opt => opt.MapFrom(src => src.DFA_AppealType))
-            .ForMember(dest => dest.AmountAppealPortalNote , opt => opt.MapFrom(src => src.DFA_AmountAppealPortalNote))
-            .ForMember(dest => dest.AmountAppealStatusPortal, opt => opt.MapFrom(src => src.DFA_AmountAppealStatusPortal))
-            .ForMember(dest => dest.SignAndSubmit, opt => opt.Ignore());
+            .ForMember(dest => dest.SignedName, opt => opt.MapFrom(src => src.DFA_ApplicantPrintName))
+            .ForMember(dest => dest.DateSigned, opt => opt.MapFrom(src => src.DFA_ApplicantSignedDate))
+            //.ForMember(dest => dest.Signature, opt => opt.MapFrom(src => src.sig));
+            //.ForMember(dest => dest.SignAndSubmit.ApplicantSignature.SignedName, opt => opt.MapFrom(src => src.DFA_ApplicantPrintName))
+            //.ForMember(dest => dest.SignAndSubmit.ApplicantSignature.DateSigned, opt => opt.MapFrom(src => src.DFA_ApplicantSignedDate));
+            .ForMember(dest => dest.AmountAppealPortalNote, opt => opt.MapFrom(src => src.DFA_AmountAppealPortalNote))
+            .ForMember(dest => dest.AmountAppealStatusPortal, opt => opt.MapFrom(src => src.DFA_AmountAppealStatusPortal));
 
         CreateMap<Appeal, DFA_Appeal>()
             .ForMember(dest => dest.DFA_AppealId, opt => opt.MapFrom(src => src.Id))
@@ -23,9 +27,9 @@ public class AppealMapper : Profile
             .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => (DFA_Appeal_StateCode)(int)src.StateCode))
             .ForMember(dest => dest.DFA_AppealStatus, opt => opt.Ignore())
             .ForMember(dest => dest.DFA_Reason, opt => opt.MapFrom(src => src.Reason))
-            .ForMember(dest => dest.DFA_AppealType, opt => opt.MapFrom(src => src.AppealType));
-        //.ForMember(dest => dest.DFA_CreatedOnPortal, opt => opt.MapFrom(src => src.CreatedOnPortal));          
-        // .ForMember(dest => dest.SignAndSubmit, opt => opt.Ignore());
+            .ForMember(dest => dest.DFA_AppealType, opt => opt.MapFrom(src => src.AppealType))
+            .ForMember(dest => dest.DFA_ApplicantPrintName, opt => opt.MapFrom(src => src.SignedName))
+            .ForMember(dest => dest.DFA_ApplicantSignedDate, opt => opt.MapFrom(src => src.DateSigned));
 
         CreateMap<DFA_CaseEligibilityAppeal, CaseEligibilityAppeal>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

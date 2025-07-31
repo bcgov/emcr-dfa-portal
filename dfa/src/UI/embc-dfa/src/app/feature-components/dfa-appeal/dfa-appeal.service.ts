@@ -19,7 +19,7 @@ export class DfaAppealService {
   /**
    * Creates an appeal using AppealService
    */
-  public insertAppeal(appeal: any): Observable<any> {
+  public insertAppeal(appeal: any) {
       return this.appealService.appealCreateAppeal({ body: appeal })
   }
 
@@ -27,13 +27,13 @@ export class DfaAppealService {
   /**
    * Creates an appeal using AppealService
    */
-  public updateAppeal(appeal: any): Observable<any> {
+  public updateAppeal(appeal: Parameters<AppealService['appealUpdateAppeal']>[0]['body']) {
     return this.appealService.appealUpdateAppeal({ body: appeal })
 }
 
 
   // Get appeal by ID
-  public getAppealById(appealId: string): Observable<any> {
+  public getAppealById(appealId: string) {
     return this.appealService.appealGetAppeal({ id: appealId }).pipe(
       catchError(error => {
         console.error('Error fetching appeal:', error);

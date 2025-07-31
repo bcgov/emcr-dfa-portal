@@ -35,7 +35,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string dfa_residencetelephonenumber { get; set; }
         public string dfa_cellphonenumber { get; set; }
         public string dfa_alternatephonenumber { get; set; }
-        // public string dfa_optoutnonessential { get; set; }
+        public bool? dfa_optoutofnonessentialnotifications { get; set; }
         public string dfa_emailaddress { get; set; }
         public string dfa_bcservicecardid { get; set; }
         public string dfa_primaryaddressline1 { get; set; }

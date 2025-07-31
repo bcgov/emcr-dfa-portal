@@ -23,20 +23,20 @@
               [signatureFormGroup]="signAndSubmitForm.get('applicantSignature')"
               [isRequired]="true"
               [isReadOnly]="isReadOnly"
-              whoseSignature="Applicant">
+              whoseSignature="Applicant"
+              [initialSignature]="initialApplicantSignature.signature"
+              [initialDateSigned]="initialApplicantSignature.dateSigned"
+              [initialSignedName]="initialApplicantSignature.signedName">        
             </app-signature>
-          </div>
-          <div
-            class="col-md-6 bottomspace"
-            *ngIf="fullApplication?.signAndSubmit?.secondaryApplicantSignature?.signedName">
-            <app-signature
-              [signatureFormGroup]="signAndSubmitForm.get('secondaryApplicantSignature')"
-              [isReadOnly]="isReadOnly"
-              [isRequired]="true"
-              whoseSignature="Secondary Applicant"></app-signature>
           </div>
         </div>
       </ng-container>
     </form>
+    <div *ngIf="isReadOnly" style="padding-top: 32px;">
+      
+      <h1>Your Appeal has been successfully submitted!</h1>
+      This appeal was submitted on: {{ initialApplicantSignature.dateSigned | date : "yyyy/MM/dd" }}<br />
+    
+    </div>
   </mat-card-content>
 </mat-card>
