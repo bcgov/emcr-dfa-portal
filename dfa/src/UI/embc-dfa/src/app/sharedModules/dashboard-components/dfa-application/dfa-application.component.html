@@ -226,11 +226,11 @@
 
       @if (canAppeal(applItem) && (applItem.caseEligibilityAppeal || applItem.caseAmountAppeal)) {
         <div>
-          @if (applItem.caseEligibilityAppeal) {
+          @if (applItem.caseEligibilityAppeal && false) {
           <button class="col-md-2 application-button whitebutton" type="button"
             (click)="viewAppealAfterSubmission(applItem, 'Eligibility')">View Eligibility Appeal</button>
           }
-          @if (applItem.caseAmountAppeal) {
+          @if (applItem.caseAmountAppeal && false) {
             <button class="col-md-2 application-button whitebutton" type="button"
             (click)="viewAppealAfterSubmission(applItem, 'Amount')">View Amount Appeal</button>
           }
@@ -241,7 +241,7 @@
       <!-- Add Appeals section -->
       <div [featureEnabled]="'useAppeals'">
         @if (applItem.dateFileClosed && remainingDays(applItem) > 0) {
-        @if(applItem.caseEligibility === this.CaseElibilityEnum.Ineligible) {
+        @if(applItem.caseEligibility === this.CaseElibilityEnum.Ineligible && false) {
         <div class="appeals">
           <span>
             You have <b>{{remainingDays(applItem)}}</b> days to register an eligible appeal on this application
@@ -251,7 +251,7 @@
             Eligibility Decision</button>
         </div>
         }
-        @if(applItem.caseEligibility === this.CaseElibilityEnum.Eligible) {
+        @if(applItem.caseEligibility === this.CaseElibilityEnum.Eligible && false) {
         <div class="appeals">
           <span>
             You have <b>{{remainingDays(applItem)}}</b> days to register an amount appeal on this application
