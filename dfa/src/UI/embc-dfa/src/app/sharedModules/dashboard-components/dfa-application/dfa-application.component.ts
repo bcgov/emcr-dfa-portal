@@ -393,18 +393,6 @@ export class DfaApplicationComponent implements OnInit {
                 if (objApp.caseAmountAppeal?.activeStage?.name) {
                   objStatItem.stage = objApp.caseAmountAppeal.activeStage.name;
                 }
-
-                // Determine statusColor based on logic
-                // if (['Ineligible', 'Withdrawn'].includes(objApp.activeStage.stage || '')) {
-                //   objApp.statusColor = '#E25E63';
-                // } else if (
-                //   objApp.activeStage.status?.toLowerCase().includes('decision made') &&
-                //   objApp.activeStage.stage?.toLowerCase().includes('progress')
-                // ) {
-                //   objApp.statusColor = '#FDCB52';
-                // } else {
-                //   objApp.statusColor = objStatItem.statusColor;
-                // }
               }
 
               // Fallback if status not matched

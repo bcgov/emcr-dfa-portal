@@ -15,7 +15,7 @@ public class AppealRepository : BaseRepository<DFA_Appeal, Appeal>, IAppealRepos
         _databaseContext = databaseContext;
     }
 
-    // TODO you can consolidate this and the below methods
+    // TODO you can consolidate this and the below method (add the DFA_CasePaidAmountAppealSet join to this method and add to the composite model)
     public IEnumerable<Appeal> GetEligibilityWorkflow(AppealQuery query)
     {
         var stages = _databaseContext.ProcessStageSet
