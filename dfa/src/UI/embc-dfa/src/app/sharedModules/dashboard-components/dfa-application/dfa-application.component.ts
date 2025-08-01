@@ -275,6 +275,7 @@ export class DfaApplicationComponent implements OnInit {
   public isLoading: boolean = true;
   public color: string = "'#169BD5";
   appealMatchStatusFound = false;
+  private caseAmountAppealHasErrorInStatus = false;
 
   constructor(
     private appService: Service,
@@ -401,15 +402,15 @@ export class DfaApplicationComponent implements OnInit {
               }
 
               // Final step validation
-              if (objStatItem.isFinalStep) {
-                if (!isFound) {
-                  // NOTE commented out to avoid fixing a bug found, no side effects found except if the status was set incorrectly
-                  //objApp.caseAmountAppeal.isErrorInStatus = true;
-                }
-                // else if (statusMatch && appealAmount?.casePaidAmountAppeal?.activeStage?.completedOn) {
-                //   objStatItem.isCompleted = true;
-                // }
-              }
+               if (objStatItem.isFinalStep) {
+                 if (!isFound) {
+                   // NOTE commented out to avoid fixing a bug found, no side effects found except if the status was set incorrectly
+                   this.caseAmountAppealHasErrorInStatus = true;
+                 }
+                 else if (statusMatch && objApp.caseAmountAppeal?.completedOn) {
+                    objStatItem.isCompleted = true;
+                 }
+               }
             });
 
             lstDataModified.push(objApp);
@@ -583,24 +584,28 @@ export class DfaApplicationComponent implements OnInit {
 
   viewAppealAfterSubmission(applItem: ApplicationExtended, type: string): void {
     const caseId = applItem.caseId;
-    let appeal;
+    let appealId;
     if (type == 'Eligibility') {
-      appeal = applItem.caseEligibilityAppeal;
+      appealId = applItem.caseEligibilityAppeal.caseAppealId;
     } else if (type == 'Amount') {
-      appeal = applItem.caseAmountAppeal;
+      appealId = applItem.caseAmountAppeal.caseAppealId;
     }
-    if (!appeal?.id || !caseId || !type) {
-      console.error('Invalid appeal or case details:', { appeal, caseId, type });
+    if (!appealId || !caseId || !type) {
+      console.error('Invalid appeal or case details:', { appealId, caseId, type });
       return;
     }
 
     this.dfaAppealDataService.setCaseDetails({...applItem, caseId, type });
 
-    this.router.navigate([`/dfa-appeal/${appeal.id}/view`], {
+    this.router.navigate([`/dfa-appeal/${appealId}/view`], {
       queryParams: {
         applicationId: applItem.applicationId
       }
     });
+  }
+
+  hasEligibilityAppeal(applItem: CurrentApplication): boolean {
+    return this.canAppeal(applItem) && !!applItem.caseEligibilityAppeal;
   }
 
   hasAmountAppeal(applItem: CurrentApplication): boolean {

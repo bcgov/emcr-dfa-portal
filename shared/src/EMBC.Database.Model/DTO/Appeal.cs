@@ -19,6 +19,8 @@ public class Appeal : IDto
     public SignAndSubmit? SignAndSubmit { get; set; }
     public string? AmountAppealPortalNote { get; set; }
     public string? AmountAppealStatusPortal { get; set; }
+    public string? EligibilityAppealPortalNote { get; set; }
+    public string? EligibilityAppealStatusPortal { get; set; }
     // public bool? CreatedOnPortal { get; set; }
 
     // Related Entities

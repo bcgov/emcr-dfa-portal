@@ -29,7 +29,9 @@ public class AppealMapper : Profile
             .ForMember(dest => dest.DFA_Reason, opt => opt.MapFrom(src => src.Reason))
             .ForMember(dest => dest.DFA_AppealType, opt => opt.MapFrom(src => src.AppealType))
             .ForMember(dest => dest.DFA_ApplicantPrintName, opt => opt.MapFrom(src => src.SignedName))
-            .ForMember(dest => dest.DFA_ApplicantSignedDate, opt => opt.MapFrom(src => src.DateSigned));
+            .ForMember(dest => dest.DFA_ApplicantSignedDate, opt => opt.MapFrom(src => src.DateSigned))
+            .ForMember(dest => dest.DFA_AmountAppealPortalNote, opt => opt.MapFrom(src => src.AmountAppealPortalNote))
+            .ForMember(dest => dest.DFA_AmountAppealStatusPortal, opt => opt.MapFrom(src => src.AmountAppealStatusPortal));
 
         CreateMap<DFA_CaseEligibilityAppeal, CaseEligibilityAppeal>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -58,6 +60,8 @@ public class AppealMapper : Profile
             .ForMember(dest => dest.AppealType, opt => opt.MapFrom(src => src.caseAppeal.DFA_AppealType))
             .ForMember(dest => dest.SignAndSubmit, opt => opt.Ignore())
             .ForMember(dest => dest.CaseEligibilityAppeal, opt => opt.MapFrom(src => src.caseEligibilityAppeal))
+            .ForMember(dest => dest.EligibilityAppealPortalNote, opt => opt.MapFrom(src => src.caseAppeal.DFA_EligibilityAppealPortalNote))
+            .ForMember(dest => dest.EligibilityAppealStatusPortal, opt => opt.MapFrom(src => src.caseAppeal.DFA_EligibilityAppealStatusPortal))
             .AfterMap((src, dest) => dest.CaseEligibilityAppeal.ActiveStage = new Stage() { Id = src.ProcessStage.Id, Name = src.ProcessStage.StageName });
 
         CreateMap<CasePaidAmountAppealComposite, Appeal>()
@@ -69,6 +73,8 @@ public class AppealMapper : Profile
             .ForMember(dest => dest.AppealType, opt => opt.MapFrom(src => src.caseAppeal.DFA_AppealType))
             .ForMember(dest => dest.SignAndSubmit, opt => opt.Ignore())
             .ForMember(dest => dest.CasePaidAmountAppeal, opt => opt.MapFrom(src => src.casePaidAmountAppeal))
+            .ForMember(dest => dest.AmountAppealPortalNote, opt => opt.MapFrom(src => src.caseAppeal.DFA_AmountAppealPortalNote))
+            .ForMember(dest => dest.AmountAppealStatusPortal, opt => opt.MapFrom(src => src.caseAppeal.DFA_AmountAppealStatusPortal))
             .AfterMap((src, dest) => dest.CasePaidAmountAppeal.ActiveStage = new Stage() { Id = src.ProcessStage.Id, Name = src.ProcessStage.StageName });
     }
 }
