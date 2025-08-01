@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿namespace EMBC.Database.Resources;
 
-namespace EMBC.Database.Resources;
-
-public interface IAppealRepository : IQueryRepository<AppealQuery, Appeal>, IBaseRepository<Appeal>
+public interface IAppealRepository : IBaseRepository<Appeal>
 {
-    IEnumerable<Appeal> QueryAmountPaidAppeal(AppealQuery query);
+    IEnumerable<Appeal> GetEligibilityWorkflow(AppealQuery query);
+    IEnumerable<Appeal> GetAmountWorkflow(AppealQuery query);
 }
 
 public class AppealRepository : BaseRepository<DFA_Appeal, Appeal>, IAppealRepository
@@ -17,7 +15,8 @@ public class AppealRepository : BaseRepository<DFA_Appeal, Appeal>, IAppealRepos
         _databaseContext = databaseContext;
     }
 
-    public IEnumerable<Appeal> Query(AppealQuery query)
+    // TODO you can consolidate this and the below method (add the DFA_CasePaidAmountAppealSet join to this method and add to the composite model)
+    public IEnumerable<Appeal> GetEligibilityWorkflow(AppealQuery query)
     {
         var stages = _databaseContext.ProcessStageSet
             .Where(x => x.PrimaryEntityTypeCode == DFA_Appeal.EntityLogicalName)
@@ -27,7 +26,8 @@ public class AppealRepository : BaseRepository<DFA_Appeal, Appeal>, IAppealRepos
             from ca in _databaseContext.DFA_AppealSet
             join ce in _databaseContext.DFA_CaseEligibilityAppealSet on ca.Id equals ce.Bpf_DFA_AppealId.Id
             join ps in _databaseContext.ProcessStageSet on ce.ActiveStageId.Id equals ps.Id
-            where ca.DFA_CaseId.Id == query.CaseId // Use the converted Guid for comparison
+            where ca.DFA_CaseId.Id == query.CaseId && ca.DFA_AppealType == DFA_AppealType.Eligibility && ce.StateCode == DFA_CaseEligibilityAppeal_StateCode.Active
+            orderby ca.CreatedOn descending
             select new CaseEligibilityAppealComposite(ca, ce, ps))
             .ToList();
 
@@ -40,7 +40,7 @@ public class AppealRepository : BaseRepository<DFA_Appeal, Appeal>, IAppealRepos
         return results;
     }
 
-    public IEnumerable<Appeal> QueryAmountPaidAppeal(AppealQuery query)
+    public IEnumerable<Appeal> GetAmountWorkflow(AppealQuery query)
     {
         var stages = _databaseContext.ProcessStageSet
             .Where(x => x.PrimaryEntityTypeCode == DFA_Appeal.EntityLogicalName)
@@ -50,14 +50,15 @@ public class AppealRepository : BaseRepository<DFA_Appeal, Appeal>, IAppealRepos
             from ca in _databaseContext.DFA_AppealSet
             join ce in _databaseContext.DFA_CasePaidAmountAppealSet on ca.Id equals ce.Bpf_DFA_AppealId.Id
             join ps in _databaseContext.ProcessStageSet on ce.ActiveStageId.Id equals ps.Id
-            where ca.DFA_CaseId.Id == query.CaseId // Use the converted Guid for comparison
+            where ca.DFA_CaseId.Id == query.CaseId && ca.DFA_AppealType == DFA_AppealType.Amount && ce.StateCode == DFA_CasePaidAmountAppeal_StateCode.Active
+            orderby ca.CreatedOn descending
             select new CasePaidAmountAppealComposite(ca, ce, ps))
             .ToList();
 
         var results = _mapper.Map<IEnumerable<Appeal>>(queryResults).ToList();
 
         results.ForEach(
-            ca => ca.CaseEligibilityAppeal?.Stages?.ToList().ForEach(
+            ca => ca.CasePaidAmountAppeal?.Stages?.ToList().ForEach(
                 ce => ce.Name = stages.Single(x => x.Id == ce.Id).StageName));
 
         return results;

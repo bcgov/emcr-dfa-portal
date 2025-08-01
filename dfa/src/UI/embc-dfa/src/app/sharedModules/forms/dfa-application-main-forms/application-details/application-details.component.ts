@@ -25,6 +25,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ApplicationService, ProfileService } from 'src/app/core/api/services';
 import { DFAApplicationMainMappingService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-mapping.service';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-application-details',
@@ -73,7 +74,8 @@ export default class ApplicationDetailsComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private applicationService: ApplicationService,
     private dfaApplicationMainMapping: DFAApplicationMainMappingService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private _snackBar: MatSnackBar
 
   ) {
     this.formBuilder = formBuilder;
@@ -159,7 +161,16 @@ export default class ApplicationDetailsComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        this._snackBar.open(
+          'Unable to get damaged property for the application. Please try again later.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
+        
       }
     });
   }

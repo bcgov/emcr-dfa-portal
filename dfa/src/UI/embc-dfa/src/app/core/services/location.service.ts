@@ -285,7 +285,8 @@ export class LocationService {
         //this.setRegionalDistricts(communities.map((comm) => comm.districtName));
       },
       error: (error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        console.error("getCommunities",error);
+        //// document.location.href = 'https://dfa.gov.bc.ca/error.html';
       }
     });
     return this.communityList || [];
@@ -304,7 +305,7 @@ export class LocationService {
         );
       },
       error: (error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
       }
     });
     return this.stateProvinceList || [];
@@ -322,7 +323,7 @@ export class LocationService {
         );
       },
       error: (error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
       }
     });
     return this.countriesList || [];
@@ -332,7 +333,7 @@ export class LocationService {
     return this.configService.configurationGetCodes({ forEnumType: 'SupportCategory' }).pipe(
       map((categories: Code[]) => categories.filter((category) => category.description)),
       catchError((error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
         return of([]);  // Return an empty array on error
       })
     );
@@ -342,7 +343,7 @@ export class LocationService {
     return this.configService.configurationGetCodes({ forEnumType: 'SupportSubCategory' }).pipe(
       map((subCategories: Code[]) => subCategories.filter((subCategory) => subCategory.description)),
       catchError((error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
         return of([]);  // Return an empty array on error
       })
     );

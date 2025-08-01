@@ -11,6 +11,7 @@ import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-ap
 import { Observable, Subject } from 'rxjs';
 import { EligibilityService } from '../../core/api/services/eligibility.service';
 import { DisasterEvent } from 'src/app/core/api/models';
+import { MatSnackBar } from '@angular/material/snack-bar';
 //import {
 //  DfaAppapplication
 //} from 'src/app/core/api/models';
@@ -46,6 +47,7 @@ export class DashboardComponent implements OnInit {
     private appSessionService: AppSessionService,
     private dfaApplicationMainDataService: DFAApplicationMainDataService,
     private eventService: EligibilityService,
+    private _snackBar: MatSnackBar
   ) {
     this.sixtyOneDaysAgo = new Date(new Date().getTime() - (1000 * 60 * 60 * 24 * 61)).getTime()
   }
@@ -58,7 +60,16 @@ export class DashboardComponent implements OnInit {
         this.hasActiveEvents = count > 0;
       },
       error: (error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        console.error('Error fetching events:', error);
+        this._snackBar.open(
+          'Unable to fetch events. Please try again later.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
+       // // document.location.href = 'https://dfa.gov.bc.ca/error.html';
       }
     });
     //alert(this.appSessionService.appNumber);

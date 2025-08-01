@@ -42,7 +42,9 @@ export class SupportsService {
           );
         },
         error: (error) => {
-          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          console.error('Error fetching support status:', error);
+          // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          
         }
       });
   }

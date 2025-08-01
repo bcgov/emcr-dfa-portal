@@ -5,10 +5,16 @@ Current angular version of the UI project is 19.
 
 ## Development server
 
+Run the following commands to build the shared library:
+\shared-workspace\
+```
+npm i
+npm run build
+```
+
 Run the following commands to run local:
 ```
-# forcing is not ideal, we should straighten out our mismatched dependencies
-npm install --force 
+npm i 
 npm run startlocal
 ```
 

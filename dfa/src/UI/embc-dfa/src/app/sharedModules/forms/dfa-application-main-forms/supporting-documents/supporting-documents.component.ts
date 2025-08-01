@@ -356,7 +356,6 @@ export default class SupportingDocumentsComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error(error);
           this.isLoading = false;
-          //document.location.href = 'https://dfa.gov.bc.ca/error.html';
           this._snackBar.open(
               'Unable to upload the file. Please retry the upload process.',
               'Close',
@@ -402,7 +401,6 @@ export default class SupportingDocumentsComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error(error);
           this.isLoading = false;
-         // document.location.href = 'https://dfa.gov.bc.ca/error.html';
           this._snackBar.open(
             'Unable to upload the file. Please retry the upload process.',
             'Close',
@@ -433,7 +431,6 @@ export default class SupportingDocumentsComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error(error);
           this.isLoading = false;
-          //document.location.href = 'https://dfa.gov.bc.ca/error.html';
           this._snackBar.open(
             'Unable to upload the file. Please retry the upload process.',
             'Close',
@@ -537,7 +534,14 @@ export default class SupportingDocumentsComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error(error);
-          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          this._snackBar.open(
+            'Unable to delete the file. Please retry the deletion process.',
+            'Close',
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+            }
+          );
         }
       });
     } else if (element.fileType === Object.keys(this.FileCategories)[Object.values(this.FileCategories).indexOf(this.FileCategories.DamagePhoto)]) {
@@ -563,7 +567,15 @@ export default class SupportingDocumentsComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error(error);
-          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          this._snackBar.open(
+            'Unable to delete the file. Please retry the deletion process.',
+            'Close',
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+            }
+          );
         }
       });
     }

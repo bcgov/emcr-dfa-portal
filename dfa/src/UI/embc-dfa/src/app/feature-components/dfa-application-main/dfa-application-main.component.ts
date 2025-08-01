@@ -23,6 +23,7 @@ import { FormCreationService } from '../../core/services/formCreation.service';
 import * as globalConst from '../../core/services/globalConstants';
 import { DFAApplicationMainDataService } from './dfa-application-main-data.service';
 import { DFAApplicationMainService } from './dfa-application-main.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -121,7 +122,8 @@ export class DFAApplicationMainComponent
     private dfaApplicationMainService: DFAApplicationMainService,
     private applicationService: ApplicationService,
     public dialog: MatDialog,
-    private fileUploadsService: AttachmentService
+    private fileUploadsService: AttachmentService,
+    private _snackBar: MatSnackBar
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation !== null) {
@@ -295,8 +297,16 @@ export class DFAApplicationMainComponent
 
       },
       error: (error) => {
-        console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        console.error("getFileUploadsForApplication",error);
+        this._snackBar.open(
+          'Unable to get file uploads. Please try again later.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
+        //// document.location.href = 'https://dfa.gov.bc.ca/error.html';
       }
     });
   }
@@ -535,8 +545,16 @@ export class DFAApplicationMainComponent
         if (this.form) this.form.markAllAsTouched();
       },
       error => {
-        console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        console.error("goForward",error);
+        //// document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        this._snackBar.open(
+          'Unable to save application. Please try again later.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
       });
     }
   }
@@ -781,8 +799,16 @@ export class DFAApplicationMainComponent
       this.returnToDashboard();
     },
     error => {
-      console.error(error);
-      document.location.href = 'https://dfa.gov.bc.ca/error.html';
+      console.error("saveAndBackToDashboard",error);
+      //// document.location.href = 'https://dfa.gov.bc.ca/error.html';
+      this._snackBar.open(
+        'Unable to save application. Please try again later.',
+        'Close',
+        {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+        }
+      );
     });
   }
 
@@ -816,8 +842,16 @@ export class DFAApplicationMainComponent
 
           },
           error => {
-            console.error(error);
-            document.location.href = 'https://dfa.gov.bc.ca/error.html';
+            console.error("submitFile", error);
+            //// document.location.href = 'https://dfa.gov.bc.ca/error.html';
+            this._snackBar.open(
+              'Unable to submit application. Please try again later.',
+              'Close',
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+              }
+            );
           });
         }
       });

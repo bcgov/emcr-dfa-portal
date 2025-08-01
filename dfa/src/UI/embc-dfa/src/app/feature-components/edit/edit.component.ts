@@ -11,6 +11,7 @@ import { DFAApplicationStartService } from '../dfa-application-start/dfa-applica
 import { EditService } from './edit.service';
 import * as globalConst from '../../core/services/globalConstants';
 import { AppSessionService } from 'src/app/core/services/appSession.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-edit',
@@ -42,7 +43,8 @@ export class EditComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private editService: EditService,
     private appSessionService: AppSessionService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private _snackBar: MatSnackBar
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras?.state !== undefined) {
@@ -94,7 +96,15 @@ export class EditComponent implements OnInit, OnDestroy {
             },
             error: (error) => {
               this.showLoader = !this.showLoader;
-              document.location.href = 'https://dfa.gov.bc.ca/error.html';
+              // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+              this._snackBar.open(
+                'Unable to submit profile. Please try again later.',
+                'Close',
+                {
+                  horizontalPosition: 'center',
+                  verticalPosition: 'top',
+                }
+              );
             }
           });
       } else if (this.appSessionService.editParentPage === 'dfa-application-start') {

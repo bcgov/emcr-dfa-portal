@@ -8,6 +8,7 @@ import { ConflictManagementService } from 'src/app/sharedModules/components/conf
 import { ProfileDataConflict } from 'src/app/core/api/models';
 import { ProfileMappingService } from '../profile/profile-mapping.service';
 import { EmailInviteService } from '../../core/services/emailInvite.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-verified-registration',
@@ -24,7 +25,8 @@ export class VerifiedRegistrationComponent implements OnInit {
     private mappingService: ProfileMappingService,
     private router: Router,
     private route: ActivatedRoute,
-    private emailService: EmailInviteService
+    private emailService: EmailInviteService,
+    private _snackBar: MatSnackBar
   ) {
   }
 
@@ -54,7 +56,15 @@ export class VerifiedRegistrationComponent implements OnInit {
           }
         },
         error: (error) => {
-           document.location.href = 'https://dfa.gov.bc.ca/error.html';
+           // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          this._snackBar.open(
+            'Unable to check profile existence. Please try again later.',
+            'Close',
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+            }
+          );
         }
       });
     }
@@ -96,7 +106,7 @@ export class VerifiedRegistrationComponent implements OnInit {
         }
       },
       error: (error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
       }
     });
   }

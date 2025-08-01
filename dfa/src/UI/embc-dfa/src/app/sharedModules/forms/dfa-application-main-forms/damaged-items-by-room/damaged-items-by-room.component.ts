@@ -175,7 +175,15 @@ export default class DamagedItemsByRoomComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        this._snackBar.open(
+          'Unable to get damaged rooms. Please try again later.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
       }
     });
   }
@@ -214,7 +222,15 @@ export default class DamagedItemsByRoomComponent implements OnInit, OnDestroy {
          error: (error) => {
            console.error(error);
            this.isLoading = false;
-           document.location.href = 'https://dfa.gov.bc.ca/error.html';
+           // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+            this._snackBar.open(
+              'Unable to update the damaged room. Please try again later.',
+              'Close',
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+              }
+            );
          }
        });
       } else {
@@ -231,7 +247,15 @@ export default class DamagedItemsByRoomComponent implements OnInit, OnDestroy {
          error: (error) => {
            console.error(error);
            this.isLoading = false;
-           document.location.href = 'https://dfa.gov.bc.ca/error.html';
+           // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+            this._snackBar.open(
+              'Unable to save the damaged room. Please try again later.',
+              'Close',
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+              }
+            );
          }
        });
       }
@@ -262,7 +286,15 @@ export default class DamagedItemsByRoomComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        this._snackBar.open(
+          'Unable to delete the damaged room. Please try again later.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
       }
     });
   }
@@ -331,7 +363,7 @@ export default class DamagedItemsByRoomComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error(error);
           this.isLoading = false;
-          //document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          //// document.location.href = 'https://dfa.gov.bc.ca/error.html';
           this._snackBar.open(
             'Unable to upload the file. Please retry the upload process.',
             'Close',
@@ -398,7 +430,15 @@ export default class DamagedItemsByRoomComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        this._snackBar.open(
+          'Unable to delete the damage photo. Please try again later.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
       }
     });
   }

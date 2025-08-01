@@ -22,6 +22,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DFAApplicationAlertDialogComponent } from 'src/app/core/components/dialog-components/dfa-application-alert-dialog/dfa-application-alert.component';
 import { ProfileService } from 'src/app/core/api/services';
 import { DFAPrescreeningDataService } from '../dfa-prescreening/dfa-prescreening-data.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -63,7 +64,8 @@ export class DFAApplicationStartComponent
     private dfaApplicationStartService: DFAApplicationStartService,
     private profileService: ProfileService,
     public dialog: MatDialog,
-    private dfaPrescreeningDataService: DFAPrescreeningDataService
+    private dfaPrescreeningDataService: DFAPrescreeningDataService,
+    private _snackBar: MatSnackBar
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation !== null) {
@@ -320,7 +322,15 @@ export class DFAApplicationStartComponent
       error: (error) => {
         this.showLoader = !this.showLoader;
         this.isSubmitted = !this.isSubmitted;
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        this._snackBar.open(
+          'Unable to submit application. Please try again later.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
       }
      });
   }

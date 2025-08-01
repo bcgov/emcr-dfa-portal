@@ -4,6 +4,7 @@ public record AppealQuery
 {
     public Guid? CaseId { get; set; }
 }
+
 public class Appeal : IDto
 {
     public Guid Id { get; set; }
@@ -16,7 +17,10 @@ public class Appeal : IDto
     public string? SignedName { get; set; }
     public string? Signature { get; set; }
     public SignAndSubmit? SignAndSubmit { get; set; }
+    public string? AmountAppealPortalNote { get; set; }
+    public string? AmountAppealStatusPortal { get; set; }
     // public bool? CreatedOnPortal { get; set; }
+
     // Related Entities
     public CaseEligibilityAppeal? CaseEligibilityAppeal { get; set; }
     public CasePaidAmountAppeal? CasePaidAmountAppeal { get; set; }
