@@ -20,6 +20,8 @@ export interface CurrentApplication {
   dateAppealClosed?: string;
   dateFileClosed?: string;
   dateOfDamage?: string;
+  eligibilityAppealPortalNote?: string;
+  eligibilityAppealStatusPortal?: string;
   eventId?: string;
   hasAppealStages?: boolean;
   isErrorInStatus?: boolean;

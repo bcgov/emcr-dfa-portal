@@ -19,6 +19,8 @@ interface CurrentCaseWithAppeals extends CurrentApplication {
   appealAmountStatusBar?: AppealStatusItem[];
   amountAppealPortalNote?: string;
   amountAppealStatusPortal?: string;
+  eligibilityAppealPortalNote?: string;
+  eligibilityAppealStatusPortal?: string;
 }
 
 interface AppealStatusItem {
@@ -130,7 +132,8 @@ export class DfaApplicationComponent implements OnInit {
   ];
 
   // eligibility appeal timeline items
-  appealItems = [
+  eligibilityAppealItems = [
+    { label: '' },
     {
       label: 'Appeal Submitted',
       isCompleted: false,
@@ -138,6 +141,8 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
       label: 'Appeal In Progress',
       isCompleted: false,
@@ -145,76 +150,52 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
-      label: 'Reviewing Application',
+      label: 'Appeal Decision',
+      isCompleted: false,
+      currentStep: false,
+      isFinalStep: false,
+      isDecision: true
+    },
+    { label: '' },
+    { label: '' },
+    {
+      label: 'Assigned To Evaluator',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
-      label: 'Creating Case File',
+      label: 'Review Report',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
-      label: 'Checking Criteria',
+      label: 'Creating Payment',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
       isErrorInStatus: false
     },
+    { label: '' },
+    { label: '' },
     {
-      label: 'Assessing Damage',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
-    },
-    {
-      label: 'Reviewing Damage Report',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
-    },
-    {
-      label: 'DFA Making Decision',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
-    },
-    {
-      label: 'DFA Decision Made',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
-    },
-    {
-      label: 'Appeal Received',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
-    },
-    {
-      label: 'Appeal In Progress',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
-    },
-    {
-      label: 'Appeal Closed',
+      label: 'Closed',
       isCompleted: false,
       currentStep: false,
       isFinalStep: true,
       isErrorInStatus: false
-    }
+    },
+    { label: '' }
   ];
 
   // amount appeal timeline items
@@ -276,6 +257,7 @@ export class DfaApplicationComponent implements OnInit {
   public color: string = "'#169BD5";
   appealMatchStatusFound = false;
   private caseAmountAppealHasErrorInStatus = false;
+  private caseEligibilityAppealHasErrorInStatus = false;
 
   constructor(
     private appService: Service,
@@ -348,24 +330,46 @@ export class DfaApplicationComponent implements OnInit {
               }
             });
 
-            // Eligibility appeal steps
             const objAppWithAppeals = objApp as CurrentCaseWithAppeals;
-            //  @TODO: Remove this cast once the API response is updated to include appealStatusBar
-            objAppWithAppeals.hasAppealStages = true;
-
             // Initialize appealStatusBar if it's missing
             if (!Array.isArray(objAppWithAppeals.appealEligibilityStatusBar)) {
-              objAppWithAppeals.appealEligibilityStatusBar = [...JSON.parse(JSON.stringify(this.appealItems))];
+              objAppWithAppeals.appealEligibilityStatusBar = JSON.parse(JSON.stringify(this.eligibilityAppealItems));
             }
+            // Eligibility appeal steps
+            if (!objApp.eligibilityAppealPortalNote)
+              objApp.eligibilityAppealPortalNote = "In Progress";
+
 
             objAppWithAppeals.appealEligibilityStatusBar.forEach((objStatItem) => {
-              if (objAppWithAppeals.caseEligibility === 'Eligible') {
-                //objStatItem.isCompleted = objAppWithAppeals.appeals.find(a => a.appealType === 'Eligibility')
+              const statusMatch =
+                objApp.caseEligibilityAppeal?.activeStage?.name &&
+                objStatItem.label?.toLowerCase() === objApp.caseEligibilityAppeal.activeStage.name.toLowerCase();
+              if (statusMatch) {
+                //if (!appealAmount?.caseEligibilityAppeal?.activeStage?.completedOn) {
+                  objStatItem.currentStep = true;
+                //}
+                isFound = true;
+                this.matchStatusFound = true;
 
-                // @TODO : Include the logic to check the amount appeal status
-                //?.caseEligibilityAppeal?.activeStage?.name?.toLowerCase() === objStatItem.label.toLowerCase() ? true : false;
-                //console.log(objAppWithAppeals.caseNumber, objAppWithAppeals.appeals.find(a => a.appealType === 'Eligibility')
-                //?.caseEligibilityAppeal?.activeStage?.name?.toLowerCase(), objStatItem.label.toLowerCase(), objStatItem.isCompleted);
+                if (objApp.caseEligibilityAppeal?.activeStage?.name) {
+                  objStatItem.stage = objApp.caseEligibilityAppeal.activeStage.name;
+                }
+              }
+
+              // Fallback if status not matched
+              if (!isFound) {
+                objStatItem.isCompleted = true;
+              }
+
+              // Final step validation
+               if (objStatItem.isFinalStep) {
+                 if (!isFound) {
+                   // NOTE commented out to avoid fixing a bug found, no side effects found except if the status was set incorrectly
+                   this.caseEligibilityAppealHasErrorInStatus = true;
+                 }
+                 else if (statusMatch && objApp.caseEligibilityAppeal?.completedOn) {
+                    objStatItem.isCompleted = true;
+                 }
               }
             });
 

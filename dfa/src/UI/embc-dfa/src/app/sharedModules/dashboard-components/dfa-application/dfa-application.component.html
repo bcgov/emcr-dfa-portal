@@ -169,7 +169,7 @@
                       {{ item.label == 'Decision Made' && (applItem.stage == 'Ineligible' || applItem.stage == 'Withdrawn')  ? 'cancel' : 'check_circle' }}
                     </span>
                     <span *ngIf="item.isCompleted == false && item.currentStep == true && applItem.isErrorInStatus == false && item.stage != ''">
-                      {{ applItem.amountAppealPortalNote }}
+                      {{ applItem.eligibilityAppealPortalNote }}
                     </span>
                     <span *ngIf="item.isCompleted == false && item.currentStep == true && applItem.isErrorInStatus == false && item.stage == ''" class="material-symbols-outlined" [ngStyle]="{'color': item.status == 'Draft' ? '#639DD4' : '#FDCB52'}">
                       {{ item.label == 'Draft' ? 'check_circle' : 'circle' }}
