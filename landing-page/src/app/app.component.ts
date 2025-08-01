@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-root',
   imports: [
-  MatCardModule, 
+  MatCardModule,
   MatCard,
   MatIconModule,
   MatButtonModule,
@@ -30,11 +30,11 @@ export class AppComponent implements OnInit {
   public currentDate = Date.now();
   startDisplayOutageBanner?: number;
   outageEnd?: number;
-  privateButtonDisabled: boolean = false;   // TODO when releasing D4P-96, initial value should be true
-  publicButtonDisabled: boolean = false;    // TODO when releasing D4P-96, initial value should be true
+  privateButtonDisabled: boolean = true;
+  publicButtonDisabled: boolean = true;
   positionOptions: TooltipPosition[] = ['below', 'above', 'left', 'right'];
   position = new FormControl(this.positionOptions[0]);
-  
+
   constructor(private environmentBannerService: EnvironmentBannerService, private httpClient: HttpClient) { }
 
   ngOnInit(): void {
@@ -43,23 +43,49 @@ export class AppComponent implements OnInit {
       if (environment.startDisplayOutageBanner) {
         this.startDisplayOutageBanner = new Date(environment.startDisplayOutageBanner).getTime();
       }
-      
-      if(environment.outageEnd){
+
+      if (environment.outageEnd){
         this.outageEnd = new Date(environment.outageEnd).getTime();
       }
 
-      this.httpClient.get(environment.apiEndpoint as string).subscribe((response: any) => {
-        let hasActiveEventResponse = response as HasActiveEventResponse;
-        console.info("Has Active Event Response", hasActiveEventResponse);
-        if (hasActiveEventResponse) {
-           this.privateButtonDisabled = !hasActiveEventResponse.hasActivePrivateEvent;
-           this.publicButtonDisabled = !hasActiveEventResponse.hasActivePublicEvent;
-        }
-      });
+      // only check for events if public and private URLs are not disabled
+      if ((!environment?.disablePublicUrl || !environment?.disablePrivateUrl) && !environment?.newApplicationNotAccepted) {
+        this.httpClient.get(environment.apiEndpoint as string).subscribe((response: any) => {
+          let hasActiveEventResponse = response as HasActiveEventResponse;
+          console.info("Has Active Event Response", hasActiveEventResponse);
+          if (hasActiveEventResponse) {
+            if (!environment?.disablePrivateUrl && hasActiveEventResponse.hasActivePrivateEvent)
+              this.privateButtonDisabled = false;
+
+            if (!environment?.disablePublicUrl && hasActiveEventResponse.hasActivePublicEvent)
+              this.publicButtonDisabled = false;
+          }
+        });
+      }
     });
   }
-  
-  naviagteToPublicDFA(){
+
+  getPublicButtonDisabled(): boolean {
+    return this.publicButtonDisabled || !!this.environment?.newApplicationNotAccepted || !!this.environment?.disablePublicUrl;
+  }
+
+  getPublicButtonTitle(): string {
+    return this.getPublicButtonDisabled()
+      ? "New applications are not currently being accepted"
+      : "";
+  }
+
+  getPrivateButtonDisabled(): boolean {
+    return this.privateButtonDisabled || !!this.environment?.newApplicationNotAccepted ||!!this.environment?.disablePrivateUrl;
+  }
+
+  getPrivateButtonTitle(): string {
+    return this.getPrivateButtonDisabled()
+      ? "New applications are not currently being accepted"
+      : "";
+  }
+
+  navigateToPublicDFA(){
     const publicUrl = this.environment?.dfaPublicUrl;
     if (publicUrl) {
       window.open(publicUrl, '_blank');
@@ -68,7 +94,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  naviagteToPrivateDFA(){
+  navigateToPrivateDFA(){
     const privateUrl = this.environment?.dfaPrivateUrl;
     if (privateUrl) {
       window.open(privateUrl, '_blank');
