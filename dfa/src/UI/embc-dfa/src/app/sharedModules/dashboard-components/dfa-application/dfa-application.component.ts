@@ -294,7 +294,7 @@ export class DfaApplicationComponent implements OnInit {
               objApp.status &&
               objApp.status.toLowerCase().indexOf('appeal') > -1
             ) {
-              jsonVal = JSON.stringify(this.appealItems);
+              jsonVal = JSON.stringify(this.items);
               objApp.hasAppealStages = true;
             }
 

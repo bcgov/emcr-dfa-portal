@@ -393,13 +393,15 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     var caseEligibilityAppeal = repository
                         .GetEligibilityWorkflow(new AppealQuery { CaseId = caseId })
                         .FirstOrDefault();
+                    app.EligibilityAppealPortalNote = caseEligibilityAppeal?.EligibilityAppealPortalNote;
+                    app.EligibilityAppealStatusPortal = caseEligibilityAppeal?.EligibilityAppealStatusPortal;
                     app.CaseEligibilityAppeal = caseEligibilityAppeal?.CaseEligibilityAppeal; // Assign the list of mapped appeals to the application
                                                                                    //}
                         var caseAmountAppeal = repository
                             .GetAmountWorkflow(new AppealQuery { CaseId = caseId })
                             .FirstOrDefault();
-                    app.AmountAppealPortalNote = caseAmountAppeal.AmountAppealPortalNote;
-                    app.AmountAppealStatusPortal = caseAmountAppeal.AmountAppealStatusPortal;
+                    app.AmountAppealPortalNote = caseAmountAppeal?.AmountAppealPortalNote;
+                    app.AmountAppealStatusPortal = caseAmountAppeal?.AmountAppealStatusPortal;
                         app.CasePaidAmountAppeal = caseAmountAppeal?.CasePaidAmountAppeal;
                 }
 
@@ -431,7 +433,11 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_accountlegalname = objApp.dfa_accountlegalname,
                                    dfa_appealcloseddate = objApp.dfa_appealcloseddate,
                                    CaseEligibilityAppeal = objApp.CaseEligibilityAppeal,
-                                   CasePaidAmountAppeal = objApp.CasePaidAmountAppeal
+                                   CasePaidAmountAppeal = objApp.CasePaidAmountAppeal,
+                                   EligibilityAppealPortalNote = objApp.EligibilityAppealPortalNote,
+                                   EligibilityAppealStatusPortal = objApp.EligibilityAppealStatusPortal,
+                                   AmountAppealPortalNote = objApp.AmountAppealPortalNote,
+                                   AmountAppealStatusPortal = objApp.AmountAppealStatusPortal
                                }).AsEnumerable().OrderByDescending(m => DateTime.Parse(m.createdon));
                 return lstApps;
             }
