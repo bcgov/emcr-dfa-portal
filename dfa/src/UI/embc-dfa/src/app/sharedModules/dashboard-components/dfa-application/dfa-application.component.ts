@@ -11,6 +11,7 @@ import { ProfileDataService } from 'src/app/feature-components/profile/profile-d
 import { ApplicationService as Service } from '../../../core/api/services/application.service';
 import { AppealConfirmationDialogComponent } from './appeal-confirmation-dialog/appeal-confirmation-dialog.component';
 import { DocumentViewingDataService } from 'src/app/core/services/document-viewing-data.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // Temporary extension until the OpenAPI spec includes appealStatusBar
 // ####################################################################
@@ -268,7 +269,8 @@ export class DfaApplicationComponent implements OnInit {
     private route: ActivatedRoute,
     public dialog: MatDialog,
     private dfaAppealDataService: DFAAppealDataService,
-    private documentViewingDataService: DocumentViewingDataService
+    private documentViewingDataService: DocumentViewingDataService,
+    private _snackBar: MatSnackBar,
   ) {
     const navigation = this.router.getCurrentNavigation();
     this.appType = this.route.snapshot.data['apptype'];
@@ -426,8 +428,16 @@ export class DfaApplicationComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+       // document.location.href = 'https://dfa.gov.bc.ca/error.html';
         this.isLoading = false;
+        this._snackBar.open(
+          'Unable to get applications. Please try again later.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
       }
     });
   }
@@ -585,6 +595,7 @@ export class DfaApplicationComponent implements OnInit {
 
     this.router.navigate(['/case', applItem.caseId, 'documents']);
   }
+
 
   viewAppealAfterSubmission(applItem: ApplicationExtended, type: string): void {
     const caseId = applItem.caseId;

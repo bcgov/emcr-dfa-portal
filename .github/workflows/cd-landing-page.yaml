@@ -13,6 +13,8 @@ on:
       - "landing-page/**"
       - ".github/workflows/cd-landing-page.yaml"
 
+  workflow_dispatch:
+
 env:
   DOCKER_CONTEXT_DIRECTORY: ./landing-page
   IMAGE_NAME: dfa-landing-page

@@ -123,7 +123,8 @@ export class ConfigService {
         this.setEnvironmentBanner(env);
       },
       error: (error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        console.log('Error fetching environment information:', error);
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
       }
     });
     return environment;

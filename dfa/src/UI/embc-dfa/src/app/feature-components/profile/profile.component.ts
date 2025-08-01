@@ -18,6 +18,7 @@ import { ProfileDataService } from './profile-data.service';
 import { ProfileService } from './profile.service';
 import * as globalConst from '../../core/services/globalConstants';
 import { CustomValidationService } from 'src/app/core/services/customValidation.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-profile',
@@ -53,7 +54,8 @@ export class ProfileComponent
     private alertService: AlertService,
     private profileDataService: ProfileDataService,
     private profileService: ProfileService,
-    private customValidation: CustomValidationService
+    private customValidation: CustomValidationService,
+    private _snackBar: MatSnackBar
   ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation !== null) {
@@ -251,7 +253,15 @@ export class ProfileComponent
          error: (error) => {
            this.showLoader = !this.showLoader;
            this.isSubmitted = !this.isSubmitted;
-           document.location.href = 'https://dfa.gov.bc.ca/error.html';
+           // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+            this._snackBar.open(
+              'Unable to submit profile. Please try again later.',
+              'Close',
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+              }
+            );
          }
        });
   }

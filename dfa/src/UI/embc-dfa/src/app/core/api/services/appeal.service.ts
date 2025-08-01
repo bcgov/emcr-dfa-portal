@@ -95,7 +95,7 @@ export class AppealService extends BaseService {
   static readonly AppealUpdateAppealPath = '/api/Appeal/update';
 
   /**
-   * Create an appeal.
+   * Update an appeal.
    *
    *
    *
@@ -109,7 +109,7 @@ export class AppealService extends BaseService {
   }
 
   /**
-   * Create an appeal.
+   * Update an appeal.
    *
    *
    *

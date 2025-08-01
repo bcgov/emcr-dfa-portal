@@ -67,7 +67,7 @@
                     </b>
                   </p>
                 </div>
-                
+
               </div>
             </div>
             <div>
@@ -102,22 +102,14 @@
             </div>
 
             <div style="padding-top: 15px;">
-              @if (environment?.disablePrivateUrl) {
-                <button disabled 
-                class="disableButton" 
-                #tooltip="matTooltip"
-                matTooltip="New applications are not currently being accepted"
-                tooltipClass="my-custom-class"
-                [matTooltipPosition]="position.value!">
-                  Register to apply to Private DFA
-                </button>
-              } @else { 
-                <button class="applyButton" (click)="naviagteToPrivateDFA()" [disabled]="privateButtonDisabled" [title]="privateButtonDisabled ? 'New applications are not currently being accepted' : ''">
-                  Register to apply to Private DFA
-                </button>
-              }
 
-              <button class="loginButton" (click)="naviagteToPrivateDFA()">
+              <!-- register private button -->
+              <button class="applyButton" #tooltip="matTooltip" [matTooltip]="getPrivateButtonTitle()" tooltipClass="my-custom-class"
+                [matTooltipPosition]="position.value!" (click)="navigateToPrivateDFA()" [disabled]="getPrivateButtonDisabled()">
+                  Register to apply to Private DFA
+              </button>
+
+              <button class="loginButton" (click)="navigateToPrivateDFA()">
                 Login into to Private DFA
               </button>
 
@@ -173,30 +165,20 @@
             </div>
             <div style="padding-top: 100px;">
 
-              @if (environment?.disablePublicUrl || environment?.newApplicationNotAccepted) {
-                <button disabled 
-                class="disableButton" 
-                #tooltip="matTooltip"
-                matTooltip="New applications are not currently being accepted"
-                tooltipClass="my-custom-class"
-                [matTooltipPosition]="position.value!">
+              <!-- register public button -->
+              <button class="applyButton" #tooltip="matTooltip" [matTooltip]="getPublicButtonTitle()" tooltipClass="my-custom-class"
+                [matTooltipPosition]="position.value!" (click)="navigateToPublicDFA()" [disabled]="getPublicButtonDisabled()">
                   Register to apply to Public DFA
-                </button>
-              } @else { 
-                <button class="applyButton" (click)="naviagteToPublicDFA()" [disabled]="publicButtonDisabled" [title]="publicButtonDisabled ? 'New applications are not currently being accepted' : ''">
-                  Register to apply to Public DFA
-                </button>
-              }
-         
+              </button>
+
               @if(!environment?.newApplicationNotAccepted) {
-                <button class="loginButton" (click)="naviagteToPublicDFA()">
+                <button class="loginButton" (click)="navigateToPublicDFA()">
                   Login into to Public DFA
                 </button>
-  
               }
-           
+
               <div>
-                <p  class="loginText">
+                <p class="loginText">
                   You will need your BCeID to log in
                 </p>
               </div>
@@ -254,7 +236,7 @@
     </div>
   </div>
   <div class="site-footer">
-   
+
     <div class="container --site-footer-layout">
       <div class="site-footer-phone-number">
         Contact DFA Support toll-free at <a class="--link-black" href="tel:18882574777">1-888-257-4777</a>

@@ -1,3 +1,4 @@
+﻿using Microsoft.Xrm.Sdk.Query;
 using Task = System.Threading.Tasks.Task;
 
 namespace Microsoft.Xrm.Sdk.Client;
@@ -141,6 +142,51 @@ public static class DataverseExtensions
         annotation["objectid"] = new EntityReference(entityLogicalName, entityId);
 
         await service.CreateAsync(annotation);
+    }
+
+    public static async Task<Annotation> GetAnnotationByFileNameAsync(
+            this IOrganizationServiceAsync organizationService,
+            string entityName,
+            Guid entityId,
+            string fileName)
+    {
+        // Define the query to retrieve the annotation by file name
+        var query = new QueryExpression("annotation")
+        {
+            ColumnSet = new ColumnSet("documentbody", "createdon", "createdby"),
+            Criteria = new FilterExpression
+            {
+                Conditions =
+                    {
+                        new ConditionExpression("objectid", ConditionOperator.Equal, entityId)
+                    }
+            }
+        };
+
+        // Execute the query
+        var results = await organizationService.RetrieveMultipleAsync(query);
+
+        // Return the first matching annotation or null if none found
+        var entity = results.Entities.FirstOrDefault();
+        if (entity != null)
+        {
+            return new Annotation
+            {
+                FileContent = entity.GetAttributeValue<string>("documentbody"),
+                CreatedOn = entity.GetAttributeValue<DateTime>("createdon"),
+                CreatedBy = entity.GetAttributeValue<EntityReference>("createdby")
+            };
+        }
+
+        return null;
+    }
+
+    // Define the Annotation class to map the retrieved annotation data
+    public class Annotation
+    {
+        public string FileContent { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public EntityReference CreatedBy { get; set; }
     }
 
     private static RetrieveAttributeResponse GetAttribute([NotNull] this OrganizationServiceContext context, [NotNull] Entity entity, string? fileFieldName)

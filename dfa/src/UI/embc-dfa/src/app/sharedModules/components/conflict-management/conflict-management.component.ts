@@ -15,6 +15,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { ConflictManagementService } from './conflict-management.service';
 import { LocationService } from 'src/app/core/services/location.service';
 import * as globalConst from '../../../core/services/globalConstants';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-conflict-management',
@@ -43,7 +44,8 @@ export class ConflictManagementComponent implements OnInit, DoCheck {
     private alertService: AlertService,
     private formCreationService: FormCreationService,
     private conflictService: ConflictManagementService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngDoCheck(): void {
@@ -70,7 +72,16 @@ export class ConflictManagementComponent implements OnInit, DoCheck {
         }
       },
       error: (error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+
+        this._snackBar.open(
+          'Unable to get conflicts. Please try again later.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
       }
     });
   }
@@ -155,7 +166,15 @@ export class ConflictManagementComponent implements OnInit, DoCheck {
       error: (error) => {
         this.showLoader = !this.showLoader;
         this.isSubmitted = !this.isSubmitted;
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        this._snackBar.open(
+          'Unable to update profile. Please try again later.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
       }
     });
   }

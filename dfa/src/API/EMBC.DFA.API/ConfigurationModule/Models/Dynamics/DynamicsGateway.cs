@@ -396,7 +396,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     app.EligibilityAppealPortalNote = caseEligibilityAppeal?.EligibilityAppealPortalNote;
                     app.EligibilityAppealStatusPortal = caseEligibilityAppeal?.EligibilityAppealStatusPortal;
                     app.CaseEligibilityAppeal = caseEligibilityAppeal?.CaseEligibilityAppeal; // Assign the list of mapped appeals to the application
-                                                                                   //}
+
                         var caseAmountAppeal = repository
                             .GetAmountWorkflow(new AppealQuery { CaseId = caseId })
                             .FirstOrDefault();

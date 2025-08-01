@@ -9,6 +9,7 @@ import {
   Output,
   SimpleChanges
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
 import { AppealFileUpload, FileCategory } from 'src/app/core/api/models';
@@ -93,9 +94,12 @@ export class AppealFileUploadComponent implements OnInit, OnChanges, OnDestroy {
   savedDocumentsTableHeaders = ['fileName', 'description', 'uploadedDate', 'deleteIcon'];
   savedDocumentsUploadsTableData: MatTableDataSource<AppealFileUpload> = new MatTableDataSource<AppealFileUpload>([]);
 
+  isEditView = this.router.url.includes('/edit');
+
   constructor(
     @Inject('formCreationService') formCreationService: FormCreationService,
-    public customValidator: CustomValidationService
+    public customValidator: CustomValidationService,
+    private router: Router
   ) {
     this.formCreationService = formCreationService;
   }

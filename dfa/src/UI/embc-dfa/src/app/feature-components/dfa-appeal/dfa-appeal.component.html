@@ -43,7 +43,7 @@
           [folderPath]="dfaAppealFolderPath"
         ></app-component-wrapper>
         <br />
-        <div class="row justify-content-between resp-style">
+        <div *ngIf="isEditView" class="row justify-content-between resp-style">
           <div class="col-md-6">
             <button
               class="button-s"

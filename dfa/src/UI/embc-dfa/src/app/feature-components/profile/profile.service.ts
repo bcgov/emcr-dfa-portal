@@ -25,7 +25,9 @@ export class ProfileService {
         this.profileMapping.mapLoginProfile(loginProfile);
       },
       error: (error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        console.error('Error fetching login profile:', error);
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        
       }
     });
   }
@@ -36,7 +38,8 @@ export class ProfileService {
         this.profileMapping.mapProfile(profile);
       },
       error: (error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        console.error('Error fetching profile:', error);
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
       }
     });
   }

@@ -33,6 +33,7 @@ import { DFAApplicationMainMappingService } from 'src/app/feature-components/dfa
 import { DialogContent } from 'src/app/core/model/dialog-content.model';
 import { AddressChangeComponent } from 'src/app/core/components/dialog-components/address-change-dialog/address-change-dialog.component';
 import { IMaskModule } from 'angular-imask';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -68,7 +69,8 @@ export default class DamagedPropertyAddressComponent implements OnInit, OnDestro
     public dialog: MatDialog,
     private applicationService: ApplicationService,
     private dfaApplicationMainMapping: DFAApplicationMainMappingService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+     public _snackBar: MatSnackBar,
 
   ) {
     this.formBuilder = formBuilder;
@@ -485,7 +487,15 @@ export default class DamagedPropertyAddressComponent implements OnInit, OnDestro
       },
       error: (error) => {
         console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        this._snackBar.open(
+          'Unable to get Damaged Property. Please try again later.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          }
+        );
       }
     });
   }
@@ -550,7 +560,15 @@ export default class DamagedPropertyAddressComponent implements OnInit, OnDestro
         },
         error: (error) => {
           console.error(error);
-          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          // document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          this._snackBar.open(
+            'Unable to submit the application. Please try again later.',
+            'Close',
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+            }
+          );
         }
       });
   }

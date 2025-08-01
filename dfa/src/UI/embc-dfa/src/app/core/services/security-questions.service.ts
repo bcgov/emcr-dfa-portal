@@ -40,7 +40,8 @@ export class SecurityQuestionsService {
         this.securityQuestionOptions = list;
       },
       error: (error) => {
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+        console.error('Error fetching security questions:', error);
+        // document.location.href = 'https://dfa.gov.bc.ca/error.html';
       }
     });
   }

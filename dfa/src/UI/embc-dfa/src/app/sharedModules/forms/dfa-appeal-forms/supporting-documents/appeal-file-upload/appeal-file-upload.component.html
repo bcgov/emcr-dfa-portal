@@ -6,7 +6,7 @@
       type="button"
       (click)="showFileUpload()"
       style="width: 250px"
-      *ngIf="isReadOnly === false">
+      *ngIf="!isReadOnly && isEditView">
       + Add Supporting Document
     </button>
   </div>
@@ -115,7 +115,7 @@
               mat-icon-button
               aria-label="Remove"
               (click)="removeAttachment(elementFile)"
-              *ngIf="isReadOnly === false">
+              *ngIf="!isReadOnly && isEditView">
               <img src="/assets/images/delete.svg" height="35" width="35" />
               <img src="/assets/images/delete_onhover.svg" height="35" width="35" />
             </button>
