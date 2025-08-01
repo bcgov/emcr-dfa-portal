@@ -247,7 +247,7 @@
         </div>
       }
 
-      @if (!applItem.appeals || applItem.appeals.length === 0) {
+      @if (applItem.caseEligibilityAppeal || applItem.caseAmountAppeal) {
         <!-- Add Appeals section -->
         <div [featureEnabled]="'useAppeals'">
           @if (applItem.dateFileClosed && remainingDays(applItem) > 0) {
