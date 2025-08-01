@@ -518,28 +518,13 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.Status, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.dfa_applicationstatusportal) ? string.Empty : s.dfa_applicationstatusportal))
                 .ForMember(d => d.StatusLastUpdated, opts => opts.MapFrom(s => "01/01/2023"))
                 .ForMember(d => d.ApplicationId, opts => opts.MapFrom(s => s.dfa_appapplicationid))
-                .ForMember(d => d.Appeals, opts => opts.MapFrom(s => s.dfa_appeal))
-                .ForMember(d => d.IsSubmitted, opts => opts.MapFrom(s => s.dfa_appeal.Any(x => x.dfa_dateappealdecisionmade != null)))
-                .ForMember(d => d.CaseEligibility, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_eligibilitystatus) ? GetEnumDescription((CaseEligibilityOptionSet)Convert.ToInt32(s.dfa_eligibilitystatus)) : null));
-
-            CreateMap<dfa_appeal, CurrentCaseAppeal>()
-                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.dfa_appealid))
-                .ForMember(d => d.AppealStatus, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_appealstatus) ? GetEnumDescription((AppealStatusOptionSet)Convert.ToInt32(s.dfa_appealstatus)) : null))
-                .ForMember(d => d.AppealType, opts => opts.MapFrom(s => s.dfa_appealtype))
-                .ForMember(d => d.Reason, opt => opt.MapFrom(src => src.DFA_Reason))
-                //.ForMember(d => d.CaseId, opt => opt.MapFrom(src => Guid.TryParse(src._dfa_caseid_value, out var guid) ? guid : Guid.Empty))
-                .ForMember(d => d.CaseId, opt => opt.MapFrom(src => src._dfa_caseid_value))
-                .ForMember(d => d.AppealReceivedDate, opt => opt.MapFrom(src => src.dfa_dateappealdecisionmade))
-                .ForMember(d => d.CaseEligibilityAppeal, opt => opt.MapFrom(src => src.CaseEligibilityAppeal))
-                .ForMember(d => d.CasePaidAmountAppeal, opt => opt.MapFrom(src => src.CasePaidAmountAppeal));
-
-            CreateMap<Appeal, dfa_appeal>()
-                .ForMember(dest => dest.dfa_appealid, opt => opt.MapFrom(src => src.Id))
-                //.ForMember(dest => dest., opt => opt.MapFrom(src => (DFA_Appeal_StateCode)(int)src.StateCode))
-                .ForMember(dest => dest._dfa_caseid_value, opt => opt.MapFrom(src => src.CaseId))
-                .ForMember(dest => dest.dfa_appealstatus, opt => opt.Ignore())
-                .ForMember(dest => dest.DFA_Reason, opt => opt.MapFrom(src => src.Reason))
-                .ForMember(dest => dest.dfa_appealtype, opt => opt.MapFrom(src => src.AppealType));
+                .ForMember(d => d.CaseEligibilityAppeal, opts => opts.MapFrom(s => s.CaseEligibilityAppeal))
+                .ForMember(d => d.CaseAmountAppeal, opts => opts.MapFrom(s => s.CasePaidAmountAppeal))
+                .ForMember(d => d.CaseEligibility, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_eligibilitystatus) ? GetEnumDescription((CaseEligibilityOptionSet)Convert.ToInt32(s.dfa_eligibilitystatus)) : null))
+                .ForMember(d => d.AmountAppealPortalNote, opts => opts.MapFrom(s => s.AmountAppealPortalNote))
+                .ForMember(d => d.AmountAppealStatusPortal, opts => opts.MapFrom(s => s.AmountAppealStatusPortal))
+                .ForMember(d => d.EligibilityAppealPortalNote, opts => opts.MapFrom(s => s.EligibilityAppealPortalNote))
+                .ForMember(d => d.EligibilityAppealStatusPortal, opts => opts.MapFrom(s => s.EligibilityAppealStatusPortal));
 
             CreateMap<DFA_CaseEligibilityAppeal, CaseEligibilityAppeal>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

@@ -299,22 +299,13 @@ namespace EMBC.DFA.API.Controllers
         public string StatusLastUpdated { get; set; }
         public bool IsErrorInStatus { get; set; }
         public bool hasAppealStages { get; set; }
-        public IEnumerable<CurrentCaseAppeal> Appeals { get; set; }
         public string CaseEligibility { get; set; }
-
-        public bool IsSubmitted { get; set; }
-    }
-
-    public class CurrentCaseAppeal
-    {
-        public Guid Id { get; set; }
-        public string AppealStatus { get; set; }
-        public string AppealType { get; set; }
-        public string Reason { get; set; }
-        public Guid? CaseId { get; set; }
-        public DateTime? AppealReceivedDate { get; set; }
-        public CaseEligibilityAppeal? CaseEligibilityAppeal { get; set; }
-        public CasePaidAmountAppeal? CasePaidAmountAppeal { get; set; }
+        public CaseEligibilityAppeal CaseEligibilityAppeal { get; set; }
+        public CasePaidAmountAppeal CaseAmountAppeal { get; set; }
+        public string AmountAppealPortalNote { get; set; }
+        public string AmountAppealStatusPortal { get; set; }
+        public string EligibilityAppealPortalNote { get; set; }
+        public string EligibilityAppealStatusPortal { get; set; }
     }
 
     public class StatusBar

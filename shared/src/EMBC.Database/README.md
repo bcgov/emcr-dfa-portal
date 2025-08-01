@@ -47,7 +47,7 @@ To use "Connection String", select "Connection String", and then add the followi
 2. See below on how to create a new connection
 3. Open XrmToolBox -> Tool "Early Bound Generator V2" and save the default settings to the project folder
 4. Select "Entities Whitelist" and select the tables you will be need to access in the solution
-5. Set "Namespace" -> "Database.Model", "Output Relative Directory" -> "Model", and "Service Context Name" -> "DatabaseContext"
+5. Set "Namespace" -> "EMBC.Database.Model", "Output Relative Directory" -> "Model", and "Service Context Name" -> "DatabaseContext"
 6. Click "Generate" to generate the entities, messages, optionsets in their corresponding folders and DatabaseContext.
 7. Copy "Shared.Contract" and "Shared.Database" folders and file "Database\DatabaseContext.Partial.cs"
 8. Add project reference "Shared.Database" to project "Database"
@@ -58,11 +58,13 @@ To use "Connection String", select "Connection String", and then add the followi
 12. Edit the prefix in file "SharedMapper.cs"
 13. Add user secrets found in "ServiceCollectionExtensions.cs" from a developer or OpenShift
 
-
-### How to generate entities
-Open DLaB.EarlyBoundGeneratorV2.DefaultSettings.xml and then click "Generate" button.
+### How to generate the entities
+1. Connect to the Dynamics database, see above for instructions on how to connect
+2. Open Database\DLaB.EarlyBoundGeneratorV2.DefaultSettings.xml and then click "Generate" button.
 This will generate the entities, messages, optionsets in their corresponding folders and DatabaseContext.
 
+NOTE you will need to generate the entities every time the Dynamics schema changes
+NOTE if you remove entities from the whitelist, those entities will be removed from the project. You should only add entities to the whitelist unless also removing code
 NOTE in theory, you could add your authentication profile to PAC using your connection string and then use the command lines found in the generated code. If you do try this, please update this ReadMe.md with your findings.
 
 
@@ -92,7 +94,9 @@ To query an entity with no joins, use `repository.Where(predicates)`. For an exa
 To query an entity with a single join, use `repository.Query(queryCommand)` by inheriting IQueryRepository. See [EMCR DFA Query](https://github.com/bcgov/emcr-dfa-portal/blob/support-develop/shared/src/EMBC.Database.Resources/RecoveryClaimRepository.cs)
 To query an entity with a single join and group, see `ProjectRepository.cs`
 To query an entity with multiple joins, see [EMCR DFA GetPending](https://github.com/bcgov/emcr-dfa-portal/blob/support-develop/shared/src/EMBC.Database.Resources/RecoveryClaimRepository.cs)
-
+To query and then include Entity collections, use `var results = context.From(communications).Join().Include(c => c.ecer_bcgov_documenturl_CommunicationId_ecer_communication).Include(c=>c.ecer_communication_Applicationid).Execute();`
+  
+  
 ## Unit Testing
 
 There is a relatively straight-forward way to unit test. It cannot be used with test runners until it is refactored to work without editing generating code.
