@@ -596,9 +596,11 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string dfa_appealcloseddate { get; set; }
         public string dfa_eligibilitystatus { get; set; }
         public CaseEligibilityAppeal? CaseEligibilityAppeal { get; set; }
+        public string EligibilityAppealDecision { get; set; }
         public string EligibilityAppealPortalNote { get; set; }
         public string EligibilityAppealStatusPortal { get; set; }
         public CasePaidAmountAppeal? CasePaidAmountAppeal { get; set; }
+        public string AmountAppealDecision { get; set; }
         public string AmountAppealPortalNote { get; set; }
         public string AmountAppealStatusPortal { get; set; }
     }

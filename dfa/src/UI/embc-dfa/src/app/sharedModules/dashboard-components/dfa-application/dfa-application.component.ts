@@ -31,6 +31,7 @@ interface AppealStatusItem {
   stage?: string;
   isCompleted?: boolean;
   isFinalStep?: boolean;
+  isDecision?: boolean;
 }
 // ####################################################################
 
@@ -288,8 +289,7 @@ export class DfaApplicationComponent implements OnInit {
           var initialList = lstData;
           lstDataUnModified.push(initialList);
           lstData.forEach((objApp, i) => {
-          //#TODO:Change this back to false once the status is resolved
-            let isFound = true;
+            let isFound = false;
             var jsonVal = JSON.stringify(this.items);
 
             if (

@@ -12,6 +12,7 @@ using AutoMapper;
 using EMBC.Database.Contract;
 using EMBC.Database.Resources;
 using EMBC.ESS.Shared.Contracts.Metadata;
+using EMBC.Utilities.Extensions;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
@@ -388,21 +389,29 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                 {
                     if (app._dfa_casecreatedid_value == null) continue; // Skip if case created id is null
                     var caseId = Guid.Parse(app._dfa_casecreatedid_value);
-                    // Load List of Case Eligibility Appeals for the case
 
+                    // Load List of Case Eligibility Appeals for the case
                     var caseEligibilityAppeal = repository
                         .GetEligibilityWorkflow(new AppealQuery { CaseId = caseId })
                         .FirstOrDefault();
-                    app.EligibilityAppealPortalNote = caseEligibilityAppeal?.EligibilityAppealPortalNote;
-                    app.EligibilityAppealStatusPortal = caseEligibilityAppeal?.EligibilityAppealStatusPortal;
-                    app.CaseEligibilityAppeal = caseEligibilityAppeal?.CaseEligibilityAppeal; // Assign the list of mapped appeals to the application
+                    if (caseEligibilityAppeal != null)
+                    {
+                        app.EligibilityAppealDecision = caseEligibilityAppeal.AppealDecision.HasValue ? EnumDescriptionHelper.GetEnumDescription(caseEligibilityAppeal.AppealDecision.Value) : null;
+                        app.EligibilityAppealPortalNote = caseEligibilityAppeal.EligibilityAppealPortalNote;
+                        app.EligibilityAppealStatusPortal = caseEligibilityAppeal.EligibilityAppealStatusPortal;
+                        app.CaseEligibilityAppeal = caseEligibilityAppeal.CaseEligibilityAppeal;
+                    }
 
                         var caseAmountAppeal = repository
                             .GetAmountWorkflow(new AppealQuery { CaseId = caseId })
                             .FirstOrDefault();
-                    app.AmountAppealPortalNote = caseAmountAppeal?.AmountAppealPortalNote;
-                    app.AmountAppealStatusPortal = caseAmountAppeal?.AmountAppealStatusPortal;
-                        app.CasePaidAmountAppeal = caseAmountAppeal?.CasePaidAmountAppeal;
+                    if (caseAmountAppeal != null)
+                    {
+                        app.AmountAppealDecision = caseAmountAppeal.AppealDecision.HasValue ? EnumDescriptionHelper.GetEnumDescription(caseAmountAppeal.AppealDecision.Value) : null;
+                        app.AmountAppealPortalNote = caseAmountAppeal.AmountAppealPortalNote;
+                        app.AmountAppealStatusPortal = caseAmountAppeal.AmountAppealStatusPortal;
+                        app.CasePaidAmountAppeal = caseAmountAppeal.CasePaidAmountAppeal;
+                    }
                 }
 
                 var lstApps = (from objApp in list.List
@@ -436,8 +445,10 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    CasePaidAmountAppeal = objApp.CasePaidAmountAppeal,
                                    EligibilityAppealPortalNote = objApp.EligibilityAppealPortalNote,
                                    EligibilityAppealStatusPortal = objApp.EligibilityAppealStatusPortal,
+                                   EligibilityAppealDecision = objApp.EligibilityAppealDecision,
                                    AmountAppealPortalNote = objApp.AmountAppealPortalNote,
-                                   AmountAppealStatusPortal = objApp.AmountAppealStatusPortal
+                                   AmountAppealStatusPortal = objApp.AmountAppealStatusPortal,
+                                   AmountAppealDecision = objApp.AmountAppealDecision
                                }).AsEnumerable().OrderByDescending(m => DateTime.Parse(m.createdon));
                 return lstApps;
             }
