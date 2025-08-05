@@ -206,7 +206,7 @@
               </tr>
               <tr>
                 <td *ngFor="let item of applItem.appealAmountStatusBar; let i=index" id="item{{i}}" [ngClass]="item.label != '' ? 'labelStyle' : 'labelEmptyWidth'">
-                  <div *ngIf="item.label != ''" [ngClass]="item.currentStep == false || item.label == 'Closed' ? 'alignStatus': (item.stage == '' ? 'alignStatus' : 'currentStatus')">
+                  <div *ngIf="item.label != ''" [ngClass]="item.currentStep == false || item.isCompleted ? 'alignStatus': (item.stage == '' ? 'alignStatus' : 'currentStatus')">
                     <span *ngIf="applItem.label != 'Closed' && item.isCompleted == true && applItem.isErrorInStatus == false" class="material-icons" [ngStyle]="{'color': item.stage == 'Ineligible' || item.stage == 'Withdrawn' ? 'red' : 'rgb(21 178 89)'}">
                       {{ item.stage == 'Ineligible' || item.stage == 'Withdrawn' ? 'cancel' : 'check_circle' }}
                     </span>

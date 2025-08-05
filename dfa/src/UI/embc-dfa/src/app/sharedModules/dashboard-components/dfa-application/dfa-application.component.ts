@@ -332,24 +332,26 @@ export class DfaApplicationComponent implements OnInit {
               }
             });
 
+            // Eligibility appeal steps
             const objAppWithAppeals = objApp as CurrentCaseWithAppeals;
             // Initialize appealStatusBar if it's missing
             if (!Array.isArray(objAppWithAppeals.appealEligibilityStatusBar)) {
               objAppWithAppeals.appealEligibilityStatusBar = JSON.parse(JSON.stringify(this.eligibilityAppealItems));
             }
-            // Eligibility appeal steps
+
+            isFound = false;
+
             if (!objApp.eligibilityAppealPortalNote)
               objApp.eligibilityAppealPortalNote = "In Progress";
-
 
             objAppWithAppeals.appealEligibilityStatusBar.forEach((objStatItem) => {
               const statusMatch =
                 objApp.caseEligibilityAppeal?.activeStage?.name &&
                 objStatItem.label?.toLowerCase() === objApp.caseEligibilityAppeal.activeStage.name.toLowerCase();
               if (statusMatch) {
-                //if (!appealAmount?.caseEligibilityAppeal?.activeStage?.completedOn) {
+                if (!objApp.caseEligibilityAppeal?.completedOn) {
                   objStatItem.currentStep = true;
-                //}
+                }
                 isFound = true;
                 this.matchStatusFound = true;
 
