@@ -503,6 +503,17 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public bool delete { get; set; } // required boolean
     }
 
+
+    public enum CaseBPFVersionSet
+    {
+        [Description("3.0")]
+        Three = 222710000,
+        [Description("4.0")]
+        Four = 222710001,
+        [Description("5.0")]
+        Five = 222710002
+    }
+
     public enum ApplicantTypeOptionSet
     {
         [Description("Charitable Organization")]
@@ -574,6 +585,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         YesBut = 222710001
     }
 
+  
+
     public class dfa_appapplication
     {
         public string dfa_appapplicationid { get; set; }
@@ -603,6 +616,9 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string AmountAppealDecision { get; set; }
         public string AmountAppealPortalNote { get; set; }
         public string AmountAppealStatusPortal { get; set; }
+        public string dfa_createdinversion { get; set; }
+        public string dfa_portalnote { get; set; }
+
     }
 
 

@@ -380,7 +380,7 @@ export class DfaAppealComponent implements OnInit {
    * @param {MatStepper} stepper stepper instance
    */
   stepChanged(event: any, stepper: MatStepper): void {
-    stepper.selected.interacted = false;
+    // stepper.selected.interacted = false;
 
     this.validateForms();
   }

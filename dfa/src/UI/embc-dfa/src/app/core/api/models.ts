@@ -12,6 +12,7 @@ export { ApplicantOption } from './models/applicant-option';
 export type { AppTypeInsurance } from './models/app-type-insurance';
 export type { AreaCommunity } from './models/area-community';
 export type { CaptchaConfiguration } from './models/captcha-configuration';
+export { CaseBpfVersionSet } from './models/case-bpf-version-set';
 export type { CaseEligibilityAppeal } from './models/case-eligibility-appeal';
 export type { CasePaidAmountAppeal } from './models/case-paid-amount-appeal';
 export type { CleanUpLog } from './models/clean-up-log';

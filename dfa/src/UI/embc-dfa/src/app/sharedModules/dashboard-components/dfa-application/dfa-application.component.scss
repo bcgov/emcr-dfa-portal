@@ -57,6 +57,17 @@
   align-items: flex-start;
 }
 
+.appealStatus{
+  display: flex;
+  padding: 32px;
+}
+
+.timeline{
+  display: flex;
+  padding: 32px;
+  border-bottom: 1px solid lightgrey;
+}
+
 .appeals{
   display: flex;
   justify-content: end;

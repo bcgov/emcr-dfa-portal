@@ -44,7 +44,6 @@ export default class SignAndSubmitComponent implements OnInit, OnDestroy {
       // Retrive sign and signature
       this.signAndSubmitForm.get('applicantSignature').get('signature')
       .valueChanges.pipe(distinctUntilChanged()).subscribe((value) => {
-        console.log("Value Changes", value);
         if (value === '') {
           this.signAndSubmitForm.get('applicantSignature').reset();
         }
