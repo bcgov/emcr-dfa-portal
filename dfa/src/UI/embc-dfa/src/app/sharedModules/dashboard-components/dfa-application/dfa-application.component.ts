@@ -50,6 +50,8 @@ export class DfaApplicationComponent implements OnInit {
     this.appSessionService.currentApplicationsCount.emit(value);
   }
 
+  // NOTE if we ever consider refactoring the timelines, considering replacing the messy conditional logic with "state design pattern" or similar
+
   // application timeline items
   items = [
     { label: '' },
