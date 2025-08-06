@@ -20,8 +20,10 @@ interface CurrentCaseWithAppeals extends CurrentApplication {
   appealAmountStatusBar?: AppealStatusItem[];
   amountAppealPortalNote?: string;
   amountAppealStatusPortal?: string;
+  amountAppealDecision?: string;
   eligibilityAppealPortalNote?: string;
   eligibilityAppealStatusPortal?: string;
+  eligibilityAppealDecision?: string;
 }
 
 interface AppealStatusItem {
@@ -363,6 +365,8 @@ export class DfaApplicationComponent implements OnInit {
               // Fallback if status not matched
               if (!isFound) {
                 objStatItem.isCompleted = true;
+              } else {
+                objStatItem.isDecision = false;
               }
 
               // Final step validation
