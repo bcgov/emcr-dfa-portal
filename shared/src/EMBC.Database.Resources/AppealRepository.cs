@@ -15,7 +15,7 @@ public class AppealRepository : BaseRepository<DFA_Appeal, Appeal>, IAppealRepos
         _databaseContext = databaseContext;
     }
 
-    // TODO you can consolidate this and the below method (add the DFA_CasePaidAmountAppealSet join to this method and add to the composite model)
+    // TODO you can consolidate this and the below method (add the DFA_CasePaidAmountAppealSet join to this method and add a property to the composite model below)
     public IEnumerable<Appeal> GetEligibilityWorkflow(AppealQuery query)
     {
         var stages = _databaseContext.ProcessStageSet
@@ -26,7 +26,8 @@ public class AppealRepository : BaseRepository<DFA_Appeal, Appeal>, IAppealRepos
             from ca in _databaseContext.DFA_AppealSet
             join ce in _databaseContext.DFA_CaseEligibilityAppealSet on ca.Id equals ce.Bpf_DFA_AppealId.Id
             join ps in _databaseContext.ProcessStageSet on ce.ActiveStageId.Id equals ps.Id
-            where ca.DFA_CaseId.Id == query.CaseId && ca.DFA_AppealType == DFA_AppealType.Eligibility && ce.StateCode == DFA_CaseEligibilityAppeal_StateCode.Active
+            where ca.DFA_CaseId.Id == query.CaseId && ca.DFA_AppealType == DFA_AppealType.Eligibility 
+                && (ce.StateCode == DFA_CaseEligibilityAppeal_StateCode.Active || ce.CompletedOn != null)
             orderby ca.CreatedOn descending
             select new CaseEligibilityAppealComposite(ca, ce, ps))
             .ToList();
@@ -50,7 +51,8 @@ public class AppealRepository : BaseRepository<DFA_Appeal, Appeal>, IAppealRepos
             from ca in _databaseContext.DFA_AppealSet
             join ce in _databaseContext.DFA_CasePaidAmountAppealSet on ca.Id equals ce.Bpf_DFA_AppealId.Id
             join ps in _databaseContext.ProcessStageSet on ce.ActiveStageId.Id equals ps.Id
-            where ca.DFA_CaseId.Id == query.CaseId && ca.DFA_AppealType == DFA_AppealType.Amount && ce.StateCode == DFA_CasePaidAmountAppeal_StateCode.Active
+            where ca.DFA_CaseId.Id == query.CaseId && ca.DFA_AppealType == DFA_AppealType.Amount 
+                && (ce.StateCode == DFA_CasePaidAmountAppeal_StateCode.Active || ce.CompletedOn != null)
             orderby ca.CreatedOn descending
             select new CasePaidAmountAppealComposite(ca, ce, ps))
             .ToList();

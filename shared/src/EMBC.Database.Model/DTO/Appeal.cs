@@ -1,5 +1,14 @@
 ﻿namespace EMBC.Database.Contract;
 
+public enum PrivateAppealDecision
+{
+    [Description("Overturned")]
+    Overturned = 222710001,
+
+    [Description("Upheld")]
+    Upheld = 222710000,
+}
+
 public record AppealQuery
 {
     public Guid? CaseId { get; set; }
@@ -22,6 +31,7 @@ public class Appeal : IDto
     public string? EligibilityAppealPortalNote { get; set; }
     public string? EligibilityAppealStatusPortal { get; set; }
     // public bool? CreatedOnPortal { get; set; }
+    public PrivateAppealDecision? AppealDecision { get; set; }
 
     // Related Entities
     public CaseEligibilityAppeal? CaseEligibilityAppeal { get; set; }
