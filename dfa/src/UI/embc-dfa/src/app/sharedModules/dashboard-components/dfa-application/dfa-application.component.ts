@@ -126,7 +126,7 @@ export class DfaApplicationComponent implements OnInit {
       isFinalStep: false,
       isErrorInStatus: false
     },
-    
+
   ];
 
   // application timeline items
@@ -370,7 +370,7 @@ export class DfaApplicationComponent implements OnInit {
           var initialList = lstData;
           lstDataUnModified.push(initialList);
           lstData.forEach((objApp, i) => {
-            let isFound = false;
+            let isFound = true;
             var jsonVal = JSON.stringify(this.items);
 
             if (
@@ -412,38 +412,6 @@ export class DfaApplicationComponent implements OnInit {
                 }
               }
             });
-
-            // Load new application timeline items
-            if (objApp.getCaseBPFVersion === CaseBpfVersionSet.Four) {
-              objApp.statusBar = JSON.parse(
-                JSON.stringify(this.newApplicationItems)
-              );
-              objApp.statusBar.forEach((objStatItem) => {
-                if (
-                  objStatItem.label.toLowerCase() ===
-                  objApp.status.toLowerCase()
-                ) {
-                  objStatItem.currentStep = true;
-                  isFound = true;
-                  this.matchStatusFound = true;
-                }
-
-                if (isFound == false) {
-                  objStatItem.isCompleted = true;
-                }
-
-                if (objStatItem.isFinalStep == true) {
-                  if (isFound == false) {
-                    objApp.isErrorInStatus = true;
-                  } else if (
-                    objStatItem.label.toLowerCase() ==
-                    objApp.status.toLowerCase()
-                  ) {
-                    objStatItem.isCompleted = true;
-                  }
-                }
-              });
-            }
 
             // Load new application timeline items
             if (objApp.getCaseBPFVersion === CaseBpfVersionSet.Four) {
@@ -551,7 +519,7 @@ export class DfaApplicationComponent implements OnInit {
 
                 if (objApp.caseAmountAppeal?.activeStage?.name) {
                   objStatItem.stage = objApp.caseAmountAppeal.activeStage.name;
-                  
+
                 }
               }
 
