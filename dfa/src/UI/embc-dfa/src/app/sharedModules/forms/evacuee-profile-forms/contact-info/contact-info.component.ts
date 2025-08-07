@@ -86,6 +86,15 @@ export default class ContactInfoComponent implements OnInit, OnDestroy {
             .bind(this.customValidator)
         ]);
         this.contactFormControl.confirmEmail.reset();
+
+        // Set default value for optOutNonEssential to false (No) when null
+        if (this.contactInfoForm.get('optOutNonEssential')) {
+          const currentValue = this.contactInfoForm.get('optOutNonEssential').value;
+          if (currentValue === null || currentValue === undefined) {
+            this.contactInfoForm.get('optOutNonEssential').setValue(false);
+          }
+        }
+
         this.contactInfoForm.updateValueAndValidity();
       });
 

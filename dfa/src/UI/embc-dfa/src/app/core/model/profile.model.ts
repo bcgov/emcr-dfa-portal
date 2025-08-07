@@ -155,7 +155,7 @@ export class ContactDetailsForm {
     ]);
 
     this.optOutNonEssential.setValue(
-      contactDetails.optOutNonEssential !== undefined
+      contactDetails.optOutNonEssential !== undefined && contactDetails.optOutNonEssential !== null
         ? contactDetails.optOutNonEssential
         : false
     );
