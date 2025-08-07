@@ -286,46 +286,51 @@ export class DfaApplicationComponent implements OnInit {
     { label: '' },
     {
       label: 'Appeal Submitted',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
+      display: 'Appeal Submitted',
     },
     { label: '' },
     { label: '' },
     {
       label: 'Appeal In Progress',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
+      display: 'Reviewing Appeal',
     },
     { label: '' },
     { label: '' },
     {
-      label: 'Reassessing Damage',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
+      label: 'Adjudicator Review',
+      display: 'Reassessment Damage',
     },
     { label: '' },
     { label: '' },
     {
-      label: 'Reviewing Appeal Report',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
+      label: 'Compliance Check',
+      display: 'Reassessing Damage',
+    },
+    { label: '' },
+    { label: '' },
+    {
+      label: 'Appeal Decision',
+      display: 'Appeal Decision',
+      isDecision: true
+    },
+    { label: '' },
+    { label: '' },
+{
+      label: 'Review Report',
+      display: 'Reviewing Damage Report',
+    },
+    { label: '' },
+    { label: '' },
+    {
+      label: 'Creating Payment',
+      display: 'Final Review',
     },
     { label: '' },
     { label: '' },
     {
       label: 'Appeal Closed',
-      isCompleted: false,
-      currentStep: false,
+      display: 'Appeal Closed',
       isFinalStep: true,
-      isErrorInStatus: false
     },
     { label: '' }
   ];
