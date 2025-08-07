@@ -63,11 +63,10 @@
                 </div>
                 <div class="col-md-3">
                   <mat-form-field appearance="outline" class="mat-form-round">
-                    <input matInput formControlName="amendmentReceivedDate">
+                    <input matInput formControlName="amendmentReceivedDate" [matDatepicker]="amendmentReceivedDatePicker">
                     <mat-hint>MM/DD/YYYY</mat-hint>
-                    <mat-datepicker-toggle matSuffix [for]="amendmentReceivedDatePicker"
-                      disabled></mat-datepicker-toggle>
-                    <mat-datepicker #amendmentReceivedDatePicker disabled></mat-datepicker>
+                    <mat-datepicker-toggle matSuffix [for]="amendmentReceivedDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #amendmentReceivedDatePicker></mat-datepicker>
                   </mat-form-field>
                 </div>
               </div>

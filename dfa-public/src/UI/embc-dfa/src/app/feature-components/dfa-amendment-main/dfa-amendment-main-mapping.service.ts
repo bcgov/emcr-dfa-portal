@@ -30,15 +30,21 @@ export class DFAAmendmentMainMappingService {
       .getProjectAmendmentForm()
       .pipe(first())
       .subscribe((amendment: FormGroup<ProjectAmendmentForm>) => {
+        // Convert date strings to Date objects for datepicker compatibility
+        const convertToDate = (dateString: string) => {
+          if (!dateString || dateString === '') return null;
+          return new Date(dateString);
+        };
+
         amendment.setValue({
           additionalProjectCostDecision: dfaAmendment.additionalProjectCostDecision,
-          amended18MonthDeadline: dfaAmendment.amended18MonthDeadline,
-          amendedProjectDeadlineDate: dfaAmendment.amendedProjectDeadlineDate,
-          amendmentApprovedDate: dfaAmendment.amendmentApprovedDate,
+          amended18MonthDeadline: convertToDate(dfaAmendment.amended18MonthDeadline),
+          amendedProjectDeadlineDate: convertToDate(dfaAmendment.amendedProjectDeadlineDate),
+          amendmentApprovedDate: convertToDate(dfaAmendment.amendmentApprovedDate),
           amendmentId: dfaAmendment.amendmentId,
           amendmentNumber: dfaAmendment.amendmentNumber,
           amendmentReason : dfaAmendment.amendmentReason,
-          amendmentReceivedDate: dfaAmendment.amendmentReceivedDate,
+          amendmentReceivedDate: convertToDate(dfaAmendment.amendmentReceivedDate),
           approvedAdditionalProjectCost: dfaAmendment.approvedAdditionalProjectCost,
           deadlineExtensionApproved: dfaAmendment.deadlineExtensionApproved,
           emcrDecisionComments: dfaAmendment.emcrDecisionComments,

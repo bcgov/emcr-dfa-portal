@@ -965,7 +965,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     {
                         "dfa_projectdocumentlocationid", "_dfa_projectid_value", "dfa_name", "dfa_description", "createdon", "dfa_documenttype", "dfa_modifiedby", "dfa_requireddocumenttype"
                     },
-                    Filter = $"_dfa_projectid_value eq {projectIdString} and dfa_documenttype eq {amendmentCategoryString}"
+                    Filter = $"_dfa_projectid_value eq {projectIdString} and dfa_documenttype eq '{amendmentCategoryString}'"
                 });
 
                 return list.List;
