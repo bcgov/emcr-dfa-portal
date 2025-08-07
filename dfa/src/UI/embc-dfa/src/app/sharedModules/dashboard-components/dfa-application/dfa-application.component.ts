@@ -219,6 +219,7 @@ export class DfaApplicationComponent implements OnInit {
     { label: '' },
     {
       label: 'Appeal Submitted',
+      display: 'Appeal Submitted',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
@@ -228,6 +229,7 @@ export class DfaApplicationComponent implements OnInit {
     { label: '' },
     {
       label: 'Appeal In Progress',
+      display: 'Reviewing Appeal',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
@@ -237,6 +239,7 @@ export class DfaApplicationComponent implements OnInit {
     { label: '' },
     {
       label: 'Appeal Decision',
+      display: 'Appeal Decision',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
@@ -246,6 +249,7 @@ export class DfaApplicationComponent implements OnInit {
     { label: '' },
     {
       label: 'Assigned To Evaluator',
+      display: 'Assessing Damage',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
@@ -255,6 +259,7 @@ export class DfaApplicationComponent implements OnInit {
     { label: '' },
     {
       label: 'Review Report',
+      display: 'Reviewing Damage Report',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
@@ -264,6 +269,7 @@ export class DfaApplicationComponent implements OnInit {
     { label: '' },
     {
       label: 'Creating Payment',
+      display: 'Final Review',
       isCompleted: false,
       currentStep: false,
       isFinalStep: false,
@@ -273,6 +279,7 @@ export class DfaApplicationComponent implements OnInit {
     { label: '' },
     {
       label: 'Closed',
+      display: 'Appeal Closed',
       isCompleted: false,
       currentStep: false,
       isFinalStep: true,
