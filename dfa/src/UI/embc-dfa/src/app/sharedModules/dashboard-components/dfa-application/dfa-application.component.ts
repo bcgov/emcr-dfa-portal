@@ -306,12 +306,7 @@ export class DfaApplicationComponent implements OnInit {
     {
       label: 'Adjudicator Review',
       display: 'Reassessment Damage',
-    },
-    { label: '' },
-    { label: '' },
-    {
-      label: 'Compliance Check',
-      display: 'Reassessing Damage',
+      consolidatedSteps: ['compliance check']
     },
     { label: '' },
     { label: '' },
@@ -519,18 +514,20 @@ export class DfaApplicationComponent implements OnInit {
             if (objApp.caseAmountAppeal) objAppWithAppeals.appealAmountStatusBar.forEach((objStatItem) => {
               const statusMatch =
                 objApp.caseAmountAppeal?.activeStage?.name &&
-                objStatItem.label?.toLowerCase() === objApp.caseAmountAppeal.activeStage.name.toLowerCase();
+                // check the current Dynamics BPF stage name matches the timeline item label
+                (objStatItem.label?.toLowerCase() === objApp.caseAmountAppeal.activeStage.name.toLowerCase()
+                  // also check if it matchs any of the consolidated timeline steps
+                  || objStatItem.consolidatedSteps?.indexOf(objApp.caseAmountAppeal.activeStage.name.toLowerCase()) > -1);
 
               if (statusMatch) {
-                //if (!appealAmount?.casePaidAmountAppeal?.activeStage?.completedOn) {
+                if (!objApp?.caseAmountAppeal?.completedOn) {
                   objStatItem.currentStep = true;
-                //}
+                }
                 isFound = true;
                 this.matchStatusFound = true;
 
                 if (objApp.caseAmountAppeal?.activeStage?.name) {
                   objStatItem.stage = objApp.caseAmountAppeal.activeStage.name;
-
                 }
               }
 
