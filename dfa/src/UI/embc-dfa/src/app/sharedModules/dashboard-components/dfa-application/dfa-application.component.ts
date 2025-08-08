@@ -34,6 +34,7 @@ interface AppealStatusItem {
   isCompleted?: boolean;
   isFinalStep?: boolean;
   isDecision?: boolean;
+  consolidatedSteps?: string[]; // NOTE must be lower case values that match Dynamics BPF stage names
 }
 // ####################################################################
 
@@ -534,6 +535,8 @@ export class DfaApplicationComponent implements OnInit {
               // Fallback if status not matched
               if (!isFound) {
                 objStatItem.isCompleted = true;
+              } else {
+                objStatItem.isDecision = false;
               }
 
               // Final step validation
