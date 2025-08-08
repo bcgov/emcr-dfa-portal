@@ -32,6 +32,7 @@ public class Appeal : IDto
     public string? EligibilityAppealStatusPortal { get; set; }
     // public bool? CreatedOnPortal { get; set; }
     public PrivateAppealDecision? AppealDecision { get; set; }
+    public Guid? ProcessId { get; set; }
 
     // Related Entities
     public CaseEligibilityAppeal? CaseEligibilityAppeal { get; set; }

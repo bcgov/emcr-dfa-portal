@@ -92,6 +92,8 @@ namespace EMBC.DFA.API.Controllers
                 return BadRequest("Type is required and must be a valid value.");
 
             var mappedAppeal = mapper.Map<Appeal>(appeal);
+            if (appeal.Type == DFA_AppealType.Amount)
+                mappedAppeal.ProcessId = Guid.Empty;
 
             var appealId = repository.Insert(mappedAppeal);
             return Ok(appealId);
