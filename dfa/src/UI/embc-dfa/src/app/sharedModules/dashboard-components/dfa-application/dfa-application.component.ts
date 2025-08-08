@@ -58,75 +58,28 @@ export class DfaApplicationComponent implements OnInit {
     { label: '' },
     {
       label: 'Draft',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
+      display: 'Draft'
     },
     { label: '' },
     { label: '' },
     {
       label: 'Submitted',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
+      display: 'Submitted',
     },
     { label: '' },
     { label: '' },
     {
-      label: 'Reviewing Application',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
+      label: 'Application Review',
+      display: 'Reviewing Application',
     },
     { label: '' },
     { label: '' },
     {
-      label: 'Checking Criteria',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
-    },
-    { label: '' },
-    { label: '' },
-    {
-      label: 'Assessing Damage',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
-    },
-    { label: '' },
-    { label: '' },
-    {
-      label: 'Reviewing Damage Report',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
-    },
-    { label: '' },
-    { label: '' },
-    {
-      label: 'Decision Made',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
-    },
-    { label: '' },
-    { label: '' },
-    {
-      label: 'Case Closed',
-      isCompleted: false,
-      currentStep: false,
-      isFinalStep: false,
-      isErrorInStatus: false
-    },
-
+      label: 'Application Decision',
+      display: 'Application Decision',
+      isDecision: true,
+      isFinalStep: true
+    }
   ];
 
   // application timeline items
@@ -382,6 +335,7 @@ export class DfaApplicationComponent implements OnInit {
           var initialList = lstData;
           lstDataUnModified.push(initialList);
           lstData.forEach((objApp, i) => {
+            // START application timeline
             let isFound = true;
             var jsonVal = JSON.stringify(this.items);
 
@@ -456,8 +410,9 @@ export class DfaApplicationComponent implements OnInit {
                 }
               });
             }
+            // END application timeline
 
-            // Eligibility appeal steps
+            // START eligibility appeal timeline
             const objAppWithAppeals = objApp as CurrentCaseWithAppeals;
             // Initialize appealStatusBar if it's missing
             if (!Array.isArray(objAppWithAppeals.appealEligibilityStatusBar)) {
@@ -504,8 +459,9 @@ export class DfaApplicationComponent implements OnInit {
                  }
               }
             });
+            // END eligibility appeal timeline
 
-            // appeal amount timeline steps
+            // START appeal amount timeline (has the latest timeline code)
             // Initialize appealStatusBar if it's missing
             if (!Array.isArray(objAppWithAppeals.appealAmountStatusBar)) {
               objAppWithAppeals.appealAmountStatusBar = JSON.parse(JSON.stringify(this.appealAmountItems));
@@ -550,6 +506,7 @@ export class DfaApplicationComponent implements OnInit {
                  }
                }
             });
+            // END appeal amount timeline
 
             lstDataModified.push(objApp);
           });
