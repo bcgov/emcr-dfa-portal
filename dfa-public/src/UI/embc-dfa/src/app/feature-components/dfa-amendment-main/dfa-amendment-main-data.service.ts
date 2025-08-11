@@ -25,6 +25,7 @@ export class DFAAmendmentMainDataService {
   private _stage: string;
   private _amendmentDecision: string;
   private _requiredDocuments = [];
+  private _isNewAmendment: boolean = false; // Track if this is a newly created amendment
   public changeViewOrEdit: EventEmitter<string> = new EventEmitter<string>();
   public changeDisableFileUpload: EventEmitter<string> = new EventEmitter<string>();
   public stepSelected: EventEmitter<string> = new EventEmitter<string>();
@@ -130,6 +131,19 @@ export class DFAAmendmentMainDataService {
     }
 
     return this._invoiceId;
+  }
+
+  public setIsNewAmendment(isNew: boolean): void {
+    this._isNewAmendment = isNew;
+    this.cacheService.set('isNewAmendment', isNew);
+  }
+
+  public getIsNewAmendment(): boolean {
+    if (this._isNewAmendment === null || this._isNewAmendment === undefined) {
+      this._isNewAmendment = this.cacheService.get('isNewAmendment') === 'true';
+    }
+
+    return this._isNewAmendment;
   }
 
   public setEligibleGST(eligibleGST: boolean): void {

@@ -82,25 +82,91 @@ namespace EMBC.DFA.API.Controllers
             {
                 return BadRequest("Project amendment details cannot be empty.");
             }
-            if (projectAmendment.ProjectAmendment != null)
+            
+            try
             {
-                // Update existing amendment
-                if (projectAmendment.Id != null)
+                System.Console.WriteLine($"Upserting amendment. ID: {projectAmendment.Id}, ProjectId: {projectAmendment.ProjectId}");
+                
+                if (projectAmendment.ProjectAmendment != null)
                 {
-                    projectAmendment.ProjectAmendment.AmendmentId = projectAmendment.Id.ToString();
+                    // Update existing amendment
+                    if (projectAmendment.Id != null)
+                    {
+                        projectAmendment.ProjectAmendment.Id = projectAmendment.Id.Value; // Set the primary key
+                        projectAmendment.ProjectAmendment.AmendmentId = projectAmendment.Id.Value.ToString();
+                    }
+                    projectAmendment.ProjectAmendment.ProjectId = projectAmendment.ProjectId;
+                    System.Console.WriteLine($"Updating existing amendment: {projectAmendment.ProjectAmendment.AmendmentId}");
                 }
-                projectAmendment.ProjectAmendment.ProjectId = projectAmendment.ProjectId;
-            }
-            else
-            {
-                // Create new amendment
-                projectAmendment.ProjectAmendment = new ProjectAmendment();
-                projectAmendment.ProjectAmendment.AmendmentNumber = projectAmendmentRepository.GetNextAmendmentNumber(projectAmendment.ProjectId);
-                projectAmendment.ProjectAmendment.ProjectId = projectAmendment.ProjectId;
-            }
-            var result = projectAmendmentRepository.Upsert(projectAmendment.ProjectAmendment);
+                else
+                {
+                    // Create new amendment
+                    projectAmendment.ProjectAmendment = new ProjectAmendment();
+                    
+                    // Generate a new GUID for the primary key
+                    var newAmendmentId = Guid.NewGuid();
+                    projectAmendment.ProjectAmendment.Id = newAmendmentId;
+                    projectAmendment.ProjectAmendment.AmendmentId = newAmendmentId.ToString();
+                    
+                    projectAmendment.ProjectAmendment.AmendmentNumber = projectAmendmentRepository.GetNextAmendmentNumber(projectAmendment.ProjectId);
+                    projectAmendment.ProjectAmendment.ProjectId = projectAmendment.ProjectId;
+                    System.Console.WriteLine($"Creating new amendment. ID: {newAmendmentId}, Number: {projectAmendment.ProjectAmendment.AmendmentNumber}");
+                }
+                
+                var result = projectAmendmentRepository.Upsert(projectAmendment.ProjectAmendment);
+                System.Console.WriteLine($"Upsert result: {result}");
 
-            return Ok(result.ToString());
+                return Ok(result.ToString());
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"Exception during upsert: {ex.Message}");
+                System.Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// delete project amendment
+        /// </summary>
+        /// <param name="amendmentId">The amendment Id.</param>
+        /// <returns>success status</returns>
+        [HttpDelete("{amendmentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<bool>> DeleteProjectAmendment(string amendmentId)
+        {
+            if (string.IsNullOrEmpty(amendmentId))
+            {
+                return BadRequest("Amendment ID cannot be empty.");
+            }
+
+            try
+            {
+                System.Console.WriteLine($"Attempting to delete amendment with ID: {amendmentId}");
+                
+                // Use the handler to delete amendment (same system as GET endpoint uses)
+                // This ensures consistency between GET and DELETE operations
+                var result = await handler.HandleProjectAmendmentDelete(amendmentId);
+                
+                if (!string.IsNullOrEmpty(result))
+                {
+                    System.Console.WriteLine($"Amendment deleted successfully: {amendmentId}");
+                    return Ok(true);
+                }
+                else
+                {
+                    System.Console.WriteLine($"Amendment deletion failed: {amendmentId}");
+                    return NotFound("Amendment could not be deleted.");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"Exception during delete: {ex.Message}");
+                System.Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 

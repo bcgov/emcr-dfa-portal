@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  OnDestroy,
   ViewChild,
   AfterViewInit,
   AfterViewChecked,
@@ -39,7 +40,7 @@ import { DFAProjectMainDataService } from '../dfa-project-main/dfa-project-main-
   styleUrls: ['./dfa-amendment-main.component.scss']
 })
 export class DFAAmendmentMainComponent
-  implements OnInit, AfterViewChecked
+  implements OnInit, OnDestroy, AfterViewChecked
 {
   dfaAmendmentMainFolderPath = 'dfa-amendment-main-forms';
   path: string;
@@ -89,6 +90,12 @@ export class DFAAmendmentMainComponent
       this.dfaAmendmentMainDataService.setAmendmentId(amendmentId);
       this.dfaAmendmentMainDataService.setProjectId(projectId);
       this.getFileUploadsForAmendment(projectId);
+      
+      // If we're loading an existing amendment, mark it as not new
+      // unless it was specifically marked as new (for newly created amendments)
+      if (this.dfaAmendmentMainDataService.getViewOrEdit() !== 'addamendment') {
+        this.dfaAmendmentMainDataService.setIsNewAmendment(false);
+      }
     }
     this.formCreationService.clearProjectAmendmentData();
     this.formCreationService.clearFileUploadsData();
@@ -172,6 +179,8 @@ export class DFAAmendmentMainComponent
 
           let objAmendmentDTO = this.dfaAmendmentMainDataService.createDFAAmendmentMainDTO();
           this.dfaAmendmentMainService.upsertProjectAmendment(objAmendmentDTO).subscribe(x => {
+            // Mark amendment as no longer "new" since it's been submitted
+            this.dfaAmendmentMainDataService.setIsNewAmendment(false);
             this.BackToDashboard();
           },
             error => {
@@ -199,7 +208,46 @@ export class DFAAmendmentMainComponent
 
   BackToDashboard(): void {
     var projId = this.dfaAmendmentMainDataService.getProjectId();
-    this.router.navigate(['/dfa-project-amendments/' + projId]);
+    var amendmentId = this.dfaAmendmentMainDataService.getAmendmentId();
+    var isNewAmendment = this.dfaAmendmentMainDataService.getIsNewAmendment();
+    
+    // If this is a new amendment that hasn't been submitted, delete it
+    if (isNewAmendment && amendmentId) {
+      this.dfaAmendmentMainService.deleteProjectAmendment(amendmentId).subscribe({
+        next: (success) => {
+          console.log('Unsaved amendment deleted successfully');
+          this.dfaAmendmentMainDataService.setIsNewAmendment(false);
+          this.router.navigate(['/dfa-project-amendments/' + projId]);
+        },
+        error: (error) => {
+          console.error('Error deleting unsaved amendment:', error);
+          // Even if delete fails, navigate back to dashboard
+          this.router.navigate(['/dfa-project-amendments/' + projId]);
+        }
+      });
+    } else {
+      // Navigate back normally for existing amendments
+      this.router.navigate(['/dfa-project-amendments/' + projId]);
+    }
+  }
+
+  ngOnDestroy(): void {
+    // Clean up any pending new amendments when component is destroyed
+    var amendmentId = this.dfaAmendmentMainDataService.getAmendmentId();
+    var isNewAmendment = this.dfaAmendmentMainDataService.getIsNewAmendment();
+    
+    if (isNewAmendment && amendmentId) {
+      // Try to delete the unsaved amendment
+      this.dfaAmendmentMainService.deleteProjectAmendment(amendmentId).subscribe({
+        next: (success) => {
+          console.log('Unsaved amendment cleaned up on destroy');
+          this.dfaAmendmentMainDataService.setIsNewAmendment(false);
+        },
+        error: (error) => {
+          console.error('Error cleaning up unsaved amendment:', error);
+        }
+      });
+    }
   }
   
 }

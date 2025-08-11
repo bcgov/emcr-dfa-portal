@@ -172,6 +172,7 @@ export class DFAAmendmentComponent
           this.dfaAmendmentMainService.upsertProjectAmendment(objAmendmentDTO).subscribe(id => {
             if (id) {
               this.dfaAmendmentMainDataService.setViewOrEdit('addamendment');
+              this.dfaAmendmentMainDataService.setIsNewAmendment(true); // Mark as new amendment
 
               this.dfaProjectMainDataService.setAmendmentId(id);
               this.dfaAmendmentMainDataService.setAmendmentId(id);

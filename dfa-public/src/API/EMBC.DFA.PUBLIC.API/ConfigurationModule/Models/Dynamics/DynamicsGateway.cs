@@ -1173,6 +1173,26 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             }
         }
 
+        public async Task<string> DeleteProjectAmendment(string amendmentId)
+        {
+            try
+            {
+                if (Guid.TryParse(amendmentId, out Guid guid))
+                {
+                    await api.Delete("dfa_projectamendments", guid);
+                    return "Success";
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid amendment ID format");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Failed to delete project amendment {ex.Message}", ex);
+            }
+        }
+
         public async Task<dfa_projectmain_retrieve> GetProjectMainById(Guid projectId)
         {
             var list = await api.GetList<dfa_projectmain_retrieve>("dfa_projects", new CRMGetListOptions

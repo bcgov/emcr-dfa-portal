@@ -33,6 +33,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> HandleApplicationUpdate(dfa_appapplicationmain_params objApplication, temp_dfa_appapplicationmain_params temp_params);
         Task<string> HandleProjectCreateUpdate(dfa_project_params objProject);
         Task<string> HandleProjectAmendmentCreateUpdate(dfa_projectamendment objAmendment);
+        Task<string> HandleProjectAmendmentDelete(string amendmentId);
         Task<dfa_appapplicationstart_retrieve> GetApplicationStartAsync(Guid applicationId);
         Task<dfa_appapplicationmain_retrieve> GetApplicationMainAsync(Guid applicationId);
         Task<string> HandleDamagedItemsAsync(dfa_appdamageditems_params objDamagedItems);
@@ -379,6 +380,12 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public async Task<string> HandleProjectAmendmentCreateUpdate(dfa_projectamendment objAmendment)
         {
             var result = await listsGateway.UpsertProjectAmendment(objAmendment);
+            return result;
+        }
+
+        public async Task<string> HandleProjectAmendmentDelete(string amendmentId)
+        {
+            var result = await listsGateway.DeleteProjectAmendment(amendmentId);
             return result;
         }
 

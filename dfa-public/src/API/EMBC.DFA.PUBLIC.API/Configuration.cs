@@ -313,7 +313,7 @@ namespace EMBC.DFA.API
 
                 // 2024-08-20 EMCRI-434 waynezen; Instead of AllowAnyMethod - only allow select Http methods
                 //policy.AllowAnyMethod();
-                policy.WithMethods("GET", "POST", "PUT");
+                policy.WithMethods("GET", "POST", "PUT", "DELETE");
 
                 //policy.WithOrigins("https://portal.dev.dfa.gov.bc.ca",
                 //                "https://dev.dfa.gov.bc.ca");

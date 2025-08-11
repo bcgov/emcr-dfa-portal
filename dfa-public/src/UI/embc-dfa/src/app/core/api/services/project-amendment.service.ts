@@ -12,6 +12,8 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { CurrentProjectAmendment } from '../models/current-project-amendment';
+import { projectAmendmentDeleteProjectAmendment } from '../fn/project-amendment/project-amendment-delete-project-amendment';
+import { ProjectAmendmentDeleteProjectAmendment$Params } from '../fn/project-amendment/project-amendment-delete-project-amendment';
 import { projectAmendmentGetDfaProjectAmendments } from '../fn/project-amendment/project-amendment-get-dfa-project-amendments';
 import { ProjectAmendmentGetDfaProjectAmendments$Params } from '../fn/project-amendment/project-amendment-get-dfa-project-amendments';
 import { projectAmendmentUpsertProjectAmendment } from '../fn/project-amendment/project-amendment-upsert-project-amendment';
@@ -86,6 +88,39 @@ export class ProjectAmendmentService extends BaseService {
   projectAmendmentUpsertProjectAmendment(params: ProjectAmendmentUpsertProjectAmendment$Params, context?: HttpContext): Observable<string> {
     return this.projectAmendmentUpsertProjectAmendment$Response(params, context).pipe(
       map((r: StrictHttpResponse<string>): string => r.body)
+    );
+  }
+
+  /** Path part for operation `projectAmendmentDeleteProjectAmendment()` */
+  static readonly ProjectAmendmentDeleteProjectAmendmentPath = '/api/projectamendments/{amendmentId}';
+
+  /**
+   * delete project amendment.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `projectAmendmentDeleteProjectAmendment()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  projectAmendmentDeleteProjectAmendment$Response(params: ProjectAmendmentDeleteProjectAmendment$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return projectAmendmentDeleteProjectAmendment(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * delete project amendment.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `projectAmendmentDeleteProjectAmendment$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  projectAmendmentDeleteProjectAmendment(params: ProjectAmendmentDeleteProjectAmendment$Params, context?: HttpContext): Observable<boolean> {
+    return this.projectAmendmentDeleteProjectAmendment$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 

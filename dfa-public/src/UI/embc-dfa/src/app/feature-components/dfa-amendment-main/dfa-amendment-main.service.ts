@@ -15,4 +15,8 @@ export class DFAAmendmentMainService {
     return this.projectAmendmentService.projectAmendmentUpsertProjectAmendment({ body: updatedProjectAmendment });
   }
 
+  public deleteProjectAmendment(amendmentId: string): Observable<boolean> {
+    return this.projectAmendmentService.projectAmendmentDeleteProjectAmendment({ amendmentId: amendmentId });
+  }
+
 }
