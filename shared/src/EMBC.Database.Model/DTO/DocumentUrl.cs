@@ -21,6 +21,16 @@ public record DocumentUrl : IDto
     public Guid? AppealId { get; set; }
 
     /// <summary>
+    /// DFA_AmendmentId
+    /// </summary>
+    public Guid? AmendmentId { get; set; }
+
+    /// <summary>
+    /// DFA_ProjectId
+    /// </summary>
+    public Guid? ProjectId { get; set; }
+
+    /// <summary>
     /// StateCode
     /// </summary>
     public StateCode StateCode { get; set; }

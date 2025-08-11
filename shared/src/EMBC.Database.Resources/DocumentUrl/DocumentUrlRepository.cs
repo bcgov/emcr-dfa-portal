@@ -15,6 +15,20 @@ public interface IDocumentUrlRepository : IBaseRepository<DocumentUrl>
     /// <param name="caseId">The ID of the case.</param>
     /// <returns>A collection of Document URLs related to the specified case.</returns>
     IEnumerable<DocumentUrl> GetByCaseId(Guid caseId);
+
+    /// <summary>
+    /// Retrieves Document URLs associated with a specific amendment ID.
+    /// </summary>
+    /// <param name="amendmentId">The ID of the amendment.</param>
+    /// <returns>A collection of Document URLs related to the specified amendment.</returns>
+    IEnumerable<DocumentUrl> GetByAmendmentId(Guid amendmentId);
+
+    /// <summary>
+    /// Retrieves Document URLs associated with a specific project ID.
+    /// </summary>
+    /// <param name="projectId">The ID of the project.</param>
+    /// <returns>A collection of Document URLs related to the specified project.</returns>
+    IEnumerable<DocumentUrl> GetByProjectId(Guid projectId);
 }
 
 /// <summary>
@@ -54,6 +68,34 @@ public class DocumentUrlRepository : BaseRepository<BcGoV_DocumentUrl, DocumentU
         return _databaseContext
             .CreateQuery<BcGoV_DocumentUrl>()
             .Where(query => query.BcGoV_CaseId != null && query.BcGoV_CaseId.Id == caseId)
+            .Select(result => _mapper.Map<DocumentUrl>(result))
+            .ToList();
+    }
+
+    /// <summary>
+    /// Fetch all Document URLs records associated with a specific amendment ID.
+    /// </summary>
+    /// <param name="amendmentId"></param>
+    /// <returns></returns>
+    public IEnumerable<DocumentUrl> GetByAmendmentId(Guid amendmentId)
+    {
+        return _databaseContext
+            .CreateQuery<BcGoV_DocumentUrl>()
+            .Where(query => query.DFA_AmendmentId != null && query.DFA_AmendmentId.Id == amendmentId)
+            .Select(result => _mapper.Map<DocumentUrl>(result))
+            .ToList();
+    }
+
+    /// <summary>
+    /// Fetch all Document URLs records associated with a specific project ID.
+    /// </summary>
+    /// <param name="projectId"></param>
+    /// <returns></returns>
+    public IEnumerable<DocumentUrl> GetByProjectId(Guid projectId)
+    {
+        return _databaseContext
+            .CreateQuery<BcGoV_DocumentUrl>()
+            .Where(query => query.DFA_ProjectId != null && query.DFA_ProjectId.Id == projectId)
             .Select(result => _mapper.Map<DocumentUrl>(result))
             .ToList();
     }
