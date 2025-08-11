@@ -440,6 +440,18 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.modifiedBy, opts => opts.MapFrom(s => s.dfa_modifiedby))
                 .ForMember(d => d.deleteFlag, opts => opts.MapFrom(s => false));
 
+            CreateMap<dfa_projectdocumentlocation, FileUploadAmendment>()
+                .ForMember(d => d.projectId, opts => opts.MapFrom(s => s._dfa_projectid_value))
+                .ForMember(d => d.id, opts => opts.MapFrom(s => s.dfa_projectdocumentlocationid))
+                .ForMember(d => d.fileName, opts => opts.MapFrom(s => s.dfa_name))
+                .ForMember(d => d.fileType, opts => opts.MapFrom(s => ConvertStringToFileCategory(s.dfa_documenttype)))
+                .ForMember(d => d.fileTypeText, opts => opts.MapFrom(s => s.dfa_documenttype))
+                .ForMember(d => d.requiredDocumentType, opts => opts.MapFrom(s => ConvertStringToRequiredDocumentType(s.dfa_requireddocumenttype)))
+                .ForMember(d => d.fileDescription, opts => opts.MapFrom(s => s.dfa_description))
+                .ForMember(d => d.uploadedDate, opts => opts.MapFrom(s => s.createdon))
+                .ForMember(d => d.modifiedBy, opts => opts.MapFrom(s => s.dfa_modifiedby))
+                .ForMember(d => d.deleteFlag, opts => opts.MapFrom(s => false));
+
             CreateMap<bcgov_documenturl, FileUpload>()
                 .ForMember(d => d.projectId, opts => opts.MapFrom(s => s._dfa_project_value))
                 .ForMember(d => d.id, opts => opts.MapFrom(s => s.bcgov_documenturlid))
@@ -593,6 +605,12 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.subject, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.fileDescription) ? s.fileName : s.fileDescription))
                 .ForMember(d => d.body, opts => opts.MapFrom(s => s.fileData));
 
+            CreateMap<FileUploadAmendment, AttachmentEntity>()
+                .ForMember(d => d.filename, opts => opts.MapFrom(s => s.fileName))
+                .ForMember(d => d.activitysubject, opts => opts.MapFrom(s => "dfa_project"))
+                .ForMember(d => d.subject, opts => opts.MapFrom(s => string.IsNullOrEmpty(s.fileDescription) ? s.fileName : s.fileDescription))
+                .ForMember(d => d.body, opts => opts.MapFrom(s => s.fileData));
+
             CreateMap<OtherContact, EMBC.DFA.API.ConfigurationModule.Models.PDF.Contact>()
                 .ForMember(d => d.BusinessPhone, opts => opts.MapFrom(s => s.phoneNumber));
 
@@ -647,6 +665,13 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.dfa_description, opts => opts.MapFrom(s => s.fileDescription))
                 .ForMember(d => d.dfa_modifiedby, opts => opts.MapFrom(s => s.modifiedBy))
                 .ForMember(d => d.dfa_requireddocumenttype, opts => opts.MapFrom(s => s.requiredDocumentType)) // TODO map required file type
+                .ForMember(d => d.fileType, opts => opts.MapFrom(s => s.fileType));
+
+            CreateMap<FileUploadAmendment, SubmissionEntity>()
+                .ForMember(d => d.dfa_projectid, opts => opts.MapFrom(s => s.projectId))
+                .ForMember(d => d.dfa_description, opts => opts.MapFrom(s => s.fileDescription))
+                .ForMember(d => d.dfa_modifiedby, opts => opts.MapFrom(s => s.modifiedBy))
+                .ForMember(d => d.dfa_requireddocumenttype, opts => opts.MapFrom(s => s.requiredDocumentType))
                 .ForMember(d => d.fileType, opts => opts.MapFrom(s => s.fileType));
 
             CreateMap<FileUploadClaim, SubmissionEntityClaim>()
@@ -811,24 +836,6 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.ARPositionTitle, opts => opts.MapFrom(s => s.dfa_arpositiontitle))
                 .ForMember(d => d.ARSecondDeclaration, opts => opts.MapFrom(s => s.dfa_ardeclaration2))
                 .ForMember(d => d.ApplicationId, opts => opts.MapFrom(s => s.dfa_appapplicationid));
-
-            CreateMap<Controllers.Profile, ESS.Shared.Contracts.Events.RegistrantProfile>()
-                .ForMember(d => d.Id, opts => opts.Ignore())
-                .ForMember(d => d.AuthenticatedUser, opts => opts.Ignore())
-                .ForMember(d => d.VerifiedUser, opts => opts.Ignore())
-                .ForMember(d => d.IsMinor, opts => opts.Ignore())
-                .ForMember(d => d.UserId, opts => opts.MapFrom(s => s.Id))
-                .ForMember(d => d.FirstName, opts => opts.MapFrom(s => s.PersonalDetails.FirstName))
-                .ForMember(d => d.LastName, opts => opts.MapFrom(s => s.PersonalDetails.LastName))
-                .ForMember(d => d.Initials, opts => opts.MapFrom(s => s.PersonalDetails.Initials))
-                .ForMember(d => d.Email, opts => opts.MapFrom(s => s.ContactDetails.Email))
-                .ForMember(d => d.Phone, opts => opts.MapFrom(s => s.ContactDetails.CellPhoneNumber))
-                .ForMember(d => d.CreatedOn, opts => opts.Ignore())
-                .ForMember(d => d.LastModified, opts => opts.Ignore())
-                .ForMember(d => d.CreatedByDisplayName, opts => opts.Ignore())
-                .ForMember(d => d.CreatedByUserId, opts => opts.Ignore())
-                .ForMember(d => d.LastModifiedDisplayName, opts => opts.Ignore())
-                .ForMember(d => d.LastModifiedUserId, opts => opts.Ignore());
 
             CreateMap<dfa_appdamageditems_retrieve, DamagedRoom>()
                 .ForMember(d => d.applicationId, opts => opts.MapFrom(s => s._dfa_applicationid_value))
