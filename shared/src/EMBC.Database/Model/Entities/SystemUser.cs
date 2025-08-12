@@ -390,6 +390,8 @@ namespace EMBC.Database.Model
 			public const string DefaultMailbox = "defaultmailbox";
 			public const string DefaultMailboxName = "defaultmailboxname";
 			public const string DefaultOdbFolderName = "defaultodbfoldername";
+			public const string DFA_SystemUser_DFA_Appeal_DecisionMaker = "DFA_SystemUser_DFA_Appeal_DecisionMaker";
+			public const string DFA_SystemUser_DFA_ClaimAppeal_AssignedTo = "DFA_SystemUser_DFA_ClaimAppeal_AssignedTo";
 			public const string DFA_SystemUser_DFA_ProjectClaim_EAnaMe = "DFA_SystemUser_DFA_ProjectClaim_EAnaMe";
 			public const string DFA_SystemUser_DFA_ProjectClaim_QualifiedReceiver = "DFA_SystemUser_DFA_ProjectClaim_QualifiedReceiver";
 			public const string DisabledReason = "disabledreason";
@@ -441,6 +443,14 @@ namespace EMBC.Database.Model
 			public const string Lk_DFA_CasePaidAmountAppeal_CreatedOnBehalfBy = "Lk_DFA_CasePaidAmountAppeal_CreatedOnBehalfBy";
 			public const string Lk_DFA_CasePaidAmountAppeal_ModifiedBy = "Lk_DFA_CasePaidAmountAppeal_ModifiedBy";
 			public const string Lk_DFA_CasePaidAmountAppeal_ModifiedOnBehalfBy = "Lk_DFA_CasePaidAmountAppeal_ModifiedOnBehalfBy";
+			public const string Lk_DFA_ClaimAppeal_CreatedBy = "Lk_DFA_ClaimAppeal_CreatedBy";
+			public const string Lk_DFA_ClaimAppeal_CreatedOnBehalfBy = "Lk_DFA_ClaimAppeal_CreatedOnBehalfBy";
+			public const string Lk_DFA_ClaimAppeal_ModifiedBy = "Lk_DFA_ClaimAppeal_ModifiedBy";
+			public const string Lk_DFA_ClaimAppeal_ModifiedOnBehalfBy = "Lk_DFA_ClaimAppeal_ModifiedOnBehalfBy";
+			public const string Lk_DFA_ClaimAppealBpf_CreatedBy = "Lk_DFA_ClaimAppealBpf_CreatedBy";
+			public const string Lk_DFA_ClaimAppealBpf_CreatedOnBehalfBy = "Lk_DFA_ClaimAppealBpf_CreatedOnBehalfBy";
+			public const string Lk_DFA_ClaimAppealBpf_ModifiedBy = "Lk_DFA_ClaimAppealBpf_ModifiedBy";
+			public const string Lk_DFA_ClaimAppealBpf_ModifiedOnBehalfBy = "Lk_DFA_ClaimAppealBpf_ModifiedOnBehalfBy";
 			public const string Lk_DFA_ClientCode_CreatedBy = "Lk_DFA_ClientCode_CreatedBy";
 			public const string Lk_DFA_ClientCode_CreatedOnBehalfBy = "Lk_DFA_ClientCode_CreatedOnBehalfBy";
 			public const string Lk_DFA_ClientCode_ModifiedBy = "Lk_DFA_ClientCode_ModifiedBy";
@@ -449,6 +459,10 @@ namespace EMBC.Database.Model
 			public const string Lk_DFA_Event_CreatedOnBehalfBy = "Lk_DFA_Event_CreatedOnBehalfBy";
 			public const string Lk_DFA_Event_ModifiedBy = "Lk_DFA_Event_ModifiedBy";
 			public const string Lk_DFA_Event_ModifiedOnBehalfBy = "Lk_DFA_Event_ModifiedOnBehalfBy";
+			public const string Lk_DFA_InvoiceAppeal_CreatedBy = "Lk_DFA_InvoiceAppeal_CreatedBy";
+			public const string Lk_DFA_InvoiceAppeal_CreatedOnBehalfBy = "Lk_DFA_InvoiceAppeal_CreatedOnBehalfBy";
+			public const string Lk_DFA_InvoiceAppeal_ModifiedBy = "Lk_DFA_InvoiceAppeal_ModifiedBy";
+			public const string Lk_DFA_InvoiceAppeal_ModifiedOnBehalfBy = "Lk_DFA_InvoiceAppeal_ModifiedOnBehalfBy";
 			public const string Lk_DFA_Project_CreatedBy = "Lk_DFA_Project_CreatedBy";
 			public const string Lk_DFA_Project_CreatedOnBehalfBy = "Lk_DFA_Project_CreatedOnBehalfBy";
 			public const string Lk_DFA_Project_ModifiedBy = "Lk_DFA_Project_ModifiedBy";
@@ -552,8 +566,10 @@ namespace EMBC.Database.Model
 			public const string TraversedPath = "traversedpath";
 			public const string User_BcGoV_DocumentUrl = "User_BcGoV_DocumentUrl";
 			public const string User_DFA_Appeal = "User_DFA_Appeal";
+			public const string User_DFA_ClaimAppeal = "User_DFA_ClaimAppeal";
 			public const string User_DFA_ClientCode = "User_DFA_ClientCode";
 			public const string User_DFA_Event = "User_DFA_Event";
+			public const string User_DFA_InvoiceAppeal = "User_DFA_InvoiceAppeal";
 			public const string User_DFA_Project = "User_DFA_Project";
 			public const string User_DFA_ProjectAmendment = "User_DFA_ProjectAmendment";
 			public const string User_DFA_ProjectAppeal = "User_DFA_ProjectAppeal";
@@ -3492,6 +3508,42 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
+		/// 1:N dfa_systemuser_dfa_appeal_DecisionMaker
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_systemuser_dfa_appeal_DecisionMaker")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_Appeal> DFA_SystemUser_DFA_Appeal_DecisionMaker
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_Appeal>("dfa_systemuser_dfa_appeal_DecisionMaker", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_Appeal>("dfa_systemuser_dfa_appeal_DecisionMaker", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N dfa_systemuser_dfa_claimappeal_AssignedTo
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_systemuser_dfa_claimappeal_AssignedTo")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_ClaimAppeal> DFA_SystemUser_DFA_ClaimAppeal_AssignedTo
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("dfa_systemuser_dfa_claimappeal_AssignedTo", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("dfa_systemuser_dfa_claimappeal_AssignedTo", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N dfa_systemuser_dfa_projectclaim_EAName
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_systemuser_dfa_projectclaim_EAName")]
@@ -3816,6 +3868,150 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
+		/// 1:N lk_dfa_claimappeal_createdby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_claimappeal_createdby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_ClaimAppeal> Lk_DFA_ClaimAppeal_CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("lk_dfa_claimappeal_createdby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("lk_dfa_claimappeal_createdby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_claimappeal_createdonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_claimappeal_createdonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_ClaimAppeal> Lk_DFA_ClaimAppeal_CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("lk_dfa_claimappeal_createdonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("lk_dfa_claimappeal_createdonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_claimappeal_modifiedby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_claimappeal_modifiedby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_ClaimAppeal> Lk_DFA_ClaimAppeal_ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("lk_dfa_claimappeal_modifiedby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("lk_dfa_claimappeal_modifiedby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_claimappeal_modifiedonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_claimappeal_modifiedonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_ClaimAppeal> Lk_DFA_ClaimAppeal_ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("lk_dfa_claimappeal_modifiedonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("lk_dfa_claimappeal_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_claimappealbpf_createdby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_claimappealbpf_createdby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_ClaimAppealBpf> Lk_DFA_ClaimAppealBpf_CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppealBpf>("lk_dfa_claimappealbpf_createdby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppealBpf>("lk_dfa_claimappealbpf_createdby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_claimappealbpf_createdonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_claimappealbpf_createdonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_ClaimAppealBpf> Lk_DFA_ClaimAppealBpf_CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppealBpf>("lk_dfa_claimappealbpf_createdonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppealBpf>("lk_dfa_claimappealbpf_createdonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_claimappealbpf_modifiedby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_claimappealbpf_modifiedby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_ClaimAppealBpf> Lk_DFA_ClaimAppealBpf_ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppealBpf>("lk_dfa_claimappealbpf_modifiedby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppealBpf>("lk_dfa_claimappealbpf_modifiedby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_claimappealbpf_modifiedonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_claimappealbpf_modifiedonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_ClaimAppealBpf> Lk_DFA_ClaimAppealBpf_ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppealBpf>("lk_dfa_claimappealbpf_modifiedonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppealBpf>("lk_dfa_claimappealbpf_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N lk_dfa_clientcode_createdby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_clientcode_createdby")]
@@ -3956,6 +4152,78 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetRelatedEntities<EMBC.Database.Model.DFA_Event>("lk_dfa_event_modifiedonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_invoiceappeal_createdby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_invoiceappeal_createdby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_InvoiceAppeal> Lk_DFA_InvoiceAppeal_CreatedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_InvoiceAppeal>("lk_dfa_invoiceappeal_createdby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_InvoiceAppeal>("lk_dfa_invoiceappeal_createdby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_invoiceappeal_createdonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_invoiceappeal_createdonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_InvoiceAppeal> Lk_DFA_InvoiceAppeal_CreatedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_InvoiceAppeal>("lk_dfa_invoiceappeal_createdonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_InvoiceAppeal>("lk_dfa_invoiceappeal_createdonbehalfby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_invoiceappeal_modifiedby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_invoiceappeal_modifiedby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_InvoiceAppeal> Lk_DFA_InvoiceAppeal_ModifiedBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_InvoiceAppeal>("lk_dfa_invoiceappeal_modifiedby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_InvoiceAppeal>("lk_dfa_invoiceappeal_modifiedby", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N lk_dfa_invoiceappeal_modifiedonbehalfby
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_invoiceappeal_modifiedonbehalfby")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_InvoiceAppeal> Lk_DFA_InvoiceAppeal_ModifiedOnBehalfBy
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_InvoiceAppeal>("lk_dfa_invoiceappeal_modifiedonbehalfby", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_InvoiceAppeal>("lk_dfa_invoiceappeal_modifiedonbehalfby", null, value);
 			}
 		}
 		
@@ -4716,6 +4984,24 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
+		/// 1:N user_dfa_claimappeal
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_dfa_claimappeal")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_ClaimAppeal> User_DFA_ClaimAppeal
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("user_dfa_claimappeal", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("user_dfa_claimappeal", null, value);
+			}
+		}
+		
+		/// <summary>
 		/// 1:N user_dfa_clientcode
 		/// </summary>
 		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_dfa_clientcode")]
@@ -4748,6 +5034,24 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetRelatedEntities<EMBC.Database.Model.DFA_Event>("user_dfa_event", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// 1:N user_dfa_invoiceappeal
+		/// </summary>
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_dfa_invoiceappeal")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_InvoiceAppeal> User_DFA_InvoiceAppeal
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntities<EMBC.Database.Model.DFA_InvoiceAppeal>("user_dfa_invoiceappeal", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntities<EMBC.Database.Model.DFA_InvoiceAppeal>("user_dfa_invoiceappeal", null, value);
 			}
 		}
 		

@@ -73,6 +73,28 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_ClaimAppeal"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.DFA_ClaimAppeal> DFA_ClaimAppealSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.DFA_ClaimAppeal>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_ClaimAppealBpf"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.DFA_ClaimAppealBpf> DFA_ClaimAppealBpfSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.DFA_ClaimAppealBpf>();
+			}
+		}
+		
+		/// <summary>
 		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_ClientCode"/> entities.
 		/// </summary>
 		public System.Linq.IQueryable<EMBC.Database.Model.DFA_ClientCode> DFA_ClientCodeSet
@@ -91,6 +113,17 @@ namespace EMBC.Database.Model
 			get
 			{
 				return this.CreateQuery<EMBC.Database.Model.DFA_Event>();
+			}
+		}
+		
+		/// <summary>
+		/// Gets a binding to the set of all <see cref="EMBC.Database.Model.DFA_InvoiceAppeal"/> entities.
+		/// </summary>
+		public System.Linq.IQueryable<EMBC.Database.Model.DFA_InvoiceAppeal> DFA_InvoiceAppealSet
+		{
+			get
+			{
+				return this.CreateQuery<EMBC.Database.Model.DFA_InvoiceAppeal>();
 			}
 		}
 		

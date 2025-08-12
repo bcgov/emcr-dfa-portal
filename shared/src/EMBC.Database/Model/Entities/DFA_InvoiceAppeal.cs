@@ -12,53 +12,11 @@ namespace EMBC.Database.Model
 {
 	
 	
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum DFA_Event_DFA_EventType
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Private", 0, "#0000ff")]
-		Private = 222710000,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Private & Public", 2, "#0000ff")]
-		PrivatePublic = 222710002,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Public", 1, "#0000ff")]
-		Public = 222710001,
-	}
-	
-	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum DFA_Event_DFA_HazardType
-	{
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Flood", 0, "#0000ff")]
-		Flood = 222710000,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Landslide", 1, "#0000ff")]
-		Landslide = 222710001,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Other", 4, "#0000ff")]
-		Other = 222710004,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Storm", 2, "#0000ff")]
-		Storm = 222710002,
-		
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		[OptionSetMetadataAttribute("Wildfire", 3, "#0000ff")]
-		Wildfire = 222710003,
-	}
-	
 	/// <summary>
-	/// Status of the Event
+	/// Status of the Invoice Appeal
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum DFA_Event_StateCode
+	public enum DFA_InvoiceAppeal_StateCode
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -71,10 +29,10 @@ namespace EMBC.Database.Model
 	}
 	
 	/// <summary>
-	/// Reason for the status of the Event
+	/// Reason for the status of the Invoice Appeal
 	/// </summary>
 	[System.Runtime.Serialization.DataContractAttribute()]
-	public enum DFA_Event_StatusCode
+	public enum DFA_InvoiceAppeal_StatusCode
 	{
 		
 		[System.Runtime.Serialization.EnumMemberAttribute()]
@@ -87,12 +45,12 @@ namespace EMBC.Database.Model
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
-	[Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("dfa_event")]
-	public partial class DFA_Event : Microsoft.Xrm.Sdk.Entity
+	[Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("dfa_invoiceappeal")]
+	public partial class DFA_InvoiceAppeal : Microsoft.Xrm.Sdk.Entity
 	{
 		
 		/// <summary>
-		/// Available fields, a the time of codegen, for the dfa_event entity
+		/// Available fields, a the time of codegen, for the dfa_invoiceappeal entity
 		/// </summary>
 		public partial class Fields
 		{
@@ -103,49 +61,31 @@ namespace EMBC.Database.Model
 			public const string CreatedOnBehalfBy = "createdonbehalfby";
 			public const string CreatedOnBehalfByName = "createdonbehalfbyname";
 			public const string CreatedOnBehalfByYomiName = "createdonbehalfbyyominame";
-			public const string DFA_90DayDeadline = "dfa_90daydeadline";
-			public const string DFA_90DayDeadlineNew = "dfa_90daydeadlinenew";
-			public const string DFA_90DayDeadlineOverwriteDate = "dfa_90daydeadlineoverwritedate";
-			public const string DFA_DateOfEvent = "dfa_dateofevent";
-			public const string DFA_DateOfEventDeclaredRevised = "dfa_dateofeventdeclaredrevised";
-			public const string DFA_DateOfEventDeclaredRevised2 = "dfa_dateofeventdeclaredrevised2";
-			public const string DFA_DeadlineDate = "dfa_deadlinedate";
-			public const string DFA_Description = "dfa_description";
-			public const string DFA_DFA_Event_DFA_ClaimAppeal_Event = "DFA_DFA_Event_DFA_ClaimAppeal_Event";
-			public const string DFA_DFAAuthNo = "dfa_dfaauthno";
-			public const string DFA_EndDate = "dfa_enddate";
-			public const string DFA_EventDateLegacy = "dfa_eventdatelegacy";
-			public const string DFA_EventId = "dfa_eventid";
-			public const string Id = "dfa_eventid";
-			public const string DFA_EventName = "dfa_eventname";
-			public const string DFA_EventScope = "dfa_eventscope";
-			public const string DFA_EventScopeName = "dfa_eventscopename";
-			public const string DFA_EventType = "dfa_eventtype";
-			public const string DFA_EventTypeName = "dfa_eventtypename";
-			public const string DFA_HazardType = "dfa_hazardtype";
-			public const string DFA_HazardTypeName = "dfa_hazardtypename";
-			public const string DFA_HazardTypeOther = "dfa_hazardtypeother";
-			public const string DFA_Id = "dfa_id";
-			public const string DFA_NumberOfCommunitiesApplied = "dfa_numberofcommunitiesapplied";
-			public const string DFA_NumberOfCommunitiesInOpenStatus = "dfa_numberofcommunitiesinopenstatus";
-			public const string DFA_NumberOfCommunitiesWitHcRP = "dfa_numberofcommunitieswithcrp";
-			public const string DFA_NumberOfCommunitiesWithdrawn = "dfa_numberofcommunitieswithdrawn";
-			public const string DFA_StartDate = "dfa_startdate";
-			public const string DFA_TotalApprovedCRPValue = "dfa_totalapprovedcrpvalue";
-			public const string DFA_TotalApprovedCRPValue_Base = "dfa_totalapprovedcrpvalue_base";
-			public const string DFA_TotalClaimedAMoUNbT = "dfa_totalclaimedamounbt";
-			public const string DFA_TotalClaimedAMoUNbT_Base = "dfa_totalclaimedamounbt_base";
-			public const string DFA_TotalClaimedAMoUNbT_Date = "dfa_totalclaimedamounbt_date";
-			public const string DFA_TotalClaimedAMoUNbT_State = "dfa_totalclaimedamounbt_state";
-			public const string DFA_TotalCRPValue = "dfa_totalcrpvalue";
-			public const string DFA_TotalCRPValue_Base = "dfa_totalcrpvalue_base";
-			public const string DFA_TotalNumberOfApprovedCRP = "dfa_totalnumberofapprovedcrp";
+			public const string DFA_AppealAdditionalApproved = "dfa_appealadditionalapproved";
+			public const string DFA_AppealAdditionalApproved_Base = "dfa_appealadditionalapproved_base";
+			public const string DFA_AppealDecision = "dfa_appealdecision";
+			public const string DFA_AppealDecisionDate = "dfa_appealdecisiondate";
+			public const string DFA_AppealDecisionName = "dfa_appealdecisionname";
+			public const string DFA_AppealReason = "dfa_appealreason";
+			public const string DFA_ClaimAppeal = "dfa_claimappeal";
+			public const string DFA_ClaimAppealName = "dfa_claimappealname";
+			public const string DFA_CreatedOnPortal = "dfa_createdonportal";
+			public const string DFA_DecisionComments = "dfa_decisioncomments";
+			public const string DFA_DFA_ClaimAppeal_DFA_InvoiceAppeal_ClaimAppeal = "dfa_dfa_claimappeal_dfa_invoiceappeal_ClaimAppeal";
+			public const string DFA_DFA_InvoiceAppeal_BcGoV_DocumentUrl_InvoiceAppeal = "DFA_DFA_InvoiceAppeal_BcGoV_DocumentUrl_InvoiceAppeal";
+			public const string DFA_FinalApprovedAmount = "dfa_finalapprovedamount";
+			public const string DFA_FinalApprovedAmount_Base = "dfa_finalapprovedamount_base";
+			public const string DFA_InvoiceAppealId = "dfa_invoiceappealid";
+			public const string Id = "dfa_invoiceappealid";
+			public const string DFA_Name = "dfa_name";
+			public const string DFA_OriginInvoice = "dfa_origininvoice";
+			public const string DFA_OriginInvoiceName = "dfa_origininvoicename";
 			public const string ExchangerAte = "exchangerate";
 			public const string ImportSequenceNumber = "importsequencenumber";
-			public const string Lk_DFA_Event_CreatedBy = "lk_dfa_event_createdby";
-			public const string Lk_DFA_Event_CreatedOnBehalfBy = "lk_dfa_event_createdonbehalfby";
-			public const string Lk_DFA_Event_ModifiedBy = "lk_dfa_event_modifiedby";
-			public const string Lk_DFA_Event_ModifiedOnBehalfBy = "lk_dfa_event_modifiedonbehalfby";
+			public const string Lk_DFA_InvoiceAppeal_CreatedBy = "lk_dfa_invoiceappeal_createdby";
+			public const string Lk_DFA_InvoiceAppeal_CreatedOnBehalfBy = "lk_dfa_invoiceappeal_createdonbehalfby";
+			public const string Lk_DFA_InvoiceAppeal_ModifiedBy = "lk_dfa_invoiceappeal_modifiedby";
+			public const string Lk_DFA_InvoiceAppeal_ModifiedOnBehalfBy = "lk_dfa_invoiceappeal_modifiedonbehalfby";
 			public const string ModifiedBy = "modifiedby";
 			public const string ModifiedByName = "modifiedbyname";
 			public const string ModifiedByYomiName = "modifiedbyyominame";
@@ -167,25 +107,25 @@ namespace EMBC.Database.Model
 			public const string TimeZoneRuleVersionNumber = "timezoneruleversionnumber";
 			public const string TransactionCurrencyId = "transactioncurrencyid";
 			public const string TransactionCurrencyIdName = "transactioncurrencyidname";
-			public const string User_DFA_Event = "user_dfa_event";
+			public const string User_DFA_InvoiceAppeal = "user_dfa_invoiceappeal";
 			public const string UtcConversionTimeZoneCode = "utcconversiontimezonecode";
 			public const string VersionNumber = "versionnumber";
 		}
 		
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public DFA_Event(System.Guid id) : 
+		public DFA_InvoiceAppeal(System.Guid id) : 
 				base(EntityLogicalName, id)
 		{
 		}
 		
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public DFA_Event(string keyName, object keyValue) : 
+		public DFA_InvoiceAppeal(string keyName, object keyValue) : 
 				base(EntityLogicalName, keyName, keyValue)
 		{
 		}
 		
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public DFA_Event(Microsoft.Xrm.Sdk.KeyAttributeCollection keyAttributes) : 
+		public DFA_InvoiceAppeal(Microsoft.Xrm.Sdk.KeyAttributeCollection keyAttributes) : 
 				base(EntityLogicalName, keyAttributes)
 		{
 		}
@@ -194,22 +134,22 @@ namespace EMBC.Database.Model
 		/// Default Constructor.
 		/// </summary>
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public DFA_Event() : 
+		public DFA_InvoiceAppeal() : 
 				base(EntityLogicalName)
 		{
 		}
 		
-		public const string PrimaryIdAttribute = "dfa_eventid";
+		public const string PrimaryIdAttribute = "dfa_invoiceappealid";
 		
-		public const string PrimaryNameAttribute = "dfa_id";
+		public const string PrimaryNameAttribute = "dfa_name";
 		
-		public const string EntitySchemaName = "dfa_event";
+		public const string EntitySchemaName = "dfa_invoiceappeal";
 		
-		public const string EntityLogicalName = "dfa_event";
+		public const string EntityLogicalName = "dfa_invoiceappeal";
 		
-		public const string EntityLogicalCollectionName = "dfa_events";
+		public const string EntityLogicalCollectionName = "dfa_invoiceappeals";
 		
-		public const string EntitySetName = "dfa_events";
+		public const string EntitySetName = "dfa_invoiceappeals";
 		
 		/// <summary>
 		/// Unique identifier of the user who created the record.
@@ -323,192 +263,201 @@ namespace EMBC.Database.Model
 			}
 		}
 		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_90daydeadline")]
-		public System.Nullable<System.DateTime> DFA_90DayDeadline
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_appealadditionalapproved")]
+		public Microsoft.Xrm.Sdk.Money DFA_AppealAdditionalApproved
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_90daydeadline");
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("dfa_appealadditionalapproved");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("dfa_90daydeadline", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_90daydeadlinenew")]
-		public System.Nullable<System.DateTime> DFA_90DayDeadlineNew
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_90daydeadlinenew");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_90daydeadlinenew", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_90daydeadlineoverwritedate")]
-		public System.Nullable<System.DateTime> DFA_90DayDeadlineOverwriteDate
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_90daydeadlineoverwritedate");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_90daydeadlineoverwritedate", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_dateofevent")]
-		public System.Nullable<System.DateTime> DFA_DateOfEvent
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_dateofevent");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_dateofevent", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_dateofeventdeclaredrevised")]
-		public System.Nullable<System.DateTime> DFA_DateOfEventDeclaredRevised
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_dateofeventdeclaredrevised");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_dateofeventdeclaredrevised", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_dateofeventdeclaredrevised2")]
-		public System.Nullable<System.DateTime> DFA_DateOfEventDeclaredRevised2
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_dateofeventdeclaredrevised2");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_dateofeventdeclaredrevised2", value);
+				this.SetAttributeValue("dfa_appealadditionalapproved", value);
 			}
 		}
 		
 		/// <summary>
-		/// 90 Day Deadline
+		/// Value of the Appeal Additional Approved in base currency.
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_deadlinedate")]
-		public System.Nullable<System.DateTime> DFA_DeadlineDate
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_appealadditionalapproved_base")]
+		public Microsoft.Xrm.Sdk.Money DFA_AppealAdditionalApproved_Base
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_deadlinedate");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_deadlinedate", value);
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("dfa_appealadditionalapproved_base");
 			}
 		}
 		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_description")]
-		public string DFA_Description
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_appealdecision")]
+		public virtual DFA_AppealDecision? DFA_AppealDecision
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<string>("dfa_description");
+				return ((DFA_AppealDecision?)(EntityOptionSetEnum.GetEnum(this, "dfa_appealdecision")));
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("dfa_description", value);
+				this.SetAttributeValue("dfa_appealdecision", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
 			}
 		}
 		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_dfaauthno")]
-		public string DFA_DFAAuthNo
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_appealdecisiondate")]
+		public System.Nullable<System.DateTime> DFA_AppealDecisionDate
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<string>("dfa_dfaauthno");
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_appealdecisiondate");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("dfa_dfaauthno", value);
+				this.SetAttributeValue("dfa_appealdecisiondate", value);
 			}
 		}
 		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_enddate")]
-		public System.Nullable<System.DateTime> DFA_EndDate
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_appealdecisionname")]
+		public string DFA_AppealDecisionName
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_enddate");
+				if (this.FormattedValues.Contains("dfa_appealdecision"))
+				{
+					return this.FormattedValues["dfa_appealdecision"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_appealreason")]
+		public string DFA_AppealReason
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("dfa_appealreason");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("dfa_enddate", value);
+				this.SetAttributeValue("dfa_appealreason", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_claimappeal")]
+		public Microsoft.Xrm.Sdk.EntityReference DFA_ClaimAppeal
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("dfa_claimappeal");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_claimappeal", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_claimappealname")]
+		public string DFA_ClaimAppealName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_claimappeal"))
+				{
+					return this.FormattedValues["dfa_claimappeal"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_createdonportal")]
+		public string DFA_CreatedOnPortal
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("dfa_createdonportal");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_createdonportal", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_decisioncomments")]
+		public string DFA_DecisionComments
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<string>("dfa_decisioncomments");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_decisioncomments", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_finalapprovedamount")]
+		public Microsoft.Xrm.Sdk.Money DFA_FinalApprovedAmount
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("dfa_finalapprovedamount");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_finalapprovedamount", value);
 			}
 		}
 		
 		/// <summary>
-		/// Event Date in Lotus Notes is in TEXT
+		/// Value of the Final Approved Amount in base currency.
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eventdatelegacy")]
-		public string DFA_EventDateLegacy
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_finalapprovedamount_base")]
+		public Microsoft.Xrm.Sdk.Money DFA_FinalApprovedAmount_Base
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<string>("dfa_eventdatelegacy");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_eventdatelegacy", value);
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("dfa_finalapprovedamount_base");
 			}
 		}
 		
 		/// <summary>
 		/// Unique identifier for entity instances
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eventid")]
-		public System.Nullable<System.Guid> DFA_EventId
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_invoiceappealid")]
+		public System.Nullable<System.Guid> DFA_InvoiceAppealId
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<System.Nullable<System.Guid>>("dfa_eventid");
+				return this.GetAttributeValue<System.Nullable<System.Guid>>("dfa_invoiceappealid");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("dfa_eventid", value);
+				this.SetAttributeValue("dfa_invoiceappealid", value);
 				if (value.HasValue)
 				{
 					base.Id = value.Value;
@@ -520,7 +469,7 @@ namespace EMBC.Database.Model
 			}
 		}
 		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eventid")]
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_invoiceappealid")]
 		public override System.Guid Id
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
@@ -531,346 +480,57 @@ namespace EMBC.Database.Model
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.DFA_EventId = value;
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eventname")]
-		public string DFA_EventName
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<string>("dfa_eventname");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_eventname", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eventscope")]
-		public virtual DFA_EventScope? DFA_EventScope
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return ((DFA_EventScope?)(EntityOptionSetEnum.GetEnum(this, "dfa_eventscope")));
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_eventscope", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eventscopename")]
-		public string DFA_EventScopeName
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				if (this.FormattedValues.Contains("dfa_eventscope"))
-				{
-					return this.FormattedValues["dfa_eventscope"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eventtype")]
-		public virtual DFA_Event_DFA_EventType? DFA_EventType
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return ((DFA_Event_DFA_EventType?)(EntityOptionSetEnum.GetEnum(this, "dfa_eventtype")));
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_eventtype", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_eventtypename")]
-		public string DFA_EventTypeName
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				if (this.FormattedValues.Contains("dfa_eventtype"))
-				{
-					return this.FormattedValues["dfa_eventtype"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_hazardtype")]
-		public virtual DFA_Event_DFA_HazardType? DFA_HazardType
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return ((DFA_Event_DFA_HazardType?)(EntityOptionSetEnum.GetEnum(this, "dfa_hazardtype")));
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_hazardtype", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_hazardtypename")]
-		public string DFA_HazardTypeName
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				if (this.FormattedValues.Contains("dfa_hazardtype"))
-				{
-					return this.FormattedValues["dfa_hazardtype"];
-				}
-				else
-				{
-					return default(string);
-				}
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_hazardtypeother")]
-		public string DFA_HazardTypeOther
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<string>("dfa_hazardtypeother");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_hazardtypeother", value);
+				this.DFA_InvoiceAppealId = value;
 			}
 		}
 		
 		/// <summary>
 		/// The name of the custom entity.
 		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_id")]
-		public string DFA_Id
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_name")]
+		public string DFA_Name
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<string>("dfa_id");
+				return this.GetAttributeValue<string>("dfa_name");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("dfa_id", value);
+				this.SetAttributeValue("dfa_name", value);
 			}
 		}
 		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_numberofcommunitiesapplied")]
-		public System.Nullable<int> DFA_NumberOfCommunitiesApplied
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_origininvoice")]
+		public Microsoft.Xrm.Sdk.EntityReference DFA_OriginInvoice
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<System.Nullable<int>>("dfa_numberofcommunitiesapplied");
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("dfa_origininvoice");
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetAttributeValue("dfa_numberofcommunitiesapplied", value);
+				this.SetAttributeValue("dfa_origininvoice", value);
 			}
 		}
 		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_numberofcommunitiesinopenstatus")]
-		public System.Nullable<int> DFA_NumberOfCommunitiesInOpenStatus
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_origininvoicename")]
+		public string DFA_OriginInvoiceName
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetAttributeValue<System.Nullable<int>>("dfa_numberofcommunitiesinopenstatus");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_numberofcommunitiesinopenstatus", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_numberofcommunitieswithcrp")]
-		public System.Nullable<int> DFA_NumberOfCommunitiesWitHcRP
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<int>>("dfa_numberofcommunitieswithcrp");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_numberofcommunitieswithcrp", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_numberofcommunitieswithdrawn")]
-		public System.Nullable<int> DFA_NumberOfCommunitiesWithdrawn
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<int>>("dfa_numberofcommunitieswithdrawn");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_numberofcommunitieswithdrawn", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_startdate")]
-		public System.Nullable<System.DateTime> DFA_StartDate
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_startdate");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_startdate", value);
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_totalapprovedcrpvalue")]
-		public Microsoft.Xrm.Sdk.Money DFA_TotalApprovedCRPValue
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("dfa_totalapprovedcrpvalue");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_totalapprovedcrpvalue", value);
-			}
-		}
-		
-		/// <summary>
-		/// Value of the Total Approved CRP Value in base currency.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_totalapprovedcrpvalue_base")]
-		public Microsoft.Xrm.Sdk.Money DFA_TotalApprovedCRPValue_Base
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("dfa_totalapprovedcrpvalue_base");
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_totalclaimedamounbt")]
-		public Microsoft.Xrm.Sdk.Money DFA_TotalClaimedAMoUNbT
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("dfa_totalclaimedamounbt");
-			}
-		}
-		
-		/// <summary>
-		/// Value of the Total Claimed Amounbt in base currency.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_totalclaimedamounbt_base")]
-		public Microsoft.Xrm.Sdk.Money DFA_TotalClaimedAMoUNbT_Base
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("dfa_totalclaimedamounbt_base");
-			}
-		}
-		
-		/// <summary>
-		/// Last Updated time of rollup field Total Claimed Amounbt.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_totalclaimedamounbt_date")]
-		public System.Nullable<System.DateTime> DFA_TotalClaimedAMoUNbT_Date
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_totalclaimedamounbt_date");
-			}
-		}
-		
-		/// <summary>
-		/// State of rollup field Total Claimed Amounbt.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_totalclaimedamounbt_state")]
-		public System.Nullable<int> DFA_TotalClaimedAMoUNbT_State
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<int>>("dfa_totalclaimedamounbt_state");
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_totalcrpvalue")]
-		public Microsoft.Xrm.Sdk.Money DFA_TotalCRPValue
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("dfa_totalcrpvalue");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_totalcrpvalue", value);
-			}
-		}
-		
-		/// <summary>
-		/// Value of the Total CRP Value in base currency.
-		/// </summary>
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_totalcrpvalue_base")]
-		public Microsoft.Xrm.Sdk.Money DFA_TotalCRPValue_Base
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<Microsoft.Xrm.Sdk.Money>("dfa_totalcrpvalue_base");
-			}
-		}
-		
-		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_totalnumberofapprovedcrp")]
-		public System.Nullable<int> DFA_TotalNumberOfApprovedCRP
-		{
-			[System.Diagnostics.DebuggerNonUserCode()]
-			get
-			{
-				return this.GetAttributeValue<System.Nullable<int>>("dfa_totalnumberofapprovedcrp");
-			}
-			[System.Diagnostics.DebuggerNonUserCode()]
-			set
-			{
-				this.SetAttributeValue("dfa_totalnumberofapprovedcrp", value);
+				if (this.FormattedValues.Contains("dfa_origininvoice"))
+				{
+					return this.FormattedValues["dfa_origininvoice"];
+				}
+				else
+				{
+					return default(string);
+				}
 			}
 		}
 		
@@ -1133,15 +793,15 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
-		/// Status of the Event
+		/// Status of the Invoice Appeal
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statecode")]
-		public virtual DFA_Event_StateCode? StateCode
+		public virtual DFA_InvoiceAppeal_StateCode? StateCode
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return ((DFA_Event_StateCode?)(EntityOptionSetEnum.GetEnum(this, "statecode")));
+				return ((DFA_InvoiceAppeal_StateCode?)(EntityOptionSetEnum.GetEnum(this, "statecode")));
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
@@ -1168,15 +828,15 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
-		/// Reason for the status of the Event
+		/// Reason for the status of the Invoice Appeal
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("statuscode")]
-		public virtual DFA_Event_StatusCode? StatusCode
+		public virtual DFA_InvoiceAppeal_StatusCode? StatusCode
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return ((DFA_Event_StatusCode?)(EntityOptionSetEnum.GetEnum(this, "statuscode")));
+				return ((DFA_InvoiceAppeal_StatusCode?)(EntityOptionSetEnum.GetEnum(this, "statuscode")));
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
@@ -1287,100 +947,119 @@ namespace EMBC.Database.Model
 		}
 		
 		/// <summary>
-		/// 1:N dfa_dfa_event_dfa_claimappeal_Event
+		/// 1:N dfa_dfa_invoiceappeal_bcgov_documenturl_InvoiceAppeal
 		/// </summary>
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_dfa_event_dfa_claimappeal_Event")]
-		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.DFA_ClaimAppeal> DFA_DFA_Event_DFA_ClaimAppeal_Event
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_dfa_invoiceappeal_bcgov_documenturl_InvoiceAppeal")]
+		public System.Collections.Generic.IEnumerable<EMBC.Database.Model.BcGoV_DocumentUrl> DFA_DFA_InvoiceAppeal_BcGoV_DocumentUrl_InvoiceAppeal
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("dfa_dfa_event_dfa_claimappeal_Event", null);
+				return this.GetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("dfa_dfa_invoiceappeal_bcgov_documenturl_InvoiceAppeal", null);
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetRelatedEntities<EMBC.Database.Model.DFA_ClaimAppeal>("dfa_dfa_event_dfa_claimappeal_Event", null, value);
+				this.SetRelatedEntities<EMBC.Database.Model.BcGoV_DocumentUrl>("dfa_dfa_invoiceappeal_bcgov_documenturl_InvoiceAppeal", null, value);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 lk_dfa_event_createdby
+		/// N:1 dfa_dfa_claimappeal_dfa_invoiceappeal_ClaimAppeal
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_claimappeal")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_dfa_claimappeal_dfa_invoiceappeal_ClaimAppeal")]
+		public EMBC.Database.Model.DFA_ClaimAppeal DFA_DFA_ClaimAppeal_DFA_InvoiceAppeal_ClaimAppeal
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<EMBC.Database.Model.DFA_ClaimAppeal>("dfa_dfa_claimappeal_dfa_invoiceappeal_ClaimAppeal", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<EMBC.Database.Model.DFA_ClaimAppeal>("dfa_dfa_claimappeal_dfa_invoiceappeal_ClaimAppeal", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 lk_dfa_invoiceappeal_createdby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdby")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_event_createdby")]
-		public EMBC.Database.Model.SystemUser Lk_DFA_Event_CreatedBy
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_invoiceappeal_createdby")]
+		public EMBC.Database.Model.SystemUser Lk_DFA_InvoiceAppeal_CreatedBy
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_event_createdby", null);
+				return this.GetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_invoiceappeal_createdby", null);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 lk_dfa_event_createdonbehalfby
+		/// N:1 lk_dfa_invoiceappeal_createdonbehalfby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("createdonbehalfby")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_event_createdonbehalfby")]
-		public EMBC.Database.Model.SystemUser Lk_DFA_Event_CreatedOnBehalfBy
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_invoiceappeal_createdonbehalfby")]
+		public EMBC.Database.Model.SystemUser Lk_DFA_InvoiceAppeal_CreatedOnBehalfBy
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_event_createdonbehalfby", null);
+				return this.GetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_invoiceappeal_createdonbehalfby", null);
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_event_createdonbehalfby", null, value);
+				this.SetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_invoiceappeal_createdonbehalfby", null, value);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 lk_dfa_event_modifiedby
+		/// N:1 lk_dfa_invoiceappeal_modifiedby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedby")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_event_modifiedby")]
-		public EMBC.Database.Model.SystemUser Lk_DFA_Event_ModifiedBy
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_invoiceappeal_modifiedby")]
+		public EMBC.Database.Model.SystemUser Lk_DFA_InvoiceAppeal_ModifiedBy
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_event_modifiedby", null);
+				return this.GetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_invoiceappeal_modifiedby", null);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 lk_dfa_event_modifiedonbehalfby
+		/// N:1 lk_dfa_invoiceappeal_modifiedonbehalfby
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("modifiedonbehalfby")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_event_modifiedonbehalfby")]
-		public EMBC.Database.Model.SystemUser Lk_DFA_Event_ModifiedOnBehalfBy
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("lk_dfa_invoiceappeal_modifiedonbehalfby")]
+		public EMBC.Database.Model.SystemUser Lk_DFA_InvoiceAppeal_ModifiedOnBehalfBy
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_event_modifiedonbehalfby", null);
+				return this.GetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_invoiceappeal_modifiedonbehalfby", null);
 			}
 			[System.Diagnostics.DebuggerNonUserCode()]
 			set
 			{
-				this.SetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_event_modifiedonbehalfby", null, value);
+				this.SetRelatedEntity<EMBC.Database.Model.SystemUser>("lk_dfa_invoiceappeal_modifiedonbehalfby", null, value);
 			}
 		}
 		
 		/// <summary>
-		/// N:1 user_dfa_event
+		/// N:1 user_dfa_invoiceappeal
 		/// </summary>
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("owninguser")]
-		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_dfa_event")]
-		public EMBC.Database.Model.SystemUser User_DFA_Event
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("user_dfa_invoiceappeal")]
+		public EMBC.Database.Model.SystemUser User_DFA_InvoiceAppeal
 		{
 			[System.Diagnostics.DebuggerNonUserCode()]
 			get
 			{
-				return this.GetRelatedEntity<EMBC.Database.Model.SystemUser>("user_dfa_event", null);
+				return this.GetRelatedEntity<EMBC.Database.Model.SystemUser>("user_dfa_invoiceappeal", null);
 			}
 		}
 		
@@ -1389,7 +1068,7 @@ namespace EMBC.Database.Model
 		/// <param name="anonymousType">LINQ anonymous type.</param>
 		/// </summary>
 		[System.Diagnostics.DebuggerNonUserCode()]
-		public DFA_Event(object anonymousType) : 
+		public DFA_InvoiceAppeal(object anonymousType) : 
 				this()
 		{
             foreach (var p in anonymousType.GetType().GetProperties())
@@ -1407,9 +1086,9 @@ namespace EMBC.Database.Model
                 {
                     case "id":
                         base.Id = (System.Guid)value;
-                        Attributes["dfa_eventid"] = base.Id;
+                        Attributes["dfa_invoiceappealid"] = base.Id;
                         break;
-                    case "dfa_eventid":
+                    case "dfa_invoiceappealid":
                         var id = (System.Nullable<System.Guid>) value;
                         if(id == null){ continue; }
                         base.Id = id.Value;

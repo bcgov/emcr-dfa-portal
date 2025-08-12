@@ -32,8 +32,11 @@
 dfa_appeal|
 dfa_caseeligibilityappeal|
 dfa_casepaidamountappeal|
+dfa_claimappeal|
+dfa_claimappealbpf|
 dfa_clientcode|
 dfa_event|
+dfa_invoiceappeal|
 dfa_project|
 dfa_projectamendment|
 dfa_projectappeal|
@@ -142,7 +145,7 @@ VoiceMail</TokenCapitalizationOverrides>
   <Namespace>EMBC.Database.Model</Namespace>
   <ServiceContextName>DatabaseContext</ServiceContextName>
   <SuppressGeneratedCodeAttribute>true</SuppressGeneratedCodeAttribute>
-  <SettingsVersion>2.2025.7.29</SettingsVersion>
+  <SettingsVersion>2.2025.4.20</SettingsVersion>
   <UpdateBuilderSettingsJson>true</UpdateBuilderSettingsJson>
   <Version>2.2025.4.20</Version>
 </Config>

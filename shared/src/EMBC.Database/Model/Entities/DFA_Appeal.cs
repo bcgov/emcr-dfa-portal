@@ -190,6 +190,8 @@ namespace EMBC.Database.Model
 			public const string DFA_ClaimSummaryCompletedName = "dfa_claimsummarycompletedname";
 			public const string DFA_ComplianceCheckCompleted = "dfa_compliancecheckcompleted";
 			public const string DFA_ComplianceCheckCompletedName = "dfa_compliancecheckcompletedname";
+			public const string DFA_CreatedInversion = "dfa_createdinversion";
+			public const string DFA_CreatedInversionName = "dfa_createdinversionname";
 			public const string DFA_CreatedOnPortal = "dfa_createdonportal";
 			public const string DFA_CreatedOnPortalName = "dfa_createdonportalname";
 			public const string DFA_CurrentStageName = "dfa_currentstagename";
@@ -201,6 +203,9 @@ namespace EMBC.Database.Model
 			public const string DFA_DateReceived = "dfa_datereceived";
 			public const string DFA_DecisionLetTeRiNeApprovals = "dfa_decisionletterineapprovals";
 			public const string DFA_DecisionLetTeRiNeApprovalsName = "dfa_decisionletterineapprovalsname";
+			public const string DFA_DecisionMaker = "dfa_decisionmaker";
+			public const string DFA_DecisionMakerName = "dfa_decisionmakername";
+			public const string DFA_DecisionMakerYomiName = "dfa_decisionmakeryominame";
 			public const string DFA_DFA_Appeal_BcGoV_DocumentUrl_AppealId = "DFA_DFA_Appeal_BcGoV_DocumentUrl_AppealId";
 			public const string ReferencingDFA_DFA_Appeal_DFA_Appeal_RelatedAppeal = "dfa_dfa_appeal_dfa_appeal_RelatedAppeal";
 			public const string DFA_DFACaseBusinessProcess = "dfa_dfacasebusinessprocess";
@@ -298,6 +303,7 @@ namespace EMBC.Database.Model
 			public const string DFA_ReviewedEvaluatorReportName = "dfa_reviewedevaluatorreportname";
 			public const string DFA_SupplierNumberRequested = "dfa_suppliernumberrequested";
 			public const string DFA_SupplierNumberRequestedName = "dfa_suppliernumberrequestedname";
+			public const string DFA_SystemUser_DFA_Appeal_DecisionMaker = "dfa_systemuser_dfa_appeal_DecisionMaker";
 			public const string DFA_UploadFMrEPorTpMtLetter = "dfa_uploadfmreportpmtletter";
 			public const string DFA_UploadFMrEPorTpMtLetterName = "dfa_uploadfmreportpmtlettername";
 			public const string DFA_UploadPaymentLetter = "dfa_uploadpaymentletter";
@@ -2523,6 +2529,38 @@ namespace EMBC.Database.Model
 			}
 		}
 		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_createdinversion")]
+		public virtual DFA_CreatedInversion? DFA_CreatedInversion
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return ((DFA_CreatedInversion?)(EntityOptionSetEnum.GetEnum(this, "dfa_createdinversion")));
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_createdinversion", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_createdinversionname")]
+		public string DFA_CreatedInversionName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_createdinversion"))
+				{
+					return this.FormattedValues["dfa_createdinversion"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
 		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_createdonportal")]
 		public System.Nullable<bool> DFA_CreatedOnPortal
 		{
@@ -2684,6 +2722,55 @@ namespace EMBC.Database.Model
 				if (this.FormattedValues.Contains("dfa_decisionletterineapprovals"))
 				{
 					return this.FormattedValues["dfa_decisionletterineapprovals"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_decisionmaker")]
+		public Microsoft.Xrm.Sdk.EntityReference DFA_DecisionMaker
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("dfa_decisionmaker");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_decisionmaker", value);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_decisionmakername")]
+		public string DFA_DecisionMakerName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_decisionmaker"))
+				{
+					return this.FormattedValues["dfa_decisionmaker"];
+				}
+				else
+				{
+					return default(string);
+				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_decisionmakeryominame")]
+		public string DFA_DecisionMakerYomiName
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				if (this.FormattedValues.Contains("dfa_decisionmaker"))
+				{
+					return this.FormattedValues["dfa_decisionmaker"];
 				}
 				else
 				{
@@ -4785,6 +4872,25 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetRelatedEntity<EMBC.Database.Model.DFA_Project>("dfa_project_dfa_appeal", null, value);
+			}
+		}
+		
+		/// <summary>
+		/// N:1 dfa_systemuser_dfa_appeal_DecisionMaker
+		/// </summary>
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_decisionmaker")]
+		[Microsoft.Xrm.Sdk.RelationshipSchemaNameAttribute("dfa_systemuser_dfa_appeal_DecisionMaker")]
+		public EMBC.Database.Model.SystemUser DFA_SystemUser_DFA_Appeal_DecisionMaker
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetRelatedEntity<EMBC.Database.Model.SystemUser>("dfa_systemuser_dfa_appeal_DecisionMaker", null);
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetRelatedEntity<EMBC.Database.Model.SystemUser>("dfa_systemuser_dfa_appeal_DecisionMaker", null, value);
 			}
 		}
 		
