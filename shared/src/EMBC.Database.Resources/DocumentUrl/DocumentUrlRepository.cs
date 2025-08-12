@@ -73,17 +73,18 @@ public class DocumentUrlRepository : BaseRepository<BcGoV_DocumentUrl, DocumentU
     }
 
     /// <summary>
-    /// Fetch all Document URLs records associated with a specific amendment ID.
+    /// Retrieves Document URLs associated with a specific amendment ID.
+    /// Note: Since there's no direct amendment relationship in the database,
+    /// this method returns an empty collection for now. Amendment filtering
+    /// should be handled at the application level using project documents.
     /// </summary>
-    /// <param name="amendmentId"></param>
-    /// <returns></returns>
+    /// <param name="amendmentId">The ID of the amendment.</param>
+    /// <returns>A collection of Document URLs related to the specified amendment.</returns>
     public IEnumerable<DocumentUrl> GetByAmendmentId(Guid amendmentId)
     {
-        return _databaseContext
-            .CreateQuery<BcGoV_DocumentUrl>()
-            .Where(query => query.DFA_AmendmentId != null && query.DFA_AmendmentId.Id == amendmentId)
-            .Select(result => _mapper.Map<DocumentUrl>(result))
-            .ToList();
+        // Since amendments don't have a direct relationship in BcGoV_DocumentUrl,
+        // return empty for now. Amendment documents should be handled differently.
+        return Enumerable.Empty<DocumentUrl>();
     }
 
     /// <summary>
@@ -95,7 +96,7 @@ public class DocumentUrlRepository : BaseRepository<BcGoV_DocumentUrl, DocumentU
     {
         return _databaseContext
             .CreateQuery<BcGoV_DocumentUrl>()
-            .Where(query => query.DFA_ProjectId != null && query.DFA_ProjectId.Id == projectId)
+            .Where(query => query.DFA_Project != null && query.DFA_Project.Id == projectId)
             .Select(result => _mapper.Map<DocumentUrl>(result))
             .ToList();
     }

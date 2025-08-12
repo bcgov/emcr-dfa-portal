@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EMBC.Database.Contract;
 using EMBC.Database.Resources;
+using EMBC.DFA.API.Controllers;
 using EMBC.Utilities.S3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -196,6 +197,8 @@ namespace EMBC.DFA.PUBLIC.API.Controllers
         /// <summary>
         /// Get a collection of amendment attachments by amendment Id.
         /// Note: This does not return the actual file data, only the dynamics attachment metadata records.
+        /// Since amendments don't have a direct relationship in the database, this currently returns empty.
+        /// Amendment documents should be handled through project documents with appropriate filtering.
         /// </summary>
         /// <param name="amendmentId">The amendment Id.</param>
         /// <returns>
@@ -272,8 +275,8 @@ namespace EMBC.DFA.PUBLIC.API.Controllers
 
             foreach (var documentUrl in result)
             {
-                // Filter for amendment documents only
-                if (documentUrl.AmendmentId != null)
+                // Filter for amendment documents based on category
+                if (documentUrl.Category != null && documentUrl.Category.Contains("Amendment", StringComparison.OrdinalIgnoreCase))
                 {
                     AmendmentFileMetadataUpload fileUpload = mapper.Map<AmendmentFileMetadataUpload>(documentUrl);
                     fileUploads = fileUploads.Append(fileUpload);

@@ -9,6 +9,7 @@ using EMBC.DFA.API.ConfigurationModule.Models.AuthModels;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.ConfigurationModule.Models.PDF;
 using EMBC.DFA.API.Controllers;
+using EMBC.DFA.PUBLIC.API.Controllers;
 using Microsoft.IdentityModel.Tokens;
 using BCeID = EMBC.Gov.BCeID;
 using RecoveryClaim = EMBC.DFA.API.Controllers.RecoveryClaim;
@@ -683,39 +684,7 @@ namespace EMBC.DFA.API.Mappers
 
             CreateMap<AmendmentFileMetadataUpload, DocumentUrl>()
                 .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
-                .ForMember(d => d.AmendmentId, opts => opts.MapFrom(s => s.AmendmentId))
-                .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.FileName))
-                .ForMember(d => d.Url, opts => opts.MapFrom(s => s.Url))
-                .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Description))
-                .ForMember(d => d.Category, opts => opts.MapFrom(s => s.Category.ToString()))
-                .ForMember(d => d.Size, opts => opts.MapFrom(s => s.Size))
-                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
-                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
-
-            CreateMap<DocumentUrl, AmendmentFileMetadataUpload>()
-                .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
-                .ForMember(d => d.AppealId, opts => opts.MapFrom(s => s.AppealId))
-                .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.FileName))
-                .ForMember(d => d.Url, opts => opts.MapFrom(s => s.Url))
-                .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Description))
-                .ForMember(d => d.Category, opts => opts.MapFrom(s => ConvertStringToFileCategory(s.Category)))
-                .ForMember(d => d.Size, opts => opts.MapFrom(s => s.Size))
-                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
-                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
-
-            CreateMap<AppealFileMetadataUpload, BcGoV_DocumentUrl>()
-                .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
-                .ForMember(d => d.DFA_AppealId, opts => opts.MapFrom(s => s.AppealId))
-                .ForMember(d => d.BcGoV_Filename, opts => opts.MapFrom(s => s.FileName))
-                .ForMember(d => d.BcGoV_Url, opts => opts.MapFrom(s => s.Url))
-                .ForMember(d => d.DFA_Description, opts => opts.MapFrom(s => s.Description))
-                .ForMember(d => d.DFA_Category, opts => opts.MapFrom(s => s.Category.ToString()))
-                .ForMember(d => d.BcGoV_Size, opts => opts.MapFrom(s => s.Size));
-
-            CreateMap<AmendmentFileMetadataUpload, DocumentUrl>()
-                .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
                 .ForMember(d => d.ProjectId, opts => opts.MapFrom(s => s.ProjectId))
-                .ForMember(d => d.AmendmentId, opts => opts.MapFrom(s => s.AmendmentId))
                 .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.FileName))
                 .ForMember(d => d.Url, opts => opts.MapFrom(s => s.Url))
                 .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Description))
@@ -727,7 +696,6 @@ namespace EMBC.DFA.API.Mappers
             CreateMap<DocumentUrl, AmendmentFileMetadataUpload>()
                 .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
                 .ForMember(d => d.ProjectId, opts => opts.MapFrom(s => s.ProjectId))
-                .ForMember(d => d.AmendmentId, opts => opts.MapFrom(s => s.AmendmentId))
                 .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.FileName))
                 .ForMember(d => d.Url, opts => opts.MapFrom(s => s.Url))
                 .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Description))
@@ -736,16 +704,27 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
                 .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
 
-            CreateMap<BcGoV_DocumentUrl, AppealFileMetadataUpload>()
+            CreateMap<AmendmentFileMetadataUpload, DocumentUrl>()
                 .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
-                .ForMember(d => d.AppealId, opts => opts.MapFrom(s => s.DFA_AppealId))
-                .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.BcGoV_Filename))
-                .ForMember(d => d.Description, opts => opts.MapFrom(s => s.DFA_Description))
-                .ForMember(d => d.Url, opts => opts.MapFrom(s => s.BcGoV_Url))
-                .ForMember(d => d.Category, opts => opts.MapFrom(s => ConvertStringToFileCategory(s.DFA_Category)))
-                .ForMember(d => d.Size, opts => opts.MapFrom(s => s.BcGoV_Size))
-                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.BcGoV_MimeType))
-                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.DFA_DateUploaded));
+                .ForMember(d => d.ProjectId, opts => opts.MapFrom(s => s.ProjectId))
+                .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.FileName))
+                .ForMember(d => d.Url, opts => opts.MapFrom(s => s.Url))
+                .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Description))
+                .ForMember(d => d.Category, opts => opts.MapFrom(s => s.Category.ToString()))
+                .ForMember(d => d.Size, opts => opts.MapFrom(s => s.Size))
+                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
+                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
+
+            CreateMap<DocumentUrl, AmendmentFileMetadataUpload>()
+                .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
+                .ForMember(d => d.ProjectId, opts => opts.MapFrom(s => s.ProjectId))
+                .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.FileName))
+                .ForMember(d => d.Url, opts => opts.MapFrom(s => s.Url))
+                .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Description))
+                .ForMember(d => d.Category, opts => opts.MapFrom(s => ConvertStringToFileCategoryAmendment(s.Category)))
+                .ForMember(d => d.Size, opts => opts.MapFrom(s => s.Size))
+                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
+                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
 
 
             CreateMap<dfa_projectamendment, CurrentProjectAmendment>()
