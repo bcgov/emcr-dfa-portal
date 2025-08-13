@@ -4,6 +4,14 @@
     vertical-align: middle;
 }
 
+.save-button.disabled-button {
+    background-color: #f5f5f5 !important;
+    color: #999999 !important;
+    border-color: #cccccc !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+}
+
 .infoHeader {
     font-weight: bold;
     font-size: 16px;

@@ -59,7 +59,9 @@ export class DFAAmendmentMainComponent
   dfaAmendmentForm: UntypedFormGroup;
   dfaAmendmentForm$: Subscription;
   viewOrEditSubscription: Subscription;
+  formValidationSubscription: Subscription;
   canSubmitAmendment: boolean = true;
+  isFormValid: boolean = false;
 
 
   constructor(
@@ -111,6 +113,8 @@ export class DFAAmendmentMainComponent
     this.viewOrEditSubscription = this.dfaAmendmentMainDataService.changeViewOrEdit.subscribe((viewMode) => {
       this.vieworedit = viewMode;
       this.updateSubmitButtonVisibility();
+      // Re-check form validation when view mode changes
+      this.updateFormValidation();
     });
 
     //this.showStepper = true;
@@ -128,6 +132,16 @@ export class DFAAmendmentMainComponent
       .getProjectAmendmentForm()
       .subscribe((dfaAmendment) => {
         this.form = dfaAmendment;
+
+        // Subscribe to form value changes to update validation state
+        if (this.form) {
+          this.formValidationSubscription = this.form.valueChanges.subscribe(() => {
+            this.updateFormValidation();
+          });
+
+          // Initial validation check
+          this.updateFormValidation();
+        }
       });
   }
 
@@ -166,6 +180,12 @@ export class DFAAmendmentMainComponent
   }
 
   submitFile(): void {
+    // Prevent submission if form is not valid
+    if (!this.isFormValid) {
+      this.alertService.setAlert('warning', 'Please fill in all required fields before submitting.');
+      return;
+    }
+
     var contentDialog = globalConst.confirmSubmitAmendmentBody;
     var height = '260px';
 
@@ -272,10 +292,47 @@ export class DFAAmendmentMainComponent
                               this.vieworedit !== 'viewOnly';
   }
 
+  private updateFormValidation(): void {
+    if (!this.form) {
+      this.isFormValid = false;
+      return;
+    }
+
+    // Check if mandatory fields are filled
+    const amendmentReason = this.form.get('amendmentReason')?.value;
+    const requestforProjectDeadlineExtention = this.form.get('requestforProjectDeadlineExtention')?.value;
+    const requestforAdditionalProjectCost = this.form.get('requestforAdditionalProjectCost')?.value;
+
+    // Basic validation: Amendment Reason is required
+    let isValid = amendmentReason && amendmentReason.trim().length > 0;
+
+    // Both radio questions are required
+    isValid = isValid && requestforProjectDeadlineExtention;
+    isValid = isValid && requestforAdditionalProjectCost;
+
+    // If requesting deadline extension, the deadline date is required
+    if (requestforProjectDeadlineExtention === 'Yes') {
+      const amendedProjectDeadlineDate = this.form.get('amendedProjectDeadlineDate')?.value;
+      isValid = isValid && amendedProjectDeadlineDate;
+    }
+
+    // If requesting additional cost, the cost amount is required
+    if (requestforAdditionalProjectCost === 'Yes') {
+      const estimatedAdditionalProjectCost = this.form.get('estimatedAdditionalProjectCost')?.value;
+      isValid = isValid && estimatedAdditionalProjectCost && estimatedAdditionalProjectCost > 0;
+    }
+
+    this.isFormValid = isValid;
+  }
+
   ngOnDestroy(): void {
     // Clean up subscriptions
     if (this.viewOrEditSubscription) {
       this.viewOrEditSubscription.unsubscribe();
+    }
+
+    if (this.formValidationSubscription) {
+      this.formValidationSubscription.unsubscribe();
     }
 
     // Clean up any pending new amendments when component is destroyed

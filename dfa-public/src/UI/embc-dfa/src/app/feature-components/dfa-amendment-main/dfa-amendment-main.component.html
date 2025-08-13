@@ -33,8 +33,10 @@
     <div class="col-md-6" *ngIf="canSubmitAmendment">
       <button 
         class="button-p save-button"
+        [class.disabled-button]="!isFormValid"
         mat-stroked-button
         type="button"
+        [disabled]="!isFormValid"
         (click)="submitFile()"
       >
         Submit
