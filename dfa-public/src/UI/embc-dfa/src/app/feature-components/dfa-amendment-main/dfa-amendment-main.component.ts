@@ -9,6 +9,7 @@ import {
   ViewEncapsulation,
   ElementRef
 } from '@angular/core';
+import { CancelConfirmationDialogComponent } from '../../core/components/dialog-components/dfa-cancel-confirmation-dialog/dfa-cancel-confirmation-dialog.component';
 import { AbstractControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ComponentCreationService } from '../../core/services/componentCreation.service';
@@ -61,6 +62,7 @@ export class DFAAmendmentMainComponent
   viewOrEditSubscription: Subscription;
   formValidationSubscription: Subscription;
   canSubmitAmendment: boolean = true;
+  canCancelAmendment: boolean = true;
   isFormValid: boolean = false;
 
 
@@ -221,6 +223,56 @@ export class DFAAmendmentMainComponent
       });
   }
 
+  cancelAmendment(): void {
+    const dialogData = {
+      title: 'Cancel Amendment',
+      text: 'Are you sure you want to cancel this amendment? All information will be discarded and cannot be recovered.',
+      confirmButton: 'Yes, Cancel Amendment',
+      cancelButton: 'No, Continue Editing'
+    };
+
+    this.dialog
+      .open(CancelConfirmationDialogComponent, {
+        data: dialogData,
+        width: '500px',
+        disableClose: true
+      })
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          // User confirmed cancellation - proceed with cleanup and navigation
+          this.performAmendmentCancellation();
+        }
+        // If not confirmed, do nothing - user continues editing
+      });
+  }
+
+  private performAmendmentCancellation(): void {
+    var amendmentId = this.dfaAmendmentMainDataService.getAmendmentId();
+    var projId = this.dfaAmendmentMainDataService.getProjectId();
+    var isNewAmendment = this.dfaAmendmentMainDataService.getIsNewAmendment();
+
+    // If this is a new amendment, delete it from the system
+    if (isNewAmendment && amendmentId) {
+      this.dfaAmendmentMainService.deleteProjectAmendment(amendmentId).subscribe({
+        next: (success) => {
+          console.log('Amendment cancelled and deleted successfully');
+          this.dfaAmendmentMainDataService.setIsNewAmendment(false);
+          this.router.navigate(['/dfa-project-amendments/' + projId]);
+        },
+        error: (error) => {
+          console.error('Error deleting cancelled amendment:', error);
+          // Even if delete fails, navigate back to dashboard
+          // The amendment will remain as a draft
+          this.router.navigate(['/dfa-project-amendments/' + projId]);
+        }
+      });
+    } else {
+      // For existing amendments in edit mode, just navigate back without saving changes
+      this.router.navigate(['/dfa-project-amendments/' + projId]);
+    }
+  }
+
   public getFileUploadsForAmendment(projectId: string) {
     const amendmentId = this.dfaAmendmentMainDataService.getAmendmentId();
 
@@ -266,7 +318,7 @@ export class DFAAmendmentMainComponent
     var projId = this.dfaAmendmentMainDataService.getProjectId();
     var amendmentId = this.dfaAmendmentMainDataService.getAmendmentId();
     var isNewAmendment = this.dfaAmendmentMainDataService.getIsNewAmendment();
-    
+
     // If this is a new amendment that hasn't been submitted, delete it
     if (isNewAmendment && amendmentId) {
       this.dfaAmendmentMainService.deleteProjectAmendment(amendmentId).subscribe({
@@ -288,10 +340,11 @@ export class DFAAmendmentMainComponent
   }
 
   private updateSubmitButtonVisibility(): void {
-    // Hide submit button when in read-only view modes
-    // Based on same logic as field read-only controls
     this.canSubmitAmendment = this.vieworedit !== 'view' &&
                               this.vieworedit !== 'edit' &&
+                              this.vieworedit !== 'viewOnly';
+
+    this.canCancelAmendment = this.vieworedit !== 'view' &&
                               this.vieworedit !== 'viewOnly';
   }
 
@@ -341,7 +394,7 @@ export class DFAAmendmentMainComponent
     // Clean up any pending new amendments when component is destroyed
     var amendmentId = this.dfaAmendmentMainDataService.getAmendmentId();
     var isNewAmendment = this.dfaAmendmentMainDataService.getIsNewAmendment();
-    
+
     if (isNewAmendment && amendmentId) {
       // Try to delete the unsaved amendment
       this.dfaAmendmentMainService.deleteProjectAmendment(amendmentId).subscribe({

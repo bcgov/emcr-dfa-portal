@@ -29,19 +29,29 @@
     [folderPath]="dfaAmendmentMainFolderPath"
   ></app-component-wrapper>
   <br />
-  <div class="row justify-content-between resp-style">
-    <div class="col-md-6" *ngIf="canSubmitAmendment">
-      <button 
-        class="button-p save-button"
-        [class.disabled-button]="!isFormValid"
-        mat-stroked-button
-        type="button"
-        [disabled]="!isFormValid"
-        (click)="submitFile()"
-      >
-        Submit
-      </button>
-    </div>
+
+  <div class="amendment-actions">
+    <button
+      id="cancel-amendment"
+      class="button-s nextNsave"
+      *ngIf="canCancelAmendment"
+      mat-button
+      type="button"
+      (click)="cancelAmendment()">
+      Cancel Amendment
+    </button>
+
+    <button
+      id="submit-amendment"
+      class="button-p nextNsave"
+      *ngIf="canSubmitAmendment"
+      mat-stroked-button
+      type="button"
+      [disabled]="!isFormValid"
+      (click)="submitFile()">
+      Submit Amendment
+      <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
+    </button>
   </div>
   <br/><br/>
 </div>
