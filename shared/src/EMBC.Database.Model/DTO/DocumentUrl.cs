@@ -1,4 +1,4 @@
-namespace EMBC.Database.Contract;
+﻿namespace EMBC.Database.Contract;
 
 /// <summary>
 /// DTO for the BcGoV_DocumentUrl entity.
@@ -68,4 +68,10 @@ public record DocumentUrl : IDto
     /// </summary>
     /// <value></value>
     public string? UploadedDate { get; set; }
+
+    /// <summary>
+    /// OriginCode
+    /// </summary>
+    /// <value></value>
+    public string? OriginCode { get; set; }
 }

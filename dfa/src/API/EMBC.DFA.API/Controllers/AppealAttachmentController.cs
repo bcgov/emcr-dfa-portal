@@ -34,6 +34,9 @@ namespace EMBC.DFA.API.Controllers
 
         private const int MAXFILESIZE = 100 * ONEMEGABYTE; // 100 MB
 
+        private static readonly string OriginCodePortal = "931490000";
+
+
         public AppealAttachmentController(
             IConfiguration configuration,
             IMapper mapper,
@@ -75,6 +78,9 @@ namespace EMBC.DFA.API.Controllers
             // Get or generate the appeal file metadata ID, which is used in the S3 key and Dynamics record.
             var appealFileMetadataId = appealFileUpload.Id ?? Guid.NewGuid();
 
+            // Add the Origin Code
+            appealFileUpload.OriginCode = OriginCodePortal;
+
             string s3Key = $"dfa_appeal/{appealFileUpload.AppealId}/{appealFileMetadataId}";
 
             // Upsert the file to S3
@@ -108,6 +114,7 @@ namespace EMBC.DFA.API.Controllers
                     Size = appealFileUpload.Size,
                     MimeType = appealFileUpload.MimeType,
                     UploadedDate = appealFileUpload.UploadedDate,
+                    OriginCode = appealFileUpload.OriginCode
                 };
 
                 var bcgovDocumentUrl = mapper.Map<AppealFileMetadataUpload, DocumentUrl>(appealFileMetadata);
@@ -294,6 +301,7 @@ namespace EMBC.DFA.API.Controllers
         public int? Size { get; set; }
         public string MimeType { get; set; }
         public bool? DeleteFlag { get; set; }
+        public string? OriginCode { get; set; }
     }
 
     /// <summary>
@@ -311,5 +319,6 @@ namespace EMBC.DFA.API.Controllers
         public int? Size { get; set; }
         public string MimeType { get; set; }
         public bool? DeleteFlag { get; set; }
+        public string? OriginCode { get; set; }
     }
 }

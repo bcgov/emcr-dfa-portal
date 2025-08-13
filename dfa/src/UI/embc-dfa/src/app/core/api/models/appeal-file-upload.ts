@@ -16,6 +16,7 @@ export interface AppealFileUpload {
   fileName?: string | null;
   id?: string | null;
   mimeType?: string;
+  originCode?: string | null;
   size?: number | null;
   uploadedDate?: string | null;
 }

@@ -466,7 +466,8 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.Category, opts => opts.MapFrom(s => s.Category.ToString()))
                 .ForMember(d => d.Size, opts => opts.MapFrom(s => s.Size))
                 .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
-                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
+                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate))
+                .ForMember(d => d.OriginCode, opts => opts.MapFrom(s => s.OriginCode));
 
             CreateMap<DocumentUrl, AppealFileMetadataUpload>()
                 .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
@@ -477,7 +478,8 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.Category, opts => opts.MapFrom(s => ConvertStringToFileCategory(s.Category)))
                 .ForMember(d => d.Size, opts => opts.MapFrom(s => s.Size))
                 .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
-                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
+                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate))
+                .ForMember(d => d.OriginCode, opts => opts.MapFrom(s => s.OriginCode));
 
             CreateMap<AppealFileMetadataUpload, BcGoV_DocumentUrl>()
                 .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
@@ -488,7 +490,8 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.DFA_Category, opts => opts.MapFrom(s => s.Category.ToString()))
                 .ForMember(d => d.BcGoV_Size, opts => opts.MapFrom(s => s.Size))
                 .ForMember(d => d.BcGoV_MimeType, opts => opts.MapFrom(s => s.MimeType))
-                .ForMember(d => d.DFA_DateUploaded, opts => opts.MapFrom(s => s.UploadedDate));
+                .ForMember(d => d.DFA_DateUploaded, opts => opts.MapFrom(s => s.UploadedDate))
+                .ForMember(d => d.BcGoV_OriginCode, opts => opts.MapFrom(s => s.OriginCode));
 
             CreateMap<BcGoV_DocumentUrl, AppealFileMetadataUpload>()
                 .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
@@ -499,7 +502,8 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.Category, opts => opts.MapFrom(s => ConvertStringToFileCategory(s.DFA_Category)))
                 .ForMember(d => d.Size, opts => opts.MapFrom(s => s.BcGoV_Size))
                 .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.BcGoV_MimeType))
-                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.DFA_DateUploaded));
+                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.DFA_DateUploaded))
+                .ForMember(d => d.OriginCode, opts => opts.MapFrom(s => s.BcGoV_OriginCode));
 
             CreateMap<dfa_appapplication, CurrentApplication>()
                 .ForMember(d => d.DateOfDamage, opts => opts.MapFrom(s => s.dfa_dateofdamage))

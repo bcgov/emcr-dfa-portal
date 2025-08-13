@@ -1,4 +1,4 @@
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 
 namespace EMBC.Database.Resources;
 
@@ -31,7 +31,8 @@ public class DocumentUrlMapper : Profile
             .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.DFA_Category))
             .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.BcGoV_Size))
             .ForMember(dest => dest.MimeType, opt => opt.MapFrom(src => src.BcGoV_MimeType))
-            .ForMember(dest => dest.UploadedDate, opt => opt.MapFrom(src => src.DFA_DateUploaded));
+            .ForMember(dest => dest.UploadedDate, opt => opt.MapFrom(src => src.DFA_DateUploaded))
+            .ForMember(dest => dest.OriginCode, opt => opt.MapFrom(src => src.BcGoV_OriginCode));
 
         CreateMap<DocumentUrl, BcGoV_DocumentUrl>()
             .ForMember(dest => dest.BcGoV_DocumentUrlId, opt => opt.MapFrom(src => src.Id))
@@ -63,6 +64,7 @@ public class DocumentUrlMapper : Profile
             .ForMember(dest => dest.DFA_Category, opt => opt.MapFrom(src => src.Category))
             .ForMember(dest => dest.BcGoV_Size, opt => opt.MapFrom(src => src.Size))
             .ForMember(dest => dest.BcGoV_MimeType, opt => opt.MapFrom(src => src.MimeType))
-            .ForMember(dest => dest.DFA_DateUploaded, opt => opt.MapFrom(src => src.UploadedDate));
+            .ForMember(dest => dest.DFA_DateUploaded, opt => opt.MapFrom(src => src.UploadedDate))
+            .ForMember(dest => dest.BcGoV_OriginCode, opt => opt.MapFrom(src => src.OriginCode));
     }
 }

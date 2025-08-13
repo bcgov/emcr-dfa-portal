@@ -15,6 +15,7 @@ export interface AppealFileMetadataUpload {
   fileName?: string;
   id?: string | null;
   mimeType?: string;
+  originCode?: string | null;
   size?: number | null;
   uploadedDate?: string | null;
   url?: string;
