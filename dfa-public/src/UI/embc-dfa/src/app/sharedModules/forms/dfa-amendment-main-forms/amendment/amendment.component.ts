@@ -232,7 +232,7 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
 
     this.dfaProjectMainDataService.setApplicationId(this.appId);
 
-    if(this.amendmentForm.value.amendmentId == null){
+    if(!this.amendmentForm.value.amendmentReceivedDate){
       this.amendmentForm.controls.amendmentReceivedDate.setValue(new Date());
     }
   }
@@ -336,6 +336,10 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
               this.dfaAmendmentMainMapping.mapDFAAmendmentMain(amendment);
               this.stage = amendment.stage;
               this.status = amendment.status;
+
+              if (!this.amendmentForm.value.amendmentReceivedDate) {
+                this.amendmentForm.controls.amendmentReceivedDate.setValue(new Date());
+              }
             } else {
               console.warn(`Amendment with ID ${currentAmendmentId} not found in project amendments`);
               let noAmendment = 'Amendment not found!<br/>Click \'Close\' button to go back to Project Dashboard';
