@@ -141,11 +141,11 @@
                           Requested Project Deadline Date<span style="color:red">*</span>
                         </p>
                         <mat-form-field appearance="outline">
-                          <input matInput formControlName="amendedProjectDeadlineDate">
+                          <input matInput formControlName="amendedProjectDeadlineDate" [matDatepicker]="amendedProjectDeadlineDatePicker">
                           <mat-hint>MM/DD/YYYY</mat-hint>
                           <mat-datepicker-toggle matSuffix [for]="amendedProjectDeadlineDatePicker"
-                            disabled></mat-datepicker-toggle>
-                          <mat-datepicker #amendedProjectDeadlineDatePicker disabled></mat-datepicker>
+                            [disabled]="isReadOnly"></mat-datepicker-toggle>
+                          <mat-datepicker #amendedProjectDeadlineDatePicker [disabled]="isReadOnly"></mat-datepicker>
                         </mat-form-field>
                       </div>
                     </div>
