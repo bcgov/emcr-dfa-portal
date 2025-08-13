@@ -231,8 +231,11 @@ export class DFAAmendmentMainComponent
 
     this.amendmentAttachmentService.amendmentAttachmentGetAttachmentsByAmendmentId({ amendmentId: amendmentId }).subscribe({
       next: (attachments) => {
+        // Filter out soft-deleted files
+        const activeAttachments = attachments.filter(attachment => !attachment.deleteFlag);
+
         // Transform AmendmentFileMetadataUpload to FileUploadAmendment
-        const transformedAttachments = attachments.map(attachment => ({
+        const transformedAttachments = activeAttachments.map(attachment => ({
           id: attachment.id,
           fileName: attachment.fileName,
           fileDescription: attachment.description,

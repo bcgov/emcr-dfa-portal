@@ -12,10 +12,10 @@ export interface AmendmentFileUpload {
   category?: FileCategoryAmendment;
   deleteFlag?: boolean | null;
   description?: string | null;
-  fileData?: string;
+  fileData?: string | null;
   fileName?: string | null;
   id?: string | null;
-  mimeType?: string;
+  mimeType?: string | null;
   projectId?: string;
   size?: number | null;
   uploadedDate?: string | null;

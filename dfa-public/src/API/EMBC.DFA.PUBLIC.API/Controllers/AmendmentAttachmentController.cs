@@ -68,6 +68,19 @@ namespace EMBC.DFA.PUBLIC.API.Controllers
                 return BadRequest("AmendmentId is required.");
             }
 
+            // For soft delete operations, we allow empty FileData and MimeType
+            if (amendmentFileUpload.DeleteFlag != true)
+            {
+                if (amendmentFileUpload.FileData == null || amendmentFileUpload.FileData.Length == 0)
+                {
+                    return BadRequest("FileData is required when not performing a soft delete.");
+                }
+                if (string.IsNullOrEmpty(amendmentFileUpload.MimeType))
+                {
+                    return BadRequest("MimeType is required when not performing a soft delete.");
+                }
+            }
+
             // If an ID is provided, it indicates an update operation; otherwise, it's a new insert.
             bool isAmendmentFileMetadataUpdate = amendmentFileUpload.Id.HasValue;
 
@@ -76,22 +89,26 @@ namespace EMBC.DFA.PUBLIC.API.Controllers
 
             string s3Key = $"dfa_amendment/{amendmentFileUpload.ProjectId}/{amendmentFileUpload.AmendmentId}/{amendmentFileMetadataId}";
 
-            // Upsert the file to S3
-            try
+            // Only upload to S3 if this is not a soft delete operation
+            if (amendmentFileUpload.DeleteFlag != true)
             {
-                var file = new S3File { FileName = amendmentFileUpload.FileName, Content = amendmentFileUpload.FileData };
+                // Upsert the file to S3
+                try
+                {
+                    var file = new S3File { FileName = amendmentFileUpload.FileName, Content = amendmentFileUpload.FileData };
 
-                var uploadFileCommand = new UploadFileCommand { File = file, Key = s3Key };
+                    var uploadFileCommand = new UploadFileCommand { File = file, Key = s3Key };
 
-                await s3Provider.HandleCommand(uploadFileCommand);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Failed to upload file to S3");
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    "An error occurred while uploading file to S3 for dfa_amendment."
-                );
+                    await s3Provider.HandleCommand(uploadFileCommand);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Failed to upload file to S3");
+                    return StatusCode(
+                        StatusCodes.Status500InternalServerError,
+                        "An error occurred while uploading file to S3 for dfa_amendment."
+                    );
+                }
             }
 
             // Upsert the attachment metadata to dynamics
@@ -108,6 +125,7 @@ namespace EMBC.DFA.PUBLIC.API.Controllers
                     Size = amendmentFileUpload.Size,
                     MimeType = amendmentFileUpload.MimeType,
                     UploadedDate = amendmentFileUpload.UploadedDate,
+                    DeleteFlag = amendmentFileUpload.DeleteFlag
                 };
 
                 var bcgovDocumentUrl = mapper.Map<AmendmentFileMetadataUpload, DocumentUrl>(amendmentFileMetadata);
@@ -293,13 +311,13 @@ namespace EMBC.DFA.PUBLIC.API.Controllers
         public Guid? Id { get; set; }
         public Guid ProjectId { get; set; }
         public Guid AmendmentId { get; set; }
-        public byte[] FileData { get; set; }
+        public byte[]? FileData { get; set; }
         public string? FileName { get; set; }
         public string? Description { get; set; }
         public FileCategoryAmendment Category { get; } = FileCategoryAmendment.Amendment;
         public string? UploadedDate { get; set; }
         public int? Size { get; set; }
-        public string MimeType { get; set; }
+        public string? MimeType { get; set; }
         public bool? DeleteFlag { get; set; }
     }
 

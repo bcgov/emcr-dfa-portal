@@ -480,10 +480,27 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
   }
 
   deleteDocumentSummaryRow(element): void {
-    // For the new S3 service, we delete using the document ID
+    // For the new S3 service, we use soft delete by setting deleteFlag to true
+    console.log("deleteDocumentSummaryRow called with element: ", element);
     if (element.id) {
-      this.amendmentAttachmentService.amendmentAttachmentDeleteAttachment({ documentUrlId: element.id }).subscribe({
+      // Create payload for soft delete by setting deleteFlag to true
+      const softDeletePayload: AmendmentFileUpload = {
+        id: element.id,
+        projectId: element.projectId,
+        amendmentId: this.dfaAmendmentMainDataService.getAmendmentId(),
+        fileName: element.fileName,
+        description: element.description,
+        fileData: null, // No file data needed for soft delete
+        size: element.size,
+        mimeType: element.contentType || element.mimeType,
+        uploadedDate: element.uploadedDate,
+        deleteFlag: true, // Mark as deleted
+        category: element.category
+      };
+
+      this.amendmentAttachmentService.amendmentAttachmentUpsertAttachment({ body: softDeletePayload }).subscribe({
         next: (result) => {
+          // Remove from local array after successful soft delete
           let fileUploads = this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value;
           let index = fileUploads?.indexOf(element);
           if (index > -1) {
@@ -497,8 +514,8 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error(error);
-          document.location.href = 'https://dfa.gov.bc.ca/error.html';
+          console.error('Error soft deleting amendment attachment:', error);
+          this.warningDialog('Failed to delete the document. Please try again.');
         }
       });
     } else {
