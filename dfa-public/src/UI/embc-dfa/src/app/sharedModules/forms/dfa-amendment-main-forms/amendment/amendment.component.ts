@@ -317,15 +317,29 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
   }
 
   getAmendmentDetails(projectId: string) {
+    // Get the specific amendment ID from the data service
+    const currentAmendmentId = this.dfaAmendmentMainDataService.getAmendmentId();
+    
+    if (!currentAmendmentId) {
+      console.error('Amendment ID is required but not available');
+      return;
+    }
+
     if (projectId) {
       this.projectAmendmentService.projectAmendmentGetDfaProjectAmendments({ projectId: projectId }).subscribe({
         next: (dfaAmendment) => {
           if (dfaAmendment) {
-            var amendment = dfaAmendment[0]; //use the first amendment
+            // Find the specific amendment by ID instead of using the first one
+            var amendment = dfaAmendment.find(a => a.amendmentId === currentAmendmentId);
+            
             if (amendment){
               this.dfaAmendmentMainMapping.mapDFAAmendmentMain(amendment);
               this.stage = amendment.stage;
               this.status = amendment.status;
+            } else {
+              console.warn(`Amendment with ID ${currentAmendmentId} not found in project amendments`);
+              let noAmendment = 'Amendment not found!<br/>Click \'Close\' button to go back to Project Dashboard';
+              this.ConfirmAndGoBack(noAmendment);
             }
           }
         },
