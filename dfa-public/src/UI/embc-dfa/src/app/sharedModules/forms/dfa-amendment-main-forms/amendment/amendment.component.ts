@@ -13,7 +13,7 @@ import { ApplicantOption, InsuranceOption, Profile, CurrentProjectAmendment, Pro
 import { DFAEligibilityDialogComponent } from 'src/app/core/components/dialog-components/dfa-eligibility-dialog/dfa-eligibility-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogContent } from 'src/app/core/model/dialog-content.model';
-import { ApplicationService, AttachmentService, EligibilityService, ProfileService, ProjectAmendmentService, ProjectService } from 'src/app/core/api/services';
+import { ApplicationService, AttachmentService, AmendmentAttachmentService, EligibilityService, ProfileService, ProjectAmendmentService, ProjectService } from 'src/app/core/api/services';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { LoginService } from 'src/app/core/services/login.service';
 import { DFAProjectAmendmentDataService } from 'src/app/feature-components/dfa-project-amendment/dfa-project-amendment-data.service';
@@ -46,6 +46,7 @@ import moment from 'moment';
 import { DFAAmendmentMainDataService } from 'src/app/feature-components/dfa-amendment-main/dfa-amendment-main-data.service';
 import { DFAAmendmentMainMappingService } from 'src/app/feature-components/dfa-amendment-main/dfa-amendment-main-mapping.service';
 import { FileUploadAmendment } from 'src/app/core/model/dfa-amendment-main.model';
+import { AmendmentFileUpload } from 'src/app/core/api/models';
 import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog-components/file-upload-warning-dialog/file-upload-warning-dialog.component';
 import { DFAFileDeleteDialogComponent } from 'src/app/core/components/dialog-components/dfa-file-delete-dialog/dfa-file-delete.component';
 
@@ -126,6 +127,7 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
     private router: Router,
     private dfaAmendmentMainMapping: DFAAmendmentMainMappingService,
     private attachmentsService: AttachmentService,
+    private amendmentAttachmentService: AmendmentAttachmentService,
     private profileService: ProfileService,
     private eligibilityService: EligibilityService,
     private amendmentDataService: DFAProjectAmendmentDataService,
@@ -377,6 +379,7 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
 
   saveSupportingFiles(fileUpload: FileUploadAmendment): void {
     // dont allow same filename twice
+    console.log("saveSupportingFiles called with fileUpload: ", fileUpload);
     let fileUploads = this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value;
     if (fileUploads?.find(x => x.fileName === fileUpload.fileName && x.deleteFlag !== true)) {
       this.warningDialog("A file with the name " + fileUpload.fileName + " has already been uploaded.");
@@ -393,7 +396,21 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
       fileUpload.requiredDocumentType = null;
       this.isLoading = true;
 
-      this.attachmentsService.attachmentUpsertDeleteProjectAmendmentAttachment({ body: fileUpload }).subscribe({
+      // Create the amendment file upload payload for the new S3 service
+      const amendmentFileUpload: AmendmentFileUpload = {
+        projectId: fileUpload.projectId,
+        amendmentId: this.dfaAmendmentMainDataService.getAmendmentId(),
+        fileName: fileUpload.fileName,
+        description: fileUpload.fileDescription,
+        fileData: fileUpload.fileData, // This should be base64 string for TypeScript model
+        size: fileUpload.fileSize,
+        mimeType: fileUpload.contentType,
+        uploadedDate: new Date().toISOString(),
+        deleteFlag: false,
+        category: fileUpload.fileType
+      };
+
+      this.amendmentAttachmentService.amendmentAttachmentUpsertAttachment({ body: amendmentFileUpload }).subscribe({
         next: (fileUploadId) => {
           fileUpload.id = fileUploadId;
           if (fileUploads) fileUploads.push(fileUpload);
@@ -449,27 +466,41 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
   }
 
   deleteDocumentSummaryRow(element): void {
-    element.deleteFlag = true;
-    element.amendmentId = this.dfaAmendmentMainDataService.getAmendmentId();
-    let fileUploads = this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value;
-    let index = fileUploads?.indexOf(element);
-    element.fileData = element?.fileData?.substring(element?.fileData?.indexOf(',') + 1) // to allow upload as byte array
-
-    this.attachmentsService.attachmentUpsertDeleteClaimAttachment({ body: element }).subscribe({
-      next: (result) => {
-        fileUploads[index] = element;
-        this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').setValue(fileUploads);
-        if (this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value.length === 0) {
-          this.fileUploadForm
-            .get('addNewFileUploadIndicator')
-            .setValue(false);
+    // For the new S3 service, we delete using the document ID
+    if (element.id) {
+      this.amendmentAttachmentService.amendmentAttachmentDeleteAttachment({ documentUrlId: element.id }).subscribe({
+        next: (result) => {
+          let fileUploads = this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value;
+          let index = fileUploads?.indexOf(element);
+          if (index > -1) {
+            fileUploads.splice(index, 1);
+            this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').setValue(fileUploads);
+          }
+          if (this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value.length === 0) {
+            this.fileUploadForm
+              .get('addNewFileUploadIndicator')
+              .setValue(false);
+          }
+        },
+        error: (error) => {
+          console.error(error);
+          document.location.href = 'https://dfa.gov.bc.ca/error.html';
         }
-      },
-      error: (error) => {
-        console.error(error);
-        document.location.href = 'https://dfa.gov.bc.ca/error.html';
+      });
+    } else {
+      // If no ID, just remove from local array (file wasn't saved yet)
+      let fileUploads = this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value;
+      let index = fileUploads?.indexOf(element);
+      if (index > -1) {
+        fileUploads.splice(index, 1);
+        this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').setValue(fileUploads);
       }
-    });
+      if (this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value.length === 0) {
+        this.fileUploadForm
+          .get('addNewFileUploadIndicator')
+          .setValue(false);
+      }
+    }
   }
 
 

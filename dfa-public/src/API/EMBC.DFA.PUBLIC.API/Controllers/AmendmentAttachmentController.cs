@@ -196,9 +196,7 @@ namespace EMBC.DFA.PUBLIC.API.Controllers
 
         /// <summary>
         /// Get a collection of amendment attachments by amendment Id.
-        /// Note: This does not return the actual file data, only the dynamics attachment metadata records.
-        /// Since amendments don't have a direct relationship in the database, this currently returns empty.
-        /// Amendment documents should be handled through project documents with appropriate filtering.
+        /// Filters by URL pattern since amendment documents are stored with S3 keys containing the amendmentId.
         /// </summary>
         /// <param name="amendmentId">The amendment Id.</param>
         /// <returns>

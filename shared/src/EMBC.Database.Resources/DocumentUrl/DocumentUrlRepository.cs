@@ -74,17 +74,21 @@ public class DocumentUrlRepository : BaseRepository<BcGoV_DocumentUrl, DocumentU
 
     /// <summary>
     /// Retrieves Document URLs associated with a specific amendment ID.
-    /// Note: Since there's no direct amendment relationship in the database,
-    /// this method returns an empty collection for now. Amendment filtering
-    /// should be handled at the application level using project documents.
+    /// Filters by URL pattern since amendment documents are stored with S3 keys containing the amendmentId.
     /// </summary>
     /// <param name="amendmentId">The ID of the amendment.</param>
     /// <returns>A collection of Document URLs related to the specified amendment.</returns>
     public IEnumerable<DocumentUrl> GetByAmendmentId(Guid amendmentId)
     {
-        // Since amendments don't have a direct relationship in BcGoV_DocumentUrl,
-        // return empty for now. Amendment documents should be handled differently.
-        return Enumerable.Empty<DocumentUrl>();
+        // Amendment documents are stored with S3 keys in the format: dfa_amendment/{projectId}/{amendmentId}/{fileId}
+        // Filter by documents where the URL contains the amendmentId pattern
+        var amendmentUrlPattern = $"/{amendmentId}/";
+        
+        return _databaseContext
+            .CreateQuery<BcGoV_DocumentUrl>()
+            .Where(query => query.BcGoV_Url != null && query.BcGoV_Url.Contains(amendmentUrlPattern))
+            .Select(result => _mapper.Map<DocumentUrl>(result))
+            .ToList();
     }
 
     /// <summary>

@@ -142,6 +142,7 @@ export class FileUploadAmendment {
   modifiedBy?: string;
   uploadedDate?: string;
   applicantType?: string;
+  amendmentId?: string;
 }
 
 export class FileUploadsAmendmentForm {

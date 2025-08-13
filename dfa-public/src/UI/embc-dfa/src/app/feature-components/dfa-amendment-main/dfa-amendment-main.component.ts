@@ -18,8 +18,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { Subscription, distinctUntilChanged, mapTo } from 'rxjs';
 import { FormCreationService } from '../../core/services/formCreation.service';
 import { AlertService } from 'src/app/core/services/alert.service';
-import { ApplicantOption, FarmOption, ProjectStageOptionSet, SmallBusinessOption } from 'src/app/core/api/models';
-import { ApplicationService, AttachmentService, ProjectService } from 'src/app/core/api/services';
+import { ApplicationService, AttachmentService, ProjectService, AmendmentAttachmentService } from 'src/app/core/api/services';
 import { MatDialog } from '@angular/material/dialog';
 import { DFAConfirmSubmitDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-submit-dialog/dfa-confirm-submit-dialog.component';
 import { SecondaryApplicant } from 'src/app/core/model/dfa-application-main.model';
@@ -70,12 +69,12 @@ export class DFAAmendmentMainComponent
     private alertService: AlertService,
     private applicationService: ApplicationService,
     public dialog: MatDialog,
-    private fileUploadsService: AttachmentService,
     private dfaAmendmentMainMapping: DFAAmendmentMainMappingService,
     private dfaAmendmentMainDataService: DFAAmendmentMainDataService,
     private dfaAmendmentMainService: DFAAmendmentMainService,
     private projectService: ProjectService,
     private dfaProjectMainDataService: DFAProjectMainDataService,
+    private amendmentAttachmentService: AmendmentAttachmentService,
   ) {
     const navigation = this.router.getCurrentNavigation();
   }
@@ -192,11 +191,34 @@ export class DFAAmendmentMainComponent
   }
 
   public getFileUploadsForAmendment(projectId: string) {
+    const amendmentId = this.dfaAmendmentMainDataService.getAmendmentId();
 
-    this.fileUploadsService.attachmentGetAmendmentAttachments({ projectId: projectId }).subscribe({
+    if (!amendmentId) {
+      console.error('Amendment ID is required but not available');
+      return;
+    }
+
+    this.amendmentAttachmentService.amendmentAttachmentGetAttachmentsByAmendmentId({ amendmentId: amendmentId }).subscribe({
       next: (attachments) => {
+        // Transform AmendmentFileMetadataUpload to FileUploadAmendment
+        const transformedAttachments = attachments.map(attachment => ({
+          id: attachment.id,
+          fileName: attachment.fileName,
+          fileDescription: attachment.description,
+          fileType: attachment.category,
+          fileTypeText: attachment.category?.toString() || 'Amendment',
+          contentType: attachment.mimeType,
+          fileSize: attachment.size,
+          uploadedDate: attachment.uploadedDate,
+          projectId: attachment.projectId,
+          deleteFlag: attachment.deleteFlag || false,
+          fileData: null,
+          modifiedBy: null,
+          requiredDocumentType: null
+        }));
+
         // initialize list of file uploads
-        this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').setValue(attachments);
+        this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').setValue(transformedAttachments);
 
       },
       error: (error) => {
