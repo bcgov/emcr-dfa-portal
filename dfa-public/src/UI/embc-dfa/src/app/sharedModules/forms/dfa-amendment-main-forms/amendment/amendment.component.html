@@ -301,7 +301,7 @@
                   &nbsp;
                 </th>
                 <td *matCellDef="let element; let index = index" mat-cell>
-                  <button class="delete-image" mat-icon-button aria-label="Remove"
+                  <button *ngIf="!isReadOnly" class="delete-image" mat-icon-button aria-label="Remove"
                     (click)="confirmDeleteDocumentSummaryRow(element)">
                     <img src="/assets/images/delete.svg" height="35" width="35" />
                   </button>

@@ -58,6 +58,8 @@ export class DFAAmendmentMainComponent
   invoiceSummaryDataSource = new MatTableDataSource<Invoice>();
   dfaAmendmentForm: UntypedFormGroup;
   dfaAmendmentForm$: Subscription;
+  viewOrEditSubscription: Subscription;
+  canSubmitAmendment: boolean = true;
 
 
   constructor(
@@ -101,7 +103,16 @@ export class DFAAmendmentMainComponent
 
     this.vieworedit = this.dfaAmendmentMainDataService.getViewOrEdit();
     this.editstep = this.dfaAmendmentMainDataService.getEditStep();
-    
+
+    // Initialize submit button visibility based on current view mode
+    this.updateSubmitButtonVisibility();
+
+    // Subscribe to view mode changes
+    this.viewOrEditSubscription = this.dfaAmendmentMainDataService.changeViewOrEdit.subscribe((viewMode) => {
+      this.vieworedit = viewMode;
+      this.updateSubmitButtonVisibility();
+    });
+
     //this.showStepper = true;
     this.dfaAmendmentMainHeading = 'Amendment Details'
 
@@ -253,7 +264,20 @@ export class DFAAmendmentMainComponent
     }
   }
 
+  private updateSubmitButtonVisibility(): void {
+    // Hide submit button when in read-only view modes
+    // Based on same logic as field read-only controls
+    this.canSubmitAmendment = this.vieworedit !== 'view' &&
+                              this.vieworedit !== 'edit' &&
+                              this.vieworedit !== 'viewOnly';
+  }
+
   ngOnDestroy(): void {
+    // Clean up subscriptions
+    if (this.viewOrEditSubscription) {
+      this.viewOrEditSubscription.unsubscribe();
+    }
+
     // Clean up any pending new amendments when component is destroyed
     var amendmentId = this.dfaAmendmentMainDataService.getAmendmentId();
     var isNewAmendment = this.dfaAmendmentMainDataService.getIsNewAmendment();
