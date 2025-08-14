@@ -93,6 +93,9 @@ export class DfaAttachmentComponent implements OnInit, OnDestroy {
     this.fileUploadsForm
       .get('addNewFileUploadIndicator')
       .valueChanges.subscribe((value) => this.updateFileUploadFormOnVisibility());
+
+    // Auto-select file category if only one option is available
+    this.checkAndAutoSelectFileCategory();
   }
 
   initFileUploadForm() {
@@ -155,6 +158,37 @@ export class DfaAttachmentComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Checks if there's only one file category available and auto-selects it
+   */
+  checkAndAutoSelectFileCategory(): void {
+    if (!this.fileType && this.FileCategories && this.excludeFileTypes) {
+      // Get available options by filtering out excluded types
+      const availableOptions = Object.entries(this.FileCategories).filter(([key, value]) => 
+        this.excludeFileTypes.indexOf(value) < 0
+      );
+
+      // If only one option is available, auto-select it
+      if (availableOptions.length === 1) {
+        const [optionKey, optionValue] = availableOptions[0];
+        this.fileUpload.get('fileType').setValue(optionKey);
+        this.fileUpload.get('fileTypeText').setValue(optionValue);
+      }
+    }
+  }
+
+  /**
+   * Gets the number of available file category options
+   */
+  get availableFileCategoriesCount(): number {
+    if (!this.FileCategories || !this.excludeFileTypes) {
+      return 0;
+    }
+    return Object.entries(this.FileCategories).filter(([key, value]) => 
+      this.excludeFileTypes.indexOf(value) < 0
+    ).length;
+  }
+
+  /**
    * Returns the control of the form
    */
   get filesUploadFormControl(): { [key: string]: AbstractControl } {
@@ -180,6 +214,9 @@ export class DfaAttachmentComponent implements OnInit, OnDestroy {
       this.fileUpload.get('contentType').setValue(event.type);
       this.fileUpload.get('fileSize').setValue(event.size);
       this.fileUpload.get('uploadedDate').setValue(new Date());
+
+      // Auto-select file category if only one option is available
+      this.checkAndAutoSelectFileCategory();
     };
   }
 
