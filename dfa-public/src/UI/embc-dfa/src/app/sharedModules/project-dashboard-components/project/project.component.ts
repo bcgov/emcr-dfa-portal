@@ -136,6 +136,7 @@ export class DfaDashProjectComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
     var applicationId = this.dFAProjectMainDataService.getApplicationId();
 
     this.projService.projectGetDfaProjects({ applicationId: applicationId }).subscribe({
@@ -268,7 +269,6 @@ export class DfaDashProjectComponent implements OnInit {
         this.isLoading = false;
       }
     });
-    this.isLoading = false;
   }
 
   Toggle(applItem): void {
