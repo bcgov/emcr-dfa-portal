@@ -90,6 +90,7 @@ export class DFAAmendmentComponent
     this.appSessionService.openAmendmentsCount.subscribe((n: number) => {
       this.openAmendmentsCount = n;
       this.tabs[0].count = n ? n.toString() : "0";
+      this.updateShowCreateButton
     });
     this.appSessionService.closedAmendmentsCount.subscribe((n: number) => {
       this.closedAmendmentsCount = n;
@@ -125,11 +126,6 @@ export class DFAAmendmentComponent
       }
     ];
 
-    if(this.openAmendmentsCount < 1) // &&
-      //this.projectStatus == ProjectStageOptionSet.DecisionMade)
-    {
-      this.showCreateButton = true;
-    }
   }
 
   navigateToDFAProjectCreate(): void {
@@ -270,6 +266,7 @@ export class DFAAmendmentComponent
             this.amendedApprovedProjectCost = project.approvedAmendedProjectCost != null ? project.approvedAmendedProjectCost.toString() : "0.00";
 
             this.projectStatus = project.projectStatus
+            this.updateShowCreateButton
           }
 
         },
@@ -279,6 +276,12 @@ export class DFAAmendmentComponent
         }
       });
     }
+  }
+
+  updateShowCreateButton() {
+    this.showCreateButton =
+      this.openAmendmentsCount < 1 &&
+      this.projectStatus !== ProjectStageOptionSet.Draft;
   }
 
   CombineCauseOfDamages(applItem: CurrentApplication): string {
