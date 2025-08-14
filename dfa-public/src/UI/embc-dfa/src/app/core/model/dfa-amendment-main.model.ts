@@ -85,7 +85,7 @@ export class ProjectAmendmentForm {
       this.emcrDecisionComments.setValue(projectAmendment.emcrDecisionComments);
     }
 
-    if (projectAmendment.requestforProjectDeadlineExtention) {
+    if (projectAmendment.requestforProjectDeadlineExtention !== undefined && projectAmendment.requestforProjectDeadlineExtention !== null) {
       this.requestforProjectDeadlineExtention.setValue(projectAmendment.requestforProjectDeadlineExtention);
     }
 
@@ -101,7 +101,7 @@ export class ProjectAmendmentForm {
       this.amended18MonthDeadline.setValue(projectAmendment.amended18MonthDeadline);
     }
 
-    if (projectAmendment.requestforAdditionalProjectCost) {
+    if (projectAmendment.requestforAdditionalProjectCost !== undefined && projectAmendment.requestforAdditionalProjectCost !== null) {
       this.requestforAdditionalProjectCost.setValue(projectAmendment.requestforAdditionalProjectCost);
     }
 

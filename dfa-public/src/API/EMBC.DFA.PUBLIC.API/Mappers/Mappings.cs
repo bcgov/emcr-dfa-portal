@@ -740,9 +740,9 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.AmendmentId, opts => opts.MapFrom(s => s.dfa_projectamendmentid))
                 .ForMember(d => d.EstimatedAdditionalProjectCost, opts => opts.MapFrom(s => s.dfa_estimatedadditionalprojectcost))
                 .ForMember(d => d.ApprovedAdditionalProjectCost, opts => opts.MapFrom(s => s.dfa_approvedadditionalprojectcost))
-                .ForMember(d => d.RequestforProjectDeadlineExtention, opts => opts.MapFrom(s => s.dfa_requestforprojectdeadlineextension == true ? "Yes" : "No"))
+                .ForMember(d => d.RequestforProjectDeadlineExtention, opts => opts.MapFrom(s => s.dfa_requestforprojectdeadlineextension == true ? "Yes" : (s.dfa_requestforprojectdeadlineextension == false ? "No" : null)))
                 .ForMember(d => d.DeadlineExtensionApproved, opts => opts.MapFrom(s => s.dfa_deadlineextensionapproved == true ? "Yes" : "No"))
-                .ForMember(d => d.RequestforAdditionalProjectCost, opts => opts.MapFrom(s => s.dfa_requestforadditionalprojectcost == true ? "Yes" : "No"))
+                .ForMember(d => d.RequestforAdditionalProjectCost, opts => opts.MapFrom(s => s.dfa_requestforadditionalprojectcost == true ? "Yes" : (s.dfa_requestforadditionalprojectcost == false ? "No" : null)))
                 .ForMember(d => d.Status, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_amendmentstages) ? GetEnumDescription((ProjectAmendmentStages)Convert.ToInt32(s.dfa_amendmentstages)) : null))
                 .ForMember(d => d.Stage, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_amendmentsubstages) ? GetEnumDescription((ProjectAmendmentSubStages)Convert.ToInt32(s.dfa_amendmentsubstages)) : null))
                 .ForMember(d => d.AdditionalProjectCostDecision, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_additionalprojectcostdecision) ? GetEnumDescription((ProjectAmendmentAdditionalProjectCostDecision)Convert.ToInt32(s.dfa_additionalprojectcostdecision)) : null))
@@ -760,12 +760,11 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.dfa_projectamendmentid, opts => opts.MapFrom(s => s.AmendmentId))
                 .ForMember(d => d.dfa_estimatedadditionalprojectcost, opts => opts.MapFrom(s => s.EstimatedAdditionalProjectCost))
                 .ForMember(d => d.dfa_approvedadditionalprojectcost, opts => opts.MapFrom(s => s.ApprovedAdditionalProjectCost))
-                .ForMember(d => d.dfa_requestforprojectdeadlineextension, opts => opts.MapFrom(s => s.RequestforProjectDeadlineExtention))
-                .ForMember(d => d.dfa_deadlineextensionapproved, opts => opts.MapFrom(s => s.DeadlineExtensionApproved))
-                .ForMember(d => d.dfa_requestforadditionalprojectcost, opts => opts.MapFrom(s => s.RequestforAdditionalProjectCost))
+                .ForMember(d => d.dfa_requestforprojectdeadlineextension, opts => opts.MapFrom(s => s.RequestforProjectDeadlineExtention == "Yes" ? true : (s.RequestforProjectDeadlineExtention == "No" ? false : (bool?)null)))
+                .ForMember(d => d.dfa_deadlineextensionapproved, opts => opts.MapFrom(s => s.DeadlineExtensionApproved == "Yes" ? true : (s.DeadlineExtensionApproved == "No" ? false : (bool?)null)))
+                .ForMember(d => d.dfa_requestforadditionalprojectcost, opts => opts.MapFrom(s => s.RequestforAdditionalProjectCost == "Yes" ? true : (s.RequestforAdditionalProjectCost == "No" ? false : (bool?)null)))
                 .ForMember(d => d.dfa_additionalprojectcostdecision, opts => opts.MapFrom(s => s.AdditionalProjectCostDecision))
-                .ForMember(d => d.dfa_amendmentdecision, opts => opts.MapFrom(s => s.AmendmentDecision))
-                ;
+                .ForMember(d => d.dfa_amendmentdecision, opts => opts.MapFrom(s => s.AmendmentDecision));
 
             CreateMap<dfa_project, CurrentProject>()
                 .ForMember(d => d.Deadline18Month, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_18monthdeadline).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_18monthdeadline).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))

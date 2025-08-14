@@ -1085,11 +1085,11 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_amendmentreason { get; set; }
         public string? dfa_amendmentapproveddate { get; set; }
         public string? dfa_emcrapprovalcomments { get; set; }
-        public bool dfa_requestforprojectdeadlineextension { get; set; }
+        public bool? dfa_requestforprojectdeadlineextension { get; set; }
         public string? dfa_amendedprojectdeadlinedate { get; set; }
-        public bool dfa_deadlineextensionapproved { get; set; }
+        public bool? dfa_deadlineextensionapproved { get; set; }
         public string? dfa_amended18monthdeadline { get; set; }
-        public bool dfa_requestforadditionalprojectcost { get; set; }
+        public bool? dfa_requestforadditionalprojectcost { get; set; }
         public string? dfa_estimatedadditionalprojectcost { get; set; }
         public string? dfa_additionalprojectcostdecision { get; set; }
         public string? dfa_approvedadditionalprojectcost { get; set; }
