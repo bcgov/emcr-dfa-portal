@@ -113,15 +113,6 @@
         <div class="col-md-3" style="display: flex; justify-content: flex-end;">
           <div class="button-column">
 
-            <button
-              class="application-button"
-              (click)="ViewAmendment(applItem)"
-              type="button"
-              *ngIf="applItem.hasAmendment"
-                    >
-              View Amendment
-            </button>
-
            @if(applItem.status != 'Closed') {
               <button
               class="application-button"
