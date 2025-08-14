@@ -306,6 +306,28 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
             this.projectName = 'Project - ' + project.projectName + ' (Amended)';
             this.originalApprovedProjectCost = project.approvedCost != null ? project.approvedCost.toString() : "0.00";
             this.deadline18Months = project.project18MonthDeadline != 'Date Not Set' ? project.project18MonthDeadline : null;
+
+            // Set the value immediately if radio is already "Yes"
+            if (
+              this.amendmentForm.get('requestforProjectDeadlineExtention')?.value === 'Yes' &&
+              this.deadline18Months &&
+              !this.amendmentForm.get('amendedProjectDeadlineDate')?.value
+            ) {
+              const dateValue = new Date(this.deadline18Months);
+              this.amendmentForm.get('amendedProjectDeadlineDate')?.setValue(dateValue);
+            }
+
+            // Subscribe to future changes
+            this.amendmentForm.get('requestforProjectDeadlineExtention')?.valueChanges.subscribe(value => {
+              if (
+                value === 'Yes' &&
+                this.deadline18Months &&
+                !this.amendmentForm.get('amendedProjectDeadlineDate')?.value
+              ) {
+                const dateValue = new Date(this.deadline18Months);
+                this.amendmentForm.get('amendedProjectDeadlineDate')?.setValue(dateValue);
+              }
+            });
           }
         },
         error: (error) => {
@@ -397,7 +419,6 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
 
   saveSupportingFiles(fileUpload: FileUploadAmendment): void {
     // dont allow same filename twice
-    console.log("saveSupportingFiles called with fileUpload: ", fileUpload);
     let fileUploads = this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value;
     if (fileUploads?.find(x => x.fileName === fileUpload.fileName && x.deleteFlag !== true)) {
       this.warningDialog("A file with the name " + fileUpload.fileName + " has already been uploaded.");
@@ -485,7 +506,6 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
 
   deleteDocumentSummaryRow(element): void {
     // For the new S3 service, we use soft delete by setting deleteFlag to true
-    console.log("deleteDocumentSummaryRow called with element: ", element);
     if (element.id) {
       // Create payload for soft delete by setting deleteFlag to true
       const softDeletePayload: AmendmentFileUpload = {
