@@ -682,51 +682,6 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.dfa_requireddocumenttype, opts => opts.MapFrom(s => s.requiredDocumentType)) // TODO map required file type
                 .ForMember(d => d.fileType, opts => opts.MapFrom(s => s.fileType));
 
-            CreateMap<AmendmentFileMetadataUpload, DocumentUrl>()
-                .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
-                .ForMember(d => d.ProjectId, opts => opts.MapFrom(s => s.ProjectId))
-                .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.FileName))
-                .ForMember(d => d.Url, opts => opts.MapFrom(s => s.Url))
-                .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Description))
-                .ForMember(d => d.Category, opts => opts.MapFrom(s => s.Category.ToString()))
-                .ForMember(d => d.Size, opts => opts.MapFrom(s => s.Size))
-                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
-                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
-
-            CreateMap<DocumentUrl, AmendmentFileMetadataUpload>()
-                .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
-                .ForMember(d => d.ProjectId, opts => opts.MapFrom(s => s.ProjectId))
-                .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.FileName))
-                .ForMember(d => d.Url, opts => opts.MapFrom(s => s.Url))
-                .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Description))
-                .ForMember(d => d.Category, opts => opts.MapFrom(s => ConvertStringToFileCategoryAmendment(s.Category)))
-                .ForMember(d => d.Size, opts => opts.MapFrom(s => s.Size))
-                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
-                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
-
-            CreateMap<AmendmentFileMetadataUpload, DocumentUrl>()
-                .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
-                .ForMember(d => d.ProjectId, opts => opts.MapFrom(s => s.ProjectId))
-                .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.FileName))
-                .ForMember(d => d.Url, opts => opts.MapFrom(s => s.Url))
-                .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Description))
-                .ForMember(d => d.Category, opts => opts.MapFrom(s => s.Category.ToString()))
-                .ForMember(d => d.Size, opts => opts.MapFrom(s => s.Size))
-                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
-                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
-
-            CreateMap<DocumentUrl, AmendmentFileMetadataUpload>()
-                .ForMember(d => d.Id, opts => opts.MapFrom(s => s.Id))
-                .ForMember(d => d.ProjectId, opts => opts.MapFrom(s => s.ProjectId))
-                .ForMember(d => d.FileName, opts => opts.MapFrom(s => s.FileName))
-                .ForMember(d => d.Url, opts => opts.MapFrom(s => s.Url))
-                .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Description))
-                .ForMember(d => d.Category, opts => opts.MapFrom(s => ConvertStringToFileCategoryAmendment(s.Category)))
-                .ForMember(d => d.Size, opts => opts.MapFrom(s => s.Size))
-                .ForMember(d => d.MimeType, opts => opts.MapFrom(s => s.MimeType))
-                .ForMember(d => d.UploadedDate, opts => opts.MapFrom(s => s.UploadedDate));
-
-
             CreateMap<dfa_projectamendment, CurrentProjectAmendment>()
                 .ForMember(d => d.CreatedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.createdon).Year < 2020 ? string.Empty : Convert.ToDateTime(s.createdon).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(d => d.AmendmentReceivedDate, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_amendmentreceiveddate).Year < 2020 ? string.Empty : Convert.ToDateTime(s.dfa_amendmentreceiveddate).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)))

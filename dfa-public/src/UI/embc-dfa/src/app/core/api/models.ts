@@ -4,8 +4,6 @@
 
 export type { Address } from './models/address';
 export type { AddressDataConflict } from './models/address-data-conflict';
-export type { AmendmentFileMetadataUpload } from './models/amendment-file-metadata-upload';
-export type { AmendmentFileUpload } from './models/amendment-file-upload';
 export { ApplicantOption } from './models/applicant-option';
 export type { ApplicantSubtypes } from './models/applicant-subtypes';
 export { ApplicantSubtypeSubCategories } from './models/applicant-subtype-sub-categories';

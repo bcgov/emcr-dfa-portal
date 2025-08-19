@@ -13,7 +13,7 @@ import { ApplicantOption, InsuranceOption, Profile, CurrentProjectAmendment, Pro
 import { DFAEligibilityDialogComponent } from 'src/app/core/components/dialog-components/dfa-eligibility-dialog/dfa-eligibility-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogContent } from 'src/app/core/model/dialog-content.model';
-import { ApplicationService, AttachmentService, AmendmentAttachmentService, EligibilityService, ProfileService, ProjectAmendmentService, ProjectService } from 'src/app/core/api/services';
+import { ApplicationService, AttachmentService, EligibilityService, ProfileService, ProjectAmendmentService, ProjectService } from 'src/app/core/api/services';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { LoginService } from 'src/app/core/services/login.service';
 import { DFAProjectAmendmentDataService } from 'src/app/feature-components/dfa-project-amendment/dfa-project-amendment-data.service';
@@ -46,7 +46,6 @@ import moment from 'moment';
 import { DFAAmendmentMainDataService } from 'src/app/feature-components/dfa-amendment-main/dfa-amendment-main-data.service';
 import { DFAAmendmentMainMappingService } from 'src/app/feature-components/dfa-amendment-main/dfa-amendment-main-mapping.service';
 import { FileUploadAmendment } from 'src/app/core/model/dfa-amendment-main.model';
-import { AmendmentFileUpload } from 'src/app/core/api/models';
 import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog-components/file-upload-warning-dialog/file-upload-warning-dialog.component';
 import { DFAFileDeleteDialogComponent } from 'src/app/core/components/dialog-components/dfa-file-delete-dialog/dfa-file-delete.component';
 
@@ -126,8 +125,7 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
     private projectAmendmentService: ProjectAmendmentService,
     private router: Router,
     private dfaAmendmentMainMapping: DFAAmendmentMainMappingService,
-    private attachmentsService: AttachmentService,
-    private amendmentAttachmentService: AmendmentAttachmentService,
+    private attachmentService: AttachmentService,
     private profileService: ProfileService,
     private eligibilityService: EligibilityService,
     private amendmentDataService: DFAProjectAmendmentDataService,
@@ -436,20 +434,20 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
       this.isLoading = true;
 
       // Create the amendment file upload payload for the new S3 service
-      const amendmentFileUpload: AmendmentFileUpload = {
+      const fileUploadAmendment: FileUploadAmendment = {
         projectId: fileUpload.projectId,
         amendmentId: this.dfaAmendmentMainDataService.getAmendmentId(),
         fileName: fileUpload.fileName,
-        description: fileUpload.fileDescription,
+        fileDescription: fileUpload.fileDescription,
         fileData: fileUpload.fileData, // This should be base64 string for TypeScript model
-        size: fileUpload.fileSize,
-        mimeType: fileUpload.contentType,
+        fileSize: fileUpload.fileSize,
+        contentType: fileUpload.contentType,
         uploadedDate: new Date().toISOString(),
         deleteFlag: false,
-        category: fileUpload.fileType
+        fileType: fileUpload.fileType
       };
 
-      this.amendmentAttachmentService.amendmentAttachmentUpsertAttachment({ body: amendmentFileUpload }).subscribe({
+      this.attachmentService.attachmentUpsertDeleteProjectAmendmentAttachment({ body: fileUploadAmendment }).subscribe({
         next: (fileUploadId) => {
           fileUpload.id = fileUploadId;
           if (fileUploads) fileUploads.push(fileUpload);
@@ -508,21 +506,21 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
     // For the new S3 service, we use soft delete by setting deleteFlag to true
     if (element.id) {
       // Create payload for soft delete by setting deleteFlag to true
-      const softDeletePayload: AmendmentFileUpload = {
+      const softDeletePayload: FileUploadAmendment = {
         id: element.id,
         projectId: element.projectId,
         amendmentId: this.dfaAmendmentMainDataService.getAmendmentId(),
         fileName: element.fileName,
-        description: element.description,
+        fileDescription: element.description,
         fileData: null, // No file data needed for soft delete
-        size: element.size,
-        mimeType: element.contentType || element.mimeType,
+        fileSize: element.size,
+        contentType: element.contentType || element.mimeType,
         uploadedDate: element.uploadedDate,
         deleteFlag: true, // Mark as deleted
-        category: element.category
+        fileType: element.category
       };
 
-      this.amendmentAttachmentService.amendmentAttachmentUpsertAttachment({ body: softDeletePayload }).subscribe({
+      this.attachmentService.attachmentUpsertDeleteProjectAmendmentAttachment({ body: softDeletePayload }).subscribe({
         next: (result) => {
           // Remove from local array after successful soft delete
           let fileUploads = this.formCreationService.fileUploadsAmendmentForm.value.get('fileUploads').value;

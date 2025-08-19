@@ -19,7 +19,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { Subscription, distinctUntilChanged, mapTo } from 'rxjs';
 import { FormCreationService } from '../../core/services/formCreation.service';
 import { AlertService } from 'src/app/core/services/alert.service';
-import { ApplicationService, AttachmentService, ProjectService, AmendmentAttachmentService } from 'src/app/core/api/services';
+import { ApplicationService, AttachmentService, ProjectService } from 'src/app/core/api/services';
 import { MatDialog } from '@angular/material/dialog';
 import { DFAConfirmSubmitDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-submit-dialog/dfa-confirm-submit-dialog.component';
 import { SecondaryApplicant } from 'src/app/core/model/dfa-application-main.model';
@@ -80,7 +80,7 @@ export class DFAAmendmentMainComponent
     private dfaAmendmentMainService: DFAAmendmentMainService,
     private projectService: ProjectService,
     private dfaProjectMainDataService: DFAProjectMainDataService,
-    private amendmentAttachmentService: AmendmentAttachmentService,
+    private attachmentService: AttachmentService,
   ) {
     const navigation = this.router.getCurrentNavigation();
   }
@@ -282,7 +282,7 @@ export class DFAAmendmentMainComponent
       return;
     }
 
-    this.amendmentAttachmentService.amendmentAttachmentGetAttachmentsByAmendmentId({ amendmentId: amendmentId }).subscribe({
+    this.attachmentService.attachmentGetAmendmentAttachments({projectId: projectId}).subscribe({
       next: (attachments) => {
         // Filter out soft-deleted files
         const activeAttachments = attachments.filter(attachment => !attachment.deleteFlag);
@@ -291,11 +291,11 @@ export class DFAAmendmentMainComponent
         const transformedAttachments = activeAttachments.map(attachment => ({
           id: attachment.id,
           fileName: attachment.fileName,
-          fileDescription: attachment.description,
-          fileType: attachment.category,
-          fileTypeText: attachment.category?.toString() || 'Amendment',
-          contentType: attachment.mimeType,
-          fileSize: attachment.size,
+          fileDescription: attachment.fileDescription,
+          fileType: attachment.fileType,
+          fileTypeText: attachment.fileTypeText?.toString() || 'Amendment',
+          contentType: attachment.contentType,
+          fileSize: attachment.fileSize,
           uploadedDate: attachment.uploadedDate,
           projectId: attachment.projectId,
           deleteFlag: attachment.deleteFlag || false,
