@@ -92,8 +92,8 @@
                     </p>
                   </div>
                   <div class="col-md-3">
-                    <mat-form-field appearance="outline">
-                      <input matInput formControlName="amendmentApprovedDate">
+                    <mat-form-field appearance="outline" class="mat-form-round">
+                      <input matInput formControlName="amendmentApprovedDate"  [matDatepicker]="amendmentApprovedDatePicker">
                       <mat-hint>MM/DD/YYYY</mat-hint>
                       <mat-datepicker-toggle matSuffix [for]="amendmentApprovedDatePicker"
                         disabled></mat-datepicker-toggle>
@@ -156,7 +156,8 @@
                           Approved Project Deadline Date
                         </p>
                         <mat-form-field appearance="outline">
-                          <input matInput formControlName="amended18MonthDeadline">
+                          <input matInput formControlName="amended18MonthDeadline" [matDatepicker]="amended18MonthDeadlineDatePicker"
+                            [disabled]="isReadOnly">
                           <mat-hint>MM/DD/YYYY</mat-hint>
                           <mat-datepicker-toggle matSuffix [for]="amended18MonthDeadlineDatePicker"
                             disabled></mat-datepicker-toggle>
@@ -225,7 +226,7 @@
             </div>
 
 
-            <ng-container> <!-- *ngIf="vieworedit !== 'viewOnly'"> <!-- Supporting Documents -->
+            <ng-container *ngIf="status !== 'Decision Made' && status !== 'Closed'"> <!-- Supporting Documents -->
               <div class="row">
                 <div class="col-md-8">
                   <app-dfa-attachment isAmendment=true isdisabled="isdisabled" requiredDocumentType="null"

@@ -189,7 +189,7 @@ export class DFAAmendmentComponent
     this.openAmendmentsCount = 0; this.closedAmendmentsCount = 0;
     lstProjects.forEach(x => {
       if (
-        ( x.status.toLowerCase() === "decision made" || 
+        ( 
           x.status.toLowerCase() === "closed" || 
           x.status.toLowerCase() === "closed: withdrawn")
       ) {

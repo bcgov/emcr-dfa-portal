@@ -183,10 +183,9 @@ export class DfaDashAmendmentComponent implements OnInit {
     //dfa decision made
     this.lstAmendments.forEach(x => {
       if (
-        (x.status.toLowerCase() === "decision made"
-          || x.status.toLowerCase() === "closed" || x.status.toLowerCase() === "closed: withdrawn")
-        //&&
-        //(x.date && (this.OneDayAgo >= new Date(x.dateFileClosed).getTime()))
+        (
+           x.status.toLowerCase() === "closed" 
+           || x.status.toLowerCase() === "closed: withdrawn")
         )
       {
         x.openAmendment = false;
