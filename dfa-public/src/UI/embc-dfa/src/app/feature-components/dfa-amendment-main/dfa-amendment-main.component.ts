@@ -168,6 +168,7 @@ export class DFAAmendmentMainComponent
       amendmentApprovedDate: this.form.get('amendmentApprovedDate').value,
       emcrDecisionComments: this.form.get('emcrDecisionComments').value,
       requestforProjectDeadlineExtention: this.form.get('requestforProjectDeadlineExtention').value,
+      requested18MonthDate: this.form.get('requested18MonthDate').value,
       amendedProjectDeadlineDate: this.form.get('amendedProjectDeadlineDate').value,
       deadlineExtensionApproved: this.form.get('deadlineExtensionApproved').value,
       amended18MonthDeadline: this.form.get('amended18MonthDeadline').value,
@@ -368,8 +369,11 @@ export class DFAAmendmentMainComponent
 
     // If requesting deadline extension, the deadline date is required
     if (requestforProjectDeadlineExtention === 'Yes') {
-      const amendedProjectDeadlineDate = this.form.get('amendedProjectDeadlineDate')?.value;
-      isValid = isValid && amendedProjectDeadlineDate;
+      //requested18MonthDate
+      const requested18MonthDate = this.form.get('requested18MonthDate')?.value;
+      isValid = isValid && requested18MonthDate;
+      //const amendedProjectDeadlineDate = this.form.get('amendedProjectDeadlineDate')?.value;
+      //isValid = isValid && amendedProjectDeadlineDate;
     }
 
     // If requesting additional cost, the cost amount is required

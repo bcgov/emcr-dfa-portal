@@ -189,6 +189,7 @@ namespace EMBC.DFA.API.Controllers
         public bool IsErrorInStatus { get; set; }
         public bool IsHidden { get; set; } = true;
         public string? ProjectId { get; set; }
+        public string? Requested18MonthDate { get; set; }
         public string? RequestforAdditionalProjectCost { get; set; }
         public string? RequestforProjectDeadlineExtention { get; set; }
         public string? Stage { get; set; }

@@ -29,6 +29,7 @@ namespace EMBC.Database.Contract
         public string? DeadlineExtensionApproved { get; set; }
         public string? EmcrDecisionComments { get; set; }
         public decimal? EstimatedAdditionalProjectCost { get; set; }
+        public string? Requested18MonthDate { get; set; }
         public string? RequestforAdditionalProjectCost { get; set; }
         public string? RequestforProjectDeadlineExtention { get; set; }
         public string? ProjectId { get; set; }

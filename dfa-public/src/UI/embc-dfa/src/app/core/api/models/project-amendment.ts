@@ -20,6 +20,7 @@ export interface ProjectAmendment {
   estimatedAdditionalProjectCost?: number | null;
   id?: string;
   projectId?: string | null;
+  requested18MonthDate?: string | null;
   requestforAdditionalProjectCost?: string | null;
   requestforProjectDeadlineExtention?: string | null;
   stage?: string | null;

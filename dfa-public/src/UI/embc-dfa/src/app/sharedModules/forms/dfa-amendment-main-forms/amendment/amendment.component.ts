@@ -189,7 +189,7 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
       this.amendmentForm.controls.amendmentApprovedDate.disable();
       this.amendmentForm.controls.emcrDecisionComments.disable();
       this.amendmentForm.controls.requestforProjectDeadlineExtention.disable();
-      this.amendmentForm.controls.amendedProjectDeadlineDate.disable();
+      this.amendmentForm.controls.requested18MonthDate.disable();
       this.amendmentForm.controls.deadlineExtensionApproved.disable();
       this.amendmentForm.controls.amended18MonthDeadline.disable();
       this.amendmentForm.controls.requestforAdditionalProjectCost.disable();
@@ -204,7 +204,7 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
       this.amendmentForm.controls.amendmentApprovedDate.enable();
       this.amendmentForm.controls.emcrDecisionComments.enable();
       this.amendmentForm.controls.requestforProjectDeadlineExtention.enable();
-      this.amendmentForm.controls.amendedProjectDeadlineDate.enable();
+      this.amendmentForm.controls.requested18MonthDate.enable();
       this.amendmentForm.controls.deadlineExtensionApproved.enable();
       this.amendmentForm.controls.amended18MonthDeadline.enable();
       this.amendmentForm.controls.requestforAdditionalProjectCost.enable();
@@ -244,7 +244,7 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
     this.amendmentForm.controls.amendmentApprovedDate.disable();
     this.amendmentForm.controls.emcrDecisionComments.disable();
     this.amendmentForm.controls.requestforProjectDeadlineExtention.disable();
-    this.amendmentForm.controls.amendedProjectDeadlineDate.disable();
+    this.amendmentForm.controls.requested18MonthDate.disable();
     this.amendmentForm.controls.deadlineExtensionApproved.disable();
     this.amendmentForm.controls.amended18MonthDeadline.disable();
     this.amendmentForm.controls.requestforAdditionalProjectCost.disable();
@@ -311,10 +311,10 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
             if (
               this.amendmentForm.get('requestforProjectDeadlineExtention')?.value === 'Yes' &&
               this.deadline18Months &&
-              !this.amendmentForm.get('amendedProjectDeadlineDate')?.value
+              !this.amendmentForm.get('requested18MonthDate')?.value
             ) {
               const dateValue = new Date(this.deadline18Months);
-              this.amendmentForm.get('amendedProjectDeadlineDate')?.setValue(dateValue);
+              this.amendmentForm.get('requested18MonthDate')?.setValue(dateValue);
             }
 
             // Subscribe to future changes
@@ -322,10 +322,10 @@ export default class AmendmentComponent implements OnInit, OnDestroy {
               if (
                 value === 'Yes' &&
                 this.deadline18Months &&
-                !this.amendmentForm.get('amendedProjectDeadlineDate')?.value
+                !this.amendmentForm.get('requested18MonthDate')?.value
               ) {
                 const dateValue = new Date(this.deadline18Months);
-                this.amendmentForm.get('amendedProjectDeadlineDate')?.setValue(dateValue);
+                this.amendmentForm.get('requested18MonthDate')?.setValue(dateValue);
               }
             });
           }

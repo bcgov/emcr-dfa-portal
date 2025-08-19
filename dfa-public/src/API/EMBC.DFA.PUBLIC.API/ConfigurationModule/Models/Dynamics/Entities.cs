@@ -1086,6 +1086,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_amendmentapproveddate { get; set; }
         public string? dfa_emcrapprovalcomments { get; set; }
         public bool? dfa_requestforprojectdeadlineextension { get; set; }
+        public string? dfa_requestedamendment18monthdate { get; set; }
         public string? dfa_amendedprojectdeadlinedate { get; set; }
         public bool? dfa_deadlineextensionapproved { get; set; }
         public string? dfa_amended18monthdeadline { get; set; }

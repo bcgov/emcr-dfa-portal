@@ -49,6 +49,7 @@ export class DFAAmendmentMainMappingService {
           deadlineExtensionApproved: dfaAmendment.deadlineExtensionApproved,
           emcrDecisionComments: dfaAmendment.emcrDecisionComments,
           estimatedAdditionalProjectCost: dfaAmendment.estimatedAdditionalProjectCost,
+          requested18MonthDate: convertToDate(dfaAmendment.requested18MonthDate),
           requestforAdditionalProjectCost: dfaAmendment.requestforAdditionalProjectCost,
           requestforProjectDeadlineExtention: dfaAmendment.requestforProjectDeadlineExtention,
           amendmentDecision: dfaAmendment.amendmentDecision,

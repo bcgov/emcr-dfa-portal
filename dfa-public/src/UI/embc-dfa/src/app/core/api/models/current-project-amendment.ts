@@ -21,6 +21,7 @@ export interface CurrentProjectAmendment {
   isErrorInStatus?: boolean;
   isHidden?: boolean;
   projectId?: string | null;
+  requested18MonthDate?: string | null;
   requestforAdditionalProjectCost?: string | null;
   requestforProjectDeadlineExtention?: string | null;
   stage?: string | null;

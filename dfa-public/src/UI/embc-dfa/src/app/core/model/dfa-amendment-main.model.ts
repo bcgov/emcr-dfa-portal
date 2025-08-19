@@ -16,6 +16,7 @@ export class ProjectAmendment {
   amendmentApprovedDate?: null | string;
   emcrDecisionComments?: null | string;
   requestforProjectDeadlineExtention?: null | string;
+  requested18MonthDate?: null | string;
   amendedProjectDeadlineDate?: null | string;
   deadlineExtensionApproved?: null | string;
   amended18MonthDeadline?: null | string;
@@ -33,6 +34,7 @@ export class ProjectAmendment {
     amendmentApprovedDate?: null | string,
     emcrDecisionComments?: null | string,
     requestforProjectDeadlineExtention?: null | string,
+    requested18MonthDate?: null | string,
     amendedProjectDeadlineDate?: null | string,
     deadlineExtensionApproved?: null | string,
     amended18MonthDeadline?: null | string,
@@ -52,6 +54,7 @@ export class ProjectAmendmentForm {
   amendmentApprovedDate = new UntypedFormControl();
   emcrDecisionComments = new UntypedFormControl();
   requestforProjectDeadlineExtention = new UntypedFormControl();
+  requested18MonthDate = new UntypedFormControl();
   amendedProjectDeadlineDate = new UntypedFormControl();
   deadlineExtensionApproved = new UntypedFormControl();
   amended18MonthDeadline = new UntypedFormControl();
@@ -87,6 +90,10 @@ export class ProjectAmendmentForm {
 
     if (projectAmendment.requestforProjectDeadlineExtention !== undefined && projectAmendment.requestforProjectDeadlineExtention !== null) {
       this.requestforProjectDeadlineExtention.setValue(projectAmendment.requestforProjectDeadlineExtention);
+    }
+
+    if (projectAmendment.requested18MonthDate){
+      this.requested18MonthDate.setValue(projectAmendment.requested18MonthDate);
     }
 
     if (projectAmendment.amendedProjectDeadlineDate) {
