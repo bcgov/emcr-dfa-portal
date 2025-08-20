@@ -1,5 +1,5 @@
 import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { AppealFileUpload, FileCategory, SignatureBlock } from 'src/app/core/api/models';
+import { FileUploadAppeal, FileCategory, SignatureBlock } from 'src/app/core/api/models';
 import { CustomValidationService } from '../services/customValidation.service';
 
 
@@ -44,11 +44,11 @@ export class AppealReasonForm {
  *   appealId: FormControl<string | null>;
  *   fileData: FormControl<string | null>;
  *   fileName: FormControl<string | null>;
- *   category: FormControl<FileCategory | null>;
- *   description: FormControl<string | null>;
+ *   fileType: FormControl<FileCategory | null>;
+ *   fileDescription: FormControl<string | null>;
  *   uploadedDate: FormControl<string | null>;
- *   size: FormControl<number | null>;
- *   mimeType: FormControl<string | null>;
+ *   fileSize: FormControl<number | null>;
+ *   contentType: FormControl<string | null>;
  *   deleteFlag: FormControl<boolean | null>;
  * }>)}
  */
@@ -57,24 +57,24 @@ export class AppealSupportingDocumentForm extends FormGroup<{
   appealId: FormControl<string | null>;
   fileData: FormControl<string | null>;
   fileName: FormControl<string | null>;
-  category: FormControl<FileCategory | null>;
-  description: FormControl<string | null>;
+  fileType: FormControl<FileCategory | null>;
+  fileDescription: FormControl<string | null>;
   uploadedDate: FormControl<string | null>;
-  size: FormControl<number | null>;
-  mimeType: FormControl<string | null>;
+  fileSize: FormControl<number | null>;
+  contentType: FormControl<string | null>;
   deleteFlag: FormControl<boolean | null>;
 }> {
-  constructor(appealSupportingDocument?: AppealFileUpload) {
+  constructor(appealSupportingDocument?: FileUploadAppeal) {
     super({
       id: new FormControl(appealSupportingDocument?.id || null),
       appealId: new FormControl(appealSupportingDocument?.appealId || null),
       fileData: new FormControl(appealSupportingDocument?.fileData || null),
       fileName: new FormControl(appealSupportingDocument?.fileName || null),
-      description: new FormControl(appealSupportingDocument?.description || null),
-      category: new FormControl(appealSupportingDocument?.category || null),
+      fileDescription: new FormControl(appealSupportingDocument?.fileDescription || null),
+      fileType: new FormControl(appealSupportingDocument?.fileType || null),
       uploadedDate: new FormControl(appealSupportingDocument?.uploadedDate || null),
-      size: new FormControl(appealSupportingDocument?.size || null),
-      mimeType: new FormControl(appealSupportingDocument?.mimeType || null),
+      fileSize: new FormControl(appealSupportingDocument?.fileSize || null),
+      contentType: new FormControl(appealSupportingDocument?.contentType || null),
       deleteFlag: new FormControl(appealSupportingDocument?.deleteFlag || null),
     });
   }
@@ -92,7 +92,7 @@ export class AppealSupportingDocumentForm extends FormGroup<{
 export class AppealSupportingDocumentsForm extends FormGroup<{
   files: FormArray<AppealSupportingDocumentForm>;
 }> {
-  constructor(appealSupportingDocuments?: AppealFileUpload[]) {
+  constructor(appealSupportingDocuments?: FileUploadAppeal[]) {
     super({
       files: new FormArray<AppealSupportingDocumentForm>(
         (appealSupportingDocuments ?? []).map((file) => new AppealSupportingDocumentForm(file))
@@ -100,15 +100,6 @@ export class AppealSupportingDocumentsForm extends FormGroup<{
     });
   }
 }
-// export class AppealSupportingDocumentsForm {
-//   files: AppealFileUpload[] = [];
-
-//   constructor(appealSupportingDocuments?: AppealFileUpload[]) {
-//     this.files = appealSupportingDocuments ?? []
-//   }
-// }
-
-
 
 export class SignAndSubmit {
   applicantSignature?: null | SignatureBlock;

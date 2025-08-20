@@ -57,7 +57,7 @@ import {
 } from '../model/profile.model';
 import { DFAAppealDataService } from 'src/app/feature-components/dfa-appeal/dfa-appeal-data.service';
 import { CustomValidationService } from './customValidation.service';
-import { AppealFileUpload } from 'src/app/core/api/models';
+import { FileUploadAppeal } from 'src/app/core/api/models';
 
 @Injectable({ providedIn: 'root' })
 export class FormCreationService {
@@ -830,7 +830,7 @@ export class FormCreationService {
    * @memberof FormCreationService
    */
   clearAppealSupportingDocumentsData(): void {
-    this.appealSupportingDocumentsForm.next(new AppealSupportingDocumentsForm(new Array<AppealFileUpload>()));
+    this.appealSupportingDocumentsForm.next(new AppealSupportingDocumentsForm(new Array<FileUploadAppeal>()));
   }
 
   getAppealSignAndSubmitForm(): Observable<UntypedFormGroup> {

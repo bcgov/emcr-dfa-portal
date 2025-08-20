@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Pipelines.Sockets.Unofficial.Arenas;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EMBC.DFA.API.Controllers
 {
@@ -223,6 +224,103 @@ namespace EMBC.DFA.API.Controllers
                 }
             }
         }
+
+
+        /// <summary>
+        /// Create / update / delete a file attachment
+        /// </summary>
+        /// <param name="fileUpload">The attachment information</param>
+        /// <returns>file upload id</returns>
+        [HttpPost("appealdocument")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [RequestSizeLimit(MAXFILESIZE)]
+        public async Task<ActionResult<string>> UpsertDeleteProjectAppealAttachment(FileUploadAppeal fileUpload)
+        {
+            if (fileUpload.fileData == null && fileUpload.deleteFlag == false) return BadRequest("FileUpload data cannot be empty.");
+            if (fileUpload.id == null && fileUpload.deleteFlag == true) return BadRequest("FileUpload id cannot be empty on delete");
+
+            if (fileUpload.deleteFlag == true)
+            {
+                var metadataDeleteParams = new MetadataDeleteParams();
+                if (fileUpload.id != null)
+                {
+                    metadataDeleteParams.DocumentMetadataId = fileUpload.id.ToString();
+                }
+                var result = await handler.HandleDeleteFileMetadataAsync(metadataDeleteParams);
+                return Ok(result);
+            }
+            else
+            {
+                logger.LogInformation("Upload S3 attachments dfa_appeal");
+                if (fileUpload.fileSize >= MAXFILESIZE)
+                {
+                    throw new Exception($"File size exceeds {MAXFILESIZE / 1_048_576.0:F2}MB limit");
+                }
+
+                var submissionEntity = mapper.Map<S3SubmissionEntity>(fileUpload);
+                /* Switch based on the regarding entity type where the doc is uploaded to
+                    case : incident 
+                    application : dfa_appapplication
+                    project : dfa_project
+                    recoveryClaim : dfa_projectclaim
+                    appeal: dfa_appeal"  
+                */
+                submissionEntity.RegardingEntitySchemaName = "dfa_appeal";
+
+                /* switch based on entity type to which the document is being uploaded
+                    case : bcgov_caseid
+                    application : dfa_appapplication
+                    project : dfa_project
+                    recoveryClaim : dfa_recoveryclaim 
+                    appeal: dfa_appealid
+                */
+                submissionEntity.RegardingEntityLookUpFieldName = "dfa_appealid";
+
+                try
+                {
+                    var result = await handler.HandleS3FileUploadAsync(submissionEntity);
+                    return Ok(result);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Failed to upload file to S3.");
+                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while uploading file.");
+                }
+            }
+            
+        }
+
+        /// <summary>
+        /// Get a list of appeal attachments by appeal Id
+        /// </summary>
+        /// <returns> FileUploads </returns>
+        /// <param name="appealId">The appeal Id.</param>
+        [HttpGet("byAppealId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<FileUploadAppeal>>> GetProjectAppealAttachments(
+            [FromQuery]
+            [Required]
+            Guid appealId)
+        {
+            IEnumerable<bcgov_documenturl> bcgovDocumentUrls = await handler.GetS3ProjectAppealDocumentListAsync(appealId);
+            IEnumerable<FileUploadAppeal> fileUploads = new FileUploadAppeal[] { };
+            if (bcgovDocumentUrls != null)
+            {
+                foreach (bcgov_documenturl bcgovDocumentUrl in bcgovDocumentUrls)
+                {
+                    FileUploadAppeal fileUpload = mapper.Map<FileUploadAppeal>(bcgovDocumentUrl);
+                    fileUploads = fileUploads.Append<FileUploadAppeal>(fileUpload);
+                }
+                return Ok(fileUploads);
+            }
+            else
+            {
+                return Ok(null);
+            }
+        }
     }
 
     /// <summary>
@@ -231,6 +329,25 @@ namespace EMBC.DFA.API.Controllers
     public class FileUpload
     {
         public Guid applicationId { get; set; }
+        public Guid? id { get; set; }
+        public string? fileName { get; set; }
+        public string? fileDescription { get; set; }
+        public FileCategory? fileType { get; set; }
+        public RequiredDocumentType? requiredDocumentType { get; set; }
+        public string? uploadedDate { get; set; }
+        public string? modifiedBy { get; set; }
+        public byte[]? fileData { get; set; }
+        public string? contentType { get; set; }
+        public int? fileSize { get; set; }
+        public bool deleteFlag { get; set; }
+    }
+
+    /// <summary>
+    /// Appeal S3 File Upload.
+    /// </summary>
+    public class FileUploadAppeal
+    {
+        public Guid appealId { get; set; }
         public Guid? id { get; set; }
         public string? fileName { get; set; }
         public string? fileDescription { get; set; }

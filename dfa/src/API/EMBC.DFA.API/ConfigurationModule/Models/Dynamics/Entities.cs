@@ -409,6 +409,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
     {
         public Guid? _dfa_project_value { get; set; }
         public Guid? _dfa_appapplication_value { get; set; }
+        public Guid? _dfa_appeal_value { get; set; }
         public string bcgov_filename { get; set; }
         public string createdon { get; set; }
         public string bcgov_url { get; set; }

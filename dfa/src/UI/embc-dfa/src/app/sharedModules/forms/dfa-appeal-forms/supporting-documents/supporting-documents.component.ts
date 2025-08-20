@@ -4,13 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { of, switchMap, take } from 'rxjs';
-import { AppealFileUpload } from 'src/app/core/api/models';
 import { AppealAttachmentService } from 'src/app/core/api/services';
 import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog-components/file-upload-warning-dialog/file-upload-warning-dialog.component';
 import { AppealSupportingDocumentForm, AppealSupportingDocumentsForm } from 'src/app/core/model/dfa-appeals-main.model';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { DFAAppealDataService } from 'src/app/feature-components/dfa-appeal/dfa-appeal-data.service';
-import { DfaApplicationMain } from 'src/app/core/api/models';
+import { DfaApplicationMain, FileUploadAppeal } from 'src/app/core/api/models';
 
 @Component({
   selector: 'app-supporting-documents',
@@ -39,12 +38,12 @@ export default class SupportingDocumentsComponent implements OnInit {
    * Note: This does not include files that are marked for deletion, and should not be used as the source of truth for
    * the state of the appeal supporting documents.
    */
-  currentAppealSupportingDocuments: AppealFileUpload[] = [];
+  currentAppealSupportingDocuments: FileUploadAppeal[] = [];
 
   /**
-   * Set to a valid AppealFileUpload object to pre-fill the form fields with existing data.
+   * Set to a valid FileUploadAppeal object to pre-fill the form fields with existing data.
    */
-  editFileUploadFormData: AppealFileUpload | undefined;
+  editFileUploadFormData: FileUploadAppeal | undefined;
 
   /**
    * Indicates whether the application data is currently being loaded.
@@ -94,7 +93,7 @@ export default class SupportingDocumentsComponent implements OnInit {
 
               if (!this.appealId) {
                 // This is a new appeal, no existing documents to fetch.
-                return of(new Array<AppealFileUpload>());
+                return of(new Array<FileUploadAppeal>());
               }
 
               // Fetch the existing appeal supporting documents, if this is an existing appeal.
@@ -173,16 +172,16 @@ export default class SupportingDocumentsComponent implements OnInit {
   /**
    * Handles the addition of a new supporting document.
    *
-   * @param {AppealFileUpload} appealFileUpload
+   * @param {FileUploadAppeal} fileUploadAppeal
    * @return {*}  {void}
    */
-  handleAddSupportingDocument(appealFileUpload: AppealFileUpload): void {
+  handleAddSupportingDocument(fileUploadAppeal: FileUploadAppeal): void {
     this._hideFileUploadForm();
 
     // If the filename already exists, we need to prevent it and show a snackbar warning
     const existingFile = this.currentAppealSupportingDocuments.find(
       // Don't match files that are marked for deletion, as they aren't true duplicates
-      (file) => file.fileName === appealFileUpload.fileName && !file.deleteFlag
+      (file) => file.fileName === fileUploadAppeal.fileName && !file.deleteFlag
     );
 
     if (existingFile) {
@@ -194,10 +193,10 @@ export default class SupportingDocumentsComponent implements OnInit {
     }
 
     // Append the new file upload to the list of existing documents
-    this.currentAppealSupportingDocuments = [...this.currentAppealSupportingDocuments, appealFileUpload];
+    this.currentAppealSupportingDocuments = [...this.currentAppealSupportingDocuments, fileUploadAppeal];
 
     const formArray = this.appealSupportingDocumentsForm.get('files') as FormArray<AppealSupportingDocumentForm>;
-    formArray.push(new AppealSupportingDocumentForm(appealFileUpload));
+    formArray.push(new AppealSupportingDocumentForm(fileUploadAppeal));
 
     // add a snack bar message to indicate that the file has been added
     this._snackBar.open('Your file has been added successfully.', 'Close', {
@@ -212,10 +211,10 @@ export default class SupportingDocumentsComponent implements OnInit {
    * For previously persisted files, it marks the file for deletion by setting the deleteFlag to true.
    * For files that have not been persisted yet, it removes the file from the list.
    *
-   * @param {AppealFileUpload} appealFileUpload
+   * @param {FileUploadAppeal} fileUploadAppeal
    * @return {*}  {void}
    */
-  handleRemoveSupportingDocument(appealFileUpload: AppealFileUpload): void {
+  handleRemoveSupportingDocument(fileUploadAppeal: FileUploadAppeal): void {
     // Either remove the file from the list or mark it for deletion
     let existingFileUploads = this.currentAppealSupportingDocuments;
 
@@ -225,7 +224,7 @@ export default class SupportingDocumentsComponent implements OnInit {
     }
 
     const indexToRemove = existingFileUploads.findIndex(
-      (existingFileUpload) => existingFileUpload.fileName === appealFileUpload.fileName
+      (existingFileUpload) => existingFileUpload.fileName === fileUploadAppeal.fileName
     );
 
     if (indexToRemove === -1) {
@@ -233,7 +232,7 @@ export default class SupportingDocumentsComponent implements OnInit {
       return;
     }
 
-    if (appealFileUpload.id) {
+    if (fileUploadAppeal.id) {
       // File has been previously persisted, mark the file for deletion
       existingFileUploads[indexToRemove].deleteFlag = true;
     } else {

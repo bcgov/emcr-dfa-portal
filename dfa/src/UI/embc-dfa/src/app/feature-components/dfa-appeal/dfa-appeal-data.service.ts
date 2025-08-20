@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AppealFileUpload, AppealUpdateRequest, DfaApplicationMain } from 'src/app/core/api/models';
+import { FileUploadAppeal, AppealUpdateRequest, DfaApplicationMain } from 'src/app/core/api/models';
 import { AppealStatus, AppealType, DfaAppeal, SignAndSubmit } from '../../core/model/dfa-appeals-main.model';
 import { CacheService } from '../../core/services/cache.service';
 
 @Injectable({ providedIn: 'root' })
 export class DFAAppealDataService {
   private _appealReason: string;
-  private _appealSupportingDocuments: AppealFileUpload[] = [];
+  private _appealSupportingDocuments: FileUploadAppeal[] = [];
   private _signAndSubmit: SignAndSubmit;
   private _dfaAppeal: DfaAppeal;
   private _applicationId: string;
@@ -40,15 +40,15 @@ export class DFAAppealDataService {
     this._appealReason = appealReason;
   }
 
-  public get appealSupportingDocuments(): AppealFileUpload[] {
+  public get appealSupportingDocuments(): FileUploadAppeal[] {
     return this._appealSupportingDocuments;
   }
 
-  public set appealSupportingDocuments(supportingDocuments: AppealFileUpload[]) {
+  public set appealSupportingDocuments(supportingDocuments: FileUploadAppeal[]) {
     this._appealSupportingDocuments = supportingDocuments;
   }
 
-  public setAppealSupportingDocuments(supportingDocuments: AppealFileUpload[]): void {
+  public setAppealSupportingDocuments(supportingDocuments: FileUploadAppeal[]): void {
     this._appealSupportingDocuments = supportingDocuments;
   }
 

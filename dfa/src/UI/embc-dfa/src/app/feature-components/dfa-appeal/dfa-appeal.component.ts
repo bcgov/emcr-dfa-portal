@@ -6,7 +6,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { concatMap, from, Subscription, tap, of, forkJoin } from 'rxjs';
 import { AppealModel, AppealUpdateRequest, DfaApplicationMain, SecondaryApplicant } from 'src/app/core/api/models';
-import { AppealAttachmentService, ApplicationService } from 'src/app/core/api/services';
+import { AttachmentService, ApplicationService } from 'src/app/core/api/services';
 import { CancelConfirmationDialogComponent } from 'src/app/core/components/dialog-components/dfa-cancel-confirmation-dialog/dfa-cancel-confirmation-dialog.component';
 import { AppealStatus, AppealType } from 'src/app/core/model/dfa-appeals-main.model';
 import { ComponentMetaDataModel } from '../../core/model/componentMetaData.model';
@@ -59,7 +59,7 @@ export class DfaAppealComponent implements OnInit {
     private dfaAppealDataService: DFAAppealDataService,
     private dfaAppealService: DfaAppealService,
     private applicationService: ApplicationService,
-    private appealAttachmentService: AppealAttachmentService,
+    private attachmentService: AttachmentService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) { }
@@ -473,14 +473,18 @@ export class DfaAppealComponent implements OnInit {
         from(supportingDocumentsToUpload)
           .pipe(
             concatMap((supportingDocument) => {
+              if (supportingDocument.deleteFlag == null){
+                supportingDocument.deleteFlag = false;
+              }
+
               if (supportingDocument.deleteFlag) {
                 // Delete the existing attachment if deleteFlag is true
-                return this.appealAttachmentService.appealAttachmentDeleteAttachment({
-                  documentUrlId: supportingDocument.id
+                return this.attachmentService.attachmentUpsertDeleteProjectAppealAttachment({
+                  body: supportingDocument
                 });
               }
 
-              return this.appealAttachmentService.appealAttachmentUpsertAttachment({ body: supportingDocument });
+              return this.attachmentService.attachmentUpsertDeleteProjectAppealAttachment({ body: supportingDocument });
             })
           )
           .subscribe({

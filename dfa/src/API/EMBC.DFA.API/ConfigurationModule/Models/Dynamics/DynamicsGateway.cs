@@ -889,6 +889,29 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             }
         }
 
+        public async Task<IEnumerable<bcgov_documenturl>> GetS3ProjectAppealDocumentListAsync(Guid appealId)
+        {
+            try
+            {
+                var appealIdString = appealId.ToString();
+                var list = await api.GetList<bcgov_documenturl>("bcgov_documenturls", new CRMGetListOptions
+                {
+                    Select = new[]
+                    {
+                        "bcgov_filename", "createdon", "bcgov_url", "bcgov_filesize", "bcgov_origincode", "bcgov_documenturlid", "statuscode", "statecode",
+                        "dfa_requireddocumenttype", "_dfa_project_value", "bcgov_mimetype", "bcgov_size", "bcgov_fileextension", "dfa_description",
+                        "bcgov_fileclassification", "dfa_category", "_dfa_appapplication_value", "_modifiedby_value", "_dfa_appeal_value"
+                    },
+                    Filter = $"_dfa_appeal_value eq {appealIdString} and statecode eq 0 and bcgov_origincode eq 931490000"
+                });
+
+                return list.List;
+            }
+            catch (System.Exception ex)
+            {
+                throw new Exception($"Failed to get documents {ex.Message}", ex);
+            }
+        }
         public async Task<int> GetEventCount()
         {
             try

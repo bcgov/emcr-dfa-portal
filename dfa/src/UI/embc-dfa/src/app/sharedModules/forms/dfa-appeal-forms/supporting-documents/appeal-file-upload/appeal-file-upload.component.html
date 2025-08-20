@@ -35,21 +35,21 @@
         >
         <mat-form-field appearance="outline" [hidden]="!fileUploadForm.get('fileName').value">
           <mat-label>File description</mat-label>
-          <input formControlName="description" matInput placeholder="File description" required maxlength="100" />
+          <input formControlName="fileDescription" matInput placeholder="File description" required maxlength="100" />
           <mat-hint>Maximum length is 100 characters</mat-hint>
           <mat-error
             *ngIf="
-              fileUploadForm.get('description').invalid &&
-              fileUploadForm.get('description').hasError('required') &&
-              fileUploadForm.get('description').touched
+              fileUploadForm.get('fileDescription').invalid &&
+              fileUploadForm.get('fileDescription').hasError('required') &&
+              fileUploadForm.get('fileDescription').touched
             "
             >File description is required</mat-error
           >
           <mat-error
             *ngIf="
-              fileUploadForm.get('description').invalid &&
-              fileUploadForm.get('description').hasError('maxLength') &&
-              fileUploadForm.get('description').touched
+              fileUploadForm.get('fileDescription').invalid &&
+              fileUploadForm.get('fileDescription').hasError('maxLength') &&
+              fileUploadForm.get('fileDescription').touched
             ">
             Maximum length is 100 characters</mat-error
           >
@@ -92,7 +92,7 @@
             <b>File Description</b>
           </th>
           <td *matCellDef="let elementFile" mat-cell>
-            {{ elementFile.description }}
+            {{ elementFile.fileDescription }}
           </td>
         </ng-container>
 

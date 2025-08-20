@@ -109,7 +109,7 @@ namespace EMBC.DFA.API.Controllers
                     Id = appealFileMetadataId,
                     AppealId = appealFileUpload.AppealId,
                     FileName = appealFileUpload.FileName,
-                    Description = appealFileUpload.Description,
+                    FileDescription = appealFileUpload.Description,
                     Url = s3Key,
                     Size = appealFileUpload.Size,
                     MimeType = appealFileUpload.MimeType,
@@ -312,7 +312,7 @@ namespace EMBC.DFA.API.Controllers
         public Guid? Id { get; set; }
         public Guid AppealId { get; set; }
         public string FileName { get; set; }
-        public string? Description { get; set; }
+        public string? FileDescription { get; set; }
         public string Url { get; set; }
         public FileCategory Category { get; } = FileCategory.Appeal;
         public string? UploadedDate { get; set; }

@@ -11,7 +11,7 @@ export interface AppealFileMetadataUpload {
   appealId?: string;
   category?: FileCategory;
   deleteFlag?: boolean | null;
-  description?: string | null;
+  fileDescription?: string | null;
   fileName?: string;
   id?: string | null;
   mimeType?: string;

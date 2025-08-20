@@ -37,6 +37,7 @@ export { FarmOption } from './models/farm-option';
 export type { FeatureFlagConfiguration } from './models/feature-flag-configuration';
 export { FileCategory } from './models/file-category';
 export type { FileUpload } from './models/file-upload';
+export type { FileUploadAppeal } from './models/file-upload-appeal';
 export type { FullTimeOccupant } from './models/full-time-occupant';
 export { InsuranceOption } from './models/insurance-option';
 export type { InviteRequest } from './models/invite-request';

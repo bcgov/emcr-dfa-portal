@@ -319,21 +319,21 @@ namespace EMBC.DFA.API.Controllers
             //CreateMap<Country, Code>()
             //    .ForMember(d => d.Type, opts => opts.MapFrom(s => nameof(Country)))
             //    .ForMember(d => d.Value, opts => opts.MapFrom(s => s.Code))
-            //    .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Name))
+            //    .ForMember(d => d.FileDescription, opts => opts.MapFrom(s => s.Name))
             //    .ForMember(d => d.ParentCode, opts => opts.Ignore())
             //    ;
 
             //CreateMap<StateProvince, Code>()
             //    .ForMember(d => d.Type, opts => opts.MapFrom(s => nameof(StateProvince)))
             //    .ForMember(d => d.Value, opts => opts.MapFrom(s => s.Code))
-            //    .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Name))
+            //    .ForMember(d => d.FileDescription, opts => opts.MapFrom(s => s.Name))
             //    .ForMember(d => d.ParentCode, opts => opts.MapFrom(s => new Code { Value = s.CountryCode, Type = nameof(Country) }))
             //    ;
 
             //CreateMap<Community, CommunityCode>()
             //    .ForMember(d => d.Type, opts => opts.MapFrom(s => nameof(Community)))
             //    .ForMember(d => d.Value, opts => opts.MapFrom(s => s.Code))
-            //    .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Name))
+            //    .ForMember(d => d.FileDescription, opts => opts.MapFrom(s => s.Name))
             //    .ForMember(d => d.DistrictName, opts => opts.MapFrom(s => s.DistrictName))
             //    .ForMember(d => d.CommunityType, opts => opts.MapFrom(s => s.Type))
             //    .ForMember(d => d.ParentCode, opts => opts.MapFrom(s => new Code { Value = s.StateProvinceCode, Type = nameof(StateProvince), ParentCode = new Code { Value = s.CountryCode, Type = nameof(Country) } }))

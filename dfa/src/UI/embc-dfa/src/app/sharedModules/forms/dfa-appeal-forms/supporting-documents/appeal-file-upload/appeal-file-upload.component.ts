@@ -12,7 +12,7 @@ import {
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
-import { AppealFileUpload, FileCategory } from 'src/app/core/api/models';
+import { FileCategory, FileUploadAppeal } from 'src/app/core/api/models';
 import { AppealSupportingDocumentForm } from 'src/app/core/model/dfa-appeals-main.model';
 import { CustomValidationService } from 'src/app/core/services/customValidation.service';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
@@ -29,15 +29,15 @@ export class AppealFileUploadComponent implements OnInit, OnChanges, OnDestroy {
    */
   @Input() description: string;
   /**
-   * Set to a valid AppealFileUpload object to pre-fill the form fields with existing data.
+   * Set to a valid FileUploadAppeal object to pre-fill the form fields with existing data.
    */
-  @Input() editFileUpload?: AppealFileUpload;
+  @Input() editFileUpload?: FileUploadAppeal;
   /**
    * The current file uploads to display in the table.
    *
-   * @type {AppealFileUpload[]}
+   * @type {FileUploadAppeal[]}
    */
-  @Input() currentFileUploads?: AppealFileUpload[];
+  @Input() currentFileUploads?: FileUploadAppeal[];
   /**
    * Indicates whether the component is in read-only mode.
    */
@@ -58,12 +58,12 @@ export class AppealFileUploadComponent implements OnInit, OnChanges, OnDestroy {
    * Emits an event when the user saves the file upload.
    * Note: The file is not persisted to the API; the parent component must handle persisting the file upload.
    */
-  @Output() onSave = new EventEmitter<AppealFileUpload>();
+  @Output() onSave = new EventEmitter<FileUploadAppeal>();
   /**
    * Emits an event when the user removes a file upload.
    * Note: The parent component must handle the actual removal of the file upload.
    */
-  @Output() onRemove = new EventEmitter<AppealFileUpload>();
+  @Output() onRemove = new EventEmitter<FileUploadAppeal>();
   /**
    * Emits an event when the user cancels the file upload.
    *
@@ -92,7 +92,7 @@ export class AppealFileUploadComponent implements OnInit, OnChanges, OnDestroy {
   fileType = FileCategory.Appeal;
 
   savedDocumentsTableHeaders = ['fileName', 'description', 'uploadedDate', 'deleteIcon'];
-  savedDocumentsUploadsTableData: MatTableDataSource<AppealFileUpload> = new MatTableDataSource<AppealFileUpload>([]);
+  savedDocumentsUploadsTableData: MatTableDataSource<FileUploadAppeal> = new MatTableDataSource<FileUploadAppeal>([]);
 
   isEditView = this.router.url.includes('/edit');
 
@@ -167,10 +167,10 @@ export class AppealFileUploadComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Removes the file upload item from the list.
    *
-   * @param {AppealFileUpload} appealFileUpload
+   * @param {FileUploadAppeal} fileUploadAppeal
    */
-  removeAttachment(appealFileUpload: AppealFileUpload): void {
-    this.onRemove.emit(appealFileUpload);
+  removeAttachment(fileUploadAppeal: FileUploadAppeal): void {
+    this.onRemove.emit(fileUploadAppeal);
   }
 
   /**
@@ -205,11 +205,11 @@ export class AppealFileUploadComponent implements OnInit, OnChanges, OnDestroy {
       // Update the form controls with the file data
       this.fileUploadForm.get('fileData').setValue(fileData);
       this.fileUploadForm.get('fileName').setValue(event.name);
-      this.fileUploadForm.get('description').setValue(event.name);
-      this.fileUploadForm.get('category').setValue(FileCategory.Appeal);
+      this.fileUploadForm.get('fileDescription').setValue(event.name);
+      this.fileUploadForm.get('fileType').setValue(FileCategory.Appeal);
       this.fileUploadForm.get('uploadedDate').setValue(new Date().toISOString());
-      this.fileUploadForm.get('size').setValue(event.size);
-      this.fileUploadForm.get('mimeType').setValue(event.type);
+      this.fileUploadForm.get('fileSize').setValue(event.size);
+      this.fileUploadForm.get('contentType').setValue(event.type);
     };
   }
 }

@@ -100,7 +100,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Controllers
     //            var type = Assembly.GetExecutingAssembly().ExportedTypes.FirstOrDefault(t => t.Name.Equals(forEnumType, StringComparison.OrdinalIgnoreCase) && t.IsEnum);
     //            if (type == null) return NotFound(new ProblemDetails { Detail = $"enum '{forEnumType}' not found" });
     //            var values = EnumDescriptionHelper.GetEnumDescriptions(type);
-    //            return Ok(values.Select(e => new Code { Type = type.Name, Value = e.Value, Description = e.Description }).ToArray());
+    //            return Ok(values.Select(e => new Code { Type = type.Name, Value = e.Value, FileDescription = e.FileDescription }).ToArray());
     //        }
     //        return BadRequest(new ProblemDetails { Detail = "empty query parameter" });
     //    }
@@ -196,7 +196,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Controllers
     //{
     //    public string Type { get; set; }
     //    public string Value { get; set; }
-    //    public string Description { get; set; }
+    //    public string FileDescription { get; set; }
     //    public Code ParentCode { get; set; }
     //    public bool IsActive { get; set; }
     //}
@@ -228,37 +228,37 @@ namespace EMBC.DFA.API.ConfigurationModule.Controllers
     //[JsonConverter(typeof(JsonStringEnumConverter))]
     //public enum CommunityType
     //{
-    //    [Description("Undefined")]
+    //    [FileDescription("Undefined")]
     //    Undefined,
 
-    //    [Description("City")]
+    //    [FileDescription("City")]
     //    City,
 
-    //    [Description("Town")]
+    //    [FileDescription("Town")]
     //    Town,
 
-    //    [Description("Village")]
+    //    [FileDescription("Village")]
     //    Village,
 
-    //    [Description("First Nations Community")]
+    //    [FileDescription("First Nations Community")]
     //    FirstNationsCommunity,
 
-    //    [Description("District Municipality")]
+    //    [FileDescription("District Municipality")]
     //    DistrictMunicipality,
 
-    //    [Description("Indian Government District")]
+    //    [FileDescription("Indian Government District")]
     //    IndianGovernmentDistrict,
 
-    //    [Description("Indian Reserve")]
+    //    [FileDescription("Indian Reserve")]
     //    IndianReserve,
 
-    //    [Description("Urban Community")]
+    //    [FileDescription("Urban Community")]
     //    UrbanCommunity,
 
-    //    [Description("Resort Municipality")]
+    //    [FileDescription("Resort Municipality")]
     //    ResortMunicipality,
 
-    //    [Description("Community")]
+    //    [FileDescription("Community")]
     //    Community,
     //}
 
@@ -269,21 +269,21 @@ namespace EMBC.DFA.API.ConfigurationModule.Controllers
     //        CreateMap<Country, Code>()
     //            .ForMember(d => d.Type, opts => opts.MapFrom(s => nameof(Country)))
     //            .ForMember(d => d.Value, opts => opts.MapFrom(s => s.Code))
-    //            .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Name))
+    //            .ForMember(d => d.FileDescription, opts => opts.MapFrom(s => s.Name))
     //            .ForMember(d => d.ParentCode, opts => opts.Ignore())
     //            ;
 
     //        CreateMap<StateProvince, Code>()
     //            .ForMember(d => d.Type, opts => opts.MapFrom(s => nameof(StateProvince)))
     //            .ForMember(d => d.Value, opts => opts.MapFrom(s => s.Code))
-    //            .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Name))
+    //            .ForMember(d => d.FileDescription, opts => opts.MapFrom(s => s.Name))
     //            .ForMember(d => d.ParentCode, opts => opts.MapFrom(s => new Code { Value = s.CountryCode, Type = nameof(Country) }))
     //            ;
 
     //        CreateMap<Community, CommunityCode>()
     //            .ForMember(d => d.Type, opts => opts.MapFrom(s => nameof(Community)))
     //            .ForMember(d => d.Value, opts => opts.MapFrom(s => s.Code))
-    //            .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Name))
+    //            .ForMember(d => d.FileDescription, opts => opts.MapFrom(s => s.Name))
     //            .ForMember(d => d.DistrictName, opts => opts.MapFrom(s => s.DistrictName))
     //            .ForMember(d => d.CommunityType, opts => opts.MapFrom(s => s.Type))
     //            .ForMember(d => d.ParentCode, opts => opts.MapFrom(s => new Code { Value = s.StateProvinceCode, Type = nameof(StateProvince), ParentCode = new Code { Value = s.CountryCode, Type = nameof(Country) } }))

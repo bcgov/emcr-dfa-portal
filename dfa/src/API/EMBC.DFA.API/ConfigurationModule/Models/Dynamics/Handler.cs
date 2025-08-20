@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Cronos;
+using EMBC.Database.Contract;
 using EMBC.DFA.API.Controllers;
 using EMBC.DFA.API.Mappers;
 using EMBC.Utilities.Caching;
@@ -42,6 +43,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> DeleteFileUploadAsync(dfa_DFAActionDeleteDocuments_parms dfa_DFAActionDeleteDocuments_parms);
         Task<IEnumerable<dfa_appdocumentlocation>> GetFileUploadsAsync(Guid applicationId);
         Task<IEnumerable<bcgov_documenturl>> GetS3ApplicationDocumentListAsync(Guid applicationId);
+        Task<IEnumerable<bcgov_documenturl>> GetS3ProjectAppealDocumentListAsync(Guid appealId);
         Task<string> HandleS3FileUploadAsync(S3SubmissionEntity objDocumentLocation);
         Task<string> HandleCreateFileMetadataAsync(MetadataSubmissionEntity submission);
         Task<string> HandleDeleteFileMetadataAsync(MetadataDeleteParams parameters);
@@ -246,6 +248,11 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public async Task<IEnumerable<bcgov_documenturl>> GetS3ApplicationDocumentListAsync(Guid applicationId)
         {
             return await listsGateway.GetS3ApplicationDocumentListAsync(applicationId);
+        }
+
+        public async Task<IEnumerable<bcgov_documenturl>> GetS3ProjectAppealDocumentListAsync(Guid appealId)
+        {
+            return await listsGateway.GetS3ProjectAppealDocumentListAsync(appealId);
         }
 
         public async Task<IEnumerable<dfa_appdocumentlocation>> GetFileUploadsAsync(Guid applicationId)

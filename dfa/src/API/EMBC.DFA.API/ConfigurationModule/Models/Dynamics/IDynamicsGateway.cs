@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using EMBC.Database.Contract;
 using EMBC.DFA.API.Controllers;
 using Google.Protobuf.WellKnownTypes;
 using Xrm.Tools.WebAPI.Requests;
@@ -35,6 +36,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<string> CreateDocumentMetadataAsync(MetadataSubmissionEntity parameters);
         Task<string> DeleteDocumentMetadataAsync(MetadataDeleteParams parameters);
         Task<IEnumerable<bcgov_documenturl>> GetS3ApplicationDocumentListAsync(Guid applicationId);
+        Task<IEnumerable<bcgov_documenturl>> GetS3ProjectAppealDocumentListAsync(Guid appealId);
         Task<IEnumerable<dfa_appdocumentlocation>> GetDocumentLocationsListAsync(Guid applicationId);
         Task<IEnumerable<dfa_appapplication>> GetApplicationListAsync(string profileId);
         Task<int> GetEventCount();

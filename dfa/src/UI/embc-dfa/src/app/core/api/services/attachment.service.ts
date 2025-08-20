@@ -13,9 +13,14 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { attachmentGetAttachments } from '../fn/attachment/attachment-get-attachments';
 import { AttachmentGetAttachments$Params } from '../fn/attachment/attachment-get-attachments';
+import { attachmentGetProjectAppealAttachments } from '../fn/attachment/attachment-get-project-appeal-attachments';
+import { AttachmentGetProjectAppealAttachments$Params } from '../fn/attachment/attachment-get-project-appeal-attachments';
 import { attachmentUpsertDeleteAttachment } from '../fn/attachment/attachment-upsert-delete-attachment';
 import { AttachmentUpsertDeleteAttachment$Params } from '../fn/attachment/attachment-upsert-delete-attachment';
+import { attachmentUpsertDeleteProjectAppealAttachment } from '../fn/attachment/attachment-upsert-delete-project-appeal-attachment';
+import { AttachmentUpsertDeleteProjectAppealAttachment$Params } from '../fn/attachment/attachment-upsert-delete-project-appeal-attachment';
 import { FileUpload } from '../models/file-upload';
+import { FileUploadAppeal } from '../models/file-upload-appeal';
 
 @Injectable({ providedIn: 'root' })
 export class AttachmentService extends BaseService {
@@ -86,6 +91,72 @@ export class AttachmentService extends BaseService {
   attachmentGetAttachments(params?: AttachmentGetAttachments$Params, context?: HttpContext): Observable<Array<FileUpload>> {
     return this.attachmentGetAttachments$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<FileUpload>>): Array<FileUpload> => r.body)
+    );
+  }
+
+  /** Path part for operation `attachmentUpsertDeleteProjectAppealAttachment()` */
+  static readonly AttachmentUpsertDeleteProjectAppealAttachmentPath = '/api/attachments/appealdocument';
+
+  /**
+   * Create / update / delete a file attachment.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `attachmentUpsertDeleteProjectAppealAttachment()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  attachmentUpsertDeleteProjectAppealAttachment$Response(params: AttachmentUpsertDeleteProjectAppealAttachment$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return attachmentUpsertDeleteProjectAppealAttachment(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create / update / delete a file attachment.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `attachmentUpsertDeleteProjectAppealAttachment$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  attachmentUpsertDeleteProjectAppealAttachment(params: AttachmentUpsertDeleteProjectAppealAttachment$Params, context?: HttpContext): Observable<string> {
+    return this.attachmentUpsertDeleteProjectAppealAttachment$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
+    );
+  }
+
+  /** Path part for operation `attachmentGetProjectAppealAttachments()` */
+  static readonly AttachmentGetProjectAppealAttachmentsPath = '/api/attachments/byAppealId';
+
+  /**
+   * Get a list of appeal attachments by appeal Id.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `attachmentGetProjectAppealAttachments()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  attachmentGetProjectAppealAttachments$Response(params?: AttachmentGetProjectAppealAttachments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FileUploadAppeal>>> {
+    return attachmentGetProjectAppealAttachments(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get a list of appeal attachments by appeal Id.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `attachmentGetProjectAppealAttachments$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  attachmentGetProjectAppealAttachments(params?: AttachmentGetProjectAppealAttachments$Params, context?: HttpContext): Observable<Array<FileUploadAppeal>> {
+    return this.attachmentGetProjectAppealAttachments$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<FileUploadAppeal>>): Array<FileUploadAppeal> => r.body)
     );
   }
 
