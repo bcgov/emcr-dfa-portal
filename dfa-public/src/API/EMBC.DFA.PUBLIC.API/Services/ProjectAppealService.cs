@@ -82,7 +82,7 @@ public class ProjectAppealService
                 {
                     return PortalNote.InProgress;
                 }
-            case "Appeal Decision Made":
+            case "Appeal Decision":
                 if (projectAppeal.AppealDecisionCommentsAdded.ToBool() || projectAppeal.AppealDecision != null)
                 {
                     return projectAppeal.AppealDecision.ThrowIfNullOrEmpty();
