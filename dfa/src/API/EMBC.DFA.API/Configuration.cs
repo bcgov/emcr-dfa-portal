@@ -116,31 +116,39 @@ namespace EMBC.DFA.API
             {
                 options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
                 {
-                    policy.RequireAuthenticatedUser();
-                    policy.AddAuthenticationSchemes("jwt");
+                    policy.RequireAuthenticatedUser()
+                    .AddAuthenticationSchemes("jwt");
 
-                    policy.RequireAssertion(ctx =>
+                    var scope = configuration.GetValue<string>("auth:jwt:scope") ?? configuration.GetValue<string>("messaging:oauth:scope");
+                    //if keycloak config does not exist  use existing oauth scope
+                    if (configuration.GetValue<string>("auth:jwt:scope") != null)
                     {
-                        var logger = ctx.User.Identity?.IsAuthenticated == true
-                            ? ctx.Resource as Microsoft.AspNetCore.Http.HttpContext
-                                != null
-                                ? ((Microsoft.AspNetCore.Http.HttpContext)ctx.Resource).RequestServices.GetRequiredService<ILogger<Configuration>>()
-                                : null
-                            : null;
-
-                        var hasScope = ctx.User.HasClaim(c => c.Type == "scope" && c.Value == "openid dfa-private-portal-6107 email profile");
-
-                        if (logger != null)
+                        policy.RequireAssertion(ctx =>
                         {
-                            //logger.LogInformation("USer Info: " + JsonSerializer.Serialize(ctx.User));
-                            logger.LogInformation("Authorization check: user '{User}' authenticated={IsAuthenticated}, hasScope={HasScope}",
-                                ctx.User.Identity?.Name ?? "anonymous",
-                                ctx.User.Identity?.IsAuthenticated,
-                                hasScope);
-                        }
+                            var logger = ctx.User.Identity?.IsAuthenticated == true
+                                ? ctx.Resource as Microsoft.AspNetCore.Http.HttpContext
+                                    != null
+                                    ? ((Microsoft.AspNetCore.Http.HttpContext)ctx.Resource).RequestServices.GetRequiredService<ILogger<Configuration>>()
+                                    : null
+                                : null;
 
-                        return hasScope;
-                    });
+                            var hasScope = ctx.User.HasClaim(c => c.Type == "scope" && c.Value == configuration.GetValue<string>("auth:jwt:scope"));
+
+                            if (logger != null)
+                            {
+                                logger.LogInformation("Authorization check: user '{User}' authenticated={IsAuthenticated}, hasScope={HasScope}",
+                                    ctx.User.Identity?.Name ?? "anonymous",
+                                    ctx.User.Identity?.IsAuthenticated,
+                                    hasScope);
+                            }
+
+                            return hasScope;
+                        });
+                    }
+                    else
+                    {
+                        policy.RequireClaim("scope", "dfa-portal-api");
+                    }
                 });
 
                 options.DefaultPolicy = options.GetPolicy(JwtBearerDefaults.AuthenticationScheme) ?? null!;
@@ -163,7 +171,7 @@ namespace EMBC.DFA.API
                 options.DocumentPath = "/api/openapi/{documentName}/openapi.json";
             });
 
-            // Register it for DI
+           // Register it for DI
 
             services.AddOpenApiDocument(document =>
             {
