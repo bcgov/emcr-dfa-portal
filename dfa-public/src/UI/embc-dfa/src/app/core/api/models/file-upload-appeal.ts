@@ -6,10 +6,10 @@ import { FileCategory } from '../models/file-category';
 import { RequiredDocumentType } from '../models/required-document-type';
 
 /**
- * File Upload
+ * Appeal S3 File Upload.
  */
-export interface FileUpload {
-  applicationId?: string;
+export interface FileUploadAppeal {
+  appealId?: string;
   contentType?: string | null;
   deleteFlag?: boolean;
   fileData?: string | null;

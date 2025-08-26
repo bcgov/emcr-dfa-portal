@@ -8,9 +8,9 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { DfaApplicationStart } from '../../models/dfa-application-start';
+import { FileUpload } from '../../models/file-upload';
 
-export interface ApplicationGetApplicationMain$Params {
+export interface AttachmentGetAttachments$Params {
 
 /**
  * The application Id.
@@ -18,8 +18,8 @@ export interface ApplicationGetApplicationMain$Params {
   applicationId?: string;
 }
 
-export function applicationGetApplicationMain(http: HttpClient, rootUrl: string, params?: ApplicationGetApplicationMain$Params, context?: HttpContext): Observable<StrictHttpResponse<DfaApplicationStart>> {
-  const rb = new RequestBuilder(rootUrl, applicationGetApplicationMain.PATH, 'get');
+export function attachmentGetAttachments(http: HttpClient, rootUrl: string, params?: AttachmentGetAttachments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FileUpload>>> {
+  const rb = new RequestBuilder(rootUrl, attachmentGetAttachments.PATH, 'get');
   if (params) {
     rb.query('applicationId', params.applicationId, {});
   }
@@ -29,9 +29,9 @@ export function applicationGetApplicationMain(http: HttpClient, rootUrl: string,
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<DfaApplicationStart>;
+      return r as StrictHttpResponse<Array<FileUpload>>;
     })
   );
 }
 
-applicationGetApplicationMain.PATH = '/api/applications/appmain/byId';
+attachmentGetAttachments.PATH = '/api/attachments/byApplicationId';

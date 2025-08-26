@@ -8,9 +8,9 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { FileUploadAppeal } from '../../models/file-upload-appeal';
+import { AppealFileMetadataUpload } from '../../models/appeal-file-metadata-upload';
 
-export interface AttachmentGetProjectAppealAttachments$Params {
+export interface AppealAttachmentGetAttachmentsByAppealId$Params {
 
 /**
  * The appeal Id.
@@ -18,8 +18,8 @@ export interface AttachmentGetProjectAppealAttachments$Params {
   appealId?: string;
 }
 
-export function attachmentGetProjectAppealAttachments(http: HttpClient, rootUrl: string, params?: AttachmentGetProjectAppealAttachments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FileUploadAppeal>>> {
-  const rb = new RequestBuilder(rootUrl, attachmentGetProjectAppealAttachments.PATH, 'get');
+export function appealAttachmentGetAttachmentsByAppealId(http: HttpClient, rootUrl: string, params?: AppealAttachmentGetAttachmentsByAppealId$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<AppealFileMetadataUpload>>> {
+  const rb = new RequestBuilder(rootUrl, appealAttachmentGetAttachmentsByAppealId.PATH, 'get');
   if (params) {
     rb.query('appealId', params.appealId, {});
   }
@@ -29,9 +29,9 @@ export function attachmentGetProjectAppealAttachments(http: HttpClient, rootUrl:
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<FileUploadAppeal>>;
+      return r as StrictHttpResponse<Array<AppealFileMetadataUpload>>;
     })
   );
 }
 
-attachmentGetProjectAppealAttachments.PATH = '/api/attachments/byAppealId';
+appealAttachmentGetAttachmentsByAppealId.PATH = '/api/appeal/attachments/byAppealId';

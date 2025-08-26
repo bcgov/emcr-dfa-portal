@@ -6,13 +6,11 @@ import { CaptchaConfiguration } from '../models/captcha-configuration';
 import { FeatureFlagConfiguration } from '../models/feature-flag-configuration';
 import { OidcOptions } from '../models/oidc-options';
 import { OutageInformation } from '../models/outage-information';
-import { S3Configuration } from '../models/s-3-configuration';
 import { TimeoutConfiguration } from '../models/timeout-configuration';
 export interface Configuration {
   captcha?: CaptchaConfiguration;
   featureFlags?: FeatureFlagConfiguration;
   oidc?: OidcOptions;
   outageInfo?: OutageInformation;
-  s3?: S3Configuration;
   timeoutInfo?: TimeoutConfiguration;
 }

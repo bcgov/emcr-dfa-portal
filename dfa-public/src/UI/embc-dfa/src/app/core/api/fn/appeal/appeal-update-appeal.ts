@@ -8,13 +8,20 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { AppealUpdateRequest } from '../../models/appeal-update-request';
 
-export interface EligibilityGetEvents$Params {
+export interface AppealUpdateAppeal$Params {
+  
+    /**
+     * The appeal information
+     */
+    body: AppealUpdateRequest
 }
 
-export function eligibilityGetEvents(http: HttpClient, rootUrl: string, params?: EligibilityGetEvents$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, eligibilityGetEvents.PATH, 'get');
+export function appealUpdateAppeal(http: HttpClient, rootUrl: string, params: AppealUpdateAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+  const rb = new RequestBuilder(rootUrl, appealUpdateAppeal.PATH, 'post');
   if (params) {
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -22,9 +29,9 @@ export function eligibilityGetEvents(http: HttpClient, rootUrl: string, params?:
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
+      return r as StrictHttpResponse<string>;
     })
   );
 }
 
-eligibilityGetEvents.PATH = '/api/eligibility/checkEventsAvailable';
+appealUpdateAppeal.PATH = '/api/Appeal/update';

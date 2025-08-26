@@ -21,6 +21,7 @@ using Org.BouncyCastle.Asn1.Mozilla;
 using Pipelines.Sockets.Unofficial.Arenas;
 using Xrm.Tools.WebAPI;
 using Xrm.Tools.WebAPI.Requests;
+using Xrm.Tools.WebAPI.Results;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
@@ -76,15 +77,15 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                 {
                     Select = new[]
                     {
-                        "dfa_firstname", "dfa_lastname", "dfa_initial",
-                        "dfa_isindigenous2", "dfa_emailaddress", "dfa_cellphonenumber",
-                        "dfa_residencetelephonenumber", "dfa_alternatephonenumber", "dfa_primaryaddressline1",
-                        "dfa_primaryaddressline2", "dfa_primarycity", "dfa_primarypostalcode",
-                        "dfa_primarystateprovince", "dfa_secondaryaddressline1", "dfa_secondaryaddressline2",
-                        "dfa_secondarycity", "dfa_secondarypostalcode", "dfa_secondarystateprovince",
-                        "dfa_isprimaryandsecondaryaddresssame", "dfa_appcontactid",
-                        "dfa_bcservicecardid", "dfa_lastdateupdated"
-                    },
+                    "dfa_firstname", "dfa_lastname", "dfa_initial",
+                    "dfa_isindigenous2", "dfa_emailaddress", "dfa_cellphonenumber",
+                    "dfa_residencetelephonenumber", "dfa_alternatephonenumber", "dfa_primaryaddressline1",
+                    "dfa_primaryaddressline2", "dfa_primarycity", "dfa_primarypostalcode",
+                    "dfa_primarystateprovince", "dfa_secondaryaddressline1", "dfa_secondaryaddressline2",
+                    "dfa_secondarycity", "dfa_secondarypostalcode", "dfa_secondarystateprovince",
+                    "dfa_isprimaryandsecondaryaddresssame", "dfa_appcontactid",
+                    "dfa_bcservicecardid", "dfa_lastdateupdated"
+                },
                     Filter = $"dfa_bcservicecardid eq '{userId}'"
                 });
 
@@ -402,9 +403,9 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         app.CaseEligibilityAppeal = caseEligibilityAppeal.CaseEligibilityAppeal;
                     }
 
-                        var caseAmountAppeal = repository
-                            .GetAmountWorkflow(new AppealQuery { CaseId = caseId })
-                            .FirstOrDefault();
+                    var caseAmountAppeal = repository
+                        .GetAmountWorkflow(new AppealQuery { CaseId = caseId })
+                        .FirstOrDefault();
                     if (caseAmountAppeal != null)
                     {
                         app.AmountAppealDecision = caseAmountAppeal.AppealDecision.HasValue ? EnumDescriptionHelper.GetEnumDescription(caseAmountAppeal.AppealDecision.Value) : null;
@@ -464,7 +465,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         {
             try
             {
-                var caseDetails = await api.Get<dfa_incident_retrieve>("incidents",caseId, new CRMGetListOptions
+                var caseDetails = await api.Get<dfa_incident_retrieve>("incidents", caseId, new CRMGetListOptions
                 {
                     Select = new[]
                     {

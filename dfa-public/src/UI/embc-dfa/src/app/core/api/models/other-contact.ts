@@ -7,14 +7,11 @@
  * Full Time Other Contact
  */
 export interface OtherContact {
-  applicationId?: string | null;
-  cellPhone?: string | null;
+  applicationId?: string;
   deleteFlag?: boolean;
   email?: string;
   firstName?: string;
   id?: string | null;
-  jobTitle?: string | null;
   lastName?: string;
-  otherNotes?: string | null;
   phoneNumber?: string;
 }

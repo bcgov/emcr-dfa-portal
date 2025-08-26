@@ -13,6 +13,7 @@ import { ProfileVerification } from '../models/profile-verification';
 export interface DfaApplicationStart {
   appTypeInsurance?: AppTypeInsurance;
   consent?: Consent;
+  eventName?: string | null;
   id?: string | null;
   notifyUser?: boolean;
   otherPreScreeningQuestions?: OtherPreScreeningQuestions;

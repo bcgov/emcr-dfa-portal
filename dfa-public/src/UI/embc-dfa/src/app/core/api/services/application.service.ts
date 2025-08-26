@@ -11,33 +11,21 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { ApplicantSubtypes } from '../models/applicant-subtypes';
-import { ApplicantSubtypeSubCategories } from '../models/applicant-subtype-sub-categories';
 import { applicationAddApplication } from '../fn/application/application-add-application';
 import { ApplicationAddApplication$Params } from '../fn/application/application-add-application';
-import { ApplicationContacts } from '../models/application-contacts';
-import { applicationGetApplicantSubSubTypes } from '../fn/application/application-get-applicant-sub-sub-types';
-import { ApplicationGetApplicantSubSubTypes$Params } from '../fn/application/application-get-applicant-sub-sub-types';
-import { applicationGetApplicantSubTypes } from '../fn/application/application-get-applicant-sub-types';
-import { ApplicationGetApplicantSubTypes$Params } from '../fn/application/application-get-applicant-sub-types';
-import { applicationGetApplicationDetailsForProject } from '../fn/application/application-get-application-details-for-project';
-import { ApplicationGetApplicationDetailsForProject$Params } from '../fn/application/application-get-application-details-for-project';
 import { applicationGetApplicationMain } from '../fn/application/application-get-application-main';
 import { ApplicationGetApplicationMain$Params } from '../fn/application/application-get-application-main';
 import { applicationGetApplicationStart } from '../fn/application/application-get-application-start';
 import { ApplicationGetApplicationStart$Params } from '../fn/application/application-get-application-start';
+import { applicationGetCaseDetails } from '../fn/application/application-get-case-details';
+import { ApplicationGetCaseDetails$Params } from '../fn/application/application-get-case-details';
 import { applicationGetDfaApplications } from '../fn/application/application-get-dfa-applications';
 import { ApplicationGetDfaApplications$Params } from '../fn/application/application-get-dfa-applications';
-import { applicationGetPdfApplicationData } from '../fn/application/application-get-pdf-application-data';
-import { ApplicationGetPdfApplicationData$Params } from '../fn/application/application-get-pdf-application-data';
-import { applicationGetPrimaryContactByBCeId } from '../fn/application/application-get-primary-contact-by-b-ce-id';
-import { ApplicationGetPrimaryContactByBCeId$Params } from '../fn/application/application-get-primary-contact-by-b-ce-id';
 import { applicationUpdateApplication } from '../fn/application/application-update-application';
 import { ApplicationUpdateApplication$Params } from '../fn/application/application-update-application';
 import { CurrentApplication } from '../models/current-application';
-import { DfaApplicationMain } from '../models/dfa-application-main';
+import { CurrentCase } from '../models/current-case';
 import { DfaApplicationStart } from '../models/dfa-application-start';
-import { PdfApplicationData } from '../models/pdf-application-data';
 
 @Injectable({ providedIn: 'root' })
 export class ApplicationService extends BaseService {
@@ -111,39 +99,6 @@ export class ApplicationService extends BaseService {
     );
   }
 
-  /** Path part for operation `applicationGetPdfApplicationData()` */
-  static readonly ApplicationGetPdfApplicationDataPath = '/api/applications';
-
-  /**
-   * Create content that will be transformed into PDF.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `applicationGetPdfApplicationData()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  applicationGetPdfApplicationData$Response(params: ApplicationGetPdfApplicationData$Params, context?: HttpContext): Observable<StrictHttpResponse<PdfApplicationData>> {
-    return applicationGetPdfApplicationData(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Create content that will be transformed into PDF.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `applicationGetPdfApplicationData$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  applicationGetPdfApplicationData(params: ApplicationGetPdfApplicationData$Params, context?: HttpContext): Observable<PdfApplicationData> {
-    return this.applicationGetPdfApplicationData$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PdfApplicationData>): PdfApplicationData => r.body)
-    );
-  }
-
   /** Path part for operation `applicationGetApplicationStart()` */
   static readonly ApplicationGetApplicationStartPath = '/api/applications/appstart/byId';
 
@@ -190,7 +145,7 @@ export class ApplicationService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  applicationGetApplicationMain$Response(params?: ApplicationGetApplicationMain$Params, context?: HttpContext): Observable<StrictHttpResponse<DfaApplicationMain>> {
+  applicationGetApplicationMain$Response(params?: ApplicationGetApplicationMain$Params, context?: HttpContext): Observable<StrictHttpResponse<DfaApplicationStart>> {
     return applicationGetApplicationMain(this.http, this.rootUrl, params, context);
   }
 
@@ -204,34 +159,9 @@ export class ApplicationService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  applicationGetApplicationMain(params?: ApplicationGetApplicationMain$Params, context?: HttpContext): Observable<DfaApplicationMain> {
+  applicationGetApplicationMain(params?: ApplicationGetApplicationMain$Params, context?: HttpContext): Observable<DfaApplicationStart> {
     return this.applicationGetApplicationMain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<DfaApplicationMain>): DfaApplicationMain => r.body)
-    );
-  }
-
-  /** Path part for operation `applicationGetPrimaryContactByBCeId()` */
-  static readonly ApplicationGetPrimaryContactByBCeIdPath = '/api/applications/getcontact/byId';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `applicationGetPrimaryContactByBCeId()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  applicationGetPrimaryContactByBCeId$Response(params?: ApplicationGetPrimaryContactByBCeId$Params, context?: HttpContext): Observable<StrictHttpResponse<ApplicationContacts>> {
-    return applicationGetPrimaryContactByBCeId(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `applicationGetPrimaryContactByBCeId$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  applicationGetPrimaryContactByBCeId(params?: ApplicationGetPrimaryContactByBCeId$Params, context?: HttpContext): Observable<ApplicationContacts> {
-    return this.applicationGetPrimaryContactByBCeId$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ApplicationContacts>): ApplicationContacts => r.body)
+      map((r: StrictHttpResponse<DfaApplicationStart>): DfaApplicationStart => r.body)
     );
   }
 
@@ -268,102 +198,36 @@ export class ApplicationService extends BaseService {
     );
   }
 
-  /** Path part for operation `applicationGetApplicationDetailsForProject()` */
-  static readonly ApplicationGetApplicationDetailsForProjectPath = '/api/applications/dfaapplicationbyID';
+  /** Path part for operation `applicationGetCaseDetails()` */
+  static readonly ApplicationGetCaseDetailsPath = '/api/applications/cases/:caseId';
 
   /**
-   * get dfa applications.
+   * Get case details by case ID.
    *
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `applicationGetApplicationDetailsForProject()` instead.
+   * To access only the response body, use `applicationGetCaseDetails()` instead.
    *
    * This method doesn't expect any request body.
    */
-  applicationGetApplicationDetailsForProject$Response(params?: ApplicationGetApplicationDetailsForProject$Params, context?: HttpContext): Observable<StrictHttpResponse<CurrentApplication>> {
-    return applicationGetApplicationDetailsForProject(this.http, this.rootUrl, params, context);
+  applicationGetCaseDetails$Response(params?: ApplicationGetCaseDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<CurrentCase>> {
+    return applicationGetCaseDetails(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * get dfa applications.
+   * Get case details by case ID.
    *
    *
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `applicationGetApplicationDetailsForProject$Response()` instead.
+   * To access the full response (for headers, for example), `applicationGetCaseDetails$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  applicationGetApplicationDetailsForProject(params?: ApplicationGetApplicationDetailsForProject$Params, context?: HttpContext): Observable<CurrentApplication> {
-    return this.applicationGetApplicationDetailsForProject$Response(params, context).pipe(
-      map((r: StrictHttpResponse<CurrentApplication>): CurrentApplication => r.body)
-    );
-  }
-
-  /** Path part for operation `applicationGetApplicantSubTypes()` */
-  static readonly ApplicationGetApplicantSubTypesPath = '/api/applications/applicantsubtypes';
-
-  /**
-   * Get the applicant subtype records.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `applicationGetApplicantSubTypes()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  applicationGetApplicantSubTypes$Response(params?: ApplicationGetApplicantSubTypes$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ApplicantSubtypes>>> {
-    return applicationGetApplicantSubTypes(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Get the applicant subtype records.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `applicationGetApplicantSubTypes$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  applicationGetApplicantSubTypes(params?: ApplicationGetApplicantSubTypes$Params, context?: HttpContext): Observable<Array<ApplicantSubtypes>> {
-    return this.applicationGetApplicantSubTypes$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<ApplicantSubtypes>>): Array<ApplicantSubtypes> => r.body)
-    );
-  }
-
-  /** Path part for operation `applicationGetApplicantSubSubTypes()` */
-  static readonly ApplicationGetApplicantSubSubTypesPath = '/api/applications/applicantsubsubtypes';
-
-  /**
-   * Get the applicant subtype records.
-   *
-   *
-   *
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `applicationGetApplicantSubSubTypes()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  applicationGetApplicantSubSubTypes$Response(params?: ApplicationGetApplicantSubSubTypes$Params, context?: HttpContext): Observable<StrictHttpResponse<ApplicantSubtypeSubCategories>> {
-    return applicationGetApplicantSubSubTypes(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * Get the applicant subtype records.
-   *
-   *
-   *
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `applicationGetApplicantSubSubTypes$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  applicationGetApplicantSubSubTypes(params?: ApplicationGetApplicantSubSubTypes$Params, context?: HttpContext): Observable<ApplicantSubtypeSubCategories> {
-    return this.applicationGetApplicantSubSubTypes$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ApplicantSubtypeSubCategories>): ApplicantSubtypeSubCategories => r.body)
+  applicationGetCaseDetails(params?: ApplicationGetCaseDetails$Params, context?: HttpContext): Observable<CurrentCase> {
+    return this.applicationGetCaseDetails$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CurrentCase>): CurrentCase => r.body)
     );
   }
 

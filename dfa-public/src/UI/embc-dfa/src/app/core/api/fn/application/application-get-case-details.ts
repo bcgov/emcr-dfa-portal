@@ -8,13 +8,20 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { CurrentCase } from '../../models/current-case';
 
-export interface EligibilityGetEvents$Params {
+export interface ApplicationGetCaseDetails$Params {
+
+/**
+ * The unique identifier of the case.
+ */
+  caseId?: string;
 }
 
-export function eligibilityGetEvents(http: HttpClient, rootUrl: string, params?: EligibilityGetEvents$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, eligibilityGetEvents.PATH, 'get');
+export function applicationGetCaseDetails(http: HttpClient, rootUrl: string, params?: ApplicationGetCaseDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<CurrentCase>> {
+  const rb = new RequestBuilder(rootUrl, applicationGetCaseDetails.PATH, 'get');
   if (params) {
+    rb.query('caseId', params.caseId, {});
   }
 
   return http.request(
@@ -22,9 +29,9 @@ export function eligibilityGetEvents(http: HttpClient, rootUrl: string, params?:
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
+      return r as StrictHttpResponse<CurrentCase>;
     })
   );
 }
 
-eligibilityGetEvents.PATH = '/api/eligibility/checkEventsAvailable';
+applicationGetCaseDetails.PATH = '/api/applications/cases/:caseId';

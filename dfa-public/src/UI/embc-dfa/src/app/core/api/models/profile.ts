@@ -10,8 +10,7 @@ import { PersonDetails } from '../models/person-details';
  * User's profile
  */
 export interface Profile {
-  bCeIDBusinessGuid?: string;
-  /** @deprecated */bcServiceCardId?: string | null;
+  bcServiceCardId?: string | null;
   contactDetails?: ContactDetails;
   id?: string | null;
   isMailingAddressSameAsPrimaryAddress?: string;

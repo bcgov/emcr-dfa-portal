@@ -48,8 +48,6 @@ export class ProfileService extends BaseService {
    * To access only the response body, use `profileGetProfile()` instead.
    *
    * This method doesn't expect any request body.
-   *
-   * @deprecated
    */
   profileGetProfile$Response(params?: ProfileGetProfile$Params, context?: HttpContext): Observable<StrictHttpResponse<Profile>> {
     return profileGetProfile(this.http, this.rootUrl, params, context);
@@ -64,8 +62,6 @@ export class ProfileService extends BaseService {
    * To access the full response (for headers, for example), `profileGetProfile$Response()` instead.
    *
    * This method doesn't expect any request body.
-   *
-   * @deprecated
    */
   profileGetProfile(params?: ProfileGetProfile$Params, context?: HttpContext): Observable<Profile> {
     return this.profileGetProfile$Response(params, context).pipe(
@@ -118,8 +114,6 @@ export class ProfileService extends BaseService {
    * To access only the response body, use `profileGetProfileWithUpdatedBcsc()` instead.
    *
    * This method doesn't expect any request body.
-   *
-   * @deprecated
    */
   profileGetProfileWithUpdatedBcsc$Response(params?: ProfileGetProfileWithUpdatedBcsc$Params, context?: HttpContext): Observable<StrictHttpResponse<Profile>> {
     return profileGetProfileWithUpdatedBcsc(this.http, this.rootUrl, params, context);
@@ -134,8 +128,6 @@ export class ProfileService extends BaseService {
    * To access the full response (for headers, for example), `profileGetProfileWithUpdatedBcsc$Response()` instead.
    *
    * This method doesn't expect any request body.
-   *
-   * @deprecated
    */
   profileGetProfileWithUpdatedBcsc(params?: ProfileGetProfileWithUpdatedBcsc$Params, context?: HttpContext): Observable<Profile> {
     return this.profileGetProfileWithUpdatedBcsc$Response(params, context).pipe(
@@ -250,8 +242,6 @@ export class ProfileService extends BaseService {
    * To access only the response body, use `profileInvite()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
-   *
-   * @deprecated
    */
   profileInvite$Response(params: ProfileInvite$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
     return profileInvite(this.http, this.rootUrl, params, context);
@@ -262,8 +252,6 @@ export class ProfileService extends BaseService {
    * To access the full response (for headers, for example), `profileInvite$Response()` instead.
    *
    * This method sends `application/json` and handles request body of type `application/json`.
-   *
-   * @deprecated
    */
   profileInvite(params: ProfileInvite$Params, context?: HttpContext): Observable<void> {
     return this.profileInvite$Response(params, context).pipe(

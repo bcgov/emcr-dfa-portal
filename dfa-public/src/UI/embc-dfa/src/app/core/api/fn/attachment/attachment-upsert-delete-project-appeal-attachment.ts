@@ -10,18 +10,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { FileUploadAppeal } from '../../models/file-upload-appeal';
 
-export interface AttachmentGetProjectAppealAttachments$Params {
-
-/**
- * The appeal Id.
- */
-  appealId?: string;
+export interface AttachmentUpsertDeleteProjectAppealAttachment$Params {
+  
+    /**
+     * The attachment information
+     */
+    body: FileUploadAppeal
 }
 
-export function attachmentGetProjectAppealAttachments(http: HttpClient, rootUrl: string, params?: AttachmentGetProjectAppealAttachments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FileUploadAppeal>>> {
-  const rb = new RequestBuilder(rootUrl, attachmentGetProjectAppealAttachments.PATH, 'get');
+export function attachmentUpsertDeleteProjectAppealAttachment(http: HttpClient, rootUrl: string, params: AttachmentUpsertDeleteProjectAppealAttachment$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+  const rb = new RequestBuilder(rootUrl, attachmentUpsertDeleteProjectAppealAttachment.PATH, 'post');
   if (params) {
-    rb.query('appealId', params.appealId, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -29,9 +29,9 @@ export function attachmentGetProjectAppealAttachments(http: HttpClient, rootUrl:
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<FileUploadAppeal>>;
+      return r as StrictHttpResponse<string>;
     })
   );
 }
 
-attachmentGetProjectAppealAttachments.PATH = '/api/attachments/byAppealId';
+attachmentUpsertDeleteProjectAppealAttachment.PATH = '/api/attachments/appealdocument';

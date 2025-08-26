@@ -36,7 +36,7 @@ namespace EMBC.DFA.API.Controllers
             this.organizationService = organizationService;
         }
 
-        private string currentUserId => User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        private string currentUserId => User.FindFirstValue(JwtRegisteredClaimNames.Sub).Split('@')[0];
 
         private async Task UploadSignatureAnnotationAsync(
             string entityName,

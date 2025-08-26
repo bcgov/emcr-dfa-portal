@@ -6,25 +6,17 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
-import { ClaimAppealService } from './services/claim-appeal.service';
-import { FilesService } from './services/files.service';
+import { AppealAttachmentService } from './services/appeal-attachment.service';
+import { AppealService } from './services/appeal.service';
 import { ApplicationService } from './services/application.service';
 import { AttachmentService } from './services/attachment.service';
-import { BCeIdLookupService } from './services/b-ce-id-lookup.service';
-import { ClaimService } from './services/claim.service';
 import { CleanUpLogItemService } from './services/clean-up-log-item.service';
 import { ConfigurationService } from './services/configuration.service';
-import { ContactService } from './services/contact.service';
 import { DamagedRoomService } from './services/damaged-room.service';
 import { EligibilityService } from './services/eligibility.service';
-import { EventService } from './services/event.service';
 import { FullTimeOccupantService } from './services/full-time-occupant.service';
-import { InvoiceService } from './services/invoice.service';
 import { OtherContactService } from './services/other-contact.service';
 import { ProfileService } from './services/profile.service';
-import { ProjectAmendmentService } from './services/project-amendment.service';
-import { ProjectAppealService } from './services/project-appeal.service';
-import { ProjectService } from './services/project.service';
 import { SecondaryApplicantService } from './services/secondary-applicant.service';
 
 /**
@@ -35,25 +27,17 @@ import { SecondaryApplicantService } from './services/secondary-applicant.servic
   exports: [],
   declarations: [],
   providers: [
-    ClaimAppealService,
-    FilesService,
+    AppealAttachmentService,
+    AppealService,
     ApplicationService,
     AttachmentService,
-    BCeIdLookupService,
-    ClaimService,
     CleanUpLogItemService,
     ConfigurationService,
-    ContactService,
     DamagedRoomService,
     EligibilityService,
-    EventService,
     FullTimeOccupantService,
-    InvoiceService,
     OtherContactService,
     ProfileService,
-    ProjectAmendmentService,
-    ProjectAppealService,
-    ProjectService,
     SecondaryApplicantService,
     ApiConfiguration
   ],

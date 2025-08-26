@@ -8,13 +8,20 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { FileUpload } from '../../models/file-upload';
 
-export interface EligibilityGetEvents$Params {
+export interface AttachmentUpsertDeleteAttachment$Params {
+  
+    /**
+     * The attachment information
+     */
+    body: FileUpload
 }
 
-export function eligibilityGetEvents(http: HttpClient, rootUrl: string, params?: EligibilityGetEvents$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, eligibilityGetEvents.PATH, 'get');
+export function attachmentUpsertDeleteAttachment(http: HttpClient, rootUrl: string, params: AttachmentUpsertDeleteAttachment$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+  const rb = new RequestBuilder(rootUrl, attachmentUpsertDeleteAttachment.PATH, 'post');
   if (params) {
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -22,9 +29,9 @@ export function eligibilityGetEvents(http: HttpClient, rootUrl: string, params?:
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
+      return r as StrictHttpResponse<string>;
     })
   );
 }
 
-eligibilityGetEvents.PATH = '/api/eligibility/checkEventsAvailable';
+attachmentUpsertDeleteAttachment.PATH = '/api/attachments';
