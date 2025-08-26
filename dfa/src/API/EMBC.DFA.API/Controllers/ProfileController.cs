@@ -38,7 +38,7 @@ namespace EMBC.DFA.API.Controllers
         private readonly IProfileInviteService profileInviteService;
         private readonly IConfigurationHandler handler;
 
-        private string currentUserId => User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        private string currentUserId => User.FindFirstValue(JwtRegisteredClaimNames.Sub).Split('@')[0];
 
         public ProfileController(
             IHostEnvironment env,
@@ -148,10 +148,10 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<bool>> GetDoesUserExists()
         {
-            var userId = currentUserId;
-            var profile = await handler.HandleGetUser(userId);
-            return Ok(profile != null);
-        }
+                var userId = currentUserId;
+                var profile = await handler.HandleGetUser(userId);
+                return Ok(profile != null);
+            }
 
         /// <summary>
         /// Create or update the current user's profile

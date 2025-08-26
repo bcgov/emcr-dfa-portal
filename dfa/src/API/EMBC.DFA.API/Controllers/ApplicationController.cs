@@ -43,7 +43,7 @@ namespace EMBC.DFA.API.Controllers
             this.handler = handler;
         }
 
-        private string currentUserId => User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+        private string currentUserId => User.FindFirstValue(JwtRegisteredClaimNames.Sub).Split('@')[0];
 
         /// <summary>
         /// Create an application
