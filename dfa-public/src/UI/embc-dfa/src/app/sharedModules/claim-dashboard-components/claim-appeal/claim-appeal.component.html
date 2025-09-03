@@ -126,8 +126,8 @@
   <div>
     <table
       mat-table
-      [dataSource]="documentSummaryDataSource"
-      *ngIf="documentSummaryDataSource.data.length > 0"
+      [dataSource]="claimDocumentSummaryDataSource"
+      *ngIf="claimDocumentSummaryDataSource.data.length > 0"
       style="width: 100%">
 
       <ng-container matColumnDef="appealCheckbox">
@@ -223,7 +223,7 @@
       </ng-container>
 
       <ng-container matColumnDef="appealReason">
-        <td mat-cell *matCellDef="let row" [attr.colspan]="documentSummaryColumnsToDisplay.length - 1">
+        <td mat-cell *matCellDef="let row" [attr.colspan]="claimDocumentSummaryColumnsToDisplay.length - 1">
           <div style="position: relative;">
             <textarea
               #reason="ngModel"
@@ -253,11 +253,11 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="documentSummaryColumnsToDisplay"></tr>
+      <tr mat-header-row *matHeaderRowDef="claimDocumentSummaryColumnsToDisplay"></tr>
 
       <tr
         mat-row
-        *matRowDef="let row; let i = index; columns: documentSummaryColumnsToDisplay; when: isInvoiceRow"
+        *matRowDef="let row; let i = index; columns: claimDocumentSummaryColumnsToDisplay; when: isInvoiceRow"
         [ngClass]="getRowClass(row, i)">
       </tr>
 
@@ -271,7 +271,7 @@
       </tr>
     </table>
 
-    <div *ngIf="documentSummaryDataSource.data.length === 0" class="no-data-message">
+    <div *ngIf="claimDocumentSummaryDataSource.data.length === 0" class="no-data-message">
       <span>
         📄 No invoices available to appeal
       </span>
@@ -289,14 +289,106 @@
     </div>
   </div>
 
-  <div>
-    <div class="col-md-12">
-      <div class="add-docs-btn" (click)="addSupportingDocuments()">
-        <span class="plus-icon">+</span> Add Supporting Documents
-        (Optional)
+
+  <ng-container  *ngIf="vieworedit !== 'viewOnly'"> <!-- Supporting Documents -->
+    <div class="row">
+      <div class="col-md-8">
+        <app-dfa-attachment
+          isAppeal=true
+          isdisabled="isdisabled"
+          requiredDocumentType="null"
+          title="Other Supporting Documents (Optional)"
+          description="If applicable, you may include additional documents related to your claim."
+          [allowedFileTypes]="allowedFileTypes"
+          allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
+          excludeFileTypes="['Identification', 'Unknown']"
+          (saveFileUpload)="saveSupportingFiles($event)"
+          (cancelFileUpload)="cancelSupportingFiles()"
+          [fileUpload]="attachmentComponent.formCreationService.fileUploadsClaimForm.value.get('supportingFilesFileUpload')"
+        ></app-dfa-attachment>
+        <app-loader
+          class="spinner"
+          [showLoader]="isLoading"
+          strokeWidth="10"
+          diameter="50"
+        >
+        </app-loader>
       </div>
     </div>
+  </ng-container>
+
+  <div *ngIf="claimAppealDocumentSummaryDataSource.data.length == 0">
+    <br />
+    <br />
+    <br />
   </div>
+
+  <div *ngIf="claimAppealDocumentSummaryDataSource.data.length > 0">
+    <br />
+    <p class="sub-heading" style="font-size: 15px">Document Summary</p>
+  </div>
+
+  <table mat-table [dataSource]="claimAppealDocumentSummaryDataSource"
+    *ngIf="claimAppealDocumentSummaryDataSource.data.length > 0" style="width:100%">
+    <!-- File Name Column -->
+    <ng-container matColumnDef="fileName" style="width:25%">
+      <th mat-header-cell *matHeaderCellDef>
+        <b>File Name</b>
+      </th>
+      <td *matCellDef="let element" mat-cell>
+        {{ element.fileName }}
+      </td>
+    </ng-container>
+
+    <!-- Description Column -->
+    <ng-container matColumnDef="fileDescription" style="width:25%">
+      <th mat-header-cell *matHeaderCellDef>
+        <b>File Description</b>
+      </th>
+      <td *matCellDef="let element" mat-cell>
+        {{ element.fileDescription}}
+      </td>
+    </ng-container>
+
+    <!-- Category Column -->
+    <ng-container matColumnDef="fileTypeText" style="width:25%">
+      <th mat-header-cell *matHeaderCellDef>
+        <b>Category</b>
+      </th>
+      <td *matCellDef="let element" mat-cell>
+        {{ element.fileTypeText }}
+      </td>
+    </ng-container>
+
+    <!-- UploadedDate Column -->
+    <ng-container matColumnDef="uploadedDate" style="width:25%">
+      <th mat-header-cell *matHeaderCellDef>
+        <b>Date Uploaded</b>
+      </th>
+      <td *matCellDef="let element" mat-cell>
+        {{ element.uploadedDate | date:"dd-MMM-yyyy" }}
+      </td>
+    </ng-container>
+
+    <!-- Delete Icon Column -->
+    <ng-container matColumnDef="icons" style="width:25%">
+      <th mat-header-cell *matHeaderCellDef>
+        &nbsp;
+      </th>
+      <td *matCellDef="let element; let index = index" mat-cell>
+        <button *ngIf="!isReadOnly" class="delete-image" mat-icon-button aria-label="Remove"
+          (click)="confirmDeleteDocumentSummaryRow(element)">
+          <img src="/assets/images/delete.svg" height="35" width="35" />
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="claimAppealDocumentSummaryColumnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let element; columns: claimAppealDocumentSummaryColumnsToDisplay" class="example-element-row"
+      [style.height]="'auto'"></tr>
+
+  </table>
+
 
   <div class="appeal-actions">
     <button

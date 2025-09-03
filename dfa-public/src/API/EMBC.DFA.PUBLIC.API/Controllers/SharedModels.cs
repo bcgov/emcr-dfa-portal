@@ -270,6 +270,16 @@ namespace EMBC.DFA.API.Controllers
     /// File Category Options
     /// </summary>
     [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum FileCategoryAppeal
+    {
+        [EnumMember(Value = "Appeal")]
+        Appeal
+    }
+
+    /// <summary>
+    /// File Category Options
+    /// </summary>
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum RequiredDocumentType
     {
         [EnumMember(Value = "Pre Event Condition")]

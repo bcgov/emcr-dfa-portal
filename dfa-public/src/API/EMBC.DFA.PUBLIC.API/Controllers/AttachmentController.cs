@@ -540,6 +540,73 @@ namespace EMBC.DFA.API.Controllers
         }
 
         /// <summary>
+        /// Create / update / delete a file attachment
+        /// </summary>
+        /// <param name="fileUpload">The attachment information</param>
+        /// <returns>file upload id</returns>
+        [HttpPost("claimappealdocument")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [RequestSizeLimit(MAXFILESIZE)]
+        public async Task<ActionResult<string>> UpsertDeleteClaimAppealAttachment(FileUploadClaimAppeal fileUpload)
+        {
+            if (fileUpload.fileData == null && fileUpload.deleteFlag == false) return BadRequest("FileUpload data cannot be empty.");
+            if (fileUpload.id == null && fileUpload.deleteFlag == true) return BadRequest("FileUpload id cannot be empty on delete");
+
+            if (fileUpload.deleteFlag == true)
+            {
+                var metadataDeleteParams = new MetadataDeleteParams();
+                if (fileUpload.id != null)
+                {
+                    metadataDeleteParams.DocumentMetadataId = fileUpload.id.ToString();
+                }
+                var result = await handler.HandleDeleteFileMetadataAsync(metadataDeleteParams);
+                return Ok(result);
+            }
+            else
+            {
+                logger.LogInformation("Upload S3 attachments dfa_appeal");
+                if (fileUpload.fileSize >= MAXFILESIZE)
+                {
+                    throw new Exception($"File size exceeds {MAXFILESIZE / 1_048_576.0:F2}MB limit");
+                }
+
+                var submissionEntity = mapper.Map<S3SubmissionEntity>(fileUpload);
+                /* Switch based on the regarding entity type where the doc is uploaded to
+                    case : incident 
+                    application : dfa_appapplication
+                    project : dfa_project
+                    recoveryClaim : dfa_projectclaim
+                    appeal: dfa_appeal"  
+                */
+                submissionEntity.RegardingEntitySchemaName = "dfa_claimappeal";
+
+                /* switch based on entity type to which the document is being uploaded
+                    case : bcgov_caseid
+                    application : dfa_appapplication
+                    project : dfa_project
+                    recoveryClaim : dfa_recoveryclaim 
+                    appeal: dfa_appealid
+                */
+                submissionEntity.RegardingEntityLookUpFieldName = "dfa_claimappeal";
+
+                try
+                {
+                    var result = await handler.HandleS3FileUploadAsync(submissionEntity);
+                    return Ok(result);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Failed to upload file to S3.");
+                    return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while uploading file.");
+                }
+            }            
+        }
+
+
+
+        /// <summary>
         /// Get a list of attachments by project Id
         /// </summary>
         /// <returns> FileUploads </returns>
@@ -771,6 +838,46 @@ namespace EMBC.DFA.API.Controllers
 
             return Ok(fileUploads);
         }
+
+        /// <summary>
+        /// Get a list of attachments by claim appeal Id
+        /// </summary>
+        /// <returns> FileUploads </returns>
+        /// <param name="claimAppealId">The appeal Id.</param>
+        [HttpGet("byClaimAppealId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<FileUploadClaimAppeal>>> GetClaimAppealAttachments(
+            [FromQuery]
+            [Required]
+            Guid claimAppealId)
+        {
+            var useS3 = configuration.GetValue<bool>("FEATURE_USE_S3");
+
+            if (useS3)
+            {
+                IEnumerable<bcgov_documenturl> bcgovDocumentUrls = await handler.GetS3ProjectDocumentListAsync(claimAppealId);
+                IEnumerable<FileUploadClaimAppeal> fileUploads = new FileUploadClaimAppeal[] { };
+                if (bcgovDocumentUrls != null)
+                {
+                    foreach (bcgov_documenturl bcgovDocumentUrl in bcgovDocumentUrls)
+                    {
+                        FileUploadClaimAppeal fileUpload = mapper.Map<FileUploadClaimAppeal>(bcgovDocumentUrl);
+                        fileUploads = fileUploads.Append<FileUploadClaimAppeal>(fileUpload);
+                    }
+                    return Ok(fileUploads);
+                }
+                else
+                {
+                    return Ok(null);
+                }
+            }
+            else
+            {
+                return new FileUploadClaimAppeal[] { };
+            }
+        }
+
     }
 
     /// <summary>
@@ -821,6 +928,23 @@ namespace EMBC.DFA.API.Controllers
         public FileCategoryAmendment? fileType { get; set; }
         public string? fileTypeText { get; set; }
         public RequiredDocumentTypeAmendment? requiredDocumentType { get; set; }
+        public string? uploadedDate { get; set; }
+        public string? modifiedBy { get; set; }
+        public byte[]? fileData { get; set; }
+        public string? contentType { get; set; }
+        public int? fileSize { get; set; }
+        public bool deleteFlag { get; set; }
+    }
+
+    public class FileUploadClaimAppeal
+    {
+        public Guid? appealId { get; set; }
+        public Guid? id { get; set; }
+        public string? fileName { get; set; }
+        public string? fileDescription { get; set; }
+        public FileCategoryAppeal? fileType { get; set; }
+        public string? fileTypeText { get; set; }
+        public RequiredDocumentTypeClaim? requiredDocumentType { get; set; }
         public string? uploadedDate { get; set; }
         public string? modifiedBy { get; set; }
         public byte[]? fileData { get; set; }

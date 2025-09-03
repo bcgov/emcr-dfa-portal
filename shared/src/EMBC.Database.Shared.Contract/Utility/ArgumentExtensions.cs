@@ -2,7 +2,7 @@
 
 public static class ArgumentExtensions
 {
-    public static T ThrowIfNull<T>(this T obj, string message = null)
+    public static T ThrowIfNull<T>(this T obj, string? message = null)
     {
         if (obj == null)
         {
@@ -11,7 +11,7 @@ public static class ArgumentExtensions
         return obj;
     }
 
-    public static string ThrowIfNullOrEmpty(this string str, string message = null)
+    public static string ThrowIfNullOrEmpty(this string str, string? message = null)
     {
         if (string.IsNullOrEmpty(str))
         {
@@ -20,16 +20,7 @@ public static class ArgumentExtensions
         return str;
     }
 
-    public static Guid ThrowIfNullOrEmpty(this Guid id, string message = null)
-    {
-        if (id == null || id == Guid.Empty)
-        {
-            throw new ArgumentNullException(message ?? $"Argument was null or empty.");
-        }
-        return id;
-    }
-
-    public static Guid? ThrowIfNullOrEmpty(this Guid? id, string message = null)
+    public static Guid? ThrowIfNullOrEmpty(this Guid? id, string? message = null)
     {
         if (id == null || id == Guid.Empty)
         {

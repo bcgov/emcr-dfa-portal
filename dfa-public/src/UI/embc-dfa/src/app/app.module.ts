@@ -1,6 +1,6 @@
 import { Contacts } from './core/model/dfa-application-main.model';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { importProvidersFrom, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -79,6 +79,7 @@ const maskConfigFunction: () => Partial<NgxMaskConfig> = () => {
         // 2024-07-04 EMCRI-217 waynezen: send BCeID Access_token along with API calls
         // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: BceidAuthInterceptor, multi: true },
+        importProvidersFrom(AppRoutingModule),
         provideHttpClient(withFetch()),
     ] })
 

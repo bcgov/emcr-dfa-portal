@@ -3,12 +3,15 @@ import {
   UntypedFormBuilder,
   UntypedFormGroup,
   AbstractControl,
+  ReactiveFormsModule,
+  FormsModule,
+  FormBuilder,
 } from '@angular/forms';
 import { KeyValue } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
 import { CustomValidationService } from 'src/app/core/services/customValidation.service';
-import { FileCategory, FileCategoryAmendment, FileCategoryClaim, FileUpload, FileUploadClaim, RequiredDocumentType, RequiredDocumentTypeClaim } from 'src/app/core/api/models';
+import { FileCategory, FileCategoryAmendment, FileCategoryAppeal, FileCategoryClaim, FileUpload, FileUploadClaim, RequiredDocumentType, RequiredDocumentTypeClaim } from 'src/app/core/api/models';
 import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
 import { DFAProjectMainDataService } from '../../../feature-components/dfa-project-main/dfa-project-main-data.service';
 import { MatSelectChange } from '@angular/material/select';
@@ -16,12 +19,14 @@ import { MatSelectChange } from '@angular/material/select';
 @Component({
   selector: 'app-dfa-attachment',
   standalone: false,
+  providers: [ReactiveFormsModule, FormsModule, FormBuilder],
   templateUrl: './dfa-attachment.component.html',
   styleUrls: ['./dfa-attachment.component.scss']
 })
 export class DfaAttachmentComponent implements OnInit, OnDestroy {
   @Input() isClaim: boolean = false;
   @Input() isAmendment: boolean = false;
+  @Input() isAppeal: boolean = false;
   @Input() requiredDocumentType: string;
   @Input() title: string;
   @Input() description: string;
@@ -39,13 +44,13 @@ export class DfaAttachmentComponent implements OnInit, OnDestroy {
   fileUploadsForm$: Subscription;
   formCreationService: FormCreationService;
   showFileUpload: boolean = false;
-  FileCategories = this.isClaim ? FileCategoryClaim : this.isAmendment ? FileCategoryAmendment : FileCategory;
+  FileCategories = this.isClaim ? FileCategoryClaim : this.isAmendment ? FileCategoryAmendment : this.isAppeal ? FileCategoryAppeal : FileCategory;
   RequiredDocumentTypes = this.isClaim ? RequiredDocumentTypeClaim : this.isAmendment ? null : RequiredDocumentType;
   isdisabled: string = 'true';
 
   constructor(
-    @Inject('formBuilder') formBuilder: UntypedFormBuilder,
-    @Inject('formCreationService') formCreationService: FormCreationService,
+    formBuilder: UntypedFormBuilder,
+    formCreationService: FormCreationService,
     public customValidator: CustomValidationService,
     private dfaApplicationMainDataService: DFAApplicationMainDataService,
     private dfaProjectMainDataService: DFAProjectMainDataService,
@@ -63,7 +68,7 @@ export class DfaAttachmentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.FileCategories = this.isClaim ? FileCategoryClaim : this.isAmendment ? FileCategoryAmendment : FileCategory;
+    this.FileCategories = this.isClaim ? FileCategoryClaim : this.isAmendment ? FileCategoryAmendment : this.isAppeal ? FileCategoryAppeal : FileCategory;
     this.RequiredDocumentTypes = this.isClaim ? RequiredDocumentTypeClaim : this.isAmendment ? null : RequiredDocumentType;
     if (this.isClaim) {
       this.fileUploadsForm$ = this.formCreationService
@@ -76,6 +81,14 @@ export class DfaAttachmentComponent implements OnInit, OnDestroy {
     else if (this.isAmendment) {
       this.fileUploadsForm$ = this.formCreationService
         .getAmendmentFileUploadsForm()
+        .subscribe((fileUploads) => {
+          this.fileUploadsForm = fileUploads;
+          this.initFileUploadForm();
+        });
+    }
+    else if (this.isAppeal) {
+      this.fileUploadsForm$ = this.formCreationService
+        .getClaimAppealFileUploadsForm()
         .subscribe((fileUploads) => {
           this.fileUploadsForm = fileUploads;
           this.initFileUploadForm();
@@ -196,7 +209,9 @@ export class DfaAttachmentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.fileUploadsForm$.unsubscribe();
+    if(this.fileUploadsForm$){
+      this.fileUploadsForm$.unsubscribe();
+    }
   }
 
 /**

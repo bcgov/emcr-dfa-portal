@@ -17,12 +17,16 @@ import { attachmentDeleteProjectAttachment } from '../fn/attachment/attachment-d
 import { AttachmentDeleteProjectAttachment$Params } from '../fn/attachment/attachment-delete-project-attachment';
 import { attachmentGetAmendmentAttachments } from '../fn/attachment/attachment-get-amendment-attachments';
 import { AttachmentGetAmendmentAttachments$Params } from '../fn/attachment/attachment-get-amendment-attachments';
+import { attachmentGetClaimAppealAttachments } from '../fn/attachment/attachment-get-claim-appeal-attachments';
+import { AttachmentGetClaimAppealAttachments$Params } from '../fn/attachment/attachment-get-claim-appeal-attachments';
 import { attachmentGetClaimAttachments } from '../fn/attachment/attachment-get-claim-attachments';
 import { AttachmentGetClaimAttachments$Params } from '../fn/attachment/attachment-get-claim-attachments';
 import { attachmentGetProjectAppealAttachments } from '../fn/attachment/attachment-get-project-appeal-attachments';
 import { AttachmentGetProjectAppealAttachments$Params } from '../fn/attachment/attachment-get-project-appeal-attachments';
 import { attachmentGetProjectAttachments } from '../fn/attachment/attachment-get-project-attachments';
 import { AttachmentGetProjectAttachments$Params } from '../fn/attachment/attachment-get-project-attachments';
+import { attachmentUpsertDeleteClaimAppealAttachment } from '../fn/attachment/attachment-upsert-delete-claim-appeal-attachment';
+import { AttachmentUpsertDeleteClaimAppealAttachment$Params } from '../fn/attachment/attachment-upsert-delete-claim-appeal-attachment';
 import { attachmentUpsertDeleteClaimAttachment } from '../fn/attachment/attachment-upsert-delete-claim-attachment';
 import { AttachmentUpsertDeleteClaimAttachment$Params } from '../fn/attachment/attachment-upsert-delete-claim-attachment';
 import { attachmentUpsertDeleteProjectAmendmentAttachment } from '../fn/attachment/attachment-upsert-delete-project-amendment-attachment';
@@ -34,6 +38,7 @@ import { AttachmentUpsertProjectAppealAttachment$Params } from '../fn/attachment
 import { FileUpload } from '../models/file-upload';
 import { FileUploadAmendment } from '../models/file-upload-amendment';
 import { FileUploadClaim } from '../models/file-upload-claim';
+import { FileUploadClaimAppeal } from '../models/file-upload-claim-appeal';
 
 @Injectable({ providedIn: 'root' })
 export class AttachmentService extends BaseService {
@@ -239,6 +244,39 @@ export class AttachmentService extends BaseService {
     );
   }
 
+  /** Path part for operation `attachmentUpsertDeleteClaimAppealAttachment()` */
+  static readonly AttachmentUpsertDeleteClaimAppealAttachmentPath = '/api/attachments/claimappealdocument';
+
+  /**
+   * Create / update / delete a file attachment.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `attachmentUpsertDeleteClaimAppealAttachment()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  attachmentUpsertDeleteClaimAppealAttachment$Response(params: AttachmentUpsertDeleteClaimAppealAttachment$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return attachmentUpsertDeleteClaimAppealAttachment(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create / update / delete a file attachment.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `attachmentUpsertDeleteClaimAppealAttachment$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  attachmentUpsertDeleteClaimAppealAttachment(params: AttachmentUpsertDeleteClaimAppealAttachment$Params, context?: HttpContext): Observable<string> {
+    return this.attachmentUpsertDeleteClaimAppealAttachment$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
+    );
+  }
+
   /** Path part for operation `attachmentGetProjectAttachments()` */
   static readonly AttachmentGetProjectAttachmentsPath = '/api/attachments/byProjectIdId';
 
@@ -368,6 +406,39 @@ export class AttachmentService extends BaseService {
   attachmentGetProjectAppealAttachments(params?: AttachmentGetProjectAppealAttachments$Params, context?: HttpContext): Observable<Array<FileUpload>> {
     return this.attachmentGetProjectAppealAttachments$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<FileUpload>>): Array<FileUpload> => r.body)
+    );
+  }
+
+  /** Path part for operation `attachmentGetClaimAppealAttachments()` */
+  static readonly AttachmentGetClaimAppealAttachmentsPath = '/api/attachments/byClaimAppealId';
+
+  /**
+   * Get a list of attachments by claim appeal Id.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `attachmentGetClaimAppealAttachments()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  attachmentGetClaimAppealAttachments$Response(params?: AttachmentGetClaimAppealAttachments$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FileUploadClaimAppeal>>> {
+    return attachmentGetClaimAppealAttachments(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get a list of attachments by claim appeal Id.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `attachmentGetClaimAppealAttachments$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  attachmentGetClaimAppealAttachments(params?: AttachmentGetClaimAppealAttachments$Params, context?: HttpContext): Observable<Array<FileUploadClaimAppeal>> {
+    return this.attachmentGetClaimAppealAttachments$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<FileUploadClaimAppeal>>): Array<FileUploadClaimAppeal> => r.body)
     );
   }
 

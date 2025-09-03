@@ -13,7 +13,7 @@ import {
 } from '../model/profile.model';
 import { AppTypeInsurance, AppTypeInsuranceForm, Consent, ConsentForm, ProfileVerification, ProfileVerificationForm } from '../model/dfa-application-start.model';
 import { DfaPrescreening, DfaPrescreeningForm } from '../model/dfa-prescreening.model';
-import { InsuranceOption } from 'src/app/core/api/models';
+import { FileUploadClaimAppeal, InsuranceOption } from 'src/app/core/api/models';
 import { ApplicationDetailsForm, DamagedPropertyAddressForm, DamagedPropertyAddress, SignAndSubmit, SupportingDocuments, DamagedRoomsForm,
   FullTimeOccupantsForm, SecondaryApplicantsForm, OtherContactsForm,
   CleanUpLogForm, SignAndSubmitForm, SupportingDocumentsForm, CleanUpLog, CleanUpLogItemsForm, SecondaryApplicant, FullTimeOccupant, OtherContact, CleanUpLogItem, DamagedRoom,  
@@ -23,6 +23,8 @@ import { FileUpload, FileUploadsForm, RecoveryPlan, RecoveryPlanForm } from '../
 import { FileUploadClaim, FileUploadsClaimForm, RecoveryClaim, RecoveryClaimForm } from '../model/dfa-claim-main.model';
 import { FileUploadAmendment, FileUploadsAmendmentForm, ProjectAmendment, ProjectAmendmentForm } from '../model/dfa-amendment-main.model'
 import { Invoice, InvoiceForm } from '../model/dfa-invoice.model';
+import { AppealSupportingDocumentForm, AppealSupportingDocumentsForm, FileUploadsClaimAppealForm } from '../model/dfa-appeals-main.model';
+import { DFAClaimAppealDataService } from 'src/app/feature-components/appeal-main/appeal-data.service';
 
 @Injectable({ providedIn: 'root' })
 export class FormCreationService {
@@ -277,6 +279,20 @@ export class FormCreationService {
   fileUploadsAmendmentForm$: Observable<UntypedFormGroup | undefined> =
     this.fileUploadsAmendmentForm.asObservable();
 
+  fileUploadsClaimAppealForm: BehaviorSubject<UntypedFormGroup | undefined> =
+    new BehaviorSubject(
+      this.formBuilder.group(
+        new FileUploadsClaimAppealForm(
+          new Array<FileUploadClaimAppeal>(),
+          this.customValidator,
+          this.formBuilder
+        )
+      )
+    );
+
+  fileUploadsClaimAppealForm$: Observable<UntypedFormGroup | undefined> =
+    this.fileUploadsClaimAppealForm.asObservable();
+
   damagedRoomsForm: BehaviorSubject<UntypedFormGroup | undefined> =
     new BehaviorSubject(
       this.formBuilder.group(
@@ -302,6 +318,20 @@ export class FormCreationService {
 
   supportingDocumentsForm$: Observable<UntypedFormGroup | undefined> =
     this.supportingDocumentsForm.asObservable();
+
+  appealSupportingDocumentForm: BehaviorSubject<AppealSupportingDocumentForm> = new BehaviorSubject(
+    new AppealSupportingDocumentForm()
+  );
+
+  appealSupportingDocumentForm$: Observable<AppealSupportingDocumentForm> =
+    this.appealSupportingDocumentForm.asObservable();
+
+  appealSupportingDocumentsForm: BehaviorSubject<AppealSupportingDocumentsForm> = new BehaviorSubject(
+    new AppealSupportingDocumentsForm(this.dfaAppealDataService.fileUploads)
+  );
+
+  appealSupportingDocumentsForm$: Observable<AppealSupportingDocumentsForm> =
+    this.appealSupportingDocumentsForm.asObservable();
 
   signAndSubmitForm: BehaviorSubject<UntypedFormGroup | undefined> =
     new BehaviorSubject(
@@ -369,6 +399,7 @@ export class FormCreationService {
         
   constructor(
     private formBuilder: UntypedFormBuilder,
+    private dfaAppealDataService: DFAClaimAppealDataService,
     private customValidator: CustomValidationService
   ) {
     this.insuranceOptionChanged = new EventEmitter<any>();
@@ -751,6 +782,26 @@ export class FormCreationService {
     );
   }
 
+  getClaimAppealFileUploadsForm(): Observable<UntypedFormGroup> {
+    return this.fileUploadsClaimAppealForm$;
+  }
+
+  setClaimAppealFileUploadsForm(fileUploadsClaimAppealForm: UntypedFormGroup): void {
+    this.fileUploadsClaimAppealForm.next(fileUploadsClaimAppealForm);
+  }
+
+  clearClaimAppealFileUploadsData(): void {
+    this.fileUploadsClaimAppealForm.next(
+      this.formBuilder.group(
+        new FileUploadsClaimAppealForm(
+          new Array<FileUploadClaimAppeal>(),
+          this.customValidator,
+          this.formBuilder
+        )
+      )
+    );
+  }
+
   getSupportingDocumentsForm(): Observable<UntypedFormGroup> {
     return this.supportingDocumentsForm$;
   }
@@ -767,6 +818,54 @@ export class FormCreationService {
         )
       )
     );
+  }
+
+  /**
+   * Retrieves the appeal supporting document form as an observable.
+   *
+   * @return {*}  {Observable<AppealSupportingDocumentForm>}
+   * @memberof FormCreationService
+   */
+  getAppealSupportingDocumentForm(): Observable<AppealSupportingDocumentForm> {
+    return this.appealSupportingDocumentForm$;
+  }
+
+  /**
+   * Sets the appeal supporting document form.
+   *
+   * @param {AppealSupportingDocumentForm} appealSupportingDocumentForm
+   * @memberof FormCreationService
+   */
+  setAppealSupportingDocumentForm(appealSupportingDocumentForm: AppealSupportingDocumentForm): void {
+    this.appealSupportingDocumentForm.next(appealSupportingDocumentForm);
+  }
+
+  /**
+   * Clears the appeal supporting document data by resetting the form to a new instance of AppealSupportingDocumentForm.
+   *
+   * @memberof FormCreationService
+   */
+  clearAppealSupportingDocumentData(): void {
+    this.appealSupportingDocumentForm.next(new AppealSupportingDocumentForm());
+  }
+
+  /**
+   * Retrieves the appeal supporting documents form as an observable.
+   *
+   * @return {*}  {Observable<AppealSupportingDocumentsForm>}
+   * @memberof FormCreationService
+   */
+  getAppealSupportingDocumentsForm(): Observable<AppealSupportingDocumentsForm> {
+    return this.appealSupportingDocumentsForm$;
+  }
+
+  /**
+   * Clears the appeal supporting documents data by resetting the form to a new instance of AppealSupportingDocumentsForm.
+   *
+   * @memberof FormCreationService
+   */
+  clearAppealSupportingDocumentsData(): void {
+    this.appealSupportingDocumentsForm.next(new AppealSupportingDocumentsForm(new Array<FileUploadClaimAppeal>()));
   }
 
   getSignAndSubmitForm(): Observable<UntypedFormGroup> {
