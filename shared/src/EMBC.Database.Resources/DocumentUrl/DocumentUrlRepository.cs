@@ -1,4 +1,4 @@
-namespace EMBC.Database.Resources;
+﻿namespace EMBC.Database.Resources;
 
 public interface IDocumentUrlRepository : IBaseRepository<DocumentUrl>
 {
@@ -53,7 +53,9 @@ public class DocumentUrlRepository : BaseRepository<BcGoV_DocumentUrl, DocumentU
     {
         return _databaseContext
             .CreateQuery<BcGoV_DocumentUrl>()
-            .Where(query => query.DFA_AppealId != null && query.DFA_AppealId.Id == appealId)
+            .Where(query => query.DFA_AppealId != null && 
+                            query.DFA_AppealId.Id == appealId && 
+                            query.BcGoV_OriginCode == BcGoV_OriginCode.Portal) /* Get only the records uploaded by the portal. */
             .Select(result => _mapper.Map<DocumentUrl>(result))
             .ToList();
     }
