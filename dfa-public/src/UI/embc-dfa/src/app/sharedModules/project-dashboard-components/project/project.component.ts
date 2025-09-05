@@ -438,8 +438,11 @@ export class DfaDashProjectComponent implements OnInit {
   }
 
   canAppeal(project: CurrentProject): boolean {
-    return project.projectDecision && (project.projectDecision.toLowerCase() === 'approved with exclusions' || project.projectDecision.toLowerCase() === 'ineligible')
-      && this.remainingDays(project) > 0;
+    return project.projectDecision && (project.projectDecision.toLowerCase() === 'approved with exclusions' || project.projectDecision.toLowerCase() === 'ineligible');
+  }
+
+  appealHasRemainingDays(project: CurrentProject): boolean {
+    return this.remainingDays(project) >= 0;
   }
 
   remainingDays(project: CurrentProject): number {
@@ -458,7 +461,7 @@ export class DfaDashProjectComponent implements OnInit {
   }
 
   appealButtonClass(project: CurrentProject): string {
-    return this.canAppeal(project) ? 'application-button' : 'disabled-button';
+    return this.appealHasRemainingDays(project) ? 'application-button' : 'disabled-button';
   }
 
   appealDecision(): void {

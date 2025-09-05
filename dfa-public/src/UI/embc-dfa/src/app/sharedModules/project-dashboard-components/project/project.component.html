@@ -257,27 +257,42 @@
             </table>
           </div>
         </div>
-        <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 32px;">
+      </div>
+      <div [featureEnabled]="'useAppeals'" *ngIf="canAppeal(applItem)">
+        <div *ngIf="applItem.activeStage" class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 32px;">
           <div class="button-column">
             <button
-              [class]="appealButtonClass(applItem)"
-              (click)="appealDecision(applItem)"
-              type="button"
-              [disabled]="!canAppeal(applItem)"
-              [title]="appealButtonTitle(applItem)"
-            >
-              {{ applItem.isSubmitted ? "Appeal Details" : "Appeal Decision" }}
+                class="application-button"
+                (click)="appealDecision(applItem)"
+                type="button"
+              >
+                 Appeal Details
             </button>
           </div>
         </div>
-        <div
-          *ngIf="canAppeal(applItem)"
-          class="col-md-12"
-          style="display: flex; justify-content: flex-end; padding: 10px 32px 0 0;"
-        >
-          <span>
-            Project Approval decision can be appealed for {{ remainingDays(applItem) }} days
-          </span>
+        <div [featureEnabled]="'useAppeals'" *ngIf="!applItem.activeStage">
+          <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 32px;">
+            <div class="button-column">
+              <button
+                  [class]="appealButtonClass(applItem)"
+                  (click)="appealDecision(applItem)"
+                  type="button"
+                  [disabled]="!appealHasRemainingDays(applItem)"
+                  [title]="appealButtonTitle(applItem)"
+                >
+                  Appeal Decision
+              </button>
+            </div>
+          </div>
+          <div
+            *ngIf="appealHasRemainingDays(applItem)"
+            class="col-md-12"
+            style="display: flex; justify-content: flex-end; padding: 10px 32px 0 0;"
+          >
+            <span>
+              Project Approval decision can be appealed for {{ remainingDays(applItem) }} days
+            </span>
+          </div>
         </div>
       </div>
     </mat-card>
