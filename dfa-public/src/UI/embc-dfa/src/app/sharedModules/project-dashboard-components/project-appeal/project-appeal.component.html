@@ -1,0 +1,67 @@
+<div class="container container-frame">
+  <div class="row heading-container">
+    <div class="col-8">
+      <span class="page-heading">Project Eligiblity Appeal </span>
+    </div>
+
+    <div class="col-4">
+      <button
+        #backtodash
+        id="backtodash"
+        class="button-p nextNsave col-4"
+        style="vertical-align: middle; width: 220px; margin-top: 15px"
+        (click)="BackToDashboard()"
+        mat-stroked-button
+        type="button">
+        Back to Project Dashboard
+        <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
+      </button>
+    </div>
+  </div>
+
+  <mat-horizontal-stepper
+    [selectedIndex]="selectedStepIndex"
+    class="stepper-style"
+    labelPosition="bottom"
+    [linear]="true"
+    (selectionChange)="onStepChange($event)">
+    <mat-step [editable]="true">
+      <ng-template matStepLabel (click)="selectedStepIndex = index">Appeal Rationale</ng-template>
+    </mat-step>
+    <mat-step [editable]="true">
+      <ng-template matStepLabel (click)="selectedStepIndex = index">Upload Document</ng-template>
+    </mat-step>
+    
+
+    <ng-template matStepperIcon="edit" let-index="index" (click)="selectedStepIndex = index">
+      {{ index + 1 }}
+    </ng-template>
+  </mat-horizontal-stepper>
+
+  <div *ngIf="selectedStepIndex === 0">
+    <app-project-appeal-rationale [edit]="vieworedit=='edit'">
+
+    </app-project-appeal-rationale>
+  </div>
+<div class="appeal-actions" *ngIf="vieworedit !== 'view'">
+      <button
+      id="open-appeal-decision"
+      class="button-s nextNsave"
+      mat-button
+      type="button"
+      (click)="cancleAppeal()">
+      Cancle Appeal
+      <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
+    </button>
+      <button
+      id="open-appeal-decision"
+      class="button-p nextNsave"
+      mat-stroked-button
+      type="button"
+      [disabled]="!IsFormValid"
+      (click)="selectedStepIndex = selectedStepIndex + 1">
+      Next
+      <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
+    </button>
+    </div>
+</div>

@@ -14,7 +14,7 @@ const routes: Routes = [{
       path: 'open',
       loadChildren: () =>
         import(
-          'src/app/sharedModules/project-dashboard-components/project/project.module'
+          'src/app/sharedModules/project-dashboard-components/project.module'
         ).then((m) => m.DFADashProjectModule),
       data: { flow: 'dfa-project-dashboard', apptype: 'open' }
     },
@@ -22,7 +22,7 @@ const routes: Routes = [{
       path: 'past',
       loadChildren: () =>
         import(
-          'src/app/sharedModules/project-dashboard-components/project/project.module'
+          'src/app/sharedModules/project-dashboard-components/project.module'
         ).then((m) => m.DFADashProjectModule),
       data: { flow: 'dfa-project-dashboard', apptype: 'closed' }
     },
