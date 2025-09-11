@@ -55,6 +55,8 @@ export class AppealMainComponent implements OnInit {
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   ];
+  vieworedit: string;
+  appealId: any;
 
   constructor(
     private router: Router,
@@ -77,8 +79,16 @@ export class AppealMainComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('Appeal Main Component Initialized');
     this.route.params.subscribe((params) => {
       this.projectId = params['id'];
+      this.appealId = params['appealId'];
+      if(this.appealId == 'new'){
+        this.appealId = this._createProjectAppeal();
+      }
+      // this.vieworedit = this.router.url.includes('view') ? 'view' : 'edit';
+      // this.appealId = this.route.snapshot.params['appealId'];
+      // this.projectId = this.route.snapshot.params['projectId'];
       console.debug('Project ID:', this.projectId);
       // TODO: load project data?
       this.loadProject(this.projectId);
@@ -222,10 +232,7 @@ export class AppealMainComponent implements OnInit {
     this.projectAppealService
       .projectAppealCreateProjectAppeal({
         body: {
-          // TODO: Finalize correct properties
-          caseId: this.projectId,
-          reason: this.getReason()
-        }
+          caseId: this.projectId}
       })
       .subscribe({
         next: async (response) => {

@@ -461,8 +461,8 @@ export class DfaDashProjectComponent implements OnInit {
     return this.canAppeal(project) ? 'application-button' : 'disabled-button';
   }
 
-  appealDecision(): void {
-    console.log("Appeal Decision");
+  appealDecision(project: CurrentProject): void {
+    this.router.navigate(['/dfa-appeal-main/' + project.projectId + '/new']);
   }
 }
 

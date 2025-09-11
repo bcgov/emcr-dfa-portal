@@ -228,7 +228,6 @@
           </table>
         </div>
       </div>
-
       <div [featureEnabled]="'useAppeals'" *ngIf="applItem.activeStage?.stage" style="margin-top: 30px; border-top: 1px solid lightgrey; padding-top: 30px;">
         <div style="display: flex; margin:30px 30px;">
           <div class="col-md-12">
@@ -257,19 +256,7 @@
             </table>
           </div>
         </div>
-        <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 32px;">
-          <div class="button-column">
-            <button
-              [class]="appealButtonClass(applItem)"
-              (click)="appealDecision(applItem)"
-              type="button"
-              [disabled]="!canAppeal(applItem)"
-              [title]="appealButtonTitle(applItem)"
-            >
-              {{ applItem.isSubmitted ? "Appeal Details" : "Appeal Decision" }}
-            </button>
-          </div>
-        </div>
+
         <div
           *ngIf="canAppeal(applItem)"
           class="col-md-12"
@@ -281,6 +268,19 @@
         </div>
       </div>
     </mat-card>
+    <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 32px;">
+          <div class="button-column">
+            <button
+              [class]="appealButtonClass(applItem)"
+              (click)="appealDecision(applItem)"
+              type="button"
+              [disabled]="!canAppeal(applItem)"
+              [title]="appealButtonTitle(applItem)"
+            >
+              {{ applItem.isSubmitted ? "Appeal Details" : "Appeal Decision" }}
+            </button>
+          </div>
+    </div>
   </div>
 </div>
 <div class="content-container no-project" *ngIf="lstFilteredProjects.length == 0 && isLoading == false">

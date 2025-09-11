@@ -25,9 +25,9 @@ public record ProjectAppeal : IDto
     public ProjectAppealStatusCode? StatusCode { get; set; } // Dynamics Optional
 
     [MaxLength(200)]
-    public required string Name { get; set; }            // Dynamics Application Required
+    public string? Name { get; set; }            // Dynamics Application Required
 
-    public Guid ProjectId { get; set; }                 // Dynamics Optional
+    public required string ProjectId { get; set; }                 // Dynamics Optional
     
     public bool? AssignedToAdjudicator { get; set; }    // Dynamics Optional
     public bool? AssignedToEvaluator { get; set; }      // Dynamics Optional

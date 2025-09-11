@@ -11,10 +11,13 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { ProjectAppeal } from '../models/project-appeal';
 import { projectAppealCreateProjectAppeal } from '../fn/project-appeal/project-appeal-create-project-appeal';
 import { ProjectAppealCreateProjectAppeal$Params } from '../fn/project-appeal/project-appeal-create-project-appeal';
 import { projectAppealDeleteProjectAppeal } from '../fn/project-appeal/project-appeal-delete-project-appeal';
 import { ProjectAppealDeleteProjectAppeal$Params } from '../fn/project-appeal/project-appeal-delete-project-appeal';
+import { projectAppealGetProjectAppealById } from '../fn/project-appeal/project-appeal-get-project-appeal-by-id';
+import { ProjectAppealGetProjectAppealById$Params } from '../fn/project-appeal/project-appeal-get-project-appeal-by-id';
 import { projectAppealUpdateProjectAppeal } from '../fn/project-appeal/project-appeal-update-project-appeal';
 import { ProjectAppealUpdateProjectAppeal$Params } from '../fn/project-appeal/project-appeal-update-project-appeal';
 
@@ -24,36 +27,36 @@ export class ProjectAppealService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `projectAppealCreateProjectAppeal()` */
-  static readonly ProjectAppealCreateProjectAppealPath = '/api/projectappeals';
+  /** Path part for operation `projectAppealGetProjectAppealById()` */
+  static readonly ProjectAppealGetProjectAppealByIdPath = '/api/projectappeals/{id}';
 
   /**
-   * Create a new project appeal.
+   * Get appeal details by ID.
    *
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `projectAppealCreateProjectAppeal()` instead.
+   * To access only the response body, use `projectAppealGetProjectAppealById()` instead.
    *
-   * This method sends `application/json` and handles request body of type `application/json`.
+   * This method doesn't expect any request body.
    */
-  projectAppealCreateProjectAppeal$Response(params: ProjectAppealCreateProjectAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
-    return projectAppealCreateProjectAppeal(this.http, this.rootUrl, params, context);
+  projectAppealGetProjectAppealById$Response(params: ProjectAppealGetProjectAppealById$Params, context?: HttpContext): Observable<StrictHttpResponse<ProjectAppeal>> {
+    return projectAppealGetProjectAppealById(this.http, this.rootUrl, params, context);
   }
 
   /**
-   * Create a new project appeal.
+   * Get appeal details by ID.
    *
    *
    *
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `projectAppealCreateProjectAppeal$Response()` instead.
+   * To access the full response (for headers, for example), `projectAppealGetProjectAppealById$Response()` instead.
    *
-   * This method sends `application/json` and handles request body of type `application/json`.
+   * This method doesn't expect any request body.
    */
-  projectAppealCreateProjectAppeal(params: ProjectAppealCreateProjectAppeal$Params, context?: HttpContext): Observable<Blob> {
-    return this.projectAppealCreateProjectAppeal$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Blob>): Blob => r.body)
+  projectAppealGetProjectAppealById(params: ProjectAppealGetProjectAppealById$Params, context?: HttpContext): Observable<ProjectAppeal> {
+    return this.projectAppealGetProjectAppealById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ProjectAppeal>): ProjectAppeal => r.body)
     );
   }
 
@@ -119,6 +122,39 @@ export class ProjectAppealService extends BaseService {
    */
   projectAppealDeleteProjectAppeal(params: ProjectAppealDeleteProjectAppeal$Params, context?: HttpContext): Observable<Blob> {
     return this.projectAppealDeleteProjectAppeal$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
+    );
+  }
+
+  /** Path part for operation `projectAppealCreateProjectAppeal()` */
+  static readonly ProjectAppealCreateProjectAppealPath = '/api/projectappeals';
+
+  /**
+   * Create a new project appeal.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `projectAppealCreateProjectAppeal()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  projectAppealCreateProjectAppeal$Response(params: ProjectAppealCreateProjectAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    return projectAppealCreateProjectAppeal(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Create a new project appeal.
+   *
+   *
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `projectAppealCreateProjectAppeal$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  projectAppealCreateProjectAppeal(params: ProjectAppealCreateProjectAppeal$Params, context?: HttpContext): Observable<Blob> {
+    return this.projectAppealCreateProjectAppeal$Response(params, context).pipe(
       map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }

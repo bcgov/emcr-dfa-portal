@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { SelectionModel } from '@angular/cdk/collections';
+import { ProjectAppealService } from 'src/app/core/api/services';
 
 
 @Component({
@@ -20,13 +21,21 @@ export class ProjectAppealComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    public projectAppealService: ProjectAppealService,
   ) {
   }
 
   ngOnInit(): void {
-    this.vieworedit = this.router.url.includes('view') ? 'view' : (this.router.url.includes('edit') ? 'edit' : 'new');
+    this.vieworedit = this.router.url.includes('view') ? 'view' : 'edit';
     this.appealId = this.route.snapshot.params['appealId'];
     this.projectId = this.route.snapshot.params['projectId'];
+
+    if(this.appealId == undefined){
+      this.appealId = this.CreateAppeal();
+    }
+  }
+  CreateAppeal(): string {
+    return "";
   }
 
   cancleAppeal() {

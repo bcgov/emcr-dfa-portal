@@ -1,15 +1,27 @@
-﻿namespace EMBC.Database.Resources;
+﻿using Microsoft.Xrm.Sdk;
+
+namespace EMBC.Database.Resources;
 
 public class ProjectAppealMapper : Profile
 {
     public ProjectAppealMapper()
     {
+        CreateMap<DFA_ProjectAppeal, ProjectAppeal>()
+            .ForMember(dest => dest.ProjectId, opt => opt.MapFrom(src => src.DFA_ProjectId != null ? src.DFA_ProjectId.Id : Guid.Empty))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.DFA_ProjectAppealId))
+            .ForMember(dest => dest.ProjectId, opt => opt.MapFrom(src => src.DFA_ProjectId));
+
+        CreateMap<ProjectAppeal, DFA_ProjectAppeal>()
+            .ForMember(dest => dest.DFA_ProjectAppealId, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.DFA_ProjectId, opt => opt.MapFrom(src => new EntityReference("dfa_project", Guid.Parse(src.ProjectId))));
+
+
         CreateMap<ProjectAppealComposite, ProjectAppeal>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ProjectAppeal.Id))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_Name))
             .ForMember(dest => dest.ProjectId, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_ProjectId))
+            .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => src.ProjectAppeal.StateCode.HasValue ? (StateCode)(int)src.ProjectAppeal.StateCode : default))
             .ForMember(dest => dest.StatusCode, opt => opt.MapFrom(src => src.ProjectAppeal.StatusCode))
-            .ForMember(dest => dest.StateCode, opt => opt.MapFrom(src => src.ProjectAppeal.StateCode))
             .ForMember(dest => dest.AssignedToAdjudicator, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_AssignedToAdjudicator))
             .ForMember(dest => dest.AssignedToEvaluator, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_AssignedToEvaluator))
             .ForMember(dest => dest.AdditionalInfoRequested, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_AdditionalInfoRequested))
