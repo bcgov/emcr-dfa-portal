@@ -75,7 +75,7 @@ namespace EMBC.DFA.API.Controllers
                     project.ActiveStage.Stage = currentProjectAppeal.ProjectAppealEligibility.ActiveStage.Name;
                     project.ActiveStage.id = currentProjectAppeal.Id.ToString();
                     project.ActiveStage.Status = projectAppealService.MapStageNote(currentProjectAppeal);
-                    project.ActiveStage.SubmissionDate = currentProjectAppeal.SubbmissionDate;
+                    project.ActiveStage.SubmissionDate = currentProjectAppeal.SubmissionDate;
                     // NOTE currently, to be consistent, the stages are hard-coded
                     // if you want dynamic stages/steps for the timeline, uncomment and finish the below code
                     // I would strongly recommend refactoring all of the timelines before moving towards dynamic stages

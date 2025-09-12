@@ -17,5 +17,5 @@ export interface ProjectAppealModel {
    */
   reason?: string | null;
   status?: string | null;
-  subbmissionDate?: string | null;
+  submissionDate?: string | null;
 }

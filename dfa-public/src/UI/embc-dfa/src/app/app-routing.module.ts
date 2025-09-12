@@ -7,7 +7,6 @@ import { DashboardModule } from './sharedModules/components/dashboard/dashboard.
 import { LoginPageModule } from './login-page/login-page.module';
 import { EligibilityService } from './core/api/services/eligibility.service'
 import { ContactService } from './core/api/services/contact.service';
-import { ProjectAppealComponent } from './sharedModules/project-dashboard-components/project-appeal/project-appeal.component';
 
 // 2024-05-27 EMCRI-217 waynezen: replace AuthGuard with built-in from angular-auth-oidc-client
 const routes: Routes = [
@@ -217,30 +216,6 @@ const routes: Routes = [
         (m) => m.OutageModule
       )
   },
-  // {
-  //   path: 'project/:projectId/appeal/:appealId/edit',
-  //   loadComponent: () =>
-  //     import('./sharedModules/project-dashboard-components/project-appeal/project-appeal.component')
-  //       .then((m) => m.ProjectAppealComponent),
-  //     canActivate: [AutoLoginPartialRoutesGuard]
-  // },
-  // {
-  //   path: 'project/:projectId/appeal/:appealId/view',
-  //   loadComponent: () =>
-  //     import('./sharedModules/project-dashboard-components/project-appeal/project-appeal.component')
-  //       .then((m) => m.ProjectAppealComponent),
-  //     canActivate: [AutoLoginPartialRoutesGuard]
-  // }
-  {
-  path: 'application/:applicationId/project/:projectId/appeal/:appealId/view',
-  component: ProjectAppealComponent,
-  canActivate: [AutoLoginPartialRoutesGuard]
-},
-//   {
-//   path: 'project/:projectId/appeal/:appealId/edit',
-//   component: ProjectAppealComponent,
-//   canActivate: [AutoLoginPartialRoutesGuard]
-// }
 
   // {
   //   path: 'api/contacts/login',

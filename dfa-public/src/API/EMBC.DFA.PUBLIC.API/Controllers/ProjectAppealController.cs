@@ -94,7 +94,7 @@ namespace EMBC.DFA.API.Controllers
 
                 var mappedProjectAppeal = mapper.Map<ProjectAppeal>(appeal);
 
-                mappedProjectAppeal.SubbmissionDate = DateTime.Now;
+                mappedProjectAppeal.SubmissionDate = DateTime.Now;
 
                 var result = projectAppealRepository.Update(mappedProjectAppeal);
                 return Ok(result);
@@ -130,7 +130,7 @@ namespace EMBC.DFA.API.Controllers
 
         public string? AppealDecision { get; set; }
 
-        public DateTime? SubbmissionDate { get; set; }
+        public DateTime? SubmissionDate { get; set; }
 
         /// <summary>
         /// User submitted reason for the appeal.

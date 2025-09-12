@@ -31,7 +31,6 @@ import { AuthConfigModule } from './auth/auth-config.module';
 import { BceidAuthInterceptor } from './core/interceptors/bceid-auth.interceptor'
 import { environment } from '../environments/environment';
 import { NgxMaskConfig, provideEnvironmentNgxMask } from 'ngx-mask';
-import { ProjectAppealRationaleComponent } from './sharedModules/project-dashboard-components/project-appeal/project-appeal-rationale/project-appeal-rationale.component';
 
 const maskConfigFunction: () => Partial<NgxMaskConfig> = () => {
     return {

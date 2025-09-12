@@ -121,7 +121,7 @@ export class AppealMainComponent implements OnInit {
       next: (appeal) => {
         console.debug('Appeal Data:', appeal);
         this.appeal = appeal;
-        this.vieworedit = appeal?.subbmissionDate ? 'view' : 'edit';
+        this.vieworedit = appeal?.submissionDate ? 'view' : 'edit';
         this.appealForm.get('step1.reason')?.setValue(appeal?.reason ?? '');
       },
       error: (error) => {

@@ -71,7 +71,7 @@ public record ProjectAppeal : IDto
     public bool? UpdateProjectApprovedCosts { get; set; } // Dynamics Optional
 
     public string? Reason { get; set; } 
-    public DateTime? SubbmissionDate { get; set; }
+    public DateTime? SubmissionDate { get; set; }
 
     // Related Entities
     public ProjectEligibilityAppeal? ProjectAppealEligibility { get; set; }
