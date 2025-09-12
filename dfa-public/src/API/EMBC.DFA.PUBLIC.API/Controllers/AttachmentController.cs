@@ -1,29 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
-using EMBC.Database.Contract;
 using EMBC.Database.Resources;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.Services;
-using EMBC.DFA.PUBLIC.API.Controllers;
 using EMBC.DFA.PUBLIC.API.Services;
 using EMBC.Utilities.S3;
-using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Namotion.Reflection;
-using Org.BouncyCastle.Asn1.Ocsp;
-using Pipelines.Sockets.Unofficial.Arenas;
 
 namespace EMBC.DFA.API.Controllers
 {

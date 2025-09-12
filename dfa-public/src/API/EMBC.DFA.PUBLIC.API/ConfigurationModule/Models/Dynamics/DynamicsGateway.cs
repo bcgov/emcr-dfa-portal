@@ -3,33 +3,18 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
-using System.Xml;
 using AutoMapper;
 using EMBC.Database.Contract;
-using EMBC.Database.Model;
 using EMBC.Database.Resources;
 using EMBC.DFA.API.ConfigurationModule.Models.AuthModels;
-using EMBC.DFA.API.ConfigurationModule.Models.PDF;
-using EMBC.ESS.Shared.Contracts.Metadata;
 using EMBC.Utilities.Extensions;
-using Google.Protobuf.WellKnownTypes;
-using Grpc.Core;
-using IdentityModel.Client;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Mozilla;
 using Pipelines.Sockets.Unofficial.Arenas;
 using Xrm.Tools.WebAPI;
 using Xrm.Tools.WebAPI.Requests;
-using Xrm.Tools.WebAPI.Results;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
 {

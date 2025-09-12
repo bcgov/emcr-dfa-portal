@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -8,18 +7,17 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Amazon.S3;
 using EMBC.Database;
+using EMBC.Database.Resources;
 using EMBC.DFA.API.ConfigurationModule.Models.Dynamics;
 using EMBC.DFA.API.ConfigurationModule.Models.PDF.PDFService;
 using EMBC.DFA.API.Services;
+using EMBC.DFA.PUBLIC.API.Services;
 //using EMBC.DFA.PUBLIC.API.Services.S3;
 using EMBC.Gov.BCeID;
 using EMBC.Gov.BCeID.Models;
 using EMBC.Utilities.Configuration;
 using EMBC.Utilities.Telemetry;
-using EMBC.Database.Resources;
-using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -34,10 +32,10 @@ using Microsoft.Net.Http.Headers;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
+using OpenIddict.Validation;
 using Xrm.Tools.WebAPI;
 using Xrm.Tools.WebAPI.Requests;
 using ITokenProvider = EMBC.DFA.API.Services.ITokenProvider;
-using EMBC.DFA.PUBLIC.API.Services;
 
 namespace EMBC.DFA.API
 {
@@ -155,7 +153,7 @@ namespace EMBC.DFA.API
                  };
              })
              //reference tokens handling
-             .AddOAuth2Introspection("introspection", options =>
+/*             .AddOAuth2Introspection("introspection", options =>
              {
                  options.EnableCaching = true;
                  options.CacheDuration = TimeSpan.FromMinutes(20);
@@ -176,7 +174,7 @@ namespace EMBC.DFA.API
                          logger.LogError(ctx?.Result?.Failure, "Introspection authentication failed");
                      }
                  };
-             })
+             })*/
 
              .AddPolicyScheme(defaultScheme, defaultScheme, options =>
             {
@@ -276,6 +274,27 @@ namespace EMBC.DFA.API
 
                 //document.GenerateAbstractProperties = true;
             });
+
+            services.AddOpenIddict()
+                .AddValidation(options =>
+                {
+                    options.UseLocalServer();
+                    
+                    var introspectionConfig = configuration.GetSection("auth:introspection");
+
+                    string clientId = (string)introspectionConfig.GetValue(typeof(string), "clientid");
+                    string authority = (string)introspectionConfig.GetValue(typeof(string), "authority");
+
+/*                    options.UseIntrospection()
+                        .SetClientId(clientId)
+                        .SetIssuer(authority);*/
+
+                    // Register the System.Net.Http integration.
+                    options.UseSystemNetHttp();
+
+                    // Register the ASP.NET Core host.
+                    options.UseAspNetCore();
+                });
 
             services.AddTransient<IEvacuationSearchService, EvacuationSearchService>();
             services.AddTransient<IProfileInviteService, ProfileInviteService>();
