@@ -228,7 +228,7 @@
           </table>
         </div>
       </div>
-      <div [featureEnabled]="'useAppeals'" *ngIf="applItem.activeStage?.stage" style="margin-top: 30px; border-top: 1px solid lightgrey; padding-top: 30px;">
+      <div [featureEnabled]="'useAppeals'" *ngIf="hasSubmittedAppeal(applItem)" style="margin-top: 30px; border-top: 1px solid lightgrey; padding-top: 30px;">
         <div style="display: flex; margin:30px 30px;">
           <div class="col-md-12">
             <table cellpadding="0" cellspacing="0">
@@ -256,31 +256,45 @@
             </table>
           </div>
         </div>
-
-        <div
-          *ngIf="canAppeal(applItem)"
-          class="col-md-12"
-          style="display: flex; justify-content: flex-end; padding: 10px 32px 0 0;"
-        >
-          <span>
-            Project Approval decision can be appealed for {{ remainingDays(applItem) }} days
-          </span>
+      </div>
+      <div [featureEnabled]="'useAppeals'" *ngIf="canAppeal(applItem)">
+        <div *ngIf="hasSubmittedAppeal(applItem)" class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 32px;">
+          <div class="button-column">
+            <button
+                class="application-button"
+                (click)="appealDecision(applItem)"
+                type="button"
+              >
+                 Appeal Details
+            </button>
+          </div>
+        </div>
+        <div [featureEnabled]="'useAppeals'" *ngIf="!hasSubmittedAppeal(applItem)">
+          <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 32px;">
+            <div class="button-column">
+              <button
+                  [class]="appealButtonClass(applItem)"
+                  (click)="appealDecision(applItem)"
+                  type="button"
+                  [disabled]="!appealHasRemainingDays(applItem)"
+                  [title]="appealButtonTitle(applItem)"
+                >
+                  Appeal Decision
+              </button>
+            </div>
+          </div>
+          <div
+            *ngIf="appealHasRemainingDays(applItem)"
+            class="col-md-12"
+            style="display: flex; justify-content: flex-end; padding: 10px 32px 0 0;"
+          >
+            <span>
+              Project Approval decision can be appealed for {{ remainingDays(applItem) }} days
+            </span>
+          </div>
         </div>
       </div>
     </mat-card>
-    <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 32px;">
-          <div class="button-column">
-            <button
-              [class]="appealButtonClass(applItem)"
-              (click)="appealDecision(applItem)"
-              type="button"
-              [disabled]="!canAppeal(applItem)"
-              [title]="appealButtonTitle(applItem)"
-            >
-              {{ applItem.isSubmitted ? "Appeal Details" : "Appeal Decision" }}
-            </button>
-          </div>
-    </div>
   </div>
 </div>
 <div class="content-container no-project" *ngIf="lstFilteredProjects.length == 0 && isLoading == false">

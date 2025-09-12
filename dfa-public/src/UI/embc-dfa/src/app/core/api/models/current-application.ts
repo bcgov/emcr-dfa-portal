@@ -14,6 +14,7 @@ export interface CurrentApplication {
   arPositionTitle?: string | null;
   arSecondDeclaration?: boolean | null;
   caseNumber?: string;
+  createdOn?: string | null;
   damagedAddress?: string;
   dateFileClosed?: string;
   dateOfDamage?: string;

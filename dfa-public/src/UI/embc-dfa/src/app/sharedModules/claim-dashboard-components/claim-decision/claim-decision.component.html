@@ -279,23 +279,25 @@
 
     </div>
 
-    
-    <div style="padding-bottom: 70px;" class="appealClaims" *ngIf="!recoveryClaim?.claim.claimAppeals && !recoveryClaim?.claim?.isAdjustmentClaim">
-        <div *ngIf="canAppealClaims(recoveryClaim)" >
-            <div style="padding: 12px;">
-                <i>Amount Approval decisions can be appealed for 60 days ({{remainingDays(recoveryClaim)}} days
-                    remaining).</i>
+    <div [featureEnabled]="'useAppeals'">
+        <div style="padding-bottom: 70px;" class="appealClaims" *ngIf="!recoveryClaim?.claim.claimAppeals && !recoveryClaim?.claim?.isAdjustmentClaim">
+            <div *ngIf="canAppealClaims(recoveryClaim)" >
+                <div style="padding: 12px;">
+                    <i>Amount Approval decisions can be appealed for 60 days ({{remainingDays(recoveryClaim)}} days
+                        remaining).</i>
+                </div>
+              
             </div>
-          
+            <button id="open-appeal-decision" class="button-p" style="width: 220px;" mat-stroked-button
+                type="button" (click)="openAppealDecision()"
+                [disabled]="remainingDays(recoveryClaim) <= 0 && !recoveryClaim?.claim?.lateAppealAllowed"
+                [matTooltip]="(remainingDays(recoveryClaim) <= 0 && !recoveryClaim?.claim?.lateAppealAllowed ) ? 'The 60 day deadline has passed and the claim amount cannot be appealed.' : ''"
+                matTooltipPosition="above">
+                Appeal Decision
+                <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
+            </button>
         </div>
-        <button id="open-appeal-decision" class="button-p" style="width: 220px;" mat-stroked-button
-            type="button" (click)="openAppealDecision()"
-            [disabled]="remainingDays(recoveryClaim) <= 0 && !recoveryClaim?.claim?.lateAppealAllowed"
-            [matTooltip]="(remainingDays(recoveryClaim) <= 0 && !recoveryClaim?.claim?.lateAppealAllowed ) ? 'The 60 day deadline has passed and the claim amount cannot be appealed.' : ''"
-            matTooltipPosition="above">
-            Appeal Decision
-            <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
-        </button>
     </div>
+   
 
 </div>

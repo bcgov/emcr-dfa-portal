@@ -11,13 +11,13 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { ProjectAppeal } from '../models/project-appeal';
 import { projectAppealCreateProjectAppeal } from '../fn/project-appeal/project-appeal-create-project-appeal';
 import { ProjectAppealCreateProjectAppeal$Params } from '../fn/project-appeal/project-appeal-create-project-appeal';
 import { projectAppealDeleteProjectAppeal } from '../fn/project-appeal/project-appeal-delete-project-appeal';
 import { ProjectAppealDeleteProjectAppeal$Params } from '../fn/project-appeal/project-appeal-delete-project-appeal';
 import { projectAppealGetProjectAppealById } from '../fn/project-appeal/project-appeal-get-project-appeal-by-id';
 import { ProjectAppealGetProjectAppealById$Params } from '../fn/project-appeal/project-appeal-get-project-appeal-by-id';
+import { ProjectAppealModel } from '../models/project-appeal-model';
 import { projectAppealUpdateProjectAppeal } from '../fn/project-appeal/project-appeal-update-project-appeal';
 import { ProjectAppealUpdateProjectAppeal$Params } from '../fn/project-appeal/project-appeal-update-project-appeal';
 
@@ -40,7 +40,7 @@ export class ProjectAppealService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  projectAppealGetProjectAppealById$Response(params: ProjectAppealGetProjectAppealById$Params, context?: HttpContext): Observable<StrictHttpResponse<ProjectAppeal>> {
+  projectAppealGetProjectAppealById$Response(params: ProjectAppealGetProjectAppealById$Params, context?: HttpContext): Observable<StrictHttpResponse<ProjectAppealModel>> {
     return projectAppealGetProjectAppealById(this.http, this.rootUrl, params, context);
   }
 
@@ -54,9 +54,9 @@ export class ProjectAppealService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  projectAppealGetProjectAppealById(params: ProjectAppealGetProjectAppealById$Params, context?: HttpContext): Observable<ProjectAppeal> {
+  projectAppealGetProjectAppealById(params: ProjectAppealGetProjectAppealById$Params, context?: HttpContext): Observable<ProjectAppealModel> {
     return this.projectAppealGetProjectAppealById$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ProjectAppeal>): ProjectAppeal => r.body)
+      map((r: StrictHttpResponse<ProjectAppealModel>): ProjectAppealModel => r.body)
     );
   }
 
@@ -139,7 +139,7 @@ export class ProjectAppealService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  projectAppealCreateProjectAppeal$Response(params: ProjectAppealCreateProjectAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+  projectAppealCreateProjectAppeal$Response(params: ProjectAppealCreateProjectAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
     return projectAppealCreateProjectAppeal(this.http, this.rootUrl, params, context);
   }
 
@@ -153,9 +153,9 @@ export class ProjectAppealService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  projectAppealCreateProjectAppeal(params: ProjectAppealCreateProjectAppeal$Params, context?: HttpContext): Observable<Blob> {
+  projectAppealCreateProjectAppeal(params: ProjectAppealCreateProjectAppeal$Params, context?: HttpContext): Observable<string> {
     return this.projectAppealCreateProjectAppeal$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Blob>): Blob => r.body)
+      map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 

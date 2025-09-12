@@ -22,6 +22,7 @@ export interface RecoveryPlan {
   isdamagedDateSameAsApplication?: boolean | null;
   paidProjectAmount?: number | null;
   project18MonthDeadline?: string | null;
+  projectAppealId?: string | null;
   projectApprovedDate?: string | null;
   projectDecision?: string | null;
   projectName?: string | null;

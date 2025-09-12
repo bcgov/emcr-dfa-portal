@@ -16,13 +16,14 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { Decision } from 'src/app/models/decision.enum';
 import { ClaimType } from 'src/app/models/claim-type.enum';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FeatureEnabledDirective } from 'src/app/core/directives/feature-enabled.directive';
 
 
 
 @Component({
   selector: 'app-claim-decision',
   standalone: true,
-  imports: [CoreModule, MatCardModule, MatTableModule, CommonModule,MatDialogModule, MatStepperModule, MatTooltipModule],
+  imports: [CoreModule, MatCardModule, MatTableModule, CommonModule,MatDialogModule, MatStepperModule, MatTooltipModule, FeatureEnabledDirective],
   templateUrl: './claim-decision.component.html',
   styleUrl: './claim-decision.component.scss',
 })

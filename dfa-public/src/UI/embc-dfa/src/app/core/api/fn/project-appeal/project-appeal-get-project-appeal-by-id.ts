@@ -8,7 +8,7 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ProjectAppeal } from '../../models/project-appeal';
+import { ProjectAppealModel } from '../../models/project-appeal-model';
 
 export interface ProjectAppealGetProjectAppealById$Params {
 
@@ -18,7 +18,7 @@ export interface ProjectAppealGetProjectAppealById$Params {
   id: string;
 }
 
-export function projectAppealGetProjectAppealById(http: HttpClient, rootUrl: string, params: ProjectAppealGetProjectAppealById$Params, context?: HttpContext): Observable<StrictHttpResponse<ProjectAppeal>> {
+export function projectAppealGetProjectAppealById(http: HttpClient, rootUrl: string, params: ProjectAppealGetProjectAppealById$Params, context?: HttpContext): Observable<StrictHttpResponse<ProjectAppealModel>> {
   const rb = new RequestBuilder(rootUrl, projectAppealGetProjectAppealById.PATH, 'get');
   if (params) {
     rb.path('id', params.id, {});
@@ -29,7 +29,7 @@ export function projectAppealGetProjectAppealById(http: HttpClient, rootUrl: str
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<ProjectAppeal>;
+      return r as StrictHttpResponse<ProjectAppealModel>;
     })
   );
 }

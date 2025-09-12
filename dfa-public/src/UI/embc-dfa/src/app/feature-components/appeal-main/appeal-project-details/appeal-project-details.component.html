@@ -14,27 +14,28 @@
       {{ project?.projectType }}
       <br />
       <b>Date of Damage:</b>
-      {{ application?.dateOfDamage }}
+      {{ application?.dateOfDamage | date:'yyyy-MM-dd'}}
       <br />
       <b>Original Application Date:</b>
-      TBD
+      {{application?.createdOn | date:'yyyy-MM-dd'}}
       <br />
       <b>Original DFA Decision Date:</b>
-      TBD
+      {{ project?.projectApprovedDate | date:'yyyy-MM-dd'}}
       <br />
       <b>Original DFA Eligibility Decision:</b>
-      TBD
+      {{ project?.projectDecision}}
       <br />
     </div>
     <div class="col-md-6">
       <b>Appeal Number:</b>
-      TBD
+      {{ appeal?.name }}
       <br />
       <b>Appeal Submission Date:</b>
-      TBD
+      {{ appeal?.subbmissionDate | date:'yyyy-MM-dd'}}
       <br />
       <b>Appeal Decision:</b>
-      TBD
+      {{ appeal?.appealDecision }}
+      
       <br />
     </div>
   </div>

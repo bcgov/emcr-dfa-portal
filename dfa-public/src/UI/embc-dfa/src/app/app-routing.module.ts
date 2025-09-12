@@ -38,7 +38,7 @@ const routes: Routes = [
     canActivate: [AutoLoginPartialRoutesGuard]
   },
   {
-    path: 'dfa-appeal-main/:id/:appealId',
+    path: 'application/:applicationId/project/:projectId/appeal/:appealId',
     loadChildren: () =>
       import(
         './feature-components/appeal-main/appeal-main.module'
@@ -232,15 +232,15 @@ const routes: Routes = [
   //     canActivate: [AutoLoginPartialRoutesGuard]
   // }
   {
-  path: 'project/:projectId/appeal/:appealId/view',
+  path: 'application/:applicationId/project/:projectId/appeal/:appealId/view',
   component: ProjectAppealComponent,
   canActivate: [AutoLoginPartialRoutesGuard]
 },
-  {
-  path: 'project/:projectId/appeal/:appealId/edit',
-  component: ProjectAppealComponent,
-  canActivate: [AutoLoginPartialRoutesGuard]
-}
+//   {
+//   path: 'project/:projectId/appeal/:appealId/edit',
+//   component: ProjectAppealComponent,
+//   canActivate: [AutoLoginPartialRoutesGuard]
+// }
 
   // {
   //   path: 'api/contacts/login',

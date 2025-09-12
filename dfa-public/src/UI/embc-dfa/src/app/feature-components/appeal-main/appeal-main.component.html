@@ -44,7 +44,6 @@
           <div class="row mb-4">
             <div class="col-md-12">
               <h2 class="sub-heading requiredField mb-0">Appeal Reason</h2>
-              {{ appealForm.get('step1.reason').value}}
               <p>
                 Please provide a detailed appeal reasoning here. If you require more space to provide your reasoning,
                 please provide it as a supporting document below. Any supporting documentation you can provide in
@@ -61,7 +60,7 @@
                   [maxlength]="reasonMaxLength"
                   [readonly]="isReadOnly"
                   (keyup)="updateReasonRemainingCharacters()"></textarea>
-                <mat-hint>{{ reasonRemainingLength }} characters remaining.</mat-hint>
+                <mat-hint *ngIf="!isReadOnly">{{ reasonRemainingLength }} characters remaining.</mat-hint>
               </mat-form-field>
             </div>
           </div>
@@ -69,7 +68,7 @@
           <div class="row mb-4">
             <div class="col-md-6">
               <button class="button-s align-back-button" mat-button type="button" (click)="cancel()">
-                Cancel Appeal
+                {{isReadOnly? 'Close': 'Cancel Appeal'}}
               </button>
             </div>
             <div class="col-md-6">
@@ -179,21 +178,32 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
-            <button class="button-s" mat-button matStepperPrevious type="button" [disabled]="isDisabled">
-              <span>Back</span>
-            </button>
-          </div>
-          <div class="col-md-6">
-            <button
-              class="button-p save-button"
-              mat-stroked-button
-              type="button"
-              [disabled]="isDisabled"
-              (click)="submit()">
-              <span>Submit Appeal</span>
-            </button>
-          </div>
+          
+            <div class="col-md-6">
+              <button class="button-s" mat-button matStepperPrevious type="button" [disabled]="isDisabled">
+                <span>Back</span>
+              </button>
+            </div>
+            <div class="col-md-6" *ngIf="!isReadOnly">
+              <button
+                class="button-p save-button"
+                mat-stroked-button
+                type="button"
+                [disabled]="isDisabled"
+                (click)="submit()">
+                <span>Submit Appeal</span>
+              </button>
+            </div>
+            <div class="col-md-6" *ngIf="isReadOnly">
+              <button
+                class="button-p save-button"
+                mat-stroked-button
+                type="button"
+                [disabled]="isDisabled"
+                (click)="cancel()">
+                <span>Close</span>
+              </button>
+            </div>
         </div>
       </mat-step>
       <ng-template matStepperIcon="edit" let-index="index">

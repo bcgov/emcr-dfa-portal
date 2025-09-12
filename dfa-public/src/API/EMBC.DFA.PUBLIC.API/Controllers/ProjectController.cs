@@ -73,7 +73,9 @@ namespace EMBC.DFA.API.Controllers
                     project.ActiveStage = new CurrentProjectAppeal();
                     project.ActiveStage.CompletedOn = currentProjectAppeal.ProjectAppealEligibility.CompletedOn;
                     project.ActiveStage.Stage = currentProjectAppeal.ProjectAppealEligibility.ActiveStage.Name;
+                    project.ActiveStage.id = currentProjectAppeal.Id.ToString();
                     project.ActiveStage.Status = projectAppealService.MapStageNote(currentProjectAppeal);
+                    project.ActiveStage.SubmissionDate = currentProjectAppeal.SubbmissionDate;
                     // NOTE currently, to be consistent, the stages are hard-coded
                     // if you want dynamic stages/steps for the timeline, uncomment and finish the below code
                     // I would strongly recommend refactoring all of the timelines before moving towards dynamic stages
@@ -142,8 +144,18 @@ namespace EMBC.DFA.API.Controllers
                 dfaProjectMain.Project.estimateCostIncludingTax = null;
             }
 
+            var query = new Database.Contract.ProjectAppealQuery();
+            query.ProjectId = projectId;
+            var workflow = projectAppealRepository
+                .GetWorkflow(query);
+            if (workflow?.ProjectAppeals?.Any() ?? false)
+            {
+                var currentProjectAppeal = workflow.ProjectAppeals.Last();
+                dfaProjectMain.Project.ProjectAppealId = currentProjectAppeal.Id;
+            }
             return Ok(dfaProjectMain);
         }
+        
 
         /// <summary>
         /// get dfa project details
@@ -260,6 +272,7 @@ namespace EMBC.DFA.API.Controllers
     public class CurrentProjectAppeal
     {
         public string id { get; set; }
+        public string Name { get; set; }
         public DateTime? SubmissionDate { get; set; }
         public DateTime? CompletedOn { get; set; }
         public string Status { get; set; }

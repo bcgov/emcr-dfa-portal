@@ -14,18 +14,18 @@ export interface ProjectAppealCreateProjectAppeal$Params {
       body: ProjectAppealModel
 }
 
-export function projectAppealCreateProjectAppeal(http: HttpClient, rootUrl: string, params: ProjectAppealCreateProjectAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+export function projectAppealCreateProjectAppeal(http: HttpClient, rootUrl: string, params: ProjectAppealCreateProjectAppeal$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
   const rb = new RequestBuilder(rootUrl, projectAppealCreateProjectAppeal.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'blob', accept: 'application/octet-stream', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Blob>;
+      return r as StrictHttpResponse<string>;
     })
   );
 }

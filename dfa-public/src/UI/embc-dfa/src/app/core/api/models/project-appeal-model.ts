@@ -7,12 +7,15 @@
  * Model representing a project appeal.
  */
 export interface ProjectAppealModel {
-  caseId?: string;
-  id?: string;
+  appealDecision?: string | null;
+  caseId?: string | null;
+  id?: string | null;
+  name?: string | null;
 
   /**
    * User submitted reason for the appeal.
    */
-  reason?: string;
-  status?: string;
+  reason?: string | null;
+  status?: string | null;
+  subbmissionDate?: string | null;
 }

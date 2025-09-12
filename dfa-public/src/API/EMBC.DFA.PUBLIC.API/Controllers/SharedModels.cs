@@ -639,6 +639,7 @@ namespace EMBC.DFA.API.Controllers
         /* D4P-112 */
         public decimal? advancedPaymentsMade { get; set; }
         public decimal? advancedPaymentsBalance { get; set; }
+        public Guid? ProjectAppealId { get; set; }
 
     }
 

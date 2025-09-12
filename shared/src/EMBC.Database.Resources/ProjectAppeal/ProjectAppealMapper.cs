@@ -7,13 +7,23 @@ public class ProjectAppealMapper : Profile
     public ProjectAppealMapper()
     {
         CreateMap<DFA_ProjectAppeal, ProjectAppeal>()
-            .ForMember(dest => dest.ProjectId, opt => opt.MapFrom(src => src.DFA_ProjectId != null ? src.DFA_ProjectId.Id : Guid.Empty))
+            .ForMember(dest => dest.ProjectId, opt => opt.MapFrom(src =>
+                src.DFA_ProjectId != null ? src.DFA_ProjectId.Id.ToString() : string.Empty))
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.DFA_ProjectAppealId))
-            .ForMember(dest => dest.ProjectId, opt => opt.MapFrom(src => src.DFA_ProjectId));
+            .ForMember(dest => dest.AppealDecision, opt => opt.MapFrom(src => src.DFA_AppealDecision))
+            .ForMember(dest => dest.SubbmissionDate, opt => opt.MapFrom(src => src.DFA_DateAppealReceived))
+            .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.DFA_AppealRationale))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.DFA_Name));
 
         CreateMap<ProjectAppeal, DFA_ProjectAppeal>()
             .ForMember(dest => dest.DFA_ProjectAppealId, opt => opt.MapFrom(src => src.Id))
-            .ForMember(dest => dest.DFA_ProjectId, opt => opt.MapFrom(src => new EntityReference("dfa_project", Guid.Parse(src.ProjectId))));
+            .ForMember(dest => dest.DFA_AppealDecision, opt => opt.MapFrom(src => src.AppealDecision))
+            .ForMember(dest => dest.DFA_DateAppealReceived, opt => opt.MapFrom(src => src.SubbmissionDate))
+            .ForMember(dest => dest.DFA_AppealRationale, opt => opt.MapFrom(src => src.Reason))
+            .ForMember(dest => dest.DFA_ProjectId, opt => opt.MapFrom(src =>
+                string.IsNullOrEmpty(src.ProjectId)
+                    ? null
+                    : new EntityReference("dfa_project", Guid.Parse(src.ProjectId))));
 
 
         CreateMap<ProjectAppealComposite, ProjectAppeal>()
@@ -59,6 +69,7 @@ public class ProjectAppealMapper : Profile
             .ForMember(dest => dest.UpdateProjectDecision, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_UpdateProjectDecision))
             .ForMember(dest => dest.UpdateProjectApprovedCosts, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_UpdateProjectApprovedCosts))
             .ForMember(dest => dest.ProjectAppealEligibility, opt => opt.MapFrom(src => src.ProjectEligibilityAppeal))
+            .ForMember(dest => dest.SubbmissionDate, opt => opt.MapFrom(src => src.ProjectAppeal.DFA_DateAppealReceived))
             .AfterMap((src, dest) => dest.ProjectAppealEligibility.ActiveStage = new Stage() { Id = src.ProcessStage.Id, Name = src.ProcessStage.StageName });
 
         CreateMap<DFA_ProjectEligibilityAppeal, ProjectEligibilityAppeal>()

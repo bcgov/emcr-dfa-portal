@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CurrentApplication, CurrentProjectAppeal, RecoveryPlan } from 'src/app/core/api/models';
+import { CurrentApplication, CurrentProjectAppeal, ProjectAppealModel, RecoveryPlan } from 'src/app/core/api/models';
 
 /**
  * A container that displays project details.
@@ -19,7 +19,7 @@ export class AppealProjectDetailsComponent implements OnInit {
   @Input() projectId: string;
   @Input() project: RecoveryPlan;
   @Input() application: CurrentApplication;
-  @Input() appeal: CurrentProjectAppeal;
+  @Input() appeal: ProjectAppealModel;
 
   constructor() {}
 

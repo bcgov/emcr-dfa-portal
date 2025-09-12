@@ -33,9 +33,9 @@ namespace EMBC.DFA.API.Controllers
         /// <param name="id">Appeal ID</param>
         /// <returns>ClaimAppeal details</returns>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(ProjectAppeal), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProjectAppealModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<ClaimAppeal> GetProjectAppealById(Guid id)
+        public ActionResult<ProjectAppealModel> GetProjectAppealById(Guid id)
         {
             // Use FirstOrDefault to get the appeal by ID
             var appeal = projectAppealRepository.FirstOrDefault(a => a.Id == id);
@@ -44,7 +44,7 @@ namespace EMBC.DFA.API.Controllers
                 return NotFound();
 
             // Map to ProjectAppealModel for response
-            var appealModel = mapper.Map<ProjectAppeal>(appeal);
+            var appealModel = mapper.Map<ProjectAppealModel>(appeal);
 
             return Ok(appealModel);
         }
@@ -58,7 +58,6 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult CreateProjectAppeal([FromBody] ProjectAppealModel appeal)
         {
-
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
@@ -89,13 +88,21 @@ namespace EMBC.DFA.API.Controllers
         public IActionResult UpdateProjectAppeal(string id, [FromBody] ProjectAppealModel appeal)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
+                if (appeal == null) return BadRequest("Appeal details cannot be empty.");
 
-            if (appeal == null) return BadRequest("Appeal details cannot be empty.");
+                var mappedProjectAppeal = mapper.Map<ProjectAppeal>(appeal);
 
-            var mappedProjectAppeal = mapper.Map<ProjectAppeal>(appeal);
+                mappedProjectAppeal.SubbmissionDate = DateTime.Now;
 
-            var result = projectAppealRepository.Update(mappedProjectAppeal);
-            return Ok(result);
+                var result = projectAppealRepository.Update(mappedProjectAppeal);
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         /// <summary>
@@ -118,6 +125,12 @@ namespace EMBC.DFA.API.Controllers
     {
         public string? Id { get; set; }
         public string? CaseId { get; set; }
+
+        public string? Name { get; set; }
+
+        public string? AppealDecision { get; set; }
+
+        public DateTime? SubbmissionDate { get; set; }
 
         /// <summary>
         /// User submitted reason for the appeal.

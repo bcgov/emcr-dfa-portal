@@ -680,6 +680,7 @@ namespace EMBC.DFA.API.Controllers
         public string? ARPositionTitle { get; set; }
         public bool? ARFirstDeclaration { get; set; }
         public bool? ARSecondDeclaration { get; set; }
+        public string? CreatedOn { get; set; }
     }
 
     public class ApplicantSubtypes

@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { CurrentApplication, CurrentProjectAppeal, RecoveryPlan } from 'src/app/core/api/models';
+import { CurrentApplication, CurrentProjectAppeal, ProjectAppealModel, RecoveryPlan } from 'src/app/core/api/models';
 import { ApplicationService, AttachmentService, ProjectAppealService, ProjectService } from 'src/app/core/api/services';
 import { WarningDialogComponent } from 'src/app/core/components/dialog-components/warning-dialog/warning-dialog.component';
 import { AppealDocument } from 'src/app/feature-components/appeal-main/appeal-documents/appeal-documents.component';
@@ -28,13 +28,16 @@ export class AppealMainComponent implements OnInit {
    * @type {boolean}
    * @memberof AppealMainComponent
    */
-  @Input() isReadOnly: boolean = false;
+
+  get isReadOnly(): boolean {
+    return this.vieworedit === 'view';
+  }
 
   appealForm: FormGroup;
   projectId: string;
   project: RecoveryPlan;
   application: CurrentApplication;
-  appeal: CurrentProjectAppeal;
+  appeal: ProjectAppealModel;
   documents: AppealDocument[] = [];
 
   isLoading: boolean = false;
@@ -55,8 +58,9 @@ export class AppealMainComponent implements OnInit {
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   ];
-  vieworedit: string;
+  vieworedit: string = 'edit';
   appealId: any;
+  applicationId: any;
 
   constructor(
     private router: Router,
@@ -81,26 +85,14 @@ export class AppealMainComponent implements OnInit {
   ngOnInit(): void {
     console.log('Appeal Main Component Initialized');
     this.route.params.subscribe((params) => {
-      this.projectId = params['id'];
+      this.projectId = params['projectId'];
       this.appealId = params['appealId'];
-      if(this.appealId == 'new'){
-        this.appealId = this._createProjectAppeal();
-      }
-      // this.vieworedit = this.router.url.includes('view') ? 'view' : 'edit';
-      // this.appealId = this.route.snapshot.params['appealId'];
-      // this.projectId = this.route.snapshot.params['projectId'];
+      this.applicationId = params['applicationId'];
+
       console.debug('Project ID:', this.projectId);
-      // TODO: load project data?
-      this.loadProject(this.projectId);
+      this.loadProjectAndAppeal(this.projectId);
+      this.loadApplication(this.applicationId);
 
-      // TODO: load application data?
-      // this.loadApplication(this.projectId);
-
-      // TODO: load appeal data?
-      // this.loadAppeal(this.projectId);
-
-      // TODO: load documents
-      // this.loadDocuments();
     });
   }
 
@@ -119,18 +111,46 @@ export class AppealMainComponent implements OnInit {
   }
 
   /**
+   * Loads the application data based on the provided application ID.
+   *
+   * @param {string} applicationId
+   * @memberof AppealMainComponent
+   */
+  loadAppeal(appealId: string) {
+    this.projectAppealService.projectAppealGetProjectAppealById({ id: appealId }).subscribe({
+      next: (appeal) => {
+        console.debug('Appeal Data:', appeal);
+        this.appeal = appeal;
+        this.vieworedit = appeal?.subbmissionDate ? 'view' : 'edit';
+        this.appealForm.get('step1.reason')?.setValue(appeal?.reason ?? '');
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+
+  /**
    * Loads the project data based on the provided project ID.
    *
    * @param {string} projectId
    * @memberof AppealMainComponent
    */
-  loadProject(projectId: string) {
+  loadProjectAndAppeal(projectId: string) {
     this.projectService.projectGetProjectMain({ projectId: projectId }).subscribe({
       next: (dfaProjectMain) => {
         console.debug('Project Data:', dfaProjectMain);
-        if (dfaProjectMain && dfaProjectMain.project)
-          // this.projectName = 'Project - ' + dfaProjectMain.project.projectName +' (Amended)';
+        if (dfaProjectMain && dfaProjectMain.project) {
           this.project = dfaProjectMain.project;
+        }
+
+        if (dfaProjectMain && dfaProjectMain.project?.projectAppealId) {
+          this.appealId = dfaProjectMain.project.projectAppealId;
+          this.loadAppeal(this.appealId);
+        }
+        else{
+          this.appealId = this._createProjectAppeal();
+        }
       },
       error: (error) => {
         console.error(error);
@@ -174,7 +194,7 @@ export class AppealMainComponent implements OnInit {
    * @memberof AppealMainComponent
    */
   cancel() {
-    this.router.navigate(['/dfa-dashboard']);
+    this.router.navigate(['/dfa-application/' + this.applicationId + '/projects']);
   }
 
   /**
@@ -232,14 +252,13 @@ export class AppealMainComponent implements OnInit {
     this.projectAppealService
       .projectAppealCreateProjectAppeal({
         body: {
-          caseId: this.projectId}
+          caseId: this.projectId
+        }
       })
       .subscribe({
         next: async (response) => {
           console.debug('Appeal Created:', response);
-          await this.uploadDocuments();
-          this.router.navigate(['/dfa-dashboard']);
-        },
+                },
         error: (error) => {
           console.error('Error creating appeal:', error);
           this.warningDialog({
@@ -271,7 +290,7 @@ export class AppealMainComponent implements OnInit {
         next: async (response) => {
           console.debug('Appeal Updated:', response);
           await this.uploadDocuments();
-          this.router.navigate(['/dfa-dashboard']);
+          this.router.navigate(['/dfa-application/' + this.applicationId + '/projects']);
         },
         error: (error) => {
           console.error('Error updating appeal:', error);

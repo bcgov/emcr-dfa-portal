@@ -252,8 +252,9 @@
         </table>
 
         <!-- BEGIN of Claim Amount Appeal Timeline -->
+        <div [featureEnabled]="'useAppeals'">
         @if(hasClaimAmountAppeal(applItem)){
-        <div [featureEnabled]="'useAppeals'"
+        <div 
           style="margin-top: 30px; border-top: 1px solid lightgrey; padding-top: 30px;">
           <div style="display: flex; justify-content: space-between;">
             <div><b>Appeal Number - {{applItem.claimAppealNumber}}</b></div>
@@ -312,6 +313,7 @@
         </div>
         
         }
+        </div>
         <!-- END Claim Amountl Timeline -->
       </div>
       <div [featureEnabled]="'useAppeals'">

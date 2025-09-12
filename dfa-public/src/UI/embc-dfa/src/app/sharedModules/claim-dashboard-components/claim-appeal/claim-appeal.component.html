@@ -83,10 +83,10 @@
       <div class="col-md-6">
         <div class="claim-details">
           <div class="col-md-6">
-            <span><b>Eligible Payable - </b></span>
+            <span><b>Eligible Adjustment Amount - </b></span>
           </div>
           <div class="col-md-6">
-            <span>{{ claimMain?.claim?.eligiblePayable | fixedCurrency:'CA$' }}</span>
+            <span>{{ claimMain?.claim?.approvedClaimTotal | fixedCurrency:'CA$' }}</span>
           </div>
         </div>
         <div class="claim-details">
@@ -376,7 +376,7 @@
   </div>
 
 
-  <ng-container> <!-- Supporting Documents -->
+  <ng-container *ngIf="!appealData?.appealDecision"> <!-- Supporting Documents -->
     <div class="row">
       <div class="col-md-8">
         <app-dfa-attachment
