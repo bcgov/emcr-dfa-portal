@@ -149,7 +149,7 @@ export class AppealMainComponent implements OnInit {
           this.loadAppeal(this.appealId);
         }
         else{
-          this.appealId = this._createProjectAppeal();
+          this._createProjectAppeal();
         }
       },
       error: (error) => {
@@ -258,6 +258,7 @@ export class AppealMainComponent implements OnInit {
       .subscribe({
         next: async (response) => {
           console.debug('Appeal Created:', response);
+          this.appealId = response;
                 },
         error: (error) => {
           console.error('Error creating appeal:', error);
