@@ -158,6 +158,10 @@ export class DfaDashProjectComponent implements OnInit {
                 isFound = true;
                 this.matchStatusFound = true;
 
+                if(objApp.status == 'Decision Made' && this.hasSubmittedAppeal(objApp)){
+                  objApp.stage = 'In Appeal';
+                }
+
                 if (objApp.stage) {
                   objStatItem.stage = objApp.stage;
                   this.dFAProjectMainDataService.setStage(objApp.stage);

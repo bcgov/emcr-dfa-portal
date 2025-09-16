@@ -8,6 +8,7 @@ import { CurrentApplication, CurrentProjectAppeal, FileCategory, FileUploadProje
 import { ApplicationService, AttachmentService, ProjectAppealService, ProjectService } from 'src/app/core/api/services';
 import { WarningDialogComponent } from 'src/app/core/components/dialog-components/warning-dialog/warning-dialog.component';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 /**
  * Public eligibility Appeal main component.
  *
@@ -33,12 +34,17 @@ export class AppealMainComponent implements OnInit {
     return this.vieworedit === 'view';
   }
 
+  get decessionMade(): boolean {
+    return this.appeal?.appealDecision != undefined;
+  }
+
   appealForm: FormGroup;
   projectId: string;
   project: RecoveryPlan;
   application: CurrentApplication;
   appeal: ProjectAppealModel;
   documents: FileUploadProjectAppeal[] = [];
+  selectedStepIndex: number = 0;
 
   isLoading: boolean = false;
   isDisabled: boolean = false;
@@ -141,6 +147,9 @@ export class AppealMainComponent implements OnInit {
         this.appeal = appeal;
         this.vieworedit = appeal?.submissionDate ? 'view' : 'edit';
         this.appealForm.get('step1.reason')?.setValue(appeal?.reason ?? '');
+        if(this.decessionMade){
+          this.selectedStepIndex = 2;
+        };
       },
       error: (error) => {
         console.error(error);

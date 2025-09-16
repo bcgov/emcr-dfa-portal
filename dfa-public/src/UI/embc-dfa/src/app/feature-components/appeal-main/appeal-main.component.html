@@ -26,8 +26,8 @@
     [color]="'green'"></app-loader>
 
   <form [formGroup]="appealForm">
-    <mat-horizontal-stepper class="stepper-style" labelPosition="bottom" #stepper [linear]="false">
-      <mat-step [stepControl]="appealForm.get('step1')">
+    <mat-horizontal-stepper class="stepper-style" labelPosition="bottom" #stepper [linear]="false" [selectedIndex]="selectedStepIndex">
+      <mat-step [editable]="!decessionMade" [stepControl]="appealForm.get('step1')">
         <ng-template matStepLabel>Appeal Rationale</ng-template>
 
         <div formGroupName="step1">
@@ -91,7 +91,7 @@
         </div>
       </mat-step>
 
-      <mat-step [stepControl]="appealForm.get('step2')">
+      <mat-step [completed]="decessionMade" [editable]="!decessionMade" [stepControl]="appealForm.get('step2')">
         <ng-template matStepLabel>Upload Documents</ng-template>
 
         <div formGroupName="step2">
@@ -133,7 +133,7 @@
         </div>
       </mat-step>
 
-      <mat-step>
+      <mat-step [editable]="!decessionMade">
         <ng-template matStepLabel>Review and Submit</ng-template>
 
         <div class="row">
@@ -233,9 +233,8 @@
         </div>
 
         <div class="row">
-          
-            <div class="col-md-6">
-              <button class="button-s" mat-button matStepperPrevious type="button" [disabled]="isDisabled">
+            <div class="col-md-6" *ngIf="!decessionMade">
+              <button class="button-s" mat-button matStepperPrevious type="button">
                 <span>Back</span>
               </button>
             </div>
@@ -249,7 +248,7 @@
                 <span>Submit Appeal</span>
               </button>
             </div>
-            <div class="col-md-6" *ngIf="isReadOnly">
+            <div class="col-md-12" *ngIf="isReadOnly">
               <button
                 class="button-p save-button"
                 mat-stroked-button
