@@ -910,7 +910,8 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.ProjectId, opts => opts.MapFrom(s => s.CaseId));
 
             CreateMap<ProjectAppeal, ProjectAppealModel>()
-                .ForMember(d => d.CaseId, opts => opts.MapFrom(s => s.ProjectId));
+                .ForMember(d => d.CaseId, opts => opts.MapFrom(s => s.ProjectId))
+                .ForMember(d => d.AppealDecision, opts => opts.MapFrom(s => s.AppealDecision == 0? null : s.AppealDecision));
 
             CreateMap<ClaimAppealModel, ClaimAppeal>()
                 .ForMember(d => d.ClaimId, opts => opts.MapFrom(s => s.ClaimId));

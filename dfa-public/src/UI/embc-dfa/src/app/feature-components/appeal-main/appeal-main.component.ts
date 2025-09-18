@@ -1,14 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, mapTo } from 'rxjs';
-import { CurrentApplication, CurrentProjectAppeal, FileCategory, FileUploadProjectAppeal, ProjectAppealModel, RecoveryPlan } from 'src/app/core/api/models';
+import { CurrentApplication, FileUploadProjectAppeal, ProjectAppealModel, RecoveryPlan } from 'src/app/core/api/models';
 import { ApplicationService, AttachmentService, ProjectAppealService, ProjectService } from 'src/app/core/api/services';
+import { CancelConfirmationDialogComponent } from 'src/app/core/components/dialog-components/dfa-cancel-confirmation-dialog/dfa-cancel-confirmation-dialog.component';
 import { WarningDialogComponent } from 'src/app/core/components/dialog-components/warning-dialog/warning-dialog.component';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 /**
  * Public eligibility Appeal main component.
  *
@@ -73,7 +73,6 @@ export class AppealMainComponent implements OnInit {
   appealId: any;
   applicationId: any;
 
-
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
@@ -83,7 +82,7 @@ export class AppealMainComponent implements OnInit {
     private projectAppealService: ProjectAppealService,
     private attachmentsService: AttachmentService,
     private dialog: MatDialog,
-    private formCreationService: FormCreationService,
+    private formCreationService: FormCreationService
   ) {
     this.appealForm = this.formBuilder.group({
       step1: this.formBuilder.group({
@@ -103,18 +102,20 @@ export class AppealMainComponent implements OnInit {
       this.applicationId = params['applicationId'];
 
       console.debug('Project ID:', this.projectId);
+      this.isLoading = true;
       this.loadProjectAndAppeal(this.projectId);
       this.loadApplication(this.applicationId);
 
       // subscribe to changes for document summary
-      const _projectAppealDocumentSummaryFormArray = this.formCreationService.fileUploadsProjectAppealForm.get('fileUploads');
+      const _projectAppealDocumentSummaryFormArray =
+        this.formCreationService.fileUploadsProjectAppealForm.get('fileUploads');
       _projectAppealDocumentSummaryFormArray.valueChanges
-        .pipe(
-          mapTo(_projectAppealDocumentSummaryFormArray.getRawValue())
-        ).subscribe(
-          _data => {
-            this.projectAppealDocumentSummaryDataSource.data = _projectAppealDocumentSummaryFormArray.getRawValue()?.filter(x => x.deleteFlag == false)
-          });
+        .pipe(mapTo(_projectAppealDocumentSummaryFormArray.getRawValue()))
+        .subscribe((_data) => {
+          this.projectAppealDocumentSummaryDataSource.data = _projectAppealDocumentSummaryFormArray
+            .getRawValue()
+            ?.filter((x) => x.deleteFlag == false);
+        });
 
       this.getFileUploadsForProjectAppeal(this.appealId);
     });
@@ -147,9 +148,9 @@ export class AppealMainComponent implements OnInit {
         this.appeal = appeal;
         this.vieworedit = appeal?.submissionDate ? 'view' : 'edit';
         this.appealForm.get('step1.reason')?.setValue(appeal?.reason ?? '');
-        if(this.decessionMade){
+        if (this.decessionMade) {
           this.selectedStepIndex = 2;
-        };
+        }
       },
       error: (error) => {
         console.error(error);
@@ -174,13 +175,14 @@ export class AppealMainComponent implements OnInit {
         if (dfaProjectMain && dfaProjectMain.project?.projectAppealId) {
           this.appealId = dfaProjectMain.project.projectAppealId;
           this.loadAppeal(this.appealId);
-        }
-        else{
+        } else {
           this._createProjectAppeal();
         }
+        this.isLoading = false;
       },
       error: (error) => {
         console.error(error);
+        this.isLoading = false;
         // TODO: redirect to error page
         // document.location.href = 'https://dfa.gov.bc.ca/error.html';
       }
@@ -219,10 +221,10 @@ export class AppealMainComponent implements OnInit {
     this.attachmentsService.attachmentGetProjectAppealAttachments({ projectAppealId: appealId }).subscribe({
       next: (attachments) => {
         // Filter out soft-deleted files
-        const activeAttachments = attachments.filter(attachment => !attachment.deleteFlag);
+        const activeAttachments = attachments.filter((attachment) => !attachment.deleteFlag);
 
         // Transform AppealFileMetadataUpload to FileUploadClaimAppeal
-        const transformedAttachments = activeAttachments.map(attachment => ({
+        const transformedAttachments = activeAttachments.map((attachment) => ({
           id: attachment.id,
           fileName: attachment.fileName,
           fileDescription: attachment.fileDescription,
@@ -243,7 +245,6 @@ export class AppealMainComponent implements OnInit {
 
         // initialize list of file uploads
         this.formCreationService.fileUploadsProjectAppealForm.get('fileUploads').setValue(transformedAttachments);
-
       },
       error: (error) => {
         console.error(error);
@@ -251,7 +252,6 @@ export class AppealMainComponent implements OnInit {
       }
     });
   }
-  
 
   /**
    * Cancels the appeal process and redirects user.
@@ -324,7 +324,7 @@ export class AppealMainComponent implements OnInit {
         next: async (response) => {
           console.debug('Appeal Created:', response);
           this.appealId = response;
-                },
+        },
         error: (error) => {
           console.error('Error creating appeal:', error);
           this.warningDialog({
@@ -376,7 +376,8 @@ export class AppealMainComponent implements OnInit {
    * @memberof AppealMainComponent
    */
   async uploadDocuments(): Promise<void> {
-    let documents: FileUploadProjectAppeal[] = this.appealForm.get('step2.documents').value as FileUploadProjectAppeal[];
+    let documents: FileUploadProjectAppeal[] = this.appealForm.get('step2.documents')
+      .value as FileUploadProjectAppeal[];
 
     if (!documents?.length) {
       return;
@@ -475,6 +476,33 @@ export class AppealMainComponent implements OnInit {
       width: '500px',
       disableClose: true
     });
+  }
+
+  closeAppeal(): void {
+    if (this.isReadOnly) {
+      this.router.navigate(['/dfa-application/' + this.applicationId + '/projects']);
+    } else {
+      const dialogRef = this.dialog.open(CancelConfirmationDialogComponent, {
+        data: {
+          title: 'Cancel Appeal',
+          subtitle: 'Are you sure you want to cancel your appeal?',
+          text: "Appeals must be created and submitted in the same session.\nDrafts are not saved - any changes you've made will be lost.",
+          cancelButton: 'No, go back',
+          confirmButton: 'Yes, cancel appeal',
+          showCloseIcon: true
+        }
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result === true) {
+          this.router.navigate(['/dfa-application/' + this.applicationId + '/projects']);
+        }
+      });
+    }
+  }
+
+  close(): void {
+    this.router.navigate(['/dfa-application/' + this.applicationId + '/projects']);
   }
 
   /**

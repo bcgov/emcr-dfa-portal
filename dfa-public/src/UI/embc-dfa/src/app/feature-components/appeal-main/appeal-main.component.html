@@ -3,19 +3,6 @@
     <div class="col-8">
       <span class="page-heading">Project Eligibility Appeal</span>
     </div>
-    <div class="col-4">
-      <button
-        #backtodash
-        id="backtodash"
-        class="button-p nextNsave col-4"
-        style="vertical-align: middle; width: 220px; margin-top: 15px"
-        (click)="BackToDashboard()"
-        mat-stroked-button
-        type="button">
-        Back to Project Dashboard
-        <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
-      </button>
-    </div>
   </div>
 
   <app-loader
@@ -26,7 +13,12 @@
     [color]="'green'"></app-loader>
 
   <form [formGroup]="appealForm">
-    <mat-horizontal-stepper class="stepper-style" labelPosition="bottom" #stepper [linear]="false" [selectedIndex]="selectedStepIndex">
+    <mat-horizontal-stepper
+      class="stepper-style"
+      labelPosition="bottom"
+      #stepper
+      [linear]="false"
+      [selectedIndex]="selectedStepIndex">
       <mat-step [editable]="!decessionMade" [stepControl]="appealForm.get('step1')">
         <ng-template matStepLabel>Appeal Rationale</ng-template>
 
@@ -80,8 +72,8 @@
 
           <div class="row mb-4">
             <div class="col-md-6">
-              <button class="button-s align-back-button" mat-button type="button" (click)="cancel()">
-                {{isReadOnly? 'Close': 'Cancel Appeal'}}
+              <button class="button-s align-back-button" mat-button type="button" (click)="closeAppeal()">
+                {{ isReadOnly? 'Close' : 'Cancel Appeal' }}
               </button>
             </div>
             <div class="col-md-6">
@@ -124,7 +116,9 @@
 
           <div class="row">
             <div class="col-md-6">
-              <button class="button-s align-back-button" mat-button matStepperPrevious type="button">Back</button>
+              <button class="button-s align-back-button" mat-button type="button" (click)="closeAppeal()">
+                {{ isReadOnly? 'Close' : 'Cancel Appeal' }}
+              </button>
             </div>
             <div class="col-md-6">
               <button class="button-p" mat-stroked-button matStepperNext type="button">Next - Review and Submit</button>
@@ -167,56 +161,55 @@
             <div class="row mb-0">
               <div class="col-md-12">
                 <p>You have also provided the following supporting documents</p>
-               <div>
-                <table mat-table [dataSource]="projectAppealDocumentSummaryDataSource">
-                  <!-- File Name Column -->
-                  <ng-container matColumnDef="fileName" style="width:25%">
-                    <th mat-header-cell *matHeaderCellDef >
-                      <b>File Name</b>
-                    </th>
-                    <td *matCellDef="let element" mat-cell>
-                      {{ element.fileName }}
-                    </td>
-                  </ng-container>
-      
-                  <!-- Description Column -->
-                  <ng-container matColumnDef="fileDescription" style="width:25%">
-                    <th mat-header-cell *matHeaderCellDef>
-                      <b>File Description</b>
-                    </th>
-                    <td *matCellDef="let element" mat-cell>
-                      {{ element.fileDescription}}
-                    </td>
-                  </ng-container>
-      
-                  <!-- Type Column -->
-                  <ng-container matColumnDef="fileTypeText" style="width:25%">
-                    <th mat-header-cell *matHeaderCellDef>
-                      <b>File Type</b>
-                    </th>
-                    <td *matCellDef="let element" mat-cell>
-                      {{ element.fileTypeText}}
-                    </td>
-                  </ng-container>
-      
-                  <!-- UploadedDate Column -->
-                  <ng-container matColumnDef="uploadedDate" style="width:25%">
-                    <th mat-header-cell *matHeaderCellDef>
-                      <b>Date Uploaded</b>
-                    </th>
-                    <td *matCellDef="let element" mat-cell>
-                      {{ element.uploadedDate | date:"dd-MMM-yyyy" }}
-                    </td>
-                  </ng-container>
-      
-                  <tr mat-header-row *matHeaderRowDef="projectAppealDocumentSummaryColumnsToDisplay"></tr>
-                  <tr
-                    mat-row
-                    *matRowDef="let element; columns: projectAppealDocumentSummaryColumnsToDisplay"
-                    class="example-element-row"
-                  ></tr>
-                </table>
-               </div>
+                <div>
+                  <table mat-table [dataSource]="projectAppealDocumentSummaryDataSource">
+                    <!-- File Name Column -->
+                    <ng-container matColumnDef="fileName" style="width: 25%">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <b>File Name</b>
+                      </th>
+                      <td *matCellDef="let element" mat-cell>
+                        {{ element.fileName }}
+                      </td>
+                    </ng-container>
+
+                    <!-- Description Column -->
+                    <ng-container matColumnDef="fileDescription" style="width: 25%">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <b>File Description</b>
+                      </th>
+                      <td *matCellDef="let element" mat-cell>
+                        {{ element.fileDescription }}
+                      </td>
+                    </ng-container>
+
+                    <!-- Type Column -->
+                    <ng-container matColumnDef="fileTypeText" style="width: 25%">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <b>File Type</b>
+                      </th>
+                      <td *matCellDef="let element" mat-cell>
+                        {{ element.fileTypeText }}
+                      </td>
+                    </ng-container>
+
+                    <!-- UploadedDate Column -->
+                    <ng-container matColumnDef="uploadedDate" style="width: 25%">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <b>Date Uploaded</b>
+                      </th>
+                      <td *matCellDef="let element" mat-cell>
+                        {{ element.uploadedDate | date: 'dd-MMM-yyyy' }}
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="projectAppealDocumentSummaryColumnsToDisplay"></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let element; columns: projectAppealDocumentSummaryColumnsToDisplay"
+                      class="example-element-row"></tr>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -233,31 +226,31 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6" *ngIf="!decessionMade">
-              <button class="button-s" mat-button matStepperPrevious type="button">
-                <span>Back</span>
-              </button>
-            </div>
-            <div class="col-md-6" *ngIf="!isReadOnly">
-              <button
-                class="button-p save-button"
-                mat-stroked-button
-                type="button"
-                [disabled]="isDisabled"
-                (click)="submit()">
-                <span>Submit Appeal</span>
-              </button>
-            </div>
-            <div class="col-md-12" *ngIf="isReadOnly">
-              <button
-                class="button-p save-button"
-                mat-stroked-button
-                type="button"
-                [disabled]="isDisabled"
-                (click)="cancel()">
-                <span>Close</span>
-              </button>
-            </div>
+          <div class="col-md-6" *ngIf="!isReadOnly">
+            <button class="button-s" (click)="closeAppeal()" mat-button type="button">
+              {{'Cancel Appeal' }}
+            </button>
+          </div>
+          <div class="col-md-6" *ngIf="!isReadOnly">
+            <button
+              class="button-p save-button"
+              mat-stroked-button
+              type="button"
+              [disabled]="isDisabled"
+              (click)="submit()">
+              <span>Submit Appeal</span>
+            </button>
+          </div>
+          <div class="col-md-12" *ngIf="isReadOnly">
+            <button
+              class="button-p save-button"
+              mat-stroked-button
+              type="button"
+              [disabled]="isDisabled"
+              (click)="close()">
+              <span>Close</span>
+            </button>
+          </div>
         </div>
       </mat-step>
       <ng-template matStepperIcon="edit" let-index="index">
