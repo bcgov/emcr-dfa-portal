@@ -541,4 +541,11 @@ export class AppealMainComponent implements OnInit {
   BackToDashboard() {
     this.router.navigate(['/dfa-application/' + this.applicationId + '/projects']);
   }
+
+  stepSelected(index: number) {
+    this.selectedStepIndex = index;
+    if (this.selectedStepIndex === 2) {
+      this.appealForm.get('step2').markAsTouched();
+    }
+  }
 }

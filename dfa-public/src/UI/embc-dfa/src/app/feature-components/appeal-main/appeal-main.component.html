@@ -11,14 +11,14 @@
     [strokeWidth]="10"
     [diameter]="50"
     [color]="'green'"></app-loader>
-
   <form [formGroup]="appealForm">
     <mat-horizontal-stepper
       class="stepper-style"
       labelPosition="bottom"
       #stepper
       [linear]="false"
-      [selectedIndex]="selectedStepIndex">
+      [selectedIndex]="selectedStepIndex"
+      (selectionChange)="stepSelected($event.selectedIndex)">
       <mat-step [editable]="!decessionMade" [stepControl]="appealForm.get('step1')">
         <ng-template matStepLabel>Appeal Rationale</ng-template>
 
@@ -82,8 +82,7 @@
           </div>
         </div>
       </mat-step>
-
-      <mat-step [completed]="decessionMade" [editable]="!decessionMade" [stepControl]="appealForm.get('step2')">
+      <mat-step [completed]="selectedStepIndex > 0 || appealForm.get('step2')?.touched" [editable]="!decessionMade" [stepControl]="appealForm.get('step2')" >
         <ng-template matStepLabel>Upload Documents</ng-template>
 
         <div formGroupName="step2">
