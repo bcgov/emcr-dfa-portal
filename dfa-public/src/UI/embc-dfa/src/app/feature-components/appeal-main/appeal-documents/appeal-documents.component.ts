@@ -39,6 +39,7 @@ export class AppealDocumentsComponent implements OnInit {
   @Input() isDisabled: boolean = false;
   @Input() documentsData: FileUploadProjectAppeal[];
   @Input() vieworedit : string;
+  @Input() appealId: string;
   /**
    * Callback fired when the remove document button is clicked.
    *
@@ -70,7 +71,6 @@ export class AppealDocumentsComponent implements OnInit {
   fileUploadsProjectAppealForm: UntypedFormGroup = this.formCreationService.fileUploadsProjectAppealForm;
   projectAppealDocumentSummaryColumnsToDisplay = ['fileName', 'fileDescription', 'fileTypeText', 'uploadedDate']
   projectAppealDocumentSummaryDataSource = new MatTableDataSource<FileUploadProjectAppeal>();
-  appealId = this.route.snapshot.params['appealId'];
 
   constructor(
     private dialog: MatDialog,
@@ -116,8 +116,8 @@ export class AppealDocumentsComponent implements OnInit {
 
     if (this.formCreationService.fileUploadsProjectAppealForm.get('supportingFilesFileUpload').status === 'VALID') {
       this.isLoading = true;
-      fileUpload.fileData = fileUpload?.fileData?.substring(fileUpload?.fileData?.indexOf(',') + 1) // to allow upload as byte array
-      fileUpload.appealId =  this.appealId
+      fileUpload.fileData = fileUpload?.fileData?.substring(fileUpload?.fileData?.indexOf(',') + 1); // to allow upload as byte array
+      fileUpload.appealId =  this.appealId;
       fileUpload.requiredDocumentType = null;
 
       this.attachmentService.attachmentUpsertDeleteProjectAppealAttachment({ body: fileUpload }).subscribe({
