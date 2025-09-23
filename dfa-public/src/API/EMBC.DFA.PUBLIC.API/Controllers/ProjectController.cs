@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using static EMBC.DFA.PUBLIC.API.Services.ProjectAppealService;
 
 namespace EMBC.DFA.API.Controllers
 {
@@ -76,7 +77,7 @@ namespace EMBC.DFA.API.Controllers
                     project.ActiveStage.id = currentProjectAppeal.Id.ToString();
                     project.ActiveStage.Status = projectAppealService.MapStageNote(currentProjectAppeal);
                     project.ActiveStage.SubmissionDate = currentProjectAppeal.SubmissionDate;
-                    project.ActiveStage.AppealDecision = currentProjectAppeal.AppealDecision.ToString();
+                    project.ActiveStage.AppealDecision = currentProjectAppeal.AppealDecision == 0? PortalNote.InProgress : currentProjectAppeal.AppealDecision.ToString();
                     // NOTE currently, to be consistent, the stages are hard-coded
                     // if you want dynamic stages/steps for the timeline, uncomment and finish the below code
                     // I would strongly recommend refactoring all of the timelines before moving towards dynamic stages
