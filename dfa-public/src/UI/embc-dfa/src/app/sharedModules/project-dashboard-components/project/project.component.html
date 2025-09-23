@@ -327,7 +327,7 @@
           </div>
         </div>
       </div>
-      <div [featureEnabled]="'useAppeals'" *ngIf="canAppeal(applItem)">
+      <div [featureEnabled]="'useAppeals'">
         <div
           *ngIf="hasSubmittedAppeal(applItem)"
           class="col-md-12"
@@ -336,7 +336,7 @@
             <button class="application-button" (click)="appealDecision(applItem)" type="button">Appeal Details</button>
           </div>
         </div>
-        <div [featureEnabled]="'useAppeals'" *ngIf="!hasSubmittedAppeal(applItem)">
+        <div [featureEnabled]="'useAppeals'" *ngIf="!hasSubmittedAppeal(applItem) && canAppeal(applItem)">
           <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 32px">
             <div class="button-column">
               <span [matTooltip]="appealButtonTitle(applItem)">

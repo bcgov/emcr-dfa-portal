@@ -150,7 +150,7 @@
                     rows="5"
                     class="w-100"
                     matInput
-                    readonly
+                    disabled
                     [ngClass]="{ 'missing-info': appealForm.get('step1.reason')?.invalid }"
                     style="resize: none"
                     [value]="getReason()"></textarea>
