@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -118,9 +118,15 @@ export class AppealMainComponent implements OnInit {
             .getRawValue()
             ?.filter((x) => x.deleteFlag == false);
         });
-
-      this.getFileUploadsForProjectAppeal(this.appealId);
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['appealId']) {
+      if (this.appealId != 'new') {
+        this.getFileUploadsForProjectAppeal(this.appealId);
+      }
+    }
   }
 
   /**
@@ -200,7 +206,7 @@ export class AppealMainComponent implements OnInit {
   }
 
   loadDocuments() {
-    this.attachmentsService.attachmentGetProjectAppealAttachments({ projectAppealId: this.appeal.id }).subscribe({
+    this.attachmentsService.attachmentGetProjectAppealAttachments({ projectAppealId: this.appealId }).subscribe({
       next: (response) => {
         console.debug('Documents Loaded:', response);
         if (response?.length > 0) {
@@ -305,11 +311,7 @@ export class AppealMainComponent implements OnInit {
     this.isDisabled = true;
     this.appealForm.disable({ emitEvent: false });
 
-    if (this.appeal?.id) {
-      this._updateProjectAppeal();
-    } else {
-      this._createProjectAppeal();
-    }
+    this._updateProjectAppeal();
 
     this.appealForm.enable({ emitEvent: false });
     this.isDisabled = false;
@@ -342,6 +344,7 @@ export class AppealMainComponent implements OnInit {
         next: async (response) => {
           console.debug('Appeal Created:', response);
           this.appealId = response;
+          this.appeal.id = response;
         },
         error: (error) => {
           console.error('Error creating appeal:', error);
@@ -362,10 +365,10 @@ export class AppealMainComponent implements OnInit {
   _updateProjectAppeal() {
     this.projectAppealService
       .projectAppealUpdateProjectAppeal({
-        id: this.appeal?.id,
+        id: this.appealId,
         body: {
           // TODO: Finalize correct properties
-          id: this.appeal?.id,
+          id: this.appealId,
           caseId: this.projectId,
           reason: this.getReason()
         }
