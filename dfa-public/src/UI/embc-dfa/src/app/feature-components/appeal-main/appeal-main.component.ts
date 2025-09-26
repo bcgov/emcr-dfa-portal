@@ -344,7 +344,10 @@ export class AppealMainComponent implements OnInit {
         next: async (response) => {
           console.debug('Appeal Created:', response);
           this.appealId = response;
-          this.appeal.id = response;
+          if(this.appeal){
+            this.appeal.id = response;
+          }
+          this.loadAppeal(this.appealId);
         },
         error: (error) => {
           console.error('Error creating appeal:', error);
