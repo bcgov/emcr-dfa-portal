@@ -18,6 +18,7 @@ export interface CurrentProject {
   isHidden?: boolean;
   projectApprovedDate?: string;
   projectDecision?: string;
+  projectDecisionDate?: string;
   projectId?: string;
   projectName?: string;
   projectNumber?: string;

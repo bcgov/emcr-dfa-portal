@@ -321,6 +321,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         /* D4P-112 */
         public decimal? dfa_totaladvancedpaymentamount { get; set; }
         public decimal? dfa_advancedpaymentbalance { get; set; }
+        public DateTime? dfa_projectdecisiondate { get; set; }
     }
 
     public class dfa_claim_retrieve
@@ -1078,6 +1079,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public string? dfa_projecttypeother { get; set; }
         public DateTime? dfa_projectapproveddate { get; set; }
         public IEnumerable<dfa_projectappeal>? dfa_projectappeal { get; set; }
+        public DateTime? dfa_projectdecisiondate { get; set; }
     }
 
     public class dfa_projectappeal

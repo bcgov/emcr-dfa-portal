@@ -824,7 +824,9 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.ProjectDecision, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projectdecision) ? GetEnumDescription((ProjectDecisions)Convert.ToInt32(s.dfa_projectdecision)) : null))
                 .ForMember(d => d.ProjectType, opts => opts.MapFrom(s => !string.IsNullOrEmpty(s.dfa_projecttype) ? GetEnumDescription((ProjectTypes)Convert.ToInt32(s.dfa_projecttype)) : null))
                 .ForMember(d => d.ProjectTypeOther, opts => opts.MapFrom(s => s.dfa_projecttypeother))
-                .ForMember(d => d.ProjectApprovedDate, opts => opts.MapFrom(s => s.dfa_projectapproveddate));
+                .ForMember(d => d.ProjectApprovedDate, opts => opts.MapFrom(s => s.dfa_projectapproveddate))
+                .ForMember(d => d.ProjectDecisionDate, opts => opts.MapFrom(s => s.dfa_projectdecisiondate))
+                ;
                 //.ForMember(d => d.Appeals, opts => opts.MapFrom(s => s.dfa_projectappeal))
 
             //CreateMap<dfa_projectappeal, CurrentProjectAppeal>()
@@ -1153,9 +1155,11 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.projectTypeOther,opts => opts.MapFrom(s => s.dfa_projecttypeother))
                 /* D4P-112 */
                 .ForMember(d => d.advancedPaymentsBalance, opts => opts.MapFrom(s => s.dfa_advancedpaymentbalance.HasValue ? decimal.Round(decimal.Parse(s.dfa_advancedpaymentbalance.Value.ToString("F")), 2) : (decimal?)null))
-                .ForMember(d => d.advancedPaymentsMade, opts => opts.MapFrom(s => s.dfa_totaladvancedpaymentamount.HasValue ? decimal.Round(decimal.Parse(s.dfa_totaladvancedpaymentamount.Value.ToString("F")), 2) : (decimal?)null));
+                .ForMember(d => d.advancedPaymentsMade, opts => opts.MapFrom(s => s.dfa_totaladvancedpaymentamount.HasValue ? decimal.Round(decimal.Parse(s.dfa_totaladvancedpaymentamount.Value.ToString("F")), 2) : (decimal?)null))
+                .ForMember(d => d.projectDecisionDate, opts => opts.MapFrom(s => s.dfa_projectdecisiondate == null ? null : Convert.ToDateTime(s.dfa_projectdecisiondate).ToString("o")))
+                ;
             // 2024-07-16 EMCRI-440 waynezen
-
+            
             CreateMap<BceidUserData, BCeID.BCeIDBusiness>()
                 .ForMember(d => d.userId, opts => opts.MapFrom(s => s.bceid_username))
                 .ForMember(d => d.legalName, opts => opts.MapFrom(s => s.bceid_business_name))

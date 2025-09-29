@@ -1206,7 +1206,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     "dfa_descriptionofdamage", "dfa_projectapproveddate", "dfa_18monthdeadline",
                     "dfa_approvedcost", "dfa_approvedamendedprojectcost", "dfa_claimtotal", "dfa_approvedtotal","dfa_paidprojectamount",
                     "dfa_emcrapprovalcomments", "dfa_projectdecision", "dfa_projecttype", "dfa_projecttypeother","createdon", "dfa_projectsubmitteddate",
-                    "dfa_totaladvancedpaymentamount", "dfa_advancedpaymentbalance"
+                    "dfa_totaladvancedpaymentamount", "dfa_advancedpaymentbalance", "dfa_projectdecisiondate"
                 },
                 Filter = $"dfa_projectid eq {projectId}"
             });
@@ -1223,7 +1223,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     {
                         "dfa_projectnumber", "dfa_projectname", "dfa_sitelocation", "dfa_estimatedcompletiondateofproject",
                         "dfa_approvedcost", "dfa_18monthdeadline", "statuscode", "dfa_projectid", "createdon", "dfa_projectbusinessprocessstages",
-                        "dfa_projectbusinessprocesssubstages", "dfa_bpfclosedate", "dfa_projectdecision", "dfa_projectapproveddate"
+                        "dfa_projectbusinessprocesssubstages", "dfa_bpfclosedate", "dfa_projectdecision", "dfa_projectapproveddate", "dfa_projectdecisiondate"
                     },
                     Filter = $"_dfa_applicationid_value eq {applicationId}"
                 });
@@ -1269,7 +1269,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         dfa_projectdecision = objApp.dfa_projectdecision,
                         dfa_bpfclosedate = !string.IsNullOrEmpty(objApp.dfa_bpfclosedate) ? DateTime.Parse(objApp.dfa_bpfclosedate).ToLocalTime().ToString() : objApp.dfa_bpfclosedate,
                         dfa_projectapproveddate = objApp.dfa_projectapproveddate,
-                        dfa_projectappeal = objApp.dfa_projectappeal
+                        dfa_projectappeal = objApp.dfa_projectappeal,
+                        dfa_projectdecisiondate = objApp.dfa_projectdecisiondate
                     })
                         .AsEnumerable()
                         .OrderByDescending(m => m.createdon);

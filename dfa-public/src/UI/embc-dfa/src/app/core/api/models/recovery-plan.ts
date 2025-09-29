@@ -25,6 +25,7 @@ export interface RecoveryPlan {
   projectAppealId?: string | null;
   projectApprovedDate?: string | null;
   projectDecision?: string | null;
+  projectDecisionDate?: string | null;
   projectName?: string | null;
   projectNumber?: string | null;
   projectStatus?: ProjectStageOptionSet | null;

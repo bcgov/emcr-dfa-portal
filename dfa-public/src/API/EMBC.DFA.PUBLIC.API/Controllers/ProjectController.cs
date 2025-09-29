@@ -269,6 +269,7 @@ namespace EMBC.DFA.API.Controllers
         public string ProjectTypeOther { get; set; }
         public string ProjectApprovedDate { get; set; }
         public CurrentProjectAppeal ActiveStage { get; set; }
+        public string ProjectDecisionDate { get; set; }
     }
 
     public class CurrentProjectAppeal
