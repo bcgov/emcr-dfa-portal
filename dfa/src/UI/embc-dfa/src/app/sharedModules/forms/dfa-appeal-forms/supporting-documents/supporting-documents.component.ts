@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { of, switchMap, take } from 'rxjs';
-import { AppealAttachmentService } from 'src/app/core/api/services';
+import { AppealAttachmentService, AttachmentService } from 'src/app/core/api/services';
 import { FileUploadWarningDialogComponent } from 'src/app/core/components/dialog-components/file-upload-warning-dialog/file-upload-warning-dialog.component';
 import { AppealSupportingDocumentForm, AppealSupportingDocumentsForm } from 'src/app/core/model/dfa-appeals-main.model';
 import { FormCreationService } from 'src/app/core/services/formCreation.service';
@@ -58,7 +58,7 @@ export default class SupportingDocumentsComponent implements OnInit {
    * The case ID guid.
    */
   caseId: string | undefined;
-  appealId : string | undefined;
+  appealId: string | undefined;
   /**
    * The case record.
    */
@@ -71,21 +71,22 @@ export default class SupportingDocumentsComponent implements OnInit {
     private dfaAppealDataService: DFAAppealDataService,
     private cdr: ChangeDetectorRef,
     private appealAttachmentService: AppealAttachmentService,
+    private attachmentService: AttachmentService,
     public formCreationService: FormCreationService,
     public dialog: MatDialog,
     public _snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.caseDetails = this.dfaAppealDataService.getCaseDetails();
-
+    
+    this.appealId = this.route.snapshot.paramMap.get('appealId');
     this.cdr.detectChanges();
 
     this.route.paramMap
       .pipe(
         switchMap((routeParams) => {
-          this.appealId = routeParams.get('appealId');
-
+        
           return this.formCreationService.getAppealSupportingDocumentsForm().pipe(
             take(1),
             switchMap((appealSupportingDocumentsForm) => {
@@ -125,7 +126,7 @@ export default class SupportingDocumentsComponent implements OnInit {
       });
   }
 
-  ngOnChanges(): void {}
+  ngOnChanges(): void { }
 
   /**
    * Handles the toggling of visibility of the file upload form based.
@@ -176,6 +177,7 @@ export default class SupportingDocumentsComponent implements OnInit {
    * @return {*}  {void}
    */
   handleAddSupportingDocument(fileUploadAppeal: FileUploadAppeal): void {
+    
     this._hideFileUploadForm();
 
     // If the filename already exists, we need to prevent it and show a snackbar warning
@@ -192,16 +194,36 @@ export default class SupportingDocumentsComponent implements OnInit {
       return;
     }
 
-    // Append the new file upload to the list of existing documents
-    this.currentAppealSupportingDocuments = [...this.currentAppealSupportingDocuments, fileUploadAppeal];
+    
+    fileUploadAppeal.appealId = this.appealId;
+    fileUploadAppeal.deleteFlag = false;
+    console.log("FileUpload Appeal:", fileUploadAppeal);
+    this.attachmentService.attachmentUpsertDeleteProjectAppealAttachment({ body: fileUploadAppeal }).subscribe({
+      next: (response) => {
+        console.log("Attachment upload response:", response);
+        fileUploadAppeal.id = response;
+        // Append the new file upload to the list of existing documents
+        this.currentAppealSupportingDocuments = [...this.currentAppealSupportingDocuments, fileUploadAppeal];
 
-    const formArray = this.appealSupportingDocumentsForm.get('files') as FormArray<AppealSupportingDocumentForm>;
-    formArray.push(new AppealSupportingDocumentForm(fileUploadAppeal));
+        const formArray = this.appealSupportingDocumentsForm.get('files') as FormArray<AppealSupportingDocumentForm>;
+        formArray.push(new AppealSupportingDocumentForm(fileUploadAppeal));
 
-    // add a snack bar message to indicate that the file has been added
-    this._snackBar.open('Your file has been added successfully.', 'Close', {
-      horizontalPosition: 'center',
-      verticalPosition: 'top'
+        // add a snack bar message to indicate that the file has been added
+        this._snackBar.open('Your file has been added successfully.', 'Close', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+      },
+      error: (error) => {
+        this._snackBar.open(
+          'Failed to add the file. Please try again. If the error persists, please contact support.',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          }
+        );
+      }
     });
   }
 
@@ -235,17 +257,31 @@ export default class SupportingDocumentsComponent implements OnInit {
     if (fileUploadAppeal.id) {
       // File has been previously persisted, mark the file for deletion
       existingFileUploads[indexToRemove].deleteFlag = true;
+
+      this.attachmentService.attachmentUpsertDeleteProjectAppealAttachment({
+        body: existingFileUploads[indexToRemove]
+      }).subscribe({
+        next: (res) => {
+          console.log("Deleted Document response:", res);
+          // Update the appealSupportingDocuments with the modified list, excluding any files marked for deletion.
+          this.currentAppealSupportingDocuments = [...existingFileUploads.filter((file) => !file.deleteFlag)];
+
+          // Update the form with the modified list
+          const formArray = this.appealSupportingDocumentsForm.get('files') as FormArray<AppealSupportingDocumentForm>;
+          formArray.removeAt(indexToRemove);
+        },
+        error: (err) => console.error("error deleting document", err)
+      });
     } else {
       // File has not been persisted, remove the file from the list
       existingFileUploads.splice(indexToRemove, 1);
+      // Update the appealSupportingDocuments with the modified list, excluding any files marked for deletion.
+      this.currentAppealSupportingDocuments = [...existingFileUploads.filter((file) => !file.deleteFlag)];
+
+      // Update the form with the modified list
+      const formArray = this.appealSupportingDocumentsForm.get('files') as FormArray<AppealSupportingDocumentForm>;
+      formArray.removeAt(indexToRemove);
     }
-
-    // Update the appealSupportingDocuments with the modified list, excluding any files marked for deletion.
-    this.currentAppealSupportingDocuments = [...existingFileUploads.filter((file) => !file.deleteFlag)];
-
-    // Update the form with the modified list
-    const formArray = this.appealSupportingDocumentsForm.get('files') as FormArray<AppealSupportingDocumentForm>;
-    formArray.removeAt(indexToRemove);
   }
 
   /**

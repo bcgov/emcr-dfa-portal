@@ -119,15 +119,11 @@ export class AppealMainComponent implements OnInit {
             ?.filter((x) => x.deleteFlag == false);
         });
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['appealId']) {
-      if (this.appealId != 'new') {
+    if (this.appealId != 'new') {
         this.getFileUploadsForProjectAppeal(this.appealId);
       }
-    }
   }
+
 
   /**
    * Loads the application data based on the provided application ID.

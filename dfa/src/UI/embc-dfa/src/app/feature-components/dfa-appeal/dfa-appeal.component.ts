@@ -97,7 +97,7 @@ export class DfaAppealComponent implements OnInit {
     // Create steps based on appeal type
     this.steps = this.componentService.createDFAAppealSteps();
 
-   
+
     // @TODO: 
     // Step 1: Get appeal details from backend using appealId
     forkJoin([this.dfaAppealService.getAppealById(this.appealId), this.loadApplicationDetails()]).subscribe(([appeal, _]) => {
@@ -120,7 +120,7 @@ export class DfaAppealComponent implements OnInit {
       }
 
       this.appealType = appealTypeEnum;
-      console.log("appealType",this.appealType )
+      console.log("appealType", this.appealType)
 
       this.dfaAppealDataService.appealType = appealTypeEnum;
 
@@ -188,7 +188,7 @@ export class DfaAppealComponent implements OnInit {
       if (form) {
         form.controls.reason.setValue(appeal.reason);
         form.controls.reviewedEvaluatorReport.setValue(appeal.reviewedEvaluatorReport ?? false);
-        
+
         if (!this.isEditView) form.disable();
 
         form.updateValueAndValidity();
@@ -204,7 +204,7 @@ export class DfaAppealComponent implements OnInit {
         });
 
         console.log(signAndSubmit.value);
-        
+
         if (!this.isEditView) signAndSubmit.disable();
 
         signAndSubmit.updateValueAndValidity();
@@ -228,6 +228,7 @@ export class DfaAppealComponent implements OnInit {
         }
         break;
       case 'supporting-documents':
+        console.log("Saving supporting documents from form:", this.appealSupportingDocumentsForm?.value);
         if (this.appealSupportingDocumentsForm) {
           this.dfaAppealDataService.setAppealSupportingDocuments(this.appealSupportingDocumentsForm.get('files').value);
         }
@@ -436,19 +437,19 @@ export class DfaAppealComponent implements OnInit {
    */
   submitAppeal(): void {
     this.isLoading = true;
-    
+
     const appealUpdateRequest: AppealUpdateRequest = {
       id: this.appealId,
       caseId: this.caseDetails.caseId,
       type: this.dfaAppealDataService.appealType as any,
       status: AppealStatus.Received,
       reason: this.dfaAppealDataService.appealReason ?? '',
-      signedName: (this.signAndSubmitForm.get('applicantSignature') as FormGroup).get('signedName').value, 
+      signedName: (this.signAndSubmitForm.get('applicantSignature') as FormGroup).get('signedName').value,
       dateSigned: (this.signAndSubmitForm.get('applicantSignature') as FormGroup).get('dateSigned').value,
       signature: (this.signAndSubmitForm.get('applicantSignature') as FormGroup).get('signature').value,
       reviewedEvaluatorReport: !!this.appealReasonForm.get('reviewedEvaluatorReport')?.value
     }
-   
+
     this.dfaAppealService.updateAppeal(appealUpdateRequest).subscribe({
       next: (isSuccess) => {
 
@@ -461,63 +462,70 @@ export class DfaAppealComponent implements OnInit {
           }
         );
 
-        const supportingDocuments = this.dfaAppealDataService.appealSupportingDocuments || [];
+        this.isLoading = false;
+        this.cd.detectChanges();
 
-        // Attach appealId to each document
-        const supportingDocumentsToUpload = supportingDocuments.map((doc) => ({
-          ...doc,
-          appealId: this.appealId
-        }));
+        // Clear storage after successful submission
+        this.dfaAppealDataService.clearAppealData();
+        
+        this.returnToDashboard();
 
-        // Upload documents one at a time
-        from(supportingDocumentsToUpload)
-          .pipe(
-            concatMap((supportingDocument) => {
-              if (supportingDocument.deleteFlag == null){
-                supportingDocument.deleteFlag = false;
-              }
+        // const supportingDocuments = this.dfaAppealDataService.appealSupportingDocuments || [];
+        // // Attach appealId to each document
+        // const supportingDocumentsToUpload = supportingDocuments.map((doc) => ({
+        //   ...doc,
+        //   appealId: this.appealId
+        // })).filter(doc => !doc.id || doc.deleteFlag === true); // Only upload new documents or deleted documents
 
-              if (supportingDocument.deleteFlag) {
-                // Delete the existing attachment if deleteFlag is true
-                return this.attachmentService.attachmentUpsertDeleteProjectAppealAttachment({
-                  body: supportingDocument
-                });
-              }
+        // // Upload documents one at a time
+        // from(supportingDocumentsToUpload)
+        //   .pipe(
+        //     concatMap((supportingDocument) => {
+        //       if (supportingDocument.deleteFlag == null){
+        //         supportingDocument.deleteFlag = false;
+        //       }
 
-              return this.attachmentService.attachmentUpsertDeleteProjectAppealAttachment({ body: supportingDocument });
-            })
-          )
-          .subscribe({
-            next:() =>
-              {
-                
-              },
+        //       if (supportingDocument.deleteFlag) {
+        //         // Delete the existing attachment if deleteFlag is true
+        //         return this.attachmentService.attachmentUpsertDeleteProjectAppealAttachment({
+        //           body: supportingDocument
+        //         });
+        //       }
 
-            complete: () => {
-              this.isLoading = false;
-              this.cd.detectChanges();
+        //       return this.attachmentService.attachmentUpsertDeleteProjectAppealAttachment({ body: supportingDocument });
+        //     })
+        //   )
+        //   .subscribe({
+        //     next:() =>
+        //       {
 
-              // Clear storage after successful submission
-              this.dfaAppealDataService.clearAppealData();
+        //       },
 
-              this.returnToDashboard();
-            },
-            error: (error) => {
-              this.isLoading = false;
-              this.cd.detectChanges();
+        //     complete: () => {
+        //       this.isLoading = false;
+        //       this.cd.detectChanges();
 
-              console.error('Failed to upload documents:', error);
+        //       // Clear storage after successful submission
+        //       this.dfaAppealDataService.clearAppealData();
 
-              this.snackBar.open(
-                'Failed to upload one or more documents. Please try again. If the error persists, please contact support.',
-                'Close',
-                {
-                  horizontalPosition: 'center',
-                  verticalPosition: 'top'
-                }
-              );
-            }
-          });
+        //       this.returnToDashboard();
+        //     },
+        //     error: (error) => {
+        //       this.isLoading = false;
+        //       this.cd.detectChanges();
+
+        //       console.error('Failed to upload documents:', error);
+
+        //       this.snackBar.open(
+        //         'Failed to upload one or more documents. Please try again. If the error persists, please contact support.',
+        //         'Close',
+        //         {
+        //           horizontalPosition: 'center',
+        //           verticalPosition: 'top'
+        //         }
+        //       );
+        //     }
+        //   });
       },
       error: (error) => {
         this.isLoading = false;

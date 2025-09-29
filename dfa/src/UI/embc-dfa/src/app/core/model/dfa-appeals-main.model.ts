@@ -75,7 +75,7 @@ export class AppealSupportingDocumentForm extends FormGroup<{
       uploadedDate: new FormControl(appealSupportingDocument?.uploadedDate || null),
       fileSize: new FormControl(appealSupportingDocument?.fileSize || null),
       contentType: new FormControl(appealSupportingDocument?.contentType || null),
-      deleteFlag: new FormControl(appealSupportingDocument?.deleteFlag || null),
+      deleteFlag: new FormControl(appealSupportingDocument?.deleteFlag ?? null),
     });
   }
 }
