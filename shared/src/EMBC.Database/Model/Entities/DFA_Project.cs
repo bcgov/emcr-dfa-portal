@@ -334,6 +334,7 @@ namespace EMBC.Database.Model
 			public const string DFA_ProjectCostForecast = "dfa_projectcostforecast";
 			public const string DFA_ProjectCostForecast_Base = "dfa_projectcostforecast_base";
 			public const string DFA_ProjectDecision = "dfa_projectdecision";
+			public const string DFA_ProjectDecisionDate = "dfa_projectdecisiondate";
 			public const string DFA_ProjectDecisionName = "dfa_projectdecisionname";
 			public const string DFA_ProjectId = "dfa_projectid";
 			public const string Id = "dfa_projectid";
@@ -3071,6 +3072,21 @@ namespace EMBC.Database.Model
 			set
 			{
 				this.SetAttributeValue("dfa_projectdecision", value.HasValue ? new Microsoft.Xrm.Sdk.OptionSetValue((int)value) : null);
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_projectdecisiondate")]
+		public System.Nullable<System.DateTime> DFA_ProjectDecisionDate
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_projectdecisiondate");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_projectdecisiondate", value);
 			}
 		}
 		
