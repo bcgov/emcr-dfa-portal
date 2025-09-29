@@ -35,9 +35,10 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: "8.0.x" # Install .NET 8.0
+          dotnet-version: "8.0.414" # Install .NET 8.0.414 SDK
+          global-json-file: dfa-public/src/API/global.json
 
       - name: Restore dependencies
         run: |
@@ -49,7 +50,8 @@ jobs:
 
       - name: Build
         run: |
-          dotnet build dfa-public/src/API/EMBC.DFA.PUBLIC.API/EMBC.DFA.PUBLIC.API.csproj --no-restore
+          cd dfa-public/src/API
+          dotnet build EMBC.DFA.PUBLIC.API/EMBC.DFA.PUBLIC.API.csproj --no-restore
           if [ $? -ne 0 ]; then
             echo "::error::Build failed - check the logs above for compilation errors"
             exit 1

@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.20 AS base
 WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
@@ -7,7 +7,7 @@ ENV DOTNET_gcServer=1
 ARG VERSION
 ENV VERSION=$VERSION
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.414 AS build
 
 
 WORKDIR /src

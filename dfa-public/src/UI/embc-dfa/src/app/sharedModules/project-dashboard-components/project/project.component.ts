@@ -449,7 +449,11 @@ export class DfaDashProjectComponent implements OnInit {
   }
 
   canAppeal(project: CurrentProject): boolean {
-    return project.projectDecision && (project.projectDecision.toLowerCase() === 'approved with exclusions' || project.projectDecision.toLowerCase() === 'ineligible');
+    return project.projectDecision 
+      && (
+          (project.projectDecision.toLowerCase() === 'approved with exclusions')
+          || (project.projectDecision.toLowerCase() === 'ineligible' && !!project.dateFileClosed)
+        );
   }
 
   hasSubmittedAppeal(project: CurrentProject): boolean {
@@ -471,6 +475,8 @@ export class DfaDashProjectComponent implements OnInit {
     }
 
     let endDate = new Date(endDateStr);
+
+    console.log("End Date: ", project.projectNumber, endDate.toISOString());
     endDate.setDate(endDate.getDate() + 60);  // add 60 days
     return Math.round((endDate.getTime() - new Date().getTime()) / oneDay);
   }
