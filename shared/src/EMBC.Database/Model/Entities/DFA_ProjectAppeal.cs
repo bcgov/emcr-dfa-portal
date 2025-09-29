@@ -173,6 +173,7 @@ namespace EMBC.Database.Model
 			public const string DFA_SubmittedForDirectorReviewName = "dfa_submittedfordirectorreviewname";
 			public const string DFA_TimelineNoteAdded = "dfa_timelinenoteadded";
 			public const string DFA_TimelineNoteAddedName = "dfa_timelinenoteaddedname";
+			public const string DFA_Today = "dfa_today";
 			public const string DFA_UpdateProjectApprovedCosts = "dfa_updateprojectapprovedcosts";
 			public const string DFA_UpdateProjectApprovedCostsName = "dfa_updateprojectapprovedcostsname";
 			public const string DFA_UpdateProjectDecision = "dfa_updateprojectdecision";
@@ -1802,6 +1803,21 @@ namespace EMBC.Database.Model
 				{
 					return default(string);
 				}
+			}
+		}
+		
+		[Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("dfa_today")]
+		public System.Nullable<System.DateTime> DFA_Today
+		{
+			[System.Diagnostics.DebuggerNonUserCode()]
+			get
+			{
+				return this.GetAttributeValue<System.Nullable<System.DateTime>>("dfa_today");
+			}
+			[System.Diagnostics.DebuggerNonUserCode()]
+			set
+			{
+				this.SetAttributeValue("dfa_today", value);
 			}
 		}
 		

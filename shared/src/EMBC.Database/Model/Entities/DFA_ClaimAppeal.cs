@@ -46,6 +46,10 @@ namespace EMBC.Database.Model
 		[System.Runtime.Serialization.EnumMemberAttribute()]
 		[OptionSetMetadataAttribute("Submitted", 0, "#0000ff")]
 		Submitted = 1,
+		
+		[System.Runtime.Serialization.EnumMemberAttribute()]
+		[OptionSetMetadataAttribute("Withdrawn", 3, "#0000ff")]
+		Withdrawn = 222710001,
 	}
 	
 	[System.Runtime.Serialization.DataContractAttribute()]
