@@ -685,3 +685,43 @@ mat-card {
 }
 
 // End Timeline
+
+/* Overwrite default disabled text style to improve legibility - START */
+
+/* matInput: text when disabled */
+.mat-mdc-form-field.mat-form-field-disabled .mdc-text-field--disabled .mdc-text-field__input {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+/* mat-form-field: label when disabled */
+.mat-mdc-form-field.mat-form-field-disabled .mdc-floating-label {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+/* mat-select: selected text + label when disabled */
+.mat-mdc-select.mat-mdc-select-disabled {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+/* mat-option: label when disabled */
+.mat-mdc-option.mdc-list-item--disabled,
+.mat-mdc-option.mat-mdc-option-disabled {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+/* mat-radio-button: label when disabled */
+.mat-mdc-radio-button.mat-mdc-radio-disabled .mdc-label {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+/* mat-checkbox: label when disabled */
+.mat-mdc-checkbox.mat-mdc-checkbox-disabled .mdc-label {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+/* input placeholder text (to match the disabled text) */
+.mat-mdc-input-element::placeholder {
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+/* Overwrite default disabled text style to improve legibility - END */
