@@ -453,7 +453,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         "dfa_applicationstatusportal", "dfa_causeofdamageflood2", "dfa_causeofdamagestorm2",
                         "dfa_causeofdamagewildfire2", "dfa_causeofdamagelandslide2", "dfa_causeofdamageloss",
                         "dfa_causeofdamageother2", "dfa_receiveguidanceassessingyourinfra", "dfa_dateofdamageto",
-                        "dfa_eligiblegst", 
+                        "dfa_eligiblegst", "dfa_applicationcasebpfstages", "dfa_applicationcasebpfsubstages",
                         /* EMCRI-1066: Authorized Representative */
                         "dfa_arbusinessphone", "dfa_ardeclaration1", "dfa_ardeclaration2", 
                         "dfa_aremail", "dfa_arfirstname", "dfa_arlastname", "dfa_arpositiontitle"
@@ -490,6 +490,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                                    dfa_causeofdamagewildfire2 = objApp.dfa_causeofdamagewildfire2,
                                    dfa_receiveguidanceassessingyourinfra = objApp.dfa_receiveguidanceassessingyourinfra,
                                    dfa_eligiblegst = objApp.dfa_eligiblegst,
+                                   dfa_applicationcasebpfstages = objApp.dfa_applicationcasebpfstages,
+                                   dfa_applicationcasebpfsubstages = objApp.dfa_applicationcasebpfsubstages,
                                    dfa_arbusinessphone = objApp.dfa_arbusinessphone,
                                    dfa_ardeclaration1 = objApp.dfa_ardeclaration1,
                                    dfa_ardeclaration2 = objApp.dfa_ardeclaration2,

@@ -1,39 +1,18 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  AfterViewInit,
-  AfterViewChecked,
-  ChangeDetectorRef,
-  ViewEncapsulation
-} from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ComponentCreationService } from '../../core/services/componentCreation.service';
-import * as globalConst from '../../core/services/globalConstants';
-import { ComponentMetaDataModel } from '../../core/model/componentMetaData.model';
-import { MatStepper } from '@angular/material/stepper';
-import { Subscription, distinctUntilChanged, mapTo } from 'rxjs';
-import { FormCreationService } from '../../core/services/formCreation.service';
-import { AlertService } from 'src/app/core/services/alert.service';
-//import { DFAProjectService } from './dfa-project.service';
-import { ApplicantOption, CurrentApplication, FarmOption, ProjectStageOptionSet, SmallBusinessOption } from 'src/app/core/api/models';
-import { ApplicationService, AttachmentService } from 'src/app/core/api/services';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DFAConfirmSubmitDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-submit-dialog/dfa-confirm-submit-dialog.component';
-import { SecondaryApplicant } from 'src/app/core/model/dfa-application-main.model';
-import { AddressChangeComponent } from 'src/app/core/components/dialog-components/address-change-dialog/address-change-dialog.component';
-import { DashTabModel } from '../dashboard/dashboard.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CurrentApplication } from 'src/app/core/api/models';
+import { ApplicationService, ProjectService } from 'src/app/core/api/services';
+import { ApplicationStatus } from 'src/app/core/model/dfa-appeals-main.model';
+import { AppSessionService } from 'src/app/core/services/appSession.service';
 import { DFAApplicationMainDataService } from 'src/app/feature-components/dfa-application-main/dfa-application-main-data.service';
 import { DFAProjectMainDataService } from 'src/app/feature-components/dfa-project-main/dfa-project-main-data.service';
-//import { DFAProjectMappingService } from './dfa-project-mapping.service';
-import { AppSessionService } from 'src/app/core/services/appSession.service';
-import { ProjectService } from 'src/app/core/api/services';
-import { ApplicationExtended } from '../../sharedModules/dashboard-components/dfa-application/dfa-application.component';
 import { DFAConfirmProjectCreateDialogComponent } from '../../core/components/dialog-components/dfa-confirm-project-create-dialog/dfa-confirm-project-create-dialog.component';
+import { FormCreationService } from '../../core/services/formCreation.service';
+import * as globalConst from '../../core/services/globalConstants';
+import { DashTabModel } from '../dashboard/dashboard.component';
 import { DFAProjectMainService } from '../dfa-project-main/dfa-project-main.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-
 
 @Component({
   selector: 'app-dfa-project-dashboard',
@@ -41,15 +20,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './dfa-project-dashboard.component.html',
   styleUrls: ['./dfa-project-dashboard.component.scss']
 })
-export class DFAProjectComponent
-  implements OnInit, AfterViewInit, AfterViewChecked
-{
+export class DFAProjectComponent implements OnInit, AfterViewInit, AfterViewChecked {
   tabs: DashTabModel[];
   currentProjectsCount = 0;
   closedProjectsCount = 0;
   isLoading = false;
   applicationNumber = '';
   appId = null;
+  application: CurrentApplication;
   caseNumber = '';
   causeOfDamage = '';
   dateOfDamageFrom = '';
@@ -68,27 +46,24 @@ export class DFAProjectComponent
     private projService: ProjectService,
     private applicationService: ApplicationService,
     private dfaProjectMainService: DFAProjectMainService,
-    private _snackBar: MatSnackBar,
+    private _snackBar: MatSnackBar
   ) {
-    this.OneDayAgo = new Date(new Date().getTime() - (1000 * 60 * 60 * 24 * 1)).getTime()
-
+    this.OneDayAgo = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 1).getTime();
   }
 
   ngOnInit(): void {
-    
     this.appId = this.route.snapshot.paramMap.get('id');
     this.applicationNumber = 'Application';
-    //var applicationId = this.dfaApplicationMainDataService.getApplicationId();
     this.getApplicationDetials(this.appId);
     this.dfaProjectMainDataService.setApplicationId(this.appId);
 
     this.appSessionService.currentApplicationsCount.subscribe((n: number) => {
       this.currentProjectsCount = n;
-      this.tabs[0].count = n ? n.toString() : "0";
+      this.tabs[0].count = n ? n.toString() : '0';
     });
     this.appSessionService.pastApplicationsCount.subscribe((n: number) => {
       this.closedProjectsCount = n;
-      this.tabs[2].count = n ? n.toString() : "0";
+      this.tabs[2].count = n ? n.toString() : '0';
     });
 
     this.projService.projectGetDfaProjects({ applicationId: this.appId }).subscribe({
@@ -99,8 +74,7 @@ export class DFAProjectComponent
           this.tabs[1].count = this.closedProjectsCount.toString();
         }
       },
-      error: (error) => {
-      }
+      error: () => {}
     });
 
     this.tabs = [
@@ -119,14 +93,27 @@ export class DFAProjectComponent
         count: this.closedProjectsCount.toString()
       }
     ];
-
   }
 
-  navigateToDFAProjectCreate(): void {
-    this.confirmCreateProject()
+   /**
+    * Whether or not the user can create a new Project under this Application.
+    *
+    * @return {*}  {boolean}
+    */
+   canCreateProject(): boolean {
+    if (!this.application) {
+      return false;
+    }
+
+    return [ApplicationStatus.CaseCreated, ApplicationStatus.CaseInProgress].includes(
+      this.application.status as ApplicationStatus
+    );
   }
 
-  confirmCreateProject(): void {
+  /**
+   * Create a new Project.
+   */
+  createProject(): void {
     var contentDialog = globalConst.confirmCreateProjectBody;
 
     this.dialog
@@ -141,22 +128,21 @@ export class DFAProjectComponent
       .afterClosed()
       .subscribe((result) => {
         if (result === 'confirm') {
-
           this.dfaProjectMainDataService.setApplicationId(this.appId);
           this.dfaProjectMainDataService.setProjectId(null);
           this.dfaProjectMainDataService.recoveryPlan = null;
-          //this.dfaProjectMainDataService.recoveryPlan.projectStatus = ProjectStageOptionSet.DRAFT;
+          // this.dfaProjectMainDataService.recoveryPlan.projectStatus = ProjectStageOptionSet.DRAFT;
           let objClaimDTO = this.dfaProjectMainDataService.createDFAProjectMainDTO();
 
-          this.dfaProjectMainService.upsertProject(objClaimDTO).subscribe(id => {
-            
-            if (id) {
-              this.dfaProjectMainDataService.setProjectId(id);
-              this.dfaProjectMainDataService.setViewOrEdit('addproject');
-              this.router.navigate(['/dfa-project-main/' + id]);
-            }
-          },
-            error => {
+          this.dfaProjectMainService.upsertProject(objClaimDTO).subscribe(
+            (id) => {
+              if (id) {
+                this.dfaProjectMainDataService.setProjectId(id);
+                this.dfaProjectMainDataService.setViewOrEdit('addproject');
+                this.router.navigate(['/dfa-project-main/' + id]);
+              }
+            },
+            (error) => {
               console.error(error);
               //document.location.href = 'https://dfa.gov.bc.ca/error.html';
               this._snackBar.open(
@@ -164,10 +150,11 @@ export class DFAProjectComponent
                 'Close',
                 {
                   horizontalPosition: 'center',
-                  verticalPosition: 'top',
+                  verticalPosition: 'top'
                 }
               );
-            });
+            }
+          );
         }
       });
   }
@@ -175,17 +162,17 @@ export class DFAProjectComponent
   countAppData(lstApp: Object): void {
     var res = JSON.parse(JSON.stringify(lstApp));
     let lstProjects = res;
-    this.currentProjectsCount = 0; 
+    this.currentProjectsCount = 0;
     this.closedProjectsCount = 0;
-    lstProjects.forEach(x => {
+    lstProjects.forEach((x) => {
       if (
-        ( x.status.toLowerCase() === "closed" || x.status.toLowerCase() === "closed: withdrawn")
-        &&
-        (x.dateFileClosed && (this.OneDayAgo >= new Date(x.dateFileClosed).getTime()))
+        (x.status.toLowerCase() === 'closed' || x.status.toLowerCase() === 'closed: withdrawn') &&
+        x.dateFileClosed &&
+        this.OneDayAgo >= new Date(x.dateFileClosed).getTime()
       ) {
         this.closedProjectsCount++;
       } else this.currentProjectsCount++;
-    })
+    });
   }
 
   getApplicationDetials(applicationId: string) {
@@ -193,35 +180,31 @@ export class DFAProjectComponent
       this.applicationService.applicationGetApplicationDetailsForProject({ applicationId: applicationId }).subscribe({
         next: (dfaApplicationMain) => {
           if (dfaApplicationMain) {
+            this.application = dfaApplicationMain;
             this.dateOfDamageFrom = dfaApplicationMain.dateOfDamage;
             this.dateOfDamageTo = dfaApplicationMain.dateOfDamageTo;
-            this.caseNumber = dfaApplicationMain.caseNumber ? dfaApplicationMain.caseNumber : "Not Generated";
+            this.caseNumber = dfaApplicationMain.caseNumber ? dfaApplicationMain.caseNumber : 'Not Generated';
             this.causeOfDamage = this.CombineCauseOfDamages(dfaApplicationMain);
           }
-
         },
         error: (error) => {
           console.error(error);
           //document.location.href = 'https://dfa.gov.bc.ca/error.html';
-          this._snackBar.open(
-            'Unable to Get Application Details. Please try again later.',
-            'Close',
-            {
-              horizontalPosition: 'center',
-              verticalPosition: 'top',
-            }
-          );
+          this._snackBar.open('Unable to Get Application Details. Please try again later.', 'Close', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          });
         }
       });
     }
   }
 
   CombineCauseOfDamages(applItem: CurrentApplication): string {
-    var causeofdamages = applItem.floodDamage == true ? "Flood, " : "";
-    causeofdamages += applItem.landslideDamage == true ? "Landslide, " : "";
-    causeofdamages += applItem.stormDamage == true ? "Storm, " : "";
-    causeofdamages += applItem.wildfireDamage == true ? "Wildfire, " : "";
-    causeofdamages += applItem.otherDamageText != null ? applItem.otherDamageText : "";
+    var causeofdamages = applItem.floodDamage == true ? 'Flood, ' : '';
+    causeofdamages += applItem.landslideDamage == true ? 'Landslide, ' : '';
+    causeofdamages += applItem.stormDamage == true ? 'Storm, ' : '';
+    causeofdamages += applItem.wildfireDamage == true ? 'Wildfire, ' : '';
+    causeofdamages += applItem.otherDamageText != null ? applItem.otherDamageText : '';
     causeofdamages = causeofdamages.trim();
 
     var lastChar = causeofdamages.slice(-1);
@@ -248,8 +231,5 @@ export class DFAProjectComponent
     this.cd.detectChanges();
   }
 
-  ngAfterViewInit(): void {
-    
-  }
-
+  ngAfterViewInit(): void {}
 }

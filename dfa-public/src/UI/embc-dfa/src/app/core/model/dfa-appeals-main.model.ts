@@ -236,3 +236,21 @@ export interface DfaAppeal {
   status: AppealStatus;
   reason: string;
 }
+
+/**
+ * Application statuses.
+ *
+ * See `Entities.cs -> ApplicationStages`.
+ *
+ * @export
+ * @enum {number}
+ */
+export enum ApplicationStatus {
+  Draft = 'Draft',
+  Submitted = 'Submitted',
+  ReviewingApplication = 'Reviewing Application',
+  CreatingCaseFile = 'Creating Case File',
+  CaseCreated = 'Case Created',
+  CaseInProgress = 'Case In Progress',
+  Closed = 'Closed',
+}

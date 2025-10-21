@@ -945,7 +945,6 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.otherDamage, opts => opts.MapFrom(s => s.dfa_causeofdamageother2 != null && s.dfa_causeofdamageother2 == (int?)YesNoOptionSet.Yes ? true : false))
                 .ForMember(d => d.otherDamageText, opts => opts.MapFrom(s => s.dfa_causeofdamageloss))
                 .ForMember(d => d.eligibleGST, opts => opts.MapFrom(s => s.dfa_eligiblegst))
-                .ForMember(d => d.IsProjectSubmission, opts => opts.MapFrom(s => CheckEligibilityForProjectSubmission(s.dfa_applicationcasebpfstages)))
                 .ForMember(d => d.ARBusinessPhone, opts => opts.MapFrom(s => s.dfa_arbusinessphone))
                 .ForMember(d => d.AREmail, opts => opts.MapFrom(s => s.dfa_aremail))
                 .ForMember(d => d.ARFirstDeclaration, opts => opts.MapFrom(s => s.dfa_ardeclaration1))
@@ -1166,21 +1165,6 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.contactEmail, opts => opts.MapFrom(s => s.emailaddress))
                 .ForMember(d => d.individualFirstname, opts => opts.MapFrom(s => s.display_name))
                 ;
-        }
-
-        private bool CheckEligibilityForProjectSubmission(string? dfa_applicationcasebpfstages)
-        {
-            if (!string.IsNullOrEmpty(dfa_applicationcasebpfstages))
-            {
-                if (Convert.ToInt32(dfa_applicationcasebpfstages) == Convert.ToInt32(ApplicationStages.CaseCreated)
-                    || Convert.ToInt32(dfa_applicationcasebpfstages) == Convert.ToInt32(ApplicationStages.CaseInProgress)
-                    || Convert.ToInt32(dfa_applicationcasebpfstages) == Convert.ToInt32(ApplicationStages.Closed))
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         public FileCategory ConvertStringToFileCategory(string documenttype)

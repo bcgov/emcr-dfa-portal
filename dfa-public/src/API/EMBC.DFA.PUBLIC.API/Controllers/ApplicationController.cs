@@ -672,7 +672,6 @@ namespace EMBC.DFA.API.Controllers
         public bool? eligibleGST { get; set; }
         public string? otherDamageText { get; set; }
         public string StatusColor { get; set; }
-        public bool IsProjectSubmission { get; set; }
         public string? ARFirstName { get; set; }
         public string? ARLastName { get; set; }
         public string? ARBusinessPhone { get; set; }
