@@ -1080,6 +1080,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         public DateTime? dfa_projectapproveddate { get; set; }
         public IEnumerable<dfa_projectappeal>? dfa_projectappeal { get; set; }
         public DateTime? dfa_projectdecisiondate { get; set; }
+        public string? dfa_approvedamendedprojectcost { get; set; }
     }
 
     public class dfa_projectappeal

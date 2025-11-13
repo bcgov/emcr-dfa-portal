@@ -67,6 +67,7 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
         Task<dfa_projectmain_retrieve> GetProjectMainAsync(Guid projectId);
         Task<List<CurrentProject>> HandleProjectList(string applicationId);
         Task<List<CurrentProjectAmendment>> HandleProjectAmendmentList(string projectId);
+        Task<string> HandleProjectAmendmentCosts(string projectId);
         Task<CurrentApplication> HandleApplicationDetails(string applicationId);
         Task<CurrentProject> HandleProjectDetails(string projectId);
         Task<string> HandleClaimCreateUpdate(dfa_claim_params objClaim);
@@ -194,6 +195,21 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
             var lstApps = await listsGateway.GetProjectAmendmentListAsync(projectId);
             var mappedProjects = mapper.Map<List<CurrentProjectAmendment>>(lstApps);
             return mappedProjects;
+        }
+
+        public async Task<string> HandleProjectAmendmentCosts(string projectId)
+        {
+            var lstApps = await listsGateway.GetProjectAmendmentListAsync(projectId);
+            //var t = lstApps.FirstOrDefault().dfa_approvedadditionalprojectcost;
+            var x3 = ProjectAmendmentDecsions.Approved.ToString();
+            var x4 = ProjectAmendmentDecsions.ApprovedwithExclusions.ToString();
+            var totalApproveAdditionalProjectCosts = lstApps.Where(a => a.dfa_amendmentdecision == "222710000" || a.dfa_amendmentdecision == "222710003").Sum(a =>
+            {
+                int value;
+                return int.TryParse(a.dfa_estimatedadditionalprojectcost, out value) ? value : 0;
+            });
+                //a.dfa_approvedadditionalprojectcost
+            return totalApproveAdditionalProjectCosts.ToString();
         }
 
         // 2024-09-19 EMCRI-676 waynezen; overloaded method that filters application based on BCeID Org

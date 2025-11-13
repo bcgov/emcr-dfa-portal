@@ -127,11 +127,11 @@
         </div>
       </div>
 
-      <div style="padding-top: 16px; display: flex" [hidden]="applItem.isHidden">
+      <div style="padding-top: 16px; padding-bottom: 5px; display: flex"  [hidden]="applItem.isHidden">
         <div class="col-md-2">
           <span><b>Site Location - </b></span>
         </div>
-        <div class="col-md-3 wrap-text">
+        <div class="col-md-3">
           <span>{{
             applItem?.projectDecision == DecisionEnum.Approved ||
             applItem?.projectDecision == DecisionEnum.ApprovedWithExclusions
@@ -152,10 +152,10 @@
         </div>
       </div>
 
-      <div style="border-bottom: 1px solid lightgrey; padding-bottom: 16px; display: flex" [hidden]="applItem.isHidden">
+      <div style="padding-bottom: 5px; display: flex"  [hidden]="applItem.isHidden">
         <div class="col-md-2">
-          <span><b>EMCR Approved Amount -</b></span>
-        </div>
+          <span><b>Approved Project Cost -</b></span>
+          </div>
         <div class="col-md-3">
           <span>{{
             applItem?.projectDecision == DecisionEnum.Approved ||
@@ -175,7 +175,23 @@
               : ''
           }}</span>
         </div>
-      </div>
+        </div>
+        <div *ngIf="applItem.hasApprovedAmendments" style="border-bottom: 1px solid lightgrey; padding-bottom: 16px; display: flex"  [hidden]="applItem.isHidden">
+            <div *ngIf="applItem.amendedAttionalCost" class="col-md-2">
+              <span><b>Approved Amended Project Cost -</b></span>
+                        </div>
+            <div *ngIf="applItem.amendedAttionalCost" class="col-md-3">
+              <span>{{(applItem.amendedAttionalCost | number: '1.2-2')}}</span>
+            
+            </div>
+          <div class="col-md-2">
+            <span><b>Amended 18 Month Deadline -</b></span>
+                      </div>
+          <div class="col-md-3">
+            <span>{{applItem.amendedDeadline18Month}}
+              </span>
+          </div>
+        </div>
 
       <!-- project timeline -->
       <div style="display: flex; margin: 30px 30px">

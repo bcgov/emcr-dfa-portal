@@ -826,6 +826,7 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.ProjectTypeOther, opts => opts.MapFrom(s => s.dfa_projecttypeother))
                 .ForMember(d => d.ProjectApprovedDate, opts => opts.MapFrom(s => s.dfa_projectapproveddate))
                 .ForMember(d => d.ProjectDecisionDate, opts => opts.MapFrom(s => s.dfa_projectdecisiondate))
+                .ForMember(d => d.ApprovedAmendedProjectCost, opts => opts.MapFrom(s => s.dfa_approvedamendedprojectcost))
                 ;
                 //.ForMember(d => d.Appeals, opts => opts.MapFrom(s => s.dfa_projectappeal))
 

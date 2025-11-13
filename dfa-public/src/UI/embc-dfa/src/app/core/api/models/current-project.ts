@@ -6,13 +6,17 @@ import { CurrentProjectAppeal } from '../models/current-project-appeal';
 import { ProjectStatusBar } from '../models/project-status-bar';
 export interface CurrentProject {
   activeStage?: CurrentProjectAppeal;
+  amendedAttionalCost?: string | null;
+  amendedDeadline18Month?: string | null;
   applicationId?: string;
+  approvedAmendedProjectCost?: string;
   createdDate?: string;
   dateFileClosed?: string;
   deadline18Month?: string;
   emcrApprovedAmount?: string;
   estimatedCompletionDate?: string;
   hasAmendment?: boolean;
+  hasApprovedAmendments?: boolean | null;
   isClaimSubmission?: boolean;
   isErrorInStatus?: boolean;
   isHidden?: boolean;

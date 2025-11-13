@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Pipelines.Sockets.Unofficial.Arenas;
 using static EMBC.DFA.PUBLIC.API.Services.ProjectAppealService;
 
 namespace EMBC.DFA.API.Controllers
@@ -61,7 +62,7 @@ namespace EMBC.DFA.API.Controllers
         {
             var lstProjects = await handler.HandleProjectList(applicationId);
             // TODO consolidate the above query with the below N queries to have only one query
-            lstProjects.ForEach(project => 
+            lstProjects.ForEach(async project => 
             {
                 // load project appeals including process stages(timeline)
                 var query = new Database.Contract.ProjectAppealQuery();
@@ -98,6 +99,21 @@ namespace EMBC.DFA.API.Controllers
                     //    })
                     //    .ToList();
                 }
+
+                var projectAmendments = await handler.HandleProjectAmendmentList(project.ProjectId);
+                var approvedProjectAmendments = projectAmendments.Where(a => a.AmendmentDecision == "Approved" || a.AmendmentDecision == "Approved with Exclusions")?.ToList();
+                project.HasApprovedAmendments = approvedProjectAmendments?.Count > 0;
+
+                if (approvedProjectAmendments?.Count > 0)
+                {
+                    
+                    project.AmendedAttionalCost = approvedProjectAmendments.Sum(a => a.ApprovedAdditionalProjectCost).ToString();
+
+                    project.AmendedDeadline18Month = approvedProjectAmendments.OrderByDescending(a => a.AmendmentApprovedDate).FirstOrDefault()?.Amended18MonthDeadline;
+                }
+
+                //project.AmendedAttionalCost = await handler.HandleProjectAmendmentCosts(project.ProjectId);
+
             });
             return Ok(lstProjects);
         }
@@ -270,6 +286,10 @@ namespace EMBC.DFA.API.Controllers
         public string ProjectApprovedDate { get; set; }
         public CurrentProjectAppeal ActiveStage { get; set; }
         public string ProjectDecisionDate { get; set; }
+        public string ApprovedAmendedProjectCost { get; set; }
+        public string? AmendedAttionalCost { get; set; }
+        public string? AmendedDeadline18Month { get; set; }
+        public bool? HasApprovedAmendments { get; set; }
     }
 
     public class CurrentProjectAppeal
