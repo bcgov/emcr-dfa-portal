@@ -181,10 +181,6 @@ export default class SupportingDocumentsClaimComponent implements OnInit, OnDest
       invalid = true;
       error["noinvoices"] = true;
     }
-    if (!supportingFiles || supportingFiles?.filter(x => x.requiredDocumentType === "GeneralLedger" && x.deleteFlag == false).length <= 0) {
-      invalid = true;
-      error["nogeneralledger"] = true;
-    }
     if (!supportingFiles || supportingFiles?.filter(x => x.requiredDocumentType === "ProofofPayment" && x.deleteFlag == false).length <= 0) {
       invalid = true;
       error["noproofofpayment"] = true;

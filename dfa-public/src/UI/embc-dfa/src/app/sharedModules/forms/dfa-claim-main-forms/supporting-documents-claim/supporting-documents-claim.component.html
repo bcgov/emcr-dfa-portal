@@ -11,7 +11,6 @@
             You must provide the following document before you can submit your claim:
             <br />
             - Invoices<br />
-            - General Ledger<br />
             - Proof of Payment<br />
           </div>
           <div class="col-md-6"></div>
@@ -53,39 +52,6 @@
       <br/>
     </ng-container>
 
-    <ng-container *ngIf="vieworedit !== 'viewOnly'"> <!-- General Ledger -->
-      <div class="row">
-        <div class="col-md-8">
-
-          <app-dfa-attachment
-            *ngIf="fileUploadForm.hasError('nogeneralledger')"
-            isClaim="true"
-            isdisabled="isdisabled"
-            title="General Ledger"
-            description="Attach General Ledger."
-            requiredDocumentType="GeneralLedger"
-            [allowedFileTypes]="allowedFileTypes"
-            allowedFileExtensionsList=".pdf, .doc, .docx, .png, .jpeg, .jpg, .ppt, .pptx, .xls, .xlsx"
-            fileType="GeneralLedger"
-            fileTypeText="General Ledger"
-            excludeFileTypes="[]"
-            (saveFileUpload)="saveRequiredForm($event, 'generalLedgerUpload')"
-            [fileUpload]="formCreationService.fileUploadsClaimForm.value.get('generalLedgerUpload')"
-          ></app-dfa-attachment>
-          <app-loader
-            class="spinner"
-            [showLoader]="isLoading"
-            strokeWidth="10"
-            diameter="50"
-          >
-          </app-loader>
-          <mat-card class="row align-card-left" *ngIf="!fileUploadForm.hasError('nogeneralledger')">
-            <p class="sub-heading" style="font-size: 15px">Required general ledger has been uploaded.</p>
-          </mat-card>
-        </div>
-      </div>
-      <br/>
-    </ng-container>
 
     <ng-container *ngIf="vieworedit !== 'viewOnly'"> <!-- Proof of Payment -->
       <div class="row">
@@ -238,9 +204,6 @@
 
     <mat-error *ngIf="fileUploadForm.hasError('noinvoices') && isformUploaddisabled != 'true' && vieworedit !== 'viewOnly'">
       <br/>Invoices are required.
-    </mat-error>
-    <mat-error *ngIf="fileUploadForm?.hasError('nogeneralledger') && isformUploaddisabled != 'true' && vieworedit !== 'viewOnly'">
-      <br/>General Ledger is required.
     </mat-error>
     <mat-error *ngIf="fileUploadForm?.hasError('noproofofpayment') && isformUploaddisabled != 'true' && vieworedit !== 'viewOnly'">
       <br/>Proof of Payment is required.

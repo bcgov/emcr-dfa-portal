@@ -291,9 +291,6 @@
         <div class="row info-detail" *ngIf="(formCreationService.fileUploadsAmendmentForm$ | async)?.hasError('noinvoices')">
           <span style="color:red">Invoices are required.</span>
         </div>
-        <div class="row info-detail" *ngIf="(formCreationService.fileUploadsAmendmentForm$ | async)?.hasError('nogeneralledger')">
-          <span style="color:red">General Ledger is required.</span>
-        </div>
         <div class="row info-detail" *ngIf="(formCreationService.fileUploadsAmendmentForm$ | async)?.hasError('noproofofpayment')">
           <span style="color:red">Proof of Payment is required.</span>
         </div>
