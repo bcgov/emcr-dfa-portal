@@ -17,7 +17,8 @@ import { MatInputModule } from '@angular/material/input';
 import { EnvironmentBannerComponent } from './layout/environment-banner/environment-banner.component';
 import { HttpClient } from '@angular/common/http';
 import { MarkdownModule } from 'ngx-markdown';
-import { TimeOutDialogComponent } from './components/dialog-components/time-out-dialog/time-out-dialog.component';
+import { IdleTimeOutDialogComponent } from './components/dialog-components/idle-time-out-dialog/idle-time-out-dialog.component';
+import { AbsoluteTimeOutDialogComponent } from './components/dialog-components/absolute-time-out-dialog/absolute-time-out-dialog.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { CaptchaV2Component } from './components/captcha-v2/captcha-v2.component';
@@ -88,7 +89,8 @@ import { WarningDialogComponent } from 'src/app/core/components/dialog-component
     DFACleanuplogDeleteDialogComponent,
     BcscInviteDialogComponent,
     EnvironmentBannerComponent,
-    TimeOutDialogComponent,
+    IdleTimeOutDialogComponent,
+    AbsoluteTimeOutDialogComponent,
     DFAApplicationAlertDialogComponent,
     DFADeleteConfirmDialogComponent,
     AddressChangeComponent,
@@ -119,7 +121,8 @@ import { WarningDialogComponent } from 'src/app/core/components/dialog-component
     FileUploadWarningDialogComponent,
     DFAFileDeleteDialogComponent,
     DFACleanuplogDeleteDialogComponent,
-    TimeOutDialogComponent,
+    IdleTimeOutDialogComponent,
+    AbsoluteTimeOutDialogComponent,
     MatToolbarModule,
     MatButtonModule,
     DFAApplicationAlertDialogComponent,

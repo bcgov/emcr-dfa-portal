@@ -50,7 +50,7 @@
       [innerHTML]="data?.content?.title"
     ></h1>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-2" *ngIf="!data?.hideCloseButton">
     <button
       class="close-image close-button-style"
       mat-icon-button

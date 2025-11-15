@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { AuthModule, LogLevel, PassedInitialConfig, StsConfigHttpLoader, StsConfigLoader } from 'angular-auth-oidc-client';
+import { AuthModule, LogLevel, StsConfigHttpLoader, StsConfigLoader } from 'angular-auth-oidc-client';
 import { map } from 'rxjs/operators';
 
 export const httpLoaderFactory = (httpClient: HttpClient) => {
@@ -15,8 +15,8 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
         scope: customConfig.scope, // 'openid profile offline_access ' + your scopes
         autoUserInfo: customConfig.auto_userinfo,
         customParamsAuthRequest: {
-            prompt: customConfig.prompt,
-            kc_idp_hint: customConfig.kc_idp_hint,
+          prompt: customConfig.prompt,
+          kc_idp_hint: customConfig.kc_idp_hint
         },
         responseType: customConfig.responseType,
         silentRenew: customConfig.silentRenew,
@@ -26,8 +26,7 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
         // secureRoutes: ['/api'],
         historyCleanupOff: true,
         // LogLevel: None = 0, Debug = 1, Warn = 2, Error = 3
-        logLevel: Number.isInteger(parseInt(customConfig.log_level)) ? parseInt(customConfig.log_level) : LogLevel.None,
-
+        logLevel: Number.isInteger(parseInt(customConfig.log_level)) ? parseInt(customConfig.log_level) : LogLevel.None
       };
     })
   );
@@ -41,10 +40,10 @@ export const httpLoaderFactory = (httpClient: HttpClient) => {
       loader: {
         provide: StsConfigLoader,
         useFactory: httpLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
+        deps: [HttpClient]
+      }
+    })
   ],
-  exports: [AuthModule],
+  exports: [AuthModule]
 })
 export class AuthConfigModule {}

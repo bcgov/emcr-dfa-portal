@@ -40,7 +40,13 @@ namespace EMBC.DFA.API.Controllers
         private readonly IConfigurationHandler handler;
         private readonly AutoMapper.MapperConfiguration mapperConfig;
 
-        public ConfigurationController(IConfiguration configuration, IMapper mapper, ICache cache, IHostEnvironment environment, IConfigurationHandler handler)
+        public ConfigurationController(
+            IConfiguration configuration,
+            IMapper mapper,
+            ICache cache,
+            IHostEnvironment environment,
+            IConfigurationHandler handler
+        )
         {
             this.configuration = configuration;
             this.mapper = mapper;
@@ -63,11 +69,6 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Configuration>> GetConfiguration()
         {
-            //var outageInfo = await cache.GetOrSet(
-            //    "outageinfo",
-            //    async () => (await client.Send(new OutageQuery { PortalType = PortalType.Registrants })).OutageInfo,
-            //    TimeSpan.FromSeconds(30));
-
             var oidcConfig = configuration.GetSection("auth:oidc");
             var config = new Configuration
             {
@@ -78,21 +79,19 @@ namespace EMBC.DFA.API.Controllers
                     Scope = oidcConfig.GetValue("scope", "openid offline_access dfa-portal-api"),
                     Idp = oidcConfig.GetValue("idp", "bcsc")
                 },
-                //OutageInfo = mapper.Map<OutageInformation>(outageInfo),
                 OutageInfo = null,
                 TimeoutInfo = new TimeoutConfiguration
                 {
-                    SessionTimeoutInMinutes = configuration.GetValue<int>("timeout:minutes", 20),
-                    WarningMessageDuration = configuration.GetValue<int>("timeout:warningDuration", 1)
+                    IdleTimeoutMinutes = configuration.GetValue<int>("timeout:minutes", 25),
+                    IdleTimeoutWarningMinutes = configuration.GetValue<int>("timeout:warningDuration", 5),
+                    AbsoluteTimeoutMinutes = configuration.GetValue<int>("timeout:absolute_timeout_minutes", 470),
+                    AbsoluteTimeoutWarningMinutes = configuration.GetValue<int>(
+                        "timeout:absolute_timeout_warning_minutes",
+                        10
+                    )
                 },
-                Captcha = new CaptchaConfiguration
-                {
-                    Key = configuration.GetValue<string>("captcha:key")
-                },
-                S3 = new S3Configuration
-                {
-                    UseS3 = configuration.GetValue<bool>("FEATURE_USE_S3")
-                },
+                Captcha = new CaptchaConfiguration { Key = configuration.GetValue<string>("captcha:key") },
+                S3 = new S3Configuration { UseS3 = configuration.GetValue<bool>("FEATURE_USE_S3") },
                 FeatureFlags = new FeatureFlagConfiguration
                 {
                     UseAppeals = !string.IsNullOrEmpty(configuration["FEATURE_USE_APPEALS"]),
@@ -101,7 +100,6 @@ namespace EMBC.DFA.API.Controllers
                     UseAutoNotifications = !string.IsNullOrEmpty(configuration["FEATURE_USE_AUTO_NOTIFICATIONS"]),
                     UseDocumentViewing = !string.IsNullOrEmpty(configuration["FEATURE_USE_DOCUMENT_VIEWING"]),
                 }
-
             };
 
             return Ok(await Task.FromResult(config));
@@ -121,10 +119,24 @@ namespace EMBC.DFA.API.Controllers
         {
             if (!string.IsNullOrEmpty(forEnumType))
             {
-                var type = Assembly.GetExecutingAssembly().ExportedTypes.FirstOrDefault(t => t.Name.Equals(forEnumType, StringComparison.OrdinalIgnoreCase) && t.IsEnum);
-                if (type == null) return NotFound(new ProblemDetails { Detail = $"enum '{forEnumType}' not found" });
+                var type = Assembly
+                    .GetExecutingAssembly()
+                    .ExportedTypes.FirstOrDefault(t =>
+                        t.Name.Equals(forEnumType, StringComparison.OrdinalIgnoreCase) && t.IsEnum
+                    );
+                if (type == null)
+                    return NotFound(new ProblemDetails { Detail = $"enum '{forEnumType}' not found" });
                 var values = EnumDescriptionHelper.GetEnumDescriptions(type);
-                return Ok(values.Select(e => new Code { Type = type.Name, Value = e.Value, Description = e.Description }).ToArray());
+                return Ok(
+                    values
+                        .Select(e => new Code
+                        {
+                            Type = type.Name,
+                            Value = e.Value,
+                            Description = e.Description
+                        })
+                        .ToArray()
+                );
             }
             return BadRequest(new ProblemDetails { Detail = "empty query parameter" });
         }
@@ -134,7 +146,11 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Obsolete("Messaging API removed")]
         // 2024-06-24 EMCRI-282 waynezen: Function obsolete due to removed Messaging API
-        public ActionResult<IEnumerable<CommunityCode>> GetCommunities([FromQuery] string? stateProvinceId, [FromQuery] string? countryId, [FromQuery] CommunityType?[] types)
+        public ActionResult<IEnumerable<CommunityCode>> GetCommunities(
+            [FromQuery] string? stateProvinceId,
+            [FromQuery] string? countryId,
+            [FromQuery] CommunityType?[] types
+        )
         {
             return BadRequest();
         }
@@ -241,8 +257,10 @@ namespace EMBC.DFA.API.Controllers
 
     public class TimeoutConfiguration
     {
-        public int SessionTimeoutInMinutes { get; set; }
-        public int WarningMessageDuration { get; set; }
+        public int IdleTimeoutMinutes { get; set; }
+        public int IdleTimeoutWarningMinutes { get; set; }
+        public int AbsoluteTimeoutMinutes { get; set; }
+        public int AbsoluteTimeoutWarningMinutes { get; set; }
     }
 
     public class CaptchaConfiguration
@@ -312,31 +330,7 @@ namespace EMBC.DFA.API.Controllers
     {
         public ConfigurationMapping()
         {
-            //CreateMap<Country, Code>()
-            //    .ForMember(d => d.Type, opts => opts.MapFrom(s => nameof(Country)))
-            //    .ForMember(d => d.Value, opts => opts.MapFrom(s => s.Code))
-            //    .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Name))
-            //    .ForMember(d => d.ParentCode, opts => opts.Ignore())
-            //    ;
-
-            //CreateMap<StateProvince, Code>()
-            //    .ForMember(d => d.Type, opts => opts.MapFrom(s => nameof(StateProvince)))
-            //    .ForMember(d => d.Value, opts => opts.MapFrom(s => s.Code))
-            //    .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Name))
-            //    .ForMember(d => d.ParentCode, opts => opts.MapFrom(s => new Code { Value = s.CountryCode, Type = nameof(Country) }))
-            //    ;
-
-            //CreateMap<Community, CommunityCode>()
-            //    .ForMember(d => d.Type, opts => opts.MapFrom(s => nameof(Community)))
-            //    .ForMember(d => d.Value, opts => opts.MapFrom(s => s.Code))
-            //    .ForMember(d => d.Description, opts => opts.MapFrom(s => s.Name))
-            //    .ForMember(d => d.DistrictName, opts => opts.MapFrom(s => s.DistrictName))
-            //    .ForMember(d => d.CommunityType, opts => opts.MapFrom(s => s.Type))
-            //    .ForMember(d => d.ParentCode, opts => opts.MapFrom(s => new Code { Value = s.StateProvinceCode, Type = nameof(StateProvince), ParentCode = new Code { Value = s.CountryCode, Type = nameof(Country) } }))
-            //    ;
-
-            CreateMap<ESS.Shared.Contracts.Metadata.OutageInformation, OutageInformation>()
-                ;
+            CreateMap<ESS.Shared.Contracts.Metadata.OutageInformation, OutageInformation>();
         }
     }
 }

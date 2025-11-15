@@ -68,11 +68,6 @@ export class VerifiedRegistrationComponent implements OnInit {
         }
       });
     }
-    
-    this.timeOutService.init(
-      this.timeOutService.timeOutInfo?.sessionTimeoutInMinutes ? this.timeOutService.timeOutInfo?.sessionTimeoutInMinutes : 10,
-      this.timeOutService.timeOutInfo?.warningMessageDuration ? this.timeOutService.timeOutInfo?.warningMessageDuration : 6
-    );
   }
 
   loadNewProfileWorkflow(): void {

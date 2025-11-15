@@ -4,7 +4,7 @@ import { Idle } from '@ng-idle/core';
 import { TimeoutConfiguration } from '../core/api/models';
 import { CacheService } from '../core/services/cache.service';
 import { LoginService } from '../core/services/login.service';
-import { TimeoutService } from '../core/services/timeout.service';
+import { TimeoutService, TimeoutServiceConfig } from '../core/services/timeout.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,9 +23,9 @@ export class MockTimeoutService extends TimeoutService {
     super(idle, dialog, loginService, cacheService);
   }
 
-  init(idleTime: number, timeOutDuration: number) {
-    this.idle.setIdle(idleTime * 60);
-    this.idle.setTimeout(timeOutDuration * 60);
+  init(options: TimeoutServiceConfig) {
+    this.idle.setIdle(options.idle.idleTimeoutMinutes * 60);
+    this.idle.setTimeout(options.idle.idleTimeoutWarningMinutes * 60);
 
     this.idle.onIdleStart.subscribe(() => {
       this.state = 'Idle';

@@ -1,15 +1,11 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { AuthModule } from 'angular-auth-oidc-client';
 import { lastValueFrom } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { tap } from 'rxjs/internal/operators/tap';
-import {
-  CaptchaConfiguration,
-  Configuration,
-  OutageInformation
-} from '../api/models';
+import { environment } from '../../../environments/environment';
+import { CaptchaConfiguration, Configuration, OutageInformation } from '../api/models';
 import { ConfigurationService } from '../api/services';
 import { EnvironmentInformation } from '../model/environment-information.model';
 import * as globalConst from '../services/globalConstants';
@@ -38,49 +34,36 @@ export class ConfigService {
     public alertService: AlertService,
     @Inject(APP_BASE_HREF) public baseHref: string
   ) {
-    // Set path based on hostname
-    if (
-      window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1'
-    ) {
+    // Set path based on environment
+    if (this.isLocalDevelopment()) {
       this.configurationGetEnvironmentInfoPath = 'assets/env/info.json';
     } else {
       this.configurationGetEnvironmentInfoPath = 'env/info.json';
     }
   }
 
+  /**
+   * Return `true` if running in development mode (not production).
+   *
+   * @return {*}  {boolean}
+   */
+  isLocalDevelopment(): boolean {
+    return !environment.production;
+  }
+
   public async loadConfig(): Promise<Configuration> {
-    if (this.configuration !== null) {
+    if (this.configuration !== null && !this.isLocalDevelopment()) {
+      // Use cached configuration when available, except for local development
       return this.configuration;
     }
 
-    const config$ = this.configurationService
-      .configurationGetConfiguration()
-      .pipe(
-        tap((c: Configuration) => {
-          this.configuration = c;
-        })
-      );
+    const config$ = this.configurationService.configurationGetConfiguration().pipe(
+      tap((c: Configuration) => {
+        this.configuration = c;
+      })
+    );
 
     return lastValueFrom(config$);
-  }
-
-  public getOAuthConfig(): AuthModule {
-    const config = this.configuration;
-    if (!config) throw new Error('Configuration was not loaded');
-    return {
-      requestAccessToken: true,
-      issuer: config.oidc?.issuer || undefined,
-      clientId: config.oidc?.clientId || undefined,
-      redirectUri: window.location.origin + this.baseHref, // concat base href to the redirect URI
-      responseType: 'code',
-      scope: config.oidc?.scope || undefined,
-      showDebugInformation: true, //!environment.production,
-      customQueryParams: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        acr_values: 'idp:bcsc'
-      }
-    };
   }
 
   public loadEnvironmentBanner(): Promise<EnvironmentInformation> {
@@ -109,8 +92,8 @@ export class ConfigService {
     return this.environmentBanner
       ? this.environmentBanner
       : JSON.parse(this.cacheService.get('environment'))
-      ? JSON.parse(this.cacheService.get('environment'))
-      : this.getEnvironmentInfo();
+        ? JSON.parse(this.cacheService.get('environment'))
+        : this.getEnvironmentInfo();
   }
 
   public setEnvironmentBanner(environmentBanner: EnvironmentInformation): void {
@@ -142,8 +125,6 @@ export class ConfigService {
   }
 
   public getEnvironment(): Observable<EnvironmentInformation> {
-    return this.http.get<EnvironmentInformation>(
-      this.configurationGetEnvironmentInfoPath
-    );
+    return this.http.get<EnvironmentInformation>(this.configurationGetEnvironmentInfoPath);
   }
 }

@@ -1,16 +1,13 @@
-import { OnInit, Renderer2 } from '@angular/core';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertService } from './core/services/alert.service';
-import * as globalConst from './core/services/globalConstants';
-import { BootstrapService } from './core/services/bootstrap.service';
-import { LoginService } from './core/services/login.service';
-import { ConfigService } from './core/services/config.service';
+import { TimeoutService } from 'src/app/core/services/timeout.service';
 import { EnvironmentInformation } from './core/model/environment-information.model';
+import { AlertService } from './core/services/alert.service';
+import { BootstrapService } from './core/services/bootstrap.service';
+import { ConfigService } from './core/services/config.service';
+import * as globalConst from './core/services/globalConstants';
+import { LoginService } from './core/services/login.service';
 import { OutageService } from './feature-components/outage/outage.service';
-import { ScriptService } from "./core/services/scriptServices";
-
-const SCRIPT_PATH = 'http://ws1.postescanada-canadapost.ca/js/addresscomplete-2.30.min.js?key=ea53-hg74-kb59-ym41';
 
 @Component({
   selector: 'app-root',
@@ -31,8 +28,7 @@ export class AppComponent implements OnInit {
     private bootstrapService: BootstrapService,
     private loginService: LoginService,
     private configService: ConfigService,
-    private renderer: Renderer2,
-    private scriptService: ScriptService,
+    private timeOutService: TimeoutService
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -53,21 +49,22 @@ export class AppComponent implements OnInit {
       this.isLoading = false;
     }
 
-    //const scriptElement = this.scriptService.loadJsScript(this.renderer, SCRIPT_PATH);
-    //scriptElement.onload = (obj) => {
-    //  console.log('Canada post script loaded');
-    //  console.log(JSON.stringify(obj));
-
-    //  // Load the JavaScript client library.
-    //  // (the init() method has been omitted for brevity)
-    //  //this.gapi.load('client', init);
-    //}
-    //scriptElement.onerror = () => {
-    //  console.log('Could not load the Google API Script!');
-    //}
-    
-    //this.outageService.outagePolling();
-    //this.outageService.startOutageInterval();
+    this.loginService.isAuthenticated$.subscribe((isAuthenticated) => {
+      if (!isAuthenticated) {
+        // Initialize the timeout service after confirming the user is authenticated
+        this.timeOutService.init({
+          idle: {
+            idleTimeoutMinutes: this.configService.configuration.timeoutInfo?.idleTimeoutMinutes ?? 25,
+            idleTimeoutWarningMinutes: this.configService.configuration.timeoutInfo?.idleTimeoutWarningMinutes ?? 5
+          },
+          absolute: {
+            absoluteTimeoutMinutes: this.configService.configuration.timeoutInfo?.absoluteTimeoutMinutes ?? 470,
+            absoluteTimeoutWarningMinutes:
+              this.configService.configuration.timeoutInfo?.absoluteTimeoutWarningMinutes ?? 10
+          }
+        });
+      }
+    });
   }
 
   public closeOutageBanner($event: boolean): void {
@@ -75,4 +72,3 @@ export class AppComponent implements OnInit {
     this.outageService.closeBannerbyUser = !$event;
   }
 }
-

@@ -1,0 +1,22 @@
+<div class="row row-padding p-align">
+  <div class="col-md-12 heading">Session Expiring!</div>
+</div>
+
+<div class="row row-padding p-align">
+  <div class="col-md-12">
+    <p>Your session will expire and you will be logged out in</p>
+    <p class="time-color bold">{{ countdown * 1000 | date: 'mm:ss' }}</p>
+  </div>
+</div>
+
+<div class="row row-padding p-align">
+  <div class="col-md-12">
+    <p>When you are logged out you will lose any unsaved work.</p>
+  </div>
+</div>
+
+<div class="row row-padding">
+  <div class="col-md-12 p-align">
+    <button class="button-width" mat-button (click)="close()">OK</button>
+  </div>
+</div>

@@ -43,6 +43,10 @@ export class DialogComponent implements OnInit, OnDestroy {
       this.componentRef.instance.idle = this.data.idle;
     }
 
+    if (this.data.countdownMinutes !== undefined) {
+      this.componentRef.instance.countdownMinutes = this.data.countdownMinutes;
+    }
+
     this.componentRef.instance.outputEvent.subscribe((value) => {
       this.buttonAction(value);
     });

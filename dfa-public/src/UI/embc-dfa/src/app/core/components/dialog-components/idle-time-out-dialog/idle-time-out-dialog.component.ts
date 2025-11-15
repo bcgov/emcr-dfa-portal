@@ -1,13 +1,22 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Idle } from '@ng-idle/core';
 
+/**
+ * A dialog displaying a warning that the user will be logged out soon due to inactivity.
+ *
+ * Used in conjunction with `timeout.service.ts`.
+ *
+ * @export
+ * @class IdleTimeOutDialogComponent
+ * @implements {OnInit}
+ */
 @Component({
-  selector: 'app-time-out-dialog',
+  selector: 'app-idle-time-out-dialog',
+  templateUrl: './idle-time-out-dialog.component.html',
+  styleUrls: ['./idle-time-out-dialog.component.scss'],
   standalone: false,
-  templateUrl: './time-out-dialog.component.html',
-  styleUrls: ['./time-out-dialog.component.scss']
 })
-export class TimeOutDialogComponent implements OnInit {
+export class IdleTimeOutDialogComponent implements OnInit {
   @Input() idle: Idle;
   @Input() initDialog: number;
   @Output() outputEvent = new EventEmitter<string>();
