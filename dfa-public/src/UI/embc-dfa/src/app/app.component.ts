@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
     }
 
     this.loginService.isAuthenticated$.subscribe((isAuthenticated) => {
-      if (!isAuthenticated) {
+      if (isAuthenticated) {
         // Initialize the timeout service after confirming the user is authenticated
         this.timeOutService.init({
           idle: {

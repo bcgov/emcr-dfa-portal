@@ -160,7 +160,17 @@ export class TimeoutService implements OnDestroy {
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
     this.idle.onIdleStart.subscribe(() => {
-      this.openIdleTimeOutDialog();
+      // Temporarily disable interrupts to allow the user to click the dialog button without
+      // immediately cancelling the idle state on mouse movement.
+      this.idle.clearInterrupts();
+
+      this.openIdleTimeOutDialog()
+        .afterClosed()
+        .subscribe(() => {
+          // Re-enable interrupts and resume watching for inactivity
+          this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+          this.idle.watch();
+        });
     });
 
     this.idle.onTimeout.subscribe(() => {
@@ -168,6 +178,7 @@ export class TimeoutService implements OnDestroy {
       this.signOut();
     });
 
+    // Start watching for inactivity
     this.idle.watch();
   }
 
