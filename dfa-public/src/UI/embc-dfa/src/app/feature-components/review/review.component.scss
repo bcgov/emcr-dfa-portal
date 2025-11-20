@@ -5,11 +5,6 @@
     color: #169bd5;
 }
 
-.card-heading {
-  align-content: center;
-  color: black;
-}
-
 .review-profile-head{
     margin: 0px !important;
 }
@@ -27,7 +22,7 @@
 }
 
 .info-detail {
-    display: contents;
+  padding: 10px 10px 10px 20px;
 }
 
 .wrap-text {
@@ -46,105 +41,7 @@
 .missing-info {
   color: red;
 }
-table {
-    border-collapse: collapse;
-}
 
-.contacts td, th {
-    border: 1px solid #1d1212;
-    padding: 0.5rem;
-    text-align: left;
+.card-heading {
+  padding-top: 15px;
 }
-td {
-    padding-bottom: 10px;
-    padding-top: 10px;
-}
-u {
-    text-decoration: underline;
-}
-.record-title {
-    width: 320px;
-    padding-left: 5px;
-    color: black;
-}
-.contacts {
-    margin: 0 auto;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-.contacts-container {
-    padding-bottom: 5px;
-}
-.contact-title{
-    font-size: 21px;
-}
-table{
-    width: 100%;
-}
-
-mat-form-field {
-    width: 100%;
-}
-
-.card-content-align {
-    padding: 0 22px;
-}
-
-.primary-radio-group {
-  display: flex;
-  flex-direction: column;
-  //margin: 15px 0;
-}
-
-.primary-radio-button {
-    margin: 5px;
-}
-
-.radio-extra-label {
-  font-weight: normal;
-  //margin-left: 30px;
-}
-
-.highlight {
-    font-weight: 700;
-    color: #169bd5;
-}
-
-.horizontal-radio-group {
-  display: flex; flex-direction: row;
-  margin: 0;
-}
-
-.topSpace{
-    margin-top: 15px;
-}
-
-::ng-deep .mat-select-panel .mat-option {
-  height: unset !important;
-}
-
-::ng-deep .mat-mdc-form-field-error-wrapper {
-  padding-left: 0px !important;
-}
-
-::ng-deep span.mat-option-text {
-  white-space: normal !important;
-}
-
-.mat-header-cell {
-  font-weight: 700;
-  font-size: 15px;
-  color: black;
-  height: 51px;
-}
-
-.mat-table {
-    overflow: auto;
-    width: 100%;
-    max-height: 500px;
-  }
-  
-.custom-mat-error {
-    display: block;
-    //padding-top: 3px;
-  }

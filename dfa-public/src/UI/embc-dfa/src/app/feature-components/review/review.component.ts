@@ -118,7 +118,13 @@ export class ReviewComponent implements OnInit, OnDestroy {
 
   otherContactsDataSource = new BehaviorSubject([]);
   otherContactsData: Array<OtherContact> = [];
-  otherContactsColumnsToDisplay = ['name', 'phoneNumber', 'email'];
+    otherContactsColumnsToDisplay = [
+    'name',
+    'phoneNumber',
+    'email',
+    'cellPhone',
+    'jobTitle'
+  ];
 
   noCauseOfDamageError: boolean = false;
   primaryContactValidated: boolean = false;
