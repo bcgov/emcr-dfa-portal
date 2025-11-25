@@ -468,7 +468,6 @@
             </span>
           </div>
         </div>
-
         <div class="row info-detail pb-0 col-4">
           <div class="sub-heading">Additional Contact Details</div>
         </div>
@@ -522,6 +521,15 @@
             </th>
             <td *matCellDef="let element" mat-cell>
               {{ element.jobTitle }}
+            </td>
+          </ng-container>
+                    <!-- Job Title Column -->
+          <ng-container matColumnDef="notes" style="width: 10%">
+            <th mat-header-cell *matHeaderCellDef>
+              <b>Notes</b>
+            </th>
+            <td *matCellDef="let element" mat-cell>
+              {{ element.otherNotes }}
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="otherContactsColumnsToDisplay"></tr>

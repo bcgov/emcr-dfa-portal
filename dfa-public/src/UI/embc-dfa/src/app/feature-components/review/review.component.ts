@@ -123,7 +123,8 @@ export class ReviewComponent implements OnInit, OnDestroy {
     'phoneNumber',
     'email',
     'cellPhone',
-    'jobTitle'
+    'jobTitle',
+    'notes'
   ];
 
   noCauseOfDamageError: boolean = false;
