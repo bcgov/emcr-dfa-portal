@@ -51,8 +51,7 @@ export class TimeoutService implements OnDestroy {
   constructor(
     public idle: Idle,
     public dialog: MatDialog,
-    public loginService: LoginService,
-    public cacheService: CacheService
+    public loginService: LoginService
   ) {}
 
   /**

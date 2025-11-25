@@ -1,11 +1,10 @@
 <div class="container container-frame">
-  
   <div class="row heading-container">
     <div class="col-8">
       <span class="page-heading">{{ dfaClaimMainHeading }}</span>
     </div>
-   
-    <div class="col-4" >
+
+    <div class="col-4">
       <button
         #backtodash
         id="backtodash"
@@ -13,85 +12,52 @@
         style="vertical-align: middle; width: 220px; margin-top: 15px"
         (click)="BackToDashboard()"
         mat-stroked-button
-        type="button"
-        >
-         Back to Claim Dashboard
-         <app-loader
-          [strokeWidth]="3"
-          [diameter]="25"
-        ></app-loader>
+        type="button">
+        Back to Claim Dashboard
+        <app-loader [strokeWidth]="3" [diameter]="25"></app-loader>
       </button>
     </div>
   </div>
 
   <mat-horizontal-stepper
-                          [selectedIndex]="selectedStepIndex"
+    [selectedIndex]="selectedStepIndex"
     class="stepper-style"
     labelPosition="bottom"
     (animationDone)="currentStep(dfaClaimMainStepper?.selectedIndex, dfaClaimMainStepper)"
     (selectionChange)="stepChanged($event, dfaClaimMainStepper)"
     #dfaClaimMainStepper
-    [linear]="false"
-  >
-    <mat-step *ngFor="let step of steps" [stepControl]="form" >
+    [linear]="false">
+    <mat-step *ngFor="let step of steps" [stepControl]="form">
       <ng-template matStepLabel>{{ step.stepName }}</ng-template>
       <app-component-wrapper
         [componentName]="step.component"
-        [folderPath]="dfaClaimMainFolderPath"
-      ></app-component-wrapper>
+        [folderPath]="dfaClaimMainFolderPath"></app-component-wrapper>
       <br />
       <div class="row justify-content-between resp-style">
-          <!--<div class="col-md-6"></div>-->
         <div class="col-md-6" *ngIf="vieworedit === 'addclaim' || vieworedit === 'updateclaim'">
           <button
             class="button-s projectbutton"
             [hidden]="step.component === 'recovery-claim'"
             mat-button
             type="button"
-            (click)="goBack(dfaClaimMainStepper, step.lastStep)"
-          >
+            (click)="goBack(dfaClaimMainStepper, step.lastStep)">
             {{ step.backButtonLabel }}
           </button>
-          <button
-            class="button-s projectbutton"
-            mat-button
-            type="button"
-            (click)="saveAsDraft()"
-          >
+          <button class="button-s projectbutton" mat-button type="button" (click)="saveAsDraftAndNavigateToDashboard()">
             Save Claim as Draft
           </button>
-          <!--<button
-            class="button-s projectbutton"
-            [hidden]="step.component !== 'recovery-plan'"
-            mat-button
-            type="button"
-            (click)="goBack(dfaProjectMainStepper, step.lastStep)"
-          >
-            Clear Answers
-          </button>-->
-          <!--<button
-            class="button-s projectbutton"
-            mat-button
-            type="button"
-          >
-            Discard this Project
-          </button>-->
         </div>
         <div class="col-md-6">
-          <button *ngIf="vieworedit === 'addclaim' || vieworedit === 'updateclaim'"
+          <button
+            *ngIf="vieworedit === 'addclaim' || vieworedit === 'updateclaim'"
             class="button-p nextNsave"
             mat-stroked-button
             type="button"
-            (click)="goForward(dfaClaimMainStepper, step.isLast, step.component)"
-          >
+            (click)="goForward(dfaClaimMainStepper, step.isLast, step.component)">
             {{ step.nextButtonLabel }}
           </button>
-          
-          
         </div>
-        <br/>
-        <!--<label>** You do not have to complete the entire application at once, you can udpate it from the dashboard as needed.  However, before you
-        submit the final signed version, all fields marked with a <b><span style="color:red;">*</span></b> must be completed.</label>-->
+        <br />
       </div>
     </mat-step>
 
@@ -103,59 +69,36 @@
         [parentPageName]="parentPageName"
         [currentFlow]="currentFlow"
         [allowEdit]="true"
-        (stepToNavigate)="navigateToStep($event)"
-      >
+        (stepToNavigate)="navigateToStep($event)">
       </app-review-claim>
       <br />
 
       <div class="row justify-content-between resp-style">
-        <div class="col-md-6" style="padding-left: 28px;">
-          <button
-            class="button-s projectbutton"
-            mat-button
-            type="button"
-            (click)="dfaClaimMainStepper.previous()"
-          >
-            Go Back<!--<span *ngIf="vieworedit === 'addproject' || vieworedit === 'updateproject'"> & Edit</span>-->
+        <div class="col-md-6" style="padding-left: 28px">
+          <button class="button-s projectbutton" mat-button type="button" (click)="dfaClaimMainStepper.previous()">
+            Go Back
           </button>
 
-          <button
-            class="button-s projectbutton"
-            mat-button
-            type="button"
-            (click)="saveAsDraft()"
-          >
+          <button class="button-s projectbutton" mat-button type="button" (click)="saveAsDraftAndNavigateToDashboard()">
             Save Claim as Draft
           </button>
-          <!--<button
-            class="button-s projectbutton"
-            mat-button
-            type="button"
-          >
-            Discard this Project
-          </button>-->
         </div>
-        <!--<div class="col-md-6" *ngIf="!isSubmitted
-           && (formCreationService.propertyDamageForm$ | async)?.valid
-           && ((formCreationService.otherContactsForm$ | async)?.value?.otherContacts?.length > 0)
-           ">-->
-        <!--        && (formCreationService.supportingDocumentsForm$ | async)?.valid-->
-                <!--&& requiredDocumentsSupplied()"-->
 
         <div class="col-md-6">
-        <button *ngIf="(formCreationService.recoveryClaimForm$ | async)?.valid
-                && invoiceSummaryDataSource?.data?.length > 0
-                && (formCreationService.supportingDocumentsForm$ | async)?.valid
-                && requiredDocumentsSupplied()
-                "
-          class="button-p nextNsave"
-          mat-stroked-button
-          type="button"
-          (click)="submitFile()"
-        >
-          Submit
-        </button>
-      </div>
+          <button
+            *ngIf="
+              (formCreationService.recoveryClaimForm$ | async)?.valid &&
+              invoiceSummaryDataSource?.data?.length > 0 &&
+              (formCreationService.supportingDocumentsForm$ | async)?.valid &&
+              requiredDocumentsSupplied()
+            "
+            class="button-p nextNsave"
+            mat-stroked-button
+            type="button"
+            (click)="submitFile()">
+            Submit
+          </button>
+        </div>
       </div>
     </mat-step>
 
