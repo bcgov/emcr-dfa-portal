@@ -1,4 +1,12 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { AbstractControl, UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -244,13 +252,7 @@ export class DFAClaimMainComponent implements OnInit, AfterViewChecked, OnDestro
         ?.fileUploads.filter((x) => x.requiredDocumentType === 'Invoices' && x.deleteFlag == false).length >= 1
         ? true
         : false;
-    let isGeneralLedgerUploaded =
-      this.formCreationService.fileUploadsClaimForm
-        .getValue()
-        .getRawValue()
-        ?.fileUploads.filter((x) => x.requiredDocumentType === 'GeneralLedger' && x.deleteFlag == false).length >= 1
-        ? true
-        : false;
+
     let isProofofPaymentUploaded =
       this.formCreationService.fileUploadsClaimForm
         .getValue()
@@ -259,8 +261,11 @@ export class DFAClaimMainComponent implements OnInit, AfterViewChecked, OnDestro
         ? true
         : false;
 
-    if (isInvoiceUploaded == true && isGeneralLedgerUploaded && isProofofPaymentUploaded) return true;
-    else return false;
+    if (!isInvoiceUploaded || !isProofofPaymentUploaded) {
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -330,6 +335,9 @@ export class DFAClaimMainComponent implements OnInit, AfterViewChecked, OnDestro
       .afterClosed()
       .subscribe((result) => {
         if (result === 'confirm') {
+          // Stop the auto save service to prevent draft saves during submission.
+          this.autoCallbackService.stop();
+
           this.setFormData(this.steps[this.dfaClaimMainStepper.selectedIndex]?.component.toString());
           this.dfaClaimMainDataService.recoveryClaim.claimStatus = ClaimStageOptionSet.SUBMIT;
 

@@ -1,4 +1,12 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -648,6 +656,9 @@ export class DFAApplicationMainComponent implements OnInit, AfterViewInit, After
       .afterClosed()
       .subscribe((result) => {
         if (result === 'confirm') {
+          // Stop the auto save service to prevent draft saves during submission.
+          this.autoCallbackService.stop();
+
           this.isLoading = !this.isLoading;
 
           this.setFormData(this.steps[this.dfaApplicationMainStepper.selectedIndex]?.component.toString());

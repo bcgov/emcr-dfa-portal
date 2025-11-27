@@ -1,4 +1,12 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { AbstractControl, UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -391,6 +399,9 @@ export class DFAProjectMainComponent implements OnInit, AfterViewChecked, OnDest
       .afterClosed()
       .subscribe((result) => {
         if (result === 'confirm') {
+          // Stop the auto save service to prevent draft saves during submission.
+          this.autoCallbackService.stop();
+
           this.setFormData(this.steps[this.dfaProjectMainStepper.selectedIndex]?.component.toString());
           this.dfaProjectMainDataService.recoveryPlan.projectStatus = ProjectStageOptionSet.Submitted;
 
