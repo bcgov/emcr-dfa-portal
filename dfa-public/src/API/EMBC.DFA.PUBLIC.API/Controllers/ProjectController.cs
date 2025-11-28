@@ -62,7 +62,7 @@ namespace EMBC.DFA.API.Controllers
         {
             var lstProjects = await handler.HandleProjectList(applicationId);
             // TODO consolidate the above query with the below N queries to have only one query
-            lstProjects.ForEach(async project => 
+            var projectProcesses = lstProjects.Select(async project => 
             {
                 // load project appeals including process stages(timeline)
                 var query = new Database.Contract.ProjectAppealQuery();
@@ -115,6 +115,7 @@ namespace EMBC.DFA.API.Controllers
                 //project.AmendedAttionalCost = await handler.HandleProjectAmendmentCosts(project.ProjectId);
 
             });
+            await Task.WhenAll(projectProcesses);
             return Ok(lstProjects);
         }
 
