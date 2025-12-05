@@ -603,7 +603,11 @@ export class DFAApplicationMainComponent implements OnInit, AfterViewInit, After
    */
   autoSaveDraft(): void {
     this.saveDraft().subscribe({
-      next: () => {},
+      next: (id) => {
+        if (id != 'Updated') {
+          this.dfaApplicationMainDataService.setApplicationId(id);
+        }
+      },
       error: () => {}
     });
   }
