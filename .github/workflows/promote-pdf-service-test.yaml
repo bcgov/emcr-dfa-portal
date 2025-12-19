@@ -25,6 +25,7 @@ env:
   IMAGE_NAME: dfa-portal-pdf-service
   SOURCE_TAG: ${{ github.event.inputs.source_tag }}
   TARGET_TAG: "test"
+  BACKUP_TAG: "test-backup"
 
 # --- JOBS ---------------------------------------------------------------------------
 jobs:
@@ -48,6 +49,19 @@ jobs:
         run: |
           SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
           echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+
+      - name: Get target digest (for backup)
+        id: get_target_digest
+        run: |
+          TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}') || true
+          echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+
+      - name: Backup Current Target Image (by digest)
+        if: steps.get_target_digest.outputs.target_digest != ''
+        run: |
+          echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+          oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference-policy=local
+          echo "Backup successful."
 
       - name: Promote source to target (by digest)
         run: |

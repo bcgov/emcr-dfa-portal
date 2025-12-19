@@ -89,10 +89,11 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ inputs.REGISTRY }}/${{ inputs.IMAGE_NAME }}
-          # Creates two tags: branch name and latest.
+          # Creates the 'latest' tag for Artifactory.
           # Commit SHA and other metadata are baked into image labels automatically.
+          # Uncomment the branch tag below when ready to use branch-specific tags:
           tags: |
-            type=raw,value=${{ inputs.BRANCH }}
+            # type=raw,value=${{ inputs.BRANCH }}
             type=raw,value=latest
 
       - name: Build and push Docker image
@@ -125,6 +126,7 @@ jobs:
       - name: Trigger ImageStream Import
         run: |
           oc login --token="${{ secrets.OCP4_PASSWORD }}" --server="${{ secrets.OPENSHIFT_SERVER }}"
-          oc import-image ${{ inputs.IMAGE_NAME }}:${{ inputs.BRANCH }} -n ${{ secrets.OCP4_NAMESPACE }} --confirm
+          # Uncomment the branch import below when ready to use branch-specific tags:
+          # oc import-image ${{ inputs.IMAGE_NAME }}:${{ inputs.BRANCH }} -n ${{ secrets.OCP4_NAMESPACE }} --confirm
           oc import-image ${{ inputs.IMAGE_NAME }}:latest -n ${{ secrets.OCP4_NAMESPACE }} --confirm
-          echo "ImageStream import triggered for ${{ inputs.IMAGE_NAME }}:${{ inputs.BRANCH }} and ${{ inputs.IMAGE_NAME }}:latest"
+          echo "ImageStream import triggered for ${{ inputs.IMAGE_NAME }}:latest"
