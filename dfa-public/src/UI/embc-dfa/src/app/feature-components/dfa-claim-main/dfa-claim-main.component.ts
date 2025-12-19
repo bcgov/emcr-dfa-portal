@@ -109,12 +109,15 @@ export class DFAClaimMainComponent implements OnInit, AfterViewChecked, OnDestro
       .subscribe((data) => (this.invoiceSummaryDataSource.data = _invoiceFormArray.getRawValue()));
 
     // Automatically save the current data as a draft, if the user is idle for 60 seconds.
-    this.autoCallbackService.start({
-      callback: () => this.autoSaveDraft(),
-      intervalSeconds: 60,
-      whenIdle: true,
-      squashErrors: true
-    });
+    // exclude view-only mode.
+    if (this.vieworedit && this.vieworedit !== 'view') {
+      this.autoCallbackService.start({
+        callback: () => this.autoSaveDraft(),
+        intervalSeconds: 60,
+        whenIdle: true,
+        squashErrors: true
+      });
+    }
   }
 
   ngAfterViewChecked(): void {

@@ -190,12 +190,15 @@ export class DFAApplicationMainComponent implements OnInit, AfterViewInit, After
     }
 
     // Automatically save the current data as a draft, if the user is idle for 60 seconds.
-    this.autoCallbackService.start({
-      callback: () => this.autoSaveDraft(),
-      intervalSeconds: 60,
-      whenIdle: true,
-      squashErrors: true
-    });
+    // exclude view-only mode.
+    if (this.vieworedit && this.vieworedit !== 'view') {
+      this.autoCallbackService.start({
+        callback: () => this.autoSaveDraft(),
+        intervalSeconds: 60,
+        whenIdle: true,
+        squashErrors: true
+      });
+    }
   }
 
   ngAfterViewChecked(): void {
