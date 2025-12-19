@@ -3,6 +3,8 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using pdfservice.Hosting;
+using Serilog;
 
 namespace pdfservice
 {
@@ -10,15 +12,17 @@ namespace pdfservice
     {
         public static void Main(string[] args)
         {
-            var app = CreateWebHostBuilder(args).Build();
+            var app = CreateHostBuilder(args).Build();
             app.Run();
         }
 
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
-
-
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .UseSerilog((ctx, services, config) => Logging.ConfigureSerilog(ctx, services, config, "PdfService"))
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }
