@@ -57,7 +57,7 @@
             <p class="sub-heading set-margin" style="font-size: 15px;">
               Mailing Address<span style="color:red">*</span>
             </p>
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="contactsForm != null">
               <app-bc-address [addressForm]="contactsForm" [primaryAddressWarning]="false">
               </app-bc-address>
             </div>
@@ -207,7 +207,7 @@
         <div class="row">
           <div class="col-md-4">
             <p>
-              Cell Phone*
+              Cell Phone1*
             </p>
             <mat-form-field appearance="outline">
               <input type="text" formControlName="pcCellPhone" matInput maxlength="100" required 
@@ -217,12 +217,8 @@
                 contactsForm.get('pcCellPhone').hasError('incorrectLength')
               ">
                 Telephone number must have 10 digits</mat-error>
-              <mat-error *ngIf="
-                contactsForm.get('pcCellPhone').invalid &&
-                contactsForm.get('pcCellPhone').hasError('required') &&
-                contactsForm.get('pcCellPhone').touched
-              ">
-                Cell Phone number is required</mat-error>
+              <mat-error >
+                Cell Phone number is required 1111</mat-error>
             </mat-form-field>
             </div>
           <div class="col-md-4">

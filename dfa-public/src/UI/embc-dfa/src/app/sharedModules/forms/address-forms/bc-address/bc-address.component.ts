@@ -74,7 +74,13 @@ export class BcAddressComponent implements OnInit, AfterViewChecked {
   ngOnInit(): void {
     this.addressMatchResponse = '';
     this.city = this.locationService.getCommunityList();
-    this.myControlAddr.setValue(this.addressFormControl.addressLine1.value);
+    
+    this.addressForm.get('addressLine1').valueChanges.subscribe(value => {
+      this.myControlAddr.setValue(value);
+    });
+    this.addressForm.get('community').valueChanges.subscribe(value => {
+      this.myControl.setValue(value);
+    });
     //this.addressCompleteCanadaPost();
 
     //const scriptElement = this.scriptService.loadJsScript(this.renderer, SCRIPT_PATH);
