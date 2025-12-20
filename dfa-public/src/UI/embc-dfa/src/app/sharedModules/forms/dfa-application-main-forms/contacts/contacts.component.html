@@ -207,7 +207,7 @@
         <div class="row">
           <div class="col-md-4">
             <p>
-              Cell Phone1*
+              Cell Phone*
             </p>
             <mat-form-field appearance="outline">
               <input type="text" formControlName="pcCellPhone" matInput maxlength="100" required 
@@ -217,8 +217,12 @@
                 contactsForm.get('pcCellPhone').hasError('incorrectLength')
               ">
                 Telephone number must have 10 digits</mat-error>
-              <mat-error >
-                Cell Phone number is required 1111</mat-error>
+              <mat-error *ngIf="
+                contactsForm.get('pcCellPhone').invalid &&
+                contactsForm.get('pcCellPhone').hasError('required') &&
+                contactsForm.get('pcCellPhone').touched
+              ">
+                Cell Phone number is required</mat-error>
             </mat-form-field>
             </div>
           <div class="col-md-4">
