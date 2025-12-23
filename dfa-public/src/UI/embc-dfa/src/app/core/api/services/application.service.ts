@@ -38,6 +38,7 @@ import { CurrentApplication } from '../models/current-application';
 import { DfaApplicationMain } from '../models/dfa-application-main';
 import { DfaApplicationStart } from '../models/dfa-application-start';
 import { PdfApplicationData } from '../models/pdf-application-data';
+import { UpdateApplicationResponse } from '../models/update-application-response';
 
 @Injectable({ providedIn: 'root' })
 export class ApplicationService extends BaseService {
@@ -91,7 +92,7 @@ export class ApplicationService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  applicationUpdateApplication$Response(params: ApplicationUpdateApplication$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+  applicationUpdateApplication$Response(params: ApplicationUpdateApplication$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateApplicationResponse>> {
     return applicationUpdateApplication(this.http, this.rootUrl, params, context);
   }
 
@@ -105,9 +106,9 @@ export class ApplicationService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  applicationUpdateApplication(params: ApplicationUpdateApplication$Params, context?: HttpContext): Observable<string> {
+  applicationUpdateApplication(params: ApplicationUpdateApplication$Params, context?: HttpContext): Observable<UpdateApplicationResponse> {
     return this.applicationUpdateApplication$Response(params, context).pipe(
-      map((r: StrictHttpResponse<string>): string => r.body)
+      map((r: StrictHttpResponse<UpdateApplicationResponse>): UpdateApplicationResponse => r.body)
     );
   }
 

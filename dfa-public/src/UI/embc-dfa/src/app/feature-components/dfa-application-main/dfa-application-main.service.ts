@@ -4,6 +4,7 @@ import { DFAApplicationMainMappingService } from './dfa-application-main-mapping
 import { DFAApplicationMainDataService } from './dfa-application-main-data.service';
 import { Observable } from 'rxjs';
 import { ApplicationService } from 'src/app/core/api/services';
+import { UpdateApplicationResponse } from 'src/app/core/api/models';
 
 @Injectable({ providedIn: 'root' })
 export class DFAApplicationMainService {
@@ -120,7 +121,7 @@ export class DFAApplicationMainService {
     this.dfaApplicationMainDataService.authorizedRepresentative = this.authorizedRepresentative;
   }
   
-  public upsertApplication(updatedApplication: DfaApplicationMain): Observable<string> {
+  public upsertApplication(updatedApplication: DfaApplicationMain): Observable<UpdateApplicationResponse> {
     return this.applicationService.applicationUpdateApplication({ body: updatedApplication });
   }
 }

@@ -9,6 +9,7 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { DfaApplicationMain } from '../../models/dfa-application-main';
+import { UpdateApplicationResponse } from '../../models/update-application-response';
 
 export interface ApplicationUpdateApplication$Params {
   
@@ -18,7 +19,7 @@ export interface ApplicationUpdateApplication$Params {
     body: DfaApplicationMain
 }
 
-export function applicationUpdateApplication(http: HttpClient, rootUrl: string, params: ApplicationUpdateApplication$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+export function applicationUpdateApplication(http: HttpClient, rootUrl: string, params: ApplicationUpdateApplication$Params, context?: HttpContext): Observable<StrictHttpResponse<UpdateApplicationResponse>> {
   const rb = new RequestBuilder(rootUrl, applicationUpdateApplication.PATH, 'put');
   if (params) {
     rb.body(params.body, 'application/json');
@@ -29,7 +30,7 @@ export function applicationUpdateApplication(http: HttpClient, rootUrl: string, 
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<string>;
+      return r as StrictHttpResponse<UpdateApplicationResponse>;
     })
   );
 }
