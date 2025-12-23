@@ -172,7 +172,7 @@
             <span>{{ getYesNoNotSet(claimMain?.claim.isThisFinalClaim) }}</span>
           </div>
           <div class="col-md-2">
-            <span><b>Less First $1,000 - </b></span>
+            <span><b>$1000 Deductible - </b></span>
           </div>
           <div class="col-md-2">
             <span>{{ claimMain?.claim.lessFirst1000 | fixedCurrency:'CA$' }}</span>
@@ -192,7 +192,7 @@
             <span>{{ claimMain?.claim.approvedClaimTotal | fixedCurrency:'CA$' }}</span>
           </div>
           <div class="col-md-2">
-            <span><b>Approved Reimbursement % - </b></span>
+            <span><b>Reimbursement % - </b></span>
           </div>
           <div class="col-md-2">
             <span>{{ claimMain?.claim.approvedReimbursement }}</span>

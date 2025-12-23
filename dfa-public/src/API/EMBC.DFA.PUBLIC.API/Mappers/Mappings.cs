@@ -827,8 +827,8 @@ namespace EMBC.DFA.API.Mappers
                 .ForMember(d => d.ProjectApprovedDate, opts => opts.MapFrom(s => s.dfa_projectapproveddate))
                 .ForMember(d => d.ProjectDecisionDate, opts => opts.MapFrom(s => s.dfa_projectdecisiondate))
                 .ForMember(d => d.ApprovedAmendedProjectCost, opts => opts.MapFrom(s => s.dfa_approvedamendedprojectcost))
-                ;
-                //.ForMember(d => d.Appeals, opts => opts.MapFrom(s => s.dfa_projectappeal))
+                .ForMember(d => d.AmendedDeadline18Month, opts => opts.MapFrom(s => Convert.ToDateTime(s.dfa_amended18monthdeadline).Year < 2020 ? "Date Not Set" : Convert.ToDateTime(s.dfa_amended18monthdeadline).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)));
+
 
             //CreateMap<dfa_projectappeal, CurrentProjectAppeal>()
             //    .ForMember(d => d.SubmissionDate, opts => opts.MapFrom(s => s.dfa_dateappealreceived));

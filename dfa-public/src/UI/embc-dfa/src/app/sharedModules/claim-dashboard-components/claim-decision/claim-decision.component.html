@@ -85,7 +85,7 @@
                             (recoveryClaim?.claim.isThisFinalClaim == false ? 'No' : 'Not Set')}}</span>
                     </div>
                     <div class="col-md-2">
-                        <span><b>Less First $1,000 - </b></span>
+                        <span><b>$1000 Deductible - </b></span>
                     </div>
                     <div class="col-md-2">
                         <span>
@@ -108,7 +108,7 @@
                         <span>CA$ {{recoveryClaim?.claim.claimTotal | number: '1.2-2'}}</span>
                     </div>
                     <div class="col-md-2">
-                    <span><b>Approved Reimbursement % - </b></span>
+                    <span><b>Reimbursement % - </b></span>
                     </div>
                     <div class="col-md-2">
                     <span>
@@ -127,7 +127,8 @@
                         <span><b> Advanced Drawdown Amount - </b></span>
                     </div>
                     <div class="col-md-2">
-                        <span>CA$ {{recoveryClaim?.claim.advancedDrawdownAmount | number: '1.2-2'}}</span>
+                        <span>{{ isAdvPayClaim ? 'N/A' : ('CA$ ' + ( recoveryClaim?.claim.advancedDrawdownAmount | number: '1.2-2')) }}</span>
+                         
                     </div>
                 </div>
             </mat-card-content>
@@ -272,7 +273,7 @@
         </div>
         <div>
             <span class="material-symbols-outlined circleicon3">
-                check_circle
+                cancel
             </span>
             Denied
         </div>

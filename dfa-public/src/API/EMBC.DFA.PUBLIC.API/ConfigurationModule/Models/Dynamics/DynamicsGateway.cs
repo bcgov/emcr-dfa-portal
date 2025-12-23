@@ -1225,7 +1225,8 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                     {
                         "dfa_projectnumber", "dfa_projectname", "dfa_sitelocation", "dfa_estimatedcompletiondateofproject",
                         "dfa_approvedcost", "dfa_18monthdeadline", "statuscode", "dfa_projectid", "createdon", "dfa_projectbusinessprocessstages",
-                        "dfa_projectbusinessprocesssubstages", "dfa_bpfclosedate", "dfa_projectdecision", "dfa_projectapproveddate", "dfa_projectdecisiondate"
+                        "dfa_projectbusinessprocesssubstages", "dfa_bpfclosedate", "dfa_projectdecision", "dfa_projectapproveddate", "dfa_projectdecisiondate",
+                        "dfa_approvedamendedprojectcost", "dfa_amended18monthdeadline"
                     },
                     Filter = $"_dfa_applicationid_value eq {applicationId}"
                 });
@@ -1272,7 +1273,9 @@ namespace EMBC.DFA.API.ConfigurationModule.Models.Dynamics
                         dfa_bpfclosedate = !string.IsNullOrEmpty(objApp.dfa_bpfclosedate) ? DateTime.Parse(objApp.dfa_bpfclosedate).ToLocalTime().ToString() : objApp.dfa_bpfclosedate,
                         dfa_projectapproveddate = objApp.dfa_projectapproveddate,
                         dfa_projectappeal = objApp.dfa_projectappeal,
-                        dfa_projectdecisiondate = objApp.dfa_projectdecisiondate
+                        dfa_projectdecisiondate = objApp.dfa_projectdecisiondate,
+                        dfa_amended18monthdeadline = objApp.dfa_amended18monthdeadline,
+                        dfa_approvedamendedprojectcost = objApp.dfa_approvedamendedprojectcost.HasValue ? Math.Round(objApp.dfa_approvedamendedprojectcost.Value, 2) : objApp.dfa_approvedamendedprojectcost
                     })
                         .AsEnumerable()
                         .OrderByDescending(m => m.createdon);

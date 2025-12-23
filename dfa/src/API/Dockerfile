@@ -1,11 +1,16 @@
+# --- Build Arguments (Global) ---
+# Defaults allow local builds without args; GitHub Actions overrides with real values
+ARG BUILD_IMAGE_NAME=local
+ARG BUILD_VERSION=local
+
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+ARG BUILD_IMAGE_NAME
+ARG BUILD_VERSION
 WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
 ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
 ENV DOTNET_gcServer=1
-ARG VERSION
-ENV VERSION=$VERSION
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
@@ -21,7 +26,14 @@ RUN dotnet restore EMBC.DFA.sln
 RUN dotnet publish "EMBC.DFA.API/EMBC.DFA.API.csproj" -c Release -o /app/publish --runtime linux-musl-x64 --no-self-contained
 
 # Final stage
-FROM base
+FROM base AS final
+ARG BUILD_IMAGE_NAME
+ARG BUILD_VERSION
 WORKDIR /app
 COPY --from=build /app/publish .
+
+# Set environment variables for traceability
+ENV BUILD_IMAGE_NAME=${BUILD_IMAGE_NAME}
+ENV BUILD_VERSION=${BUILD_VERSION}
+
 ENTRYPOINT ["dotnet", "EMBC.DFA.API.dll"]

@@ -1,3 +1,8 @@
+# --- Build Arguments (Global) ---
+# Defaults allow local builds without args; GitHub Actions overrides with real values
+ARG BUILD_IMAGE_NAME=local
+ARG BUILD_VERSION=local
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["pdf-service.csproj", "./"]
@@ -11,15 +16,17 @@ RUN dotnet publish "pdf-service.csproj" -c Release -o /app/publish
 
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+ARG BUILD_IMAGE_NAME
+ARG BUILD_VERSION
 WORKDIR /opt/app-root/app
-#ENV ASPNETCORE_URLS=http://*:8080
 ENV ASPNETCORE_URLS=http://*:8080
-
 ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
 ENV DOTNET_gcServer=1
 ENV LD_LIBRARY_PATH=/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH
-ARG VERSION
-ENV VERSION=$VERSION
+
+# Set environment variables for traceability
+ENV BUILD_IMAGE_NAME=${BUILD_IMAGE_NAME}
+ENV BUILD_VERSION=${BUILD_VERSION}
 USER 0
 RUN apt-get update && ln -s /usr/lib/libgdiplus.so /lib/x86_64-linux-gnu/libgdiplus.so
 RUN apt-get install -y --no-install-recommends zlib1g fontconfig libfreetype6 libx11-6 libxext6 libxrender1 wget gdebi

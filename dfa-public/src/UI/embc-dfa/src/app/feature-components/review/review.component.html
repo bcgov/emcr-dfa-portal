@@ -130,8 +130,7 @@
         <div class="row info-detail" style="padding-top: 20px">
           <!-- Indigenous Governing Body & Local Authority Legal Name -->
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info':
                   !(formCreationService.applicationDetailsForm$ | async)?.value?.legalName ||
                   (formCreationService.applicationDetailsForm$ | async)?.controls.legalName.invalid
@@ -140,16 +139,15 @@
             </span>
           </div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info':
                   !(formCreationService.applicationDetailsForm$ | async)?.value?.legalName ||
                   (formCreationService.applicationDetailsForm$ | async)?.controls.legalName.invalid
               }">
               {{
-                (formCreationService.applicationDetailsForm$ | async)?.value.legalName
-                  ? (formCreationService.applicationDetailsForm$ | async)?.value.legalName
-                  : 'Enter required information'
+              (formCreationService.applicationDetailsForm$ | async)?.value.legalName
+              ? (formCreationService.applicationDetailsForm$ | async)?.value.legalName
+              : 'Enter required information'
               }}
             </span>
           </div>
@@ -159,16 +157,15 @@
         <div class="row info-detail">
           <div class="col-md-4">Date of Damage From:</div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info': !(formCreationService.applicationDetailsForm$ | async)?.value?.damageFromDate
               }">
               {{
-                (formCreationService.applicationDetailsForm$ | async)?.value.damageFromDate
-                  ? 'Starts ' +
-                    ((formCreationService.applicationDetailsForm$ | async).value.damageFromDate | date: 'MM/dd/yyyy') +
-                    '. '
-                  : 'Enter required start date.'
+              (formCreationService.applicationDetailsForm$ | async)?.value.damageFromDate
+              ? 'Starts ' +
+              ((formCreationService.applicationDetailsForm$ | async).value.damageFromDate | date: 'MM/dd/yyyy') +
+              '. '
+              : 'Enter required start date.'
               }}
             </span>
           </div>
@@ -178,16 +175,15 @@
         <div class="row info-detail">
           <div class="col-md-4">Date of Damage To:</div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info': !(formCreationService.applicationDetailsForm$ | async)?.value?.damageToDate
               }">
               {{
-                (formCreationService.applicationDetailsForm$ | async)?.value.damageToDate
-                  ? 'Ends ' +
-                    ((formCreationService.applicationDetailsForm$ | async).value.damageToDate | date: 'MM/dd/yyyy') +
-                    '. '
-                  : 'Enter required end date.'
+              (formCreationService.applicationDetailsForm$ | async)?.value.damageToDate
+              ? 'Ends ' +
+              ((formCreationService.applicationDetailsForm$ | async).value.damageToDate | date: 'MM/dd/yyyy') +
+              '. '
+              : 'Enter required end date.'
               }}
             </span>
           </div>
@@ -197,16 +193,15 @@
         <div class="row info-detail">
           <div class="col-md-4">Disaster Event:</div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info':
                   !(formCreationService.applicationDetailsForm$ | async)?.value?.eventName ||
                   (formCreationService.applicationDetailsForm$ | async)?.controls.eventName.invalid
               }">
               {{
-                (formCreationService.applicationDetailsForm$ | async)?.value.eventName
-                  ? (formCreationService.applicationDetailsForm$ | async)?.value.eventName
-                  : 'Enter required information'
+              (formCreationService.applicationDetailsForm$ | async)?.value.eventName
+              ? (formCreationService.applicationDetailsForm$ | async)?.value.eventName
+              : 'Enter required information'
               }}
             </span>
           </div>
@@ -226,16 +221,15 @@
         <div class="row info-detail">
           <div class="col-md-4">Government Type:</div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info':
                   !(formCreationService.applicationDetailsForm$ | async)?.value?.applicantSubtype ||
                   (formCreationService.applicationDetailsForm$ | async)?.controls.applicantSubtype.invalid
               }">
               {{
-                (formCreationService.applicationDetailsForm$ | async)?.value.applicantSubtype
-                  ? (formCreationService.applicationDetailsForm$ | async)?.value.applicantSubtype
-                  : 'Enter required information'
+              (formCreationService.applicationDetailsForm$ | async)?.value.applicantSubtype
+              ? (formCreationService.applicationDetailsForm$ | async)?.value.applicantSubtype
+              : 'Enter required information'
               }}
             </span>
           </div>
@@ -258,9 +252,9 @@
           <div class="col-md-4">
             <span>
               {{
-                (formCreationService.contactsForm$ | async)?.value.doingBusinessAs
-                  ? (formCreationService.contactsForm$ | async)?.value.doingBusinessAs
-                  : ''
+              (formCreationService.contactsForm$ | async)?.value.doingBusinessAs
+              ? (formCreationService.contactsForm$ | async)?.value.doingBusinessAs
+              : ''
               }}
             </span>
           </div>
@@ -272,9 +266,9 @@
           <div class="col-md-4">
             <span>
               {{
-                (formCreationService.contactsForm$ | async)?.value.businessNumber
-                  ? (formCreationService.contactsForm$ | async)?.value.businessNumber
-                  : ''
+              (formCreationService.contactsForm$ | async)?.value.businessNumber
+              ? (formCreationService.contactsForm$ | async)?.value.businessNumber
+              : ''
               }}
             </span>
           </div>
@@ -291,16 +285,15 @@
         <div class="row info-detail">
           <div class="col-md-4">Address Line 1:</div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info':
                   !(formCreationService.contactsForm$ | async)?.value?.addressLine1 ||
                   (formCreationService.contactsForm$ | async)?.controls.addressLine1.invalid
               }">
               {{
-                (formCreationService.contactsForm$ | async)?.value.addressLine1
-                  ? (formCreationService.contactsForm$ | async)?.value.addressLine1
-                  : 'Enter required information'
+              (formCreationService.contactsForm$ | async)?.value.addressLine1
+              ? (formCreationService.contactsForm$ | async)?.value.addressLine1
+              : 'Enter required information'
               }}
             </span>
           </div>
@@ -312,9 +305,9 @@
           <div class="col-md-4">
             <span>
               {{
-                (formCreationService.contactsForm$ | async)?.value.addressLine2
-                  ? (formCreationService.contactsForm$ | async)?.value.addressLine2
-                  : ''
+              (formCreationService.contactsForm$ | async)?.value.addressLine2
+              ? (formCreationService.contactsForm$ | async)?.value.addressLine2
+              : ''
               }}
             </span>
           </div>
@@ -324,16 +317,15 @@
         <div class="row info-detail">
           <div class="col-md-4">City:</div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info':
                   !(formCreationService.contactsForm$ | async)?.value?.community ||
                   (formCreationService.contactsForm$ | async)?.controls.community.invalid
               }">
               {{
-                (formCreationService.contactsForm$ | async)?.value.community
-                  ? (formCreationService.contactsForm$ | async)?.value.community
-                  : 'Enter required information'
+              (formCreationService.contactsForm$ | async)?.value.community
+              ? (formCreationService.contactsForm$ | async)?.value.community
+              : 'Enter required information'
               }}
             </span>
           </div>
@@ -343,16 +335,15 @@
         <div class="row info-detail">
           <div class="col-md-4">Province:</div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info':
                   !(formCreationService.contactsForm$ | async)?.value?.stateProvince ||
                   (formCreationService.contactsForm$ | async)?.controls.stateProvince.invalid
               }">
               {{
-                (formCreationService.contactsForm$ | async)?.value.stateProvince
-                  ? (formCreationService.contactsForm$ | async)?.value.stateProvince
-                  : 'Enter required information'
+              (formCreationService.contactsForm$ | async)?.value.stateProvince
+              ? (formCreationService.contactsForm$ | async)?.value.stateProvince
+              : 'Enter required information'
               }}
             </span>
           </div>
@@ -362,16 +353,15 @@
         <div class="row info-detail">
           <div class="col-md-4">Postal Code:</div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info':
                   !(formCreationService.contactsForm$ | async)?.value?.postalCode ||
                   (formCreationService.contactsForm$ | async)?.controls.postalCode.invalid
               }">
               {{
-                (formCreationService.contactsForm$ | async)?.value.postalCode
-                  ? (formCreationService.contactsForm$ | async)?.value.postalCode
-                  : 'Enter required information'
+              (formCreationService.contactsForm$ | async)?.value.postalCode
+              ? (formCreationService.contactsForm$ | async)?.value.postalCode
+              : 'Enter required information'
               }}
             </span>
           </div>
@@ -388,16 +378,15 @@
         <div class="row info-detail">
           <div class="col-md-4">First Name:</div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info':
                   !(formCreationService.contactsForm$ | async)?.value?.pcFirstName ||
                   (formCreationService.contactsForm$ | async)?.controls.pcFirstName.invalid
               }">
               {{
-                (formCreationService.contactsForm$ | async)?.value.pcFirstName
-                  ? (formCreationService.contactsForm$ | async)?.value.pcFirstName
-                  : 'Enter required information'
+              (formCreationService.contactsForm$ | async)?.value.pcFirstName
+              ? (formCreationService.contactsForm$ | async)?.value.pcFirstName
+              : 'Enter required information'
               }}
             </span>
           </div>
@@ -407,16 +396,15 @@
         <div class="row info-detail">
           <div class="col-md-4">Last Name:</div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info':
                   !(formCreationService.contactsForm$ | async)?.value?.pcLastName ||
                   (formCreationService.contactsForm$ | async)?.controls.pcLastName.invalid
               }">
               {{
-                (formCreationService.contactsForm$ | async)?.value.pcLastName
-                  ? (formCreationService.contactsForm$ | async)?.value.pcLastName
-                  : 'Enter required information'
+              (formCreationService.contactsForm$ | async)?.value.pcLastName
+              ? (formCreationService.contactsForm$ | async)?.value.pcLastName
+              : 'Enter required information'
               }}
             </span>
           </div>
@@ -428,9 +416,9 @@
           <div class="col-md-4">
             <span>
               {{
-                (formCreationService.contactsForm$ | async)?.value.pcDepartment
-                  ? (formCreationService.contactsForm$ | async)?.value.pcDepartment
-                  : ''
+              (formCreationService.contactsForm$ | async)?.value.pcDepartment
+              ? (formCreationService.contactsForm$ | async)?.value.pcDepartment
+              : ''
               }}
             </span>
           </div>
@@ -442,9 +430,9 @@
           <div class="col-md-4">
             <span>
               {{
-                (formCreationService.contactsForm$ | async)?.value.pcBusinessPhone
-                  ? (formCreationService.contactsForm$ | async)?.value.pcBusinessPhone
-                  : ''
+              (formCreationService.contactsForm$ | async)?.value.pcBusinessPhone
+              ? (formCreationService.contactsForm$ | async)?.value.pcBusinessPhone
+              : ''
               }}
             </span>
           </div>
@@ -454,20 +442,51 @@
         <div class="row info-detail">
           <div class="col-md-4">Email Address:</div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info':
                   !(formCreationService.contactsForm$ | async)?.value?.pcEmailAddress ||
                   (formCreationService.contactsForm$ | async)?.controls.pcEmailAddress.invalid
               }">
               {{
-                (formCreationService.contactsForm$ | async)?.value.pcEmailAddress
-                  ? (formCreationService.contactsForm$ | async)?.value.pcEmailAddress
-                  : 'Enter required information'
+              (formCreationService.contactsForm$ | async)?.value.pcEmailAddress
+              ? (formCreationService.contactsForm$ | async)?.value.pcEmailAddress
+              : 'Enter required information'
               }}
             </span>
           </div>
         </div>
+
+        <!-- Cell Phone -->
+        <div class="row info-detail">
+          <div class="col-md-4">Cell Phone:</div>
+          <div class="col-md-4">
+            <span [ngClass]="{'missing-info': !(formCreationService.contactsForm$ | async)?.value?.pcCellPhone || 
+              (formCreationService.contactsForm$ | async)?.controls.pcCellPhone.invalid}">
+              {{
+              (formCreationService.contactsForm$ | async)?.value
+              .pcCellPhone ? (formCreationService.contactsForm$ | async)?.value
+              .pcCellPhone : "Enter required information"
+              }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Job Title -->
+        <div class="row info-detail">
+          <div class="col-md-4">Job Title:</div>
+          <div class="col-md-4">
+            <span
+              [ngClass]="{'missing-info': !(formCreationService.contactsForm$ | async)?.value?.pcJobTitle 
+              || (formCreationService.contactsForm$ | async)?.controls.pcJobTitle.invalid}">
+              {{
+              (formCreationService.contactsForm$ | async)?.value
+              .pcJobTitle ? (formCreationService.contactsForm$ | async)?.value
+              .pcJobTitle : "Enter required information"
+              }}
+            </span>
+          </div>
+        </div>
+
         <div class="row info-detail pb-0 col-4">
           <div class="sub-heading">Additional Contact Details</div>
         </div>
@@ -475,82 +494,83 @@
           <div class="missing-info">At least one other contact is required.</div>
         </div>
         <div class="px-2">
-        <table  *ngIf="otherContactsDataSource.getValue()?.length > 0"  mat-table [dataSource]="otherContactsDataSource">
-          <!-- Name Column -->
-          <ng-container matColumnDef="name" style="width: 26%">
-            <th mat-header-cell *matHeaderCellDef>
-              <b>Name</b>
-            </th>
-            <td *matCellDef="let element" mat-cell>{{ element.firstName }}&nbsp; {{ element.lastName }}</td>
-          </ng-container>
+          <table *ngIf="otherContactsDataSource.getValue()?.length > 0" mat-table
+            [dataSource]="otherContactsDataSource">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name" style="width: 26%">
+              <th mat-header-cell *matHeaderCellDef>
+                <b>Name</b>
+              </th>
+              <td *matCellDef="let element" mat-cell>{{ element.firstName }}&nbsp; {{ element.lastName }}</td>
+            </ng-container>
 
-          <!-- Phone Column -->
-          <ng-container matColumnDef="phoneNumber" style="width: 17%">
-            <th mat-header-cell *matHeaderCellDef>
-              <b>Phone</b>
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.phoneNumber | phoneFormat }}
-            </td>
-          </ng-container>
+            <!-- Phone Column -->
+            <ng-container matColumnDef="phoneNumber" style="width: 17%">
+              <th mat-header-cell *matHeaderCellDef>
+                <b>Phone</b>
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                {{ element.phoneNumber | phoneFormat }}
+              </td>
+            </ng-container>
 
-          <!-- Email Column -->
-          <ng-container matColumnDef="email" style="width: 17%">
-            <th mat-header-cell *matHeaderCellDef>
-              <b>Email</b>
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.email }}
-            </td>
-          </ng-container>
+            <!-- Email Column -->
+            <ng-container matColumnDef="email" style="width: 17%">
+              <th mat-header-cell *matHeaderCellDef>
+                <b>Email</b>
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                {{ element.email }}
+              </td>
+            </ng-container>
 
-          <!-- Cell Phone Column -->
-          <ng-container matColumnDef="cellPhone" style="width: 10%">
-            <th mat-header-cell *matHeaderCellDef>
-              <b>Cell Phone</b>
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.cellPhone }}
-            </td>
-          </ng-container>
+            <!-- Cell Phone Column -->
+            <ng-container matColumnDef="cellPhone" style="width: 10%">
+              <th mat-header-cell *matHeaderCellDef>
+                <b>Cell Phone</b>
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                {{ element.cellPhone }}
+              </td>
+            </ng-container>
 
-          <!-- Job Title Column -->
-          <ng-container matColumnDef="jobTitle" style="width: 10%">
-            <th mat-header-cell *matHeaderCellDef>
-              <b>Job Title</b>
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.jobTitle }}
-            </td>
-          </ng-container>
-                    <!-- Job Title Column -->
-          <ng-container matColumnDef="notes" style="width: 10%">
-            <th mat-header-cell *matHeaderCellDef>
-              <b>Notes</b>
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              {{ element.otherNotes }}
-            </td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="otherContactsColumnsToDisplay"></tr>
-          <tr mat-row *matRowDef="let element; columns: otherContactsColumnsToDisplay" class="example-element-row"></tr>
-        </table>
+            <!-- Job Title Column -->
+            <ng-container matColumnDef="jobTitle" style="width: 10%">
+              <th mat-header-cell *matHeaderCellDef>
+                <b>Job Title</b>
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                {{ element.jobTitle }}
+              </td>
+            </ng-container>
+            <!-- Job Title Column -->
+            <ng-container matColumnDef="notes" style="width: 10%">
+              <th mat-header-cell *matHeaderCellDef>
+                <b>Notes</b>
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                {{ element.otherNotes }}
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="otherContactsColumnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let element; columns: otherContactsColumnsToDisplay" class="example-element-row">
+            </tr>
+          </table>
         </div>
 
         <div class="row info-detail">
           <div class="col-md-4">Want to receive guidance and support?:</div>
           <div class="col-md-4">
-            <span
-              [ngClass]="{
+            <span [ngClass]="{
                 'missing-info':
                   !(formCreationService.contactsForm$ | async)?.value?.guidanceSupport ||
                   (formCreationService.contactsForm$ | async)?.controls.guidanceSupport.invalid
               }">
 
               {{
-                (formCreationService.contactsForm$ | async)?.value.guidanceSupport
-                  ? (formCreationService.contactsForm$ | async).value.guidanceSupport == 'true' ? 'Yes' : 'No'
-                  : 'Please validate the guidance support'
+              (formCreationService.contactsForm$ | async)?.value.guidanceSupport
+              ? (formCreationService.contactsForm$ | async).value.guidanceSupport == 'true' ? 'Yes' : 'No'
+              : 'Please validate the guidance support'
               }}
             </span>
           </div>
@@ -578,42 +598,34 @@
                     <mat-form-field appearance="outline">
                       <mat-label>First Name</mat-label>
                       <input formControlName="firstName" matInput placeholder="First Name" required maxlength="49" />
-                      <mat-error
-                        *ngIf="
+                      <mat-error *ngIf="
                           authorizedRepresentativeForm.get('firstName').invalid &&
                           authorizedRepresentativeForm.get('firstName').hasError('required') &&
                           authorizedRepresentativeForm.get('firstName').touched
                         ">
-                        First Name is required</mat-error
-                      >
-                      <mat-error
-                        *ngIf="
+                        First Name is required</mat-error>
+                      <mat-error *ngIf="
                           authorizedRepresentativeForm.get('firstName').invalid &&
                           authorizedRepresentativeForm.get('firstName').hasError('maxLength')
                         ">
-                        Maximum length is 49 characters</mat-error
-                      >
+                        Maximum length is 49 characters</mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
                     <mat-form-field appearance="outline">
                       <mat-label>Last Name</mat-label>
                       <input formControlName="lastName" matInput placeholder="Last Name" required maxlength="49" />
-                      <mat-error
-                        *ngIf="
+                      <mat-error *ngIf="
                           authorizedRepresentativeForm.get('lastName').invalid &&
                           authorizedRepresentativeForm.get('lastName').hasError('required') &&
                           authorizedRepresentativeForm.get('lastName').touched
                         ">
-                        Last Name is required</mat-error
-                      >
-                      <mat-error
-                        *ngIf="
+                        Last Name is required</mat-error>
+                      <mat-error *ngIf="
                           authorizedRepresentativeForm.get('lastName').invalid &&
                           authorizedRepresentativeForm.get('lastName').hasError('maxLength')
                         ">
-                        Maximum length is 49 characters</mat-error
-                      >
+                        Maximum length is 49 characters</mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -621,57 +633,39 @@
                   <div class="col-md-4">
                     <mat-form-field appearance="outline">
                       <mat-label>Business Phone</mat-label>
-                      <input
-                        formControlName="businessPhone"
-                        matInput
-                        required
-                        placeholder="Business Phone"
+                      <input formControlName="businessPhone" matInput required placeholder="Business Phone"
                         mask="(000) 000-0000" />
-                      <mat-error
-                        *ngIf="
+                      <mat-error *ngIf="
                           authorizedRepresentativeForm.get('businessPhone').invalid &&
                           authorizedRepresentativeForm.get('businessPhone').hasError('required') &&
                           authorizedRepresentativeForm.get('businessPhone').touched
                         ">
-                        Business Phone is required</mat-error
-                      >
-                      <mat-error
-                        *ngIf="
+                        Business Phone is required</mat-error>
+                      <mat-error *ngIf="
                           authorizedRepresentativeForm.get('businessPhone').invalid &&
                           authorizedRepresentativeForm.get('businessPhone').hasError('incorrectLength')
                         ">
-                        Business Phone must have 10 digits</mat-error
-                      >
+                        Business Phone must have 10 digits</mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
                     <mat-form-field appearance="outline">
                       <mat-label>Email</mat-label>
-                      <input
-                        formControlName="email"
-                        required
-                        matInput
-                        placeholder="Email"
-                        type="email"
+                      <input formControlName="email" required matInput placeholder="Email" type="email"
                         maxlength="100" />
-                      <mat-error
-                        *ngIf="
+                      <mat-error *ngIf="
                           authorizedRepresentativeForm.get('email').invalid &&
                           authorizedRepresentativeForm.get('email').hasError('required') &&
                           authorizedRepresentativeForm.get('email').touched
                         ">
-                        Email is required</mat-error
-                      >
+                        Email is required</mat-error>
                       <mat-error *ngIf="authorizedRepresentativeForm.get('email').invalid">
-                        Invalid email address</mat-error
-                      >
-                      <mat-error
-                        *ngIf="
+                        Invalid email address</mat-error>
+                      <mat-error *ngIf="
                           authorizedRepresentativeForm.get('email').invalid &&
                           authorizedRepresentativeForm.get('email').hasError('maxLength')
                         ">
-                        Maximum length is 100 characters</mat-error
-                      >
+                        Maximum length is 100 characters</mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -681,21 +675,17 @@
                     <mat-form-field appearance="outline">
                       <mat-label>Position/Title</mat-label>
                       <input formControlName="positionTitle" matInput placeholder="Position/Title" maxlength="100" />
-                      <mat-error
-                        *ngIf="
+                      <mat-error *ngIf="
                           authorizedRepresentativeForm.get('positionTitle').invalid &&
                           authorizedRepresentativeForm.get('positionTitle').hasError('required') &&
                           authorizedRepresentativeForm.get('positionTitle').touched
                         ">
-                        Job Title is required</mat-error
-                      >
-                      <mat-error
-                        *ngIf="
+                        Job Title is required</mat-error>
+                      <mat-error *ngIf="
                           authorizedRepresentativeForm.get('positionTitle').invalid &&
                           authorizedRepresentativeForm.get('positionTitle').hasError('maxLength')
                         ">
-                        Maximum length is 100 characters</mat-error
-                      >
+                        Maximum length is 100 characters</mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -707,23 +697,17 @@
                       Body or Local Authority.
                       <span style="color: red">*</span>
                     </p>
-                    <mat-radio-group
-                      formControlName="firstDeclaration"
-                      class="primary-radio-group horizontal-radio-group"
-                      required
-                      color="primary"
-                      aria-label="Select an option"
-                      (change)="validateAuthorizedRepresentative()">
-                      <mat-radio-button value="true">Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value="false"
-                        >No</mat-radio-button
-                      >
+                    <mat-radio-group formControlName="firstDeclaration"
+                      class="primary-radio-group horizontal-radio-group" required color="primary"
+                      aria-label="Select an option" (change)="validateAuthorizedRepresentative()">
+                      <mat-radio-button value="true">Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button
+                        value="false">No</mat-radio-button>
                     </mat-radio-group>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <mat-error
-                      *ngIf="
+                    <mat-error *ngIf="
                         authorizedRepresentativeForm.get('firstDeclaration').invalid &&
                         authorizedRepresentativeForm.get('firstDeclaration').hasError('required') &&
                         authorizedRepresentativeForm.get('firstDeclaration').touched
@@ -739,23 +723,17 @@
                       information contained in this application is accurate.
                       <span style="color: red">*</span>
                     </p>
-                    <mat-radio-group
-                      formControlName="secondDeclaration"
-                      class="primary-radio-group horizontal-radio-group"
-                      required
-                      color="primary"
-                      aria-label="Select an option"
-                      (change)="validateAuthorizedRepresentative()">
-                      <mat-radio-button value="true">Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button value="false"
-                        >No</mat-radio-button
-                      >
+                    <mat-radio-group formControlName="secondDeclaration"
+                      class="primary-radio-group horizontal-radio-group" required color="primary"
+                      aria-label="Select an option" (change)="validateAuthorizedRepresentative()">
+                      <mat-radio-button value="true">Yes</mat-radio-button>&nbsp;&nbsp;<mat-radio-button
+                        value="false">No</mat-radio-button>
                     </mat-radio-group>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <mat-error
-                      *ngIf="
+                    <mat-error *ngIf="
                         authorizedRepresentativeForm.get('secondDeclaration').invalid &&
                         authorizedRepresentativeForm.get('secondDeclaration').hasError('required') &&
                         authorizedRepresentativeForm.get('secondDeclaration').touched

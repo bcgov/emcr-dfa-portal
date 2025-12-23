@@ -6,7 +6,7 @@ import { CurrentProjectAppeal } from '../models/current-project-appeal';
 import { ProjectStatusBar } from '../models/project-status-bar';
 export interface CurrentProject {
   activeStage?: CurrentProjectAppeal;
-  amendedAttionalCost?: string | null;
+  amendedAdditionalCost?: string | null;
   amendedDeadline18Month?: string | null;
   applicationId?: string;
   approvedAmendedProjectCost?: string;

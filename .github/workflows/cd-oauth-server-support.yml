@@ -1,78 +1,58 @@
-name: Build oauth-server
+# ======================================================================================
+#  Last Updated: 2025-12-19
+#
+#  Description:
+#  This is the main CD workflow for the OAuth Server.
+#  It orchestrates the build and deployment process for the OAuth service.
+#
+#  Triggers:
+#  1. Automatic (`push`): Triggers automatically when code is merged to 'support-develop' branch.
+#  2. Manual (`workflow_dispatch`): Allows for manual deployments.
+#
+#  Note: Commit SHA and build metadata are automatically baked into image labels.
+#
+# ======================================================================================
 
-permissions:
-  contents: write
+name: CD OAuth Server
 
+# --- TRIGGERS -----------------------------------------------------------------------
 on:
+  # Triggers this workflow when code is merged to support-develop branch
   push:
-    branches:
-      - support-develop
-
+    branches: [support-develop]
     paths:
       - "oauth-server/src/API/**"
-      - ".github/workflows/cd-oauth-server-project.yml"
+      - ".github/workflows/cd-oauth-server-support.yml"
 
+  # manual trigger
   workflow_dispatch:
 
-env:
-  IMAGE_NAME: oauth-server
-  WORKING_DIRECTORY: ./oauth-server/src/API
-
+# --- JOBS ---------------------------------------------------------------------------
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: docker/setup-buildx-action@v2
-        id: buildx
-        with:
-          install: true
-
-      - name: Log into registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ secrets.DOCKER_SUPPORT_REGISTRY }}
-          username: ${{ secrets.DOCKER_SUPPORT_USERNAME }}
-          password: ${{ secrets.DOCKER_SUPPORT_PASSWORD_BUILDER }}
-
-      - name: Set image repository
-        id: set_image_repository
-        run: |
-          # Set image repository and change all uppercase to lowercase
-          DOCKER_REPOSITORY=$(echo ${{ secrets.DOCKER_SUPPORT_REGISTRY }}/${{ env.IMAGE_NAME }} | tr '[A-Z]' '[a-z]')
-          echo "::set-output name=docker-repository::$DOCKER_REPOSITORY"
-
-      - name: Pull image
-        env:
-          DOCKER_REPOSITORY: ${{ steps.set_image_repository.outputs.docker-repository }}
-        run: docker pull $DOCKER_REPOSITORY:latest || true
-
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_prefix: ${{ env.IMAGE_NAME }}=v
-          fetch_all_tags: true
-
-      - name: Build image
-        env:
-          DOCKER_REPOSITORY: ${{ steps.set_image_repository.outputs.docker-repository }}
-        working-directory: ${{ env.WORKING_DIRECTORY }}
-        run: |
-          VERSION=$(echo "${{ steps.tag_version.outputs.new_tag }}" | awk -F=v '{print $NF}')
-
-          echo DOCKER_REPOSITORY=${{ env.DOCKER_REPOSITORY }}
-          echo VERSION=$VERSION          
-
-          tar -czh . | docker build --load --tag ${{ env.DOCKER_REPOSITORY }}:latest --cache-from=${{ env.DOCKER_REPOSITORY }}:latest --build-arg VERSION=$VERSION -
-          docker tag ${{ env.DOCKER_REPOSITORY }}:latest ${{ env.DOCKER_REPOSITORY }}:$VERSION
-
-      - name: Push image
-        env:
-          DOCKER_REPOSITORY: ${{ steps.set_image_repository.outputs.docker-repository }}
-        run: |
-          docker push --all-tags ${{ env.DOCKER_REPOSITORY }}
+  # ------------------------------------------------------------------------------------
+  #  Job: build-and-deploy
+  #  Purpose: Calls the reusable build workflow to build, publish, and scan the image.
+  # ------------------------------------------------------------------------------------
+  build-and-deploy:
+    permissions:
+      # Core repository and deployment access
+      contents: read              # Read repository files and clone code
+      actions: read               # Read workflow runs and job information for private repo access
+      packages: write             # Push Docker images to container registry
+      # Environment and security
+      id-token: write             # Required for environment protection and OIDC
+      security-events: write      # Upload security scan results (Trivy SARIF)
+    uses: ./.github/workflows/build-template.yml
+    with:
+      EVENT_NAME: ${{ github.event_name }}
+      IMAGE_CONTEXT: ./oauth-server/src/API
+      IMAGE_FILE: ./oauth-server/src/API/Dockerfile
+      IMAGE_NAME: oauth-server
+      REGISTRY: ${{ vars.ARTIFACTORY_REGISTRY }}
+      BRANCH: ${{ github.ref_name }}
+    secrets:
+      REGISTRY_USER: ${{ secrets.ARTIFACTORY_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+      OCP4_PASSWORD: ${{ secrets.OCP4_PASSWORD }}
+      OCP4_NAMESPACE: ${{ secrets.OCP4_NAMESPACE }}
+      OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_SERVER }}

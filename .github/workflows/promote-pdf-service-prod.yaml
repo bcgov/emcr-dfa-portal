@@ -1,39 +1,93 @@
-name: Promote PDF Service to Production
+# ======================================================================================
+#  Last Updated: 2025-12-19
+#
+#  Description:
+#  Promotes PDF Service image by re-tagging it within the OpenShift ImageStream.
+#  This in-cluster promotion guarantees image digest is preserved.
+#
+# ======================================================================================
 
+name: Promote PDF Service - Training to Prod
+
+# --- TRIGGERS -----------------------------------------------------------------------
 on:
+  # This workflow is triggered manually, requiring explicit user action.
   workflow_dispatch:
+    inputs:
+      source_tag:
+        description: "The source tag to promote (e.g., training)"
+        required: false
+        default: "training"
 
+# --- ENVIRONMENT VARIABLES ----------------------------------------------------------
 env:
-  IMAGE_PDF_NAME: dfa-portal-pdf-service
-  IMAGE_REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
-  IMAGE_CURRENT_ENV_TAG: training
-  IMAGE_PROMOTE_ENV_TAG: prod
-  IMAGE_PROMOTE_ENV_BACKUP_TAG: prod-backup
+  NAMESPACE: ${{ secrets.OCP4_NAMESPACE }}
+  IMAGE_NAME: dfa-portal-pdf-service
+  SOURCE_TAG: ${{ github.event.inputs.source_tag }}
+  TARGET_TAG: "prod"
+  BACKUP_TAG: "prod-backup"
 
+# --- JOBS ---------------------------------------------------------------------------
 jobs:
   promote-pdf-service:
+    name: Promote dfa-portal-pdf-service to Prod
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'bcgov'
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Install OpenShift CLI
+        run: |
+          curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+          tar -xzf openshift-client-linux.tar.gz
+          sudo mv oc /usr/local/bin/
 
-      - name: Retag existing prod dfa-portal-pdf-service image to prod-backup
-        uses: tinact/docker.image-retag@master
-        with:
-          image_name: ${{ env.IMAGE_PDF_NAME }}
-          image_old_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
-          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_BACKUP_TAG }}
-          registry: ${{ env.IMAGE_REGISTRY }}
-          registry_username: ${{ secrets.OCP4_USERNAME }}
-          registry_password: ${{ secrets.OCP4_PASSWORD }}
+      - name: Login to OpenShift
+        run: |
+          oc login --token="${{ secrets.OCP4_PASSWORD }}" --server="${{ secrets.OPENSHIFT_SERVER }}"
 
-      - name: Promote dfa-portal-pdf-service to prod
-        uses: tinact/docker.image-retag@master
-        with:
-          image_name: ${{ env.IMAGE_PDF_NAME }}
-          image_old_tag: ${{ env.IMAGE_CURRENT_ENV_TAG }}
-          image_new_tag: ${{ env.IMAGE_PROMOTE_ENV_TAG }}
-          registry: ${{ env.IMAGE_REGISTRY }}
-          registry_username: ${{ secrets.OCP4_USERNAME }}
-          registry_password: ${{ secrets.OCP4_PASSWORD }}
+      - name: Get source digest
+        id: get_source_digest
+        run: |
+          SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+          echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+
+      - name: Get target digest (for backup)
+        id: get_target_digest
+        run: |
+          TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}') || true
+          echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+
+      - name: Backup Current Target Image (by digest)
+        if: steps.get_target_digest.outputs.target_digest != ''
+        run: |
+          echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+          oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference-policy=local
+          echo "Backup successful."
+
+      - name: Promote source to target (by digest)
+        run: |
+          echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+          oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference-policy=local
+          echo "Promotion successful."
+
+      - name: Validate Promotion by Comparing Image Digests
+        run: |
+          echo "Validating promotion for image '${{ env.IMAGE_NAME }}'..."
+          sleep 5
+
+          SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+          TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+
+          echo "Source Digest: $SOURCE_SHA"
+          echo "Target Digest: $TARGET_SHA"
+
+          if [[ -z "$SOURCE_SHA" ]]; then
+            echo "::error::Could not find source digest for tag '${{ env.SOURCE_TAG }}' for image '${{ env.IMAGE_NAME }}'."
+            exit 1
+          fi
+
+          if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+            echo "Validation successful! Digests match perfectly."
+          else
+            echo "::error::Image digests do not match after promotion for image '${{ env.IMAGE_NAME }}'."
+            exit 1
+          fi

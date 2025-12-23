@@ -177,11 +177,11 @@
         </div>
         </div>
         <div *ngIf="applItem.hasApprovedAmendments" style="border-bottom: 1px solid lightgrey; padding-bottom: 16px; display: flex"  [hidden]="applItem.isHidden">
-            <div *ngIf="applItem.amendedAttionalCost" class="col-md-2">
+            <div *ngIf="applItem.approvedAmendedProjectCost" class="col-md-2">
               <span><b>Approved Amended Project Cost -</b></span>
                         </div>
-            <div *ngIf="applItem.amendedAttionalCost" class="col-md-3">
-              <span>{{(applItem.amendedAttionalCost | number: '1.2-2')}}</span>
+            <div *ngIf="applItem.approvedAmendedProjectCost" class="col-md-3">
+              <span>{{(applItem.approvedAmendedProjectCost | number: '1.2-2')}}</span>
             
             </div>
           <div class="col-md-2">
