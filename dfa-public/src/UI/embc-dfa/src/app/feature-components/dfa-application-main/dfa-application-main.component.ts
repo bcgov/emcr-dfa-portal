@@ -82,6 +82,8 @@ export class DFAApplicationMainComponent implements OnInit, AfterViewInit, After
   applicationDetailsValid: boolean = false;
   contactsForm$: Subscription;
   contactsForm: UntypedFormGroup;
+  otherContactsForm$: Subscription;
+  otherContactsForm: UntypedFormGroup;
   contactsValid: boolean = false;
 
   /* EMCRI-1066: Authorized Representative */
@@ -90,7 +92,7 @@ export class DFAApplicationMainComponent implements OnInit, AfterViewInit, After
   authorizedRepresentativeValid: boolean = false;
 
   primaryContactValidated: boolean = false;
-
+  autoSaveInProgress: boolean = false;
   constructor(
     private router: Router,
     private componentService: ComponentCreationService,
@@ -150,6 +152,10 @@ export class DFAApplicationMainComponent implements OnInit, AfterViewInit, After
     this.contactsForm$ = this.formCreationService.getContactsForm().subscribe((contacts) => {
       this.contactsForm = contacts;
       this.contactsValid = this.contactsForm.valid && contacts.value.primaryContactValidated != null;
+    });
+
+    this.otherContactsForm$ = this.formCreationService.getOtherContactsForm().subscribe((otherContacts) => {
+      this.otherContactsForm = otherContacts;
     });
 
     /* EMCRI-1066: Authorized Representative */
@@ -605,14 +611,29 @@ export class DFAApplicationMainComponent implements OnInit, AfterViewInit, After
    * Save current data as draft.
    */
   autoSaveDraft(): void {
-    this.saveDraft().subscribe({
-      next: (id) => {
-        if (id != 'Updated') {
-          this.dfaApplicationMainDataService.setApplicationId(id);
-        }
-      },
-      error: () => {}
-    });
+    if(this.autoSaveInProgress === false){
+      this.autoSaveInProgress = true
+      this.saveDraft().subscribe({
+        next: (result) => {
+          if (result.applicationId != 'Updated') {
+            this.dfaApplicationMainDataService.setApplicationId(result.applicationId);
+          }
+          if(result.otherContact){
+            this.dfaApplicationMainDataService.otherContacts = result.otherContact;
+            this.otherContactsForm.patchValue({
+              otherContacts: result.otherContact  
+            });
+            this.otherContactsForm.get('otherContacts')?.updateValueAndValidity();
+
+            this.formCreationService.setOtherContactsForm(this.otherContactsForm);
+          }
+          this.autoSaveInProgress = false;
+        },
+        error: () => {
+          this.autoSaveInProgress = false;
+        },
+      });
+    }
   }
 
   /**

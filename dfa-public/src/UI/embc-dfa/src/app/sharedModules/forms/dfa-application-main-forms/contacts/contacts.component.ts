@@ -588,13 +588,22 @@ export default class ContactsComponent implements OnInit, OnDestroy {
   }
 
   addOtherContact(): void {
-    this.otherContactsForm.get('otherContact').reset();
-    this.showOtherContactForm = !this.showOtherContactForm;
-    this.otherContactsForm.get('addNewOtherContactIndicator').setValue(true);
-    this.otherContactsForm.get('otherContact.deleteFlag').setValue(false);
-    this.otherContactsForm
-      .get('otherContact.applicationId')
-      .setValue(this.dfaApplicationMainDataService.getApplicationId());
+    this.formCreationService
+      .getOtherContactsForm()
+      .subscribe((otherContacts) => {
+        this.otherContactsForm = otherContacts;
+        this.otherContactsData = this.otherContactsForm.get('otherContacts').value;
+        this.otherContactsDataSource.next(this.otherContactsData);
+
+        this.otherContactsForm.get('otherContact').reset();
+        this.showOtherContactForm = !this.showOtherContactForm;
+        this.otherContactsForm.get('addNewOtherContactIndicator').setValue(true);
+        this.otherContactsForm.get('otherContact.deleteFlag').setValue(false);
+        this.otherContactsForm
+          .get('otherContact.applicationId')
+          .setValue(this.dfaApplicationMainDataService.getApplicationId());
+        });
+   
   }
 
   editOtherContactsRow(element, index): void {
