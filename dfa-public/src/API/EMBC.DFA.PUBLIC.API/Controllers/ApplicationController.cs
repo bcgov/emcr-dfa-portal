@@ -129,8 +129,9 @@ namespace EMBC.DFA.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> UpdateApplication(DFAApplicationMain application)
+        public async Task<ActionResult<UpdateApplicationResponse>> UpdateApplication(DFAApplicationMain application)
         {
+            var result = new UpdateApplicationResponse();
             var txt = JsonConvert.SerializeObject(application, Formatting.Indented);
             var e2 = ((ApplicantSubtypeCategories)System.Enum.Parse(typeof(ApplicantSubtypeCategories), "FirstNationCommunity")).ToString();
             var e3 = ((EstimatedPercent)System.Enum.Parse(typeof(EstimatedPercent), "FirstNationCommunity")).ToString();
@@ -185,11 +186,11 @@ namespace EMBC.DFA.API.Controllers
             //    }
             //}
 
-            var result = await handler.HandleApplicationUpdate(mappedApplication, null);
+            result.ApplicationId = await handler.HandleApplicationUpdate(mappedApplication, null);
 
-            if (string.IsNullOrEmpty(mappedApplication.dfa_appapplicationid) && result != null && Guid.TryParse(result, out Guid appId))
+            if (string.IsNullOrEmpty(mappedApplication.dfa_appapplicationid) && result != null && Guid.TryParse(result.ApplicationId, out Guid appId))
             {
-                mappedApplication.dfa_appapplicationid = result;
+                mappedApplication.dfa_appapplicationid = result.ApplicationId;
             }
             if (application.OtherContact != null)
             {
@@ -197,7 +198,7 @@ namespace EMBC.DFA.API.Controllers
                 {
                     if (string.IsNullOrEmpty(mappedApplication.dfa_appapplicationid))
                     {
-                        objContact.applicationId = Guid.Parse(result);
+                        objContact.applicationId = Guid.Parse(result.ApplicationId);
                     }
                     else
                     {
@@ -206,7 +207,13 @@ namespace EMBC.DFA.API.Controllers
                     var mappedOtherContact = mapper.Map<dfa_appothercontact_params>(objContact);
 
                     var resultContact = await handler.HandleOtherContactAsync(mappedOtherContact);
+                    if(objContact.id == null)
+                    {
+                        objContact.id = Guid.Parse(resultContact);
+                    }
+                        
                 }
+                result.OtherContact = application.OtherContact;   
             }
             if (application != null && application.applicationDetails != null && application.applicationDetails.appStatus == ApplicationStageOptionSet.SUBMIT)
             {
@@ -251,7 +258,7 @@ namespace EMBC.DFA.API.Controllers
                             recoveryClaim : dfa_recoveryclaim */
                         submissionEntity.RegardingEntityLookUpFieldName = "dfa_appapplication";
 
-                        var uploadResult = await handler.HandleS3FileUploadAsync(submissionEntity);
+                        var uploadResult = await handler.HandleS3FileUploadAsync(submissionEntity);                   
                         return Ok(result);
                     }
                     else
@@ -700,4 +707,11 @@ namespace EMBC.DFA.API.Controllers
         public bool IsErrorInStatus { get; set; }
         public string StatusColor { get; set; }
     }
+
+    public class UpdateApplicationResponse
+    {
+        public string ApplicationId { get; set; }
+        public OtherContact[]? OtherContact { get; set; }
+    }
+
 }

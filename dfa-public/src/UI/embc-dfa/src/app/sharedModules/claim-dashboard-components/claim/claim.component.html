@@ -87,6 +87,7 @@
       </div>
     </div>
     </div>-->
+
     <mat-card class="mat-elevation-z4 content" [ngStyle]="{'border-left': '20px solid ' + applItem.statusColor}">
       <div style="border-bottom: 1px solid lightgrey; padding-bottom: 15px; display: flex;">
         <div class="col-md-4">
@@ -155,8 +156,12 @@
           <span><b>$1000 Deductible -</b></span>
         </div>
         <div class="col-md-2">
-          {{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision ==
-          DecisionEnum.ApprovedWithExclusions ? applItem.lessFirst1000 : ""}}
+          <span>
+            {{ applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == 
+              DecisionEnum.ApprovedWithExclusions
+              ? (applItem?.claimType === 'Advanced Payment' ? 'N/A' : applItem.lessFirst1000)
+              : "" }}
+          </span>
         </div>
         <div class="col-md-2">
           <span><b>Paid Claim Amount -</b></span>
@@ -180,17 +185,23 @@
         <div class="col-md-2">
           <span><b>Reimbursement % -</b></span>
         </div>
-        <div class="col-md-2">
-          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision ==
-            DecisionEnum.ApprovedWithExclusions ? applItem.approvedReimbursePercent : ""}}</span>
+          <div class="col-md-2">
+          <span>{{ applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision ==
+            DecisionEnum.ApprovedWithExclusions
+            ? (applItem?.claimType === 'Advanced Payment' ? 'N/A' : applItem.approvedReimbursePercent)
+            : ""}}</span>
         </div>
 
         <div [featureEnabled]="'useAdvancedPayments'" class="col-md-2">
           <span><b>Advanced Drawdown Amount -</b></span>
         </div>
         <div [featureEnabled]="'useAdvancedPayments'" class="col-md-2">
-          <span>{{applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision ==
-            DecisionEnum.ApprovedWithExclusions ? applItem.advancedDrawdownAmount : ""}}</span>
+          <span>
+            {{ applItem?.claimDecision == DecisionEnum.Approved || applItem?.claimDecision == 
+              DecisionEnum.ApprovedWithExclusions
+              ? (applItem?.claimType === 'Advanced Payment' ? 'CA$ 0.00' : applItem.advancedDrawdownAmount)
+              : "" }}
+          </span>
         </div>
 
       </div>

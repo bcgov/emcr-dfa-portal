@@ -200,7 +200,8 @@ export class ClaimDecisionComponent implements OnInit {
   }
 
   get isAdvPayClaim(): boolean {
-    return this.recoveryClaim?.claim?.claimNumber?.startsWith('ADVPAY');
+     return this.recoveryClaim?.claim?.claimType === this.ClaimTypeEnum.AdvancedPayment;
+    
   }
 
 }

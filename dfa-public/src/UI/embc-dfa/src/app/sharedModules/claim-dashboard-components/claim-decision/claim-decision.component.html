@@ -110,7 +110,9 @@
                     <div class="col-md-2">
                     <span><b>Reimbursement % - </b></span>
                     </div>
+                    
                     <div class="col-md-2">
+                       
                     <span>
                         {{ isAdvPayClaim ? 'N/A' : recoveryClaim?.claim.approvedReimbursement }}
                     </span>
@@ -127,7 +129,7 @@
                         <span><b> Advanced Drawdown Amount - </b></span>
                     </div>
                     <div class="col-md-2">
-                        <span>{{ isAdvPayClaim ? 'N/A' : ('CA$ ' + ( recoveryClaim?.claim.advancedDrawdownAmount | number: '1.2-2')) }}</span>
+                        <span>{{ isAdvPayClaim ? 'CA$ 0.00' : ('CA$ ' + ( recoveryClaim?.claim.advancedDrawdownAmount | number: '1.2-2')) }}</span>
                          
                     </div>
                 </div>

@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { ApplicantOption, ApplicationStageOptionSet, FarmOption, SmallBusinessOption } from 'src/app/core/api/models';
+import { ApplicantOption, ApplicationStageOptionSet, FarmOption, SmallBusinessOption, UpdateApplicationResponse } from 'src/app/core/api/models';
 import { AddressChangeComponent } from 'src/app/core/components/dialog-components/address-change-dialog/address-change-dialog.component';
 import { DFAConfirmSubmitDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-submit-dialog/dfa-confirm-submit-dialog.component';
 import { SecondaryApplicant } from 'src/app/core/model/dfa-application-main.model';
@@ -600,11 +600,12 @@ export class DFAApplicationMainComponent implements OnInit, AfterViewInit, After
    * @private
    * @return {*}  {Observable<any>}
    */
-  private saveDraft(): Observable<string> {
+  private saveDraft(): Observable<UpdateApplicationResponse> {
     this.setFormData(this.steps[this.dfaApplicationMainStepper.selectedIndex]?.component.toString());
     let application = this.dfaApplicationMainDataService.createDFAApplicationMainDTO();
     application.applicationDetails.appStatus = ApplicationStageOptionSet.DRAFT;
     return this.dfaApplicationMainService.upsertApplication(application);
+
   }
 
   /**

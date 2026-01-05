@@ -98,3 +98,4 @@ export type { Stage } from './models/stage';
 export { StateCode } from './models/state-code';
 export type { StatusBar } from './models/status-bar';
 export type { TimeoutConfiguration } from './models/timeout-configuration';
+export type { UpdateApplicationResponse } from './models/update-application-response';
