@@ -103,7 +103,7 @@ export class DFAProjectMainComponent implements OnInit, AfterViewChecked, OnDest
 
     // Automatically save the current data as a draft, if the user is idle for 60 seconds.
     // exclude view-only mode.
-    if (this.vieworedit && this.vieworedit !== 'view') {
+    if (this.vieworedit && this.vieworedit !== 'view' && this.vieworedit !== 'viewOnly') {
       this.autoCallbackService.start({
         callback: () => this.autoSaveDraft(),
         intervalSeconds: 60,

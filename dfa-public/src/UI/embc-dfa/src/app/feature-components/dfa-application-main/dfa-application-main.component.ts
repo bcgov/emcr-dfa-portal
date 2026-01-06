@@ -13,7 +13,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { ApplicantOption, ApplicationStageOptionSet, FarmOption, SmallBusinessOption, UpdateApplicationResponse } from 'src/app/core/api/models';
+import {
+  ApplicantOption,
+  ApplicationStageOptionSet,
+  FarmOption,
+  SmallBusinessOption,
+  UpdateApplicationResponse
+} from 'src/app/core/api/models';
 import { AddressChangeComponent } from 'src/app/core/components/dialog-components/address-change-dialog/address-change-dialog.component';
 import { DFAConfirmSubmitDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-submit-dialog/dfa-confirm-submit-dialog.component';
 import { SecondaryApplicant } from 'src/app/core/model/dfa-application-main.model';
@@ -58,6 +64,7 @@ export class DFAApplicationMainComponent implements OnInit, AfterViewInit, After
   isSignaturesValid: boolean = false;
   appTypeInsuranceForm: UntypedFormGroup;
   appTypeInsuranceForm$: Subscription;
+  // TODO: instead of relying on vieworedit string CACHE value, refactor to rely on path or route data and maybe use enum
   vieworedit: string;
   editstep: string;
   ninetyDayDeadline: string;
@@ -197,7 +204,7 @@ export class DFAApplicationMainComponent implements OnInit, AfterViewInit, After
 
     // Automatically save the current data as a draft, if the user is idle for 60 seconds.
     // exclude view-only mode.
-    if (this.vieworedit && this.vieworedit !== 'view') {
+    if (this.vieworedit && this.vieworedit !== 'view' && this.vieworedit !== 'viewOnly') {
       this.autoCallbackService.start({
         callback: () => this.autoSaveDraft(),
         intervalSeconds: 60,
@@ -605,24 +612,23 @@ export class DFAApplicationMainComponent implements OnInit, AfterViewInit, After
     let application = this.dfaApplicationMainDataService.createDFAApplicationMainDTO();
     application.applicationDetails.appStatus = ApplicationStageOptionSet.DRAFT;
     return this.dfaApplicationMainService.upsertApplication(application);
-
   }
 
   /**
    * Save current data as draft.
    */
   autoSaveDraft(): void {
-    if(this.autoSaveInProgress === false){
-      this.autoSaveInProgress = true
+    if (this.autoSaveInProgress === false) {
+      this.autoSaveInProgress = true;
       this.saveDraft().subscribe({
         next: (result) => {
           if (result.applicationId != 'Updated') {
             this.dfaApplicationMainDataService.setApplicationId(result.applicationId);
           }
-          if(result.otherContact){
+          if (result.otherContact) {
             this.dfaApplicationMainDataService.otherContacts = result.otherContact;
             this.otherContactsForm.patchValue({
-              otherContacts: result.otherContact  
+              otherContacts: result.otherContact
             });
             this.otherContactsForm.get('otherContacts')?.updateValueAndValidity();
 
@@ -632,7 +638,7 @@ export class DFAApplicationMainComponent implements OnInit, AfterViewInit, After
         },
         error: () => {
           this.autoSaveInProgress = false;
-        },
+        }
       });
     }
   }
