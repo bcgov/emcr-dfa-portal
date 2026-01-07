@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, UntypedFormGroup } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { DfaApplicationMain, FullTimeOccupant, SecondaryApplicant, OtherContact, DamagedRoom, CleanUpLogItem } from 'src/app/core/model/dfa-application-main.model';
-import { FormCreationService } from '../../core/services/formCreation.service';
 import { DfaClaimMain, RecoveryClaimForm } from '../../core/model/dfa-claim-main.model';
-import { DFAClaimMainDataService } from './dfa-claim-main-data.service';
 import { DfaInvoiceMain } from '../../core/model/dfa-invoice.model';
+import { FormCreationService } from '../../core/services/formCreation.service';
+import { DFAClaimMainDataService } from './dfa-claim-main-data.service';
 
 @Injectable({ providedIn: 'root' })
 export class DFAClaimMainMappingService {
   constructor(
     private formCreationService: FormCreationService,
-    private dfaClaimMainDataService: DFAClaimMainDataService,
-  ) { }
+    private dfaClaimMainDataService: DFAClaimMainDataService
+  ) {}
 
   mapDFAClaimMain(dfaClaimMain: DfaClaimMain): void {
     this.dfaClaimMainDataService.setDFAClaimMain(dfaClaimMain);
@@ -29,19 +28,19 @@ export class DFAClaimMainMappingService {
       .getRecoveryClaimForm()
       .pipe(first())
       .subscribe((claim: FormGroup<RecoveryClaimForm>) => {
-        claim.setValue({
-          // ...dfaClaimMain.claim,
+        claim.patchValue({
           approvedClaimTotal: dfaClaimMain.claim.approvedClaimTotal,
           claimEligibleGST: dfaClaimMain.claim.claimEligibleGST,
           claimNumber: dfaClaimMain.claim.claimNumber,
           claimGrossGST: dfaClaimMain.claim.claimGrossGST,
           approvedReimbursement: dfaClaimMain.claim.approvedReimbursement,
           claimPST: dfaClaimMain.claim.claimPST,
-          claimReceivedDate : dfaClaimMain.claim.claimReceivedDate,
+          claimReceivedDate: dfaClaimMain.claim.claimReceivedDate,
           claimStatus: dfaClaimMain.claim.claimStatus,
           claimTotal: dfaClaimMain.claim.claimTotal,
           eligiblePayable: dfaClaimMain.claim.eligiblePayable,
-          invoices: dfaClaimMain.claim.invoices,
+          // TODO: consider removing invoices from DTO as they are handled separately and are never a part of returned DTO
+          // invoices: dfaClaimMain.claim.invoices,
           lessFirst1000: dfaClaimMain.claim.lessFirst1000,
           paidClaimAmount: dfaClaimMain.claim.paidClaimAmount,
           paidClaimDate: dfaClaimMain.claim.paidClaimDate,
@@ -84,5 +83,4 @@ export class DFAClaimMainMappingService {
       });
     this.dfaClaimMainDataService.invoice = dfaInvoiceMain.invoice;
   }
-
 }

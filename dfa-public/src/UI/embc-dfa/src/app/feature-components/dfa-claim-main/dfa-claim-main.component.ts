@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription, mapTo } from 'rxjs';
+import { distinctUntilChanged, Observable, Subscription } from 'rxjs';
 import { ClaimStageOptionSet } from 'src/app/core/api/models';
 import { AttachmentService } from 'src/app/core/api/services';
 import { DFAConfirmSubmitDialogComponent } from 'src/app/core/components/dialog-components/dfa-confirm-submit-dialog/dfa-confirm-submit-dialog.component';
@@ -104,9 +104,9 @@ export class DFAClaimMainComponent implements OnInit, AfterViewChecked, OnDestro
     this.dfaClaimMainHeading = 'Claim Details';
 
     const _invoiceFormArray = this.formCreationService.recoveryClaimForm.value.get('invoices');
-    _invoiceFormArray.valueChanges
-      .pipe(mapTo(_invoiceFormArray.getRawValue()))
-      .subscribe((data) => (this.invoiceSummaryDataSource.data = _invoiceFormArray.getRawValue()));
+    _invoiceFormArray.valueChanges.pipe(distinctUntilChanged()).subscribe((data: Invoice[]) => {
+      this.invoiceSummaryDataSource.data = data;
+    });
 
     // Automatically save the current data as a draft, if the user is idle for 60 seconds.
     // exclude view-only mode.
