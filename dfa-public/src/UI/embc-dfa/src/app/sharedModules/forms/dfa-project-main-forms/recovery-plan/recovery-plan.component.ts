@@ -233,7 +233,7 @@ export default class RecoveryPlanComponent implements OnInit, OnDestroy {
       }
     })
 
-    if (this.dfaProjectMainDataService.getViewOrEdit() == 'viewOnly') {
+    if (this.dfaProjectMainDataService.getViewOrEdit() == 'viewOnly' || this.dfaProjectMainDataService.getViewOrEdit() == 'view') {
       this.recoveryPlanForm.disable();
     }
     else {
