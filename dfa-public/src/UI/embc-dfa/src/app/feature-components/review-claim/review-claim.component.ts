@@ -43,11 +43,6 @@ export class ReviewClaimComponent implements OnInit {
 
   ngOnInit(): void {
     this.navigationExtras = { state: { parentPageName: this.parentPageName } };
-    //if (this.currentFlow === 'verified-registration') {
-    //  this.captchaPassed.emit({
-    //    type: CaptchaResponseType.success
-    //  });
-    //}
 
     const recoveryClaimForm = this.formCreationService.recoveryClaimForm.value;
     this.recoveryPlanFormAbstract = recoveryClaimForm.getRawValue();
@@ -63,33 +58,6 @@ export class ReviewClaimComponent implements OnInit {
     _invoiceFormArray.valueChanges.pipe(distinctUntilChanged()).subscribe((data: Invoice[]) => {
       this.invoiceSummaryDataSource.data = data;
     });
-    //// subscribe to changes in secondary applicants
-    //const _secondaryApplicantsFormArray = this.formCreationService.secondaryApplicantsForm.value.get('secondaryApplicants');
-    //_secondaryApplicantsFormArray.valueChanges
-    //  .pipe(
-    //    mapTo(_secondaryApplicantsFormArray.getRawValue())
-    //    ).subscribe(data => this.secondaryApplicantsDataSource.data = _secondaryApplicantsFormArray.getRawValue());
-
-    //// subscribe to changes in other contacts
-    //const _otherContactsFormArray = this.formCreationService.otherContactsForm.value.get('otherContacts');
-    //_otherContactsFormArray.valueChanges
-    //  .pipe(
-    //    mapTo(_otherContactsFormArray.getRawValue())
-    //    ).subscribe(data => this.otherContactsDataSource.data = _otherContactsFormArray.getRawValue());
-
-    //// subscribe to changes in clean up logs
-    //const _cleanUpWorkFormArray = this.formCreationService.cleanUpLogItemsForm.value.get('cleanuplogs');
-    //_cleanUpWorkFormArray.valueChanges
-    //  .pipe(
-    //    mapTo(_cleanUpWorkFormArray.getRawValue())
-    //    ).subscribe(data => this.cleanUpWorkDataSource.data = _cleanUpWorkFormArray.getRawValue());
-
-    //// subscribe to changes in damaged rooms
-    //const _damagedRoomsFormArray = this.formCreationService.damagedRoomsForm.value.get('damagedRooms');
-    //_damagedRoomsFormArray.valueChanges
-    //  .pipe(
-    //    mapTo(_damagedRoomsFormArray.getRawValue())
-    //    ).subscribe(data => this.damagedRoomsDataSource.data = _damagedRoomsFormArray.getRawValue());
 
     // subscribe to changes in file uploads
     const _fileUploadsFormArray = this.formCreationService.fileUploadsClaimForm.value.get('fileUploads');

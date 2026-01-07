@@ -125,18 +125,6 @@ export class ClaimDecisionComponent implements OnInit {
           this.documentSummaryDataSourceFiltered.data = this.documentSummaryDataSource.data;
           this.invoicesCount = this.documentSummaryDataSource.data.length;
 
-
-
-          // this.formCreationService.recoveryClaimForm.value
-          //   .get('invoices')
-          //   .setValue(this.documentSummaryDataSource.data);
-          // this.formCreationService.recoveryClaimForm.value.updateValueAndValidity();
-
-          // if (this.dfaClaimMainDataService.recoveryClaim) {
-          //   this.dfaClaimMainDataService.recoveryClaim.invoices = this.documentSummaryDataSource.data;
-          //   this.SummaryClaimCalc();
-          // }
-
           this.dfaClaimMainDataService.setClaimInvoices(lstInvoices);
         },
         error: (_error) => { }
