@@ -8,6 +8,7 @@ using Serilog;
 using Serilog.Enrichers.Span;
 using Serilog.Events;
 using Serilog.Exceptions;
+using System.Reflection;
 
 namespace pdfservice.Hosting;
 
