@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +36,8 @@ namespace EMBC.Utilities.Hosting
                 //.Enrich.WithClientAgent()
                 .Enrich.WithClientIp()
                 .Enrich.WithSpan()
-                .Enrich.WithProperty("version", Environment.GetEnvironmentVariable("VERSION") ?? "unknown")
+                .Enrich.WithProperty("version", Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Unknown")
+                .Enrich.WithProperty("UTC_Timestamp", DateTime.UtcNow.ToString("o"))
                 .Enrich.When(logEvent => IsSecurityEvent(logEvent), e => e.WithProperty("IsSecurityEvent", true))
                 .WriteTo.Console(outputTemplate: LogOutputTemplate);
 
