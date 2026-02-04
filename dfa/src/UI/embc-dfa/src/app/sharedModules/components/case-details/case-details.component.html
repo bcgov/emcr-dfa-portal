@@ -1,9 +1,0 @@
-<div class="case-details-section">
-  <div class="sub-heading">Case Details</div>
-  <div class="case-detail"><b>Damaged Property Address:</b> <span>{{ applicationDetails?.damagedPropertyAddress?.addressLine1 }}, {{applicationDetails?.damagedPropertyAddress?.stateProvince}}</span></div>
-  <div class="case-detail"><b>Date of Damage:</b> <span>{{ applicationDetails?.propertyDamage?.damageFromDate | date : "yyyy/MM/dd" }}</span></div>
-  <div class="case-detail"><b>Event ID:</b> <span>{{applicationDetails?.eventName}}</span></div>
-  <div class="case-detail"><b>Original Application Date:</b> <span>{{ applicationDetails?.createdon | date : "yyyy/MM/dd"}}</span></div>
-  <div class="case-detail"><b>Case Number:</b> <span>{{ caseDetails?.caseNumber }}</span></div>
-  <div class="case-detail"><b>Applicant Type:</b> <span>{{ applicationDetails?.applicationType }}</span></div>
-</div>
